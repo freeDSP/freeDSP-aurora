@@ -1,0 +1,5 @@
+(sym_lib_table
+  (lib (name freeDSP-aurora-rescue)(type Legacy)(uri ${KIPRJMOD}/freeDSP-aurora-rescue.lib)(options "")(descr ""))
+  (lib (name rk)(type Legacy)(uri /Users/rkn/Documents/KiCAD/lib/rk.lib)(options "")(descr ""))
+  (lib (name rkdev)(type Legacy)(uri /Users/rkn/Documents/KiCAD/lib/rkdev.lib)(options "")(descr ""))
+)

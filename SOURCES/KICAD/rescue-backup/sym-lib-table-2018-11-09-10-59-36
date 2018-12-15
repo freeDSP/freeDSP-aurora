@@ -1,0 +1,5 @@
+(sym_lib_table
+  (lib (name freeDSP-Lumiere-rescue)(type Legacy)(uri ${KIPRJMOD}/freeDSP-Lumiere-rescue.lib)(options "")(descr ""))
+  (lib (name rkdev)(type Legacy)(uri /Users/rkn/Documents/KiCAD/lib/rkdev.lib)(options "")(descr ""))
+  (lib (name rk)(type Legacy)(uri /Users/rkn/Documents/KiCAD/lib/rk.lib)(options "")(descr ""))
+)

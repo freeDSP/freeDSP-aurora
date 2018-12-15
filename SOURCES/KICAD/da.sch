@@ -1,0 +1,4251 @@
+EESchema Schematic File Version 4
+LIBS:freeDSP-aurora-cache
+EELAYER 26 0
+EELAYER END
+$Descr A3 16535 11693
+encoding utf-8
+Sheet 3 5
+Title "freeDSP Aurora"
+Date "24.7.2018"
+Rev "1.0.0"
+Comp "auverdion"
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+Text HLabel 2450 4400 0    39   Input ~ 0
+MCLK
+Text HLabel 2450 4500 0    39   Input ~ 0
+BCLK
+Text HLabel 2450 4600 0    39   Input ~ 0
+LRCK
+Wire Wire Line
+	2450 4400 2800 4400
+Wire Wire Line
+	2450 4500 2800 4500
+Wire Wire Line
+	2450 4600 2800 4600
+$Comp
+L freeDSP-aurora-rescue:GND #PWR0151
+U 1 1 590863AD
+P 3750 7700
+F 0 "#PWR0151" H 3750 7450 50  0001 C CNN
+F 1 "GND" H 3750 7550 39  0000 C CNN
+F 2 "" H 3750 7700 50  0000 C CNN
+F 3 "" H 3750 7700 50  0000 C CNN
+	1    3750 7700
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:GND #PWR0152
+U 1 1 590863B3
+P 3500 7700
+F 0 "#PWR0152" H 3500 7450 50  0001 C CNN
+F 1 "GND" H 3500 7550 39  0000 C CNN
+F 2 "" H 3500 7700 50  0000 C CNN
+F 3 "" H 3500 7700 50  0000 C CNN
+	1    3500 7700
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:+3V3 #PWR0153
+U 1 1 590863B9
+P 3500 7300
+F 0 "#PWR0153" H 3500 7150 50  0001 C CNN
+F 1 "+3V3" H 3500 7440 39  0000 C CNN
+F 2 "" H 3500 7300 50  0000 C CNN
+F 3 "" H 3500 7300 50  0000 C CNN
+	1    3500 7300
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3500 7300 3500 7350
+Wire Wire Line
+	3750 7400 3750 7350
+Wire Wire Line
+	3750 7350 3500 7350
+Connection ~ 3500 7350
+Wire Wire Line
+	3300 3800 3300 3750
+Wire Wire Line
+	3300 3750 3600 3750
+Wire Wire Line
+	5150 3750 5150 4500
+$Comp
+L freeDSP-aurora-rescue:GND #PWR0154
+U 1 1 590863E8
+P 5150 6250
+F 0 "#PWR0154" H 5150 6000 50  0001 C CNN
+F 1 "GND" H 5150 6100 39  0000 C CNN
+F 2 "" H 5150 6250 50  0000 C CNN
+F 3 "" H 5150 6250 50  0000 C CNN
+	1    5150 6250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3600 3800 3600 3750
+Connection ~ 3600 3750
+Wire Wire Line
+	3700 3800 3700 3700
+Wire Wire Line
+	2700 3700 3700 3700
+$Comp
+L freeDSP-aurora-rescue:+3V3 #PWR0155
+U 1 1 5908668B
+P 2700 3650
+F 0 "#PWR0155" H 2700 3500 50  0001 C CNN
+F 1 "+3V3" H 2700 3790 39  0000 C CNN
+F 2 "" H 2700 3650 50  0000 C CNN
+F 3 "" H 2700 3650 50  0000 C CNN
+	1    2700 3650
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:GND #PWR0156
+U 1 1 5908688F
+P 3800 3500
+F 0 "#PWR0156" H 3800 3250 50  0001 C CNN
+F 1 "GND" H 3800 3350 39  0000 C CNN
+F 2 "" H 3800 3500 50  0000 C CNN
+F 3 "" H 3800 3500 50  0000 C CNN
+	1    3800 3500
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3500 3800 3500 3500
+Wire Wire Line
+	3800 3700 3800 3800
+Connection ~ 3700 3700
+Text HLabel 3400 3650 1    39   Input ~ 0
+~RST
+Wire Wire Line
+	3400 3800 3400 3650
+Text Notes 1950 5000 0    39   ~ 0
+Configuration DAC:\nTDM256, MSB, 32bit\nBCLK = 256fs
+$Comp
+L freeDSP-aurora-rescue:GND #PWR0157
+U 1 1 590870EC
+P 3400 6550
+F 0 "#PWR0157" H 3400 6300 50  0001 C CNN
+F 1 "GND" H 3400 6400 39  0000 C CNN
+F 2 "" H 3400 6550 50  0000 C CNN
+F 3 "" H 3400 6550 50  0000 C CNN
+	1    3400 6550
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:+3V3 #PWR0158
+U 1 1 5908711B
+P 3500 6650
+F 0 "#PWR0158" H 3500 6500 50  0001 C CNN
+F 1 "+3V3" H 3500 6790 39  0000 C CNN
+F 2 "" H 3500 6650 50  0000 C CNN
+F 3 "" H 3500 6650 50  0000 C CNN
+	1    3500 6650
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	3400 6250 3400 6100
+Wire Wire Line
+	3500 6250 3500 6100
+Wire Wire Line
+	3500 6650 3500 6550
+$Comp
+L freeDSP-aurora-rescue:GND #PWR0159
+U 1 1 5908737E
+P 3600 6550
+F 0 "#PWR0159" H 3600 6300 50  0001 C CNN
+F 1 "GND" H 3600 6400 39  0000 C CNN
+F 2 "" H 3600 6550 50  0000 C CNN
+F 3 "" H 3600 6550 50  0000 C CNN
+	1    3600 6550
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3600 6100 3600 6250
+Wire Wire Line
+	2750 5500 2800 5500
+Wire Wire Line
+	2750 4800 2750 4900
+Wire Wire Line
+	2750 6150 4100 6150
+Connection ~ 5150 6150
+$Comp
+L freeDSP-aurora-rescue:+3V3 #PWR0160
+U 1 1 590874C4
+P 3800 6650
+F 0 "#PWR0160" H 3800 6500 50  0001 C CNN
+F 1 "+3V3" H 3800 6790 39  0000 C CNN
+F 2 "" H 3800 6650 50  0000 C CNN
+F 3 "" H 3800 6650 50  0000 C CNN
+	1    3800 6650
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	3800 6550 3800 6600
+Wire Wire Line
+	3800 6600 3700 6600
+Wire Wire Line
+	3700 6600 3700 6550
+Connection ~ 3800 6600
+Wire Wire Line
+	3700 6250 3700 6100
+Wire Wire Line
+	3800 6250 3800 6100
+Text Notes 2550 6450 0    39   ~ 0
+Resistors are only for\nprototype
+Wire Wire Line
+	2750 5400 2800 5400
+Connection ~ 2750 5500
+Wire Wire Line
+	2800 5300 2750 5300
+Connection ~ 2750 5400
+Wire Wire Line
+	2800 5200 2750 5200
+Connection ~ 2750 5300
+Wire Wire Line
+	2800 5100 2750 5100
+Connection ~ 2750 5200
+Wire Wire Line
+	2800 5000 2750 5000
+Connection ~ 2750 5100
+Wire Wire Line
+	2800 4900 2750 4900
+Connection ~ 2750 5000
+Wire Wire Line
+	2800 4800 2750 4800
+Connection ~ 2750 4900
+Text HLabel 2450 4700 0    39   Input ~ 0
+TDM
+Wire Wire Line
+	2450 4700 2800 4700
+Wire Wire Line
+	2700 3700 2700 3650
+Wire Wire Line
+	4100 3800 4100 3750
+Connection ~ 4100 3750
+Wire Wire Line
+	5100 4500 5150 4500
+Connection ~ 5150 4500
+Wire Wire Line
+	5100 5000 5150 5000
+Connection ~ 5150 5000
+Wire Wire Line
+	5100 5400 5150 5400
+Connection ~ 5150 5400
+Wire Wire Line
+	4100 6100 4100 6150
+Connection ~ 4100 6150
+$Comp
+L freeDSP-aurora-rescue:GND #PWR0161
+U 1 1 59087F9D
+P 5650 5250
+F 0 "#PWR0161" H 5650 5000 50  0001 C CNN
+F 1 "GND" H 5650 5100 39  0000 C CNN
+F 2 "" H 5650 5250 50  0000 C CNN
+F 3 "" H 5650 5250 50  0000 C CNN
+	1    5650 5250
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:GND #PWR0162
+U 1 1 59087FA3
+P 5900 5250
+F 0 "#PWR0162" H 5900 5000 50  0001 C CNN
+F 1 "GND" H 5900 5100 39  0000 C CNN
+F 2 "" H 5900 5250 50  0000 C CNN
+F 3 "" H 5900 5250 50  0000 C CNN
+	1    5900 5250
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:+5VA #PWR0163
+U 1 1 59088147
+P 5900 4850
+F 0 "#PWR0163" H 5900 4700 50  0001 C CNN
+F 1 "+5VA" H 5900 4990 39  0000 C CNN
+F 2 "" H 5900 4850 50  0000 C CNN
+F 3 "" H 5900 4850 50  0000 C CNN
+	1    5900 4850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5900 4850 5900 4900
+Connection ~ 5900 4900
+$Comp
+L freeDSP-aurora-rescue:GND #PWR0164
+U 1 1 59088442
+P 6350 4950
+F 0 "#PWR0164" H 6350 4700 50  0001 C CNN
+F 1 "GND" H 6350 4800 39  0000 C CNN
+F 2 "" H 6350 4950 50  0000 C CNN
+F 3 "" H 6350 4950 50  0000 C CNN
+	1    6350 4950
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:GND #PWR0165
+U 1 1 59088448
+P 6150 4950
+F 0 "#PWR0165" H 6150 4700 50  0001 C CNN
+F 1 "GND" H 6150 4800 39  0000 C CNN
+F 2 "" H 6150 4950 50  0000 C CNN
+F 3 "" H 6150 4950 50  0000 C CNN
+	1    6150 4950
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5100 4600 6150 4600
+Wire Wire Line
+	6350 4600 6350 4650
+Wire Wire Line
+	6150 4600 6150 4650
+Connection ~ 6350 4600
+Wire Wire Line
+	5100 4700 5550 4700
+Text Label 5550 4700 2    39   ~ 0
+DAC5-
+Wire Wire Line
+	5100 4900 5650 4900
+Wire Wire Line
+	5650 4900 5650 4950
+Connection ~ 5650 4900
+Wire Wire Line
+	5100 4800 5550 4800
+Text Label 5550 4800 2    39   ~ 0
+DAC5+
+Wire Wire Line
+	5100 5100 5550 5100
+Text Label 5550 5100 2    39   ~ 0
+DAC4+
+Wire Wire Line
+	5100 5200 5550 5200
+Text Label 5550 5200 2    39   ~ 0
+DAC4-
+Wire Wire Line
+	3900 3800 3900 3350
+Text Label 3900 3350 3    39   ~ 0
+DAC8+
+Wire Wire Line
+	4000 3800 4000 3350
+Text Label 4000 3350 3    39   ~ 0
+DAC8-
+Wire Wire Line
+	4400 3800 4400 3350
+Text Label 4400 3350 3    39   ~ 0
+DAC7+
+Wire Wire Line
+	4300 3800 4300 3350
+Text Label 4300 3350 3    39   ~ 0
+DAC7-
+Wire Wire Line
+	4500 3800 4500 3350
+Text Label 4500 3350 3    39   ~ 0
+DAC6+
+Wire Wire Line
+	5100 4400 5550 4400
+Text Label 5550 4400 2    39   ~ 0
+DAC6-
+Wire Wire Line
+	5100 5500 5550 5500
+Text Label 5550 5500 2    39   ~ 0
+DAC3-
+Wire Wire Line
+	4500 6100 4500 6550
+Text Label 4500 6550 1    39   ~ 0
+DAC3+
+Wire Wire Line
+	4400 6100 4400 6550
+Text Label 4400 6550 1    39   ~ 0
+DAC2+
+Wire Wire Line
+	4300 6100 4300 6550
+Text Label 4300 6550 1    39   ~ 0
+DAC2-
+Wire Wire Line
+	4000 6100 4000 6550
+Text Label 4000 6550 1    39   ~ 0
+DAC1-
+Wire Wire Line
+	3900 6100 3900 6550
+Text Label 3900 6550 1    39   ~ 0
+DAC1+
+Connection ~ 6150 4600
+$Comp
+L freeDSP-aurora-rescue:GND #PWR0166
+U 1 1 5908953A
+P 6350 5900
+F 0 "#PWR0166" H 6350 5650 50  0001 C CNN
+F 1 "GND" H 6350 5750 39  0000 C CNN
+F 2 "" H 6350 5900 50  0000 C CNN
+F 3 "" H 6350 5900 50  0000 C CNN
+	1    6350 5900
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:GND #PWR0167
+U 1 1 59089540
+P 6150 5900
+F 0 "#PWR0167" H 6150 5650 50  0001 C CNN
+F 1 "GND" H 6150 5750 39  0000 C CNN
+F 2 "" H 6150 5900 50  0000 C CNN
+F 3 "" H 6150 5900 50  0000 C CNN
+	1    6150 5900
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5200 5550 6150 5550
+Wire Wire Line
+	6350 5550 6350 5600
+Wire Wire Line
+	6150 5550 6150 5600
+Connection ~ 6350 5550
+Connection ~ 6150 5550
+Wire Wire Line
+	5100 5300 5200 5300
+Wire Wire Line
+	5200 5300 5200 5550
+$Comp
+L freeDSP-aurora-rescue:GND #PWR0168
+U 1 1 59089A96
+P 6350 4050
+F 0 "#PWR0168" H 6350 3800 50  0001 C CNN
+F 1 "GND" H 6350 3900 39  0000 C CNN
+F 2 "" H 6350 4050 50  0000 C CNN
+F 3 "" H 6350 4050 50  0000 C CNN
+	1    6350 4050
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:GND #PWR0169
+U 1 1 59089A9C
+P 6150 4050
+F 0 "#PWR0169" H 6150 3800 50  0001 C CNN
+F 1 "GND" H 6150 3900 39  0000 C CNN
+F 2 "" H 6150 4050 50  0000 C CNN
+F 3 "" H 6150 4050 50  0000 C CNN
+	1    6150 4050
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4200 3700 6150 3700
+Wire Wire Line
+	6350 3700 6350 3750
+Wire Wire Line
+	6150 3700 6150 3750
+Connection ~ 6350 3700
+Connection ~ 6150 3700
+Wire Wire Line
+	4200 3700 4200 3800
+Wire Wire Line
+	6700 3700 6750 3700
+Wire Wire Line
+	6750 3650 6750 3700
+Wire Wire Line
+	6750 4600 6700 4600
+Connection ~ 6750 3700
+Wire Wire Line
+	6750 5550 6700 5550
+Connection ~ 6750 4600
+$Comp
+L freeDSP-aurora-rescue:GND #PWR0170
+U 1 1 59089D58
+P 6350 6550
+F 0 "#PWR0170" H 6350 6300 50  0001 C CNN
+F 1 "GND" H 6350 6400 39  0000 C CNN
+F 2 "" H 6350 6550 50  0000 C CNN
+F 3 "" H 6350 6550 50  0000 C CNN
+	1    6350 6550
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:GND #PWR0171
+U 1 1 59089D5E
+P 6150 6550
+F 0 "#PWR0171" H 6150 6300 50  0001 C CNN
+F 1 "GND" H 6150 6400 39  0000 C CNN
+F 2 "" H 6150 6550 50  0000 C CNN
+F 3 "" H 6150 6550 50  0000 C CNN
+	1    6150 6550
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4200 6200 6150 6200
+Wire Wire Line
+	6350 6200 6350 6250
+Wire Wire Line
+	6150 6200 6150 6250
+Connection ~ 6350 6200
+Connection ~ 6150 6200
+Wire Wire Line
+	4200 6200 4200 6100
+Wire Wire Line
+	6750 6200 6700 6200
+Connection ~ 6750 5550
+$Comp
+L freeDSP-aurora-rescue:+5VA #PWR0172
+U 1 1 5908A05A
+P 6750 3650
+F 0 "#PWR0172" H 6750 3500 50  0001 C CNN
+F 1 "+5VA" H 6750 3790 39  0000 C CNN
+F 2 "" H 6750 3650 50  0000 C CNN
+F 3 "" H 6750 3650 50  0000 C CNN
+	1    6750 3650
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:GND #PWR0173
+U 1 1 5908A8E6
+P 8800 3050
+F 0 "#PWR0173" H 8800 2800 50  0001 C CNN
+F 1 "GND" H 8800 2900 39  0000 C CNN
+F 2 "" H 8800 3050 50  0000 C CNN
+F 3 "" H 8800 3050 50  0000 C CNN
+	1    8800 3050
+	1    0    0    -1  
+$EndComp
+Text Label 7500 2200 0    39   ~ 0
+DAC1-
+Wire Wire Line
+	7750 2200 7500 2200
+Text Label 7500 2900 0    39   ~ 0
+DAC1+
+Wire Wire Line
+	7750 2900 7500 2900
+Wire Wire Line
+	8050 2900 8100 2900
+Wire Wire Line
+	8100 2750 8100 2900
+Connection ~ 8100 2900
+Wire Wire Line
+	8150 2350 8100 2350
+Wire Wire Line
+	8100 2200 8100 2350
+Wire Wire Line
+	8550 2700 8500 2700
+Wire Wire Line
+	8500 2700 8500 2350
+Wire Wire Line
+	8450 2350 8500 2350
+Wire Wire Line
+	8450 2900 8500 2900
+Wire Wire Line
+	8500 2950 8500 2900
+Connection ~ 8500 2900
+Connection ~ 8500 2350
+Wire Wire Line
+	9200 2350 9150 2350
+Connection ~ 9200 2350
+Wire Wire Line
+	8050 2200 8100 2200
+Connection ~ 8100 2350
+Connection ~ 8100 2200
+Wire Wire Line
+	10100 2600 9900 2600
+Wire Wire Line
+	9900 2450 9900 2600
+Wire Wire Line
+	9850 2800 9900 2800
+Connection ~ 9900 2800
+$Comp
+L freeDSP-aurora-rescue:GND #PWR0174
+U 1 1 5908ECF9
+P 8500 10800
+F 0 "#PWR0174" H 8500 10550 50  0001 C CNN
+F 1 "GND" H 8500 10650 39  0000 C CNN
+F 2 "" H 8500 10800 50  0000 C CNN
+F 3 "" H 8500 10800 50  0000 C CNN
+	1    8500 10800
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:GND #PWR0175
+U 1 1 5908ED07
+P 8700 10800
+F 0 "#PWR0175" H 8700 10550 50  0001 C CNN
+F 1 "GND" H 8700 10650 39  0000 C CNN
+F 2 "" H 8700 10800 50  0000 C CNN
+F 3 "" H 8700 10800 50  0000 C CNN
+	1    8700 10800
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:GND #PWR0176
+U 1 1 5908ED15
+P 8900 10800
+F 0 "#PWR0176" H 8900 10550 50  0001 C CNN
+F 1 "GND" H 8900 10650 39  0000 C CNN
+F 2 "" H 8900 10800 50  0000 C CNN
+F 3 "" H 8900 10800 50  0000 C CNN
+	1    8900 10800
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:GND #PWR0177
+U 1 1 5908ED23
+P 9100 10800
+F 0 "#PWR0177" H 9100 10550 50  0001 C CNN
+F 1 "GND" H 9100 10650 39  0000 C CNN
+F 2 "" H 9100 10800 50  0000 C CNN
+F 3 "" H 9100 10800 50  0000 C CNN
+	1    9100 10800
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:GND #PWR0178
+U 1 1 5908ED31
+P 9300 10800
+F 0 "#PWR0178" H 9300 10550 50  0001 C CNN
+F 1 "GND" H 9300 10650 39  0000 C CNN
+F 2 "" H 9300 10800 50  0000 C CNN
+F 3 "" H 9300 10800 50  0000 C CNN
+	1    9300 10800
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:GND #PWR0179
+U 1 1 5908ED3F
+P 9500 10800
+F 0 "#PWR0179" H 9500 10550 50  0001 C CNN
+F 1 "GND" H 9500 10650 39  0000 C CNN
+F 2 "" H 9500 10800 50  0000 C CNN
+F 3 "" H 9500 10800 50  0000 C CNN
+	1    9500 10800
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:GND #PWR0180
+U 1 1 5908ED4D
+P 9700 10800
+F 0 "#PWR0180" H 9700 10550 50  0001 C CNN
+F 1 "GND" H 9700 10650 39  0000 C CNN
+F 2 "" H 9700 10800 50  0000 C CNN
+F 3 "" H 9700 10800 50  0000 C CNN
+	1    9700 10800
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:GND #PWR0181
+U 1 1 5908ED5B
+P 9900 10800
+F 0 "#PWR0181" H 9900 10550 50  0001 C CNN
+F 1 "GND" H 9900 10650 39  0000 C CNN
+F 2 "" H 9900 10800 50  0000 C CNN
+F 3 "" H 9900 10800 50  0000 C CNN
+	1    9900 10800
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8500 10400 8500 10450
+Wire Wire Line
+	8500 10450 8700 10450
+Wire Wire Line
+	8700 10450 8700 10500
+Connection ~ 8500 10450
+Wire Wire Line
+	8900 10450 8900 10500
+Connection ~ 8700 10450
+Wire Wire Line
+	9100 10450 9100 10500
+Connection ~ 8900 10450
+Wire Wire Line
+	9300 10450 9300 10500
+Connection ~ 9100 10450
+Wire Wire Line
+	9500 10450 9500 10500
+Connection ~ 9300 10450
+Wire Wire Line
+	9700 10450 9700 10500
+Connection ~ 9500 10450
+Wire Wire Line
+	9900 10450 9900 10500
+Connection ~ 9700 10450
+Wire Wire Line
+	10100 2450 9900 2450
+Connection ~ 9900 2600
+Wire Wire Line
+	10550 2900 10600 2900
+Wire Wire Line
+	10600 2450 10600 2600
+Wire Wire Line
+	10600 2600 10400 2600
+Wire Wire Line
+	10400 2450 10600 2450
+Connection ~ 10600 2600
+Connection ~ 9200 2800
+Connection ~ 10600 2900
+Wire Wire Line
+	9150 2800 9200 2800
+Wire Wire Line
+	9200 2200 9200 2350
+Connection ~ 9200 2200
+Wire Wire Line
+	10950 2900 11150 2900
+Text Label 15400 2900 2    39   ~ 0
+AOUT1-
+Text Label 15400 2200 2    39   ~ 0
+AOUT1+
+$Comp
+L freeDSP-aurora-rescue:GND #PWR0182
+U 1 1 59092E96
+P 8800 4350
+F 0 "#PWR0182" H 8800 4100 50  0001 C CNN
+F 1 "GND" H 8800 4200 39  0000 C CNN
+F 2 "" H 8800 4350 50  0000 C CNN
+F 3 "" H 8800 4350 50  0000 C CNN
+	1    8800 4350
+	1    0    0    -1  
+$EndComp
+Text Label 11750 3500 0    39   ~ 0
+DAC3-
+Wire Wire Line
+	7750 3500 7500 3500
+Text Label 11750 4200 0    39   ~ 0
+DAC3+
+Wire Wire Line
+	7750 4200 7500 4200
+Wire Wire Line
+	8050 4200 8100 4200
+Wire Wire Line
+	8100 4050 8100 4200
+Connection ~ 8100 4200
+Wire Wire Line
+	8150 3650 8100 3650
+Wire Wire Line
+	8100 3500 8100 3650
+Wire Wire Line
+	8550 4000 8500 4000
+Wire Wire Line
+	8500 4000 8500 3650
+Wire Wire Line
+	8450 3650 8500 3650
+Wire Wire Line
+	8450 4200 8500 4200
+Wire Wire Line
+	8500 4250 8500 4200
+Connection ~ 8500 4200
+Connection ~ 8500 3650
+Wire Wire Line
+	9200 3650 9150 3650
+Connection ~ 9200 3650
+Wire Wire Line
+	8050 3500 8100 3500
+Connection ~ 8100 3650
+Connection ~ 8100 3500
+Wire Wire Line
+	10100 3900 9900 3900
+Wire Wire Line
+	9900 3750 9900 3900
+Wire Wire Line
+	9850 4100 9900 4100
+Connection ~ 9900 4100
+Wire Wire Line
+	10100 3750 9900 3750
+Connection ~ 9900 3900
+Wire Wire Line
+	10550 4200 10600 4200
+Wire Wire Line
+	10600 3750 10600 3900
+Wire Wire Line
+	10600 3900 10400 3900
+Wire Wire Line
+	10400 3750 10600 3750
+Connection ~ 10600 3900
+Connection ~ 9200 4100
+Connection ~ 10600 4200
+Wire Wire Line
+	9150 4100 9200 4100
+Wire Wire Line
+	9200 3500 9200 3650
+Connection ~ 9200 3500
+Wire Wire Line
+	10950 4200 11150 4200
+Text Label 11150 4200 2    39   ~ 0
+AOUT3-
+Text Label 11150 3500 2    39   ~ 0
+AOUT3+
+$Comp
+L freeDSP-aurora-rescue:GND #PWR0183
+U 1 1 590931B7
+P 8800 5650
+F 0 "#PWR0183" H 8800 5400 50  0001 C CNN
+F 1 "GND" H 8800 5500 39  0000 C CNN
+F 2 "" H 8800 5650 50  0000 C CNN
+F 3 "" H 8800 5650 50  0000 C CNN
+	1    8800 5650
+	1    0    0    -1  
+$EndComp
+Text Label 11750 4800 0    39   ~ 0
+DAC5-
+Wire Wire Line
+	7750 4800 7500 4800
+Text Label 11750 5500 0    39   ~ 0
+DAC5+
+Wire Wire Line
+	7750 5500 7500 5500
+Wire Wire Line
+	8050 5500 8100 5500
+Wire Wire Line
+	8100 5350 8100 5500
+Connection ~ 8100 5500
+Wire Wire Line
+	8150 4950 8100 4950
+Wire Wire Line
+	8100 4800 8100 4950
+Wire Wire Line
+	8550 5300 8500 5300
+Wire Wire Line
+	8500 5300 8500 4950
+Wire Wire Line
+	8450 4950 8500 4950
+Wire Wire Line
+	8450 5500 8500 5500
+Wire Wire Line
+	8500 5550 8500 5500
+Connection ~ 8500 5500
+Connection ~ 8500 4950
+Wire Wire Line
+	9200 4950 9150 4950
+Connection ~ 9200 4950
+Wire Wire Line
+	8050 4800 8100 4800
+Connection ~ 8100 4950
+Connection ~ 8100 4800
+Wire Wire Line
+	10100 5200 9900 5200
+Wire Wire Line
+	9900 5050 9900 5200
+Wire Wire Line
+	9850 5400 9900 5400
+Connection ~ 9900 5400
+Wire Wire Line
+	10100 5050 9900 5050
+Connection ~ 9900 5200
+Wire Wire Line
+	10550 5500 10600 5500
+Wire Wire Line
+	10600 5050 10600 5200
+Wire Wire Line
+	10600 5200 10400 5200
+Wire Wire Line
+	10400 5050 10600 5050
+Connection ~ 10600 5200
+Connection ~ 9200 5400
+Connection ~ 10600 5500
+Wire Wire Line
+	9150 5400 9200 5400
+Wire Wire Line
+	9200 4800 9200 4950
+Connection ~ 9200 4800
+Wire Wire Line
+	10950 5500 11150 5500
+Text Label 11150 5500 2    39   ~ 0
+AOUT5-
+Text Label 11150 4800 2    39   ~ 0
+AOUT5+
+$Comp
+L freeDSP-aurora-rescue:GND #PWR0184
+U 1 1 5909358B
+P 8800 6950
+F 0 "#PWR0184" H 8800 6700 50  0001 C CNN
+F 1 "GND" H 8800 6800 39  0000 C CNN
+F 2 "" H 8800 6950 50  0000 C CNN
+F 3 "" H 8800 6950 50  0000 C CNN
+	1    8800 6950
+	1    0    0    -1  
+$EndComp
+Text Label 11750 6100 0    39   ~ 0
+DAC7-
+Wire Wire Line
+	7750 6100 7500 6100
+Text Label 11750 6800 0    39   ~ 0
+DAC7+
+Wire Wire Line
+	7750 6800 7500 6800
+Wire Wire Line
+	8050 6800 8100 6800
+Wire Wire Line
+	8100 6650 8100 6800
+Connection ~ 8100 6800
+Wire Wire Line
+	8150 6250 8100 6250
+Wire Wire Line
+	8100 6100 8100 6250
+Wire Wire Line
+	8550 6600 8500 6600
+Wire Wire Line
+	8500 6600 8500 6250
+Wire Wire Line
+	8450 6250 8500 6250
+Wire Wire Line
+	8450 6800 8500 6800
+Wire Wire Line
+	8500 6850 8500 6800
+Connection ~ 8500 6800
+Connection ~ 8500 6250
+Wire Wire Line
+	9200 6250 9150 6250
+Connection ~ 9200 6250
+Wire Wire Line
+	8050 6100 8100 6100
+Connection ~ 8100 6250
+Connection ~ 8100 6100
+Wire Wire Line
+	10100 6500 9900 6500
+Wire Wire Line
+	9900 6350 9900 6500
+Wire Wire Line
+	9850 6700 9900 6700
+Connection ~ 9900 6700
+Wire Wire Line
+	10100 6350 9900 6350
+Connection ~ 9900 6500
+Wire Wire Line
+	10550 6800 10600 6800
+Wire Wire Line
+	10600 6350 10600 6500
+Wire Wire Line
+	10600 6500 10400 6500
+Wire Wire Line
+	10400 6350 10600 6350
+Connection ~ 10600 6500
+Connection ~ 9200 6700
+Connection ~ 10600 6800
+Wire Wire Line
+	9150 6700 9200 6700
+Wire Wire Line
+	9200 6100 9200 6250
+Connection ~ 9200 6100
+Wire Wire Line
+	10950 6800 11150 6800
+Text Label 11150 6800 2    39   ~ 0
+AOUT7-
+Text Label 11150 6100 2    39   ~ 0
+AOUT7+
+$Comp
+L freeDSP-aurora-rescue:GND #PWR0185
+U 1 1 59095A8E
+P 13050 3050
+F 0 "#PWR0185" H 13050 2800 50  0001 C CNN
+F 1 "GND" H 13050 2900 39  0000 C CNN
+F 2 "" H 13050 3050 50  0000 C CNN
+F 3 "" H 13050 3050 50  0000 C CNN
+	1    13050 3050
+	1    0    0    -1  
+$EndComp
+Text Label 11750 2200 0    39   ~ 0
+DAC2-
+Wire Wire Line
+	12000 2200 11750 2200
+Text Label 11750 2900 0    39   ~ 0
+DAC2+
+Wire Wire Line
+	12000 2900 11750 2900
+Wire Wire Line
+	12300 2900 12350 2900
+Wire Wire Line
+	12350 2750 12350 2900
+Connection ~ 12350 2900
+Wire Wire Line
+	12400 2350 12350 2350
+Wire Wire Line
+	12350 2200 12350 2350
+Wire Wire Line
+	12800 2700 12750 2700
+Wire Wire Line
+	12750 2700 12750 2350
+Wire Wire Line
+	12700 2350 12750 2350
+Wire Wire Line
+	12700 2900 12750 2900
+Wire Wire Line
+	12750 2950 12750 2900
+Connection ~ 12750 2900
+Connection ~ 12750 2350
+Wire Wire Line
+	13450 2350 13400 2350
+Connection ~ 13450 2350
+Wire Wire Line
+	12300 2200 12350 2200
+Connection ~ 12350 2350
+Connection ~ 12350 2200
+Wire Wire Line
+	14350 2600 14150 2600
+Wire Wire Line
+	14150 2450 14150 2600
+Wire Wire Line
+	14100 2800 14150 2800
+Connection ~ 14150 2800
+Wire Wire Line
+	14350 2450 14150 2450
+Connection ~ 14150 2600
+Wire Wire Line
+	14800 2900 14850 2900
+Wire Wire Line
+	14850 2450 14850 2600
+Wire Wire Line
+	14850 2600 14650 2600
+Wire Wire Line
+	14650 2450 14850 2450
+Connection ~ 14850 2600
+Connection ~ 13450 2800
+Connection ~ 14850 2900
+Wire Wire Line
+	13400 2800 13450 2800
+Wire Wire Line
+	13450 2200 13450 2350
+Connection ~ 13450 2200
+Wire Wire Line
+	15200 2900 15400 2900
+Text Label 11150 2900 2    39   ~ 0
+AOUT2-
+Text Label 11150 2200 2    39   ~ 0
+AOUT2+
+$Comp
+L freeDSP-aurora-rescue:GND #PWR0186
+U 1 1 59095B5C
+P 13050 4350
+F 0 "#PWR0186" H 13050 4100 50  0001 C CNN
+F 1 "GND" H 13050 4200 39  0000 C CNN
+F 2 "" H 13050 4350 50  0000 C CNN
+F 3 "" H 13050 4350 50  0000 C CNN
+	1    13050 4350
+	1    0    0    -1  
+$EndComp
+Text Label 7500 3500 0    39   ~ 0
+DAC4-
+Wire Wire Line
+	12000 3500 11750 3500
+Text Label 7500 4200 0    39   ~ 0
+DAC4+
+Wire Wire Line
+	12000 4200 11750 4200
+Wire Wire Line
+	12300 4200 12350 4200
+Wire Wire Line
+	12350 4050 12350 4200
+Connection ~ 12350 4200
+Wire Wire Line
+	12400 3650 12350 3650
+Wire Wire Line
+	12350 3500 12350 3650
+Wire Wire Line
+	12800 4000 12750 4000
+Wire Wire Line
+	12750 4000 12750 3650
+Wire Wire Line
+	12700 3650 12750 3650
+Wire Wire Line
+	12700 4200 12750 4200
+Wire Wire Line
+	12750 4250 12750 4200
+Connection ~ 12750 4200
+Connection ~ 12750 3650
+Wire Wire Line
+	13450 3650 13400 3650
+Connection ~ 13450 3650
+Wire Wire Line
+	12300 3500 12350 3500
+Connection ~ 12350 3650
+Connection ~ 12350 3500
+Wire Wire Line
+	14350 3900 14150 3900
+Wire Wire Line
+	14150 3750 14150 3900
+Wire Wire Line
+	14100 4100 14150 4100
+Connection ~ 14150 4100
+Wire Wire Line
+	14350 3750 14150 3750
+Connection ~ 14150 3900
+Wire Wire Line
+	14800 4200 14850 4200
+Wire Wire Line
+	14850 3750 14850 3900
+Wire Wire Line
+	14850 3900 14650 3900
+Wire Wire Line
+	14650 3750 14850 3750
+Connection ~ 14850 3900
+Connection ~ 13450 4100
+Connection ~ 14850 4200
+Wire Wire Line
+	13400 4100 13450 4100
+Wire Wire Line
+	13450 3500 13450 3650
+Connection ~ 13450 3500
+Wire Wire Line
+	15200 4200 15400 4200
+Text Label 15400 4200 2    39   ~ 0
+AOUT4-
+Text Label 15400 3500 2    39   ~ 0
+AOUT4+
+$Comp
+L freeDSP-aurora-rescue:GND #PWR0187
+U 1 1 59095C2A
+P 13050 5650
+F 0 "#PWR0187" H 13050 5400 50  0001 C CNN
+F 1 "GND" H 13050 5500 39  0000 C CNN
+F 2 "" H 13050 5650 50  0000 C CNN
+F 3 "" H 13050 5650 50  0000 C CNN
+	1    13050 5650
+	1    0    0    -1  
+$EndComp
+Text Label 7500 4800 0    39   ~ 0
+DAC6-
+Wire Wire Line
+	12000 4800 11750 4800
+Text Label 7500 5500 0    39   ~ 0
+DAC6+
+Wire Wire Line
+	12000 5500 11750 5500
+Wire Wire Line
+	12300 5500 12350 5500
+Wire Wire Line
+	12350 5350 12350 5500
+Connection ~ 12350 5500
+Wire Wire Line
+	12400 4950 12350 4950
+Wire Wire Line
+	12350 4800 12350 4950
+Wire Wire Line
+	12800 5300 12750 5300
+Wire Wire Line
+	12750 5300 12750 4950
+Wire Wire Line
+	12700 4950 12750 4950
+Wire Wire Line
+	12700 5500 12750 5500
+Wire Wire Line
+	12750 5550 12750 5500
+Connection ~ 12750 5500
+Connection ~ 12750 4950
+Wire Wire Line
+	13450 4950 13400 4950
+Connection ~ 13450 4950
+Wire Wire Line
+	12300 4800 12350 4800
+Connection ~ 12350 4950
+Connection ~ 12350 4800
+Wire Wire Line
+	14350 5200 14150 5200
+Wire Wire Line
+	14150 5050 14150 5200
+Wire Wire Line
+	14100 5400 14150 5400
+Connection ~ 14150 5400
+Wire Wire Line
+	14350 5050 14150 5050
+Connection ~ 14150 5200
+Wire Wire Line
+	14800 5500 14850 5500
+Wire Wire Line
+	14850 5050 14850 5200
+Wire Wire Line
+	14850 5200 14650 5200
+Wire Wire Line
+	14650 5050 14850 5050
+Connection ~ 14850 5200
+Connection ~ 13450 5400
+Connection ~ 14850 5500
+Wire Wire Line
+	13400 5400 13450 5400
+Wire Wire Line
+	13450 4800 13450 4950
+Connection ~ 13450 4800
+Wire Wire Line
+	15200 5500 15400 5500
+Text Label 15400 5500 2    39   ~ 0
+AOUT6-
+Text Label 15400 4800 2    39   ~ 0
+AOUT6+
+$Comp
+L freeDSP-aurora-rescue:GND #PWR0188
+U 1 1 59095CF8
+P 13050 6950
+F 0 "#PWR0188" H 13050 6700 50  0001 C CNN
+F 1 "GND" H 13050 6800 39  0000 C CNN
+F 2 "" H 13050 6950 50  0000 C CNN
+F 3 "" H 13050 6950 50  0000 C CNN
+	1    13050 6950
+	1    0    0    -1  
+$EndComp
+Text Label 7500 6100 0    39   ~ 0
+DAC8-
+Wire Wire Line
+	12000 6100 11750 6100
+Text Label 7500 6800 0    39   ~ 0
+DAC8+
+Wire Wire Line
+	12000 6800 11750 6800
+Wire Wire Line
+	12300 6800 12350 6800
+Wire Wire Line
+	12350 6650 12350 6800
+Connection ~ 12350 6800
+Wire Wire Line
+	12400 6250 12350 6250
+Wire Wire Line
+	12350 6100 12350 6250
+Wire Wire Line
+	12800 6600 12750 6600
+Wire Wire Line
+	12750 6600 12750 6250
+Wire Wire Line
+	12700 6250 12750 6250
+Wire Wire Line
+	12700 6800 12750 6800
+Wire Wire Line
+	12750 6850 12750 6800
+Connection ~ 12750 6800
+Connection ~ 12750 6250
+Wire Wire Line
+	13450 6250 13400 6250
+Connection ~ 13450 6250
+Wire Wire Line
+	12300 6100 12350 6100
+Connection ~ 12350 6250
+Connection ~ 12350 6100
+Wire Wire Line
+	14350 6500 14150 6500
+Wire Wire Line
+	14150 6350 14150 6500
+Wire Wire Line
+	14100 6700 14150 6700
+Connection ~ 14150 6700
+Wire Wire Line
+	14350 6350 14150 6350
+Connection ~ 14150 6500
+Wire Wire Line
+	14800 6800 14850 6800
+Wire Wire Line
+	14850 6350 14850 6500
+Wire Wire Line
+	14850 6500 14650 6500
+Wire Wire Line
+	14650 6350 14850 6350
+Connection ~ 14850 6500
+Connection ~ 13450 6700
+Connection ~ 14850 6800
+Wire Wire Line
+	13400 6700 13450 6700
+Wire Wire Line
+	13450 6100 13450 6250
+Connection ~ 13450 6100
+Wire Wire Line
+	15200 6800 15400 6800
+Text Label 15400 6800 2    39   ~ 0
+AOUT8-
+Text Label 15400 6100 2    39   ~ 0
+AOUT8+
+$Comp
+L freeDSP-aurora-rescue:CONN_02X13 X301
+U 1 1 590CA412
+P 13600 8650
+F 0 "X301" H 13600 9350 39  0000 C CNN
+F 1 "CONN_02X13" V 13600 8650 39  0000 C CNN
+F 2 "rklib:HDR_02x13" H 13600 7500 50  0001 C CNN
+F 3 "" H 13600 7500 50  0000 C CNN
+F 4 "SKT_02x13" H 0   0   50  0001 C CNN "Value1"
+F 5 "-" H 0   0   50  0001 C CNN "Value2"
+F 6 "???" H 0   0   50  0001 C CNN "digikey"
+	1    13600 8650
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:GND #PWR0189
+U 1 1 590CAA26
+P 13900 9300
+F 0 "#PWR0189" H 13900 9050 50  0001 C CNN
+F 1 "GND" H 13900 9150 39  0000 C CNN
+F 2 "" H 13900 9300 50  0000 C CNN
+F 3 "" H 13900 9300 50  0000 C CNN
+	1    13900 9300
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:GND #PWR0190
+U 1 1 590CAEB2
+P 13300 9300
+F 0 "#PWR0190" H 13300 9050 50  0001 C CNN
+F 1 "GND" H 13300 9150 39  0000 C CNN
+F 2 "" H 13300 9300 50  0000 C CNN
+F 3 "" H 13300 9300 50  0000 C CNN
+	1    13300 9300
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	13900 9150 13850 9150
+Wire Wire Line
+	13900 8250 13900 8550
+Wire Wire Line
+	13850 8850 13900 8850
+Connection ~ 13900 9150
+Wire Wire Line
+	13850 8550 13900 8550
+Connection ~ 13900 8850
+Wire Wire Line
+	13850 8250 13900 8250
+Connection ~ 13900 8550
+Wire Wire Line
+	13300 9050 13350 9050
+Wire Wire Line
+	13300 8150 13300 8450
+Wire Wire Line
+	13350 8750 13300 8750
+Connection ~ 13300 9050
+Wire Wire Line
+	13350 8450 13300 8450
+Connection ~ 13300 8750
+Wire Wire Line
+	13350 8150 13300 8150
+Connection ~ 13300 8450
+Wire Wire Line
+	13350 9150 13050 9150
+Text Label 13050 9150 0    39   ~ 0
+AOUT1-
+Text Label 14150 9050 2    39   ~ 0
+AOUT1+
+Wire Wire Line
+	13850 9050 14150 9050
+Text Label 14150 8950 2    39   ~ 0
+AOUT2-
+Wire Wire Line
+	13850 8950 14150 8950
+Text Label 14150 8750 2    39   ~ 0
+AOUT3+
+Wire Wire Line
+	13850 8750 14150 8750
+Text Label 14150 8650 2    39   ~ 0
+AOUT4-
+Wire Wire Line
+	13850 8650 14150 8650
+Text Label 14150 8450 2    39   ~ 0
+AOUT5+
+Wire Wire Line
+	13850 8450 14150 8450
+Text Label 14150 8350 2    39   ~ 0
+AOUT6-
+Wire Wire Line
+	13850 8350 14150 8350
+Text Label 14150 8150 2    39   ~ 0
+AOUT7+
+Wire Wire Line
+	13850 8150 14150 8150
+Text Label 14150 8050 2    39   ~ 0
+AOUT8-
+Wire Wire Line
+	13850 8050 14150 8050
+Wire Wire Line
+	13350 8950 13050 8950
+Text Label 13050 8950 0    39   ~ 0
+AOUT2+
+Wire Wire Line
+	13350 8850 13050 8850
+Text Label 13050 8850 0    39   ~ 0
+AOUT3-
+Wire Wire Line
+	13350 8650 13050 8650
+Text Label 13050 8650 0    39   ~ 0
+AOUT4+
+Wire Wire Line
+	13350 8550 13050 8550
+Text Label 13050 8550 0    39   ~ 0
+AOUT5-
+Wire Wire Line
+	13350 8350 13050 8350
+Text Label 13050 8350 0    39   ~ 0
+AOUT6+
+Wire Wire Line
+	13350 8250 13050 8250
+Text Label 13050 8250 0    39   ~ 0
+AOUT7-
+Wire Wire Line
+	13350 8050 13050 8050
+Text Label 13050 8050 0    39   ~ 0
+AOUT8+
+Text Notes 8650 7750 0    60   ~ 0
+Achtung: Kanäle L/R vertauscht. Im SigmaDSP-Programm berücksichtigen!
+Wire Wire Line
+	7850 3300 8100 3300
+Wire Wire Line
+	8100 3300 8100 3250
+Wire Wire Line
+	8500 3300 8500 3250
+Connection ~ 8100 3300
+Wire Wire Line
+	8750 2200 9200 2200
+Wire Wire Line
+	9550 2200 11150 2200
+Wire Wire Line
+	12350 3300 12350 3250
+Wire Wire Line
+	12750 3300 12750 3250
+Connection ~ 12350 3300
+Wire Wire Line
+	13000 2200 13450 2200
+Wire Wire Line
+	13800 2200 15400 2200
+Wire Wire Line
+	8100 4600 8100 4550
+Wire Wire Line
+	8500 4600 8500 4550
+Connection ~ 8100 4600
+Wire Wire Line
+	12350 4600 12350 4550
+Wire Wire Line
+	12750 4600 12750 4550
+Connection ~ 12350 4600
+Wire Wire Line
+	13000 3500 13450 3500
+Wire Wire Line
+	13800 3500 15400 3500
+Wire Wire Line
+	8750 3500 9200 3500
+Wire Wire Line
+	9550 3500 11150 3500
+Wire Wire Line
+	8750 4800 9200 4800
+Wire Wire Line
+	9550 4800 11150 4800
+Wire Wire Line
+	13000 4800 13450 4800
+Wire Wire Line
+	13800 4800 15400 4800
+Wire Wire Line
+	8100 5900 8100 5850
+Wire Wire Line
+	8500 5900 8500 5850
+Connection ~ 8100 5900
+Wire Wire Line
+	12350 5900 12350 5850
+Wire Wire Line
+	12750 5900 12750 5850
+Connection ~ 12350 5900
+Wire Wire Line
+	8100 7200 8100 7150
+Wire Wire Line
+	8500 7200 8500 7150
+Connection ~ 8100 7200
+Wire Wire Line
+	12350 7200 12350 7150
+Wire Wire Line
+	12750 7200 12750 7150
+Connection ~ 12350 7200
+Wire Wire Line
+	13000 6100 13450 6100
+Wire Wire Line
+	13800 6100 15400 6100
+Wire Wire Line
+	9550 6100 11150 6100
+Wire Wire Line
+	8750 6100 9200 6100
+Text HLabel 7850 3300 0    39   Input ~ 0
+VGROUND
+Wire Wire Line
+	9900 3300 9900 3000
+Wire Wire Line
+	9900 3000 9950 3000
+Connection ~ 8500 3300
+Wire Wire Line
+	7850 4600 8100 4600
+Wire Wire Line
+	9900 4600 9900 4300
+Wire Wire Line
+	9900 4300 9950 4300
+Connection ~ 8500 4600
+Text HLabel 7850 4600 0    39   Input ~ 0
+VGROUND
+Wire Wire Line
+	7850 5900 8100 5900
+Wire Wire Line
+	9900 5900 9900 5600
+Wire Wire Line
+	9900 5600 9950 5600
+Connection ~ 8500 5900
+Text HLabel 7850 5900 0    39   Input ~ 0
+VGROUND
+Wire Wire Line
+	7850 7200 8100 7200
+Wire Wire Line
+	9900 7200 9900 6900
+Wire Wire Line
+	9900 6900 9950 6900
+Connection ~ 8500 7200
+Text HLabel 7850 7200 0    39   Input ~ 0
+VGROUND
+Wire Wire Line
+	12100 7200 12350 7200
+Text HLabel 12100 7200 0    39   Input ~ 0
+VGROUND
+Connection ~ 12750 7200
+Wire Wire Line
+	14150 7200 14150 6900
+Wire Wire Line
+	14150 6900 14200 6900
+Wire Wire Line
+	12100 5900 12350 5900
+Text HLabel 12100 5900 0    39   Input ~ 0
+VGROUND
+Connection ~ 12750 5900
+Wire Wire Line
+	14150 5900 14150 5600
+Wire Wire Line
+	14150 5600 14200 5600
+Wire Wire Line
+	12100 4600 12350 4600
+Text HLabel 12100 4600 0    39   Input ~ 0
+VGROUND
+Wire Wire Line
+	14150 4600 14150 4300
+Wire Wire Line
+	14150 4300 14200 4300
+Connection ~ 12750 4600
+Wire Wire Line
+	12100 3300 12350 3300
+Text HLabel 12100 3300 0    39   Input ~ 0
+VGROUND
+Connection ~ 12750 3300
+Wire Wire Line
+	14150 3300 14150 3000
+Wire Wire Line
+	14150 3000 14200 3000
+Text Notes 13050 9700 0    60   ~ 0
+RFI auf Anschlussplatine
+Text Notes 8650 8050 0    60   ~ 0
+alternative OpAmps: OPA1652, OPA2365, OPA2353
+$Comp
+L freeDSP-aurora-rescue:+9VA #PWR0191
+U 1 1 5B7AAAFD
+P 8800 2550
+F 0 "#PWR0191" H 8800 2425 50  0001 C CNN
+F 1 "+9VA" H 8800 2700 39  0000 C CNN
+F 2 "" H 8800 2550 50  0001 C CNN
+F 3 "" H 8800 2550 50  0001 C CNN
+	1    8800 2550
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:+9VA #PWR0192
+U 1 1 5B7AABA5
+P 13050 2550
+F 0 "#PWR0192" H 13050 2425 50  0001 C CNN
+F 1 "+9VA" H 13050 2700 39  0000 C CNN
+F 2 "" H 13050 2550 50  0001 C CNN
+F 3 "" H 13050 2550 50  0001 C CNN
+	1    13050 2550
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:+9VA #PWR0193
+U 1 1 5B7AAC4D
+P 8800 3850
+F 0 "#PWR0193" H 8800 3725 50  0001 C CNN
+F 1 "+9VA" H 8800 4000 39  0000 C CNN
+F 2 "" H 8800 3850 50  0001 C CNN
+F 3 "" H 8800 3850 50  0001 C CNN
+	1    8800 3850
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:+9VA #PWR0194
+U 1 1 5B7AACF5
+P 13050 3850
+F 0 "#PWR0194" H 13050 3725 50  0001 C CNN
+F 1 "+9VA" H 13050 4000 39  0000 C CNN
+F 2 "" H 13050 3850 50  0001 C CNN
+F 3 "" H 13050 3850 50  0001 C CNN
+	1    13050 3850
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:+9VA #PWR0195
+U 1 1 5B7AAD9D
+P 8800 5150
+F 0 "#PWR0195" H 8800 5025 50  0001 C CNN
+F 1 "+9VA" H 8800 5300 39  0000 C CNN
+F 2 "" H 8800 5150 50  0001 C CNN
+F 3 "" H 8800 5150 50  0001 C CNN
+	1    8800 5150
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:+9VA #PWR0196
+U 1 1 5B7AAE45
+P 13050 5150
+F 0 "#PWR0196" H 13050 5025 50  0001 C CNN
+F 1 "+9VA" H 13050 5300 39  0000 C CNN
+F 2 "" H 13050 5150 50  0001 C CNN
+F 3 "" H 13050 5150 50  0001 C CNN
+	1    13050 5150
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:+9VA #PWR0197
+U 1 1 5B7AAEED
+P 8800 6450
+F 0 "#PWR0197" H 8800 6325 50  0001 C CNN
+F 1 "+9VA" H 8800 6600 39  0000 C CNN
+F 2 "" H 8800 6450 50  0001 C CNN
+F 3 "" H 8800 6450 50  0001 C CNN
+	1    8800 6450
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:+9VA #PWR0198
+U 1 1 5B7AAF95
+P 13050 6450
+F 0 "#PWR0198" H 13050 6325 50  0001 C CNN
+F 1 "+9VA" H 13050 6600 39  0000 C CNN
+F 2 "" H 13050 6450 50  0001 C CNN
+F 3 "" H 13050 6450 50  0001 C CNN
+	1    13050 6450
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:+9VA #PWR0199
+U 1 1 5B7ABDFE
+P 8500 10400
+F 0 "#PWR0199" H 8500 10275 50  0001 C CNN
+F 1 "+9VA" H 8500 10550 39  0000 C CNN
+F 2 "" H 8500 10400 50  0001 C CNN
+F 3 "" H 8500 10400 50  0001 C CNN
+	1    8500 10400
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:CAP_100u_20%_25V_ALUM_RADIAL C301
+U 1 1 5B7DAFBA
+P 9400 2200
+F 0 "C301" H 9450 2300 39  0000 L CNN
+F 1 "CAP_100u_20%_25V_ALUM_RADIAL" H 9400 2050 39  0001 C CNN
+F 2 "rklib:RD2_D5_L11" H 9400 2000 39  0001 C CNN
+F 3 "" V 9400 2200 50  0001 C CNN
+F 4 "100u" H 9450 2250 39  0000 L CNN "Value1"
+F 5 "20% 25V" H 9400 1950 39  0001 C CNN "Value2"
+F 6 "399-6102-ND" H 9450 1900 39  0001 C CNN "digikey"
+	1    9400 2200
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:CAP_100u_20%_25V_ALUM_RADIAL C314
+U 1 1 5B7DBCFF
+P 9400 3500
+F 0 "C314" H 9450 3600 39  0000 L CNN
+F 1 "CAP_100u_20%_25V_ALUM_RADIAL" H 9400 3350 39  0001 C CNN
+F 2 "rklib:RD2_D5_L11" H 9400 3300 39  0001 C CNN
+F 3 "" V 9400 3500 50  0001 C CNN
+F 4 "100u" H 9450 3550 39  0000 L CNN "Value1"
+F 5 "20% 25V" H 9400 3250 39  0001 C CNN "Value2"
+F 6 "399-6102-ND" H 9450 3200 39  0001 C CNN "digikey"
+	1    9400 3500
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:CAP_100u_20%_25V_ALUM_RADIAL C302
+U 1 1 5B7DBDF9
+P 13650 2200
+F 0 "C302" H 13700 2300 39  0000 L CNN
+F 1 "CAP_100u_20%_25V_ALUM_RADIAL" H 13650 2050 39  0001 C CNN
+F 2 "rklib:RD2_D5_L11" H 13650 2000 39  0001 C CNN
+F 3 "" V 13650 2200 50  0001 C CNN
+F 4 "100u" H 13700 2250 39  0000 L CNN "Value1"
+F 5 "20% 25V" H 13650 1950 39  0001 C CNN "Value2"
+F 6 "399-6102-ND" H 13700 1900 39  0001 C CNN "digikey"
+	1    13650 2200
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:CAP_100u_20%_25V_ALUM_RADIAL C315
+U 1 1 5B7DBEC6
+P 13650 3500
+F 0 "C315" H 13700 3600 39  0000 L CNN
+F 1 "CAP_100u_20%_25V_ALUM_RADIAL" H 13650 3350 39  0001 C CNN
+F 2 "rklib:RD2_D5_L11" H 13650 3300 39  0001 C CNN
+F 3 "" V 13650 3500 50  0001 C CNN
+F 4 "100u" H 13700 3550 39  0000 L CNN "Value1"
+F 5 "20% 25V" H 13650 3250 39  0001 C CNN "Value2"
+F 6 "399-6102-ND" H 13700 3200 39  0001 C CNN "digikey"
+	1    13650 3500
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:CAP_100u_20%_25V_ALUM_RADIAL C330
+U 1 1 5B7DC224
+P 9400 4800
+F 0 "C330" H 9450 4900 39  0000 L CNN
+F 1 "CAP_100u_20%_25V_ALUM_RADIAL" H 9400 4650 39  0001 C CNN
+F 2 "rklib:RD2_D5_L11" H 9400 4600 39  0001 C CNN
+F 3 "" V 9400 4800 50  0001 C CNN
+F 4 "100u" H 9450 4850 39  0000 L CNN "Value1"
+F 5 "20% 25V" H 9400 4550 39  0001 C CNN "Value2"
+F 6 "399-6102-ND" H 9450 4500 39  0001 C CNN "digikey"
+	1    9400 4800
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:CAP_100u_20%_25V_ALUM_RADIAL C331
+U 1 1 5B7DC2E9
+P 13650 4800
+F 0 "C331" H 13700 4900 39  0000 L CNN
+F 1 "CAP_100u_20%_25V_ALUM_RADIAL" H 13650 4650 39  0001 C CNN
+F 2 "rklib:RD2_D5_L11" H 13650 4600 39  0001 C CNN
+F 3 "" V 13650 4800 50  0001 C CNN
+F 4 "100u" H 13700 4850 39  0000 L CNN "Value1"
+F 5 "20% 25V" H 13650 4550 39  0001 C CNN "Value2"
+F 6 "399-6102-ND" H 13700 4500 39  0001 C CNN "digikey"
+	1    13650 4800
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:CAP_100u_20%_25V_ALUM_RADIAL C346
+U 1 1 5B7DC3BE
+P 9400 6100
+F 0 "C346" H 9450 6200 39  0000 L CNN
+F 1 "CAP_100u_20%_25V_ALUM_RADIAL" H 9400 5950 39  0001 C CNN
+F 2 "rklib:RD2_D5_L11" H 9400 5900 39  0001 C CNN
+F 3 "" V 9400 6100 50  0001 C CNN
+F 4 "100u" H 9450 6150 39  0000 L CNN "Value1"
+F 5 "20% 25V" H 9400 5850 39  0001 C CNN "Value2"
+F 6 "399-6102-ND" H 9450 5800 39  0001 C CNN "digikey"
+	1    9400 6100
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:CAP_100u_20%_25V_ALUM_RADIAL C347
+U 1 1 5B7DC48D
+P 13650 6100
+F 0 "C347" H 13700 6200 39  0000 L CNN
+F 1 "CAP_100u_20%_25V_ALUM_RADIAL" H 13650 5950 39  0001 C CNN
+F 2 "rklib:RD2_D5_L11" H 13650 5900 39  0001 C CNN
+F 3 "" V 13650 6100 50  0001 C CNN
+F 4 "100u" H 13700 6150 39  0000 L CNN "Value1"
+F 5 "20% 25V" H 13650 5850 39  0001 C CNN "Value2"
+F 6 "399-6102-ND" H 13700 5800 39  0001 C CNN "digikey"
+	1    13650 6100
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:CAP_100u_20%_25V_ALUM_RADIAL C309
+U 1 1 5B7E2436
+P 10800 2900
+F 0 "C309" H 10850 2850 39  0000 L CNN
+F 1 "CAP_100u_20%_25V_ALUM_RADIAL" H 10800 2750 39  0001 C CNN
+F 2 "rklib:RD2_D5_L11" H 10800 2700 39  0001 C CNN
+F 3 "" V 10800 2900 50  0001 C CNN
+F 4 "100u" H 10850 2800 39  0000 L CNN "Value1"
+F 5 "20% 25V" H 10800 2650 39  0001 C CNN "Value2"
+F 6 "399-6102-ND" H 10850 2600 39  0001 C CNN "digikey"
+	1    10800 2900
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:CAP_100u_20%_25V_ALUM_RADIAL C310
+U 1 1 5B7E3719
+P 15050 2900
+F 0 "C310" H 15100 2850 39  0000 L CNN
+F 1 "CAP_100u_20%_25V_ALUM_RADIAL" H 15050 2750 39  0001 C CNN
+F 2 "rklib:RD2_D5_L11" H 15050 2700 39  0001 C CNN
+F 3 "" V 15050 2900 50  0001 C CNN
+F 4 "100u" H 15100 2800 39  0000 L CNN "Value1"
+F 5 "20% 25V" H 15050 2650 39  0001 C CNN "Value2"
+F 6 "399-6102-ND" H 15100 2600 39  0001 C CNN "digikey"
+	1    15050 2900
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:CAP_100u_20%_25V_ALUM_RADIAL C324
+U 1 1 5B7E37E8
+P 10800 4200
+F 0 "C324" H 10850 4150 39  0000 L CNN
+F 1 "CAP_100u_20%_25V_ALUM_RADIAL" H 10800 4050 39  0001 C CNN
+F 2 "rklib:RD2_D5_L11" H 10800 4000 39  0001 C CNN
+F 3 "" V 10800 4200 50  0001 C CNN
+F 4 "100u" H 10850 4100 39  0000 L CNN "Value1"
+F 5 "20% 25V" H 10800 3950 39  0001 C CNN "Value2"
+F 6 "399-6102-ND" H 10850 3900 39  0001 C CNN "digikey"
+	1    10800 4200
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:CAP_100u_20%_25V_ALUM_RADIAL C325
+U 1 1 5B7E38BA
+P 15050 4200
+F 0 "C325" H 15100 4150 39  0000 L CNN
+F 1 "CAP_100u_20%_25V_ALUM_RADIAL" H 15050 4050 39  0001 C CNN
+F 2 "rklib:RD2_D5_L11" H 15050 4000 39  0001 C CNN
+F 3 "" V 15050 4200 50  0001 C CNN
+F 4 "100u" H 15100 4100 39  0000 L CNN "Value1"
+F 5 "20% 25V" H 15050 3950 39  0001 C CNN "Value2"
+F 6 "399-6102-ND" H 15100 3900 39  0001 C CNN "digikey"
+	1    15050 4200
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:CAP_100u_20%_25V_ALUM_RADIAL C340
+U 1 1 5B7E3997
+P 10800 5500
+F 0 "C340" H 10850 5450 39  0000 L CNN
+F 1 "CAP_100u_20%_25V_ALUM_RADIAL" H 10800 5350 39  0001 C CNN
+F 2 "rklib:RD2_D5_L11" H 10800 5300 39  0001 C CNN
+F 3 "" V 10800 5500 50  0001 C CNN
+F 4 "100u" H 10850 5400 39  0000 L CNN "Value1"
+F 5 "20% 25V" H 10800 5250 39  0001 C CNN "Value2"
+F 6 "399-6102-ND" H 10850 5200 39  0001 C CNN "digikey"
+	1    10800 5500
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:CAP_100u_20%_25V_ALUM_RADIAL C341
+U 1 1 5B7E3A6A
+P 15050 5500
+F 0 "C341" H 15100 5450 39  0000 L CNN
+F 1 "CAP_100u_20%_25V_ALUM_RADIAL" H 15050 5350 39  0001 C CNN
+F 2 "rklib:RD2_D5_L11" H 15050 5300 39  0001 C CNN
+F 3 "" V 15050 5500 50  0001 C CNN
+F 4 "100u" H 15100 5400 39  0000 L CNN "Value1"
+F 5 "20% 25V" H 15050 5250 39  0001 C CNN "Value2"
+F 6 "399-6102-ND" H 15100 5200 39  0001 C CNN "digikey"
+	1    15050 5500
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:CAP_100u_20%_25V_ALUM_RADIAL C356
+U 1 1 5B7E3C8D
+P 10800 6800
+F 0 "C356" H 10850 6750 39  0000 L CNN
+F 1 "CAP_100u_20%_25V_ALUM_RADIAL" H 10800 6650 39  0001 C CNN
+F 2 "rklib:RD2_D5_L11" H 10800 6600 39  0001 C CNN
+F 3 "" V 10800 6800 50  0001 C CNN
+F 4 "100u" H 10850 6700 39  0000 L CNN "Value1"
+F 5 "20% 25V" H 10800 6550 39  0001 C CNN "Value2"
+F 6 "399-6102-ND" H 10850 6500 39  0001 C CNN "digikey"
+	1    10800 6800
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:CAP_100u_20%_25V_ALUM_RADIAL C357
+U 1 1 5B7E3D5A
+P 15050 6800
+F 0 "C357" H 15100 6750 39  0000 L CNN
+F 1 "CAP_100u_20%_25V_ALUM_RADIAL" H 15050 6650 39  0001 C CNN
+F 2 "rklib:RD2_D5_L11" H 15050 6600 39  0001 C CNN
+F 3 "" V 15050 6800 50  0001 C CNN
+F 4 "100u" H 15100 6700 39  0000 L CNN "Value1"
+F 5 "20% 25V" H 15050 6550 39  0001 C CNN "Value2"
+F 6 "399-6102-ND" H 15100 6500 39  0001 C CNN "digikey"
+	1    15050 6800
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:CAP_100u_20%_25V_ALUM_RADIAL C321
+U 1 1 5B7E9942
+P 6350 3900
+F 0 "C321" V 6450 3900 39  0000 L CNN
+F 1 "CAP_100u_20%_25V_ALUM_RADIAL" H 6350 3750 39  0001 C CNN
+F 2 "rklib:RD2_D5_L11" H 6350 3700 39  0001 C CNN
+F 3 "" V 6350 3900 50  0001 C CNN
+F 4 "100u" V 6500 3900 39  0000 L CNN "Value1"
+F 5 "20% 25V" H 6350 3650 39  0001 C CNN "Value2"
+F 6 "399-6102-ND" H 6400 3600 39  0001 C CNN "digikey"
+	1    6350 3900
+	0    1    1    0   
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:CAP_100u_20%_25V_ALUM_RADIAL C329
+U 1 1 5B7EA5DA
+P 6350 4800
+F 0 "C329" V 6450 4800 39  0000 L CNN
+F 1 "CAP_100u_20%_25V_ALUM_RADIAL" H 6350 4650 39  0001 C CNN
+F 2 "rklib:RD2_D5_L11" H 6350 4600 39  0001 C CNN
+F 3 "" V 6350 4800 50  0001 C CNN
+F 4 "100u" V 6500 4800 39  0000 L CNN "Value1"
+F 5 "20% 25V" H 6350 4550 39  0001 C CNN "Value2"
+F 6 "399-6102-ND" H 6400 4500 39  0001 C CNN "digikey"
+	1    6350 4800
+	0    1    1    0   
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:CAP_100u_20%_25V_ALUM_RADIAL C345
+U 1 1 5B7EA6AB
+P 6350 5750
+F 0 "C345" V 6450 5750 39  0000 L CNN
+F 1 "CAP_100u_20%_25V_ALUM_RADIAL" H 6350 5600 39  0001 C CNN
+F 2 "rklib:RD2_D5_L11" H 6350 5550 39  0001 C CNN
+F 3 "" V 6350 5750 50  0001 C CNN
+F 4 "100u" V 6500 5750 39  0000 L CNN "Value1"
+F 5 "20% 25V" H 6350 5500 39  0001 C CNN "Value2"
+F 6 "399-6102-ND" H 6400 5450 39  0001 C CNN "digikey"
+	1    6350 5750
+	0    1    1    0   
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:CAP_100u_20%_25V_ALUM_RADIAL C353
+U 1 1 5B7EA8C1
+P 6350 6400
+F 0 "C353" V 6450 6400 39  0000 L CNN
+F 1 "CAP_100u_20%_25V_ALUM_RADIAL" H 6350 6250 39  0001 C CNN
+F 2 "rklib:RD2_D5_L11" H 6350 6200 39  0001 C CNN
+F 3 "" V 6350 6400 50  0001 C CNN
+F 4 "100u" V 6500 6400 39  0000 L CNN "Value1"
+F 5 "20% 25V" H 6350 6150 39  0001 C CNN "Value2"
+F 6 "399-6102-ND" H 6400 6100 39  0001 C CNN "digikey"
+	1    6350 6400
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	3500 7350 3500 7400
+Wire Wire Line
+	3600 3750 4100 3750
+Wire Wire Line
+	3700 3700 3800 3700
+Wire Wire Line
+	5150 6150 5150 6250
+Wire Wire Line
+	3800 6600 3800 6650
+Wire Wire Line
+	2750 5500 2750 6150
+Wire Wire Line
+	2750 5400 2750 5500
+Wire Wire Line
+	2750 5300 2750 5400
+Wire Wire Line
+	2750 5200 2750 5300
+Wire Wire Line
+	2750 5100 2750 5200
+Wire Wire Line
+	2750 5000 2750 5100
+Wire Wire Line
+	2750 4900 2750 5000
+Wire Wire Line
+	4100 3750 5150 3750
+Wire Wire Line
+	5150 4500 5150 5000
+Wire Wire Line
+	5150 5000 5150 5400
+Wire Wire Line
+	5150 5400 5150 6150
+Wire Wire Line
+	4100 6150 5150 6150
+Wire Wire Line
+	5900 4900 5900 4950
+Wire Wire Line
+	6350 4600 6400 4600
+Wire Wire Line
+	5650 4900 5900 4900
+Wire Wire Line
+	6150 4600 6350 4600
+Wire Wire Line
+	6350 5550 6400 5550
+Wire Wire Line
+	6150 5550 6350 5550
+Wire Wire Line
+	6350 3700 6400 3700
+Wire Wire Line
+	6150 3700 6350 3700
+Wire Wire Line
+	6750 3700 6750 4600
+Wire Wire Line
+	6750 4600 6750 5550
+Wire Wire Line
+	6350 6200 6400 6200
+Wire Wire Line
+	6150 6200 6350 6200
+Wire Wire Line
+	6750 5550 6750 6200
+Wire Wire Line
+	8100 2900 8150 2900
+Wire Wire Line
+	8100 2900 8100 2950
+Wire Wire Line
+	8500 2900 8550 2900
+Wire Wire Line
+	8500 2350 8850 2350
+Wire Wire Line
+	9200 2350 9200 2800
+Wire Wire Line
+	8100 2350 8100 2450
+Wire Wire Line
+	8100 2200 8450 2200
+Wire Wire Line
+	9900 2800 9950 2800
+Wire Wire Line
+	8500 10450 8500 10500
+Wire Wire Line
+	8700 10450 8900 10450
+Wire Wire Line
+	8900 10450 9100 10450
+Wire Wire Line
+	9100 10450 9300 10450
+Wire Wire Line
+	9300 10450 9500 10450
+Wire Wire Line
+	9500 10450 9700 10450
+Wire Wire Line
+	9700 10450 9900 10450
+Wire Wire Line
+	9900 2600 9900 2800
+Wire Wire Line
+	10600 2600 10600 2900
+Wire Wire Line
+	9200 2800 9550 2800
+Wire Wire Line
+	10600 2900 10650 2900
+Wire Wire Line
+	9200 2200 9250 2200
+Wire Wire Line
+	8100 4200 8150 4200
+Wire Wire Line
+	8100 4200 8100 4250
+Wire Wire Line
+	8500 4200 8550 4200
+Wire Wire Line
+	8500 3650 8850 3650
+Wire Wire Line
+	9200 3650 9200 4100
+Wire Wire Line
+	8100 3650 8100 3750
+Wire Wire Line
+	8100 3500 8450 3500
+Wire Wire Line
+	9900 4100 9950 4100
+Wire Wire Line
+	9900 3900 9900 4100
+Wire Wire Line
+	10600 3900 10600 4200
+Wire Wire Line
+	9200 4100 9550 4100
+Wire Wire Line
+	10600 4200 10650 4200
+Wire Wire Line
+	9200 3500 9250 3500
+Wire Wire Line
+	8100 5500 8150 5500
+Wire Wire Line
+	8100 5500 8100 5550
+Wire Wire Line
+	8500 5500 8550 5500
+Wire Wire Line
+	8500 4950 8850 4950
+Wire Wire Line
+	9200 4950 9200 5400
+Wire Wire Line
+	8100 4950 8100 5050
+Wire Wire Line
+	8100 4800 8450 4800
+Wire Wire Line
+	9900 5400 9950 5400
+Wire Wire Line
+	9900 5200 9900 5400
+Wire Wire Line
+	10600 5200 10600 5500
+Wire Wire Line
+	9200 5400 9550 5400
+Wire Wire Line
+	10600 5500 10650 5500
+Wire Wire Line
+	9200 4800 9250 4800
+Wire Wire Line
+	8100 6800 8150 6800
+Wire Wire Line
+	8100 6800 8100 6850
+Wire Wire Line
+	8500 6800 8550 6800
+Wire Wire Line
+	8500 6250 8850 6250
+Wire Wire Line
+	9200 6250 9200 6700
+Wire Wire Line
+	8100 6250 8100 6350
+Wire Wire Line
+	8100 6100 8450 6100
+Wire Wire Line
+	9900 6700 9950 6700
+Wire Wire Line
+	9900 6500 9900 6700
+Wire Wire Line
+	10600 6500 10600 6800
+Wire Wire Line
+	9200 6700 9550 6700
+Wire Wire Line
+	10600 6800 10650 6800
+Wire Wire Line
+	9200 6100 9250 6100
+Wire Wire Line
+	12350 2900 12400 2900
+Wire Wire Line
+	12350 2900 12350 2950
+Wire Wire Line
+	12750 2900 12800 2900
+Wire Wire Line
+	12750 2350 13100 2350
+Wire Wire Line
+	13450 2350 13450 2800
+Wire Wire Line
+	12350 2350 12350 2450
+Wire Wire Line
+	12350 2200 12700 2200
+Wire Wire Line
+	14150 2800 14200 2800
+Wire Wire Line
+	14150 2600 14150 2800
+Wire Wire Line
+	14850 2600 14850 2900
+Wire Wire Line
+	13450 2800 13800 2800
+Wire Wire Line
+	14850 2900 14900 2900
+Wire Wire Line
+	13450 2200 13500 2200
+Wire Wire Line
+	12350 4200 12400 4200
+Wire Wire Line
+	12350 4200 12350 4250
+Wire Wire Line
+	12750 4200 12800 4200
+Wire Wire Line
+	12750 3650 13100 3650
+Wire Wire Line
+	13450 3650 13450 4100
+Wire Wire Line
+	12350 3650 12350 3750
+Wire Wire Line
+	12350 3500 12700 3500
+Wire Wire Line
+	14150 4100 14200 4100
+Wire Wire Line
+	14150 3900 14150 4100
+Wire Wire Line
+	14850 3900 14850 4200
+Wire Wire Line
+	13450 4100 13800 4100
+Wire Wire Line
+	14850 4200 14900 4200
+Wire Wire Line
+	13450 3500 13500 3500
+Wire Wire Line
+	12350 5500 12400 5500
+Wire Wire Line
+	12350 5500 12350 5550
+Wire Wire Line
+	12750 5500 12800 5500
+Wire Wire Line
+	12750 4950 13100 4950
+Wire Wire Line
+	13450 4950 13450 5400
+Wire Wire Line
+	12350 4950 12350 5050
+Wire Wire Line
+	12350 4800 12700 4800
+Wire Wire Line
+	14150 5400 14200 5400
+Wire Wire Line
+	14150 5200 14150 5400
+Wire Wire Line
+	14850 5200 14850 5500
+Wire Wire Line
+	13450 5400 13800 5400
+Wire Wire Line
+	14850 5500 14900 5500
+Wire Wire Line
+	13450 4800 13500 4800
+Wire Wire Line
+	12350 6800 12400 6800
+Wire Wire Line
+	12350 6800 12350 6850
+Wire Wire Line
+	12750 6800 12800 6800
+Wire Wire Line
+	12750 6250 13100 6250
+Wire Wire Line
+	13450 6250 13450 6700
+Wire Wire Line
+	12350 6250 12350 6350
+Wire Wire Line
+	12350 6100 12700 6100
+Wire Wire Line
+	14150 6700 14200 6700
+Wire Wire Line
+	14150 6500 14150 6700
+Wire Wire Line
+	14850 6500 14850 6800
+Wire Wire Line
+	13450 6700 13800 6700
+Wire Wire Line
+	14850 6800 14900 6800
+Wire Wire Line
+	13450 6100 13500 6100
+Wire Wire Line
+	13900 9150 13900 9300
+Wire Wire Line
+	13900 8850 13900 9150
+Wire Wire Line
+	13900 8550 13900 8850
+Wire Wire Line
+	13300 9050 13300 9300
+Wire Wire Line
+	13300 8750 13300 9050
+Wire Wire Line
+	13300 8450 13300 8750
+Wire Wire Line
+	8100 3300 8500 3300
+Wire Wire Line
+	12350 3300 12750 3300
+Wire Wire Line
+	8100 4600 8500 4600
+Wire Wire Line
+	12350 4600 12750 4600
+Wire Wire Line
+	8100 5900 8500 5900
+Wire Wire Line
+	12350 5900 12750 5900
+Wire Wire Line
+	8100 7200 8500 7200
+Wire Wire Line
+	12350 7200 12750 7200
+Wire Wire Line
+	8500 3300 9900 3300
+Wire Wire Line
+	8500 4600 9900 4600
+Wire Wire Line
+	8500 5900 9900 5900
+Wire Wire Line
+	8500 7200 9900 7200
+Wire Wire Line
+	12750 7200 14150 7200
+Wire Wire Line
+	12750 5900 14150 5900
+Wire Wire Line
+	12750 4600 14150 4600
+Wire Wire Line
+	12750 3300 14150 3300
+$Comp
+L rk:CAP_100n_50V_X7R_0805 C?
+U 1 1 5C99C421
+P 6150 3900
+AR Path="/5C99C421" Ref="C?"  Part="1" 
+AR Path="/5904EED5/5C99C421" Ref="C320"  Part="1" 
+F 0 "C320" H 6350 3950 39  0000 R CNN
+F 1 "CAP_100n_50V_X7R_0805" H 6150 3750 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 6150 3700 39  0001 C CNN
+F 3 "" H 6200 3950 50  0001 C CNN
+F 4 "100n" H 6350 4000 39  0000 R CNN "Value1"
+F 5 "5% 50V X7R" H 6150 3650 39  0001 C CNN "Value2"
+F 6 "399-1170-1-ND" H 6150 3600 39  0001 C CNN "digikey"
+	1    6150 3900
+	0    1    1    0   
+$EndComp
+$Comp
+L rk:CAP_100n_50V_X7R_0805 C?
+U 1 1 5C9E441F
+P 6150 4800
+AR Path="/5C9E441F" Ref="C?"  Part="1" 
+AR Path="/5904EED5/5C9E441F" Ref="C328"  Part="1" 
+F 0 "C328" H 6350 4850 39  0000 R CNN
+F 1 "CAP_100n_50V_X7R_0805" H 6150 4650 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 6150 4600 39  0001 C CNN
+F 3 "" H 6200 4850 50  0001 C CNN
+F 4 "100n" H 6350 4900 39  0000 R CNN "Value1"
+F 5 "5% 50V X7R" H 6150 4550 39  0001 C CNN "Value2"
+F 6 "399-1170-1-ND" H 6150 4500 39  0001 C CNN "digikey"
+	1    6150 4800
+	0    1    1    0   
+$EndComp
+$Comp
+L rk:CAP_100n_50V_X7R_0805 C?
+U 1 1 5CA2C567
+P 5650 5100
+AR Path="/5CA2C567" Ref="C?"  Part="1" 
+AR Path="/5904EED5/5CA2C567" Ref="C336"  Part="1" 
+F 0 "C336" H 5850 5150 39  0000 R CNN
+F 1 "CAP_100n_50V_X7R_0805" H 5650 4950 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 5650 4900 39  0001 C CNN
+F 3 "" H 5700 5150 50  0001 C CNN
+F 4 "100n" H 5850 5200 39  0000 R CNN "Value1"
+F 5 "5% 50V X7R" H 5650 4850 39  0001 C CNN "Value2"
+F 6 "399-1170-1-ND" H 5650 4800 39  0001 C CNN "digikey"
+	1    5650 5100
+	0    1    1    0   
+$EndComp
+$Comp
+L rk:CAP_100n_50V_X7R_0805 C?
+U 1 1 5CA74422
+P 6150 5750
+AR Path="/5CA74422" Ref="C?"  Part="1" 
+AR Path="/5904EED5/5CA74422" Ref="C344"  Part="1" 
+F 0 "C344" H 6350 5800 39  0000 R CNN
+F 1 "CAP_100n_50V_X7R_0805" H 6150 5600 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 6150 5550 39  0001 C CNN
+F 3 "" H 6200 5800 50  0001 C CNN
+F 4 "100n" H 6350 5850 39  0000 R CNN "Value1"
+F 5 "5% 50V X7R" H 6150 5500 39  0001 C CNN "Value2"
+F 6 "399-1170-1-ND" H 6150 5450 39  0001 C CNN "digikey"
+	1    6150 5750
+	0    1    1    0   
+$EndComp
+$Comp
+L rk:CAP_100n_50V_X7R_0805 C?
+U 1 1 5CABC2E4
+P 6150 6400
+AR Path="/5CABC2E4" Ref="C?"  Part="1" 
+AR Path="/5904EED5/5CABC2E4" Ref="C352"  Part="1" 
+F 0 "C352" H 6350 6450 39  0000 R CNN
+F 1 "CAP_100n_50V_X7R_0805" H 6150 6250 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 6150 6200 39  0001 C CNN
+F 3 "" H 6200 6450 50  0001 C CNN
+F 4 "100n" H 6350 6500 39  0000 R CNN "Value1"
+F 5 "5% 50V X7R" H 6150 6150 39  0001 C CNN "Value2"
+F 6 "399-1170-1-ND" H 6150 6100 39  0001 C CNN "digikey"
+	1    6150 6400
+	0    1    1    0   
+$EndComp
+$Comp
+L rk:CAP_1u00_16V_X7R_0805 C313
+U 1 1 5CB062AC
+P 3650 3500
+F 0 "C313" H 3650 3728 39  0000 C CNN
+F 1 "CAP_1u00_16V_X7R_0805" H 3650 3350 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 3650 3300 39  0001 C CNN
+F 3 "" H 3700 3550 50  0001 C CNN
+F 4 "1u00" H 3650 3653 39  0000 C CNN "Value1"
+F 5 "10% 16V X7R" H 3650 3250 39  0001 C CNN "Value2"
+F 6 "311-1365-1-ND" H 3650 3200 39  0001 C CNN "digikey"
+	1    3650 3500
+	1    0    0    -1  
+$EndComp
+$Comp
+L rk:CAP_100n_50V_X7R_0805 C?
+U 1 1 5CB071A2
+P 3750 7550
+AR Path="/5CB071A2" Ref="C?"  Part="1" 
+AR Path="/5904EED5/5CB071A2" Ref="C361"  Part="1" 
+F 0 "C361" H 3950 7600 39  0000 R CNN
+F 1 "CAP_100n_50V_X7R_0805" H 3750 7400 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 3750 7350 39  0001 C CNN
+F 3 "" H 3800 7600 50  0001 C CNN
+F 4 "100n" H 3950 7650 39  0000 R CNN "Value1"
+F 5 "5% 50V X7R" H 3750 7300 39  0001 C CNN "Value2"
+F 6 "399-1170-1-ND" H 3750 7250 39  0001 C CNN "digikey"
+	1    3750 7550
+	0    1    1    0   
+$EndComp
+$Comp
+L rk:CAP_100n_50V_X7R_0805 C?
+U 1 1 5CB500D0
+P 8500 10650
+AR Path="/5CB500D0" Ref="C?"  Part="1" 
+AR Path="/5904EED5/5CB500D0" Ref="C362"  Part="1" 
+F 0 "C362" H 8700 10700 39  0000 R CNN
+F 1 "CAP_100n_50V_X7R_0805" H 8500 10500 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 8500 10450 39  0001 C CNN
+F 3 "" H 8550 10700 50  0001 C CNN
+F 4 "100n" H 8700 10750 39  0000 R CNN "Value1"
+F 5 "5% 50V X7R" H 8500 10400 39  0001 C CNN "Value2"
+F 6 "399-1170-1-ND" H 8500 10350 39  0001 C CNN "digikey"
+	1    8500 10650
+	0    1    1    0   
+$EndComp
+$Comp
+L rk:CAP_100n_50V_X7R_0805 C?
+U 1 1 5CB97F8D
+P 8700 10650
+AR Path="/5CB97F8D" Ref="C?"  Part="1" 
+AR Path="/5904EED5/5CB97F8D" Ref="C363"  Part="1" 
+F 0 "C363" H 8900 10700 39  0000 R CNN
+F 1 "CAP_100n_50V_X7R_0805" H 8700 10500 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 8700 10450 39  0001 C CNN
+F 3 "" H 8750 10700 50  0001 C CNN
+F 4 "100n" H 8900 10750 39  0000 R CNN "Value1"
+F 5 "5% 50V X7R" H 8700 10400 39  0001 C CNN "Value2"
+F 6 "399-1170-1-ND" H 8700 10350 39  0001 C CNN "digikey"
+	1    8700 10650
+	0    1    1    0   
+$EndComp
+$Comp
+L rk:CAP_100n_50V_X7R_0805 C?
+U 1 1 5CBE0041
+P 8900 10650
+AR Path="/5CBE0041" Ref="C?"  Part="1" 
+AR Path="/5904EED5/5CBE0041" Ref="C364"  Part="1" 
+F 0 "C364" H 9100 10700 39  0000 R CNN
+F 1 "CAP_100n_50V_X7R_0805" H 8900 10500 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 8900 10450 39  0001 C CNN
+F 3 "" H 8950 10700 50  0001 C CNN
+F 4 "100n" H 9100 10750 39  0000 R CNN "Value1"
+F 5 "5% 50V X7R" H 8900 10400 39  0001 C CNN "Value2"
+F 6 "399-1170-1-ND" H 8900 10350 39  0001 C CNN "digikey"
+	1    8900 10650
+	0    1    1    0   
+$EndComp
+$Comp
+L rk:CAP_100n_50V_X7R_0805 C?
+U 1 1 5CC27F00
+P 9100 10650
+AR Path="/5CC27F00" Ref="C?"  Part="1" 
+AR Path="/5904EED5/5CC27F00" Ref="C365"  Part="1" 
+F 0 "C365" H 9300 10700 39  0000 R CNN
+F 1 "CAP_100n_50V_X7R_0805" H 9100 10500 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 9100 10450 39  0001 C CNN
+F 3 "" H 9150 10700 50  0001 C CNN
+F 4 "100n" H 9300 10750 39  0000 R CNN "Value1"
+F 5 "5% 50V X7R" H 9100 10400 39  0001 C CNN "Value2"
+F 6 "399-1170-1-ND" H 9100 10350 39  0001 C CNN "digikey"
+	1    9100 10650
+	0    1    1    0   
+$EndComp
+$Comp
+L rk:CAP_100n_50V_X7R_0805 C?
+U 1 1 5CC6FDC2
+P 9300 10650
+AR Path="/5CC6FDC2" Ref="C?"  Part="1" 
+AR Path="/5904EED5/5CC6FDC2" Ref="C366"  Part="1" 
+F 0 "C366" H 9500 10700 39  0000 R CNN
+F 1 "CAP_100n_50V_X7R_0805" H 9300 10500 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 9300 10450 39  0001 C CNN
+F 3 "" H 9350 10700 50  0001 C CNN
+F 4 "100n" H 9500 10750 39  0000 R CNN "Value1"
+F 5 "5% 50V X7R" H 9300 10400 39  0001 C CNN "Value2"
+F 6 "399-1170-1-ND" H 9300 10350 39  0001 C CNN "digikey"
+	1    9300 10650
+	0    1    1    0   
+$EndComp
+$Comp
+L rk:CAP_100n_50V_X7R_0805 C?
+U 1 1 5CCB7C83
+P 9500 10650
+AR Path="/5CCB7C83" Ref="C?"  Part="1" 
+AR Path="/5904EED5/5CCB7C83" Ref="C367"  Part="1" 
+F 0 "C367" H 9700 10700 39  0000 R CNN
+F 1 "CAP_100n_50V_X7R_0805" H 9500 10500 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 9500 10450 39  0001 C CNN
+F 3 "" H 9550 10700 50  0001 C CNN
+F 4 "100n" H 9700 10750 39  0000 R CNN "Value1"
+F 5 "5% 50V X7R" H 9500 10400 39  0001 C CNN "Value2"
+F 6 "399-1170-1-ND" H 9500 10350 39  0001 C CNN "digikey"
+	1    9500 10650
+	0    1    1    0   
+$EndComp
+$Comp
+L rk:CAP_100n_50V_X7R_0805 C?
+U 1 1 5CCFFB44
+P 9700 10650
+AR Path="/5CCFFB44" Ref="C?"  Part="1" 
+AR Path="/5904EED5/5CCFFB44" Ref="C368"  Part="1" 
+F 0 "C368" H 9900 10700 39  0000 R CNN
+F 1 "CAP_100n_50V_X7R_0805" H 9700 10500 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 9700 10450 39  0001 C CNN
+F 3 "" H 9750 10700 50  0001 C CNN
+F 4 "100n" H 9900 10750 39  0000 R CNN "Value1"
+F 5 "5% 50V X7R" H 9700 10400 39  0001 C CNN "Value2"
+F 6 "399-1170-1-ND" H 9700 10350 39  0001 C CNN "digikey"
+	1    9700 10650
+	0    1    1    0   
+$EndComp
+$Comp
+L rk:CAP_100n_50V_X7R_0805 C?
+U 1 1 5CD47A07
+P 9900 10650
+AR Path="/5CD47A07" Ref="C?"  Part="1" 
+AR Path="/5904EED5/5CD47A07" Ref="C369"  Part="1" 
+F 0 "C369" H 10100 10700 39  0000 R CNN
+F 1 "CAP_100n_50V_X7R_0805" H 9900 10500 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 9900 10450 39  0001 C CNN
+F 3 "" H 9950 10700 50  0001 C CNN
+F 4 "100n" H 10100 10750 39  0000 R CNN "Value1"
+F 5 "5% 50V X7R" H 9900 10400 39  0001 C CNN "Value2"
+F 6 "399-1170-1-ND" H 9900 10350 39  0001 C CNN "digikey"
+	1    9900 10650
+	0    1    1    0   
+$EndComp
+$Comp
+L rk:CAP_10u0_25V_X5R_0805 C?
+U 1 1 5D507C8F
+P 3500 7550
+AR Path="/5D507C8F" Ref="C?"  Part="1" 
+AR Path="/5904EED5/5D507C8F" Ref="C360"  Part="1" 
+F 0 "C360" H 3700 7600 39  0000 R CNN
+F 1 "CAP_10u0_25V_X5R_0805" H 3500 7400 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 3500 7350 39  0001 C CNN
+F 3 "" H 3550 7600 50  0001 C CNN
+F 4 "10u0" H 3700 7650 39  0000 R CNN "Value1"
+F 5 "20% 25V X5R" H 3500 7300 39  0001 C CNN "Value2"
+F 6 "490-10748-1-ND" H 3500 7250 39  0001 C CNN "digikey"
+	1    3500 7550
+	0    1    1    0   
+$EndComp
+$Comp
+L rk:CAP_10u0_25V_X5R_0805 C?
+U 1 1 5D5514EB
+P 5900 5100
+AR Path="/5D5514EB" Ref="C?"  Part="1" 
+AR Path="/5904EED5/5D5514EB" Ref="C337"  Part="1" 
+F 0 "C337" H 6100 5150 39  0000 R CNN
+F 1 "CAP_10u0_25V_X5R_0805" H 5900 4950 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 5900 4900 39  0001 C CNN
+F 3 "" H 5950 5150 50  0001 C CNN
+F 4 "10u0" H 6100 5200 39  0000 R CNN "Value1"
+F 5 "20% 25V X5R" H 5900 4850 39  0001 C CNN "Value2"
+F 6 "490-10748-1-ND" H 5900 4800 39  0001 C CNN "digikey"
+	1    5900 5100
+	0    1    1    0   
+$EndComp
+$Comp
+L rk:CAP_27p0_50V_C0G_NP0_0805 C305
+U 1 1 5D59F50E
+P 10250 2450
+F 0 "C305" H 10400 2350 39  0000 C CNN
+F 1 "CAP_27p0_50V_C0G_NP0_0805" H 10250 2300 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 10250 2250 39  0001 C CNN
+F 3 "" H 10300 2500 50  0001 C CNN
+F 4 "27p0" H 10400 2400 39  0000 C CNN "Value1"
+F 5 "5% 50V C0G/NP0" H 10250 2200 39  0001 C CNN "Value2"
+F 6 "399-1114-1-ND" H 10250 2150 39  0001 C CNN "digikey"
+	1    10250 2450
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:CAP_27p0_50V_C0G_NP0_0805 C306
+U 1 1 5D59FFA4
+P 14500 2450
+F 0 "C306" H 14650 2350 39  0000 C CNN
+F 1 "CAP_27p0_50V_C0G_NP0_0805" H 14500 2300 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 14500 2250 39  0001 C CNN
+F 3 "" H 14550 2500 50  0001 C CNN
+F 4 "27p0" H 14650 2400 39  0000 C CNN "Value1"
+F 5 "5% 50V C0G/NP0" H 14500 2200 39  0001 C CNN "Value2"
+F 6 "399-1114-1-ND" H 14500 2150 39  0001 C CNN "digikey"
+	1    14500 2450
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:CAP_27p0_50V_C0G_NP0_0805 C318
+U 1 1 5D5E7E66
+P 10250 3750
+F 0 "C318" H 10400 3650 39  0000 C CNN
+F 1 "CAP_27p0_50V_C0G_NP0_0805" H 10250 3600 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 10250 3550 39  0001 C CNN
+F 3 "" H 10300 3800 50  0001 C CNN
+F 4 "27p0" H 10400 3700 39  0000 C CNN "Value1"
+F 5 "5% 50V C0G/NP0" H 10250 3500 39  0001 C CNN "Value2"
+F 6 "399-1114-1-ND" H 10250 3450 39  0001 C CNN "digikey"
+	1    10250 3750
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:CAP_27p0_50V_C0G_NP0_0805 C319
+U 1 1 5D62FD35
+P 14500 3750
+F 0 "C319" H 14650 3650 39  0000 C CNN
+F 1 "CAP_27p0_50V_C0G_NP0_0805" H 14500 3600 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 14500 3550 39  0001 C CNN
+F 3 "" H 14550 3800 50  0001 C CNN
+F 4 "27p0" H 14650 3700 39  0000 C CNN "Value1"
+F 5 "5% 50V C0G/NP0" H 14500 3500 39  0001 C CNN "Value2"
+F 6 "399-1114-1-ND" H 14500 3450 39  0001 C CNN "digikey"
+	1    14500 3750
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:CAP_27p0_50V_C0G_NP0_0805 C334
+U 1 1 5D67A630
+P 10250 5050
+F 0 "C334" H 10400 4950 39  0000 C CNN
+F 1 "CAP_27p0_50V_C0G_NP0_0805" H 10250 4900 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 10250 4850 39  0001 C CNN
+F 3 "" H 10300 5100 50  0001 C CNN
+F 4 "27p0" H 10400 5000 39  0000 C CNN "Value1"
+F 5 "5% 50V C0G/NP0" H 10250 4800 39  0001 C CNN "Value2"
+F 6 "399-1114-1-ND" H 10250 4750 39  0001 C CNN "digikey"
+	1    10250 5050
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:CAP_27p0_50V_C0G_NP0_0805 C350
+U 1 1 5D6C24F4
+P 10250 6350
+F 0 "C350" H 10400 6250 39  0000 C CNN
+F 1 "CAP_27p0_50V_C0G_NP0_0805" H 10250 6200 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 10250 6150 39  0001 C CNN
+F 3 "" H 10300 6400 50  0001 C CNN
+F 4 "27p0" H 10400 6300 39  0000 C CNN "Value1"
+F 5 "5% 50V C0G/NP0" H 10250 6100 39  0001 C CNN "Value2"
+F 6 "399-1114-1-ND" H 10250 6050 39  0001 C CNN "digikey"
+	1    10250 6350
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:CAP_27p0_50V_C0G_NP0_0805 C335
+U 1 1 5D70A3C5
+P 14500 5050
+F 0 "C335" H 14650 4950 39  0000 C CNN
+F 1 "CAP_27p0_50V_C0G_NP0_0805" H 14500 4900 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 14500 4850 39  0001 C CNN
+F 3 "" H 14550 5100 50  0001 C CNN
+F 4 "27p0" H 14650 5000 39  0000 C CNN "Value1"
+F 5 "5% 50V C0G/NP0" H 14500 4800 39  0001 C CNN "Value2"
+F 6 "399-1114-1-ND" H 14500 4750 39  0001 C CNN "digikey"
+	1    14500 5050
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:CAP_27p0_50V_C0G_NP0_0805 C351
+U 1 1 5D752286
+P 14500 6350
+F 0 "C351" H 14650 6250 39  0000 C CNN
+F 1 "CAP_27p0_50V_C0G_NP0_0805" H 14500 6200 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 14500 6150 39  0001 C CNN
+F 3 "" H 14550 6400 50  0001 C CNN
+F 4 "27p0" H 14650 6300 39  0000 C CNN "Value1"
+F 5 "5% 50V C0G/NP0" H 14500 6100 39  0001 C CNN "Value2"
+F 6 "399-1114-1-ND" H 14500 6050 39  0001 C CNN "digikey"
+	1    14500 6350
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:CAP_470p_2%_50V_PPS_0805 C332
+U 1 1 5D79C719
+P 9000 4950
+F 0 "C332" H 9150 4850 39  0000 C CNN
+F 1 "CAP_470p_2%_50V_PPS_0805" H 9000 4800 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 9000 4750 39  0001 C CNN
+F 3 "" H 9050 5000 50  0001 C CNN
+F 4 "470p" H 9150 4900 39  0000 C CNN "Value1"
+F 5 "2% 50V PPS" H 9000 4700 39  0001 C CNN "Value2"
+F 6 "PCF1292CT-ND" H 9000 4650 39  0001 C CNN "digikey"
+	1    9000 4950
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:CAP_470p_2%_50V_PPS_0805 C348
+U 1 1 5D79F283
+P 9000 6250
+F 0 "C348" H 9150 6150 39  0000 C CNN
+F 1 "CAP_470p_2%_50V_PPS_0805" H 9000 6100 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 9000 6050 39  0001 C CNN
+F 3 "" H 9050 6300 50  0001 C CNN
+F 4 "470p" H 9150 6200 39  0000 C CNN "Value1"
+F 5 "2% 50V PPS" H 9000 6000 39  0001 C CNN "Value2"
+F 6 "PCF1292CT-ND" H 9000 5950 39  0001 C CNN "digikey"
+	1    9000 6250
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:CAP_470p_2%_50V_PPS_0805 C333
+U 1 1 5D7E73E5
+P 13250 4950
+F 0 "C333" H 13400 4850 39  0000 C CNN
+F 1 "CAP_470p_2%_50V_PPS_0805" H 13250 4800 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 13250 4750 39  0001 C CNN
+F 3 "" H 13300 5000 50  0001 C CNN
+F 4 "470p" H 13400 4900 39  0000 C CNN "Value1"
+F 5 "2% 50V PPS" H 13250 4700 39  0001 C CNN "Value2"
+F 6 "PCF1292CT-ND" H 13250 4650 39  0001 C CNN "digikey"
+	1    13250 4950
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:CAP_470p_2%_50V_PPS_0805 C349
+U 1 1 5D82F4A7
+P 13250 6250
+F 0 "C349" H 13400 6150 39  0000 C CNN
+F 1 "CAP_470p_2%_50V_PPS_0805" H 13250 6100 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 13250 6050 39  0001 C CNN
+F 3 "" H 13300 6300 50  0001 C CNN
+F 4 "470p" H 13400 6200 39  0000 C CNN "Value1"
+F 5 "2% 50V PPS" H 13250 6000 39  0001 C CNN "Value2"
+F 6 "PCF1292CT-ND" H 13250 5950 39  0001 C CNN "digikey"
+	1    13250 6250
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:CAP_470p_2%_50V_PPS_0805 C303
+U 1 1 5D8786F8
+P 9000 2350
+F 0 "C303" H 9150 2250 39  0000 C CNN
+F 1 "CAP_470p_2%_50V_PPS_0805" H 9000 2200 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 9000 2150 39  0001 C CNN
+F 3 "" H 9050 2400 50  0001 C CNN
+F 4 "470p" H 9150 2300 39  0000 C CNN "Value1"
+F 5 "2% 50V PPS" H 9000 2100 39  0001 C CNN "Value2"
+F 6 "PCF1292CT-ND" H 9000 2050 39  0001 C CNN "digikey"
+	1    9000 2350
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:CAP_470p_2%_50V_PPS_0805 C316
+U 1 1 5D8C05BD
+P 9000 3650
+F 0 "C316" H 9150 3550 39  0000 C CNN
+F 1 "CAP_470p_2%_50V_PPS_0805" H 9000 3500 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 9000 3450 39  0001 C CNN
+F 3 "" H 9050 3700 50  0001 C CNN
+F 4 "470p" H 9150 3600 39  0000 C CNN "Value1"
+F 5 "2% 50V PPS" H 9000 3400 39  0001 C CNN "Value2"
+F 6 "PCF1292CT-ND" H 9000 3350 39  0001 C CNN "digikey"
+	1    9000 3650
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:CAP_470p_2%_50V_PPS_0805 C304
+U 1 1 5D908480
+P 13250 2350
+F 0 "C304" H 13400 2250 39  0000 C CNN
+F 1 "CAP_470p_2%_50V_PPS_0805" H 13250 2200 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 13250 2150 39  0001 C CNN
+F 3 "" H 13300 2400 50  0001 C CNN
+F 4 "470p" H 13400 2300 39  0000 C CNN "Value1"
+F 5 "2% 50V PPS" H 13250 2100 39  0001 C CNN "Value2"
+F 6 "PCF1292CT-ND" H 13250 2050 39  0001 C CNN "digikey"
+	1    13250 2350
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:CAP_470p_2%_50V_PPS_0805 C317
+U 1 1 5D95033E
+P 13250 3650
+F 0 "C317" H 13400 3550 39  0000 C CNN
+F 1 "CAP_470p_2%_50V_PPS_0805" H 13250 3500 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 13250 3450 39  0001 C CNN
+F 3 "" H 13300 3700 50  0001 C CNN
+F 4 "470p" H 13400 3600 39  0000 C CNN "Value1"
+F 5 "2% 50V PPS" H 13250 3400 39  0001 C CNN "Value2"
+F 6 "PCF1292CT-ND" H 13250 3350 39  0001 C CNN "digikey"
+	1    13250 3650
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:CAP_3n90_5%_16V_PPS_0805 C307
+U 1 1 5D99A6A9
+P 8100 2600
+F 0 "C307" V 8062 2715 39  0000 L CNN
+F 1 "CAP_3n90_5%_16V_PPS_0805" H 8100 2450 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 8100 2400 39  0001 C CNN
+F 3 "" H 8150 2650 50  0001 C CNN
+F 4 "3n90" V 8137 2715 39  0000 L CNN "Value1"
+F 5 "5% 16V PPS" H 8100 2350 39  0001 C CNN "Value2"
+F 6 "PCF1191CT-ND" H 8100 2300 39  0001 C CNN "digikey"
+	1    8100 2600
+	0    1    1    0   
+$EndComp
+$Comp
+L rk:CAP_470p_2%_50V_PPS_0805 C311
+U 1 1 5D99AB5F
+P 8500 3100
+F 0 "C311" V 8462 3215 39  0000 L CNN
+F 1 "CAP_470p_2%_50V_PPS_0805" H 8500 2950 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 8500 2900 39  0001 C CNN
+F 3 "" H 8550 3150 50  0001 C CNN
+F 4 "470p" V 8537 3215 39  0000 L CNN "Value1"
+F 5 "2% 50V PPS" H 8500 2850 39  0001 C CNN "Value2"
+F 6 "PCF1292CT-ND" H 8500 2800 39  0001 C CNN "digikey"
+	1    8500 3100
+	0    1    1    0   
+$EndComp
+$Comp
+L rk:CAP_3n90_5%_16V_PPS_0805 C322
+U 1 1 5D99BA24
+P 8100 3900
+F 0 "C322" V 8062 4015 39  0000 L CNN
+F 1 "CAP_3n90_5%_16V_PPS_0805" H 8100 3750 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 8100 3700 39  0001 C CNN
+F 3 "" H 8150 3950 50  0001 C CNN
+F 4 "3n90" V 8137 4015 39  0000 L CNN "Value1"
+F 5 "5% 16V PPS" H 8100 3650 39  0001 C CNN "Value2"
+F 6 "PCF1191CT-ND" H 8100 3600 39  0001 C CNN "digikey"
+	1    8100 3900
+	0    1    1    0   
+$EndComp
+$Comp
+L rk:CAP_470p_2%_50V_PPS_0805 C326
+U 1 1 5D99BA2E
+P 8500 4400
+F 0 "C326" V 8462 4515 39  0000 L CNN
+F 1 "CAP_470p_2%_50V_PPS_0805" H 8500 4250 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 8500 4200 39  0001 C CNN
+F 3 "" H 8550 4450 50  0001 C CNN
+F 4 "470p" V 8537 4515 39  0000 L CNN "Value1"
+F 5 "2% 50V PPS" H 8500 4150 39  0001 C CNN "Value2"
+F 6 "PCF1292CT-ND" H 8500 4100 39  0001 C CNN "digikey"
+	1    8500 4400
+	0    1    1    0   
+$EndComp
+$Comp
+L rk:CAP_3n90_5%_16V_PPS_0805 C338
+U 1 1 5D9E3C34
+P 8100 5200
+F 0 "C338" V 8062 5315 39  0000 L CNN
+F 1 "CAP_3n90_5%_16V_PPS_0805" H 8100 5050 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 8100 5000 39  0001 C CNN
+F 3 "" H 8150 5250 50  0001 C CNN
+F 4 "3n90" V 8137 5315 39  0000 L CNN "Value1"
+F 5 "5% 16V PPS" H 8100 4950 39  0001 C CNN "Value2"
+F 6 "PCF1191CT-ND" H 8100 4900 39  0001 C CNN "digikey"
+	1    8100 5200
+	0    1    1    0   
+$EndComp
+$Comp
+L rk:CAP_470p_2%_50V_PPS_0805 C342
+U 1 1 5D9E3C3E
+P 8500 5700
+F 0 "C342" V 8462 5815 39  0000 L CNN
+F 1 "CAP_470p_2%_50V_PPS_0805" H 8500 5550 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 8500 5500 39  0001 C CNN
+F 3 "" H 8550 5750 50  0001 C CNN
+F 4 "470p" V 8537 5815 39  0000 L CNN "Value1"
+F 5 "2% 50V PPS" H 8500 5450 39  0001 C CNN "Value2"
+F 6 "PCF1292CT-ND" H 8500 5400 39  0001 C CNN "digikey"
+	1    8500 5700
+	0    1    1    0   
+$EndComp
+$Comp
+L rk:CAP_3n90_5%_16V_PPS_0805 C354
+U 1 1 5DA2BB34
+P 8100 6500
+F 0 "C354" V 8062 6615 39  0000 L CNN
+F 1 "CAP_3n90_5%_16V_PPS_0805" H 8100 6350 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 8100 6300 39  0001 C CNN
+F 3 "" H 8150 6550 50  0001 C CNN
+F 4 "3n90" V 8137 6615 39  0000 L CNN "Value1"
+F 5 "5% 16V PPS" H 8100 6250 39  0001 C CNN "Value2"
+F 6 "PCF1191CT-ND" H 8100 6200 39  0001 C CNN "digikey"
+	1    8100 6500
+	0    1    1    0   
+$EndComp
+$Comp
+L rk:CAP_470p_2%_50V_PPS_0805 C358
+U 1 1 5DA2BB3E
+P 8500 7000
+F 0 "C358" V 8462 7115 39  0000 L CNN
+F 1 "CAP_470p_2%_50V_PPS_0805" H 8500 6850 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 8500 6800 39  0001 C CNN
+F 3 "" H 8550 7050 50  0001 C CNN
+F 4 "470p" V 8537 7115 39  0000 L CNN "Value1"
+F 5 "2% 50V PPS" H 8500 6750 39  0001 C CNN "Value2"
+F 6 "PCF1292CT-ND" H 8500 6700 39  0001 C CNN "digikey"
+	1    8500 7000
+	0    1    1    0   
+$EndComp
+$Comp
+L rk:CAP_3n90_5%_16V_PPS_0805 C308
+U 1 1 5DA73A70
+P 12350 2600
+F 0 "C308" V 12312 2715 39  0000 L CNN
+F 1 "CAP_3n90_5%_16V_PPS_0805" H 12350 2450 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 12350 2400 39  0001 C CNN
+F 3 "" H 12400 2650 50  0001 C CNN
+F 4 "3n90" V 12387 2715 39  0000 L CNN "Value1"
+F 5 "5% 16V PPS" H 12350 2350 39  0001 C CNN "Value2"
+F 6 "PCF1191CT-ND" H 12350 2300 39  0001 C CNN "digikey"
+	1    12350 2600
+	0    1    1    0   
+$EndComp
+$Comp
+L rk:CAP_470p_2%_50V_PPS_0805 C312
+U 1 1 5DA73A7A
+P 12750 3100
+F 0 "C312" V 12712 3215 39  0000 L CNN
+F 1 "CAP_470p_2%_50V_PPS_0805" H 12750 2950 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 12750 2900 39  0001 C CNN
+F 3 "" H 12800 3150 50  0001 C CNN
+F 4 "470p" V 12787 3215 39  0000 L CNN "Value1"
+F 5 "2% 50V PPS" H 12750 2850 39  0001 C CNN "Value2"
+F 6 "PCF1292CT-ND" H 12750 2800 39  0001 C CNN "digikey"
+	1    12750 3100
+	0    1    1    0   
+$EndComp
+$Comp
+L rk:CAP_3n90_5%_16V_PPS_0805 C323
+U 1 1 5DABB952
+P 12350 3900
+F 0 "C323" V 12312 4015 39  0000 L CNN
+F 1 "CAP_3n90_5%_16V_PPS_0805" H 12350 3750 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 12350 3700 39  0001 C CNN
+F 3 "" H 12400 3950 50  0001 C CNN
+F 4 "3n90" V 12387 4015 39  0000 L CNN "Value1"
+F 5 "5% 16V PPS" H 12350 3650 39  0001 C CNN "Value2"
+F 6 "PCF1191CT-ND" H 12350 3600 39  0001 C CNN "digikey"
+	1    12350 3900
+	0    1    1    0   
+$EndComp
+$Comp
+L rk:CAP_470p_2%_50V_PPS_0805 C327
+U 1 1 5DABB95C
+P 12750 4400
+F 0 "C327" V 12712 4515 39  0000 L CNN
+F 1 "CAP_470p_2%_50V_PPS_0805" H 12750 4250 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 12750 4200 39  0001 C CNN
+F 3 "" H 12800 4450 50  0001 C CNN
+F 4 "470p" V 12787 4515 39  0000 L CNN "Value1"
+F 5 "2% 50V PPS" H 12750 4150 39  0001 C CNN "Value2"
+F 6 "PCF1292CT-ND" H 12750 4100 39  0001 C CNN "digikey"
+	1    12750 4400
+	0    1    1    0   
+$EndComp
+$Comp
+L rk:CAP_3n90_5%_16V_PPS_0805 C339
+U 1 1 5DB03844
+P 12350 5200
+F 0 "C339" V 12312 5315 39  0000 L CNN
+F 1 "CAP_3n90_5%_16V_PPS_0805" H 12350 5050 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 12350 5000 39  0001 C CNN
+F 3 "" H 12400 5250 50  0001 C CNN
+F 4 "3n90" V 12387 5315 39  0000 L CNN "Value1"
+F 5 "5% 16V PPS" H 12350 4950 39  0001 C CNN "Value2"
+F 6 "PCF1191CT-ND" H 12350 4900 39  0001 C CNN "digikey"
+	1    12350 5200
+	0    1    1    0   
+$EndComp
+$Comp
+L rk:CAP_470p_2%_50V_PPS_0805 C343
+U 1 1 5DB0384E
+P 12750 5700
+F 0 "C343" V 12712 5815 39  0000 L CNN
+F 1 "CAP_470p_2%_50V_PPS_0805" H 12750 5550 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 12750 5500 39  0001 C CNN
+F 3 "" H 12800 5750 50  0001 C CNN
+F 4 "470p" V 12787 5815 39  0000 L CNN "Value1"
+F 5 "2% 50V PPS" H 12750 5450 39  0001 C CNN "Value2"
+F 6 "PCF1292CT-ND" H 12750 5400 39  0001 C CNN "digikey"
+	1    12750 5700
+	0    1    1    0   
+$EndComp
+$Comp
+L rk:CAP_3n90_5%_16V_PPS_0805 C355
+U 1 1 5DB4B730
+P 12350 6500
+F 0 "C355" V 12312 6615 39  0000 L CNN
+F 1 "CAP_3n90_5%_16V_PPS_0805" H 12350 6350 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 12350 6300 39  0001 C CNN
+F 3 "" H 12400 6550 50  0001 C CNN
+F 4 "3n90" V 12387 6615 39  0000 L CNN "Value1"
+F 5 "5% 16V PPS" H 12350 6250 39  0001 C CNN "Value2"
+F 6 "PCF1191CT-ND" H 12350 6200 39  0001 C CNN "digikey"
+	1    12350 6500
+	0    1    1    0   
+$EndComp
+$Comp
+L rk:CAP_470p_2%_50V_PPS_0805 C359
+U 1 1 5DB4B73A
+P 12750 7000
+F 0 "C359" V 12712 7115 39  0000 L CNN
+F 1 "CAP_470p_2%_50V_PPS_0805" H 12750 6850 39  0001 C CNN
+F 2 "rklib:C0805-X7R" H 12750 6800 39  0001 C CNN
+F 3 "" H 12800 7050 50  0001 C CNN
+F 4 "470p" V 12787 7115 39  0000 L CNN "Value1"
+F 5 "2% 50V PPS" H 12750 6750 39  0001 C CNN "Value2"
+F 6 "PCF1292CT-ND" H 12750 6700 39  0001 C CNN "digikey"
+	1    12750 7000
+	0    1    1    0   
+$EndComp
+$Comp
+L rk:IC_AK4458VN IC305
+U 1 1 5DDE8210
+P 3950 4950
+F 0 "IC305" H 4600 3850 39  0000 L CNN
+F 1 "IC_AK4458VN" H 3950 3700 39  0001 C CNN
+F 2 "rklib:QFN48_7x7mm_Pitch0.5mm_EP_Handsoldering" H 3950 3650 39  0001 C CNN
+F 3 "" H 3950 4950 60  0000 C CNN
+F 4 "AK4458VN" H 4600 3800 39  0000 L CNN "Value1"
+F 5 "974-1082-1-ND" H 3950 3550 39  0001 C CNN "digikey"
+F 6 "DAC" H 3950 3600 39  0001 C CNN "Value2"
+	1    3950 4950
+	1    0    0    -1  
+$EndComp
+$Comp
+L rk:RES_20R0_1%_0.125W_Thick_0805 R?
+U 1 1 5FA5E386
+P 6550 3700
+AR Path="/5904EED2/5FA5E386" Ref="R?"  Part="1" 
+AR Path="/5904EED5/5FA5E386" Ref="R323"  Part="1" 
+F 0 "R323" H 6550 3700 39  0000 C CNN
+F 1 "RES_20R0_1%_0.125W_Thick_0805" H 6550 3525 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 6550 3475 39  0001 C CNN
+F 3 "" H 6550 3700 50  0000 C CNN
+F 4 "20R0" H 6550 3775 39  0000 C CNN "Value1"
+F 5 "1% 0.125W Thick" H 6550 3575 39  0001 C CNN "Value2"
+F 6 "311-20.0CRCT-ND" H 6550 3400 39  0001 C CNN "digikey"
+	1    6550 3700
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_20R0_1%_0.125W_Thick_0805 R?
+U 1 1 5FAA6241
+P 6550 4600
+AR Path="/5904EED2/5FAA6241" Ref="R?"  Part="1" 
+AR Path="/5904EED5/5FAA6241" Ref="R334"  Part="1" 
+F 0 "R334" H 6550 4600 39  0000 C CNN
+F 1 "RES_20R0_1%_0.125W_Thick_0805" H 6550 4425 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 6550 4375 39  0001 C CNN
+F 3 "" H 6550 4600 50  0000 C CNN
+F 4 "20R0" H 6550 4675 39  0000 C CNN "Value1"
+F 5 "1% 0.125W Thick" H 6550 4475 39  0001 C CNN "Value2"
+F 6 "311-20.0CRCT-ND" H 6550 4300 39  0001 C CNN "digikey"
+	1    6550 4600
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_20R0_1%_0.125W_Thick_0805 R?
+U 1 1 5FAEE102
+P 6550 5550
+AR Path="/5904EED2/5FAEE102" Ref="R?"  Part="1" 
+AR Path="/5904EED5/5FAEE102" Ref="R349"  Part="1" 
+F 0 "R349" H 6550 5550 39  0000 C CNN
+F 1 "RES_20R0_1%_0.125W_Thick_0805" H 6550 5375 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 6550 5325 39  0001 C CNN
+F 3 "" H 6550 5550 50  0000 C CNN
+F 4 "20R0" H 6550 5625 39  0000 C CNN "Value1"
+F 5 "1% 0.125W Thick" H 6550 5425 39  0001 C CNN "Value2"
+F 6 "311-20.0CRCT-ND" H 6550 5250 39  0001 C CNN "digikey"
+	1    6550 5550
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_20R0_1%_0.125W_Thick_0805 R?
+U 1 1 5FB3610B
+P 6550 6200
+AR Path="/5904EED2/5FB3610B" Ref="R?"  Part="1" 
+AR Path="/5904EED5/5FB3610B" Ref="R356"  Part="1" 
+F 0 "R356" H 6550 6200 39  0000 C CNN
+F 1 "RES_20R0_1%_0.125W_Thick_0805" H 6550 6025 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 6550 5975 39  0001 C CNN
+F 3 "" H 6550 6200 50  0000 C CNN
+F 4 "20R0" H 6550 6275 39  0000 C CNN "Value1"
+F 5 "1% 0.125W Thick" H 6550 6075 39  0001 C CNN "Value2"
+F 6 "311-20.0CRCT-ND" H 6550 5900 39  0001 C CNN "digikey"
+	1    6550 6200
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_4K42_0.5%_0.1W_Thin_0805 R301
+U 1 1 5FBC7472
+P 7900 2200
+F 0 "R301" H 7900 2200 39  0000 C CNN
+F 1 "RES_4K42_0.5%_0.1W_Thin_0805" H 7900 2025 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 7900 1975 39  0001 C CNN
+F 3 "" H 7900 2200 50  0000 C CNN
+F 4 "4K42" H 7900 2275 39  0000 C CNN "Value1"
+F 5 "0.5% 0.1W Thin" H 7900 2075 39  0001 C CNN "Value2"
+F 6 "RR12P4.42KDCT-ND" H 7900 1900 39  0001 C CNN "digikey"
+	1    7900 2200
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_4K42_0.5%_0.1W_Thin_0805 R311
+U 1 1 5FC582B0
+P 7900 2900
+F 0 "R311" H 7900 2900 39  0000 C CNN
+F 1 "RES_4K42_0.5%_0.1W_Thin_0805" H 7900 2725 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 7900 2675 39  0001 C CNN
+F 3 "" H 7900 2900 50  0000 C CNN
+F 4 "4K42" H 7900 2975 39  0000 C CNN "Value1"
+F 5 "0.5% 0.1W Thin" H 7900 2775 39  0001 C CNN "Value2"
+F 6 "RR12P4.42KDCT-ND" H 7900 2600 39  0001 C CNN "digikey"
+	1    7900 2900
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_4K42_0.5%_0.1W_Thin_0805 R317
+U 1 1 5FCA0171
+P 7900 3500
+F 0 "R317" H 7900 3500 39  0000 C CNN
+F 1 "RES_4K42_0.5%_0.1W_Thin_0805" H 7900 3325 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 7900 3275 39  0001 C CNN
+F 3 "" H 7900 3500 50  0000 C CNN
+F 4 "4K42" H 7900 3575 39  0000 C CNN "Value1"
+F 5 "0.5% 0.1W Thin" H 7900 3375 39  0001 C CNN "Value2"
+F 6 "RR12P4.42KDCT-ND" H 7900 3200 39  0001 C CNN "digikey"
+	1    7900 3500
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_4K42_0.5%_0.1W_Thin_0805 R328
+U 1 1 5FCE803A
+P 7900 4200
+F 0 "R328" H 7900 4200 39  0000 C CNN
+F 1 "RES_4K42_0.5%_0.1W_Thin_0805" H 7900 4025 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 7900 3975 39  0001 C CNN
+F 3 "" H 7900 4200 50  0000 C CNN
+F 4 "4K42" H 7900 4275 39  0000 C CNN "Value1"
+F 5 "0.5% 0.1W Thin" H 7900 4075 39  0001 C CNN "Value2"
+F 6 "RR12P4.42KDCT-ND" H 7900 3900 39  0001 C CNN "digikey"
+	1    7900 4200
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_4K42_0.5%_0.1W_Thin_0805 R335
+U 1 1 5FD2FEFF
+P 7900 4800
+F 0 "R335" H 7900 4800 39  0000 C CNN
+F 1 "RES_4K42_0.5%_0.1W_Thin_0805" H 7900 4625 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 7900 4575 39  0001 C CNN
+F 3 "" H 7900 4800 50  0000 C CNN
+F 4 "4K42" H 7900 4875 39  0000 C CNN "Value1"
+F 5 "0.5% 0.1W Thin" H 7900 4675 39  0001 C CNN "Value2"
+F 6 "RR12P4.42KDCT-ND" H 7900 4500 39  0001 C CNN "digikey"
+	1    7900 4800
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_4K42_0.5%_0.1W_Thin_0805 R345
+U 1 1 5FD77FCC
+P 7900 5500
+F 0 "R345" H 7900 5500 39  0000 C CNN
+F 1 "RES_4K42_0.5%_0.1W_Thin_0805" H 7900 5325 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 7900 5275 39  0001 C CNN
+F 3 "" H 7900 5500 50  0000 C CNN
+F 4 "4K42" H 7900 5575 39  0000 C CNN "Value1"
+F 5 "0.5% 0.1W Thin" H 7900 5375 39  0001 C CNN "Value2"
+F 6 "RR12P4.42KDCT-ND" H 7900 5200 39  0001 C CNN "digikey"
+	1    7900 5500
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_4K42_0.5%_0.1W_Thin_0805 R352
+U 1 1 5FDC0846
+P 7900 6100
+F 0 "R352" H 7900 6100 39  0000 C CNN
+F 1 "RES_4K42_0.5%_0.1W_Thin_0805" H 7900 5925 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 7900 5875 39  0001 C CNN
+F 3 "" H 7900 6100 50  0000 C CNN
+F 4 "4K42" H 7900 6175 39  0000 C CNN "Value1"
+F 5 "0.5% 0.1W Thin" H 7900 5975 39  0001 C CNN "Value2"
+F 6 "RR12P4.42KDCT-ND" H 7900 5800 39  0001 C CNN "digikey"
+	1    7900 6100
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_4K42_0.5%_0.1W_Thin_0805 R368
+U 1 1 5FE0870F
+P 7900 6800
+F 0 "R368" H 7900 6800 39  0000 C CNN
+F 1 "RES_4K42_0.5%_0.1W_Thin_0805" H 7900 6625 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 7900 6575 39  0001 C CNN
+F 3 "" H 7900 6800 50  0000 C CNN
+F 4 "4K42" H 7900 6875 39  0000 C CNN "Value1"
+F 5 "0.5% 0.1W Thin" H 7900 6675 39  0001 C CNN "Value2"
+F 6 "RR12P4.42KDCT-ND" H 7900 6500 39  0001 C CNN "digikey"
+	1    7900 6800
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_4K42_0.5%_0.1W_Thin_0805 R303
+U 1 1 5FE50C4D
+P 12150 2200
+F 0 "R303" H 12150 2200 39  0000 C CNN
+F 1 "RES_4K42_0.5%_0.1W_Thin_0805" H 12150 2025 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 12150 1975 39  0001 C CNN
+F 3 "" H 12150 2200 50  0000 C CNN
+F 4 "4K42" H 12150 2275 39  0000 C CNN "Value1"
+F 5 "0.5% 0.1W Thin" H 12150 2075 39  0001 C CNN "Value2"
+F 6 "RR12P4.42KDCT-ND" H 12150 1900 39  0001 C CNN "digikey"
+	1    12150 2200
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_4K42_0.5%_0.1W_Thin_0805 R313
+U 1 1 5FE50C57
+P 12150 2900
+F 0 "R313" H 12150 2900 39  0000 C CNN
+F 1 "RES_4K42_0.5%_0.1W_Thin_0805" H 12150 2725 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 12150 2675 39  0001 C CNN
+F 3 "" H 12150 2900 50  0000 C CNN
+F 4 "4K42" H 12150 2975 39  0000 C CNN "Value1"
+F 5 "0.5% 0.1W Thin" H 12150 2775 39  0001 C CNN "Value2"
+F 6 "RR12P4.42KDCT-ND" H 12150 2600 39  0001 C CNN "digikey"
+	1    12150 2900
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_4K42_0.5%_0.1W_Thin_0805 R319
+U 1 1 5FE50C61
+P 12150 3500
+F 0 "R319" H 12150 3500 39  0000 C CNN
+F 1 "RES_4K42_0.5%_0.1W_Thin_0805" H 12150 3325 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 12150 3275 39  0001 C CNN
+F 3 "" H 12150 3500 50  0000 C CNN
+F 4 "4K42" H 12150 3575 39  0000 C CNN "Value1"
+F 5 "0.5% 0.1W Thin" H 12150 3375 39  0001 C CNN "Value2"
+F 6 "RR12P4.42KDCT-ND" H 12150 3200 39  0001 C CNN "digikey"
+	1    12150 3500
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_4K42_0.5%_0.1W_Thin_0805 R330
+U 1 1 5FE50C6B
+P 12150 4200
+F 0 "R330" H 12150 4200 39  0000 C CNN
+F 1 "RES_4K42_0.5%_0.1W_Thin_0805" H 12150 4025 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 12150 3975 39  0001 C CNN
+F 3 "" H 12150 4200 50  0000 C CNN
+F 4 "4K42" H 12150 4275 39  0000 C CNN "Value1"
+F 5 "0.5% 0.1W Thin" H 12150 4075 39  0001 C CNN "Value2"
+F 6 "RR12P4.42KDCT-ND" H 12150 3900 39  0001 C CNN "digikey"
+	1    12150 4200
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_4K42_0.5%_0.1W_Thin_0805 R337
+U 1 1 5FE50C75
+P 12150 4800
+F 0 "R337" H 12150 4800 39  0000 C CNN
+F 1 "RES_4K42_0.5%_0.1W_Thin_0805" H 12150 4625 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 12150 4575 39  0001 C CNN
+F 3 "" H 12150 4800 50  0000 C CNN
+F 4 "4K42" H 12150 4875 39  0000 C CNN "Value1"
+F 5 "0.5% 0.1W Thin" H 12150 4675 39  0001 C CNN "Value2"
+F 6 "RR12P4.42KDCT-ND" H 12150 4500 39  0001 C CNN "digikey"
+	1    12150 4800
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_4K42_0.5%_0.1W_Thin_0805 R347
+U 1 1 5FE50C7F
+P 12150 5500
+F 0 "R347" H 12150 5500 39  0000 C CNN
+F 1 "RES_4K42_0.5%_0.1W_Thin_0805" H 12150 5325 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 12150 5275 39  0001 C CNN
+F 3 "" H 12150 5500 50  0000 C CNN
+F 4 "4K42" H 12150 5575 39  0000 C CNN "Value1"
+F 5 "0.5% 0.1W Thin" H 12150 5375 39  0001 C CNN "Value2"
+F 6 "RR12P4.42KDCT-ND" H 12150 5200 39  0001 C CNN "digikey"
+	1    12150 5500
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_4K42_0.5%_0.1W_Thin_0805 R354
+U 1 1 5FE50C89
+P 12150 6100
+F 0 "R354" H 12150 6100 39  0000 C CNN
+F 1 "RES_4K42_0.5%_0.1W_Thin_0805" H 12150 5925 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 12150 5875 39  0001 C CNN
+F 3 "" H 12150 6100 50  0000 C CNN
+F 4 "4K42" H 12150 6175 39  0000 C CNN "Value1"
+F 5 "0.5% 0.1W Thin" H 12150 5975 39  0001 C CNN "Value2"
+F 6 "RR12P4.42KDCT-ND" H 12150 5800 39  0001 C CNN "digikey"
+	1    12150 6100
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_4K42_0.5%_0.1W_Thin_0805 R370
+U 1 1 5FE50C93
+P 12150 6800
+F 0 "R370" H 12150 6800 39  0000 C CNN
+F 1 "RES_4K42_0.5%_0.1W_Thin_0805" H 12150 6625 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 12150 6575 39  0001 C CNN
+F 3 "" H 12150 6800 50  0000 C CNN
+F 4 "4K42" H 12150 6875 39  0000 C CNN "Value1"
+F 5 "0.5% 0.1W Thin" H 12150 6675 39  0001 C CNN "Value2"
+F 6 "RR12P4.42KDCT-ND" H 12150 6500 39  0001 C CNN "digikey"
+	1    12150 6800
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_3K40_0.5%_0.1W_Thin_0805 R302
+U 1 1 5FF2D53E
+P 8600 2200
+F 0 "R302" H 8600 2200 39  0000 C CNN
+F 1 "RES_3K40_0.5%_0.1W_Thin_0805" H 8600 2025 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 8600 1975 39  0001 C CNN
+F 3 "" H 8600 2200 50  0000 C CNN
+F 4 "3K40" H 8600 2275 39  0000 C CNN "Value1"
+F 5 "0.5% 0.1W Thin" H 8600 2075 39  0001 C CNN "Value2"
+F 6 "RR12P3.4KDCT-ND" H 8600 1900 39  0001 C CNN "digikey"
+	1    8600 2200
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_3K40_0.5%_0.1W_Thin_0805 R315
+U 1 1 5FFBE509
+P 8100 3100
+F 0 "R315" H 8100 3100 39  0000 C CNN
+F 1 "RES_3K40_0.5%_0.1W_Thin_0805" H 8100 2925 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 8100 2875 39  0001 C CNN
+F 3 "" H 8100 3100 50  0000 C CNN
+F 4 "3K40" H 8100 3175 39  0000 C CNN "Value1"
+F 5 "0.5% 0.1W Thin" H 8100 2975 39  0001 C CNN "Value2"
+F 6 "RR12P3.4KDCT-ND" H 8100 2800 39  0001 C CNN "digikey"
+	1    8100 3100
+	0    1    1    0   
+$EndComp
+$Comp
+L rk:RES_3K40_0.5%_0.1W_Thin_0805 R318
+U 1 1 60006C79
+P 8600 3500
+F 0 "R318" H 8600 3500 39  0000 C CNN
+F 1 "RES_3K40_0.5%_0.1W_Thin_0805" H 8600 3325 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 8600 3275 39  0001 C CNN
+F 3 "" H 8600 3500 50  0000 C CNN
+F 4 "3K40" H 8600 3575 39  0000 C CNN "Value1"
+F 5 "0.5% 0.1W Thin" H 8600 3375 39  0001 C CNN "Value2"
+F 6 "RR12P3.4KDCT-ND" H 8600 3200 39  0001 C CNN "digikey"
+	1    8600 3500
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_3K40_0.5%_0.1W_Thin_0805 R332
+U 1 1 60006C83
+P 8100 4400
+F 0 "R332" H 8100 4400 39  0000 C CNN
+F 1 "RES_3K40_0.5%_0.1W_Thin_0805" H 8100 4225 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 8100 4175 39  0001 C CNN
+F 3 "" H 8100 4400 50  0000 C CNN
+F 4 "3K40" H 8100 4475 39  0000 C CNN "Value1"
+F 5 "0.5% 0.1W Thin" H 8100 4275 39  0001 C CNN "Value2"
+F 6 "RR12P3.4KDCT-ND" H 8100 4100 39  0001 C CNN "digikey"
+	1    8100 4400
+	0    1    1    0   
+$EndComp
+$Comp
+L rk:RES_3K40_0.5%_0.1W_Thin_0805 R336
+U 1 1 6004EB61
+P 8600 4800
+F 0 "R336" H 8600 4800 39  0000 C CNN
+F 1 "RES_3K40_0.5%_0.1W_Thin_0805" H 8600 4625 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 8600 4575 39  0001 C CNN
+F 3 "" H 8600 4800 50  0000 C CNN
+F 4 "3K40" H 8600 4875 39  0000 C CNN "Value1"
+F 5 "0.5% 0.1W Thin" H 8600 4675 39  0001 C CNN "Value2"
+F 6 "RR12P3.4KDCT-ND" H 8600 4500 39  0001 C CNN "digikey"
+	1    8600 4800
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_3K40_0.5%_0.1W_Thin_0805 R350
+U 1 1 6004EB6B
+P 8100 5700
+F 0 "R350" H 8100 5700 39  0000 C CNN
+F 1 "RES_3K40_0.5%_0.1W_Thin_0805" H 8100 5525 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 8100 5475 39  0001 C CNN
+F 3 "" H 8100 5700 50  0000 C CNN
+F 4 "3K40" H 8100 5775 39  0000 C CNN "Value1"
+F 5 "0.5% 0.1W Thin" H 8100 5575 39  0001 C CNN "Value2"
+F 6 "RR12P3.4KDCT-ND" H 8100 5400 39  0001 C CNN "digikey"
+	1    8100 5700
+	0    1    1    0   
+$EndComp
+$Comp
+L rk:RES_3K40_0.5%_0.1W_Thin_0805 R353
+U 1 1 60096B9B
+P 8600 6100
+F 0 "R353" H 8600 6100 39  0000 C CNN
+F 1 "RES_3K40_0.5%_0.1W_Thin_0805" H 8600 5925 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 8600 5875 39  0001 C CNN
+F 3 "" H 8600 6100 50  0000 C CNN
+F 4 "3K40" H 8600 6175 39  0000 C CNN "Value1"
+F 5 "0.5% 0.1W Thin" H 8600 5975 39  0001 C CNN "Value2"
+F 6 "RR12P3.4KDCT-ND" H 8600 5800 39  0001 C CNN "digikey"
+	1    8600 6100
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_3K40_0.5%_0.1W_Thin_0805 R372
+U 1 1 60096BA5
+P 8100 7000
+F 0 "R372" H 8100 7000 39  0000 C CNN
+F 1 "RES_3K40_0.5%_0.1W_Thin_0805" H 8100 6825 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 8100 6775 39  0001 C CNN
+F 3 "" H 8100 7000 50  0000 C CNN
+F 4 "3K40" H 8100 7075 39  0000 C CNN "Value1"
+F 5 "0.5% 0.1W Thin" H 8100 6875 39  0001 C CNN "Value2"
+F 6 "RR12P3.4KDCT-ND" H 8100 6700 39  0001 C CNN "digikey"
+	1    8100 7000
+	0    1    1    0   
+$EndComp
+$Comp
+L rk:RES_3K40_0.5%_0.1W_Thin_0805 R304
+U 1 1 600DF463
+P 12850 2200
+F 0 "R304" H 12850 2200 39  0000 C CNN
+F 1 "RES_3K40_0.5%_0.1W_Thin_0805" H 12850 2025 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 12850 1975 39  0001 C CNN
+F 3 "" H 12850 2200 50  0000 C CNN
+F 4 "3K40" H 12850 2275 39  0000 C CNN "Value1"
+F 5 "0.5% 0.1W Thin" H 12850 2075 39  0001 C CNN "Value2"
+F 6 "RR12P3.4KDCT-ND" H 12850 1900 39  0001 C CNN "digikey"
+	1    12850 2200
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_3K40_0.5%_0.1W_Thin_0805 R316
+U 1 1 600DF46D
+P 12350 3100
+F 0 "R316" H 12350 3100 39  0000 C CNN
+F 1 "RES_3K40_0.5%_0.1W_Thin_0805" H 12350 2925 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 12350 2875 39  0001 C CNN
+F 3 "" H 12350 3100 50  0000 C CNN
+F 4 "3K40" H 12350 3175 39  0000 C CNN "Value1"
+F 5 "0.5% 0.1W Thin" H 12350 2975 39  0001 C CNN "Value2"
+F 6 "RR12P3.4KDCT-ND" H 12350 2800 39  0001 C CNN "digikey"
+	1    12350 3100
+	0    1    1    0   
+$EndComp
+$Comp
+L rk:RES_3K40_0.5%_0.1W_Thin_0805 R320
+U 1 1 600DF477
+P 12850 3500
+F 0 "R320" H 12850 3500 39  0000 C CNN
+F 1 "RES_3K40_0.5%_0.1W_Thin_0805" H 12850 3325 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 12850 3275 39  0001 C CNN
+F 3 "" H 12850 3500 50  0000 C CNN
+F 4 "3K40" H 12850 3575 39  0000 C CNN "Value1"
+F 5 "0.5% 0.1W Thin" H 12850 3375 39  0001 C CNN "Value2"
+F 6 "RR12P3.4KDCT-ND" H 12850 3200 39  0001 C CNN "digikey"
+	1    12850 3500
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_3K40_0.5%_0.1W_Thin_0805 R333
+U 1 1 600DF481
+P 12350 4400
+F 0 "R333" H 12350 4400 39  0000 C CNN
+F 1 "RES_3K40_0.5%_0.1W_Thin_0805" H 12350 4225 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 12350 4175 39  0001 C CNN
+F 3 "" H 12350 4400 50  0000 C CNN
+F 4 "3K40" H 12350 4475 39  0000 C CNN "Value1"
+F 5 "0.5% 0.1W Thin" H 12350 4275 39  0001 C CNN "Value2"
+F 6 "RR12P3.4KDCT-ND" H 12350 4100 39  0001 C CNN "digikey"
+	1    12350 4400
+	0    1    1    0   
+$EndComp
+$Comp
+L rk:RES_3K40_0.5%_0.1W_Thin_0805 R338
+U 1 1 600DF48B
+P 12850 4800
+F 0 "R338" H 12850 4800 39  0000 C CNN
+F 1 "RES_3K40_0.5%_0.1W_Thin_0805" H 12850 4625 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 12850 4575 39  0001 C CNN
+F 3 "" H 12850 4800 50  0000 C CNN
+F 4 "3K40" H 12850 4875 39  0000 C CNN "Value1"
+F 5 "0.5% 0.1W Thin" H 12850 4675 39  0001 C CNN "Value2"
+F 6 "RR12P3.4KDCT-ND" H 12850 4500 39  0001 C CNN "digikey"
+	1    12850 4800
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_3K40_0.5%_0.1W_Thin_0805 R351
+U 1 1 600DF495
+P 12350 5700
+F 0 "R351" H 12350 5700 39  0000 C CNN
+F 1 "RES_3K40_0.5%_0.1W_Thin_0805" H 12350 5525 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 12350 5475 39  0001 C CNN
+F 3 "" H 12350 5700 50  0000 C CNN
+F 4 "3K40" H 12350 5775 39  0000 C CNN "Value1"
+F 5 "0.5% 0.1W Thin" H 12350 5575 39  0001 C CNN "Value2"
+F 6 "RR12P3.4KDCT-ND" H 12350 5400 39  0001 C CNN "digikey"
+	1    12350 5700
+	0    1    1    0   
+$EndComp
+$Comp
+L rk:RES_3K40_0.5%_0.1W_Thin_0805 R355
+U 1 1 600DF49F
+P 12850 6100
+F 0 "R355" H 12850 6100 39  0000 C CNN
+F 1 "RES_3K40_0.5%_0.1W_Thin_0805" H 12850 5925 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 12850 5875 39  0001 C CNN
+F 3 "" H 12850 6100 50  0000 C CNN
+F 4 "3K40" H 12850 6175 39  0000 C CNN "Value1"
+F 5 "0.5% 0.1W Thin" H 12850 5975 39  0001 C CNN "Value2"
+F 6 "RR12P3.4KDCT-ND" H 12850 5800 39  0001 C CNN "digikey"
+	1    12850 6100
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_3K40_0.5%_0.1W_Thin_0805 R373
+U 1 1 600DF4A9
+P 12350 7000
+F 0 "R373" H 12350 7000 39  0000 C CNN
+F 1 "RES_3K40_0.5%_0.1W_Thin_0805" H 12350 6825 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 12350 6775 39  0001 C CNN
+F 3 "" H 12350 7000 50  0000 C CNN
+F 4 "3K40" H 12350 7075 39  0000 C CNN "Value1"
+F 5 "0.5% 0.1W Thin" H 12350 6875 39  0001 C CNN "Value2"
+F 6 "RR12P3.4KDCT-ND" H 12350 6700 39  0001 C CNN "digikey"
+	1    12350 7000
+	0    1    1    0   
+$EndComp
+$Comp
+L rk:RES_4K70_1%_0.125W_Thin_0805 R309
+U 1 1 6012EA61
+P 9700 2800
+F 0 "R309" H 9700 2800 39  0000 C CNN
+F 1 "RES_4K70_1%_0.125W_Thin_0805" H 9700 2625 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 9700 2575 39  0001 C CNN
+F 3 "" H 9700 2800 50  0000 C CNN
+F 4 "4K70" H 9700 2875 39  0000 C CNN "Value1"
+F 5 "1% 0.125W Thin" H 9700 2675 39  0001 C CNN "Value2"
+F 6 "YAG3364CT-ND" H 9700 2500 39  0001 C CNN "digikey"
+	1    9700 2800
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_4K70_1%_0.125W_Thin_0805 R326
+U 1 1 601BF311
+P 9700 4100
+F 0 "R326" H 9700 4100 39  0000 C CNN
+F 1 "RES_4K70_1%_0.125W_Thin_0805" H 9700 3925 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 9700 3875 39  0001 C CNN
+F 3 "" H 9700 4100 50  0000 C CNN
+F 4 "4K70" H 9700 4175 39  0000 C CNN "Value1"
+F 5 "1% 0.125W Thin" H 9700 3975 39  0001 C CNN "Value2"
+F 6 "YAG3364CT-ND" H 9700 3800 39  0001 C CNN "digikey"
+	1    9700 4100
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_4K70_1%_0.125W_Thin_0805 R343
+U 1 1 602071D2
+P 9700 5400
+F 0 "R343" H 9700 5400 39  0000 C CNN
+F 1 "RES_4K70_1%_0.125W_Thin_0805" H 9700 5225 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 9700 5175 39  0001 C CNN
+F 3 "" H 9700 5400 50  0000 C CNN
+F 4 "4K70" H 9700 5475 39  0000 C CNN "Value1"
+F 5 "1% 0.125W Thin" H 9700 5275 39  0001 C CNN "Value2"
+F 6 "YAG3364CT-ND" H 9700 5100 39  0001 C CNN "digikey"
+	1    9700 5400
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_4K70_1%_0.125W_Thin_0805 R310
+U 1 1 6024F0B3
+P 13950 2800
+F 0 "R310" H 13950 2800 39  0000 C CNN
+F 1 "RES_4K70_1%_0.125W_Thin_0805" H 13950 2625 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 13950 2575 39  0001 C CNN
+F 3 "" H 13950 2800 50  0000 C CNN
+F 4 "4K70" H 13950 2875 39  0000 C CNN "Value1"
+F 5 "1% 0.125W Thin" H 13950 2675 39  0001 C CNN "Value2"
+F 6 "YAG3364CT-ND" H 13950 2500 39  0001 C CNN "digikey"
+	1    13950 2800
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_4K70_1%_0.125W_Thin_0805 R327
+U 1 1 60296F73
+P 13950 4100
+F 0 "R327" H 13950 4100 39  0000 C CNN
+F 1 "RES_4K70_1%_0.125W_Thin_0805" H 13950 3925 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 13950 3875 39  0001 C CNN
+F 3 "" H 13950 4100 50  0000 C CNN
+F 4 "4K70" H 13950 4175 39  0000 C CNN "Value1"
+F 5 "1% 0.125W Thin" H 13950 3975 39  0001 C CNN "Value2"
+F 6 "YAG3364CT-ND" H 13950 3800 39  0001 C CNN "digikey"
+	1    13950 4100
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_4K70_1%_0.125W_Thin_0805 R344
+U 1 1 602DEE34
+P 13950 5400
+F 0 "R344" H 13950 5400 39  0000 C CNN
+F 1 "RES_4K70_1%_0.125W_Thin_0805" H 13950 5225 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 13950 5175 39  0001 C CNN
+F 3 "" H 13950 5400 50  0000 C CNN
+F 4 "4K70" H 13950 5475 39  0000 C CNN "Value1"
+F 5 "1% 0.125W Thin" H 13950 5275 39  0001 C CNN "Value2"
+F 6 "YAG3364CT-ND" H 13950 5100 39  0001 C CNN "digikey"
+	1    13950 5400
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_4K70_1%_0.125W_Thin_0805 R367
+U 1 1 60326DB1
+P 13950 6700
+F 0 "R367" H 13950 6700 39  0000 C CNN
+F 1 "RES_4K70_1%_0.125W_Thin_0805" H 13950 6525 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 13950 6475 39  0001 C CNN
+F 3 "" H 13950 6700 50  0000 C CNN
+F 4 "4K70" H 13950 6775 39  0000 C CNN "Value1"
+F 5 "1% 0.125W Thin" H 13950 6575 39  0001 C CNN "Value2"
+F 6 "YAG3364CT-ND" H 13950 6400 39  0001 C CNN "digikey"
+	1    13950 6700
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_4K70_1%_0.125W_Thin_0805 R366
+U 1 1 6036EC7B
+P 9700 6700
+F 0 "R366" H 9700 6700 39  0000 C CNN
+F 1 "RES_4K70_1%_0.125W_Thin_0805" H 9700 6525 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 9700 6475 39  0001 C CNN
+F 3 "" H 9700 6700 50  0000 C CNN
+F 4 "4K70" H 9700 6775 39  0000 C CNN "Value1"
+F 5 "1% 0.125W Thin" H 9700 6575 39  0001 C CNN "Value2"
+F 6 "YAG3364CT-ND" H 9700 6400 39  0001 C CNN "digikey"
+	1    9700 6700
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_150R_1%_0.25W_Thin_0805 R305
+U 1 1 6063F8D3
+P 8300 2350
+F 0 "R305" H 8300 2350 39  0000 C CNN
+F 1 "RES_150R_1%_0.25W_Thin_0805" H 8300 2175 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 8300 2125 39  0001 C CNN
+F 3 "" H 8300 2350 50  0000 C CNN
+F 4 "150R" H 8300 2425 39  0000 C CNN "Value1"
+F 5 "1% 0.25W Thin" H 8300 2225 39  0001 C CNN "Value2"
+F 6 "RNCP0805FTD150RCT-ND" H 8300 2050 39  0001 C CNN "digikey"
+	1    8300 2350
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_150R_1%_0.25W_Thin_0805 R312
+U 1 1 606D054D
+P 8300 2900
+F 0 "R312" H 8300 2900 39  0000 C CNN
+F 1 "RES_150R_1%_0.25W_Thin_0805" H 8300 2725 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 8300 2675 39  0001 C CNN
+F 3 "" H 8300 2900 50  0000 C CNN
+F 4 "150R" H 8300 2975 39  0000 C CNN "Value1"
+F 5 "1% 0.25W Thin" H 8300 2775 39  0001 C CNN "Value2"
+F 6 "RNCP0805FTD150RCT-ND" H 8300 2600 39  0001 C CNN "digikey"
+	1    8300 2900
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_150R_1%_0.25W_Thin_0805 R321
+U 1 1 60718416
+P 8300 3650
+F 0 "R321" H 8300 3650 39  0000 C CNN
+F 1 "RES_150R_1%_0.25W_Thin_0805" H 8300 3475 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 8300 3425 39  0001 C CNN
+F 3 "" H 8300 3650 50  0000 C CNN
+F 4 "150R" H 8300 3725 39  0000 C CNN "Value1"
+F 5 "1% 0.25W Thin" H 8300 3525 39  0001 C CNN "Value2"
+F 6 "RNCP0805FTD150RCT-ND" H 8300 3350 39  0001 C CNN "digikey"
+	1    8300 3650
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_150R_1%_0.25W_Thin_0805 R329
+U 1 1 607602D3
+P 8300 4200
+F 0 "R329" H 8300 4200 39  0000 C CNN
+F 1 "RES_150R_1%_0.25W_Thin_0805" H 8300 4025 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 8300 3975 39  0001 C CNN
+F 3 "" H 8300 4200 50  0000 C CNN
+F 4 "150R" H 8300 4275 39  0000 C CNN "Value1"
+F 5 "1% 0.25W Thin" H 8300 4075 39  0001 C CNN "Value2"
+F 6 "RNCP0805FTD150RCT-ND" H 8300 3900 39  0001 C CNN "digikey"
+	1    8300 4200
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_150R_1%_0.25W_Thin_0805 R339
+U 1 1 607A8197
+P 8300 4950
+F 0 "R339" H 8300 4950 39  0000 C CNN
+F 1 "RES_150R_1%_0.25W_Thin_0805" H 8300 4775 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 8300 4725 39  0001 C CNN
+F 3 "" H 8300 4950 50  0000 C CNN
+F 4 "150R" H 8300 5025 39  0000 C CNN "Value1"
+F 5 "1% 0.25W Thin" H 8300 4825 39  0001 C CNN "Value2"
+F 6 "RNCP0805FTD150RCT-ND" H 8300 4650 39  0001 C CNN "digikey"
+	1    8300 4950
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_150R_1%_0.25W_Thin_0805 R346
+U 1 1 607F0056
+P 8300 5500
+F 0 "R346" H 8300 5500 39  0000 C CNN
+F 1 "RES_150R_1%_0.25W_Thin_0805" H 8300 5325 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 8300 5275 39  0001 C CNN
+F 3 "" H 8300 5500 50  0000 C CNN
+F 4 "150R" H 8300 5575 39  0000 C CNN "Value1"
+F 5 "1% 0.25W Thin" H 8300 5375 39  0001 C CNN "Value2"
+F 6 "RNCP0805FTD150RCT-ND" H 8300 5200 39  0001 C CNN "digikey"
+	1    8300 5500
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_150R_1%_0.25W_Thin_0805 R357
+U 1 1 60837F1C
+P 8300 6250
+F 0 "R357" H 8300 6250 39  0000 C CNN
+F 1 "RES_150R_1%_0.25W_Thin_0805" H 8300 6075 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 8300 6025 39  0001 C CNN
+F 3 "" H 8300 6250 50  0000 C CNN
+F 4 "150R" H 8300 6325 39  0000 C CNN "Value1"
+F 5 "1% 0.25W Thin" H 8300 6125 39  0001 C CNN "Value2"
+F 6 "RNCP0805FTD150RCT-ND" H 8300 5950 39  0001 C CNN "digikey"
+	1    8300 6250
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_150R_1%_0.25W_Thin_0805 R369
+U 1 1 6087FDDC
+P 8300 6800
+F 0 "R369" H 8300 6800 39  0000 C CNN
+F 1 "RES_150R_1%_0.25W_Thin_0805" H 8300 6625 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 8300 6575 39  0001 C CNN
+F 3 "" H 8300 6800 50  0000 C CNN
+F 4 "150R" H 8300 6875 39  0000 C CNN "Value1"
+F 5 "1% 0.25W Thin" H 8300 6675 39  0001 C CNN "Value2"
+F 6 "RNCP0805FTD150RCT-ND" H 8300 6500 39  0001 C CNN "digikey"
+	1    8300 6800
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_150R_1%_0.25W_Thin_0805 R306
+U 1 1 608C7CC4
+P 12550 2350
+F 0 "R306" H 12550 2350 39  0000 C CNN
+F 1 "RES_150R_1%_0.25W_Thin_0805" H 12550 2175 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 12550 2125 39  0001 C CNN
+F 3 "" H 12550 2350 50  0000 C CNN
+F 4 "150R" H 12550 2425 39  0000 C CNN "Value1"
+F 5 "1% 0.25W Thin" H 12550 2225 39  0001 C CNN "Value2"
+F 6 "RNCP0805FTD150RCT-ND" H 12550 2050 39  0001 C CNN "digikey"
+	1    12550 2350
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_150R_1%_0.25W_Thin_0805 R314
+U 1 1 6090FB86
+P 12550 2900
+F 0 "R314" H 12550 2900 39  0000 C CNN
+F 1 "RES_150R_1%_0.25W_Thin_0805" H 12550 2725 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 12550 2675 39  0001 C CNN
+F 3 "" H 12550 2900 50  0000 C CNN
+F 4 "150R" H 12550 2975 39  0000 C CNN "Value1"
+F 5 "1% 0.25W Thin" H 12550 2775 39  0001 C CNN "Value2"
+F 6 "RNCP0805FTD150RCT-ND" H 12550 2600 39  0001 C CNN "digikey"
+	1    12550 2900
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_150R_1%_0.25W_Thin_0805 R322
+U 1 1 60957A49
+P 12550 3650
+F 0 "R322" H 12550 3650 39  0000 C CNN
+F 1 "RES_150R_1%_0.25W_Thin_0805" H 12550 3475 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 12550 3425 39  0001 C CNN
+F 3 "" H 12550 3650 50  0000 C CNN
+F 4 "150R" H 12550 3725 39  0000 C CNN "Value1"
+F 5 "1% 0.25W Thin" H 12550 3525 39  0001 C CNN "Value2"
+F 6 "RNCP0805FTD150RCT-ND" H 12550 3350 39  0001 C CNN "digikey"
+	1    12550 3650
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_150R_1%_0.25W_Thin_0805 R331
+U 1 1 6099F90E
+P 12550 4200
+F 0 "R331" H 12550 4200 39  0000 C CNN
+F 1 "RES_150R_1%_0.25W_Thin_0805" H 12550 4025 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 12550 3975 39  0001 C CNN
+F 3 "" H 12550 4200 50  0000 C CNN
+F 4 "150R" H 12550 4275 39  0000 C CNN "Value1"
+F 5 "1% 0.25W Thin" H 12550 4075 39  0001 C CNN "Value2"
+F 6 "RNCP0805FTD150RCT-ND" H 12550 3900 39  0001 C CNN "digikey"
+	1    12550 4200
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_150R_1%_0.25W_Thin_0805 R340
+U 1 1 609E77D7
+P 12550 4950
+F 0 "R340" H 12550 4950 39  0000 C CNN
+F 1 "RES_150R_1%_0.25W_Thin_0805" H 12550 4775 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 12550 4725 39  0001 C CNN
+F 3 "" H 12550 4950 50  0000 C CNN
+F 4 "150R" H 12550 5025 39  0000 C CNN "Value1"
+F 5 "1% 0.25W Thin" H 12550 4825 39  0001 C CNN "Value2"
+F 6 "RNCP0805FTD150RCT-ND" H 12550 4650 39  0001 C CNN "digikey"
+	1    12550 4950
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_150R_1%_0.25W_Thin_0805 R348
+U 1 1 60A2F69F
+P 12550 5500
+F 0 "R348" H 12550 5500 39  0000 C CNN
+F 1 "RES_150R_1%_0.25W_Thin_0805" H 12550 5325 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 12550 5275 39  0001 C CNN
+F 3 "" H 12550 5500 50  0000 C CNN
+F 4 "150R" H 12550 5575 39  0000 C CNN "Value1"
+F 5 "1% 0.25W Thin" H 12550 5375 39  0001 C CNN "Value2"
+F 6 "RNCP0805FTD150RCT-ND" H 12550 5200 39  0001 C CNN "digikey"
+	1    12550 5500
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_150R_1%_0.25W_Thin_0805 R358
+U 1 1 60A7756C
+P 12550 6250
+F 0 "R358" H 12550 6250 39  0000 C CNN
+F 1 "RES_150R_1%_0.25W_Thin_0805" H 12550 6075 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 12550 6025 39  0001 C CNN
+F 3 "" H 12550 6250 50  0000 C CNN
+F 4 "150R" H 12550 6325 39  0000 C CNN "Value1"
+F 5 "1% 0.25W Thin" H 12550 6125 39  0001 C CNN "Value2"
+F 6 "RNCP0805FTD150RCT-ND" H 12550 5950 39  0001 C CNN "digikey"
+	1    12550 6250
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_150R_1%_0.25W_Thin_0805 R371
+U 1 1 60ABF435
+P 12550 6800
+F 0 "R371" H 12550 6800 39  0000 C CNN
+F 1 "RES_150R_1%_0.25W_Thin_0805" H 12550 6625 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 12550 6575 39  0001 C CNN
+F 3 "" H 12550 6800 50  0000 C CNN
+F 4 "150R" H 12550 6875 39  0000 C CNN "Value1"
+F 5 "1% 0.25W Thin" H 12550 6675 39  0001 C CNN "Value2"
+F 6 "RNCP0805FTD150RCT-ND" H 12550 6500 39  0001 C CNN "digikey"
+	1    12550 6800
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_4K70_1%_0.125W_Thin_0805 R307
+U 1 1 60B0DB8D
+P 10250 2600
+F 0 "R307" H 10250 2600 39  0000 C CNN
+F 1 "RES_4K70_1%_0.125W_Thin_0805" H 10250 2425 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 10250 2375 39  0001 C CNN
+F 3 "" H 10250 2600 50  0000 C CNN
+F 4 "4K70" H 10250 2675 39  0000 C CNN "Value1"
+F 5 "1% 0.125W Thin" H 10250 2475 39  0001 C CNN "Value2"
+F 6 "YAG3364CT-ND" H 10250 2300 39  0001 C CNN "digikey"
+	1    10250 2600
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_4K70_1%_0.125W_Thin_0805 R324
+U 1 1 60B55A4C
+P 10250 3900
+F 0 "R324" H 10250 3900 39  0000 C CNN
+F 1 "RES_4K70_1%_0.125W_Thin_0805" H 10250 3725 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 10250 3675 39  0001 C CNN
+F 3 "" H 10250 3900 50  0000 C CNN
+F 4 "4K70" H 10250 3975 39  0000 C CNN "Value1"
+F 5 "1% 0.125W Thin" H 10250 3775 39  0001 C CNN "Value2"
+F 6 "YAG3364CT-ND" H 10250 3600 39  0001 C CNN "digikey"
+	1    10250 3900
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_4K70_1%_0.125W_Thin_0805 R341
+U 1 1 60B9D90C
+P 10250 5200
+F 0 "R341" H 10250 5200 39  0000 C CNN
+F 1 "RES_4K70_1%_0.125W_Thin_0805" H 10250 5025 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 10250 4975 39  0001 C CNN
+F 3 "" H 10250 5200 50  0000 C CNN
+F 4 "4K70" H 10250 5275 39  0000 C CNN "Value1"
+F 5 "1% 0.125W Thin" H 10250 5075 39  0001 C CNN "Value2"
+F 6 "YAG3364CT-ND" H 10250 4900 39  0001 C CNN "digikey"
+	1    10250 5200
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_4K70_1%_0.125W_Thin_0805 R364
+U 1 1 60BE57CD
+P 10250 6500
+F 0 "R364" H 10250 6500 39  0000 C CNN
+F 1 "RES_4K70_1%_0.125W_Thin_0805" H 10250 6325 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 10250 6275 39  0001 C CNN
+F 3 "" H 10250 6500 50  0000 C CNN
+F 4 "4K70" H 10250 6575 39  0000 C CNN "Value1"
+F 5 "1% 0.125W Thin" H 10250 6375 39  0001 C CNN "Value2"
+F 6 "YAG3364CT-ND" H 10250 6200 39  0001 C CNN "digikey"
+	1    10250 6500
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_4K70_1%_0.125W_Thin_0805 R308
+U 1 1 60C2D6C1
+P 14500 2600
+F 0 "R308" H 14500 2600 39  0000 C CNN
+F 1 "RES_4K70_1%_0.125W_Thin_0805" H 14500 2425 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 14500 2375 39  0001 C CNN
+F 3 "" H 14500 2600 50  0000 C CNN
+F 4 "4K70" H 14500 2675 39  0000 C CNN "Value1"
+F 5 "1% 0.125W Thin" H 14500 2475 39  0001 C CNN "Value2"
+F 6 "YAG3364CT-ND" H 14500 2300 39  0001 C CNN "digikey"
+	1    14500 2600
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_4K70_1%_0.125W_Thin_0805 R325
+U 1 1 60C75588
+P 14500 3900
+F 0 "R325" H 14500 3900 39  0000 C CNN
+F 1 "RES_4K70_1%_0.125W_Thin_0805" H 14500 3725 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 14500 3675 39  0001 C CNN
+F 3 "" H 14500 3900 50  0000 C CNN
+F 4 "4K70" H 14500 3975 39  0000 C CNN "Value1"
+F 5 "1% 0.125W Thin" H 14500 3775 39  0001 C CNN "Value2"
+F 6 "YAG3364CT-ND" H 14500 3600 39  0001 C CNN "digikey"
+	1    14500 3900
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_4K70_1%_0.125W_Thin_0805 R342
+U 1 1 60CBD457
+P 14500 5200
+F 0 "R342" H 14500 5200 39  0000 C CNN
+F 1 "RES_4K70_1%_0.125W_Thin_0805" H 14500 5025 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 14500 4975 39  0001 C CNN
+F 3 "" H 14500 5200 50  0000 C CNN
+F 4 "4K70" H 14500 5275 39  0000 C CNN "Value1"
+F 5 "1% 0.125W Thin" H 14500 5075 39  0001 C CNN "Value2"
+F 6 "YAG3364CT-ND" H 14500 4900 39  0001 C CNN "digikey"
+	1    14500 5200
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_4K70_1%_0.125W_Thin_0805 R365
+U 1 1 60D0531B
+P 14500 6500
+F 0 "R365" H 14500 6500 39  0000 C CNN
+F 1 "RES_4K70_1%_0.125W_Thin_0805" H 14500 6325 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 14500 6275 39  0001 C CNN
+F 3 "" H 14500 6500 50  0000 C CNN
+F 4 "4K70" H 14500 6575 39  0000 C CNN "Value1"
+F 5 "1% 0.125W Thin" H 14500 6375 39  0001 C CNN "Value2"
+F 6 "YAG3364CT-ND" H 14500 6200 39  0001 C CNN "digikey"
+	1    14500 6500
+	-1   0    0    1   
+$EndComp
+$Comp
+L rk:RES_0R00_1%_0.125W_Thick_0805 R?
+U 1 1 60D522C8
+P 3400 6400
+AR Path="/5904EED2/60D522C8" Ref="R?"  Part="1" 
+AR Path="/5904EED5/60D522C8" Ref="R359"  Part="1" 
+F 0 "R359" H 3400 6400 39  0000 C CNN
+F 1 "RES_0R00_1%_0.125W_Thick_0805" H 3400 6225 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 3400 6175 39  0001 C CNN
+F 3 "" H 3400 6400 50  0000 C CNN
+F 4 "0R00" H 3400 6475 39  0000 C CNN "Value1"
+F 5 "1% 0.125W Thick" H 3400 6275 39  0001 C CNN "Value2"
+F 6 "311-0.0ARCT-ND" H 3400 6100 39  0001 C CNN "digikey"
+	1    3400 6400
+	0    -1   1    0   
+$EndComp
+$Comp
+L rk:RES_0R00_1%_0.125W_Thick_0805 R?
+U 1 1 60D9ABC3
+P 3500 6400
+AR Path="/5904EED2/60D9ABC3" Ref="R?"  Part="1" 
+AR Path="/5904EED5/60D9ABC3" Ref="R360"  Part="1" 
+F 0 "R360" H 3500 6400 39  0000 C CNN
+F 1 "RES_0R00_1%_0.125W_Thick_0805" H 3500 6225 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 3500 6175 39  0001 C CNN
+F 3 "" H 3500 6400 50  0000 C CNN
+F 4 "0R00" H 3500 6475 39  0001 C CNN "Value1"
+F 5 "1% 0.125W Thick" H 3500 6275 39  0001 C CNN "Value2"
+F 6 "311-0.0ARCT-ND" H 3500 6100 39  0001 C CNN "digikey"
+	1    3500 6400
+	0    -1   1    0   
+$EndComp
+$Comp
+L rk:RES_0R00_1%_0.125W_Thick_0805 R?
+U 1 1 60DE2F2F
+P 3600 6400
+AR Path="/5904EED2/60DE2F2F" Ref="R?"  Part="1" 
+AR Path="/5904EED5/60DE2F2F" Ref="R361"  Part="1" 
+F 0 "R361" H 3600 6400 39  0000 C CNN
+F 1 "RES_0R00_1%_0.125W_Thick_0805" H 3600 6225 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 3600 6175 39  0001 C CNN
+F 3 "" H 3600 6400 50  0000 C CNN
+F 4 "0R00" H 3600 6475 39  0001 C CNN "Value1"
+F 5 "1% 0.125W Thick" H 3600 6275 39  0001 C CNN "Value2"
+F 6 "311-0.0ARCT-ND" H 3600 6100 39  0001 C CNN "digikey"
+	1    3600 6400
+	0    -1   1    0   
+$EndComp
+$Comp
+L rk:RES_0R00_1%_0.125W_Thick_0805 R?
+U 1 1 60E2ADED
+P 3700 6400
+AR Path="/5904EED2/60E2ADED" Ref="R?"  Part="1" 
+AR Path="/5904EED5/60E2ADED" Ref="R362"  Part="1" 
+F 0 "R362" H 3700 6400 39  0000 C CNN
+F 1 "RES_0R00_1%_0.125W_Thick_0805" H 3700 6225 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 3700 6175 39  0001 C CNN
+F 3 "" H 3700 6400 50  0000 C CNN
+F 4 "0R00" H 3700 6475 39  0001 C CNN "Value1"
+F 5 "1% 0.125W Thick" H 3700 6275 39  0001 C CNN "Value2"
+F 6 "311-0.0ARCT-ND" H 3700 6100 39  0001 C CNN "digikey"
+	1    3700 6400
+	0    -1   1    0   
+$EndComp
+$Comp
+L rk:RES_0R00_1%_0.125W_Thick_0805 R?
+U 1 1 60E72CAB
+P 3800 6400
+AR Path="/5904EED2/60E72CAB" Ref="R?"  Part="1" 
+AR Path="/5904EED5/60E72CAB" Ref="R363"  Part="1" 
+F 0 "R363" H 3800 6400 39  0000 C CNN
+F 1 "RES_0R00_1%_0.125W_Thick_0805" H 3800 6225 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 3800 6175 39  0001 C CNN
+F 3 "" H 3800 6400 50  0000 C CNN
+F 4 "0R00" H 3800 6475 39  0001 C CNN "Value1"
+F 5 "1% 0.125W Thick" H 3800 6275 39  0001 C CNN "Value2"
+F 6 "311-0.0ARCT-ND" H 3800 6100 39  0001 C CNN "digikey"
+	1    3800 6400
+	0    -1   1    0   
+$EndComp
+$Comp
+L rk:IC_OPA1652AIDR IC?
+U 1 1 5C38DC62
+P 8850 2800
+AR Path="/5904EED2/5C38DC62" Ref="IC?"  Part="1" 
+AR Path="/5904EED5/5C38DC62" Ref="IC301"  Part="1" 
+F 0 "IC301" H 8850 2650 39  0000 L CNN
+F 1 "IC_OPA1652AIDR" H 8850 2450 39  0001 C CNN
+F 2 "rklib:SOIC8_3.9x4.9mm_Pitch1.27mm" H 8850 2350 39  0001 C CNN
+F 3 "" H 8850 2650 50  0000 C CNN
+F 4 "OPA1652AIDR" H 8850 2600 39  0000 L CNN "Value1"
+F 5 "OpAmp" H 9150 2950 39  0001 C CNN "Value2"
+F 6 "296-39101-1-ND" H 8850 2400 39  0001 C CNN "digikey"
+	1    8850 2800
+	1    0    0    -1  
+$EndComp
+$Comp
+L rk:IC_OPA1652AIDR IC?
+U 2 1 5C38DC6C
+P 10250 2900
+AR Path="/5904EED2/5C38DC6C" Ref="IC?"  Part="2" 
+AR Path="/5904EED5/5C38DC6C" Ref="IC301"  Part="2" 
+F 0 "IC301" H 10200 2700 39  0000 L CNN
+F 1 "IC_OPA1652AIDR" H 10250 2550 39  0001 C CNN
+F 2 "rklib:SOIC8_3.9x4.9mm_Pitch1.27mm" H 10250 2450 39  0001 C CNN
+F 3 "" H 10250 2750 50  0000 C CNN
+F 4 "OPA1652AIDR" H 10200 2650 39  0000 L CNN "Value1"
+F 5 "OpAmp" H 10550 3050 39  0001 C CNN "Value2"
+F 6 "296-39101-1-ND" H 10250 2500 39  0001 C CNN "digikey"
+	2    10250 2900
+	1    0    0    -1  
+$EndComp
+$Comp
+L rk:IC_OPA1652AIDR IC?
+U 1 1 5C3D698C
+P 8850 4100
+AR Path="/5904EED2/5C3D698C" Ref="IC?"  Part="1" 
+AR Path="/5904EED5/5C3D698C" Ref="IC303"  Part="1" 
+F 0 "IC303" H 8850 3950 39  0000 L CNN
+F 1 "IC_OPA1652AIDR" H 8850 3750 39  0001 C CNN
+F 2 "rklib:SOIC8_3.9x4.9mm_Pitch1.27mm" H 8850 3650 39  0001 C CNN
+F 3 "" H 8850 3950 50  0000 C CNN
+F 4 "OPA1652AIDR" H 8850 3900 39  0000 L CNN "Value1"
+F 5 "OpAmp" H 9150 4250 39  0001 C CNN "Value2"
+F 6 "296-39101-1-ND" H 8850 3700 39  0001 C CNN "digikey"
+	1    8850 4100
+	1    0    0    -1  
+$EndComp
+$Comp
+L rk:IC_OPA1652AIDR IC?
+U 2 1 5C3D6996
+P 10250 4200
+AR Path="/5904EED2/5C3D6996" Ref="IC?"  Part="2" 
+AR Path="/5904EED5/5C3D6996" Ref="IC303"  Part="2" 
+F 0 "IC303" H 10200 4000 39  0000 L CNN
+F 1 "IC_OPA1652AIDR" H 10250 3850 39  0001 C CNN
+F 2 "rklib:SOIC8_3.9x4.9mm_Pitch1.27mm" H 10250 3750 39  0001 C CNN
+F 3 "" H 10250 4050 50  0000 C CNN
+F 4 "OPA1652AIDR" H 10200 3950 39  0000 L CNN "Value1"
+F 5 "OpAmp" H 10550 4350 39  0001 C CNN "Value2"
+F 6 "296-39101-1-ND" H 10250 3800 39  0001 C CNN "digikey"
+	2    10250 4200
+	1    0    0    -1  
+$EndComp
+$Comp
+L rk:IC_OPA1652AIDR IC?
+U 1 1 5C41EF72
+P 8850 5400
+AR Path="/5904EED2/5C41EF72" Ref="IC?"  Part="1" 
+AR Path="/5904EED5/5C41EF72" Ref="IC306"  Part="1" 
+F 0 "IC306" H 8850 5250 39  0000 L CNN
+F 1 "IC_OPA1652AIDR" H 8850 5050 39  0001 C CNN
+F 2 "rklib:SOIC8_3.9x4.9mm_Pitch1.27mm" H 8850 4950 39  0001 C CNN
+F 3 "" H 8850 5250 50  0000 C CNN
+F 4 "OPA1652AIDR" H 8850 5200 39  0000 L CNN "Value1"
+F 5 "OpAmp" H 9150 5550 39  0001 C CNN "Value2"
+F 6 "296-39101-1-ND" H 8850 5000 39  0001 C CNN "digikey"
+	1    8850 5400
+	1    0    0    -1  
+$EndComp
+$Comp
+L rk:IC_OPA1652AIDR IC?
+U 2 1 5C41EF7C
+P 10250 5500
+AR Path="/5904EED2/5C41EF7C" Ref="IC?"  Part="2" 
+AR Path="/5904EED5/5C41EF7C" Ref="IC306"  Part="2" 
+F 0 "IC306" H 10200 5300 39  0000 L CNN
+F 1 "IC_OPA1652AIDR" H 10250 5150 39  0001 C CNN
+F 2 "rklib:SOIC8_3.9x4.9mm_Pitch1.27mm" H 10250 5050 39  0001 C CNN
+F 3 "" H 10250 5350 50  0000 C CNN
+F 4 "OPA1652AIDR" H 10200 5250 39  0000 L CNN "Value1"
+F 5 "OpAmp" H 10550 5650 39  0001 C CNN "Value2"
+F 6 "296-39101-1-ND" H 10250 5100 39  0001 C CNN "digikey"
+	2    10250 5500
+	1    0    0    -1  
+$EndComp
+$Comp
+L rk:IC_OPA1652AIDR IC?
+U 1 1 5C466E48
+P 8850 6700
+AR Path="/5904EED2/5C466E48" Ref="IC?"  Part="1" 
+AR Path="/5904EED5/5C466E48" Ref="IC308"  Part="1" 
+F 0 "IC308" H 8850 6550 39  0000 L CNN
+F 1 "IC_OPA1652AIDR" H 8850 6350 39  0001 C CNN
+F 2 "rklib:SOIC8_3.9x4.9mm_Pitch1.27mm" H 8850 6250 39  0001 C CNN
+F 3 "" H 8850 6550 50  0000 C CNN
+F 4 "OPA1652AIDR" H 8850 6500 39  0000 L CNN "Value1"
+F 5 "OpAmp" H 9150 6850 39  0001 C CNN "Value2"
+F 6 "296-39101-1-ND" H 8850 6300 39  0001 C CNN "digikey"
+	1    8850 6700
+	1    0    0    -1  
+$EndComp
+$Comp
+L rk:IC_OPA1652AIDR IC?
+U 2 1 5C466E52
+P 10250 6800
+AR Path="/5904EED2/5C466E52" Ref="IC?"  Part="2" 
+AR Path="/5904EED5/5C466E52" Ref="IC308"  Part="2" 
+F 0 "IC308" H 10200 6600 39  0000 L CNN
+F 1 "IC_OPA1652AIDR" H 10250 6450 39  0001 C CNN
+F 2 "rklib:SOIC8_3.9x4.9mm_Pitch1.27mm" H 10250 6350 39  0001 C CNN
+F 3 "" H 10250 6650 50  0000 C CNN
+F 4 "OPA1652AIDR" H 10200 6550 39  0000 L CNN "Value1"
+F 5 "OpAmp" H 10550 6950 39  0001 C CNN "Value2"
+F 6 "296-39101-1-ND" H 10250 6400 39  0001 C CNN "digikey"
+	2    10250 6800
+	1    0    0    -1  
+$EndComp
+$Comp
+L rk:IC_OPA1652AIDR IC?
+U 1 1 5C4AED34
+P 13100 6700
+AR Path="/5904EED2/5C4AED34" Ref="IC?"  Part="1" 
+AR Path="/5904EED5/5C4AED34" Ref="IC309"  Part="1" 
+F 0 "IC309" H 13100 6550 39  0000 L CNN
+F 1 "IC_OPA1652AIDR" H 13100 6350 39  0001 C CNN
+F 2 "rklib:SOIC8_3.9x4.9mm_Pitch1.27mm" H 13100 6250 39  0001 C CNN
+F 3 "" H 13100 6550 50  0000 C CNN
+F 4 "OPA1652AIDR" H 13100 6500 39  0000 L CNN "Value1"
+F 5 "OpAmp" H 13400 6850 39  0001 C CNN "Value2"
+F 6 "296-39101-1-ND" H 13100 6300 39  0001 C CNN "digikey"
+	1    13100 6700
+	1    0    0    -1  
+$EndComp
+$Comp
+L rk:IC_OPA1652AIDR IC?
+U 2 1 5C4AED3E
+P 14500 6800
+AR Path="/5904EED2/5C4AED3E" Ref="IC?"  Part="2" 
+AR Path="/5904EED5/5C4AED3E" Ref="IC309"  Part="2" 
+F 0 "IC309" H 14450 6600 39  0000 L CNN
+F 1 "IC_OPA1652AIDR" H 14500 6450 39  0001 C CNN
+F 2 "rklib:SOIC8_3.9x4.9mm_Pitch1.27mm" H 14500 6350 39  0001 C CNN
+F 3 "" H 14500 6650 50  0000 C CNN
+F 4 "OPA1652AIDR" H 14450 6550 39  0000 L CNN "Value1"
+F 5 "OpAmp" H 14800 6950 39  0001 C CNN "Value2"
+F 6 "296-39101-1-ND" H 14500 6400 39  0001 C CNN "digikey"
+	2    14500 6800
+	1    0    0    -1  
+$EndComp
+$Comp
+L rk:IC_OPA1652AIDR IC?
+U 1 1 5C4F6C0E
+P 13100 5400
+AR Path="/5904EED2/5C4F6C0E" Ref="IC?"  Part="1" 
+AR Path="/5904EED5/5C4F6C0E" Ref="IC307"  Part="1" 
+F 0 "IC307" H 13100 5250 39  0000 L CNN
+F 1 "IC_OPA1652AIDR" H 13100 5050 39  0001 C CNN
+F 2 "rklib:SOIC8_3.9x4.9mm_Pitch1.27mm" H 13100 4950 39  0001 C CNN
+F 3 "" H 13100 5250 50  0000 C CNN
+F 4 "OPA1652AIDR" H 13100 5200 39  0000 L CNN "Value1"
+F 5 "OpAmp" H 13400 5550 39  0001 C CNN "Value2"
+F 6 "296-39101-1-ND" H 13100 5000 39  0001 C CNN "digikey"
+	1    13100 5400
+	1    0    0    -1  
+$EndComp
+$Comp
+L rk:IC_OPA1652AIDR IC?
+U 2 1 5C4F6C18
+P 14500 5500
+AR Path="/5904EED2/5C4F6C18" Ref="IC?"  Part="2" 
+AR Path="/5904EED5/5C4F6C18" Ref="IC307"  Part="2" 
+F 0 "IC307" H 14450 5300 39  0000 L CNN
+F 1 "IC_OPA1652AIDR" H 14500 5150 39  0001 C CNN
+F 2 "rklib:SOIC8_3.9x4.9mm_Pitch1.27mm" H 14500 5050 39  0001 C CNN
+F 3 "" H 14500 5350 50  0000 C CNN
+F 4 "OPA1652AIDR" H 14450 5250 39  0000 L CNN "Value1"
+F 5 "OpAmp" H 14800 5650 39  0001 C CNN "Value2"
+F 6 "296-39101-1-ND" H 14500 5100 39  0001 C CNN "digikey"
+	2    14500 5500
+	1    0    0    -1  
+$EndComp
+$Comp
+L rk:IC_OPA1652AIDR IC?
+U 1 1 5C53EAE4
+P 13100 4100
+AR Path="/5904EED2/5C53EAE4" Ref="IC?"  Part="1" 
+AR Path="/5904EED5/5C53EAE4" Ref="IC304"  Part="1" 
+F 0 "IC304" H 13100 3950 39  0000 L CNN
+F 1 "IC_OPA1652AIDR" H 13100 3750 39  0001 C CNN
+F 2 "rklib:SOIC8_3.9x4.9mm_Pitch1.27mm" H 13100 3650 39  0001 C CNN
+F 3 "" H 13100 3950 50  0000 C CNN
+F 4 "OPA1652AIDR" H 13100 3900 39  0000 L CNN "Value1"
+F 5 "OpAmp" H 13400 4250 39  0001 C CNN "Value2"
+F 6 "296-39101-1-ND" H 13100 3700 39  0001 C CNN "digikey"
+	1    13100 4100
+	1    0    0    -1  
+$EndComp
+$Comp
+L rk:IC_OPA1652AIDR IC?
+U 2 1 5C53EAEE
+P 14500 4200
+AR Path="/5904EED2/5C53EAEE" Ref="IC?"  Part="2" 
+AR Path="/5904EED5/5C53EAEE" Ref="IC304"  Part="2" 
+F 0 "IC304" H 14450 4000 39  0000 L CNN
+F 1 "IC_OPA1652AIDR" H 14500 3850 39  0001 C CNN
+F 2 "rklib:SOIC8_3.9x4.9mm_Pitch1.27mm" H 14500 3750 39  0001 C CNN
+F 3 "" H 14500 4050 50  0000 C CNN
+F 4 "OPA1652AIDR" H 14450 3950 39  0000 L CNN "Value1"
+F 5 "OpAmp" H 14800 4350 39  0001 C CNN "Value2"
+F 6 "296-39101-1-ND" H 14500 3800 39  0001 C CNN "digikey"
+	2    14500 4200
+	1    0    0    -1  
+$EndComp
+$Comp
+L rk:IC_OPA1652AIDR IC?
+U 1 1 5C5869C6
+P 13100 2800
+AR Path="/5904EED2/5C5869C6" Ref="IC?"  Part="1" 
+AR Path="/5904EED5/5C5869C6" Ref="IC302"  Part="1" 
+F 0 "IC302" H 13100 2650 39  0000 L CNN
+F 1 "IC_OPA1652AIDR" H 13100 2450 39  0001 C CNN
+F 2 "rklib:SOIC8_3.9x4.9mm_Pitch1.27mm" H 13100 2350 39  0001 C CNN
+F 3 "" H 13100 2650 50  0000 C CNN
+F 4 "OPA1652AIDR" H 13100 2600 39  0000 L CNN "Value1"
+F 5 "OpAmp" H 13400 2950 39  0001 C CNN "Value2"
+F 6 "296-39101-1-ND" H 13100 2400 39  0001 C CNN "digikey"
+	1    13100 2800
+	1    0    0    -1  
+$EndComp
+$Comp
+L rk:IC_OPA1652AIDR IC?
+U 2 1 5C5869D0
+P 14500 2900
+AR Path="/5904EED2/5C5869D0" Ref="IC?"  Part="2" 
+AR Path="/5904EED5/5C5869D0" Ref="IC302"  Part="2" 
+F 0 "IC302" H 14450 2700 39  0000 L CNN
+F 1 "IC_OPA1652AIDR" H 14500 2550 39  0001 C CNN
+F 2 "rklib:SOIC8_3.9x4.9mm_Pitch1.27mm" H 14500 2450 39  0001 C CNN
+F 3 "" H 14500 2750 50  0000 C CNN
+F 4 "OPA1652AIDR" H 14450 2650 39  0000 L CNN "Value1"
+F 5 "OpAmp" H 14800 3050 39  0001 C CNN "Value2"
+F 6 "296-39101-1-ND" H 14500 2500 39  0001 C CNN "digikey"
+	2    14500 2900
+	1    0    0    -1  
+$EndComp
+$EndSCHEMATC
