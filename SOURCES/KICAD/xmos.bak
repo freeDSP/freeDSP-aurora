@@ -773,6 +773,8 @@ F 3 "" H 10000 1650 50  0001 C CNN
 F 4 "100n" H 9750 1650 39  0000 L CNN "Value1"
 F 5 "5% 50V X7R" H 9950 1350 39  0001 C CNN "Value2"
 F 6 "399-1170-1-ND" H 9950 1300 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C104K5RACTU" H 0   0   50  0001 C CNN "pn"
 	1    9950 1600
 	0    -1   -1   0   
 $EndComp
@@ -787,6 +789,8 @@ F 3 "" H 6400 1050 50  0001 C CNN
 F 4 "100n" H 6150 1050 39  0000 L CNN "Value1"
 F 5 "5% 50V X7R" H 6350 750 39  0001 C CNN "Value2"
 F 6 "399-1170-1-ND" H 6350 700 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C104K5RACTU" H 0   0   50  0001 C CNN "pn"
 	1    6350 1000
 	1    0    0    -1  
 $EndComp
@@ -801,6 +805,8 @@ F 3 "" H 8650 7650 50  0001 C CNN
 F 4 "100n" H 8400 7650 39  0000 L CNN "Value1"
 F 5 "5% 50V X7R" H 8600 7350 39  0001 C CNN "Value2"
 F 6 "399-1170-1-ND" H 8600 7300 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C104K5RACTU" H 0   0   50  0001 C CNN "pn"
 	1    8600 7600
 	0    -1   -1   0   
 $EndComp
@@ -815,6 +821,8 @@ F 3 "" H 5700 8300 50  0001 C CNN
 F 4 "100n" H 5450 8300 39  0000 L CNN "Value1"
 F 5 "5% 50V X7R" H 5650 8000 39  0001 C CNN "Value2"
 F 6 "399-1170-1-ND" H 5650 7950 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C104K5RACTU" H 0   0   50  0001 C CNN "pn"
 	1    5650 8250
 	0    -1   -1   0   
 $EndComp
@@ -829,6 +837,8 @@ F 3 "" H 8700 1350 50  0000 C CNN
 F 4 "10K0" H 8700 1275 39  0000 C CNN "Value1"
 F 5 "1% 0.125W Thick" H 8700 1225 39  0001 C CNN "Value2"
 F 6 "311-10.0KCRCT-ND" H 8700 1050 39  0001 C CNN "digikey"
+F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RC0805FR-0710KL" H 0   0   50  0001 C CNN "pn"
 	1    8700 1350
 	0    -1   -1   0   
 $EndComp
@@ -843,6 +853,8 @@ F 3 "" H 9550 1350 50  0000 C CNN
 F 4 "10K0" H 9550 1275 39  0000 C CNN "Value1"
 F 5 "1% 0.125W Thick" H 9550 1225 39  0001 C CNN "Value2"
 F 6 "311-10.0KCRCT-ND" H 9550 1050 39  0001 C CNN "digikey"
+F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RC0805FR-0710KL" H 0   0   50  0001 C CNN "pn"
 	1    9550 1350
 	0    -1   -1   0   
 $EndComp
@@ -857,6 +869,8 @@ F 3 "" H 2400 1000 50  0001 C CNN
 F 4 "10n0" H 2400 900 39  0000 L CNN "Value1"
 F 5 "10% 50V X7R" H 2350 700 39  0001 C CNN "Value2"
 F 6 "311-1136-1-ND" H 2350 650 39  0001 C CNN "digikey"
+F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "CC0805KRX7R9BB103" H 0   0   50  0001 C CNN "pn"
 	1    2350 950 
 	0    -1   -1   0   
 $EndComp
@@ -871,6 +885,8 @@ F 3 "" H 9750 7800 50  0001 C CNN
 F 4 "10u0" H 9500 7800 39  0000 L CNN "Value1"
 F 5 "20% 25V X5R" H 9700 7500 39  0001 C CNN "Value2"
 F 6 "490-10748-1-ND" H 9700 7450 39  0001 C CNN "digikey"
+F 7 "Murata Electronics North America" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "GRM21BR61E106MA73L" H 0   0   50  0001 C CNN "pn"
 	1    9700 7750
 	0    -1   -1   0   
 $EndComp
@@ -885,6 +901,8 @@ F 3 "" H 10750 7800 50  0001 C CNN
 F 4 "10u0" H 10500 7800 39  0000 L CNN "Value1"
 F 5 "20% 25V X5R" H 10700 7500 39  0001 C CNN "Value2"
 F 6 "490-10748-1-ND" H 10700 7450 39  0001 C CNN "digikey"
+F 7 "Murata Electronics North America" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "GRM21BR61E106MA73L" H 0   0   50  0001 C CNN "pn"
 	1    10700 7750
 	0    -1   -1   0   
 $EndComp
@@ -899,6 +917,8 @@ F 3 "" H 10450 3300 79  0001 C CNN
 F 4 "NC7SZ175" H 0   0   50  0001 C CNN "Value1"
 F 5 "D-Type Flip-Flop with Asynchronous Clear" H 0   0   50  0001 C CNN "Value2"
 F 6 "???" H 0   0   50  0001 C CNN "digikey"
+F 7 "Texas Instruments" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "SN74LVC1G175DCKR" H 0   0   50  0001 C CNN "pn"
 	1    10450 3300
 	1    0    0    -1  
 $EndComp
@@ -935,6 +955,8 @@ F 3 "" H 11400 3150 50  0001 C CNN
 F 4 "100n" H 11150 3150 39  0000 L CNN "Value1"
 F 5 "5% 50V X7R" H 11350 2850 39  0001 C CNN "Value2"
 F 6 "399-1170-1-ND" H 11350 2800 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C104K5RACTU" H 0   0   50  0001 C CNN "pn"
 	1    11350 3100
 	0    -1   -1   0   
 $EndComp
@@ -1009,6 +1031,8 @@ F 3 "" H 10450 5900 50  0001 C CNN
 F 4 "100n" H 10200 5900 39  0000 L CNN "Value1"
 F 5 "5% 50V X7R" H 10400 5600 39  0001 C CNN "Value2"
 F 6 "399-1170-1-ND" H 10400 5550 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C104K5RACTU" H 0   0   50  0001 C CNN "pn"
 	1    10400 5850
 	0    -1   -1   0   
 $EndComp
@@ -1065,6 +1089,8 @@ F 3 "" H 12500 4550 60  0000 C CNN
 F 4 "NC7SZ157" H 0   0   50  0001 C CNN "Value1"
 F 5 "2-Input Non-Inverting Multiplexer" H 0   0   50  0001 C CNN "Value2"
 F 6 "NC7SZ157P6XCT-ND" H 0   0   50  0001 C CNN "digikey"
+F 7 "ON Semiconductor" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "NC7SZ157P6X" H 0   0   50  0001 C CNN "pn"
 	1    12150 4600
 	1    0    0    -1  
 $EndComp
@@ -1567,6 +1593,8 @@ F 3 "" H 10650 5900 50  0001 C CNN
 F 4 "100n" H 10400 5900 39  0000 L CNN "Value1"
 F 5 "5% 50V X7R" H 10600 5600 39  0001 C CNN "Value2"
 F 6 "399-1170-1-ND" H 10600 5550 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C104K5RACTU" H 0   0   50  0001 C CNN "pn"
 	1    10600 5850
 	0    -1   -1   0   
 $EndComp
@@ -1628,6 +1656,8 @@ F 3 "" H 9850 4750 60  0000 C CNN
 F 4 "NC7SZ157" H 0   0   50  0001 C CNN "Value1"
 F 5 "2-Input Non-Inverting Multiplexer" H 0   0   50  0001 C CNN "Value2"
 F 6 "NC7SZ157P6XCT-ND" H 0   0   50  0001 C CNN "digikey"
+F 7 "ON Semiconductor" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "NC7SZ157P6X" H 0   0   50  0001 C CNN "pn"
 	1    9500 4800
 	1    0    0    -1  
 $EndComp
@@ -1711,6 +1741,8 @@ F 3 "" H 10850 5900 50  0001 C CNN
 F 4 "100n" H 10600 5900 39  0000 L CNN "Value1"
 F 5 "5% 50V X7R" H 10800 5600 39  0001 C CNN "Value2"
 F 6 "399-1170-1-ND" H 10800 5550 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C104K5RACTU" H 0   0   50  0001 C CNN "pn"
 	1    10800 5850
 	0    -1   -1   0   
 $EndComp
@@ -1849,6 +1881,8 @@ F 3 "" H 2350 10450 50  0001 C CNN
 F 4 "100n" H 2100 10450 39  0000 L CNN "Value1"
 F 5 "5% 50V X7R" H 2300 10150 39  0001 C CNN "Value2"
 F 6 "399-1170-1-ND" H 2300 10100 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C104K5RACTU" H 0   0   50  0001 C CNN "pn"
 	1    2300 10400
 	0    -1   -1   0   
 $EndComp
@@ -1863,6 +1897,8 @@ F 3 "" H 1500 10450 50  0001 C CNN
 F 4 "10u0" H 1250 10450 39  0000 L CNN "Value1"
 F 5 "20% 25V X5R" H 1450 10150 39  0001 C CNN "Value2"
 F 6 "490-10748-1-ND" H 1450 10100 39  0001 C CNN "digikey"
+F 7 "Murata Electronics North America" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "GRM21BR61E106MA73L" H 0   0   50  0001 C CNN "pn"
 	1    1450 10400
 	0    -1   -1   0   
 $EndComp
@@ -1877,6 +1913,8 @@ F 3 "" H 2550 10450 50  0001 C CNN
 F 4 "10u0" H 2300 10450 39  0000 L CNN "Value1"
 F 5 "20% 25V X5R" H 2500 10150 39  0001 C CNN "Value2"
 F 6 "490-10748-1-ND" H 2500 10100 39  0001 C CNN "digikey"
+F 7 "Murata Electronics North America" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "GRM21BR61E106MA73L" H 0   0   50  0001 C CNN "pn"
 	1    2500 10400
 	0    -1   -1   0   
 $EndComp
@@ -1891,6 +1929,8 @@ F 3 "" H 1850 10150 50  0000 C CNN
 F 4 "NCP1117LPST33" H 1600 10350 39  0000 L CNN "Value1"
 F 5 "NCP1117LPST33T3GOSCT-ND" H 1850 9500 39  0001 C CNN "digikey"
 F 6 "LDO" H 1850 9600 39  0001 C CNN "Value2"
+F 7 "ON Semiconductor" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "NCP1117LPST33T3G" H 0   0   50  0001 C CNN "pn"
 	1    1850 10150
 	1    0    0    -1  
 $EndComp
@@ -2004,6 +2044,8 @@ F 3 "" H 2900 10450 50  0001 C CNN
 F 4 "10u0" H 2650 10450 39  0000 L CNN "Value1"
 F 5 "20% 25V X5R" H 2850 10150 39  0001 C CNN "Value2"
 F 6 "490-10748-1-ND" H 2850 10100 39  0001 C CNN "digikey"
+F 7 "Murata Electronics North America" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "GRM21BR61E106MA73L" H 0   0   50  0001 C CNN "pn"
 	1    2850 10400
 	0    -1   -1   0   
 $EndComp
@@ -2018,6 +2060,8 @@ F 3 "" H 4200 10450 50  0001 C CNN
 F 4 "22u0" V 4187 10515 39  0000 L CNN "Value1"
 F 5 "20% 10V X5R" H 4150 10150 39  0001 C CNN "Value2"
 F 6 "490-10511-1-ND" H 4150 10100 39  0001 C CNN "digikey"
+F 7 "Murata Electronics North America" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "GRM21BR61A226ME51L" H 0   0   50  0001 C CNN "pn"
 	1    4150 10400
 	0    1    1    0   
 $EndComp
@@ -2032,6 +2076,8 @@ F 3 "" H 3800 10250 50  0001 C CNN
 F 4 "2u20" H 3800 10286 39  0000 C CNN "Value1"
 F 5 "30% 4.5A 26 mOhm" H 3800 10000 39  0001 C CNN "Value2"
 F 6 "811-1157-1-ND" H 3800 9900 39  0001 C CNN "digikey"
+F 7 "Murata Power Solutions Inc." H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "45222C" H 0   0   50  0001 C CNN "pn"
 	1    3800 10200
 	1    0    0    -1  
 $EndComp
@@ -2046,6 +2092,8 @@ F 3 "" H 3400 10200 60  0000 C CNN
 F 4 "TLV62565" H 3150 10550 39  0000 L CNN "Value1"
 F 5 "1.5A" H 3350 9900 39  0001 C CNN "Value2"
 F 6 "296-43657-1-ND" H 3350 9850 39  0001 C CNN "digikey"
+F 7 "Texas Instruments" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "TLV62565DBVR" H 0   0   50  0001 C CNN "pn"
 	1    3350 10300
 	1    0    0    -1  
 $EndComp
@@ -2060,6 +2108,8 @@ F 3 "" H 3950 10400 50  0000 C CNN
 F 4 "80K6" H 3950 10325 39  0000 C CNN "Value1"
 F 5 "1% 0.125W Thick" H 3950 10275 39  0001 C CNN "Value2"
 F 6 "311-80.6KCRCT-ND" H 3950 10100 39  0001 C CNN "digikey"
+F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RC0805FR-0780K6L" H 0   0   50  0001 C CNN "pn"
 	1    3950 10400
 	0    -1   1    0   
 $EndComp
@@ -2238,6 +2288,8 @@ F 3 "" H 3950 10800 50  0000 C CNN
 F 4 "120K" H 3950 10725 39  0000 C CNN "Value1"
 F 5 "1% 0.125W Thick" H 3950 10675 39  0001 C CNN "Value2"
 F 6 "311-120KCRCT-ND" H 3950 10500 39  0001 C CNN "digikey"
+F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RC0805FR-07120KL" H 0   0   50  0001 C CNN "pn"
 	1    3950 10800
 	0    -1   1    0   
 $EndComp
@@ -2252,6 +2304,8 @@ F 3 "" H 6400 10750 50  0001 C CNN
 F 4 "100n" H 6550 10825 39  0000 R CNN "Value1"
 F 5 "10% 10V X7R" H 6350 10450 39  0001 C CNN "Value2"
 F 6 "490-6321-1-ND" H 6350 10400 39  0001 C CNN "digikey"
+F 7 "Murata Electronics North America" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "GRM155R71A104KA01D" H 0   0   50  0001 C CNN "pn"
 	1    6350 10700
 	0    1    1    0   
 $EndComp
@@ -2266,6 +2320,8 @@ F 3 "" H 6600 10750 50  0001 C CNN
 F 4 "100n" H 6750 10825 39  0000 R CNN "Value1"
 F 5 "10% 10V X7R" H 6550 10450 39  0001 C CNN "Value2"
 F 6 "490-6321-1-ND" H 6550 10400 39  0001 C CNN "digikey"
+F 7 "Murata Electronics North America" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "GRM155R71A104KA01D" H 0   0   50  0001 C CNN "pn"
 	1    6550 10700
 	0    1    1    0   
 $EndComp
@@ -2280,6 +2336,8 @@ F 3 "" H 6800 10750 50  0001 C CNN
 F 4 "100n" H 6950 10825 39  0000 R CNN "Value1"
 F 5 "10% 10V X7R" H 6750 10450 39  0001 C CNN "Value2"
 F 6 "490-6321-1-ND" H 6750 10400 39  0001 C CNN "digikey"
+F 7 "Murata Electronics North America" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "GRM155R71A104KA01D" H 0   0   50  0001 C CNN "pn"
 	1    6750 10700
 	0    1    1    0   
 $EndComp
@@ -2294,6 +2352,8 @@ F 3 "" H 7000 10750 50  0001 C CNN
 F 4 "100n" H 7150 10825 39  0000 R CNN "Value1"
 F 5 "10% 10V X7R" H 6950 10450 39  0001 C CNN "Value2"
 F 6 "490-6321-1-ND" H 6950 10400 39  0001 C CNN "digikey"
+F 7 "Murata Electronics North America" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "GRM155R71A104KA01D" H 0   0   50  0001 C CNN "pn"
 	1    6950 10700
 	0    1    1    0   
 $EndComp
@@ -2308,6 +2368,8 @@ F 3 "" H 7200 10750 50  0001 C CNN
 F 4 "100n" H 7350 10825 39  0000 R CNN "Value1"
 F 5 "10% 10V X7R" H 7150 10450 39  0001 C CNN "Value2"
 F 6 "490-6321-1-ND" H 7150 10400 39  0001 C CNN "digikey"
+F 7 "Murata Electronics North America" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "GRM155R71A104KA01D" H 0   0   50  0001 C CNN "pn"
 	1    7150 10700
 	0    1    1    0   
 $EndComp
@@ -2322,6 +2384,8 @@ F 3 "" H 7400 10750 50  0001 C CNN
 F 4 "100n" H 7550 10825 39  0000 R CNN "Value1"
 F 5 "10% 10V X7R" H 7350 10450 39  0001 C CNN "Value2"
 F 6 "490-6321-1-ND" H 7350 10400 39  0001 C CNN "digikey"
+F 7 "Murata Electronics North America" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "GRM155R71A104KA01D" H 0   0   50  0001 C CNN "pn"
 	1    7350 10700
 	0    1    1    0   
 $EndComp
@@ -2336,6 +2400,8 @@ F 3 "" H 7600 10750 50  0001 C CNN
 F 4 "100n" H 7750 10825 39  0000 R CNN "Value1"
 F 5 "10% 10V X7R" H 7550 10450 39  0001 C CNN "Value2"
 F 6 "490-6321-1-ND" H 7550 10400 39  0001 C CNN "digikey"
+F 7 "Murata Electronics North America" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "GRM155R71A104KA01D" H 0   0   50  0001 C CNN "pn"
 	1    7550 10700
 	0    1    1    0   
 $EndComp
@@ -2350,6 +2416,8 @@ F 3 "" H 7800 10750 50  0001 C CNN
 F 4 "100n" H 7950 10825 39  0000 R CNN "Value1"
 F 5 "10% 10V X7R" H 7750 10450 39  0001 C CNN "Value2"
 F 6 "490-6321-1-ND" H 7750 10400 39  0001 C CNN "digikey"
+F 7 "Murata Electronics North America" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "GRM155R71A104KA01D" H 0   0   50  0001 C CNN "pn"
 	1    7750 10700
 	0    1    1    0   
 $EndComp
@@ -2364,6 +2432,8 @@ F 3 "" H 8000 10750 50  0001 C CNN
 F 4 "100n" H 8150 10825 39  0000 R CNN "Value1"
 F 5 "10% 10V X7R" H 7950 10450 39  0001 C CNN "Value2"
 F 6 "490-6321-1-ND" H 7950 10400 39  0001 C CNN "digikey"
+F 7 "Murata Electronics North America" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "GRM155R71A104KA01D" H 0   0   50  0001 C CNN "pn"
 	1    7950 10700
 	0    1    1    0   
 $EndComp
@@ -2378,6 +2448,8 @@ F 3 "" H 8200 10750 50  0001 C CNN
 F 4 "100n" H 8350 10825 39  0000 R CNN "Value1"
 F 5 "10% 10V X7R" H 8150 10450 39  0001 C CNN "Value2"
 F 6 "490-6321-1-ND" H 8150 10400 39  0001 C CNN "digikey"
+F 7 "Murata Electronics North America" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "GRM155R71A104KA01D" H 0   0   50  0001 C CNN "pn"
 	1    8150 10700
 	0    1    1    0   
 $EndComp
@@ -2392,6 +2464,8 @@ F 3 "" H 8400 10750 50  0001 C CNN
 F 4 "100n" H 8550 10825 39  0000 R CNN "Value1"
 F 5 "10% 10V X7R" H 8350 10450 39  0001 C CNN "Value2"
 F 6 "490-6321-1-ND" H 8350 10400 39  0001 C CNN "digikey"
+F 7 "Murata Electronics North America" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "GRM155R71A104KA01D" H 0   0   50  0001 C CNN "pn"
 	1    8350 10700
 	0    1    1    0   
 $EndComp
@@ -2406,6 +2480,8 @@ F 3 "" H 8600 10750 50  0001 C CNN
 F 4 "100n" H 8750 10825 39  0000 R CNN "Value1"
 F 5 "10% 10V X7R" H 8550 10450 39  0001 C CNN "Value2"
 F 6 "490-6321-1-ND" H 8550 10400 39  0001 C CNN "digikey"
+F 7 "Murata Electronics North America" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "GRM155R71A104KA01D" H 0   0   50  0001 C CNN "pn"
 	1    8550 10700
 	0    1    1    0   
 $EndComp
@@ -2420,6 +2496,8 @@ F 3 "" H 8800 10750 50  0001 C CNN
 F 4 "100n" H 8950 10825 39  0000 R CNN "Value1"
 F 5 "10% 10V X7R" H 8750 10450 39  0001 C CNN "Value2"
 F 6 "490-6321-1-ND" H 8750 10400 39  0001 C CNN "digikey"
+F 7 "Murata Electronics North America" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "GRM155R71A104KA01D" H 0   0   50  0001 C CNN "pn"
 	1    8750 10700
 	0    1    1    0   
 $EndComp
@@ -2434,6 +2512,8 @@ F 3 "" H 9000 10750 50  0001 C CNN
 F 4 "100n" H 9150 10825 39  0000 R CNN "Value1"
 F 5 "10% 10V X7R" H 8950 10450 39  0001 C CNN "Value2"
 F 6 "490-6321-1-ND" H 8950 10400 39  0001 C CNN "digikey"
+F 7 "Murata Electronics North America" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "GRM155R71A104KA01D" H 0   0   50  0001 C CNN "pn"
 	1    8950 10700
 	0    1    1    0   
 $EndComp
@@ -2448,6 +2528,8 @@ F 3 "" H 9450 10750 50  0001 C CNN
 F 4 "100n" H 9600 10825 39  0000 R CNN "Value1"
 F 5 "10% 10V X7R" H 9400 10450 39  0001 C CNN "Value2"
 F 6 "490-6321-1-ND" H 9400 10400 39  0001 C CNN "digikey"
+F 7 "Murata Electronics North America" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "GRM155R71A104KA01D" H 0   0   50  0001 C CNN "pn"
 	1    9400 10700
 	0    1    1    0   
 $EndComp
@@ -2462,6 +2544,8 @@ F 3 "" H 9650 10750 50  0001 C CNN
 F 4 "100n" H 9800 10825 39  0000 R CNN "Value1"
 F 5 "10% 10V X7R" H 9600 10450 39  0001 C CNN "Value2"
 F 6 "490-6321-1-ND" H 9600 10400 39  0001 C CNN "digikey"
+F 7 "Murata Electronics North America" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "GRM155R71A104KA01D" H 0   0   50  0001 C CNN "pn"
 	1    9600 10700
 	0    1    1    0   
 $EndComp
@@ -2476,6 +2560,8 @@ F 3 "" H 9850 10750 50  0001 C CNN
 F 4 "100n" H 10000 10825 39  0000 R CNN "Value1"
 F 5 "10% 10V X7R" H 9800 10450 39  0001 C CNN "Value2"
 F 6 "490-6321-1-ND" H 9800 10400 39  0001 C CNN "digikey"
+F 7 "Murata Electronics North America" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "GRM155R71A104KA01D" H 0   0   50  0001 C CNN "pn"
 	1    9800 10700
 	0    1    1    0   
 $EndComp
@@ -2490,6 +2576,8 @@ F 3 "" H 10050 10750 50  0001 C CNN
 F 4 "100n" H 10200 10825 39  0000 R CNN "Value1"
 F 5 "10% 10V X7R" H 10000 10450 39  0001 C CNN "Value2"
 F 6 "490-6321-1-ND" H 10000 10400 39  0001 C CNN "digikey"
+F 7 "Murata Electronics North America" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "GRM155R71A104KA01D" H 0   0   50  0001 C CNN "pn"
 	1    10000 10700
 	0    1    1    0   
 $EndComp
@@ -2504,6 +2592,8 @@ F 3 "" H 10250 10750 50  0001 C CNN
 F 4 "100n" H 10400 10825 39  0000 R CNN "Value1"
 F 5 "10% 10V X7R" H 10200 10450 39  0001 C CNN "Value2"
 F 6 "490-6321-1-ND" H 10200 10400 39  0001 C CNN "digikey"
+F 7 "Murata Electronics North America" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "GRM155R71A104KA01D" H 0   0   50  0001 C CNN "pn"
 	1    10200 10700
 	0    1    1    0   
 $EndComp
@@ -2518,6 +2608,8 @@ F 3 "" H 10450 10750 50  0001 C CNN
 F 4 "100n" H 10600 10825 39  0000 R CNN "Value1"
 F 5 "10% 10V X7R" H 10400 10450 39  0001 C CNN "Value2"
 F 6 "490-6321-1-ND" H 10400 10400 39  0001 C CNN "digikey"
+F 7 "Murata Electronics North America" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "GRM155R71A104KA01D" H 0   0   50  0001 C CNN "pn"
 	1    10400 10700
 	0    1    1    0   
 $EndComp
@@ -2532,6 +2624,8 @@ F 3 "" H 10650 10750 50  0001 C CNN
 F 4 "100n" H 10800 10825 39  0000 R CNN "Value1"
 F 5 "10% 10V X7R" H 10600 10450 39  0001 C CNN "Value2"
 F 6 "490-6321-1-ND" H 10600 10400 39  0001 C CNN "digikey"
+F 7 "Murata Electronics North America" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "GRM155R71A104KA01D" H 0   0   50  0001 C CNN "pn"
 	1    10600 10700
 	0    1    1    0   
 $EndComp
@@ -2546,6 +2640,8 @@ F 3 "" H 10850 10750 50  0001 C CNN
 F 4 "100n" H 11000 10825 39  0000 R CNN "Value1"
 F 5 "10% 10V X7R" H 10800 10450 39  0001 C CNN "Value2"
 F 6 "490-6321-1-ND" H 10800 10400 39  0001 C CNN "digikey"
+F 7 "Murata Electronics North America" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "GRM155R71A104KA01D" H 0   0   50  0001 C CNN "pn"
 	1    10800 10700
 	0    1    1    0   
 $EndComp
@@ -2560,6 +2656,8 @@ F 3 "" H 11050 10750 50  0001 C CNN
 F 4 "100n" H 11200 10825 39  0000 R CNN "Value1"
 F 5 "10% 10V X7R" H 11000 10450 39  0001 C CNN "Value2"
 F 6 "490-6321-1-ND" H 11000 10400 39  0001 C CNN "digikey"
+F 7 "Murata Electronics North America" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "GRM155R71A104KA01D" H 0   0   50  0001 C CNN "pn"
 	1    11000 10700
 	0    1    1    0   
 $EndComp
@@ -2574,6 +2672,8 @@ F 3 "" H 11250 10750 50  0001 C CNN
 F 4 "100n" H 11400 10825 39  0000 R CNN "Value1"
 F 5 "10% 10V X7R" H 11200 10450 39  0001 C CNN "Value2"
 F 6 "490-6321-1-ND" H 11200 10400 39  0001 C CNN "digikey"
+F 7 "Murata Electronics North America" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "GRM155R71A104KA01D" H 0   0   50  0001 C CNN "pn"
 	1    11200 10700
 	0    1    1    0   
 $EndComp
@@ -2588,6 +2688,8 @@ F 3 "" H 11500 10750 50  0001 C CNN
 F 4 "100n" H 11650 10825 39  0000 R CNN "Value1"
 F 5 "10% 10V X7R" H 11450 10450 39  0001 C CNN "Value2"
 F 6 "490-6321-1-ND" H 11450 10400 39  0001 C CNN "digikey"
+F 7 "Murata Electronics North America" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "GRM155R71A104KA01D" H 0   0   50  0001 C CNN "pn"
 	1    11450 10700
 	0    1    1    0   
 $EndComp
@@ -2602,6 +2704,8 @@ F 3 "" H 5450 8050 50  0001 C CNN
 F 4 "MBR120VLSFT" H 5450 7933 39  0000 C CNN "Value1"
 F 5 "Schottky 20V 1 A " H 5450 7800 39  0001 C CNN "Value2"
 F 6 "MBR120VLSFT3GOSCT-ND" H 5450 7750 39  0001 C CNN "digikey"
+F 7 "ON Semiconductor" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "MBR120VLSFT3G" H 0   0   50  0001 C CNN "pn"
 	1    5450 8050
 	-1   0    0    1   
 $EndComp
@@ -2616,6 +2720,8 @@ F 3 "" H 5900 8250 50  0000 C CNN
 F 4 "100K" H 5900 8175 39  0000 C CNN "Value1"
 F 5 "1% 0.125W Thick" H 5900 8125 39  0001 C CNN "Value2"
 F 6 "311-100KCRCT-ND" H 5900 7950 39  0001 C CNN "digikey"
+F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RC0805FR-07100KL" H 0   0   50  0001 C CNN "pn"
 	1    5900 8250
 	0    -1   -1   0   
 $EndComp
@@ -2630,6 +2736,8 @@ F 3 "" H 10700 4350 60  0000 C CNN
 F 4 "CS2100CP" H 10300 4200 39  0000 L CNN "Value1"
 F 5 "Fractional-N Clock Multiplier" H 10650 4050 39  0001 C CNN "Value2"
 F 6 "598-1750-ND" H 10650 3950 39  0001 C CNN "digikey"
+F 7 "Cirrus Logic Inc." H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "CS2100CP-CZZ" H 0   0   50  0001 C CNN "pn"
 	1    10650 4600
 	1    0    0    -1  
 $EndComp
@@ -2644,6 +2752,8 @@ F 3 "" H 12650 4500 50  0000 C CNN
 F 4 "33R0" H 12650 4575 39  0000 C CNN "Value1"
 F 5 "1% 0.125W Thick" H 12650 4375 39  0001 C CNN "Value2"
 F 6 "311-33.0CRCT-ND" H 12650 4200 39  0001 C CNN "digikey"
+F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RC0805FR-0733RL" H 0   0   50  0001 C CNN "pn"
 	1    12650 4500
 	-1   0    0    1   
 $EndComp
@@ -2658,6 +2768,8 @@ F 3 "" H 12650 4700 50  0000 C CNN
 F 4 "33R0" H 12650 4775 39  0000 C CNN "Value1"
 F 5 "1% 0.125W Thick" H 12650 4575 39  0001 C CNN "Value2"
 F 6 "311-33.0CRCT-ND" H 12650 4400 39  0001 C CNN "digikey"
+F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RC0805FR-0733RL" H 0   0   50  0001 C CNN "pn"
 	1    12650 4700
 	-1   0    0    1   
 $EndComp
@@ -2672,6 +2784,8 @@ F 3 "" H 9200 5100 50  0000 C CNN
 F 4 "10K0" H 9200 5025 39  0000 C CNN "Value1"
 F 5 "1% 0.125W Thick" H 9200 4975 39  0001 C CNN "Value2"
 F 6 "311-10.0KCRCT-ND" H 9200 4800 39  0001 C CNN "digikey"
+F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RC0805FR-0710KL" H 0   0   50  0001 C CNN "pn"
 	1    9200 5100
 	0    -1   -1   0   
 $EndComp
@@ -2686,6 +2800,8 @@ F 3 "" H 11850 4900 50  0000 C CNN
 F 4 "10K0" H 11850 4825 39  0000 C CNN "Value1"
 F 5 "1% 0.125W Thick" H 11850 4775 39  0001 C CNN "Value2"
 F 6 "311-10.0KCRCT-ND" H 11850 4600 39  0001 C CNN "digikey"
+F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RC0805FR-0710KL" H 0   0   50  0001 C CNN "pn"
 	1    11850 4900
 	0    -1   -1   0   
 $EndComp
@@ -2700,6 +2816,8 @@ F 3 "" H 2950 2950 50  0000 C CNN
 F 4 "33R0" H 2950 3025 39  0000 C CNN "Value1"
 F 5 "1% 0.125W Thick" H 2950 2825 39  0001 C CNN "Value2"
 F 6 "311-33.0CRCT-ND" H 2950 2650 39  0001 C CNN "digikey"
+F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RC0805FR-0733RL" H 0   0   50  0001 C CNN "pn"
 	1    2950 2950
 	-1   0    0    1   
 $EndComp
@@ -2714,6 +2832,8 @@ F 3 "" H 2950 3150 50  0000 C CNN
 F 4 "33R0" H 2950 3225 39  0000 C CNN "Value1"
 F 5 "1% 0.125W Thick" H 2950 3025 39  0001 C CNN "Value2"
 F 6 "311-33.0CRCT-ND" H 2950 2850 39  0001 C CNN "digikey"
+F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RC0805FR-0733RL" H 0   0   50  0001 C CNN "pn"
 	1    2950 3150
 	-1   0    0    1   
 $EndComp
@@ -2728,6 +2848,8 @@ F 3 "" H 3750 900 50  0000 C CNN
 F 4 "33R0" H 3750 975 39  0000 C CNN "Value1"
 F 5 "1% 0.125W Thick" H 3750 775 39  0001 C CNN "Value2"
 F 6 "311-33.0CRCT-ND" H 3750 600 39  0001 C CNN "digikey"
+F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RC0805FR-0733RL" H 0   0   50  0001 C CNN "pn"
 	1    3750 900 
 	-1   0    0    1   
 $EndComp
@@ -2742,6 +2864,8 @@ F 3 "" H 3750 1050 50  0000 C CNN
 F 4 "33R0" H 3750 1125 39  0000 C CNN "Value1"
 F 5 "1% 0.125W Thick" H 3750 925 39  0001 C CNN "Value2"
 F 6 "311-33.0CRCT-ND" H 3750 750 39  0001 C CNN "digikey"
+F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RC0805FR-0733RL" H 0   0   50  0001 C CNN "pn"
 	1    3750 1050
 	-1   0    0    1   
 $EndComp
@@ -2756,6 +2880,8 @@ F 3 "" H 3200 700 50  0000 C CNN
 F 4 "10K0" H 3200 625 39  0000 C CNN "Value1"
 F 5 "1% 0.125W Thick" H 3200 575 39  0001 C CNN "Value2"
 F 6 "311-10.0KCRCT-ND" H 3200 400 39  0001 C CNN "digikey"
+F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RC0805FR-0710KL" H 0   0   50  0001 C CNN "pn"
 	1    3200 700 
 	1    0    0    -1  
 $EndComp
@@ -2770,6 +2896,8 @@ F 3 "" H 4250 3950 60  0000 C CNN
 F 4 "XE216-512-TQ128" H 6800 1700 39  0000 L CNN "Value1"
 F 5 "xCore" H 5250 1450 39  0001 C CNN "Value2"
 F 6 "880-1096-ND" H 5250 1350 39  0001 C CNN "digikey"
+F 7 "XMOS" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "XE216-512-TQ128-C20" H 0   0   50  0001 C CNN "pn"
 	1    5250 3600
 	1    0    0    -1  
 $EndComp
@@ -2784,6 +2912,8 @@ F 3 "" H 7650 7350 39  0000 C CNN
 F 4 "IS25LP080D" H 7650 7300 39  0000 L CNN "Value1"
 F 5 "8Mb" H 7850 7150 39  0001 C CNN "Value2"
 F 6 "706-1580-ND" H 7850 7050 39  0001 C CNN "digikey"
+F 7 "ISSI, Integrated Silicon Solution Inc" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "IS25LP080D-JNLE" H 0   0   50  0001 C CNN "pn"
 	1    7850 7650
 	1    0    0    -1  
 $EndComp
@@ -2798,6 +2928,8 @@ F 3 "" H 10550 7200 60  0000 C CNN
 F 4 "NCP4681DSQ25T1G" H 9950 7800 39  0000 L CNN "Value1"
 F 5 "2,5V 150mA" H 10200 7100 39  0001 C CNN "Value2"
 F 6 "NCP4681DSQ25T1GOSCT-ND" H 10200 7000 39  0001 C CNN "digikey"
+F 7 "ON Semiconductor" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "NCP4681DSQ25T1G" H 0   0   50  0001 C CNN "pn"
 	1    10200 7600
 	1    0    0    -1  
 $EndComp
@@ -2812,6 +2944,8 @@ F 3 "" H 3000 750 39  0000 C CNN
 F 4 "24M0" H 3000 700 39  0000 L CNN "Value1"
 F 5 "-" H 3200 600 39  0001 C CNN "Value2"
 F 6 "300-8252-1-ND" H 3200 500 39  0001 C CNN "digikey"
+F 7 "Abracon LLC" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "ASFL1-24.000MHZ-EC-T" H 0   0   50  0001 C CNN "pn"
 	1    3200 950 
 	1    0    0    -1  
 $EndComp
@@ -2828,6 +2962,8 @@ F 3 "" H 2850 2450 50  0001 C CNN
 F 4 "33R0" V 3100 2350 39  0000 L CNN "Value1"
 F 5 "5% 62,5mW" H 2850 2050 39  0001 C CNN "Value2"
 F 6 "???" H 2850 1950 39  0001 C CNN "digikey"
+F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "TC164-JR-0733RL" H 0   0   50  0001 C CNN "pn"
 	1    2850 2450
 	0    1    1    0   
 $EndComp
@@ -2844,6 +2980,8 @@ F 3 "" H 3000 4450 50  0000 C CNN
 F 4 "1K00" H 3000 4375 39  0000 C CNN "Value1"
 F 5 "1% 0.125W Thick" H 3000 4325 39  0001 C CNN "Value2"
 F 6 "311-1.00KCRCT-ND" H 3000 4150 39  0001 C CNN "digikey"
+F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RC0805FR-071KL" H 0   0   50  0001 C CNN "pn"
 	1    3000 4450
 	0    -1   1    0   
 $EndComp
@@ -2860,6 +2998,8 @@ F 3 "" H 4350 6250 50  0000 C CNN
 F 4 "2K00" H 4350 6175 39  0000 C CNN "Value1"
 F 5 "1% 0.125W Thick" H 4350 6125 39  0001 C CNN "Value2"
 F 6 "311-2.00KCRCT-ND" H 4350 5950 39  0001 C CNN "digikey"
+F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RC0805FR-072KL" H 0   0   50  0001 C CNN "pn"
 	1    4350 6250
 	0    -1   1    0   
 $EndComp
@@ -2876,6 +3016,8 @@ F 3 "" H 4500 6250 50  0000 C CNN
 F 4 "2K00" H 4500 6175 39  0000 C CNN "Value1"
 F 5 "1% 0.125W Thick" H 4500 6125 39  0001 C CNN "Value2"
 F 6 "311-2.00KCRCT-ND" H 4500 5950 39  0001 C CNN "digikey"
+F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RC0805FR-072KL" H 0   0   50  0001 C CNN "pn"
 	1    4500 6250
 	0    -1   1    0   
 $EndComp
@@ -2890,6 +3032,8 @@ F 3 "" H 5950 1000 50  0000 C CNN
 F 4 "4R70" H 5950 1075 39  0000 C CNN "Value1"
 F 5 "1% 0.125W Thick" H 5950 875 39  0001 C CNN "Value2"
 F 6 "311-4.70CRCT-ND" H 5950 700 39  0001 C CNN "digikey"
+F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RC0805FR-074R7L" H 0   0   50  0001 C CNN "pn"
 	1    5950 1000
 	-1   0    0    1   
 $EndComp
@@ -2904,6 +3048,8 @@ F 3 "" H 5150 5850 50  0000 C CNN
 F 4 "43R2" H 5150 5775 39  0000 C CNN "Value1"
 F 5 "1% 0.125W Thick" H 5150 5725 39  0001 C CNN "Value2"
 F 6 "P43.2CCT-ND" H 5150 5550 39  0001 C CNN "digikey"
+F 7 "Panasonic Electronic Components" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "ERJ-6ENF43R2V" H 0   0   50  0001 C CNN "pn"
 	1    5150 5850
 	0    -1   1    0   
 $EndComp
@@ -2918,6 +3064,8 @@ F 3 "" H 7800 9250 50  0001 C CNN
 F 4 "HDR-02x10" V 7800 8700 39  0000 C CNN "Value1"
 F 5 "-" H 7800 8050 39  0001 C CNN "Value2"
 F 6 "S2011EC-10-ND" H 7800 7950 39  0001 C CNN "digikey"
+F 7 "Sullins Connector Solutions" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "PRPC010DAAN-RC" H 0   0   50  0001 C CNN "pn"
 	1    7750 8750
 	1    0    0    -1  
 $EndComp
@@ -2932,6 +3080,8 @@ F 3 "" H 9050 1650 60  0000 C CNN
 F 4 "NC7WZ07" H 8850 1350 39  0000 L CNN "Value1"
 F 5 "Noninverting Buffer" H 9000 1150 39  0001 C CNN "Value2"
 F 6 "NC7WZ07P6XCT-ND" H 9050 1100 39  0001 C CNN "digikey"
+F 7 "ON Semiconductor" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "NC7WZ07P6X" H 0   0   50  0001 C CNN "pn"
 	1    9050 1650
 	1    0    0    -1  
 $EndComp
@@ -2946,6 +3096,8 @@ F 3 "" H 4850 8250 50  0001 C CNN
 F 4 "HDR-01x05" H 4850 8250 39  0001 C CNN "Value1"
 F 5 "-" H 4850 8250 50  0001 C CNN "Value2"
 F 6 "S1011EC-05-ND" H 4850 8250 39  0001 C CNN "digikey"
+F 7 "Sullins Connector Solutions" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "PRPC005SAAN-RC" H 0   0   50  0001 C CNN "pn"
 	1    4850 8250
 	-1   0    0    -1  
 $EndComp

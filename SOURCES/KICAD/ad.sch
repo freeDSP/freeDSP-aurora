@@ -1524,6 +1524,8 @@ F 3 "" H 1400 4850 50  0000 C CNN
 F 4 "SKT_02x13" H 0   0   50  0001 C CNN "Value1"
 F 5 "-" H 0   0   50  0001 C CNN "Value2"
 F 6 "???" H 0   0   50  0001 C CNN "digikey"
+F 7 "Sullins Connector Solutions" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "PRPC013DAAN-RC" H 0   0   50  0001 C CNN "pn"
 	1    1400 6000
 	1    0    0    -1  
 $EndComp
@@ -1791,7 +1793,9 @@ F 2 "rklib:RD2_D5_L11" H 2700 2400 39  0001 C CNN
 F 3 "" V 2700 2600 50  0001 C CNN
 F 4 "100u" H 2750 2800 39  0000 R CNN "Value1"
 F 5 "20% 25V" H 2700 2350 39  0001 C CNN "Value2"
-F 6 "399-6102-ND" H 2750 2300 39  0001 C CNN "digikey"
+F 6 "UVY1E101MDD-ND" H 2750 2300 39  0001 C CNN "digikey"
+F 7 "Nichicon" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "UVY1E101MDD" H 0   0   50  0001 C CNN "pn"
 	1    2700 2600
 	-1   0    0    1   
 $EndComp
@@ -1805,7 +1809,9 @@ F 2 "rklib:RD2_D5_L11" H 5550 2400 39  0001 C CNN
 F 3 "" V 5550 2600 50  0001 C CNN
 F 4 "100u" H 5600 2800 39  0000 R CNN "Value1"
 F 5 "20% 25V" H 5550 2350 39  0001 C CNN "Value2"
-F 6 "399-6102-ND" H 5600 2300 39  0001 C CNN "digikey"
+F 6 "UVY1E101MDD-ND" H 5600 2300 39  0001 C CNN "digikey"
+F 7 "Nichicon" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "UVY1E101MDD" H 0   0   50  0001 C CNN "pn"
 	1    5550 2600
 	-1   0    0    1   
 $EndComp
@@ -1819,7 +1825,9 @@ F 2 "rklib:RD2_D5_L11" H 2700 3350 39  0001 C CNN
 F 3 "" V 2700 3550 50  0001 C CNN
 F 4 "100u" H 2750 3750 39  0000 R CNN "Value1"
 F 5 "20% 25V" H 2700 3300 39  0001 C CNN "Value2"
-F 6 "399-6102-ND" H 2750 3250 39  0001 C CNN "digikey"
+F 6 "UVY1E101MDD-ND" H 2750 3250 39  0001 C CNN "digikey"
+F 7 "Nichicon" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "UVY1E101MDD" H 0   0   50  0001 C CNN "pn"
 	1    2700 3550
 	-1   0    0    1   
 $EndComp
@@ -1833,7 +1841,9 @@ F 2 "rklib:RD2_D5_L11" H 5550 3350 39  0001 C CNN
 F 3 "" V 5550 3550 50  0001 C CNN
 F 4 "100u" H 5600 3750 39  0000 R CNN "Value1"
 F 5 "20% 25V" H 5550 3300 39  0001 C CNN "Value2"
-F 6 "399-6102-ND" H 5600 3250 39  0001 C CNN "digikey"
+F 6 "UVY1E101MDD-ND" H 5600 3250 39  0001 C CNN "digikey"
+F 7 "Nichicon" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "UVY1E101MDD" H 0   0   50  0001 C CNN "pn"
 	1    5550 3550
 	-1   0    0    1   
 $EndComp
@@ -1847,7 +1857,9 @@ F 2 "rklib:RD2_D5_L11" H 2700 4300 39  0001 C CNN
 F 3 "" V 2700 4500 50  0001 C CNN
 F 4 "100u" H 2750 4700 39  0000 R CNN "Value1"
 F 5 "20% 25V" H 2700 4250 39  0001 C CNN "Value2"
-F 6 "399-6102-ND" H 2750 4200 39  0001 C CNN "digikey"
+F 6 "UVY1E101MDD-ND" H 2750 4200 39  0001 C CNN "digikey"
+F 7 "Nichicon" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "UVY1E101MDD" H 0   0   50  0001 C CNN "pn"
 	1    2700 4500
 	-1   0    0    1   
 $EndComp
@@ -1861,7 +1873,9 @@ F 2 "rklib:RD2_D5_L11" H 2700 5250 39  0001 C CNN
 F 3 "" V 2700 5450 50  0001 C CNN
 F 4 "100u" H 2750 5650 39  0000 R CNN "Value1"
 F 5 "20% 25V" H 2700 5200 39  0001 C CNN "Value2"
-F 6 "399-6102-ND" H 2750 5150 39  0001 C CNN "digikey"
+F 6 "UVY1E101MDD-ND" H 2750 5150 39  0001 C CNN "digikey"
+F 7 "Nichicon" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "UVY1E101MDD" H 0   0   50  0001 C CNN "pn"
 	1    2700 5450
 	-1   0    0    1   
 $EndComp
@@ -1875,7 +1889,9 @@ F 2 "rklib:RD2_D5_L11" H 5550 4300 39  0001 C CNN
 F 3 "" V 5550 4500 50  0001 C CNN
 F 4 "100u" H 5600 4700 39  0000 R CNN "Value1"
 F 5 "20% 25V" H 5550 4250 39  0001 C CNN "Value2"
-F 6 "399-6102-ND" H 5600 4200 39  0001 C CNN "digikey"
+F 6 "UVY1E101MDD-ND" H 5600 4200 39  0001 C CNN "digikey"
+F 7 "Nichicon" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "UVY1E101MDD" H 0   0   50  0001 C CNN "pn"
 	1    5550 4500
 	-1   0    0    1   
 $EndComp
@@ -1889,7 +1905,9 @@ F 2 "rklib:RD2_D5_L11" H 5550 5250 39  0001 C CNN
 F 3 "" V 5550 5450 50  0001 C CNN
 F 4 "100u" H 5600 5650 39  0000 R CNN "Value1"
 F 5 "20% 25V" H 5550 5200 39  0001 C CNN "Value2"
-F 6 "399-6102-ND" H 5600 5150 39  0001 C CNN "digikey"
+F 6 "UVY1E101MDD-ND" H 5600 5150 39  0001 C CNN "digikey"
+F 7 "Nichicon" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "UVY1E101MDD" H 0   0   50  0001 C CNN "pn"
 	1    5550 5450
 	-1   0    0    1   
 $EndComp
@@ -1903,7 +1921,9 @@ F 2 "rklib:RD2_D5_L11" H 2700 6200 39  0001 C CNN
 F 3 "" V 2700 6400 50  0001 C CNN
 F 4 "100u" H 2750 6600 39  0000 R CNN "Value1"
 F 5 "20% 25V" H 2700 6150 39  0001 C CNN "Value2"
-F 6 "399-6102-ND" H 2750 6100 39  0001 C CNN "digikey"
+F 6 "UVY1E101MDD-ND" H 2750 6100 39  0001 C CNN "digikey"
+F 7 "Nichicon" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "UVY1E101MDD" H 0   0   50  0001 C CNN "pn"
 	1    2700 6400
 	-1   0    0    1   
 $EndComp
@@ -1917,7 +1937,9 @@ F 2 "rklib:RD2_D5_L11" H 2700 7150 39  0001 C CNN
 F 3 "" V 2700 7350 50  0001 C CNN
 F 4 "100u" H 2750 7550 39  0000 R CNN "Value1"
 F 5 "20% 25V" H 2700 7100 39  0001 C CNN "Value2"
-F 6 "399-6102-ND" H 2750 7050 39  0001 C CNN "digikey"
+F 6 "UVY1E101MDD-ND" H 2750 7050 39  0001 C CNN "digikey"
+F 7 "Nichicon" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "UVY1E101MDD" H 0   0   50  0001 C CNN "pn"
 	1    2700 7350
 	-1   0    0    1   
 $EndComp
@@ -1931,7 +1953,9 @@ F 2 "rklib:RD2_D5_L11" H 5550 6200 39  0001 C CNN
 F 3 "" V 5550 6400 50  0001 C CNN
 F 4 "100u" H 5600 6600 39  0000 R CNN "Value1"
 F 5 "20% 25V" H 5550 6150 39  0001 C CNN "Value2"
-F 6 "399-6102-ND" H 5600 6100 39  0001 C CNN "digikey"
+F 6 "UVY1E101MDD-ND" H 5600 6100 39  0001 C CNN "digikey"
+F 7 "Nichicon" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "UVY1E101MDD" H 0   0   50  0001 C CNN "pn"
 	1    5550 6400
 	-1   0    0    1   
 $EndComp
@@ -1945,7 +1969,9 @@ F 2 "rklib:RD2_D5_L11" H 5550 7150 39  0001 C CNN
 F 3 "" V 5550 7350 50  0001 C CNN
 F 4 "100u" H 5600 7550 39  0000 R CNN "Value1"
 F 5 "20% 25V" H 5550 7100 39  0001 C CNN "Value2"
-F 6 "399-6102-ND" H 5600 7050 39  0001 C CNN "digikey"
+F 6 "UVY1E101MDD-ND" H 5600 7050 39  0001 C CNN "digikey"
+F 7 "Nichicon" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "UVY1E101MDD" H 0   0   50  0001 C CNN "pn"
 	1    5550 7350
 	-1   0    0    1   
 $EndComp
@@ -1959,7 +1985,9 @@ F 2 "rklib:RD2_D5_L11" H 2700 8100 39  0001 C CNN
 F 3 "" V 2700 8300 50  0001 C CNN
 F 4 "100u" H 2750 8500 39  0000 R CNN "Value1"
 F 5 "20% 25V" H 2700 8050 39  0001 C CNN "Value2"
-F 6 "399-6102-ND" H 2750 8000 39  0001 C CNN "digikey"
+F 6 "UVY1E101MDD-ND" H 2750 8000 39  0001 C CNN "digikey"
+F 7 "Nichicon" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "UVY1E101MDD" H 0   0   50  0001 C CNN "pn"
 	1    2700 8300
 	-1   0    0    1   
 $EndComp
@@ -1973,7 +2001,9 @@ F 2 "rklib:RD2_D5_L11" H 5550 8100 39  0001 C CNN
 F 3 "" V 5550 8300 50  0001 C CNN
 F 4 "100u" H 5600 8500 39  0000 R CNN "Value1"
 F 5 "20% 25V" H 5550 8050 39  0001 C CNN "Value2"
-F 6 "399-6102-ND" H 5600 8000 39  0001 C CNN "digikey"
+F 6 "UVY1E101MDD-ND" H 5600 8000 39  0001 C CNN "digikey"
+F 7 "Nichicon" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "UVY1E101MDD" H 0   0   50  0001 C CNN "pn"
 	1    5550 8300
 	-1   0    0    1   
 $EndComp
@@ -1987,7 +2017,9 @@ F 2 "rklib:RD2_D5_L11" H 2700 9050 39  0001 C CNN
 F 3 "" V 2700 9250 50  0001 C CNN
 F 4 "100u" H 2750 9450 39  0000 R CNN "Value1"
 F 5 "20% 25V" H 2700 9000 39  0001 C CNN "Value2"
-F 6 "399-6102-ND" H 2750 8950 39  0001 C CNN "digikey"
+F 6 "UVY1E101MDD-ND" H 2750 8950 39  0001 C CNN "digikey"
+F 7 "Nichicon" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "UVY1E101MDD" H 0   0   50  0001 C CNN "pn"
 	1    2700 9250
 	-1   0    0    1   
 $EndComp
@@ -2001,7 +2033,9 @@ F 2 "rklib:RD2_D5_L11" H 5550 9050 39  0001 C CNN
 F 3 "" V 5550 9250 50  0001 C CNN
 F 4 "100u" H 5600 9450 39  0000 R CNN "Value1"
 F 5 "20% 25V" H 5550 9000 39  0001 C CNN "Value2"
-F 6 "399-6102-ND" H 5600 8950 39  0001 C CNN "digikey"
+F 6 "UVY1E101MDD-ND" H 5600 8950 39  0001 C CNN "digikey"
+F 7 "Nichicon" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "UVY1E101MDD" H 0   0   50  0001 C CNN "pn"
 	1    5550 9250
 	-1   0    0    1   
 $EndComp
@@ -2015,7 +2049,9 @@ F 2 "rklib:RD2_D5_L11" H 9700 4300 39  0001 C CNN
 F 3 "" V 9700 4500 50  0001 C CNN
 F 4 "100u" V 9850 4500 39  0000 L CNN "Value1"
 F 5 "20% 25V" H 9700 4250 39  0001 C CNN "Value2"
-F 6 "399-6102-ND" H 9750 4200 39  0001 C CNN "digikey"
+F 6 "UVY1E101MDD-ND" H 9750 4200 39  0001 C CNN "digikey"
+F 7 "Nichicon" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "UVY1E101MDD" H 0   0   50  0001 C CNN "pn"
 	1    9700 4500
 	0    1    1    0   
 $EndComp
@@ -2029,7 +2065,9 @@ F 2 "rklib:RD2_D5_L11" H 9700 5250 39  0001 C CNN
 F 3 "" V 9700 5450 50  0001 C CNN
 F 4 "100u" V 9850 5450 39  0000 L CNN "Value1"
 F 5 "20% 25V" H 9700 5200 39  0001 C CNN "Value2"
-F 6 "399-6102-ND" H 9750 5150 39  0001 C CNN "digikey"
+F 6 "UVY1E101MDD-ND" H 9750 5150 39  0001 C CNN "digikey"
+F 7 "Nichicon" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "UVY1E101MDD" H 0   0   50  0001 C CNN "pn"
 	1    9700 5450
 	0    1    1    0   
 $EndComp
@@ -2043,7 +2081,9 @@ F 2 "rklib:RD2_D5_L11" H 9700 5750 39  0001 C CNN
 F 3 "" V 9700 5950 50  0001 C CNN
 F 4 "100u" V 9850 5950 39  0000 L CNN "Value1"
 F 5 "20% 25V" H 9700 5700 39  0001 C CNN "Value2"
-F 6 "399-6102-ND" H 9750 5650 39  0001 C CNN "digikey"
+F 6 "UVY1E101MDD-ND" H 9750 5650 39  0001 C CNN "digikey"
+F 7 "Nichicon" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "UVY1E101MDD" H 0   0   50  0001 C CNN "pn"
 	1    9700 5950
 	0    1    1    0   
 $EndComp
@@ -2057,7 +2097,9 @@ F 2 "rklib:RD2_D5_L11" H 9700 6700 39  0001 C CNN
 F 3 "" V 9700 6900 50  0001 C CNN
 F 4 "100u" V 9850 6900 39  0000 L CNN "Value1"
 F 5 "20% 25V" H 9700 6650 39  0001 C CNN "Value2"
-F 6 "399-6102-ND" H 9750 6600 39  0001 C CNN "digikey"
+F 6 "UVY1E101MDD-ND" H 9750 6600 39  0001 C CNN "digikey"
+F 7 "Nichicon" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "UVY1E101MDD" H 0   0   50  0001 C CNN "pn"
 	1    9700 6900
 	0    1    1    0   
 $EndComp
@@ -2322,6 +2364,8 @@ F 3 "" H 4650 3200 50  0001 C CNN
 F 4 "5n60" V 4650 3250 39  0000 L CNN "Value1"
 F 5 "5% 16V PPS" H 4600 2900 39  0001 C CNN "Value2"
 F 6 "PCF1193CT-ND" H 4600 2850 39  0001 C CNN "digikey"
+F 7 "Panasonic Electronic Components" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "ECH-U1C562JX5" H 0   0   50  0001 C CNN "pn"
 	1    4600 3150
 	0    1    1    0   
 $EndComp
@@ -2336,6 +2380,8 @@ F 3 "" H 7500 3200 50  0001 C CNN
 F 4 "5n60" V 7500 3250 39  0000 L CNN "Value1"
 F 5 "5% 16V PPS" H 7450 2900 39  0001 C CNN "Value2"
 F 6 "PCF1193CT-ND" H 7450 2850 39  0001 C CNN "digikey"
+F 7 "Panasonic Electronic Components" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "ECH-U1C562JX5" H 0   0   50  0001 C CNN "pn"
 	1    7450 3150
 	0    1    1    0   
 $EndComp
@@ -2350,6 +2396,8 @@ F 3 "" H 4650 5100 50  0001 C CNN
 F 4 "5n60" V 4650 5150 39  0000 L CNN "Value1"
 F 5 "5% 16V PPS" H 4600 4800 39  0001 C CNN "Value2"
 F 6 "PCF1193CT-ND" H 4600 4750 39  0001 C CNN "digikey"
+F 7 "Panasonic Electronic Components" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "ECH-U1C562JX5" H 0   0   50  0001 C CNN "pn"
 	1    4600 5050
 	0    1    1    0   
 $EndComp
@@ -2364,6 +2412,8 @@ F 3 "" H 7500 5100 50  0001 C CNN
 F 4 "5n60" V 7500 5150 39  0000 L CNN "Value1"
 F 5 "5% 16V PPS" H 7450 4800 39  0001 C CNN "Value2"
 F 6 "PCF1193CT-ND" H 7450 4750 39  0001 C CNN "digikey"
+F 7 "Panasonic Electronic Components" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "ECH-U1C562JX5" H 0   0   50  0001 C CNN "pn"
 	1    7450 5050
 	0    1    1    0   
 $EndComp
@@ -2378,6 +2428,8 @@ F 3 "" H 4650 7000 50  0001 C CNN
 F 4 "5n60" V 4650 7050 39  0000 L CNN "Value1"
 F 5 "5% 16V PPS" H 4600 6700 39  0001 C CNN "Value2"
 F 6 "PCF1193CT-ND" H 4600 6650 39  0001 C CNN "digikey"
+F 7 "Panasonic Electronic Components" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "ECH-U1C562JX5" H 0   0   50  0001 C CNN "pn"
 	1    4600 6950
 	0    1    1    0   
 $EndComp
@@ -2392,6 +2444,8 @@ F 3 "" H 7500 7000 50  0001 C CNN
 F 4 "5n60" V 7500 7050 39  0000 L CNN "Value1"
 F 5 "5% 16V PPS" H 7450 6700 39  0001 C CNN "Value2"
 F 6 "PCF1193CT-ND" H 7450 6650 39  0001 C CNN "digikey"
+F 7 "Panasonic Electronic Components" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "ECH-U1C562JX5" H 0   0   50  0001 C CNN "pn"
 	1    7450 6950
 	0    1    1    0   
 $EndComp
@@ -2406,6 +2460,8 @@ F 3 "" H 4650 8900 50  0001 C CNN
 F 4 "5n60" V 4650 8950 39  0000 L CNN "Value1"
 F 5 "5% 16V PPS" H 4600 8600 39  0001 C CNN "Value2"
 F 6 "PCF1193CT-ND" H 4600 8550 39  0001 C CNN "digikey"
+F 7 "Panasonic Electronic Components" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "ECH-U1C562JX5" H 0   0   50  0001 C CNN "pn"
 	1    4600 8850
 	0    1    1    0   
 $EndComp
@@ -2420,6 +2476,8 @@ F 3 "" H 7500 8900 50  0001 C CNN
 F 4 "5n60" V 7500 8950 39  0000 L CNN "Value1"
 F 5 "5% 16V PPS" H 7450 8600 39  0001 C CNN "Value2"
 F 6 "PCF1193CT-ND" H 7450 8550 39  0001 C CNN "digikey"
+F 7 "Panasonic Electronic Components" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "ECH-U1C562JX5" H 0   0   50  0001 C CNN "pn"
 	1    7450 8850
 	0    1    1    0   
 $EndComp
@@ -2436,6 +2494,8 @@ F 3 "" H 10000 4550 50  0001 C CNN
 F 4 "100n" H 10150 4600 39  0000 R CNN "Value1"
 F 5 "5% 50V X7R" H 9950 4250 39  0001 C CNN "Value2"
 F 6 "399-1170-1-ND" H 9950 4200 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C104K5RACTU" H 0   0   50  0001 C CNN "pn"
 	1    9950 4500
 	0    1    1    0   
 $EndComp
@@ -2452,6 +2512,8 @@ F 3 "" H 10000 5500 50  0001 C CNN
 F 4 "100n" H 10150 5550 39  0000 R CNN "Value1"
 F 5 "5% 50V X7R" H 9950 5200 39  0001 C CNN "Value2"
 F 6 "399-1170-1-ND" H 9950 5150 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C104K5RACTU" H 0   0   50  0001 C CNN "pn"
 	1    9950 5450
 	0    1    1    0   
 $EndComp
@@ -2468,6 +2530,8 @@ F 3 "" H 10000 6000 50  0001 C CNN
 F 4 "100n" H 10150 6050 39  0000 R CNN "Value1"
 F 5 "5% 50V X7R" H 9950 5700 39  0001 C CNN "Value2"
 F 6 "399-1170-1-ND" H 9950 5650 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C104K5RACTU" H 0   0   50  0001 C CNN "pn"
 	1    9950 5950
 	0    1    1    0   
 $EndComp
@@ -2484,6 +2548,8 @@ F 3 "" H 10000 6950 50  0001 C CNN
 F 4 "100n" H 10150 7000 39  0000 R CNN "Value1"
 F 5 "5% 50V X7R" H 9950 6650 39  0001 C CNN "Value2"
 F 6 "399-1170-1-ND" H 9950 6600 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C104K5RACTU" H 0   0   50  0001 C CNN "pn"
 	1    9950 6900
 	0    1    1    0   
 $EndComp
@@ -2520,6 +2586,8 @@ F 3 "" H 9950 8750 50  0001 C CNN
 F 4 "100n" H 10100 8800 39  0000 R CNN "Value1"
 F 5 "5% 50V X7R" H 9900 8450 39  0001 C CNN "Value2"
 F 6 "399-1170-1-ND" H 9900 8400 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C104K5RACTU" H 0   0   50  0001 C CNN "pn"
 	1    9900 8700
 	0    1    1    0   
 $EndComp
@@ -2536,6 +2604,8 @@ F 3 "" H 10200 8750 50  0001 C CNN
 F 4 "100n" H 10350 8800 39  0000 R CNN "Value1"
 F 5 "5% 50V X7R" H 10150 8450 39  0001 C CNN "Value2"
 F 6 "399-1170-1-ND" H 10150 8400 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C104K5RACTU" H 0   0   50  0001 C CNN "pn"
 	1    10150 8700
 	0    1    1    0   
 $EndComp
@@ -2552,6 +2622,8 @@ F 3 "" H 10800 8750 50  0001 C CNN
 F 4 "100n" H 10950 8800 39  0000 R CNN "Value1"
 F 5 "5% 50V X7R" H 10750 8450 39  0001 C CNN "Value2"
 F 6 "399-1170-1-ND" H 10750 8400 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C104K5RACTU" H 0   0   50  0001 C CNN "pn"
 	1    10750 8700
 	0    1    1    0   
 $EndComp
@@ -2568,6 +2640,8 @@ F 3 "" H 4750 10400 50  0001 C CNN
 F 4 "100n" H 4900 10450 39  0000 R CNN "Value1"
 F 5 "5% 50V X7R" H 4700 10100 39  0001 C CNN "Value2"
 F 6 "399-1170-1-ND" H 4700 10050 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C104K5RACTU" H 0   0   50  0001 C CNN "pn"
 	1    4700 10350
 	0    1    1    0   
 $EndComp
@@ -2584,6 +2658,8 @@ F 3 "" H 4550 10400 50  0001 C CNN
 F 4 "100n" H 4700 10450 39  0000 R CNN "Value1"
 F 5 "5% 50V X7R" H 4500 10100 39  0001 C CNN "Value2"
 F 6 "399-1170-1-ND" H 4500 10050 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C104K5RACTU" H 0   0   50  0001 C CNN "pn"
 	1    4500 10350
 	0    1    1    0   
 $EndComp
@@ -2600,6 +2676,8 @@ F 3 "" H 4350 10400 50  0001 C CNN
 F 4 "100n" H 4500 10450 39  0000 R CNN "Value1"
 F 5 "5% 50V X7R" H 4300 10100 39  0001 C CNN "Value2"
 F 6 "399-1170-1-ND" H 4300 10050 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C104K5RACTU" H 0   0   50  0001 C CNN "pn"
 	1    4300 10350
 	0    1    1    0   
 $EndComp
@@ -2616,6 +2694,8 @@ F 3 "" H 4150 10400 50  0001 C CNN
 F 4 "100n" H 4300 10450 39  0000 R CNN "Value1"
 F 5 "5% 50V X7R" H 4100 10100 39  0001 C CNN "Value2"
 F 6 "399-1170-1-ND" H 4100 10050 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C104K5RACTU" H 0   0   50  0001 C CNN "pn"
 	1    4100 10350
 	0    1    1    0   
 $EndComp
@@ -2632,6 +2712,8 @@ F 3 "" H 3950 10400 50  0001 C CNN
 F 4 "100n" H 4100 10450 39  0000 R CNN "Value1"
 F 5 "5% 50V X7R" H 3900 10100 39  0001 C CNN "Value2"
 F 6 "399-1170-1-ND" H 3900 10050 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C104K5RACTU" H 0   0   50  0001 C CNN "pn"
 	1    3900 10350
 	0    1    1    0   
 $EndComp
@@ -2648,6 +2730,8 @@ F 3 "" H 3750 10400 50  0001 C CNN
 F 4 "100n" H 3900 10450 39  0000 R CNN "Value1"
 F 5 "5% 50V X7R" H 3700 10100 39  0001 C CNN "Value2"
 F 6 "399-1170-1-ND" H 3700 10050 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C104K5RACTU" H 0   0   50  0001 C CNN "pn"
 	1    3700 10350
 	0    1    1    0   
 $EndComp
@@ -2664,6 +2748,8 @@ F 3 "" H 3550 10400 50  0001 C CNN
 F 4 "100n" H 3700 10450 39  0000 R CNN "Value1"
 F 5 "5% 50V X7R" H 3500 10100 39  0001 C CNN "Value2"
 F 6 "399-1170-1-ND" H 3500 10050 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C104K5RACTU" H 0   0   50  0001 C CNN "pn"
 	1    3500 10350
 	0    1    1    0   
 $EndComp
@@ -2680,6 +2766,8 @@ F 3 "" H 3350 10400 50  0001 C CNN
 F 4 "100n" H 3500 10450 39  0000 R CNN "Value1"
 F 5 "5% 50V X7R" H 3300 10100 39  0001 C CNN "Value2"
 F 6 "399-1170-1-ND" H 3300 10050 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C104K5RACTU" H 0   0   50  0001 C CNN "pn"
 	1    3300 10350
 	0    1    1    0   
 $EndComp
@@ -2696,6 +2784,8 @@ F 3 "" H 11950 7400 50  0001 C CNN
 F 4 "100n" H 12100 7450 39  0000 R CNN "Value1"
 F 5 "5% 50V X7R" H 11900 7100 39  0001 C CNN "Value2"
 F 6 "399-1170-1-ND" H 11900 7050 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C104K5RACTU" H 0   0   50  0001 C CNN "pn"
 	1    11900 7350
 	0    1    1    0   
 $EndComp
@@ -2710,6 +2800,8 @@ F 3 "" H 12150 7400 50  0001 C CNN
 F 4 "4u70" H 12300 7450 39  0000 R CNN "Value1"
 F 5 "20% 25V X5R" H 12100 7100 39  0001 C CNN "Value2"
 F 6 "490-5422-1-ND" H 12100 7050 39  0001 C CNN "digikey"
+F 7 "Murata Electronics North America" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "GRM21BR61E475MA12L" H 0   0   50  0001 C CNN "pn"
 	1    12100 7350
 	0    1    1    0   
 $EndComp
@@ -2724,6 +2816,8 @@ F 3 "" H 3950 2550 50  0001 C CNN
 F 4 "1n00" V 3937 2615 39  0000 L CNN "Value1"
 F 5 "5% 50V PPS" H 3900 2250 39  0001 C CNN "Value2"
 F 6 "PCF1328CT-ND" H 3900 2200 39  0001 C CNN "digikey"
+F 7 "Panasonic Electronic Components" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "ECH-U1H102JX5" H 0   0   50  0001 C CNN "pn"
 	1    3900 2500
 	0    1    1    0   
 $EndComp
@@ -2738,6 +2832,8 @@ F 3 "" H 6800 2550 50  0001 C CNN
 F 4 "1n00" V 6787 2615 39  0000 L CNN "Value1"
 F 5 "5% 50V PPS" H 6750 2250 39  0001 C CNN "Value2"
 F 6 "PCF1328CT-ND" H 6750 2200 39  0001 C CNN "digikey"
+F 7 "Panasonic Electronic Components" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "ECH-U1H102JX5" H 0   0   50  0001 C CNN "pn"
 	1    6750 2500
 	0    1    1    0   
 $EndComp
@@ -2752,6 +2848,8 @@ F 3 "" H 3950 3500 50  0001 C CNN
 F 4 "1n00" V 3937 3565 39  0000 L CNN "Value1"
 F 5 "5% 50V PPS" H 3900 3200 39  0001 C CNN "Value2"
 F 6 "PCF1328CT-ND" H 3900 3150 39  0001 C CNN "digikey"
+F 7 "Panasonic Electronic Components" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "ECH-U1H102JX5" H 0   0   50  0001 C CNN "pn"
 	1    3900 3450
 	0    1    1    0   
 $EndComp
@@ -2766,6 +2864,8 @@ F 3 "" H 6800 3500 50  0001 C CNN
 F 4 "1n00" V 6787 3565 39  0000 L CNN "Value1"
 F 5 "5% 50V PPS" H 6750 3200 39  0001 C CNN "Value2"
 F 6 "PCF1328CT-ND" H 6750 3150 39  0001 C CNN "digikey"
+F 7 "Panasonic Electronic Components" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "ECH-U1H102JX5" H 0   0   50  0001 C CNN "pn"
 	1    6750 3450
 	0    1    1    0   
 $EndComp
@@ -2780,6 +2880,8 @@ F 3 "" H 3950 4450 50  0001 C CNN
 F 4 "1n00" V 3937 4515 39  0000 L CNN "Value1"
 F 5 "5% 50V PPS" H 3900 4150 39  0001 C CNN "Value2"
 F 6 "PCF1328CT-ND" H 3900 4100 39  0001 C CNN "digikey"
+F 7 "Panasonic Electronic Components" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "ECH-U1H102JX5" H 0   0   50  0001 C CNN "pn"
 	1    3900 4400
 	0    1    1    0   
 $EndComp
@@ -2794,6 +2896,8 @@ F 3 "" H 6800 4450 50  0001 C CNN
 F 4 "1n00" V 6787 4515 39  0000 L CNN "Value1"
 F 5 "5% 50V PPS" H 6750 4150 39  0001 C CNN "Value2"
 F 6 "PCF1328CT-ND" H 6750 4100 39  0001 C CNN "digikey"
+F 7 "Panasonic Electronic Components" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "ECH-U1H102JX5" H 0   0   50  0001 C CNN "pn"
 	1    6750 4400
 	0    1    1    0   
 $EndComp
@@ -2808,6 +2912,8 @@ F 3 "" H 3950 5400 50  0001 C CNN
 F 4 "1n00" V 3937 5465 39  0000 L CNN "Value1"
 F 5 "5% 50V PPS" H 3900 5100 39  0001 C CNN "Value2"
 F 6 "PCF1328CT-ND" H 3900 5050 39  0001 C CNN "digikey"
+F 7 "Panasonic Electronic Components" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "ECH-U1H102JX5" H 0   0   50  0001 C CNN "pn"
 	1    3900 5350
 	0    1    1    0   
 $EndComp
@@ -2822,6 +2928,8 @@ F 3 "" H 3950 6350 50  0001 C CNN
 F 4 "1n00" V 3937 6415 39  0000 L CNN "Value1"
 F 5 "5% 50V PPS" H 3900 6050 39  0001 C CNN "Value2"
 F 6 "PCF1328CT-ND" H 3900 6000 39  0001 C CNN "digikey"
+F 7 "Panasonic Electronic Components" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "ECH-U1H102JX5" H 0   0   50  0001 C CNN "pn"
 	1    3900 6300
 	0    1    1    0   
 $EndComp
@@ -2836,6 +2944,8 @@ F 3 "" H 3950 7300 50  0001 C CNN
 F 4 "1n00" V 3937 7365 39  0000 L CNN "Value1"
 F 5 "5% 50V PPS" H 3900 7000 39  0001 C CNN "Value2"
 F 6 "PCF1328CT-ND" H 3900 6950 39  0001 C CNN "digikey"
+F 7 "Panasonic Electronic Components" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "ECH-U1H102JX5" H 0   0   50  0001 C CNN "pn"
 	1    3900 7250
 	0    1    1    0   
 $EndComp
@@ -2850,6 +2960,8 @@ F 3 "" H 3950 8250 50  0001 C CNN
 F 4 "1n00" V 3937 8315 39  0000 L CNN "Value1"
 F 5 "5% 50V PPS" H 3900 7950 39  0001 C CNN "Value2"
 F 6 "PCF1328CT-ND" H 3900 7900 39  0001 C CNN "digikey"
+F 7 "Panasonic Electronic Components" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "ECH-U1H102JX5" H 0   0   50  0001 C CNN "pn"
 	1    3900 8200
 	0    1    1    0   
 $EndComp
@@ -2864,6 +2976,8 @@ F 3 "" H 3950 9200 50  0001 C CNN
 F 4 "1n00" V 3937 9265 39  0000 L CNN "Value1"
 F 5 "5% 50V PPS" H 3900 8900 39  0001 C CNN "Value2"
 F 6 "PCF1328CT-ND" H 3900 8850 39  0001 C CNN "digikey"
+F 7 "Panasonic Electronic Components" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "ECH-U1H102JX5" H 0   0   50  0001 C CNN "pn"
 	1    3900 9150
 	0    1    1    0   
 $EndComp
@@ -2878,6 +2992,8 @@ F 3 "" H 6800 9200 50  0001 C CNN
 F 4 "1n00" V 6787 9265 39  0000 L CNN "Value1"
 F 5 "5% 50V PPS" H 6750 8900 39  0001 C CNN "Value2"
 F 6 "PCF1328CT-ND" H 6750 8850 39  0001 C CNN "digikey"
+F 7 "Panasonic Electronic Components" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "ECH-U1H102JX5" H 0   0   50  0001 C CNN "pn"
 	1    6750 9150
 	0    1    1    0   
 $EndComp
@@ -2892,6 +3008,8 @@ F 3 "" H 6800 8250 50  0001 C CNN
 F 4 "1n00" V 6787 8315 39  0000 L CNN "Value1"
 F 5 "5% 50V PPS" H 6750 7950 39  0001 C CNN "Value2"
 F 6 "PCF1328CT-ND" H 6750 7900 39  0001 C CNN "digikey"
+F 7 "Panasonic Electronic Components" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "ECH-U1H102JX5" H 0   0   50  0001 C CNN "pn"
 	1    6750 8200
 	0    1    1    0   
 $EndComp
@@ -2906,6 +3024,8 @@ F 3 "" H 6800 7300 50  0001 C CNN
 F 4 "1n00" V 6787 7365 39  0000 L CNN "Value1"
 F 5 "5% 50V PPS" H 6750 7000 39  0001 C CNN "Value2"
 F 6 "PCF1328CT-ND" H 6750 6950 39  0001 C CNN "digikey"
+F 7 "Panasonic Electronic Components" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "ECH-U1H102JX5" H 0   0   50  0001 C CNN "pn"
 	1    6750 7250
 	0    1    1    0   
 $EndComp
@@ -2920,6 +3040,8 @@ F 3 "" H 6800 6350 50  0001 C CNN
 F 4 "1n00" V 6787 6415 39  0000 L CNN "Value1"
 F 5 "5% 50V PPS" H 6750 6050 39  0001 C CNN "Value2"
 F 6 "PCF1328CT-ND" H 6750 6000 39  0001 C CNN "digikey"
+F 7 "Panasonic Electronic Components" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "ECH-U1H102JX5" H 0   0   50  0001 C CNN "pn"
 	1    6750 6300
 	0    1    1    0   
 $EndComp
@@ -2934,6 +3056,8 @@ F 3 "" H 6800 5400 50  0001 C CNN
 F 4 "1n00" V 6787 5465 39  0000 L CNN "Value1"
 F 5 "5% 50V PPS" H 6750 5100 39  0001 C CNN "Value2"
 F 6 "PCF1328CT-ND" H 6750 5050 39  0001 C CNN "digikey"
+F 7 "Panasonic Electronic Components" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "ECH-U1H102JX5" H 0   0   50  0001 C CNN "pn"
 	1    6750 5350
 	0    1    1    0   
 $EndComp
@@ -2948,6 +3072,8 @@ F 3 "" H 4350 2900 50  0001 C CNN
 F 4 "100p" V 4337 2965 39  0000 L CNN "Value1"
 F 5 "5% 50V C0G/NP0" H 4300 2600 39  0001 C CNN "Value2"
 F 6 "399-1122-1-ND" H 4300 2550 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C101J5GACTU" H 0   0   50  0001 C CNN "pn"
 	1    4300 2850
 	0    1    1    0   
 $EndComp
@@ -2962,6 +3088,8 @@ F 3 "" H 4350 3850 50  0001 C CNN
 F 4 "100p" V 4337 3915 39  0000 L CNN "Value1"
 F 5 "5% 50V C0G/NP0" H 4300 3550 39  0001 C CNN "Value2"
 F 6 "399-1122-1-ND" H 4300 3500 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C101J5GACTU" H 0   0   50  0001 C CNN "pn"
 	1    4300 3800
 	0    1    1    0   
 $EndComp
@@ -2976,6 +3104,8 @@ F 3 "" H 7200 2900 50  0001 C CNN
 F 4 "100p" V 7187 2965 39  0000 L CNN "Value1"
 F 5 "5% 50V C0G/NP0" H 7150 2600 39  0001 C CNN "Value2"
 F 6 "399-1122-1-ND" H 7150 2550 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C101J5GACTU" H 0   0   50  0001 C CNN "pn"
 	1    7150 2850
 	0    1    1    0   
 $EndComp
@@ -2990,6 +3120,8 @@ F 3 "" H 7200 3850 50  0001 C CNN
 F 4 "100p" V 7187 3915 39  0000 L CNN "Value1"
 F 5 "5% 50V C0G/NP0" H 7150 3550 39  0001 C CNN "Value2"
 F 6 "399-1122-1-ND" H 7150 3500 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C101J5GACTU" H 0   0   50  0001 C CNN "pn"
 	1    7150 3800
 	0    1    1    0   
 $EndComp
@@ -3004,6 +3136,8 @@ F 3 "" H 4350 4800 50  0001 C CNN
 F 4 "100p" V 4337 4865 39  0000 L CNN "Value1"
 F 5 "5% 50V C0G/NP0" H 4300 4500 39  0001 C CNN "Value2"
 F 6 "399-1122-1-ND" H 4300 4450 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C101J5GACTU" H 0   0   50  0001 C CNN "pn"
 	1    4300 4750
 	0    1    1    0   
 $EndComp
@@ -3018,6 +3152,8 @@ F 3 "" H 4350 5750 50  0001 C CNN
 F 4 "100p" V 4337 5815 39  0000 L CNN "Value1"
 F 5 "5% 50V C0G/NP0" H 4300 5450 39  0001 C CNN "Value2"
 F 6 "399-1122-1-ND" H 4300 5400 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C101J5GACTU" H 0   0   50  0001 C CNN "pn"
 	1    4300 5700
 	0    1    1    0   
 $EndComp
@@ -3032,6 +3168,8 @@ F 3 "" H 4350 6700 50  0001 C CNN
 F 4 "100p" V 4337 6765 39  0000 L CNN "Value1"
 F 5 "5% 50V C0G/NP0" H 4300 6400 39  0001 C CNN "Value2"
 F 6 "399-1122-1-ND" H 4300 6350 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C101J5GACTU" H 0   0   50  0001 C CNN "pn"
 	1    4300 6650
 	0    1    1    0   
 $EndComp
@@ -3046,6 +3184,8 @@ F 3 "" H 4350 7650 50  0001 C CNN
 F 4 "100p" V 4337 7715 39  0000 L CNN "Value1"
 F 5 "5% 50V C0G/NP0" H 4300 7350 39  0001 C CNN "Value2"
 F 6 "399-1122-1-ND" H 4300 7300 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C101J5GACTU" H 0   0   50  0001 C CNN "pn"
 	1    4300 7600
 	0    1    1    0   
 $EndComp
@@ -3060,6 +3200,8 @@ F 3 "" H 7200 4800 50  0001 C CNN
 F 4 "100p" V 7187 4865 39  0000 L CNN "Value1"
 F 5 "5% 50V C0G/NP0" H 7150 4500 39  0001 C CNN "Value2"
 F 6 "399-1122-1-ND" H 7150 4450 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C101J5GACTU" H 0   0   50  0001 C CNN "pn"
 	1    7150 4750
 	0    1    1    0   
 $EndComp
@@ -3074,6 +3216,8 @@ F 3 "" H 7200 5750 50  0001 C CNN
 F 4 "100p" V 7187 5815 39  0000 L CNN "Value1"
 F 5 "5% 50V C0G/NP0" H 7150 5450 39  0001 C CNN "Value2"
 F 6 "399-1122-1-ND" H 7150 5400 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C101J5GACTU" H 0   0   50  0001 C CNN "pn"
 	1    7150 5700
 	0    1    1    0   
 $EndComp
@@ -3088,6 +3232,8 @@ F 3 "" H 7200 6700 50  0001 C CNN
 F 4 "100p" V 7187 6765 39  0000 L CNN "Value1"
 F 5 "5% 50V C0G/NP0" H 7150 6400 39  0001 C CNN "Value2"
 F 6 "399-1122-1-ND" H 7150 6350 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C101J5GACTU" H 0   0   50  0001 C CNN "pn"
 	1    7150 6650
 	0    1    1    0   
 $EndComp
@@ -3102,6 +3248,8 @@ F 3 "" H 7200 7650 50  0001 C CNN
 F 4 "100p" V 7187 7715 39  0000 L CNN "Value1"
 F 5 "5% 50V C0G/NP0" H 7150 7350 39  0001 C CNN "Value2"
 F 6 "399-1122-1-ND" H 7150 7300 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C101J5GACTU" H 0   0   50  0001 C CNN "pn"
 	1    7150 7600
 	0    1    1    0   
 $EndComp
@@ -3116,6 +3264,8 @@ F 3 "" H 4350 8600 50  0001 C CNN
 F 4 "100p" V 4337 8665 39  0000 L CNN "Value1"
 F 5 "5% 50V C0G/NP0" H 4300 8300 39  0001 C CNN "Value2"
 F 6 "399-1122-1-ND" H 4300 8250 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C101J5GACTU" H 0   0   50  0001 C CNN "pn"
 	1    4300 8550
 	0    1    1    0   
 $EndComp
@@ -3130,6 +3280,8 @@ F 3 "" H 4350 9550 50  0001 C CNN
 F 4 "100p" V 4337 9615 39  0000 L CNN "Value1"
 F 5 "5% 50V C0G/NP0" H 4300 9250 39  0001 C CNN "Value2"
 F 6 "399-1122-1-ND" H 4300 9200 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C101J5GACTU" H 0   0   50  0001 C CNN "pn"
 	1    4300 9500
 	0    1    1    0   
 $EndComp
@@ -3144,6 +3296,8 @@ F 3 "" H 7200 8600 50  0001 C CNN
 F 4 "100p" V 7187 8665 39  0000 L CNN "Value1"
 F 5 "5% 50V C0G/NP0" H 7150 8300 39  0001 C CNN "Value2"
 F 6 "399-1122-1-ND" H 7150 8250 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C101J5GACTU" H 0   0   50  0001 C CNN "pn"
 	1    7150 8550
 	0    1    1    0   
 $EndComp
@@ -3158,6 +3312,8 @@ F 3 "" H 7200 9550 50  0001 C CNN
 F 4 "100p" V 7187 9615 39  0000 L CNN "Value1"
 F 5 "5% 50V C0G/NP0" H 7150 9250 39  0001 C CNN "Value2"
 F 6 "399-1122-1-ND" H 7150 9200 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C101J5GACTU" H 0   0   50  0001 C CNN "pn"
 	1    7150 9500
 	0    1    1    0   
 $EndComp
@@ -3174,6 +3330,8 @@ F 3 "" H 9450 8750 50  0001 C CNN
 F 4 "10u0" H 9600 8800 39  0000 R CNN "Value1"
 F 5 "20% 25V X5R" H 9400 8450 39  0001 C CNN "Value2"
 F 6 "490-10748-1-ND" H 9400 8400 39  0001 C CNN "digikey"
+F 7 "Murata Electronics North America" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "GRM21BR61E106MA73L" H 0   0   50  0001 C CNN "pn"
 	1    9400 8700
 	0    1    1    0   
 $EndComp
@@ -3190,6 +3348,8 @@ F 3 "" H 9700 8750 50  0001 C CNN
 F 4 "10u0" H 9850 8800 39  0000 R CNN "Value1"
 F 5 "20% 25V X5R" H 9650 8450 39  0001 C CNN "Value2"
 F 6 "490-10748-1-ND" H 9650 8400 39  0001 C CNN "digikey"
+F 7 "Murata Electronics North America" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "GRM21BR61E106MA73L" H 0   0   50  0001 C CNN "pn"
 	1    9650 8700
 	0    1    1    0   
 $EndComp
@@ -3204,6 +3364,8 @@ F 3 "" H 10550 8750 50  0001 C CNN
 F 4 "10n0" H 10700 8800 39  0000 R CNN "Value1"
 F 5 "10% 50V X7R" H 10500 8450 39  0001 C CNN "Value2"
 F 6 "311-1136-1-ND" H 10500 8400 39  0001 C CNN "digikey"
+F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "CC0805KRX7R9BB103" H 0   0   50  0001 C CNN "pn"
 	1    10500 8700
 	0    1    1    0   
 $EndComp
@@ -3218,6 +3380,8 @@ F 3 "" H 11650 5550 60  0000 C CNN
 F 4 "AK5558VN" H 12450 4450 39  0000 L CNN "Value1"
 F 5 "974-1128-1-ND" H 11650 4000 39  0001 C CNN "digikey"
 F 6 "ADC" H 11650 4100 39  0001 C CNN "Value2"
+F 7 "AKM Semiconductor Inc." H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "AK5558VN" H 0   0   50  0001 C CNN "pn"
 	1    11650 5550
 	1    0    0    -1  
 $EndComp
@@ -3234,6 +3398,8 @@ F 3 "" H 13050 6000 50  0000 C CNN
 F 4 "33R0" H 13050 6075 39  0000 C CNN "Value1"
 F 5 "1% 0.125W Thick" H 13050 5875 39  0001 C CNN "Value2"
 F 6 "311-33.0CRCT-ND" H 13050 5700 39  0001 C CNN "digikey"
+F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RC0805FR-0733RL" H 0   0   50  0001 C CNN "pn"
 	1    13050 6000
 	-1   0    0    1   
 $EndComp
@@ -3248,6 +3414,8 @@ F 3 "" H 4300 2500 50  0000 C CNN
 F 4 "620R" H 4300 2425 39  0000 C CNN "Value1"
 F 5 "0.5% 0.1W Thin" H 4300 2375 39  0001 C CNN "Value2"
 F 6 "RR12P620DCT-ND" H 4300 2200 39  0001 C CNN "digikey"
+F 7 "Susumu" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RR1220P-621-D" H 0   0   50  0001 C CNN "pn"
 	1    4300 2500
 	0    -1   1    0   
 $EndComp
@@ -3262,6 +3430,8 @@ F 3 "" H 4300 3450 50  0000 C CNN
 F 4 "620R" H 4300 3375 39  0000 C CNN "Value1"
 F 5 "0.5% 0.1W Thin" H 4300 3325 39  0001 C CNN "Value2"
 F 6 "RR12P620DCT-ND" H 4300 3150 39  0001 C CNN "digikey"
+F 7 "Susumu" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RR1220P-621-D" H 0   0   50  0001 C CNN "pn"
 	1    4300 3450
 	0    -1   1    0   
 $EndComp
@@ -3276,6 +3446,8 @@ F 3 "" H 7150 2500 50  0000 C CNN
 F 4 "620R" H 7150 2425 39  0000 C CNN "Value1"
 F 5 "0.5% 0.1W Thin" H 7150 2375 39  0001 C CNN "Value2"
 F 6 "RR12P620DCT-ND" H 7150 2200 39  0001 C CNN "digikey"
+F 7 "Susumu" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RR1220P-621-D" H 0   0   50  0001 C CNN "pn"
 	1    7150 2500
 	0    -1   1    0   
 $EndComp
@@ -3290,6 +3462,8 @@ F 3 "" H 7150 3450 50  0000 C CNN
 F 4 "620R" H 7150 3375 39  0000 C CNN "Value1"
 F 5 "0.5% 0.1W Thin" H 7150 3325 39  0001 C CNN "Value2"
 F 6 "RR12P620DCT-ND" H 7150 3150 39  0001 C CNN "digikey"
+F 7 "Susumu" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RR1220P-621-D" H 0   0   50  0001 C CNN "pn"
 	1    7150 3450
 	0    -1   1    0   
 $EndComp
@@ -3304,6 +3478,8 @@ F 3 "" H 4300 4400 50  0000 C CNN
 F 4 "620R" H 4300 4325 39  0000 C CNN "Value1"
 F 5 "0.5% 0.1W Thin" H 4300 4275 39  0001 C CNN "Value2"
 F 6 "RR12P620DCT-ND" H 4300 4100 39  0001 C CNN "digikey"
+F 7 "Susumu" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RR1220P-621-D" H 0   0   50  0001 C CNN "pn"
 	1    4300 4400
 	0    -1   1    0   
 $EndComp
@@ -3318,6 +3494,8 @@ F 3 "" H 4300 5350 50  0000 C CNN
 F 4 "620R" H 4300 5275 39  0000 C CNN "Value1"
 F 5 "0.5% 0.1W Thin" H 4300 5225 39  0001 C CNN "Value2"
 F 6 "RR12P620DCT-ND" H 4300 5050 39  0001 C CNN "digikey"
+F 7 "Susumu" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RR1220P-621-D" H 0   0   50  0001 C CNN "pn"
 	1    4300 5350
 	0    -1   1    0   
 $EndComp
@@ -3332,6 +3510,8 @@ F 3 "" H 7150 4400 50  0000 C CNN
 F 4 "620R" H 7150 4325 39  0000 C CNN "Value1"
 F 5 "0.5% 0.1W Thin" H 7150 4275 39  0001 C CNN "Value2"
 F 6 "RR12P620DCT-ND" H 7150 4100 39  0001 C CNN "digikey"
+F 7 "Susumu" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RR1220P-621-D" H 0   0   50  0001 C CNN "pn"
 	1    7150 4400
 	0    -1   1    0   
 $EndComp
@@ -3346,6 +3526,8 @@ F 3 "" H 7150 5350 50  0000 C CNN
 F 4 "620R" H 7150 5275 39  0000 C CNN "Value1"
 F 5 "0.5% 0.1W Thin" H 7150 5225 39  0001 C CNN "Value2"
 F 6 "RR12P620DCT-ND" H 7150 5050 39  0001 C CNN "digikey"
+F 7 "Susumu" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RR1220P-621-D" H 0   0   50  0001 C CNN "pn"
 	1    7150 5350
 	0    -1   1    0   
 $EndComp
@@ -3360,6 +3542,8 @@ F 3 "" H 7150 6300 50  0000 C CNN
 F 4 "620R" H 7150 6225 39  0000 C CNN "Value1"
 F 5 "0.5% 0.1W Thin" H 7150 6175 39  0001 C CNN "Value2"
 F 6 "RR12P620DCT-ND" H 7150 6000 39  0001 C CNN "digikey"
+F 7 "Susumu" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RR1220P-621-D" H 0   0   50  0001 C CNN "pn"
 	1    7150 6300
 	0    -1   1    0   
 $EndComp
@@ -3374,6 +3558,8 @@ F 3 "" H 4300 6300 50  0000 C CNN
 F 4 "620R" H 4300 6225 39  0000 C CNN "Value1"
 F 5 "0.5% 0.1W Thin" H 4300 6175 39  0001 C CNN "Value2"
 F 6 "RR12P620DCT-ND" H 4300 6000 39  0001 C CNN "digikey"
+F 7 "Susumu" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RR1220P-621-D" H 0   0   50  0001 C CNN "pn"
 	1    4300 6300
 	0    -1   1    0   
 $EndComp
@@ -3388,6 +3574,8 @@ F 3 "" H 4300 7250 50  0000 C CNN
 F 4 "620R" H 4300 7175 39  0000 C CNN "Value1"
 F 5 "0.5% 0.1W Thin" H 4300 7125 39  0001 C CNN "Value2"
 F 6 "RR12P620DCT-ND" H 4300 6950 39  0001 C CNN "digikey"
+F 7 "Susumu" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RR1220P-621-D" H 0   0   50  0001 C CNN "pn"
 	1    4300 7250
 	0    -1   1    0   
 $EndComp
@@ -3402,6 +3590,8 @@ F 3 "" H 7150 7250 50  0000 C CNN
 F 4 "620R" H 7150 7175 39  0000 C CNN "Value1"
 F 5 "0.5% 0.1W Thin" H 7150 7125 39  0001 C CNN "Value2"
 F 6 "RR12P620DCT-ND" H 7150 6950 39  0001 C CNN "digikey"
+F 7 "Susumu" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RR1220P-621-D" H 0   0   50  0001 C CNN "pn"
 	1    7150 7250
 	0    -1   1    0   
 $EndComp
@@ -3416,6 +3606,8 @@ F 3 "" H 7150 8200 50  0000 C CNN
 F 4 "620R" H 7150 8125 39  0000 C CNN "Value1"
 F 5 "0.5% 0.1W Thin" H 7150 8075 39  0001 C CNN "Value2"
 F 6 "RR12P620DCT-ND" H 7150 7900 39  0001 C CNN "digikey"
+F 7 "Susumu" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RR1220P-621-D" H 0   0   50  0001 C CNN "pn"
 	1    7150 8200
 	0    -1   1    0   
 $EndComp
@@ -3430,6 +3622,8 @@ F 3 "" H 7150 9150 50  0000 C CNN
 F 4 "620R" H 7150 9075 39  0000 C CNN "Value1"
 F 5 "0.5% 0.1W Thin" H 7150 9025 39  0001 C CNN "Value2"
 F 6 "RR12P620DCT-ND" H 7150 8850 39  0001 C CNN "digikey"
+F 7 "Susumu" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RR1220P-621-D" H 0   0   50  0001 C CNN "pn"
 	1    7150 9150
 	0    -1   1    0   
 $EndComp
@@ -3444,6 +3638,8 @@ F 3 "" H 4300 9150 50  0000 C CNN
 F 4 "620R" H 4300 9075 39  0000 C CNN "Value1"
 F 5 "0.5% 0.1W Thin" H 4300 9025 39  0001 C CNN "Value2"
 F 6 "RR12P620DCT-ND" H 4300 8850 39  0001 C CNN "digikey"
+F 7 "Susumu" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RR1220P-621-D" H 0   0   50  0001 C CNN "pn"
 	1    4300 9150
 	0    -1   1    0   
 $EndComp
@@ -3458,6 +3654,8 @@ F 3 "" H 4300 8200 50  0000 C CNN
 F 4 "620R" H 4300 8125 39  0000 C CNN "Value1"
 F 5 "0.5% 0.1W Thin" H 4300 8075 39  0001 C CNN "Value2"
 F 6 "RR12P620DCT-ND" H 4300 7900 39  0001 C CNN "digikey"
+F 7 "Susumu" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RR1220P-621-D" H 0   0   50  0001 C CNN "pn"
 	1    4300 8200
 	0    -1   1    0   
 $EndComp
@@ -3472,6 +3670,8 @@ F 3 "" H 3000 2600 50  0000 C CNN
 F 4 "976R" H 3000 2525 39  0000 C CNN "Value1"
 F 5 "0.5% 0.1W Thin" H 3000 2475 39  0001 C CNN "Value2"
 F 6 "408-1761-1-ND" H 3000 2300 39  0001 C CNN "digikey"
+F 7 "Susumu" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RR1220P-9760-D-M" H 0   0   50  0001 C CNN "pn"
 	1    3000 2600
 	-1   0    0    -1  
 $EndComp
@@ -3488,6 +3688,8 @@ F 3 "" H 3000 3550 50  0000 C CNN
 F 4 "976R" H 3000 3475 39  0000 C CNN "Value1"
 F 5 "0.5% 0.1W Thin" H 3000 3425 39  0001 C CNN "Value2"
 F 6 "408-1761-1-ND" H 3000 3250 39  0001 C CNN "digikey"
+F 7 "Susumu" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RR1220P-9760-D-M" H 0   0   50  0001 C CNN "pn"
 	1    3000 3550
 	-1   0    0    -1  
 $EndComp
@@ -3502,6 +3704,8 @@ F 3 "" H 3000 4500 50  0000 C CNN
 F 4 "976R" H 3000 4425 39  0000 C CNN "Value1"
 F 5 "0.5% 0.1W Thin" H 3000 4375 39  0001 C CNN "Value2"
 F 6 "408-1761-1-ND" H 3000 4200 39  0001 C CNN "digikey"
+F 7 "Susumu" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RR1220P-9760-D-M" H 0   0   50  0001 C CNN "pn"
 	1    3000 4500
 	-1   0    0    -1  
 $EndComp
@@ -3516,6 +3720,8 @@ F 3 "" H 3000 5450 50  0000 C CNN
 F 4 "976R" H 3000 5375 39  0000 C CNN "Value1"
 F 5 "0.5% 0.1W Thin" H 3000 5325 39  0001 C CNN "Value2"
 F 6 "408-1761-1-ND" H 3000 5150 39  0001 C CNN "digikey"
+F 7 "Susumu" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RR1220P-9760-D-M" H 0   0   50  0001 C CNN "pn"
 	1    3000 5450
 	-1   0    0    -1  
 $EndComp
@@ -3530,6 +3736,8 @@ F 3 "" H 5850 2600 50  0000 C CNN
 F 4 "976R" H 5850 2525 39  0000 C CNN "Value1"
 F 5 "0.5% 0.1W Thin" H 5850 2475 39  0001 C CNN "Value2"
 F 6 "408-1761-1-ND" H 5850 2300 39  0001 C CNN "digikey"
+F 7 "Susumu" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RR1220P-9760-D-M" H 0   0   50  0001 C CNN "pn"
 	1    5850 2600
 	-1   0    0    -1  
 $EndComp
@@ -3544,6 +3752,8 @@ F 3 "" H 5850 3550 50  0000 C CNN
 F 4 "976R" H 5850 3475 39  0000 C CNN "Value1"
 F 5 "0.5% 0.1W Thin" H 5850 3425 39  0001 C CNN "Value2"
 F 6 "408-1761-1-ND" H 5850 3250 39  0001 C CNN "digikey"
+F 7 "Susumu" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RR1220P-9760-D-M" H 0   0   50  0001 C CNN "pn"
 	1    5850 3550
 	-1   0    0    -1  
 $EndComp
@@ -3558,6 +3768,8 @@ F 3 "" H 5850 4500 50  0000 C CNN
 F 4 "976R" H 5850 4425 39  0000 C CNN "Value1"
 F 5 "0.5% 0.1W Thin" H 5850 4375 39  0001 C CNN "Value2"
 F 6 "408-1761-1-ND" H 5850 4200 39  0001 C CNN "digikey"
+F 7 "Susumu" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RR1220P-9760-D-M" H 0   0   50  0001 C CNN "pn"
 	1    5850 4500
 	-1   0    0    -1  
 $EndComp
@@ -3572,6 +3784,8 @@ F 3 "" H 5850 5450 50  0000 C CNN
 F 4 "976R" H 5850 5375 39  0000 C CNN "Value1"
 F 5 "0.5% 0.1W Thin" H 5850 5325 39  0001 C CNN "Value2"
 F 6 "408-1761-1-ND" H 5850 5150 39  0001 C CNN "digikey"
+F 7 "Susumu" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RR1220P-9760-D-M" H 0   0   50  0001 C CNN "pn"
 	1    5850 5450
 	-1   0    0    -1  
 $EndComp
@@ -3586,6 +3800,8 @@ F 3 "" H 3000 6400 50  0000 C CNN
 F 4 "976R" H 3000 6325 39  0000 C CNN "Value1"
 F 5 "0.5% 0.1W Thin" H 3000 6275 39  0001 C CNN "Value2"
 F 6 "408-1761-1-ND" H 3000 6100 39  0001 C CNN "digikey"
+F 7 "Susumu" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RR1220P-9760-D-M" H 0   0   50  0001 C CNN "pn"
 	1    3000 6400
 	-1   0    0    -1  
 $EndComp
@@ -3600,6 +3816,8 @@ F 3 "" H 3000 7350 50  0000 C CNN
 F 4 "976R" H 3000 7275 39  0000 C CNN "Value1"
 F 5 "0.5% 0.1W Thin" H 3000 7225 39  0001 C CNN "Value2"
 F 6 "408-1761-1-ND" H 3000 7050 39  0001 C CNN "digikey"
+F 7 "Susumu" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RR1220P-9760-D-M" H 0   0   50  0001 C CNN "pn"
 	1    3000 7350
 	-1   0    0    -1  
 $EndComp
@@ -3614,6 +3832,8 @@ F 3 "" H 3000 8300 50  0000 C CNN
 F 4 "976R" H 3000 8225 39  0000 C CNN "Value1"
 F 5 "0.5% 0.1W Thin" H 3000 8175 39  0001 C CNN "Value2"
 F 6 "408-1761-1-ND" H 3000 8000 39  0001 C CNN "digikey"
+F 7 "Susumu" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RR1220P-9760-D-M" H 0   0   50  0001 C CNN "pn"
 	1    3000 8300
 	-1   0    0    -1  
 $EndComp
@@ -3628,6 +3848,8 @@ F 3 "" H 3000 9250 50  0000 C CNN
 F 4 "976R" H 3000 9175 39  0000 C CNN "Value1"
 F 5 "0.5% 0.1W Thin" H 3000 9125 39  0001 C CNN "Value2"
 F 6 "408-1761-1-ND" H 3000 8950 39  0001 C CNN "digikey"
+F 7 "Susumu" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RR1220P-9760-D-M" H 0   0   50  0001 C CNN "pn"
 	1    3000 9250
 	-1   0    0    -1  
 $EndComp
@@ -3642,6 +3864,8 @@ F 3 "" H 5850 6400 50  0000 C CNN
 F 4 "976R" H 5850 6325 39  0000 C CNN "Value1"
 F 5 "0.5% 0.1W Thin" H 5850 6275 39  0001 C CNN "Value2"
 F 6 "408-1761-1-ND" H 5850 6100 39  0001 C CNN "digikey"
+F 7 "Susumu" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RR1220P-9760-D-M" H 0   0   50  0001 C CNN "pn"
 	1    5850 6400
 	-1   0    0    -1  
 $EndComp
@@ -3656,6 +3880,8 @@ F 3 "" H 5850 7350 50  0000 C CNN
 F 4 "976R" H 5850 7275 39  0000 C CNN "Value1"
 F 5 "0.5% 0.1W Thin" H 5850 7225 39  0001 C CNN "Value2"
 F 6 "408-1761-1-ND" H 5850 7050 39  0001 C CNN "digikey"
+F 7 "Susumu" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RR1220P-9760-D-M" H 0   0   50  0001 C CNN "pn"
 	1    5850 7350
 	-1   0    0    -1  
 $EndComp
@@ -3670,6 +3896,8 @@ F 3 "" H 5850 8300 50  0000 C CNN
 F 4 "976R" H 5850 8225 39  0000 C CNN "Value1"
 F 5 "0.5% 0.1W Thin" H 5850 8175 39  0001 C CNN "Value2"
 F 6 "408-1761-1-ND" H 5850 8000 39  0001 C CNN "digikey"
+F 7 "Susumu" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RR1220P-9760-D-M" H 0   0   50  0001 C CNN "pn"
 	1    5850 8300
 	-1   0    0    -1  
 $EndComp
@@ -3684,6 +3912,8 @@ F 3 "" H 5850 9250 50  0000 C CNN
 F 4 "976R" H 5850 9175 39  0000 C CNN "Value1"
 F 5 "0.5% 0.1W Thin" H 5850 9125 39  0001 C CNN "Value2"
 F 6 "408-1761-1-ND" H 5850 8950 39  0001 C CNN "digikey"
+F 7 "Susumu" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RR1220P-9760-D-M" H 0   0   50  0001 C CNN "pn"
 	1    5850 9250
 	-1   0    0    -1  
 $EndComp
@@ -3698,6 +3928,8 @@ F 3 "" H 6950 9350 50  0000 C CNN
 F 4 "10R0" H 6950 9275 39  0000 C CNN "Value1"
 F 5 "1% 0.25W Thin" H 6950 9225 39  0001 C CNN "Value2"
 F 6 "RNCP0805FTD10R0CT-ND" H 6950 9050 39  0001 C CNN "digikey"
+F 7 "Stackpole Electronics Inc." H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RNCP0805FTD10R0" H 0   0   50  0001 C CNN "pn"
 	1    6950 9350
 	-1   0    0    -1  
 $EndComp
@@ -3712,6 +3944,8 @@ F 3 "" H 4100 9350 50  0000 C CNN
 F 4 "10R0" H 4100 9275 39  0000 C CNN "Value1"
 F 5 "1% 0.25W Thin" H 4100 9225 39  0001 C CNN "Value2"
 F 6 "RNCP0805FTD10R0CT-ND" H 4100 9050 39  0001 C CNN "digikey"
+F 7 "Stackpole Electronics Inc." H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RNCP0805FTD10R0" H 0   0   50  0001 C CNN "pn"
 	1    4100 9350
 	-1   0    0    -1  
 $EndComp
@@ -3726,6 +3960,8 @@ F 3 "" H 4100 8400 50  0000 C CNN
 F 4 "10R0" H 4100 8325 39  0000 C CNN "Value1"
 F 5 "1% 0.25W Thin" H 4100 8275 39  0001 C CNN "Value2"
 F 6 "RNCP0805FTD10R0CT-ND" H 4100 8100 39  0001 C CNN "digikey"
+F 7 "Stackpole Electronics Inc." H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RNCP0805FTD10R0" H 0   0   50  0001 C CNN "pn"
 	1    4100 8400
 	-1   0    0    -1  
 $EndComp
@@ -3740,6 +3976,8 @@ F 3 "" H 6950 8400 50  0000 C CNN
 F 4 "10R0" H 6950 8325 39  0000 C CNN "Value1"
 F 5 "1% 0.25W Thin" H 6950 8275 39  0001 C CNN "Value2"
 F 6 "RNCP0805FTD10R0CT-ND" H 6950 8100 39  0001 C CNN "digikey"
+F 7 "Stackpole Electronics Inc." H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RNCP0805FTD10R0" H 0   0   50  0001 C CNN "pn"
 	1    6950 8400
 	-1   0    0    -1  
 $EndComp
@@ -3754,6 +3992,8 @@ F 3 "" H 6950 7450 50  0000 C CNN
 F 4 "10R0" H 6950 7375 39  0000 C CNN "Value1"
 F 5 "1% 0.25W Thin" H 6950 7325 39  0001 C CNN "Value2"
 F 6 "RNCP0805FTD10R0CT-ND" H 6950 7150 39  0001 C CNN "digikey"
+F 7 "Stackpole Electronics Inc." H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RNCP0805FTD10R0" H 0   0   50  0001 C CNN "pn"
 	1    6950 7450
 	-1   0    0    -1  
 $EndComp
@@ -3768,6 +4008,8 @@ F 3 "" H 4100 7450 50  0000 C CNN
 F 4 "10R0" H 4100 7375 39  0000 C CNN "Value1"
 F 5 "1% 0.25W Thin" H 4100 7325 39  0001 C CNN "Value2"
 F 6 "RNCP0805FTD10R0CT-ND" H 4100 7150 39  0001 C CNN "digikey"
+F 7 "Stackpole Electronics Inc." H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RNCP0805FTD10R0" H 0   0   50  0001 C CNN "pn"
 	1    4100 7450
 	-1   0    0    -1  
 $EndComp
@@ -3782,6 +4024,8 @@ F 3 "" H 4100 6500 50  0000 C CNN
 F 4 "10R0" H 4100 6425 39  0000 C CNN "Value1"
 F 5 "1% 0.25W Thin" H 4100 6375 39  0001 C CNN "Value2"
 F 6 "RNCP0805FTD10R0CT-ND" H 4100 6200 39  0001 C CNN "digikey"
+F 7 "Stackpole Electronics Inc." H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RNCP0805FTD10R0" H 0   0   50  0001 C CNN "pn"
 	1    4100 6500
 	-1   0    0    -1  
 $EndComp
@@ -3796,6 +4040,8 @@ F 3 "" H 6950 6500 50  0000 C CNN
 F 4 "10R0" H 6950 6425 39  0000 C CNN "Value1"
 F 5 "1% 0.25W Thin" H 6950 6375 39  0001 C CNN "Value2"
 F 6 "RNCP0805FTD10R0CT-ND" H 6950 6200 39  0001 C CNN "digikey"
+F 7 "Stackpole Electronics Inc." H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RNCP0805FTD10R0" H 0   0   50  0001 C CNN "pn"
 	1    6950 6500
 	-1   0    0    -1  
 $EndComp
@@ -3810,6 +4056,8 @@ F 3 "" H 4100 5550 50  0000 C CNN
 F 4 "10R0" H 4100 5475 39  0000 C CNN "Value1"
 F 5 "1% 0.25W Thin" H 4100 5425 39  0001 C CNN "Value2"
 F 6 "RNCP0805FTD10R0CT-ND" H 4100 5250 39  0001 C CNN "digikey"
+F 7 "Stackpole Electronics Inc." H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RNCP0805FTD10R0" H 0   0   50  0001 C CNN "pn"
 	1    4100 5550
 	-1   0    0    -1  
 $EndComp
@@ -3824,6 +4072,8 @@ F 3 "" H 4100 4600 50  0000 C CNN
 F 4 "10R0" H 4100 4525 39  0000 C CNN "Value1"
 F 5 "1% 0.25W Thin" H 4100 4475 39  0001 C CNN "Value2"
 F 6 "RNCP0805FTD10R0CT-ND" H 4100 4300 39  0001 C CNN "digikey"
+F 7 "Stackpole Electronics Inc." H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RNCP0805FTD10R0" H 0   0   50  0001 C CNN "pn"
 	1    4100 4600
 	-1   0    0    -1  
 $EndComp
@@ -3838,6 +4088,8 @@ F 3 "" H 4100 3650 50  0000 C CNN
 F 4 "10R0" H 4100 3575 39  0000 C CNN "Value1"
 F 5 "1% 0.25W Thin" H 4100 3525 39  0001 C CNN "Value2"
 F 6 "RNCP0805FTD10R0CT-ND" H 4100 3350 39  0001 C CNN "digikey"
+F 7 "Stackpole Electronics Inc." H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RNCP0805FTD10R0" H 0   0   50  0001 C CNN "pn"
 	1    4100 3650
 	-1   0    0    -1  
 $EndComp
@@ -3852,6 +4104,8 @@ F 3 "" H 4100 2700 50  0000 C CNN
 F 4 "10R0" H 4100 2625 39  0000 C CNN "Value1"
 F 5 "1% 0.25W Thin" H 4100 2575 39  0001 C CNN "Value2"
 F 6 "RNCP0805FTD10R0CT-ND" H 4100 2400 39  0001 C CNN "digikey"
+F 7 "Stackpole Electronics Inc." H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RNCP0805FTD10R0" H 0   0   50  0001 C CNN "pn"
 	1    4100 2700
 	-1   0    0    -1  
 $EndComp
@@ -3866,6 +4120,8 @@ F 3 "" H 6950 2700 50  0000 C CNN
 F 4 "10R0" H 6950 2625 39  0000 C CNN "Value1"
 F 5 "1% 0.25W Thin" H 6950 2575 39  0001 C CNN "Value2"
 F 6 "RNCP0805FTD10R0CT-ND" H 6950 2400 39  0001 C CNN "digikey"
+F 7 "Stackpole Electronics Inc." H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RNCP0805FTD10R0" H 0   0   50  0001 C CNN "pn"
 	1    6950 2700
 	-1   0    0    -1  
 $EndComp
@@ -3880,6 +4136,8 @@ F 3 "" H 6950 3650 50  0000 C CNN
 F 4 "10R0" H 6950 3575 39  0000 C CNN "Value1"
 F 5 "1% 0.25W Thin" H 6950 3525 39  0001 C CNN "Value2"
 F 6 "RNCP0805FTD10R0CT-ND" H 6950 3350 39  0001 C CNN "digikey"
+F 7 "Stackpole Electronics Inc." H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RNCP0805FTD10R0" H 0   0   50  0001 C CNN "pn"
 	1    6950 3650
 	-1   0    0    -1  
 $EndComp
@@ -3894,6 +4152,8 @@ F 3 "" H 6950 4600 50  0000 C CNN
 F 4 "10R0" H 6950 4525 39  0000 C CNN "Value1"
 F 5 "1% 0.25W Thin" H 6950 4475 39  0001 C CNN "Value2"
 F 6 "RNCP0805FTD10R0CT-ND" H 6950 4300 39  0001 C CNN "digikey"
+F 7 "Stackpole Electronics Inc." H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RNCP0805FTD10R0" H 0   0   50  0001 C CNN "pn"
 	1    6950 4600
 	-1   0    0    -1  
 $EndComp
@@ -3908,6 +4168,8 @@ F 3 "" H 6950 5550 50  0000 C CNN
 F 4 "10R0" H 6950 5475 39  0000 C CNN "Value1"
 F 5 "1% 0.25W Thin" H 6950 5425 39  0001 C CNN "Value2"
 F 6 "RNCP0805FTD10R0CT-ND" H 6950 5250 39  0001 C CNN "digikey"
+F 7 "Stackpole Electronics Inc." H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RNCP0805FTD10R0" H 0   0   50  0001 C CNN "pn"
 	1    6950 5550
 	-1   0    0    -1  
 $EndComp
@@ -3922,6 +4184,8 @@ F 3 "" H 13850 4600 50  0000 C CNN
 F 4 "47K0" H 13850 4525 39  0000 C CNN "Value1"
 F 5 "1% 0.125W Thick" H 13850 4475 39  0001 C CNN "Value2"
 F 6 "311-47.0KCRCT-ND" H 13850 4300 39  0001 C CNN "digikey"
+F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RC0805FR-0747KL" H 0   0   50  0001 C CNN "pn"
 	1    13850 4600
 	0    -1   1    0   
 $EndComp
@@ -3936,6 +4200,8 @@ F 3 "" H 13700 5550 50  0000 C CNN
 F 4 "0R00" H 13700 5475 39  0000 C CNN "Value1"
 F 5 "1% 0.125W Thick" H 13700 5425 39  0001 C CNN "Value2"
 F 6 "311-0.0ARCT-ND" H 13700 5250 39  0001 C CNN "digikey"
+F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RC0805JR-070RL" H 0   0   50  0001 C CNN "pn"
 	1    13700 5550
 	0    -1   1    0   
 $EndComp
@@ -3950,6 +4216,8 @@ F 3 "" H 14000 4600 50  0000 C CNN
 F 4 "47K0" H 14000 4525 39  0000 C CNN "Value1"
 F 5 "1% 0.125W Thick" H 14000 4475 39  0001 C CNN "Value2"
 F 6 "311-47.0KCRCT-ND" H 14000 4300 39  0001 C CNN "digikey"
+F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RC0805FR-0747KL" H 0   0   50  0001 C CNN "pn"
 	1    14000 4600
 	0    -1   1    0   
 $EndComp
@@ -3964,6 +4232,8 @@ F 3 "" H 14150 4600 50  0000 C CNN
 F 4 "47K0" H 14150 4525 39  0000 C CNN "Value1"
 F 5 "1% 0.125W Thick" H 14150 4475 39  0001 C CNN "Value2"
 F 6 "311-47.0KCRCT-ND" H 14150 4300 39  0001 C CNN "digikey"
+F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RC0805FR-0747KL" H 0   0   50  0001 C CNN "pn"
 	1    14150 4600
 	0    -1   1    0   
 $EndComp
@@ -3978,6 +4248,8 @@ F 3 "" H 13850 5550 50  0000 C CNN
 F 4 "0R00" H 13850 5475 39  0000 C CNN "Value1"
 F 5 "1% 0.125W Thick" H 13850 5425 39  0001 C CNN "Value2"
 F 6 "311-0.0ARCT-ND" H 13850 5250 39  0001 C CNN "digikey"
+F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RC0805JR-070RL" H 0   0   50  0001 C CNN "pn"
 	1    13850 5550
 	0    -1   1    0   
 $EndComp
@@ -3992,6 +4264,8 @@ F 3 "" H 14000 5550 50  0000 C CNN
 F 4 "0R00" H 14000 5475 39  0000 C CNN "Value1"
 F 5 "1% 0.125W Thick" H 14000 5425 39  0001 C CNN "Value2"
 F 6 "311-0.0ARCT-ND" H 14000 5250 39  0001 C CNN "digikey"
+F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RC0805JR-070RL" H 0   0   50  0001 C CNN "pn"
 	1    14000 5550
 	0    -1   1    0   
 $EndComp
@@ -4006,6 +4280,8 @@ F 3 "" H 12100 4150 50  0000 C CNN
 F 4 "0R00" H 12100 4075 39  0001 C CNN "Value1"
 F 5 "1% 0.125W Thick" H 12100 4025 39  0001 C CNN "Value2"
 F 6 "311-0.0ARCT-ND" H 12100 3850 39  0001 C CNN "digikey"
+F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RC0805JR-070RL" H 0   0   50  0001 C CNN "pn"
 	1    12100 4150
 	0    -1   1    0   
 $EndComp
@@ -4020,6 +4296,8 @@ F 3 "" H 11700 4150 50  0000 C CNN
 F 4 "0R00" H 11700 4075 39  0000 C CNN "Value1"
 F 5 "1% 0.125W Thick" H 11700 4025 39  0001 C CNN "Value2"
 F 6 "311-0.0ARCT-ND" H 11700 3850 39  0001 C CNN "digikey"
+F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RC0805JR-070RL" H 0   0   50  0001 C CNN "pn"
 	1    11700 4150
 	0    -1   1    0   
 $EndComp
@@ -4034,6 +4312,8 @@ F 3 "" H 12200 4150 50  0000 C CNN
 F 4 "0R00" H 12200 4075 39  0001 C CNN "Value1"
 F 5 "1% 0.125W Thick" H 12200 4025 39  0001 C CNN "Value2"
 F 6 "311-0.0ARCT-ND" H 12200 3850 39  0001 C CNN "digikey"
+F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RC0805JR-070RL" H 0   0   50  0001 C CNN "pn"
 	1    12200 4150
 	0    -1   1    0   
 $EndComp
@@ -4048,6 +4328,8 @@ F 3 "" H 12300 4150 50  0000 C CNN
 F 4 "0R00" H 12300 4075 39  0001 C CNN "Value1"
 F 5 "1% 0.125W Thick" H 12300 4025 39  0001 C CNN "Value2"
 F 6 "311-0.0ARCT-ND" H 12300 3850 39  0001 C CNN "digikey"
+F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RC0805JR-070RL" H 0   0   50  0001 C CNN "pn"
 	1    12300 4150
 	0    -1   1    0   
 $EndComp
@@ -4062,6 +4344,8 @@ F 3 "" H 12400 4150 50  0000 C CNN
 F 4 "0R00" H 12400 4075 39  0000 C CNN "Value1"
 F 5 "1% 0.125W Thick" H 12400 4025 39  0001 C CNN "Value2"
 F 6 "311-0.0ARCT-ND" H 12400 3850 39  0001 C CNN "digikey"
+F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RC0805JR-070RL" H 0   0   50  0001 C CNN "pn"
 	1    12400 4150
 	0    -1   1    0   
 $EndComp
@@ -4076,6 +4360,8 @@ F 3 "" H 9500 4350 50  0000 C CNN
 F 4 "20R0" H 9500 4425 39  0000 C CNN "Value1"
 F 5 "1% 0.125W Thick" H 9500 4225 39  0001 C CNN "Value2"
 F 6 "311-20.0CRCT-ND" H 9500 4050 39  0001 C CNN "digikey"
+F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RC0805FR-0720RL" H 0   0   50  0001 C CNN "pn"
 	1    9500 4350
 	-1   0    0    1   
 $EndComp
@@ -4090,6 +4376,8 @@ F 3 "" H 9500 5300 50  0000 C CNN
 F 4 "20R0" H 9500 5375 39  0000 C CNN "Value1"
 F 5 "1% 0.125W Thick" H 9500 5175 39  0001 C CNN "Value2"
 F 6 "311-20.0CRCT-ND" H 9500 5000 39  0001 C CNN "digikey"
+F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RC0805FR-0720RL" H 0   0   50  0001 C CNN "pn"
 	1    9500 5300
 	-1   0    0    1   
 $EndComp
@@ -4104,6 +4392,8 @@ F 3 "" H 9500 5800 50  0000 C CNN
 F 4 "20R0" H 9500 5875 39  0000 C CNN "Value1"
 F 5 "1% 0.125W Thick" H 9500 5675 39  0001 C CNN "Value2"
 F 6 "311-20.0CRCT-ND" H 9500 5500 39  0001 C CNN "digikey"
+F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RC0805FR-0720RL" H 0   0   50  0001 C CNN "pn"
 	1    9500 5800
 	-1   0    0    1   
 $EndComp
@@ -4118,6 +4408,8 @@ F 3 "" H 9500 6750 50  0000 C CNN
 F 4 "20R0" H 9500 6825 39  0000 C CNN "Value1"
 F 5 "1% 0.125W Thick" H 9500 6625 39  0001 C CNN "Value2"
 F 6 "311-20.0CRCT-ND" H 9500 6450 39  0001 C CNN "digikey"
+F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RC0805FR-0720RL" H 0   0   50  0001 C CNN "pn"
 	1    9500 6750
 	-1   0    0    1   
 $EndComp
@@ -4132,6 +4424,8 @@ F 3 "" H 3550 2550 50  0000 C CNN
 F 4 "OPA1652AIDR" H 3550 2500 39  0000 L CNN "Value1"
 F 5 "OpAmp" H 3850 2850 39  0001 C CNN "Value2"
 F 6 "296-39101-1-ND" H 3550 2300 39  0001 C CNN "digikey"
+F 7 "Texas Instruments" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "OPA1652AIDR" H 0   0   50  0001 C CNN "pn"
 	1    3550 2700
 	1    0    0    -1  
 $EndComp
@@ -4146,6 +4440,8 @@ F 3 "" H 3550 3500 50  0000 C CNN
 F 4 "OPA1652AIDR" H 3500 3400 39  0000 L CNN "Value1"
 F 5 "OpAmp" H 3850 3800 39  0001 C CNN "Value2"
 F 6 "296-39101-1-ND" H 3550 3250 39  0001 C CNN "digikey"
+F 7 "Texas Instruments" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "OPA1652AIDR" H 0   0   50  0001 C CNN "pn"
 	2    3550 3650
 	1    0    0    -1  
 $EndComp
@@ -4160,6 +4456,8 @@ F 3 "" H 6400 2550 50  0000 C CNN
 F 4 "OPA1652AIDR" H 6400 2500 39  0000 L CNN "Value1"
 F 5 "OpAmp" H 6700 2850 39  0001 C CNN "Value2"
 F 6 "296-39101-1-ND" H 6400 2300 39  0001 C CNN "digikey"
+F 7 "Texas Instruments" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "OPA1652AIDR" H 0   0   50  0001 C CNN "pn"
 	1    6400 2700
 	1    0    0    -1  
 $EndComp
@@ -4174,6 +4472,8 @@ F 3 "" H 6400 3500 50  0000 C CNN
 F 4 "OPA1652AIDR" H 6350 3400 39  0000 L CNN "Value1"
 F 5 "OpAmp" H 6700 3800 39  0001 C CNN "Value2"
 F 6 "296-39101-1-ND" H 6400 3250 39  0001 C CNN "digikey"
+F 7 "Texas Instruments" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "OPA1652AIDR" H 0   0   50  0001 C CNN "pn"
 	2    6400 3650
 	1    0    0    -1  
 $EndComp
@@ -4188,6 +4488,8 @@ F 3 "" H 3550 4450 50  0000 C CNN
 F 4 "OPA1652AIDR" H 3550 4400 39  0000 L CNN "Value1"
 F 5 "OpAmp" H 3850 4750 39  0001 C CNN "Value2"
 F 6 "296-39101-1-ND" H 3550 4200 39  0001 C CNN "digikey"
+F 7 "Texas Instruments" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "OPA1652AIDR" H 0   0   50  0001 C CNN "pn"
 	1    3550 4600
 	1    0    0    -1  
 $EndComp
@@ -4202,6 +4504,8 @@ F 3 "" H 3550 5400 50  0000 C CNN
 F 4 "OPA1652AIDR" H 3500 5300 39  0000 L CNN "Value1"
 F 5 "OpAmp" H 3850 5700 39  0001 C CNN "Value2"
 F 6 "296-39101-1-ND" H 3550 5150 39  0001 C CNN "digikey"
+F 7 "Texas Instruments" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "OPA1652AIDR" H 0   0   50  0001 C CNN "pn"
 	2    3550 5550
 	1    0    0    -1  
 $EndComp
@@ -4216,6 +4520,8 @@ F 3 "" H 6400 4450 50  0000 C CNN
 F 4 "OPA1652AIDR" H 6400 4400 39  0000 L CNN "Value1"
 F 5 "OpAmp" H 6700 4750 39  0001 C CNN "Value2"
 F 6 "296-39101-1-ND" H 6400 4200 39  0001 C CNN "digikey"
+F 7 "Texas Instruments" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "OPA1652AIDR" H 0   0   50  0001 C CNN "pn"
 	1    6400 4600
 	1    0    0    -1  
 $EndComp
@@ -4230,6 +4536,8 @@ F 3 "" H 6400 5400 50  0000 C CNN
 F 4 "OPA1652AIDR" H 6350 5300 39  0000 L CNN "Value1"
 F 5 "OpAmp" H 6700 5700 39  0001 C CNN "Value2"
 F 6 "296-39101-1-ND" H 6400 5150 39  0001 C CNN "digikey"
+F 7 "Texas Instruments" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "OPA1652AIDR" H 0   0   50  0001 C CNN "pn"
 	2    6400 5550
 	1    0    0    -1  
 $EndComp
@@ -4244,6 +4552,8 @@ F 3 "" H 3550 6350 50  0000 C CNN
 F 4 "OPA1652AIDR" H 3550 6300 39  0000 L CNN "Value1"
 F 5 "OpAmp" H 3850 6650 39  0001 C CNN "Value2"
 F 6 "296-39101-1-ND" H 3550 6100 39  0001 C CNN "digikey"
+F 7 "Texas Instruments" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "OPA1652AIDR" H 0   0   50  0001 C CNN "pn"
 	1    3550 6500
 	1    0    0    -1  
 $EndComp
@@ -4258,6 +4568,8 @@ F 3 "" H 3550 7300 50  0000 C CNN
 F 4 "OPA1652AIDR" H 3500 7200 39  0000 L CNN "Value1"
 F 5 "OpAmp" H 3850 7600 39  0001 C CNN "Value2"
 F 6 "296-39101-1-ND" H 3550 7050 39  0001 C CNN "digikey"
+F 7 "Texas Instruments" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "OPA1652AIDR" H 0   0   50  0001 C CNN "pn"
 	2    3550 7450
 	1    0    0    -1  
 $EndComp
@@ -4272,6 +4584,8 @@ F 3 "" H 6400 6350 50  0000 C CNN
 F 4 "OPA1652AIDR" H 6400 6300 39  0000 L CNN "Value1"
 F 5 "OpAmp" H 6700 6650 39  0001 C CNN "Value2"
 F 6 "296-39101-1-ND" H 6400 6100 39  0001 C CNN "digikey"
+F 7 "Texas Instruments" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "OPA1652AIDR" H 0   0   50  0001 C CNN "pn"
 	1    6400 6500
 	1    0    0    -1  
 $EndComp
@@ -4286,6 +4600,8 @@ F 3 "" H 6400 7300 50  0000 C CNN
 F 4 "OPA1652AIDR" H 6350 7200 39  0000 L CNN "Value1"
 F 5 "OpAmp" H 6700 7600 39  0001 C CNN "Value2"
 F 6 "296-39101-1-ND" H 6400 7050 39  0001 C CNN "digikey"
+F 7 "Texas Instruments" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "OPA1652AIDR" H 0   0   50  0001 C CNN "pn"
 	2    6400 7450
 	1    0    0    -1  
 $EndComp
@@ -4300,6 +4616,8 @@ F 3 "" H 3550 8250 50  0000 C CNN
 F 4 "OPA1652AIDR" H 3550 8200 39  0000 L CNN "Value1"
 F 5 "OpAmp" H 3850 8550 39  0001 C CNN "Value2"
 F 6 "296-39101-1-ND" H 3550 8000 39  0001 C CNN "digikey"
+F 7 "Texas Instruments" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "OPA1652AIDR" H 0   0   50  0001 C CNN "pn"
 	1    3550 8400
 	1    0    0    -1  
 $EndComp
@@ -4314,6 +4632,8 @@ F 3 "" H 3550 9200 50  0000 C CNN
 F 4 "OPA1652AIDR" H 3500 9100 39  0000 L CNN "Value1"
 F 5 "OpAmp" H 3850 9500 39  0001 C CNN "Value2"
 F 6 "296-39101-1-ND" H 3550 8950 39  0001 C CNN "digikey"
+F 7 "Texas Instruments" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "OPA1652AIDR" H 0   0   50  0001 C CNN "pn"
 	2    3550 9350
 	1    0    0    -1  
 $EndComp
@@ -4328,6 +4648,8 @@ F 3 "" H 6400 8250 50  0000 C CNN
 F 4 "OPA1652AIDR" H 6400 8200 39  0000 L CNN "Value1"
 F 5 "OpAmp" H 6700 8550 39  0001 C CNN "Value2"
 F 6 "296-39101-1-ND" H 6400 8000 39  0001 C CNN "digikey"
+F 7 "Texas Instruments" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "OPA1652AIDR" H 0   0   50  0001 C CNN "pn"
 	1    6400 8400
 	1    0    0    -1  
 $EndComp
@@ -4342,6 +4664,8 @@ F 3 "" H 6400 9200 50  0000 C CNN
 F 4 "OPA1652AIDR" H 6350 9100 39  0000 L CNN "Value1"
 F 5 "OpAmp" H 6700 9500 39  0001 C CNN "Value2"
 F 6 "296-39101-1-ND" H 6400 8950 39  0001 C CNN "digikey"
+F 7 "Texas Instruments" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "OPA1652AIDR" H 0   0   50  0001 C CNN "pn"
 	2    6400 9350
 	1    0    0    -1  
 $EndComp

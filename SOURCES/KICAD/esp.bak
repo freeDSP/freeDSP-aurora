@@ -25,6 +25,8 @@ F 3 "" H 5250 3050 79  0001 C CNN
 F 4 "ESP32-WROOM-32U" H 0   0   50  0001 C CNN "Value1"
 F 5 "Module" H 0   0   50  0001 C CNN "Value2"
 F 6 "1904-1026-1-ND" H 0   0   50  0001 C CNN "digikey"
+F 7 "Espressif Systems" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "ESP32-WROOM-32U" H 0   0   50  0001 C CNN "pn"
 	1    5600 3050
 	1    0    0    -1  
 $EndComp
@@ -69,6 +71,8 @@ F 3 "" H 3550 2650 50  0000 C CNN
 F 4 "10K0" H 3550 2575 39  0000 C CNN "Value1"
 F 5 "1% 0.125W Thick" H 3550 2525 39  0001 C CNN "Value2"
 F 6 "311-10.0KCRCT-ND" H 3550 2350 39  0001 C CNN "digikey"
+F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RC0805FR-0710KL" H 0   0   50  0001 C CNN "pn"
 	1    3550 2650
 	1    0    0    -1  
 $EndComp
@@ -83,6 +87,8 @@ F 3 "" H 4000 2900 50  0001 C CNN
 F 4 "100n" H 4000 2800 39  0000 L CNN "Value1"
 F 5 "5% 50V X7R" H 3950 2600 39  0001 C CNN "Value2"
 F 6 "399-1170-1-ND" H 3950 2550 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C104K5RACTU" H 0   0   50  0001 C CNN "pn"
 	1    3950 2850
 	0    -1   -1   0   
 $EndComp
@@ -97,6 +103,8 @@ F 3 "" H 4400 2900 50  0001 C CNN
 F 4 "100n" H 4400 2800 39  0000 L CNN "Value1"
 F 5 "5% 50V X7R" H 4350 2600 39  0001 C CNN "Value2"
 F 6 "399-1170-1-ND" H 4350 2550 39  0001 C CNN "digikey"
+F 7 "KEMET" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "C0805C104K5RACTU" H 0   0   50  0001 C CNN "pn"
 	1    4350 2850
 	0    -1   -1   0   
 $EndComp
@@ -111,6 +119,8 @@ F 3 "" H 4200 2900 50  0001 C CNN
 F 4 "10u0" H 4200 2800 39  0000 L CNN "Value1"
 F 5 "20% 25V X5R" H 4150 2600 39  0001 C CNN "Value2"
 F 6 "490-10748-1-ND" H 4150 2550 39  0001 C CNN "digikey"
+F 7 "Murata Electronics North America" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "GRM21BR61E106MA73L" H 0   0   50  0001 C CNN "pn"
 	1    4150 2850
 	0    -1   -1   0   
 $EndComp
@@ -239,6 +249,8 @@ F 3 "" H 8100 2100 50  0001 C CNN
 F 4 "KK254-01x04" H 0   0   50  0001 C CNN "Value1"
 F 5 "-" H 0   0   50  0001 C CNN "Value2"
 F 6 "???" H 0   0   50  0001 C CNN "digikey"
+F 7 "Molex, LLC" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "0022232041" H 0   0   50  0001 C CNN "pn"
 	1    8100 2100
 	1    0    0    1   
 $EndComp
@@ -295,6 +307,8 @@ F 3 "" H 8100 2950 50  0001 C CNN
 F 4 "PB-01x05" H 0   0   50  0001 C CNN "Value1"
 F 5 "-" H 0   0   50  0001 C CNN "Value2"
 F 6 "???" H 0   0   50  0001 C CNN "digikey"
+F 7 "Molex, LLC" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "0530470510" H 0   0   50  0001 C CNN "pn"
 	1    8100 2950
 	1    0    0    1   
 $EndComp
@@ -389,6 +403,8 @@ F 3 "" H 8100 4000 50  0001 C CNN
 F 4 "PB-01x03" H 0   0   50  0001 C CNN "Value1"
 F 5 "-" H 0   0   50  0001 C CNN "Value2"
 F 6 "???" H 0   0   50  0001 C CNN "digikey"
+F 7 "Molex, LLC" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "0530470310" H 0   0   50  0001 C CNN "pn"
 	1    8100 4000
 	1    0    0    1   
 $EndComp
@@ -462,6 +478,8 @@ F 3 "" H 7750 5200 50  0001 C CNN
 F 4 "HDR-01x06" H 0   0   50  0001 C CNN "Value1"
 F 5 "-" H 0   0   50  0001 C CNN "Value2"
 F 6 "???" H 0   0   50  0001 C CNN "digikey"
+F 7 "Sullins Connector Solutions" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "PRPC006SAAN-RC" H 0   0   50  0001 C CNN "pn"
 	1    7750 5200
 	1    0    0    -1  
 $EndComp
@@ -513,6 +531,8 @@ F 3 "" H 5250 5200 50  0000 C CNN
 F 4 "10K0" H 5250 5125 39  0000 C CNN "Value1"
 F 5 "1% 0.125W Thick" H 5250 5075 39  0001 C CNN "Value2"
 F 6 "311-10.0KCRCT-ND" H 5250 4900 39  0001 C CNN "digikey"
+F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RC0805FR-0710KL" H 0   0   50  0001 C CNN "pn"
 	1    5250 5200
 	1    0    0    -1  
 $EndComp
@@ -527,6 +547,8 @@ F 3 "" H 5250 5750 50  0000 C CNN
 F 4 "10K0" H 5250 5675 39  0000 C CNN "Value1"
 F 5 "1% 0.125W Thick" H 5250 5625 39  0001 C CNN "Value2"
 F 6 "311-10.0KCRCT-ND" H 5250 5450 39  0001 C CNN "digikey"
+F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RC0805FR-0710KL" H 0   0   50  0001 C CNN "pn"
 	1    5250 5750
 	1    0    0    -1  
 $EndComp
@@ -541,6 +563,8 @@ F 3 "" H 5600 5200 50  0001 C CNN
 F 4 "SS8050-G" H 5791 5163 39  0000 L CNN "Value1"
 F 5 "-" H 5600 5200 50  0001 C CNN "Value2"
 F 6 "???" H 5600 5200 39  0001 C CNN "digikey"
+F 7 "Comchip Technology" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "SS8050-G" H 0   0   50  0001 C CNN "pn"
 	1    5600 5200
 	1    0    0    -1  
 $EndComp
@@ -557,6 +581,8 @@ F 3 "" H 5600 5750 50  0001 C CNN
 F 4 "SS8050-G" H 5800 5800 39  0000 L CNN "Value1"
 F 5 "-" H 5600 5750 50  0001 C CNN "Value2"
 F 6 "???" H 5600 5750 39  0001 C CNN "digikey"
+F 7 "Comchip Technology" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "SS8050-G" H 0   0   50  0001 C CNN "pn"
 	1    5600 5750
 	1    0    0    1   
 $EndComp
@@ -619,6 +645,8 @@ F 3 "" H 3750 3050 50  0001 C CNN
 F 4 "B3U-1000P" H 3450 3000 39  0000 L CNN "Value1"
 F 5 "SWITCH TACTILE SPST-NO 0.05A 12V" H 3750 2850 39  0001 C CNN "Value2"
 F 6 "SW1020CT-ND" H 3750 2850 50  0001 C CNN "digikey"
+F 7 "Omron Electronics Inc-EMC Div" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "B3U-1000P" H 0   0   50  0001 C CNN "pn"
 	1    3750 2850
 	0    -1   -1   0   
 $EndComp
