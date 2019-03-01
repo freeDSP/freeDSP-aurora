@@ -31,8 +31,10 @@ include(C:\matlib\vektorraum.pri)
 }
 
 INCLUDEPATH += src \
-               src/figure\
-               src/dsp
+               src/figure \
+               src/dsp \
+               src/dsp/8channels \
+               src/dsp/HomeCinema71
 
 SOURCES += \
         main.cpp \
@@ -52,8 +54,12 @@ SOURCES += \
         src/dsp/freeDSP-Aurora.cpp \
         src/dialoglicense.cpp \
         src/QInputSelect.cpp \
+        src/QOutputSelect.cpp \
+        src/QCrossover.cpp \
         src/DialogSettings.cpp \
-        src/QVolumeSlider.cpp
+        src/QVolumeSlider.cpp \
+        src/dsp/8channels/PlugIn8Channels.cpp \
+        src/dsp/HomeCinema71/PlugInHomeCinema71.cpp
 
 HEADERS += \
         MainWindow.hpp \
@@ -70,11 +76,17 @@ HEADERS += \
         src/QDelay.hpp \
         src/QHighShelv.hpp \
         src/QLowShelv.hpp \
+        src/QCrossover.hpp \
         src/dsp/freeDSP-Aurora.hpp \
         src/dialoglicense.hpp \
         src/QInputSelect.hpp \
+        src/QOutputSelect.hpp \
         src/DialogSettings.hpp \
-        src/QVolumeSlider.hpp
+        src/QVolumeSlider.hpp \
+        src/dsp/8channels/PlugIn8Channels.hpp \
+        src/dsp/HomeCinema71/PlugInHomeCinema71.hpp \
+        src/QDialogDemoSelector.hpp \
+        src/dsp/DspPlugIn.hpp
 
 FORMS += \
         MainWindow.ui \
@@ -88,9 +100,11 @@ FORMS += \
         src/QDelay.ui \
         src/QHighShelv.ui \
         src/QLowShelv.ui  \
+        src/QCrossover.ui \
         src/dialoglicense.ui \
-    src/QInputSelect.ui \
-    src/DialogSettings.ui
+        src/QInputSelect.ui \
+        src/QOutputSelect.ui \
+        src/DialogSettings.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

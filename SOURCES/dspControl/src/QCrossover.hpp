@@ -1,5 +1,5 @@
-#ifndef QHIGHPASS_HPP
-#define QHIGHPASS_HPP
+#ifndef QCROSSOVER_HPP
+#define QCROSSOVER_HPP
 
 #include <QWidget>
 #include "QDspBlock.hpp"
@@ -7,10 +7,10 @@
 #include "freeDSP-Aurora.hpp"
 
 namespace Ui {
-class QHighPass;
+class QCrossover;
 }
 
-class QHighPass : public QDspBlock
+class QCrossover : public QDspBlock
 {
   Q_OBJECT
 
@@ -67,19 +67,19 @@ private:
   };
 
 public:
-  explicit QHighPass( tfilterdesign design, Vektorraum::tfloat fc,
-                      uint16_t addrB2_1, uint16_t addrB1_1, uint16_t addrB0_1,
-                      uint16_t addrA2_1, uint16_t addrA1_1,
-                      uint16_t addrB2_2, uint16_t addrB1_2, uint16_t addrB0_2,
-                      uint16_t addrA2_2, uint16_t addrA1_2,
-                      uint16_t addrB2_3, uint16_t addrB1_3, uint16_t addrB0_3,
-                      uint16_t addrA2_3, uint16_t addrA1_3,
-                      uint16_t addrB2_4, uint16_t addrB1_4, uint16_t addrB0_4,
-                      uint16_t addrA2_4, uint16_t addrA1_4,
-                      Vektorraum::tfloat samplerate,
-                      CFreeDspAurora* ptrdsp, bool isbypassed = false,
-                      QWidget *parent = nullptr );
-  ~QHighPass();
+  explicit QCrossover( tfilterdesign design, Vektorraum::tfloat fc,
+                       uint16_t addrB2_1, uint16_t addrB1_1, uint16_t addrB0_1,
+                       uint16_t addrA2_1, uint16_t addrA1_1,
+                       uint16_t addrB2_2, uint16_t addrB1_2, uint16_t addrB0_2,
+                       uint16_t addrA2_2, uint16_t addrA1_2,
+                       uint16_t addrB2_3, uint16_t addrB1_3, uint16_t addrB0_3,
+                       uint16_t addrA2_3, uint16_t addrA1_3,
+                       uint16_t addrB2_4, uint16_t addrB1_4, uint16_t addrB0_4,
+                       uint16_t addrA2_4, uint16_t addrA1_4,
+                       Vektorraum::tfloat samplerate,
+                       CFreeDspAurora* ptrdsp,
+                       QWidget *parent = nullptr );
+  ~QCrossover();
 
   virtual Vektorraum::tvector<Vektorraum::tcomplex> getTransferFunction( void )
   {
@@ -99,19 +99,17 @@ public:
 
   virtual void writeDspParameter( void );
 
-  void setName( QString newname );
-
 private:
   void updateCoeffs( void );
 
 private slots:
-  void on_doubleSpinBoxFc_valueChanged( double  );
-  void on_comboBoxType_currentIndexChanged( int  );
+  void on_doubleSpinBoxFcHp_valueChanged( double  );
+  void on_comboBoxTypeHp_currentIndexChanged( int  );
 
   void on_pushButtonBypass_clicked();
 
 private:
-  Ui::QHighPass *ui;
+  Ui::QCrossover *ui;
 
   tfilterdesign filterDesign;
   Vektorraum::tfloat Q[4];
@@ -122,4 +120,4 @@ private:
   Vektorraum::tuint stages;
 };
 
-#endif // QHIGHPASS_HPP
+#endif // QCROSSOVER_HPP

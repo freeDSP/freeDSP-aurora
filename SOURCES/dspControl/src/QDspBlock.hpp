@@ -2,6 +2,7 @@
 #define QDSPBLOCK_HPP
 
 #include <QWidget>
+#include <QString>
 #include <cstdint>
 
 #include "typedefs.h"
@@ -39,6 +40,7 @@ protected:
   Vektorraum::tvector<Vektorraum::tcomplex> H;
   Vektorraum::tfloat fs;
   bool bypass = false;
+  QString name;
 
 private:
   Ui::QDspBlock *ui;

@@ -1,16 +1,13 @@
 #include <QDebug>
 
-#include "QHighPass.hpp"
-#include "ui_QHighPass.h"
+#include "QCrossover.hpp"
+#include "ui_QCrossover.h"
 
 #include "vektorraum.h"
 
 using namespace Vektorraum;
 
-//==============================================================================
-/*!
- */
-QHighPass::QHighPass( tfilterdesign design, tfloat fc,
+QCrossover::QCrossover( tfilterdesign design, tfloat fc,
                       uint16_t addrB2_1, uint16_t addrB1_1, uint16_t addrB0_1,
                       uint16_t addrA2_1, uint16_t addrA1_1,
                       uint16_t addrB2_2, uint16_t addrB1_2, uint16_t addrB0_2,
@@ -20,10 +17,18 @@ QHighPass::QHighPass( tfilterdesign design, tfloat fc,
                       uint16_t addrB2_4, uint16_t addrB1_4, uint16_t addrB0_4,
                       uint16_t addrA2_4, uint16_t addrA1_4,
                       tfloat samplerate,
-                      CFreeDspAurora* ptrdsp, bool isbypassed,
+                      CFreeDspAurora* ptrdsp,
                       QWidget *parent ) :
-  QDspBlock(parent), ui(new Ui::QHighPass)
+  QDspBlock(parent), ui(new Ui::QCrossover)
 {
+  tfilterdesign designLp = kLinkwitzRiley24;
+
+  #if defined( __MACOSX__ )
+  setFixedSize( QSize( 200, 185 ) );
+  #elif defined( __WIN__ )
+  setFixedSize( QSize( 200, 165 ) );
+  #endif
+
   addr[kParamB2_1] = addrB2_1;
   addr[kParamB1_1] = addrB1_1;
   addr[kParamB0_1] = addrB0_1;
@@ -48,42 +53,64 @@ QHighPass::QHighPass( tfilterdesign design, tfloat fc,
   dsp = ptrdsp;
 
   ui->setupUi(this);
-  ui->comboBoxType->blockSignals( true );
-  ui->comboBoxType->addItem( "Bes 6dB",  kBessel6 );
-  ui->comboBoxType->addItem( "Bes 12dB", kBessel12 );
-  ui->comboBoxType->addItem( "Bes 18dB", kBessel18 );
-  ui->comboBoxType->addItem( "Bes 24dB", kBessel24 );
-  ui->comboBoxType->addItem( "But 6dB",  kButterworth6 );
-  ui->comboBoxType->addItem( "But 12dB", kButterworth12 );
-  ui->comboBoxType->addItem( "But 18dB", kButterworth18 );
-  ui->comboBoxType->addItem( "But 24dB", kButterworth24 );
-  ui->comboBoxType->addItem( "LR 12dB",  kLinkwitzRiley12 );
-  ui->comboBoxType->addItem( "LR 24dB",  kLinkwitzRiley24 );
-  ui->comboBoxType->addItem( "LR 36dB",  kLinkwitzRiley36 );
-  ui->comboBoxType->addItem( "LR 48dB",  kLinkwitzRiley48 );
-  ui->comboBoxType->setCurrentIndex( design );
-  ui->comboBoxType->blockSignals( false );
-  ui->doubleSpinBoxFc->blockSignals( true );
-  ui->doubleSpinBoxFc->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-  ui->doubleSpinBoxFc->setValue( fc );
-  ui->doubleSpinBoxFc->blockSignals( false );
+  ui->comboBoxTypeHp->blockSignals( true );
+  ui->comboBoxTypeHp->addItem( "Bes 6dB",  kBessel6 );
+  ui->comboBoxTypeHp->addItem( "Bes 12dB", kBessel12 );
+  ui->comboBoxTypeHp->addItem( "Bes 18dB", kBessel18 );
+  ui->comboBoxTypeHp->addItem( "Bes 24dB", kBessel24 );
+  ui->comboBoxTypeHp->addItem( "But 6dB",  kButterworth6 );
+  ui->comboBoxTypeHp->addItem( "But 12dB", kButterworth12 );
+  ui->comboBoxTypeHp->addItem( "But 18dB", kButterworth18 );
+  ui->comboBoxTypeHp->addItem( "But 24dB", kButterworth24 );
+  ui->comboBoxTypeHp->addItem( "LR 12dB",  kLinkwitzRiley12 );
+  ui->comboBoxTypeHp->addItem( "LR 24dB",  kLinkwitzRiley24 );
+  ui->comboBoxTypeHp->addItem( "LR 36dB",  kLinkwitzRiley36 );
+  ui->comboBoxTypeHp->addItem( "LR 48dB",  kLinkwitzRiley48 );
+  ui->comboBoxTypeHp->setCurrentIndex( design );
+  ui->comboBoxTypeHp->blockSignals( false );
+  ui->doubleSpinBoxFcHp->blockSignals( true );
+  ui->doubleSpinBoxFcHp->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+  ui->doubleSpinBoxFcHp->setValue( fc );
+  ui->doubleSpinBoxFcHp->blockSignals( false );
 
-  bypass = isbypassed;
-  ui->pushButtonBypass->setChecked( bypass );
+  ui->comboBoxTypeLp->blockSignals( true );
+  ui->comboBoxTypeLp->addItem( "Bes 6dB",  kBessel6 );
+  ui->comboBoxTypeLp->addItem( "Bes 12dB", kBessel12 );
+  ui->comboBoxTypeLp->addItem( "Bes 18dB", kBessel18 );
+  ui->comboBoxTypeLp->addItem( "Bes 24dB", kBessel24 );
+  ui->comboBoxTypeLp->addItem( "But 6dB",  kButterworth6 );
+  ui->comboBoxTypeLp->addItem( "But 12dB", kButterworth12 );
+  ui->comboBoxTypeLp->addItem( "But 18dB", kButterworth18 );
+  ui->comboBoxTypeLp->addItem( "But 24dB", kButterworth24 );
+  ui->comboBoxTypeLp->addItem( "LR 12dB",  kLinkwitzRiley12 );
+  ui->comboBoxTypeLp->addItem( "LR 24dB",  kLinkwitzRiley24 );
+  ui->comboBoxTypeLp->addItem( "LR 36dB",  kLinkwitzRiley36 );
+  ui->comboBoxTypeLp->addItem( "LR 48dB",  kLinkwitzRiley48 );
+  ui->comboBoxTypeLp->setCurrentIndex( designLp );
+  ui->comboBoxTypeLp->blockSignals( false );
+  ui->doubleSpinBoxFcLp->blockSignals( true );
+  ui->doubleSpinBoxFcLp->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+  ui->doubleSpinBoxFcLp->setValue( fc );
+  ui->doubleSpinBoxFcLp->blockSignals( false );
+  ui->doubleSpinBoxGainLp->blockSignals( true );
+  ui->doubleSpinBoxGainLp->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+  ui->doubleSpinBoxGainLp->setValue( -10.0 );
+  ui->doubleSpinBoxGainLp->blockSignals( false );
+
+  //bypass = isbypassed;
+  //ui->pushButtonBypass->setChecked( bypass );
 }
 
-//==============================================================================
-/*!
- */
-QHighPass::~QHighPass()
+QCrossover::~QCrossover()
 {
   delete ui;
 }
 
-//==============================================================================
-/*!
+//------------------------------------------------------------------------------
+/*! \brief Updates the filter.
+ *
  */
-void QHighPass::update( tvector<tfloat> f )
+void QCrossover::update( tvector<tfloat> f )
 {
   updateCoeffs();
   tvector<tcomplex> z = exp( j * ( -2.0 * pi * f / fs ) );
@@ -109,17 +136,20 @@ void QHighPass::update( tvector<tfloat> f )
   }
 }
 
-//==============================================================================
+//------------------------------------------------------------------------------
 /*!
+ *
  */
-void QHighPass::updateCoeffs( void )
+void QCrossover::updateCoeffs( void )
 {
+  #warning Add LP coeffs
+
   for( tuint ii = 0; ii < 4; ii++ )
   {
     Q[ii] = -1.0;
     fc[ii] = -1.0;
   }
-  filterDesign = static_cast<tfilterdesign>(ui->comboBoxType->currentData().toInt());
+  filterDesign = static_cast<tfilterdesign>(ui->comboBoxTypeHp->currentData().toInt());
   
 
   for( tuint ii = 0; ii < 4; ii++ )
@@ -168,7 +198,7 @@ void QHighPass::updateCoeffs( void )
     {
     case kLinkwitzRiley12:
       Q[0] = 0.5;
-      fc[0] = ui->doubleSpinBoxFc->value();
+      fc[0] = ui->doubleSpinBoxFcHp->value();
 
       w0 = 2.0 * pi * fc[0] / fs;
       alpha = sin(w0) / (2.0 * Q[0]);
@@ -190,8 +220,8 @@ void QHighPass::updateCoeffs( void )
     case kLinkwitzRiley24:
       Q[0] = 0.71;
       Q[1] = 0.71;
-      fc[0] = ui->doubleSpinBoxFc->value();
-      fc[1] = ui->doubleSpinBoxFc->value();
+      fc[0] = ui->doubleSpinBoxFcHp->value();
+      fc[1] = ui->doubleSpinBoxFcHp->value();
 
       w0 = 2.0 * pi * fc[0] / fs;
       alpha = sin(w0) / (2.0 * Q[0]);
@@ -229,9 +259,9 @@ void QHighPass::updateCoeffs( void )
       Q[0] = 0.50;
       Q[1] = 1.00;
       Q[2] = 1.00;
-      fc[0] = ui->doubleSpinBoxFc->value();
-      fc[1] = ui->doubleSpinBoxFc->value();
-      fc[2] = ui->doubleSpinBoxFc->value();
+      fc[0] = ui->doubleSpinBoxFcHp->value();
+      fc[1] = ui->doubleSpinBoxFcHp->value();
+      fc[2] = ui->doubleSpinBoxFcHp->value();
 
       w0 = 2.0 * pi * fc[0] / fs;
       alpha = sin(w0) / (2.0 * Q[0]);
@@ -285,10 +315,10 @@ void QHighPass::updateCoeffs( void )
       Q[1] = 1.34;
       Q[2] = 0.54;
       Q[3] = 1.34;
-      fc[0] = ui->doubleSpinBoxFc->value();
-      fc[1] = ui->doubleSpinBoxFc->value();
-      fc[2] = ui->doubleSpinBoxFc->value();
-      fc[3] = ui->doubleSpinBoxFc->value();
+      fc[0] = ui->doubleSpinBoxFcHp->value();
+      fc[1] = ui->doubleSpinBoxFcHp->value();
+      fc[2] = ui->doubleSpinBoxFcHp->value();
+      fc[3] = ui->doubleSpinBoxFcHp->value();
 
       w0 = 2.0 * pi * fc[0] / fs;
       alpha = sin(w0) / (2.0 * Q[0]);
@@ -355,7 +385,7 @@ void QHighPass::updateCoeffs( void )
     case kBessel6:
       stages = 1;
       Q[0] = 0.0;
-      fc[0] = ui->doubleSpinBoxFc->value();
+      fc[0] = ui->doubleSpinBoxFcHp->value();
 
       T = 1.0/fs;
       T2 = T*T;
@@ -396,7 +426,7 @@ void QHighPass::updateCoeffs( void )
     case kBessel12:
       stages = 1;
       Q[0] = 0.577;
-      fc[0] = ui->doubleSpinBoxFc->value();
+      fc[0] = ui->doubleSpinBoxFcHp->value();
 
       Omega = 2.0*pi*fc[0]/fs;
       T = 1.0/fs;
@@ -437,8 +467,8 @@ void QHighPass::updateCoeffs( void )
       stages = 2;
       Q[0] = 0.0;
       Q[1] = 0.69;
-      fc[0] = ui->doubleSpinBoxFc->value();
-      fc[1] = ui->doubleSpinBoxFc->value();
+      fc[0] = ui->doubleSpinBoxFcHp->value();
+      fc[1] = ui->doubleSpinBoxFcHp->value();
 
       T = 1.0/fs;
       T2 = T*T;
@@ -508,8 +538,8 @@ void QHighPass::updateCoeffs( void )
       stages = 2;
       Q[0] = 0.52;
       Q[1] = 0.81;
-      fc[0] = ui->doubleSpinBoxFc->value();
-      fc[1] = ui->doubleSpinBoxFc->value();
+      fc[0] = ui->doubleSpinBoxFcHp->value();
+      fc[1] = ui->doubleSpinBoxFcHp->value();
      
       T = 1.0/fs;
       T2 = T*T;
@@ -578,7 +608,7 @@ void QHighPass::updateCoeffs( void )
     case kButterworth6:
       stages = 1;
       Q[0] = 0.0;
-      fc[0] = ui->doubleSpinBoxFc->value();
+      fc[0] = ui->doubleSpinBoxFcHp->value();
 
       T = 1.0/fs;
       T2 = T*T;
@@ -619,7 +649,7 @@ void QHighPass::updateCoeffs( void )
     case kButterworth12:
       stages = 1;
       Q[0] = 0.71;
-      fc[0] = ui->doubleSpinBoxFc->value();
+      fc[0] = ui->doubleSpinBoxFcHp->value();
 
       Omega = 2.0*pi*fc[0]/fs;
       T = 1.0/fs;
@@ -660,8 +690,8 @@ void QHighPass::updateCoeffs( void )
       stages = 2;
       Q[0] = 0.0;
       Q[1] = 1.0;
-      fc[0] = ui->doubleSpinBoxFc->value();
-      fc[1] = ui->doubleSpinBoxFc->value();
+      fc[0] = ui->doubleSpinBoxFcHp->value();
+      fc[1] = ui->doubleSpinBoxFcHp->value();
 
       T = 1.0/fs;
       T2 = T*T;
@@ -731,8 +761,8 @@ void QHighPass::updateCoeffs( void )
       stages = 2;
       Q[0] = 0.54;
       Q[1] = 1.31;
-      fc[0] = ui->doubleSpinBoxFc->value();
-      fc[1] = ui->doubleSpinBoxFc->value();
+      fc[0] = ui->doubleSpinBoxFcHp->value();
+      fc[1] = ui->doubleSpinBoxFcHp->value();
 
       T = 1.0/fs;
       T2 = T*T;
@@ -800,73 +830,36 @@ void QHighPass::updateCoeffs( void )
 
     }
 
-    
-
-    //H = ( b0 + b1*z + b2*z2 ) / ( a0 - a1*z - a2*z2 );
-    #if 0
-    for( tuint ii = 1; ii < 4; ii++ )
-    {
-      if( Q[ii] > 0.0 )
-      {
-        w0 = 2.0 * pi * fc[ii] / fs;
-        alpha = sin(w0) / (2.0 * Q[ii]);
-        a0 = 1.0 + alpha;
-        b0 = ( ( 1.0 + cos(w0) ) * 0.5 ) / a0;
-        b1 = ( -( 1.0 + cos(w0) ) ) / a0;
-        b2 = ( ( 1.0 + cos(w0) ) * 0.5 ) / a0;
-        a1 = ( -2.0 * cos(w0) ) / a0;
-        a2 = ( 1.0 - alpha ) / a0;
-        a0 = 1.0;
-        coeffs[ii*5+kB0] = b0;
-        coeffs[ii*5+kB1] = b1;
-        coeffs[ii*5+kB2] = b2;
-        coeffs[ii*5+kA1] = a1;
-        coeffs[ii*5+kA2] = a2;
-
-      }
-      else
-      {
-        b0 = 1.0;
-        b1 = 0.0;
-        b2 = 0.0;
-        a1 = 0.0;
-        a2 = 0.0;
-        a0 = 1.0;
-        coeffs[ii*5+kB0] = b0;
-        coeffs[ii*5+kB1] = b1;
-        coeffs[ii*5+kB2] = b2;
-        coeffs[ii*5+kA1] = a1;
-        coeffs[ii*5+kA2] = a2;
-      }
-    }
-    #endif
   }
 }
 
-//==============================================================================
+//------------------------------------------------------------------------------
 /*!
+ *
  */
-void QHighPass::on_doubleSpinBoxFc_valueChanged( double  )
+void QCrossover::on_doubleSpinBoxFcHp_valueChanged( double  )
 {
   updateCoeffs();
   sendDspParameter();
   emit valueChanged();
 }
 
-//==============================================================================
+//------------------------------------------------------------------------------
 /*!
+ *
  */
-void QHighPass::on_comboBoxType_currentIndexChanged( int  )
+void QCrossover::on_comboBoxTypeHp_currentIndexChanged( int  )
 {
   updateCoeffs();
   sendDspParameter();
   emit valueChanged();
 }
 
-//==============================================================================
+//------------------------------------------------------------------------------
 /*!
+ *
  */
-void QHighPass::on_pushButtonBypass_clicked()
+void QCrossover::on_pushButtonBypass_clicked()
 {
   bypass = ui->pushButtonBypass->isChecked();
   updateCoeffs();
@@ -874,10 +867,11 @@ void QHighPass::on_pushButtonBypass_clicked()
   emit valueChanged();
 }
 
-//==============================================================================
+//------------------------------------------------------------------------------
 /*!
+ *
  */
-void QHighPass::sendDspParameter( void )
+void QCrossover::sendDspParameter( void )
 {
   dsp->sendParameter( addr[kParamB2_1], static_cast<float>(coeffs[kB2]) );
   dsp->sendParameter( addr[kParamB1_1], static_cast<float>(coeffs[kB1]) );
@@ -904,18 +898,20 @@ void QHighPass::sendDspParameter( void )
   dsp->sendParameter( addr[kParamA1_4], static_cast<float>(coeffs[3*5+kA1]) );
 }
 
-//==============================================================================
+//------------------------------------------------------------------------------
 /*!
+ *
  */
-uint32_t QHighPass::getNumBytes( void )
+uint32_t QCrossover::getNumBytes( void )
 {
   return 2*5*4 + 4*5*4;
 }
 
-//==============================================================================
+//------------------------------------------------------------------------------
 /*!
+ *
  */
-void QHighPass::writeDspParameter( void )
+void QCrossover::writeDspParameter( void )
 {
   dsp->storeRegAddr( addr[kParamB2_1] );
   dsp->storeValue( static_cast<float>(coeffs[kB2]) );
@@ -960,13 +956,4 @@ void QHighPass::writeDspParameter( void )
   dsp->storeValue( static_cast<float>(coeffs[3*5+kA2]) );
   dsp->storeRegAddr( addr[kParamA1_4] );
   dsp->storeValue( static_cast<float>(coeffs[3*5+kA1]) );
-}
-
-//==============================================================================
-/*!
- */
-void QHighPass::setName( QString newname )
-{
-  ui->label->setText( newname );
-  name = newname;
 }

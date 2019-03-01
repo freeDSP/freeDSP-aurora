@@ -16,6 +16,7 @@
 #include "QLowShelv.hpp"
 #include "QHighShelv.hpp"
 #include "QInputSelect.hpp"
+#include "QOutputSelect.hpp"
 #include "dialoglicense.hpp"
 
 #include "vektorraum.h"

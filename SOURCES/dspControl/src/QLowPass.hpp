@@ -21,10 +21,6 @@ class QLowPass : public QDspBlock
 public:
   enum tfilterdesign
   {
-    kLinkwitzRiley12 = 0,
-    kLinkwitzRiley24,
-    kLinkwitzRiley36,
-    kLinkwitzRiley48,
     kBessel6,
     kBessel12,
     kBessel18,
@@ -32,7 +28,11 @@ public:
     kButterworth6,
     kButterworth12,
     kButterworth18,
-    kButterworth24
+    kButterworth24,
+    kLinkwitzRiley12,
+    kLinkwitzRiley24,
+    kLinkwitzRiley36,
+    kLinkwitzRiley48
   };
 
 private:
