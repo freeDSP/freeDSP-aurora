@@ -1,5 +1,5 @@
-#ifndef QPLUGINHOMECINEMA71_H
-#define QPLUGINHOMECINEMA71_H
+#ifndef QPLUGIN4FIRS_H
+#define QPLUGIN4FIRS_H
 
 #include <QWidget>
 #include <QHBoxLayout>
@@ -12,18 +12,18 @@
 
 #include "8channels_IC_1_PARAM.h"
 
-class CPlugInHomeCinema71 : public CDspPlugin
+class CPlugIn4FIRs : public CDspPlugin
 {
 
 public:
-  explicit CPlugInHomeCinema71( Vektorraum::tfloat samplerate );
-  ~CPlugInHomeCinema71( void );
+  explicit CPlugIn4FIRs( Vektorraum::tfloat samplerate );
+  ~CPlugIn4FIRs( void );
 
   //============================================================================
   /*!
    *
    */
-  unsigned int getNumChannels( void ) { return 8; }
+  unsigned int getNumChannels( void ) { return 4; }
 
   //============================================================================
   /*!
@@ -38,21 +38,13 @@ public:
   virtual QString getChannelName( unsigned int channel )
   {
     if( channel == 0 )
-      return QString( "Front Left" );
+      return QString( "Channel 1" );
     else if( channel == 1 )
-      return QString( "Front Right" );
+      return QString( "Channel 2" );
     else if( channel == 2 )
-      return QString( "Front Center" );
+      return QString( "Channel 3" );
     else if( channel == 3 )
-      return QString( "Rear Left" );
-    else if( channel == 4 )
-      return QString( "Rear Right" );
-    else if( channel == 5 )
-      return QString( "Side Left" );
-    else if( channel == 6 )
-      return QString( "Side Right" );
-    else if( channel == 7 )
-      return QString( "LFE" );
+      return QString( "Channel 4" );
     else
       return QString( "" );
   }
@@ -62,6 +54,8 @@ public:
   // Member Variables
   //
   //============================================================================
+private:
+  unsigned int NFFT;
 
 };
 

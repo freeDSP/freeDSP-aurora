@@ -55,7 +55,7 @@ private:
 
   Vektorraum::tvector<Vektorraum::tfloat> freq;
   Vektorraum::tfloat fs = 48000.0;
-  int numChannels;
+  unsigned int numChannels;
 
   CFreeDspAurora dsp;
 

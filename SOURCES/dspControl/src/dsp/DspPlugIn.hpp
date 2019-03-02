@@ -4,6 +4,8 @@
 #include <QHBoxLayout>
 #include <QString>
 
+#include "vektorraum.h"
+
 #include "QChannel.hpp"
 #include "QGain.hpp"
 
@@ -28,13 +30,29 @@ public:
     
   }
 
+  //============================================================================
+  /*!
+   *
+   */
+  Vektorraum::tvector<Vektorraum::tfloat> getFrequencyVector( void )
+  {
+    return freq;
+  }
+
   void setDoSummation( bool yesno ) { flagSummation = yesno; } 
 
   bool doSummation( void ) { return flagSummation; }
 
-  virtual QString getChannelName( int channel ) = 0;
+  virtual QString getChannelName( unsigned int channel ) = 0;
 
+  //============================================================================
+  //
+  // Member Variables
+  //
+  //============================================================================
 protected:
+  Vektorraum::tvector<Vektorraum::tfloat> freq;
+  Vektorraum::tfloat fs;
   bool flagSummation;
 
 private:

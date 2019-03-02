@@ -15,6 +15,7 @@
 
 #include "PlugIn8Channels.hpp"
 #include "PlugInHomeCinema71.hpp"
+#include "PlugIn4FIRs.hpp"
 
 #define VERSION_STR "0.9.2"
 #define FS 48000.0
@@ -36,8 +37,9 @@ QColor colorPlot[kMaxPlotColors] = { QColor(  81, 158, 228 ),
 
 QVolumeSlider* sliderMainVolume;
 
-CPlugIn8Channels plugin8Channels;
-CPlugInHomeCinema71 pluginHomeCinema71;
+CPlugIn8Channels plugin8Channels( FS );
+CPlugInHomeCinema71 pluginHomeCinema71( FS );
+CPlugIn4FIRs plugin4FIRs( FS );
 
 CDspPlugin* dspPlugin;
 
@@ -59,7 +61,7 @@ MainWindow::MainWindow(QWidget *parent) :
   #if defined( DEMO )
   setWindowTitle( QString("dspControl DEMO ").append( VERSION_STR ) );
 
-  QStringList itemList( {"8channels", "Home Cinema 7.1"} );
+  QStringList itemList( {"8channels", "Home Cinema 7.1", "4 FIRs"} );
   QDialogDemoSelector dialog( "Please select the plugin for demo: ", itemList );
   if( dialog.exec() == QDialog::Accepted )
   {
@@ -67,7 +69,7 @@ MainWindow::MainWindow(QWidget *parent) :
     {
       qDebug()<<"Loading plugin 8channels";
       numChannels = plugin8Channels.getNumChannels();
-      for( int n = 0; n < numChannels; n++ )
+      for( unsigned int n = 0; n < numChannels; n++ )
       {
         tDspChannel dspChannel = plugin8Channels.getGuiForChannel( n, FS, &dsp, this );
         listOutputGains.append( dspChannel.gain );
@@ -86,7 +88,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
         dspChannel.channel->widgetChannel->setLayout( dspChannel.layout );
 
-        for( int chn = 0; chn < numChannels; chn++ )
+        for( unsigned int chn = 0; chn < numChannels; chn++ )
         {
           QAction* action = new QAction( "Show " + plugin8Channels.getChannelName( chn ) );
           action->setCheckable( true );
@@ -102,7 +104,7 @@ MainWindow::MainWindow(QWidget *parent) :
     {
       qDebug()<<"Loading plugin Home Cinema 7.1";
       numChannels = pluginHomeCinema71.getNumChannels();
-      for( int n = 0; n < numChannels; n++ )
+      for( unsigned int n = 0; n < numChannels; n++ )
       {
         tDspChannel dspChannel = pluginHomeCinema71.getGuiForChannel( n, FS, &dsp, this );
         listOutputGains.append( dspChannel.gain );
@@ -121,7 +123,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
         dspChannel.channel->widgetChannel->setLayout( dspChannel.layout );
 
-        for( int chn = 0; chn < numChannels; chn++ )
+        for( unsigned int chn = 0; chn < numChannels; chn++ )
         {
           QAction* action = new QAction( "Show " + pluginHomeCinema71.getChannelName( chn ) );
           action->setCheckable( true );
@@ -133,6 +135,41 @@ MainWindow::MainWindow(QWidget *parent) :
       }
       dspPlugin = &pluginHomeCinema71;
     }
+    else if( dialog.comboBox()->currentText() == QString("4 FIRs") )
+    {
+      qDebug()<<"Loading plugin 4 FIRs";
+      numChannels = plugin4FIRs.getNumChannels();
+      for( unsigned int n = 0; n < numChannels; n++ )
+      {
+        tDspChannel dspChannel = plugin4FIRs.getGuiForChannel( n, FS, &dsp, this );
+        listOutputGains.append( dspChannel.gain );
+
+        ui->tabChannels->addTab( dspChannel.channel, "" );
+        lbl1 = new QLabel();
+        lbl1->setText( dspChannel.name );
+        lbl1->setStyleSheet( QString("background-color: transparent; border: 0px solid black; border-left: 2px solid ") + colorPlot[n%kMaxPlotColors].name() + QString("; color: white; ") );
+        lbl1->setFixedWidth( 100 );
+        ui->tabChannels->tabBar()->setTabButton( n, QTabBar::LeftSide, lbl1 );
+
+        dspChannel.layout->setSpacing( 0 );
+        dspChannel.layout->setMargin( 0 );
+        dspChannel.layout->setContentsMargins( 0, 0, 0, 0 );
+        dspChannel.layout->setAlignment( Qt::AlignLeft );
+
+        dspChannel.channel->widgetChannel->setLayout( dspChannel.layout );
+
+        for( unsigned int chn = 0; chn < numChannels; chn++ )
+        {
+          QAction* action = new QAction( "Show " + plugin4FIRs.getChannelName( chn ) );
+          action->setCheckable( true );
+          dspChannel.channel->actionsContextMenu.append( action );
+          dspChannel.channel->contextMenu.addAction( action );
+        }
+        dspChannel.channel->actionsContextMenu.at(n)->setChecked( true );
+        connect( dspChannel.channel, SIGNAL(selectionChanged()), this, SLOT(updatePlots()) );
+      }
+      dspPlugin = &plugin4FIRs;
+    }
     
   }
 
@@ -140,82 +177,8 @@ MainWindow::MainWindow(QWidget *parent) :
   setWindowTitle( "dspControl " + VERSION_STR );
   #endif
 
-  //----------------------------------------------------------------------------
-  //--- Init frequency vector
-  //----------------------------------------------------------------------------
-  tuint n = 0;
-  tfloat pointsperdecade = 100.0;
-  tfloat fstart = 1.0;
-  tfloat fstop = 20000.0;
+  freq = dspPlugin->getFrequencyVector();
 
-  for( tfloat k = 1.0; k < 10.0; k = k + 10.0/pointsperdecade )
-  {
-    if( (k >= fstart) && (k <= fstop) )
-      n++;
-  }
-  for( tfloat k = 10.0; k < 100.0; k = k + 100.0/pointsperdecade )
-  {
-    if( (k >= fstart) && (k <= fstop) )
-      n++;
-  }
-  for( tfloat k = 100.0; k < 1000.0; k = k + 1000.0/pointsperdecade )
-  {
-    if( (k >= fstart) && (k <= fstop) )
-      n++;
-  }
-  for( tfloat k = 1000.0; k < 10000.0; k = k + 10000.0/pointsperdecade )
-  {
-    if( (k >= fstart) && (k <= fstop) )
-      n++;
-  }
-  for( tfloat k = 10000.0; k < 20001.0; k = k + 100000.0/pointsperdecade )
-  {
-    if( (k >= fstart) && (k <= fstop) )
-      n++;
-  }
-
-  tvector<tfloat> f( n );
-  n = 0;
-  for( tfloat k = 1.0; k < 10.0; k = k + 10.0/pointsperdecade )
-  {
-    if( (k >= fstart) && (k <= fstop) )
-    {
-      f[n] = k;
-      n++;
-    }
-  }
-  for( tfloat k = 10.0; k < 100.0; k = k + 100.0/pointsperdecade )
-  {
-    if( (k >= fstart) && (k <= fstop) )
-    {
-      f[n] = k;
-      n++;
-    }
-  }
-  for( tfloat k = 100.0; k < 1000.0; k = k + 1000.0/pointsperdecade )
-  {
-    if( (k >= fstart) && (k <= fstop) ) {
-      f[n] = k;
-      n++;
-    }
-  }
-  for( tfloat k = 1000.0; k < 10000.0; k = k + 10000.0/pointsperdecade )
-  {
-    if( (k >= fstart) && (k <= fstop) )
-    {
-      f[n] = k;
-      n++;
-    }
-  }
-  for( tfloat k = 10000.0; k < 20001.0; k = k + 100000.0/pointsperdecade )
-  {
-    if( (k >= fstart) && (k <= fstop) )
-    {
-      f[n] = k;
-      n++;
-    }
-  }
-  freq = f;
   //tvector<tcomplex> H;
 
   updatePlots();
@@ -263,7 +226,7 @@ void MainWindow::updatePlots( void )
     if( channel != nullptr )
     {
       channel->update( freq );
-      tvector<tcomplex> H = channel->getTransferFunction();
+      //tvector<tcomplex> H = channel->getTransferFunction();
       //channel->figVoltageMagnitude->semilogx( freq, 20.0 * log10( abs( H ) ), Qt::white, 2 );
     }
   }
@@ -277,7 +240,7 @@ void MainWindow::updatePlots( void )
       currentChannel->figVoltageMagnitude->clear();
       currentChannel->figVoltageMagnitude->holdon();
 
-      for( int ii = 0; ii < numChannels; ii++ )
+      for( unsigned int ii = 0; ii < numChannels; ii++ )
       {
         if( currentChannel->actionsContextMenu.at(ii)->isChecked() )
         {

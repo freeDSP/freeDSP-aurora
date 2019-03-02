@@ -1,6 +1,8 @@
 #ifndef QFIGURE_H
 #define QFIGURE_H
 
+#include <limits>
+
 #include <QtGui>
 #include <QWidget>
 #include <QtMath>
@@ -351,6 +353,8 @@ private:
 
   qreal xlog( qreal x, qreal width )
   {
+    if( x <= 0 )
+      x = std::numeric_limits<double>::epsilon();
     qreal xvalue = ( std::log10(x) - std::log10(xaxismin) );
     xvalue /= std::log10(xaxismax) - std::log10(xaxismin);
     xvalue *= width;

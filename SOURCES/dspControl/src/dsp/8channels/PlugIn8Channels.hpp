@@ -16,26 +16,26 @@ class CPlugIn8Channels : public CDspPlugin
 {
 
 public:
-  explicit CPlugIn8Channels( void );
+  explicit CPlugIn8Channels( Vektorraum::tfloat samplerate );
   ~CPlugIn8Channels( void );
 
   //============================================================================
   /*!
    *
    */
-  int getNumChannels( void ) { return 8; }
+  unsigned int getNumChannels( void ) { return 8; }
 
   //============================================================================
   /*!
    *
    */
-  tDspChannel getGuiForChannel( int chn, Vektorraum::tfloat fs, CFreeDspAurora* ptrdsp, QWidget* parent );
+  tDspChannel getGuiForChannel( unsigned int chn, Vektorraum::tfloat fs, CFreeDspAurora* ptrdsp, QWidget* parent );
 
   //============================================================================
   /*!
    *
    */
-  virtual QString getChannelName( int channel )
+  virtual QString getChannelName( unsigned int channel )
   {
     if( channel == 0 )
       return QString( "Channel 1" );
@@ -53,7 +53,15 @@ public:
       return QString( "Channel 7" );
     else if( channel == 7 )
       return QString( "Channel 8" );
+    else
+      return QString( "" );
   }
+
+  //============================================================================
+  //
+  // Member Variables
+  //
+  //============================================================================
 
 };
 

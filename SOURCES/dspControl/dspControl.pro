@@ -34,6 +34,7 @@ INCLUDEPATH += src \
                src/figure \
                src/dsp \
                src/dsp/8channels \
+               src/dsp/4FIRs \
                src/dsp/HomeCinema71
 
 SOURCES += \
@@ -58,7 +59,9 @@ SOURCES += \
         src/QCrossover.cpp \
         src/DialogSettings.cpp \
         src/QVolumeSlider.cpp \
+        src/QFir.cpp \
         src/dsp/8channels/PlugIn8Channels.cpp \
+        src/dsp/4FIRs/PlugIn4FIRs.cpp \
         src/dsp/HomeCinema71/PlugInHomeCinema71.cpp
 
 HEADERS += \
@@ -83,8 +86,10 @@ HEADERS += \
         src/QOutputSelect.hpp \
         src/DialogSettings.hpp \
         src/QVolumeSlider.hpp \
+        src/QFir.hpp \
         src/dsp/8channels/PlugIn8Channels.hpp \
         src/dsp/HomeCinema71/PlugInHomeCinema71.hpp \
+        src/dsp/4FIRs/PlugIn4FIRs.hpp \
         src/QDialogDemoSelector.hpp \
         src/dsp/DspPlugIn.hpp
 
@@ -104,6 +109,7 @@ FORMS += \
         src/dialoglicense.ui \
         src/QInputSelect.ui \
         src/QOutputSelect.ui \
+        src/QFir.ui \
         src/DialogSettings.ui
 
 # Default rules for deployment.
@@ -129,9 +135,11 @@ macx {
 
   DEFINES += __MACOSX__
   DEFINES += MATLIB_USE_UINT64
-  DEFINES += __NOFFT__
   DEFINES += __NOSNDFILE__
+  DEFINES += USE_APPLEVDSP
   DEFINES += DEMO
+
+  LIBS += -framework CoreFoundation -framework Accelerate
 
   ICON = $${PWD}/rc/appicon.icns
 

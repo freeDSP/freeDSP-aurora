@@ -54,8 +54,8 @@ void QGain::update( tvector<tfloat> f )
  */
 void QGain::on_doubleSpinBoxGain_valueChanged( double )
 {
-  emit valueChanged();
   sendDspParameter();
+  emit valueChanged();
 }
 
 //------------------------------------------------------------------------------

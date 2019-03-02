@@ -173,7 +173,7 @@ QScrollArea
 /* -------------------------------------------------------------------------- */
 QAbstractScrollArea
 {
-  background-color: transparent;
+  background-color: green; /*transparent;*/
   border: 0px solid #c1c1c1;
   border-radius: 2px;
 }
@@ -315,6 +315,10 @@ QToolButton:hover
 /* QWidget                                                                    */
 /* -------------------------------------------------------------------------- */
 QWidget#centralWidget
+{
+  background-color: #111111;
+}
+QWidget#widgetChannel
 {
   background-color: #111111;
 }
