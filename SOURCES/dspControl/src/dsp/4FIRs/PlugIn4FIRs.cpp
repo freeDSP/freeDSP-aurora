@@ -18,6 +18,8 @@
 #include "QCrossover.hpp"
 #include "QFir.hpp"
 
+#include "4FIRs_IC_1_PARAM.h"
+
 using namespace Vektorraum;
 
 //==============================================================================
@@ -84,7 +86,7 @@ tDspChannel CPlugIn4FIRs::getGuiForChannel( unsigned int chn, tfloat fs, CFreeDs
     layout->addWidget( input );
     channel->addDspBlock( input );
 
-    fir = new QFir( 0, NFFT, ptrdsp );
+    fir = new QFir( MOD_FIR1_ALG0_FIRSIGMA300ALG1FIRCOEFF0_ADDR, NFFT, ptrdsp );
     layout->addWidget( fir );
     channel->addDspBlock( fir );
 
@@ -204,7 +206,7 @@ tDspChannel CPlugIn4FIRs::getGuiForChannel( unsigned int chn, tfloat fs, CFreeDs
     layout->addWidget( input );
     channel->addDspBlock( input );
 
-    fir = new QFir( 0, NFFT, ptrdsp );
+    fir = new QFir( MOD_FIR2_ALG0_FIRSIGMA300ALG2FIRCOEFF0_ADDR, NFFT, ptrdsp );
     layout->addWidget( fir );
     channel->addDspBlock( fir );
 
@@ -324,7 +326,7 @@ tDspChannel CPlugIn4FIRs::getGuiForChannel( unsigned int chn, tfloat fs, CFreeDs
     layout->addWidget( input );
     channel->addDspBlock( input );
 
-    fir = new QFir( 0, NFFT, ptrdsp );
+    fir = new QFir( MOD_FIR3_ALG0_FIRSIGMA300ALG3FIRCOEFF0_ADDR, NFFT, ptrdsp );
     layout->addWidget( fir );
     channel->addDspBlock( fir );
 
@@ -444,7 +446,7 @@ tDspChannel CPlugIn4FIRs::getGuiForChannel( unsigned int chn, tfloat fs, CFreeDs
     layout->addWidget( input );
     channel->addDspBlock( input );
 
-    fir = new QFir( 0, NFFT, ptrdsp );
+    fir = new QFir( MOD_FIR4_ALG0_FIRSIGMA300ALG4FIRCOEFF0_ADDR, NFFT, ptrdsp );
     layout->addWidget( fir );
     channel->addDspBlock( fir );
 
