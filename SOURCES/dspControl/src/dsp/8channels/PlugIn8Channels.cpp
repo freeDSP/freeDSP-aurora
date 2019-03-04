@@ -315,6 +315,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     QObject::connect( phase,  SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( dly,    SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( gain,   SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
+    QObject::connect( output, SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
   }
   else if( chn == 1 )
   {
@@ -487,6 +488,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     QObject::connect( phase,  SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( dly,    SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( gain,   SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
+    QObject::connect( output, SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
   }
   else if( chn == 2 )
   {
@@ -659,6 +661,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     QObject::connect( phase,  SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( dly,    SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( gain,   SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
+    QObject::connect( output, SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
   }
   else if( chn == 3 )
   {
@@ -831,6 +834,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     QObject::connect( phase,  SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( dly,    SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( gain,   SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
+    QObject::connect( output, SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
   }
   else if( chn == 4 )
   {
@@ -1003,6 +1007,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     QObject::connect( phase,  SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( dly,    SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( gain,   SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
+    QObject::connect( output, SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
   }
   else if( chn == 5 )
   {
@@ -1175,6 +1180,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     QObject::connect( phase,  SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( dly,    SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( gain,   SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
+    QObject::connect( output, SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
   }
   else if( chn == 6 )
   {
@@ -1347,6 +1353,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     QObject::connect( phase,  SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( dly,    SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( gain,   SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
+    QObject::connect( output, SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
   }
   else if( chn == 7 )
   {
@@ -1519,6 +1526,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     QObject::connect( phase,  SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( dly,    SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( gain,   SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
+    QObject::connect( output, SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
   }
 
 

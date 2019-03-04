@@ -195,6 +195,7 @@ tDspChannel CPlugIn4FIRs::getGuiForChannel( unsigned int chn, tfloat fs, CFreeDs
     QObject::connect( peq10,  SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( dly,    SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( gain,   SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
+    QObject::connect( output, SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
   }
   else if( chn == 1 )
   {
@@ -315,6 +316,7 @@ tDspChannel CPlugIn4FIRs::getGuiForChannel( unsigned int chn, tfloat fs, CFreeDs
     QObject::connect( peq10,  SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( dly,    SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( gain,   SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
+    QObject::connect( output, SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
   }
   else if( chn == 2 )
   {
@@ -435,6 +437,7 @@ tDspChannel CPlugIn4FIRs::getGuiForChannel( unsigned int chn, tfloat fs, CFreeDs
     QObject::connect( peq10,  SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( dly,    SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( gain,   SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
+    QObject::connect( output, SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
   }
   else if( chn == 3 )
   {
@@ -555,6 +558,7 @@ tDspChannel CPlugIn4FIRs::getGuiForChannel( unsigned int chn, tfloat fs, CFreeDs
     QObject::connect( peq10,  SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( dly,    SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( gain,   SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
+    QObject::connect( output, SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
   }
 
   dspChannel.layout = layout;

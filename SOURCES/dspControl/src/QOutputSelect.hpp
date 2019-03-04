@@ -51,6 +51,11 @@ private:
 
   uint16_t addr[kNumParams];
   CFreeDspAurora* dsp;
+  QString fileName;
+
+  Vektorraum::tvector<Vektorraum::tfloat> freq;
+  Vektorraum::tvector<Vektorraum::tcomplex> FR;
+  Vektorraum::tfloat refSpl;
 };
 
 #endif // QOUTPUTSELECT_HPP

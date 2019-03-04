@@ -302,6 +302,7 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     QObject::connect( phase,  SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( dly,    SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( gain,   SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
+    QObject::connect( output, SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
   }
   else if( chn == 1 )
   {
@@ -459,6 +460,7 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     QObject::connect( phase,  SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( dly,    SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( gain,   SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
+    QObject::connect( output, SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
   }
   else if( chn == 2 )
   {
@@ -616,6 +618,7 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     QObject::connect( phase,  SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( dly,    SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( gain,   SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
+    QObject::connect( output, SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
   }
   else if( chn == 3 )
   {
@@ -773,6 +776,7 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     QObject::connect( phase,  SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( dly,    SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( gain,   SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
+    QObject::connect( output, SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
   }
   else if( chn == 4 )
   {
@@ -930,6 +934,7 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     QObject::connect( phase,  SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( dly,    SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( gain,   SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
+    QObject::connect( output, SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
   }
   else if( chn == 5 )
   {
@@ -1087,6 +1092,7 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     QObject::connect( phase,  SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( dly,    SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( gain,   SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
+    QObject::connect( output, SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
   }
   else if( chn == 6 )
   {
@@ -1244,6 +1250,7 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     QObject::connect( phase,  SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( dly,    SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( gain,   SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
+    QObject::connect( output, SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
   }
   else if( chn == 7 )
   {
@@ -1417,6 +1424,7 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     QObject::connect( phase,  SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( dly,    SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( gain,   SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
+    QObject::connect( output, SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
   }
 
 

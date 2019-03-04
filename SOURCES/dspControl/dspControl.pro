@@ -23,11 +23,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 macx {
-include(/Users/rkn/Documents/C++/lavinia/Source/matlib/vektorraum.pri)
+include(./vektorraum/vektorraum.pri)
 }
 
 win32 {
-include(C:\matlib\vektorraum.pri)
+include(vektorraum\vektorraum.pri)
 }
 
 INCLUDEPATH += src \

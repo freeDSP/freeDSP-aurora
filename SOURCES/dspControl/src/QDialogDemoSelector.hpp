@@ -34,7 +34,6 @@ public:
 
 private:
   QComboBox* comboboxPlugins;
-  QPushButton* pushButtonOk;
 };
 
 #endif

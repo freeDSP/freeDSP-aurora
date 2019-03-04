@@ -3,6 +3,8 @@
 #include <QStandardItemModel>
 #include <QFileDialog>
 #include <QStandardPaths>
+#include <QString>
+#include <QMessageBox>
 
 #include "QOutputSelect.hpp"
 #include "ui_QOutputSelect.h"
@@ -18,6 +20,9 @@ QOutputSelect::QOutputSelect( uint32_t selection, uint16_t outputaddr, CFreeDspA
   ui->setupUi(this);
 
   ui->lineEditResponseFile->installEventFilter( this );
+
+  fileName = "";
+  refSpl = 80.0;
 
   //QListView * listView = new QListView(ui->comboBoxInput );
 
@@ -58,8 +63,22 @@ QOutputSelect::~QOutputSelect()
 void QOutputSelect::update( tvector<tfloat> f )
 {
   H = tvector<tcomplex>( length(f) );
-  for( tuint ii = 0; ii < length(f); ii++ )
-    H[ii] = 1.0;
+
+  if( fileName.isEmpty() )
+  {
+    for( tuint ii = 0; ii < length(f); ii++ )
+      H[ii] = 1.0;
+  }
+  else
+  {
+    tvector<tfloat> magt = abs( FR );
+    tvector<tfloat> phit = angle( FR );
+
+    tvector<tfloat> mag = interp1( freq, magt, f, "spline" );
+    tvector<tfloat> phi = interp1( freq, phit, f, "spline" );
+
+    H = mag * exp( j*phi );
+  }
 }
 
 //------------------------------------------------------------------------------
@@ -110,9 +129,72 @@ bool QOutputSelect::eventFilter( QObject* object, QEvent* event )
 {
   if( object == ui->lineEditResponseFile && event->type() == QEvent::MouseButtonDblClick )
   {
-    QString fileName = QFileDialog::getOpenFileName( this, tr("Open Frequency Response"), 
-                                                     QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory),
-                                                     tr("FRD Files (*.frd)") );
+    fileName = QFileDialog::getOpenFileName( this, tr("Open Frequency Response"), 
+                                             QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory),
+                                             tr("FRD Files (*.frd)") );
+
+    if( !fileName.isEmpty() )
+    {
+      QFile fileFRD( fileName );
+      QFileInfo infoFRD( fileFRD );
+
+      if( (!fileFRD.exists()) || (QString::compare( infoFRD.suffix(), "frd", Qt::CaseInsensitive) != 0) )
+      {
+        QMessageBox::critical( this, tr("Loading file failed"),
+                                     tr("You did not select a valid frequency response file. File will be ignored. Sorry."),
+                                     QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton );
+        fileName = "";
+      }
+      else 
+      {
+        unsigned int idx = 0;
+        if( fileFRD.open( QIODevice::ReadOnly ) ) 
+        {
+          QTextStream in( &fileFRD );
+          while( !in.atEnd() ) 
+          {
+            QString line = in.readLine();
+            line = line.simplified();
+            QStringList values = line.split( ' ' );
+            bool flagNumber;
+            tfloat num = values.value(0).toDouble( &flagNumber );
+            if( flagNumber ) 
+              idx++;
+          }
+          fileFRD.close();
+        }
+
+        freq = tvector<tfloat>( idx );
+        FR = tvector<tcomplex>( idx );
+        idx = 0;
+        if( fileFRD.open( QIODevice::ReadOnly ) ) 
+        {
+          QTextStream in( &fileFRD );
+          while( !in.atEnd() ) 
+          {
+            QString line = in.readLine();
+            line = line.simplified();
+            QStringList values = line.split( ' ' );
+            bool flagNumber;
+            tfloat frq = values.value(0).toDouble( &flagNumber );
+            tfloat mag = values.value(1).toDouble();
+            tfloat phi = values.value(2).toDouble();
+            if( flagNumber ) 
+            {
+              freq[idx] = frq;
+              FR[idx] = std::pow( 10.0, mag/20.0 ) * std::exp( j*phi*pi/180.0 ) / std::pow( 10.0, refSpl/20.0 );
+              idx++;
+            }
+          }
+          fileFRD.close();
+        }
+        ui->lineEditResponseFile->blockSignals( true );
+        QFileInfo fileInfo( fileFRD.fileName() );
+        ui->lineEditResponseFile->setText( fileInfo.fileName() );
+        ui->lineEditResponseFile->blockSignals( false );
+      }      
+    }
+    emit valueChanged();
     return true;
   }
   return false;
