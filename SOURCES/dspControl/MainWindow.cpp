@@ -4,6 +4,8 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QDialog>
+#include <QFileDialog>
+#include <QMessageBox>
 
 #include "MainWindow.hpp"
 #include "ui_MainWindow.h"
@@ -370,4 +372,63 @@ void MainWindow::on_volumeSliderMain_valueChanged( double val )
 {
   for( int ii = 0; ii < listOutputGains.size(); ii++ )
     listOutputGains.at(ii)->sendDspParameter();
+}
+
+//==============================================================================
+/*!
+ */
+void MainWindow::importRewPeqs( QWidget* sender )
+{
+  qDebug()<<"MainWindow::Importing REW PEQs";
+  QPeq* peq = static_cast<QPeq*>(sender);
+  QChannel* chn = peq->getChannel();
+  qDebug()<<"Channel Name"<<chn->getName();
+
+  QString fileName = QFileDialog::getOpenFileName( this, tr("Open REW export file"), 
+                                                     QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory),
+                                                     tr("REW Files (*.txt)") );
+  QFile rewFile( fileName );
+  if( rewFile.open(QIODevice::ReadOnly) )
+  {
+    QVector<QPeq*> peqs = chn->getPeqs();
+    for( int ii = 0; ii < peqs.size(); ii++ )
+      peqs.at(ii)->setParameters( 1000.0, 0.0, 1.0 );
+
+    QTextStream in( &rewFile );
+    QString line = in.readLine();
+    int idx = 0;
+    while (!in.atEnd())
+    {
+      QString line = in.readLine();
+      line = line.simplified();
+      QStringList values = line.split( ' ' );
+      if( values.value(0) == QString( "Filter") )
+      {
+        if( (values.value(2) == QString( "ON")) && (values.value(3) == QString( "PK")) )
+        {
+          qDebug()<<values.value(0)<<values.value(1)<<values.value(2)<<values.value(3);
+          QString str = values.value(5);
+          str.replace( ".", "" );
+          str.replace( ",", "." );
+          tfloat fc = str.toDouble();
+          str = values.value(8);
+          str.replace( ".", "" );
+          str.replace( ",", "." );
+          tfloat V0 = str.toDouble();
+          str = values.value(11);
+          str.replace( ".", "" );
+          str.replace( ",", "." );
+          tfloat Q = str.toDouble();
+          peqs.at(idx)->setParameters( fc, V0, Q );
+          idx++;
+        }
+      }
+    }
+    qDebug()<<"Closing file";
+    rewFile.close();
+  }
+  else
+    QMessageBox::critical( this, tr("Loading file failed"),
+                                     tr("I could not open your file. I am sorry."),
+                                     QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton );
 }

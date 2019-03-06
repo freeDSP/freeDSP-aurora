@@ -155,6 +155,7 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     input = new QInputSelect( 0, MOD_NX1_1_1_MONOMUXSIGMA300NS1INDEX_ADDR, ptrdsp );
     layout->addWidget( input );
     channel->addDspBlock( input );
+    channel->setName( dspChannel.name );
 
     lshelv = new QLowShelv( 0.0, 100.0, 1.0,
                             MOD_LOWSHELV1_ALG0_STAGE0_B2_ADDR, MOD_LOWSHELV1_ALG0_STAGE0_B1_ADDR, MOD_LOWSHELV1_ALG0_STAGE0_B0_ADDR,
@@ -165,82 +166,92 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     channel->addDspBlock( lshelv );
 
     peq01 = new QPeq( 0.0, 1000.0, 1.0,
-                  MOD_PARAMEQ1_ALG0_STAGE0_B2_ADDR, MOD_PARAMEQ1_ALG0_STAGE0_B1_ADDR, MOD_PARAMEQ1_ALG0_STAGE0_B0_ADDR,
-                  MOD_PARAMEQ1_ALG0_STAGE0_A2_ADDR, MOD_PARAMEQ1_ALG0_STAGE0_A1_ADDR,
-                  fs,
-                  ptrdsp );
+                      MOD_PARAMEQ1_ALG0_STAGE0_B2_ADDR, MOD_PARAMEQ1_ALG0_STAGE0_B1_ADDR, MOD_PARAMEQ1_ALG0_STAGE0_B0_ADDR,
+                      MOD_PARAMEQ1_ALG0_STAGE0_A2_ADDR, MOD_PARAMEQ1_ALG0_STAGE0_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq01 );
     channel->addDspBlock( peq01 );
 
     peq02 = new QPeq( 0.0, 2000.0, 2.0,
-                    MOD_PARAMEQ1_ALG0_STAGE1_B2_ADDR, MOD_PARAMEQ1_ALG0_STAGE1_B1_ADDR, MOD_PARAMEQ1_ALG0_STAGE1_B0_ADDR,
-                    MOD_PARAMEQ1_ALG0_STAGE1_A2_ADDR, MOD_PARAMEQ1_ALG0_STAGE1_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ1_ALG0_STAGE1_B2_ADDR, MOD_PARAMEQ1_ALG0_STAGE1_B1_ADDR, MOD_PARAMEQ1_ALG0_STAGE1_B0_ADDR,
+                      MOD_PARAMEQ1_ALG0_STAGE1_A2_ADDR, MOD_PARAMEQ1_ALG0_STAGE1_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq02 );
     channel->addDspBlock( peq02 );
 
     peq03 = new QPeq( 0.0, 3000.0, 2.0,
-                    MOD_PARAMEQ1_ALG0_STAGE2_B2_ADDR, MOD_PARAMEQ1_ALG0_STAGE2_B1_ADDR, MOD_PARAMEQ1_ALG0_STAGE2_B0_ADDR,
-                    MOD_PARAMEQ1_ALG0_STAGE2_A2_ADDR, MOD_PARAMEQ1_ALG0_STAGE2_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ1_ALG0_STAGE2_B2_ADDR, MOD_PARAMEQ1_ALG0_STAGE2_B1_ADDR, MOD_PARAMEQ1_ALG0_STAGE2_B0_ADDR,
+                      MOD_PARAMEQ1_ALG0_STAGE2_A2_ADDR, MOD_PARAMEQ1_ALG0_STAGE2_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq03 );
     channel->addDspBlock( peq03 );
 
     peq04 = new QPeq( 0.0, 4000.0, 2.0,
-                    MOD_PARAMEQ1_ALG0_STAGE3_B2_ADDR, MOD_PARAMEQ1_ALG0_STAGE3_B1_ADDR, MOD_PARAMEQ1_ALG0_STAGE3_B0_ADDR,
-                    MOD_PARAMEQ1_ALG0_STAGE3_A2_ADDR, MOD_PARAMEQ1_ALG0_STAGE3_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ1_ALG0_STAGE3_B2_ADDR, MOD_PARAMEQ1_ALG0_STAGE3_B1_ADDR, MOD_PARAMEQ1_ALG0_STAGE3_B0_ADDR,
+                      MOD_PARAMEQ1_ALG0_STAGE3_A2_ADDR, MOD_PARAMEQ1_ALG0_STAGE3_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq04 );
     channel->addDspBlock( peq04 );
 
     peq05 = new QPeq( 0.0, 5000.0, 2.0,
-                  MOD_PARAMEQ1_ALG0_STAGE4_B2_ADDR, MOD_PARAMEQ1_ALG0_STAGE4_B1_ADDR, MOD_PARAMEQ1_ALG0_STAGE4_B0_ADDR,
-                  MOD_PARAMEQ1_ALG0_STAGE4_A2_ADDR, MOD_PARAMEQ1_ALG0_STAGE4_A1_ADDR,
-                  fs,
-                  ptrdsp );
+                      MOD_PARAMEQ1_ALG0_STAGE4_B2_ADDR, MOD_PARAMEQ1_ALG0_STAGE4_B1_ADDR, MOD_PARAMEQ1_ALG0_STAGE4_B0_ADDR,
+                      MOD_PARAMEQ1_ALG0_STAGE4_A2_ADDR, MOD_PARAMEQ1_ALG0_STAGE4_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq05 );
     channel->addDspBlock( peq05 );
 
     peq06 = new QPeq( 0.0, 6000.0, 2.0,
-                    MOD_PARAMEQ1_ALG0_STAGE5_B2_ADDR, MOD_PARAMEQ1_ALG0_STAGE5_B1_ADDR, MOD_PARAMEQ1_ALG0_STAGE5_B0_ADDR,
-                    MOD_PARAMEQ1_ALG0_STAGE5_A2_ADDR, MOD_PARAMEQ1_ALG0_STAGE5_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ1_ALG0_STAGE5_B2_ADDR, MOD_PARAMEQ1_ALG0_STAGE5_B1_ADDR, MOD_PARAMEQ1_ALG0_STAGE5_B0_ADDR,
+                      MOD_PARAMEQ1_ALG0_STAGE5_A2_ADDR, MOD_PARAMEQ1_ALG0_STAGE5_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq06 );
     channel->addDspBlock( peq06 );
 
     peq07 = new QPeq( 0.0, 7000.0, 2.0,
-                    MOD_PARAMEQ1_ALG0_STAGE6_B2_ADDR, MOD_PARAMEQ1_ALG0_STAGE6_B1_ADDR, MOD_PARAMEQ1_ALG0_STAGE6_B0_ADDR,
-                    MOD_PARAMEQ1_ALG0_STAGE6_A2_ADDR, MOD_PARAMEQ1_ALG0_STAGE6_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ1_ALG0_STAGE6_B2_ADDR, MOD_PARAMEQ1_ALG0_STAGE6_B1_ADDR, MOD_PARAMEQ1_ALG0_STAGE6_B0_ADDR,
+                      MOD_PARAMEQ1_ALG0_STAGE6_A2_ADDR, MOD_PARAMEQ1_ALG0_STAGE6_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq07 );
     channel->addDspBlock( peq07 );
 
     peq08 = new QPeq( 0.0, 8000.0, 2.0,
-                    MOD_PARAMEQ1_ALG0_STAGE7_B2_ADDR, MOD_PARAMEQ1_ALG0_STAGE7_B1_ADDR, MOD_PARAMEQ1_ALG0_STAGE7_B0_ADDR,
-                    MOD_PARAMEQ1_ALG0_STAGE7_A2_ADDR, MOD_PARAMEQ1_ALG0_STAGE7_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ1_ALG0_STAGE7_B2_ADDR, MOD_PARAMEQ1_ALG0_STAGE7_B1_ADDR, MOD_PARAMEQ1_ALG0_STAGE7_B0_ADDR,
+                      MOD_PARAMEQ1_ALG0_STAGE7_A2_ADDR, MOD_PARAMEQ1_ALG0_STAGE7_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq08 );
     channel->addDspBlock( peq08 );
 
     peq09 = new QPeq( 0.0, 9000.0, 2.0,
-                    MOD_PARAMEQ1_ALG0_STAGE8_B2_ADDR, MOD_PARAMEQ1_ALG0_STAGE8_B1_ADDR, MOD_PARAMEQ1_ALG0_STAGE8_B0_ADDR,
-                    MOD_PARAMEQ1_ALG0_STAGE8_A2_ADDR, MOD_PARAMEQ1_ALG0_STAGE8_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ1_ALG0_STAGE8_B2_ADDR, MOD_PARAMEQ1_ALG0_STAGE8_B1_ADDR, MOD_PARAMEQ1_ALG0_STAGE8_B0_ADDR,
+                      MOD_PARAMEQ1_ALG0_STAGE8_A2_ADDR, MOD_PARAMEQ1_ALG0_STAGE8_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq09 );
     channel->addDspBlock( peq09 );
 
     peq10 = new QPeq( 0.0, 10000.0, 2.0,
-                  MOD_PARAMEQ1_ALG0_STAGE9_B2_ADDR, MOD_PARAMEQ1_ALG0_STAGE9_B1_ADDR, MOD_PARAMEQ1_ALG0_STAGE9_B0_ADDR,
-                  MOD_PARAMEQ1_ALG0_STAGE9_A2_ADDR, MOD_PARAMEQ1_ALG0_STAGE9_A1_ADDR,
-                  fs,
-                  ptrdsp );
+                      MOD_PARAMEQ1_ALG0_STAGE9_B2_ADDR, MOD_PARAMEQ1_ALG0_STAGE9_B1_ADDR, MOD_PARAMEQ1_ALG0_STAGE9_B0_ADDR,
+                      MOD_PARAMEQ1_ALG0_STAGE9_A2_ADDR, MOD_PARAMEQ1_ALG0_STAGE9_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq10 );
     channel->addDspBlock( peq10 );
 
@@ -303,6 +314,17 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     QObject::connect( dly,    SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( gain,   SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( output, SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
+
+    QObject::connect( peq01,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq02,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq03,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq04,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq05,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq06,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq07,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq08,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq09,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq10,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
   }
   else if( chn == 1 )
   {
@@ -313,6 +335,7 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     input = new QInputSelect( 1, MOD_NX1_1_2_MONOMUXSIGMA300NS2INDEX_ADDR, ptrdsp );
     layout->addWidget( input );
     channel->addDspBlock( input );
+    channel->setName( dspChannel.name );
 
     lshelv = new QLowShelv( 0.0, 100.0, 1.0,
                             MOD_LOWSHELV2_ALG0_STAGE0_B2_ADDR, MOD_LOWSHELV2_ALG0_STAGE0_B1_ADDR, MOD_LOWSHELV2_ALG0_STAGE0_B0_ADDR,
@@ -323,82 +346,92 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     channel->addDspBlock( lshelv );
 
     peq01 = new QPeq( 0.0, 1000.0, 1.0,
-                  MOD_PARAMEQ2_ALG0_STAGE0_B2_ADDR, MOD_PARAMEQ2_ALG0_STAGE0_B1_ADDR, MOD_PARAMEQ2_ALG0_STAGE0_B0_ADDR,
-                  MOD_PARAMEQ2_ALG0_STAGE0_A2_ADDR, MOD_PARAMEQ2_ALG0_STAGE0_A1_ADDR,
-                  fs,
-                  ptrdsp );
+                      MOD_PARAMEQ2_ALG0_STAGE0_B2_ADDR, MOD_PARAMEQ2_ALG0_STAGE0_B1_ADDR, MOD_PARAMEQ2_ALG0_STAGE0_B0_ADDR,
+                      MOD_PARAMEQ2_ALG0_STAGE0_A2_ADDR, MOD_PARAMEQ2_ALG0_STAGE0_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq01 );
     channel->addDspBlock( peq01 );
 
     peq02 = new QPeq( 0.0, 2000.0, 2.0,
-                    MOD_PARAMEQ2_ALG0_STAGE1_B2_ADDR, MOD_PARAMEQ2_ALG0_STAGE1_B1_ADDR, MOD_PARAMEQ2_ALG0_STAGE1_B0_ADDR,
-                    MOD_PARAMEQ2_ALG0_STAGE1_A2_ADDR, MOD_PARAMEQ2_ALG0_STAGE1_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ2_ALG0_STAGE1_B2_ADDR, MOD_PARAMEQ2_ALG0_STAGE1_B1_ADDR, MOD_PARAMEQ2_ALG0_STAGE1_B0_ADDR,
+                      MOD_PARAMEQ2_ALG0_STAGE1_A2_ADDR, MOD_PARAMEQ2_ALG0_STAGE1_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq02 );
     channel->addDspBlock( peq02 );
 
     peq03 = new QPeq( 0.0, 3000.0, 2.0,
-                    MOD_PARAMEQ2_ALG0_STAGE2_B2_ADDR, MOD_PARAMEQ2_ALG0_STAGE2_B1_ADDR, MOD_PARAMEQ2_ALG0_STAGE2_B0_ADDR,
-                    MOD_PARAMEQ2_ALG0_STAGE2_A2_ADDR, MOD_PARAMEQ2_ALG0_STAGE2_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ2_ALG0_STAGE2_B2_ADDR, MOD_PARAMEQ2_ALG0_STAGE2_B1_ADDR, MOD_PARAMEQ2_ALG0_STAGE2_B0_ADDR,
+                      MOD_PARAMEQ2_ALG0_STAGE2_A2_ADDR, MOD_PARAMEQ2_ALG0_STAGE2_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq03 );
     channel->addDspBlock( peq03 );
 
     peq04 = new QPeq( 0.0, 4000.0, 2.0,
-                    MOD_PARAMEQ2_ALG0_STAGE3_B2_ADDR, MOD_PARAMEQ2_ALG0_STAGE3_B1_ADDR, MOD_PARAMEQ2_ALG0_STAGE3_B0_ADDR,
-                    MOD_PARAMEQ2_ALG0_STAGE3_A2_ADDR, MOD_PARAMEQ2_ALG0_STAGE3_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ2_ALG0_STAGE3_B2_ADDR, MOD_PARAMEQ2_ALG0_STAGE3_B1_ADDR, MOD_PARAMEQ2_ALG0_STAGE3_B0_ADDR,
+                      MOD_PARAMEQ2_ALG0_STAGE3_A2_ADDR, MOD_PARAMEQ2_ALG0_STAGE3_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq04 );
     channel->addDspBlock( peq04 );
 
     peq05 = new QPeq( 0.0, 5000.0, 2.0,
-                    MOD_PARAMEQ2_ALG0_STAGE4_B2_ADDR, MOD_PARAMEQ2_ALG0_STAGE4_B1_ADDR, MOD_PARAMEQ2_ALG0_STAGE4_B0_ADDR,
-                    MOD_PARAMEQ2_ALG0_STAGE4_A2_ADDR, MOD_PARAMEQ2_ALG0_STAGE4_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ2_ALG0_STAGE4_B2_ADDR, MOD_PARAMEQ2_ALG0_STAGE4_B1_ADDR, MOD_PARAMEQ2_ALG0_STAGE4_B0_ADDR,
+                      MOD_PARAMEQ2_ALG0_STAGE4_A2_ADDR, MOD_PARAMEQ2_ALG0_STAGE4_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq05 );
     channel->addDspBlock( peq05 );
 
     peq06 = new QPeq( 0.0, 6000.0, 2.0,
-                    MOD_PARAMEQ2_ALG0_STAGE5_B2_ADDR, MOD_PARAMEQ2_ALG0_STAGE5_B1_ADDR, MOD_PARAMEQ2_ALG0_STAGE5_B0_ADDR,
-                    MOD_PARAMEQ2_ALG0_STAGE5_A2_ADDR, MOD_PARAMEQ2_ALG0_STAGE5_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ2_ALG0_STAGE5_B2_ADDR, MOD_PARAMEQ2_ALG0_STAGE5_B1_ADDR, MOD_PARAMEQ2_ALG0_STAGE5_B0_ADDR,
+                      MOD_PARAMEQ2_ALG0_STAGE5_A2_ADDR, MOD_PARAMEQ2_ALG0_STAGE5_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq06 );
     channel->addDspBlock( peq06 );
 
     peq07 = new QPeq( 0.0, 7000.0, 2.0,
-                    MOD_PARAMEQ2_ALG0_STAGE6_B2_ADDR, MOD_PARAMEQ2_ALG0_STAGE6_B1_ADDR, MOD_PARAMEQ2_ALG0_STAGE6_B0_ADDR,
-                    MOD_PARAMEQ2_ALG0_STAGE6_A2_ADDR, MOD_PARAMEQ2_ALG0_STAGE6_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ2_ALG0_STAGE6_B2_ADDR, MOD_PARAMEQ2_ALG0_STAGE6_B1_ADDR, MOD_PARAMEQ2_ALG0_STAGE6_B0_ADDR,
+                      MOD_PARAMEQ2_ALG0_STAGE6_A2_ADDR, MOD_PARAMEQ2_ALG0_STAGE6_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq07 );
     channel->addDspBlock( peq07 );
 
     peq08 = new QPeq( 0.0, 8000.0, 2.0,
-                    MOD_PARAMEQ2_ALG0_STAGE7_B2_ADDR, MOD_PARAMEQ2_ALG0_STAGE7_B1_ADDR, MOD_PARAMEQ2_ALG0_STAGE7_B0_ADDR,
-                    MOD_PARAMEQ2_ALG0_STAGE7_A2_ADDR, MOD_PARAMEQ2_ALG0_STAGE7_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ2_ALG0_STAGE7_B2_ADDR, MOD_PARAMEQ2_ALG0_STAGE7_B1_ADDR, MOD_PARAMEQ2_ALG0_STAGE7_B0_ADDR,
+                      MOD_PARAMEQ2_ALG0_STAGE7_A2_ADDR, MOD_PARAMEQ2_ALG0_STAGE7_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq08 );
     channel->addDspBlock( peq08 );
 
     peq09 = new QPeq( 0.0, 9000.0, 2.0,
-                    MOD_PARAMEQ2_ALG0_STAGE8_B2_ADDR, MOD_PARAMEQ2_ALG0_STAGE8_B1_ADDR, MOD_PARAMEQ2_ALG0_STAGE8_B0_ADDR,
-                    MOD_PARAMEQ2_ALG0_STAGE8_A2_ADDR, MOD_PARAMEQ2_ALG0_STAGE8_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ2_ALG0_STAGE8_B2_ADDR, MOD_PARAMEQ2_ALG0_STAGE8_B1_ADDR, MOD_PARAMEQ2_ALG0_STAGE8_B0_ADDR,
+                      MOD_PARAMEQ2_ALG0_STAGE8_A2_ADDR, MOD_PARAMEQ2_ALG0_STAGE8_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq09 );
     channel->addDspBlock( peq09 );
 
     peq10 = new QPeq( 0.0, 10000.0, 2.0,
-                    MOD_PARAMEQ2_ALG0_STAGE9_B2_ADDR, MOD_PARAMEQ2_ALG0_STAGE9_B1_ADDR, MOD_PARAMEQ2_ALG0_STAGE9_B0_ADDR,
-                    MOD_PARAMEQ2_ALG0_STAGE9_A2_ADDR, MOD_PARAMEQ2_ALG0_STAGE9_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ2_ALG0_STAGE9_B2_ADDR, MOD_PARAMEQ2_ALG0_STAGE9_B1_ADDR, MOD_PARAMEQ2_ALG0_STAGE9_B0_ADDR,
+                      MOD_PARAMEQ2_ALG0_STAGE9_A2_ADDR, MOD_PARAMEQ2_ALG0_STAGE9_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq10 );
     channel->addDspBlock( peq10 );
 
@@ -461,6 +494,17 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     QObject::connect( dly,    SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( gain,   SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( output, SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
+
+    QObject::connect( peq01,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq02,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq03,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq04,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq05,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq06,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq07,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq08,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq09,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq10,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
   }
   else if( chn == 2 )
   {
@@ -471,6 +515,7 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     input = new QInputSelect( 2, MOD_NX1_1_3_MONOMUXSIGMA300NS3INDEX_ADDR, ptrdsp );
     layout->addWidget( input );
     channel->addDspBlock( input );
+    channel->setName( dspChannel.name );
 
     lshelv = new QLowShelv( 0.0, 100.0, 1.0,
                             MOD_LOWSHELV3_ALG0_STAGE0_B2_ADDR, MOD_LOWSHELV3_ALG0_STAGE0_B1_ADDR, MOD_LOWSHELV3_ALG0_STAGE0_B0_ADDR,
@@ -481,82 +526,92 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     channel->addDspBlock( lshelv );
 
     peq01 = new QPeq( 0.0, 1000.0, 1.0,
-                  MOD_PARAMEQ3_ALG0_STAGE0_B2_ADDR, MOD_PARAMEQ3_ALG0_STAGE0_B1_ADDR, MOD_PARAMEQ3_ALG0_STAGE0_B0_ADDR,
-                  MOD_PARAMEQ3_ALG0_STAGE0_A2_ADDR, MOD_PARAMEQ3_ALG0_STAGE0_A1_ADDR,
-                  fs,
-                  ptrdsp );
+                      MOD_PARAMEQ3_ALG0_STAGE0_B2_ADDR, MOD_PARAMEQ3_ALG0_STAGE0_B1_ADDR, MOD_PARAMEQ3_ALG0_STAGE0_B0_ADDR,
+                      MOD_PARAMEQ3_ALG0_STAGE0_A2_ADDR, MOD_PARAMEQ3_ALG0_STAGE0_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq01 );
     channel->addDspBlock( peq01 );
 
     peq02 = new QPeq( 0.0, 2000.0, 2.0,
-                    MOD_PARAMEQ3_ALG0_STAGE1_B2_ADDR, MOD_PARAMEQ3_ALG0_STAGE1_B1_ADDR, MOD_PARAMEQ3_ALG0_STAGE1_B0_ADDR,
-                    MOD_PARAMEQ3_ALG0_STAGE1_A2_ADDR, MOD_PARAMEQ3_ALG0_STAGE1_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ3_ALG0_STAGE1_B2_ADDR, MOD_PARAMEQ3_ALG0_STAGE1_B1_ADDR, MOD_PARAMEQ3_ALG0_STAGE1_B0_ADDR,
+                      MOD_PARAMEQ3_ALG0_STAGE1_A2_ADDR, MOD_PARAMEQ3_ALG0_STAGE1_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq02 );
     channel->addDspBlock( peq02 );
 
     peq03 = new QPeq( 0.0, 3000.0, 2.0,
-                    MOD_PARAMEQ3_ALG0_STAGE2_B2_ADDR, MOD_PARAMEQ3_ALG0_STAGE2_B1_ADDR, MOD_PARAMEQ3_ALG0_STAGE2_B0_ADDR,
-                    MOD_PARAMEQ3_ALG0_STAGE2_A2_ADDR, MOD_PARAMEQ3_ALG0_STAGE2_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ3_ALG0_STAGE2_B2_ADDR, MOD_PARAMEQ3_ALG0_STAGE2_B1_ADDR, MOD_PARAMEQ3_ALG0_STAGE2_B0_ADDR,
+                      MOD_PARAMEQ3_ALG0_STAGE2_A2_ADDR, MOD_PARAMEQ3_ALG0_STAGE2_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq03 );
     channel->addDspBlock( peq03 );
 
     peq04 = new QPeq( 0.0, 4000.0, 2.0,
-                  MOD_PARAMEQ3_ALG0_STAGE3_B2_ADDR, MOD_PARAMEQ3_ALG0_STAGE3_B1_ADDR, MOD_PARAMEQ3_ALG0_STAGE3_B0_ADDR,
-                  MOD_PARAMEQ3_ALG0_STAGE3_A2_ADDR, MOD_PARAMEQ3_ALG0_STAGE3_A1_ADDR,
-                  fs,
-                  ptrdsp );
+                      MOD_PARAMEQ3_ALG0_STAGE3_B2_ADDR, MOD_PARAMEQ3_ALG0_STAGE3_B1_ADDR, MOD_PARAMEQ3_ALG0_STAGE3_B0_ADDR,
+                      MOD_PARAMEQ3_ALG0_STAGE3_A2_ADDR, MOD_PARAMEQ3_ALG0_STAGE3_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq04 );
     channel->addDspBlock( peq04 );
 
     peq05 = new QPeq( 0.0, 5000.0, 2.0,
-                    MOD_PARAMEQ3_ALG0_STAGE4_B2_ADDR, MOD_PARAMEQ3_ALG0_STAGE4_B1_ADDR, MOD_PARAMEQ3_ALG0_STAGE4_B0_ADDR,
-                    MOD_PARAMEQ3_ALG0_STAGE4_A2_ADDR, MOD_PARAMEQ3_ALG0_STAGE4_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ3_ALG0_STAGE4_B2_ADDR, MOD_PARAMEQ3_ALG0_STAGE4_B1_ADDR, MOD_PARAMEQ3_ALG0_STAGE4_B0_ADDR,
+                      MOD_PARAMEQ3_ALG0_STAGE4_A2_ADDR, MOD_PARAMEQ3_ALG0_STAGE4_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq05 );
     channel->addDspBlock( peq05 );
 
     peq06 = new QPeq( 0.0, 6000.0, 2.0,
-                    MOD_PARAMEQ3_ALG0_STAGE5_B2_ADDR, MOD_PARAMEQ3_ALG0_STAGE5_B1_ADDR, MOD_PARAMEQ3_ALG0_STAGE5_B0_ADDR,
-                    MOD_PARAMEQ3_ALG0_STAGE5_A2_ADDR, MOD_PARAMEQ3_ALG0_STAGE5_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ3_ALG0_STAGE5_B2_ADDR, MOD_PARAMEQ3_ALG0_STAGE5_B1_ADDR, MOD_PARAMEQ3_ALG0_STAGE5_B0_ADDR,
+                      MOD_PARAMEQ3_ALG0_STAGE5_A2_ADDR, MOD_PARAMEQ3_ALG0_STAGE5_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq06 );
     channel->addDspBlock( peq06 );
 
     peq07 = new QPeq( 0.0, 7000.0, 2.0,
-                    MOD_PARAMEQ3_ALG0_STAGE6_B2_ADDR, MOD_PARAMEQ3_ALG0_STAGE6_B1_ADDR, MOD_PARAMEQ3_ALG0_STAGE6_B0_ADDR,
-                    MOD_PARAMEQ3_ALG0_STAGE6_A2_ADDR, MOD_PARAMEQ3_ALG0_STAGE6_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ3_ALG0_STAGE6_B2_ADDR, MOD_PARAMEQ3_ALG0_STAGE6_B1_ADDR, MOD_PARAMEQ3_ALG0_STAGE6_B0_ADDR,
+                      MOD_PARAMEQ3_ALG0_STAGE6_A2_ADDR, MOD_PARAMEQ3_ALG0_STAGE6_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq07 );
     channel->addDspBlock( peq07 );
 
     peq08 = new QPeq( 0.0, 8000.0, 2.0,
-                  MOD_PARAMEQ3_ALG0_STAGE7_B2_ADDR, MOD_PARAMEQ3_ALG0_STAGE7_B1_ADDR, MOD_PARAMEQ3_ALG0_STAGE7_B0_ADDR,
-                  MOD_PARAMEQ3_ALG0_STAGE7_A2_ADDR, MOD_PARAMEQ3_ALG0_STAGE7_A1_ADDR,
-                  fs,
-                  ptrdsp );
+                      MOD_PARAMEQ3_ALG0_STAGE7_B2_ADDR, MOD_PARAMEQ3_ALG0_STAGE7_B1_ADDR, MOD_PARAMEQ3_ALG0_STAGE7_B0_ADDR,
+                      MOD_PARAMEQ3_ALG0_STAGE7_A2_ADDR, MOD_PARAMEQ3_ALG0_STAGE7_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq08 );
     channel->addDspBlock( peq08 );
 
     peq09 = new QPeq( 0.0, 9000.0, 2.0,
-                    MOD_PARAMEQ3_ALG0_STAGE8_B2_ADDR, MOD_PARAMEQ3_ALG0_STAGE8_B1_ADDR, MOD_PARAMEQ3_ALG0_STAGE8_B0_ADDR,
-                    MOD_PARAMEQ3_ALG0_STAGE8_A2_ADDR, MOD_PARAMEQ3_ALG0_STAGE8_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ3_ALG0_STAGE8_B2_ADDR, MOD_PARAMEQ3_ALG0_STAGE8_B1_ADDR, MOD_PARAMEQ3_ALG0_STAGE8_B0_ADDR,
+                      MOD_PARAMEQ3_ALG0_STAGE8_A2_ADDR, MOD_PARAMEQ3_ALG0_STAGE8_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq09 );
     channel->addDspBlock( peq09 );
 
     peq10 = new QPeq( 0.0, 10000.0, 2.0,
-                    MOD_PARAMEQ3_ALG0_STAGE9_B2_ADDR, MOD_PARAMEQ3_ALG0_STAGE9_B1_ADDR, MOD_PARAMEQ3_ALG0_STAGE9_B0_ADDR,
-                    MOD_PARAMEQ3_ALG0_STAGE9_A2_ADDR, MOD_PARAMEQ3_ALG0_STAGE9_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ3_ALG0_STAGE9_B2_ADDR, MOD_PARAMEQ3_ALG0_STAGE9_B1_ADDR, MOD_PARAMEQ3_ALG0_STAGE9_B0_ADDR,
+                      MOD_PARAMEQ3_ALG0_STAGE9_A2_ADDR, MOD_PARAMEQ3_ALG0_STAGE9_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq10 );
     channel->addDspBlock( peq10 );
 
@@ -619,6 +674,17 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     QObject::connect( dly,    SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( gain,   SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( output, SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
+
+    QObject::connect( peq01,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq02,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq03,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq04,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq05,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq06,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq07,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq08,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq09,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq10,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
   }
   else if( chn == 3 )
   {
@@ -629,6 +695,7 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     input = new QInputSelect( 3, MOD_NX1_1_4_MONOMUXSIGMA300NS4INDEX_ADDR, ptrdsp );
     layout->addWidget( input );
     channel->addDspBlock( input );
+    channel->setName( dspChannel.name );
 
     lshelv = new QLowShelv( 0.0, 100.0, 1.0,
                             MOD_LOWSHELV4_ALG0_STAGE0_B2_ADDR, MOD_LOWSHELV4_ALG0_STAGE0_B1_ADDR, MOD_LOWSHELV4_ALG0_STAGE0_B0_ADDR,
@@ -639,82 +706,92 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     channel->addDspBlock( lshelv );
 
     peq01 = new QPeq( 0.0, 1000.0, 1.0,
-                  MOD_PARAMEQ4_ALG0_STAGE0_B2_ADDR, MOD_PARAMEQ4_ALG0_STAGE0_B1_ADDR, MOD_PARAMEQ4_ALG0_STAGE0_B0_ADDR,
-                  MOD_PARAMEQ4_ALG0_STAGE0_A2_ADDR, MOD_PARAMEQ4_ALG0_STAGE0_A1_ADDR,
-                  fs,
-                  ptrdsp );
+                      MOD_PARAMEQ4_ALG0_STAGE0_B2_ADDR, MOD_PARAMEQ4_ALG0_STAGE0_B1_ADDR, MOD_PARAMEQ4_ALG0_STAGE0_B0_ADDR,
+                      MOD_PARAMEQ4_ALG0_STAGE0_A2_ADDR, MOD_PARAMEQ4_ALG0_STAGE0_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq01 );
     channel->addDspBlock( peq01 );
 
     peq02 = new QPeq( 0.0, 2000.0, 2.0,
-                    MOD_PARAMEQ4_ALG0_STAGE1_B2_ADDR, MOD_PARAMEQ4_ALG0_STAGE1_B1_ADDR, MOD_PARAMEQ4_ALG0_STAGE1_B0_ADDR,
-                    MOD_PARAMEQ4_ALG0_STAGE1_A2_ADDR, MOD_PARAMEQ4_ALG0_STAGE1_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ4_ALG0_STAGE1_B2_ADDR, MOD_PARAMEQ4_ALG0_STAGE1_B1_ADDR, MOD_PARAMEQ4_ALG0_STAGE1_B0_ADDR,
+                      MOD_PARAMEQ4_ALG0_STAGE1_A2_ADDR, MOD_PARAMEQ4_ALG0_STAGE1_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq02 );
     channel->addDspBlock( peq02 );
 
     peq03 = new QPeq( 0.0, 3000.0, 2.0,
-                    MOD_PARAMEQ4_ALG0_STAGE2_B2_ADDR, MOD_PARAMEQ4_ALG0_STAGE2_B1_ADDR, MOD_PARAMEQ4_ALG0_STAGE2_B0_ADDR,
-                    MOD_PARAMEQ4_ALG0_STAGE2_A2_ADDR, MOD_PARAMEQ4_ALG0_STAGE2_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ4_ALG0_STAGE2_B2_ADDR, MOD_PARAMEQ4_ALG0_STAGE2_B1_ADDR, MOD_PARAMEQ4_ALG0_STAGE2_B0_ADDR,
+                      MOD_PARAMEQ4_ALG0_STAGE2_A2_ADDR, MOD_PARAMEQ4_ALG0_STAGE2_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq03 );
     channel->addDspBlock( peq03 );
 
     peq04 = new QPeq( 0.0, 4000.0, 2.0,
-                    MOD_PARAMEQ4_ALG0_STAGE3_B2_ADDR, MOD_PARAMEQ4_ALG0_STAGE3_B1_ADDR, MOD_PARAMEQ4_ALG0_STAGE3_B0_ADDR,
-                    MOD_PARAMEQ4_ALG0_STAGE3_A2_ADDR, MOD_PARAMEQ4_ALG0_STAGE3_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ4_ALG0_STAGE3_B2_ADDR, MOD_PARAMEQ4_ALG0_STAGE3_B1_ADDR, MOD_PARAMEQ4_ALG0_STAGE3_B0_ADDR,
+                      MOD_PARAMEQ4_ALG0_STAGE3_A2_ADDR, MOD_PARAMEQ4_ALG0_STAGE3_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq04 );
     channel->addDspBlock( peq04 );
 
     peq05 = new QPeq( 0.0, 5000.0, 2.0,
-                  MOD_PARAMEQ4_ALG0_STAGE4_B2_ADDR, MOD_PARAMEQ4_ALG0_STAGE4_B1_ADDR, MOD_PARAMEQ4_ALG0_STAGE4_B0_ADDR,
-                  MOD_PARAMEQ4_ALG0_STAGE4_A2_ADDR, MOD_PARAMEQ4_ALG0_STAGE4_A1_ADDR,
-                  fs,
-                  ptrdsp );
+                      MOD_PARAMEQ4_ALG0_STAGE4_B2_ADDR, MOD_PARAMEQ4_ALG0_STAGE4_B1_ADDR, MOD_PARAMEQ4_ALG0_STAGE4_B0_ADDR,
+                      MOD_PARAMEQ4_ALG0_STAGE4_A2_ADDR, MOD_PARAMEQ4_ALG0_STAGE4_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq05 );
     channel->addDspBlock( peq05 );
 
     peq06 = new QPeq( 0.0, 6000.0, 2.0,
-                    MOD_PARAMEQ4_ALG0_STAGE5_B2_ADDR, MOD_PARAMEQ4_ALG0_STAGE5_B1_ADDR, MOD_PARAMEQ4_ALG0_STAGE5_B0_ADDR,
-                    MOD_PARAMEQ4_ALG0_STAGE5_A2_ADDR, MOD_PARAMEQ4_ALG0_STAGE5_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ4_ALG0_STAGE5_B2_ADDR, MOD_PARAMEQ4_ALG0_STAGE5_B1_ADDR, MOD_PARAMEQ4_ALG0_STAGE5_B0_ADDR,
+                      MOD_PARAMEQ4_ALG0_STAGE5_A2_ADDR, MOD_PARAMEQ4_ALG0_STAGE5_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq06 );
     channel->addDspBlock( peq06 );
 
     peq07 = new QPeq( 0.0, 7000.0, 2.0,
-                    MOD_PARAMEQ4_ALG0_STAGE6_B2_ADDR, MOD_PARAMEQ4_ALG0_STAGE6_B1_ADDR, MOD_PARAMEQ4_ALG0_STAGE6_B0_ADDR,
-                    MOD_PARAMEQ4_ALG0_STAGE6_A2_ADDR, MOD_PARAMEQ4_ALG0_STAGE6_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ4_ALG0_STAGE6_B2_ADDR, MOD_PARAMEQ4_ALG0_STAGE6_B1_ADDR, MOD_PARAMEQ4_ALG0_STAGE6_B0_ADDR,
+                      MOD_PARAMEQ4_ALG0_STAGE6_A2_ADDR, MOD_PARAMEQ4_ALG0_STAGE6_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq07 );
     channel->addDspBlock( peq07 );
 
     peq08 = new QPeq( 0.0, 8000.0, 2.0,
-                    MOD_PARAMEQ4_ALG0_STAGE7_B2_ADDR, MOD_PARAMEQ4_ALG0_STAGE7_B1_ADDR, MOD_PARAMEQ4_ALG0_STAGE7_B0_ADDR,
-                    MOD_PARAMEQ4_ALG0_STAGE7_A2_ADDR, MOD_PARAMEQ4_ALG0_STAGE7_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ4_ALG0_STAGE7_B2_ADDR, MOD_PARAMEQ4_ALG0_STAGE7_B1_ADDR, MOD_PARAMEQ4_ALG0_STAGE7_B0_ADDR,
+                      MOD_PARAMEQ4_ALG0_STAGE7_A2_ADDR, MOD_PARAMEQ4_ALG0_STAGE7_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq08 );
     channel->addDspBlock( peq08 );
 
     peq09 = new QPeq( 0.0, 9000.0, 2.0,
-                  MOD_PARAMEQ4_ALG0_STAGE8_B2_ADDR, MOD_PARAMEQ4_ALG0_STAGE8_B1_ADDR, MOD_PARAMEQ4_ALG0_STAGE8_B0_ADDR,
-                  MOD_PARAMEQ4_ALG0_STAGE8_A2_ADDR, MOD_PARAMEQ4_ALG0_STAGE8_A1_ADDR,
-                  fs,
-                  ptrdsp );
+                      MOD_PARAMEQ4_ALG0_STAGE8_B2_ADDR, MOD_PARAMEQ4_ALG0_STAGE8_B1_ADDR, MOD_PARAMEQ4_ALG0_STAGE8_B0_ADDR,
+                      MOD_PARAMEQ4_ALG0_STAGE8_A2_ADDR, MOD_PARAMEQ4_ALG0_STAGE8_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq09 );
     channel->addDspBlock( peq09 );
 
     peq10 = new QPeq( 0.0, 10000.0, 2.0,
-                    MOD_PARAMEQ4_ALG0_STAGE9_B2_ADDR, MOD_PARAMEQ4_ALG0_STAGE9_B1_ADDR, MOD_PARAMEQ4_ALG0_STAGE9_B0_ADDR,
-                    MOD_PARAMEQ4_ALG0_STAGE9_A2_ADDR, MOD_PARAMEQ4_ALG0_STAGE9_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ4_ALG0_STAGE9_B2_ADDR, MOD_PARAMEQ4_ALG0_STAGE9_B1_ADDR, MOD_PARAMEQ4_ALG0_STAGE9_B0_ADDR,
+                      MOD_PARAMEQ4_ALG0_STAGE9_A2_ADDR, MOD_PARAMEQ4_ALG0_STAGE9_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq10 );
     channel->addDspBlock( peq10 );
 
@@ -777,6 +854,17 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     QObject::connect( dly,    SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( gain,   SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( output, SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
+
+    QObject::connect( peq01,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq02,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq03,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq04,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq05,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq06,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq07,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq08,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq09,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq10,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
   }
   else if( chn == 4 )
   {
@@ -787,6 +875,7 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     input = new QInputSelect( 4, MOD_NX1_1_5_MONOMUXSIGMA300NS5INDEX_ADDR, ptrdsp );
     layout->addWidget( input );
     channel->addDspBlock( input );
+    channel->setName( dspChannel.name );
 
     lshelv = new QLowShelv( 0.0, 100.0, 1.0,
                             MOD_LOWSHELV5_ALG0_STAGE0_B2_ADDR, MOD_LOWSHELV5_ALG0_STAGE0_B1_ADDR, MOD_LOWSHELV5_ALG0_STAGE0_B0_ADDR,
@@ -797,82 +886,92 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     channel->addDspBlock( lshelv );
 
     peq01 = new QPeq( 0.0, 1000.0, 1.0,
-                  MOD_PARAMEQ5_ALG0_STAGE0_B2_ADDR, MOD_PARAMEQ5_ALG0_STAGE0_B1_ADDR, MOD_PARAMEQ5_ALG0_STAGE0_B0_ADDR,
-                  MOD_PARAMEQ5_ALG0_STAGE0_A2_ADDR, MOD_PARAMEQ5_ALG0_STAGE0_A1_ADDR,
-                  fs,
-                  ptrdsp );
+                      MOD_PARAMEQ5_ALG0_STAGE0_B2_ADDR, MOD_PARAMEQ5_ALG0_STAGE0_B1_ADDR, MOD_PARAMEQ5_ALG0_STAGE0_B0_ADDR,
+                      MOD_PARAMEQ5_ALG0_STAGE0_A2_ADDR, MOD_PARAMEQ5_ALG0_STAGE0_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq01 );
     channel->addDspBlock( peq01 );
 
     peq02 = new QPeq( 0.0, 2000.0, 2.0,
-                    MOD_PARAMEQ5_ALG0_STAGE1_B2_ADDR, MOD_PARAMEQ5_ALG0_STAGE1_B1_ADDR, MOD_PARAMEQ5_ALG0_STAGE1_B0_ADDR,
-                    MOD_PARAMEQ5_ALG0_STAGE1_A2_ADDR, MOD_PARAMEQ5_ALG0_STAGE1_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ5_ALG0_STAGE1_B2_ADDR, MOD_PARAMEQ5_ALG0_STAGE1_B1_ADDR, MOD_PARAMEQ5_ALG0_STAGE1_B0_ADDR,
+                      MOD_PARAMEQ5_ALG0_STAGE1_A2_ADDR, MOD_PARAMEQ5_ALG0_STAGE1_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq02 );
     channel->addDspBlock( peq02 );
 
     peq03 = new QPeq( 0.0, 3000.0, 2.0,
-                    MOD_PARAMEQ5_ALG0_STAGE2_B2_ADDR, MOD_PARAMEQ5_ALG0_STAGE2_B1_ADDR, MOD_PARAMEQ5_ALG0_STAGE2_B0_ADDR,
-                    MOD_PARAMEQ5_ALG0_STAGE2_A2_ADDR, MOD_PARAMEQ5_ALG0_STAGE2_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ5_ALG0_STAGE2_B2_ADDR, MOD_PARAMEQ5_ALG0_STAGE2_B1_ADDR, MOD_PARAMEQ5_ALG0_STAGE2_B0_ADDR,
+                      MOD_PARAMEQ5_ALG0_STAGE2_A2_ADDR, MOD_PARAMEQ5_ALG0_STAGE2_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq03 );
     channel->addDspBlock( peq03 );
 
     peq04 = new QPeq( 0.0, 4000.0, 2.0,
-                    MOD_PARAMEQ5_ALG0_STAGE3_B2_ADDR, MOD_PARAMEQ5_ALG0_STAGE3_B1_ADDR, MOD_PARAMEQ5_ALG0_STAGE3_B0_ADDR,
-                    MOD_PARAMEQ5_ALG0_STAGE3_A2_ADDR, MOD_PARAMEQ5_ALG0_STAGE3_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ5_ALG0_STAGE3_B2_ADDR, MOD_PARAMEQ5_ALG0_STAGE3_B1_ADDR, MOD_PARAMEQ5_ALG0_STAGE3_B0_ADDR,
+                      MOD_PARAMEQ5_ALG0_STAGE3_A2_ADDR, MOD_PARAMEQ5_ALG0_STAGE3_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq04 );
     channel->addDspBlock( peq04 );
 
     peq05 = new QPeq( 0.0, 5000.0, 2.0,
-                  MOD_PARAMEQ5_ALG0_STAGE4_B2_ADDR, MOD_PARAMEQ5_ALG0_STAGE4_B1_ADDR, MOD_PARAMEQ5_ALG0_STAGE4_B0_ADDR,
-                  MOD_PARAMEQ5_ALG0_STAGE4_A2_ADDR, MOD_PARAMEQ5_ALG0_STAGE4_A1_ADDR,
-                  fs,
-                  ptrdsp );
+                      MOD_PARAMEQ5_ALG0_STAGE4_B2_ADDR, MOD_PARAMEQ5_ALG0_STAGE4_B1_ADDR, MOD_PARAMEQ5_ALG0_STAGE4_B0_ADDR,
+                      MOD_PARAMEQ5_ALG0_STAGE4_A2_ADDR, MOD_PARAMEQ5_ALG0_STAGE4_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq05 );
     channel->addDspBlock( peq05 );
 
     peq06 = new QPeq( 0.0, 6000.0, 2.0,
-                    MOD_PARAMEQ5_ALG0_STAGE5_B2_ADDR, MOD_PARAMEQ5_ALG0_STAGE5_B1_ADDR, MOD_PARAMEQ5_ALG0_STAGE5_B0_ADDR,
-                    MOD_PARAMEQ5_ALG0_STAGE5_A2_ADDR, MOD_PARAMEQ5_ALG0_STAGE5_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ5_ALG0_STAGE5_B2_ADDR, MOD_PARAMEQ5_ALG0_STAGE5_B1_ADDR, MOD_PARAMEQ5_ALG0_STAGE5_B0_ADDR,
+                      MOD_PARAMEQ5_ALG0_STAGE5_A2_ADDR, MOD_PARAMEQ5_ALG0_STAGE5_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq06 );
     channel->addDspBlock( peq06 );
 
     peq07 = new QPeq( 0.0, 7000.0, 2.0,
-                    MOD_PARAMEQ5_ALG0_STAGE6_B2_ADDR, MOD_PARAMEQ5_ALG0_STAGE6_B1_ADDR, MOD_PARAMEQ5_ALG0_STAGE6_B0_ADDR,
-                    MOD_PARAMEQ5_ALG0_STAGE6_A2_ADDR, MOD_PARAMEQ5_ALG0_STAGE6_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ5_ALG0_STAGE6_B2_ADDR, MOD_PARAMEQ5_ALG0_STAGE6_B1_ADDR, MOD_PARAMEQ5_ALG0_STAGE6_B0_ADDR,
+                      MOD_PARAMEQ5_ALG0_STAGE6_A2_ADDR, MOD_PARAMEQ5_ALG0_STAGE6_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq07 );
     channel->addDspBlock( peq07 );
 
     peq08 = new QPeq( 0.0, 8000.0, 2.0,
-                    MOD_PARAMEQ5_ALG0_STAGE7_B2_ADDR, MOD_PARAMEQ5_ALG0_STAGE7_B1_ADDR, MOD_PARAMEQ5_ALG0_STAGE7_B0_ADDR,
-                    MOD_PARAMEQ5_ALG0_STAGE7_A2_ADDR, MOD_PARAMEQ5_ALG0_STAGE7_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ5_ALG0_STAGE7_B2_ADDR, MOD_PARAMEQ5_ALG0_STAGE7_B1_ADDR, MOD_PARAMEQ5_ALG0_STAGE7_B0_ADDR,
+                      MOD_PARAMEQ5_ALG0_STAGE7_A2_ADDR, MOD_PARAMEQ5_ALG0_STAGE7_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq08 );
     channel->addDspBlock( peq08 );
 
     peq09 = new QPeq( 0.0, 9000.0, 2.0,
-                  MOD_PARAMEQ5_ALG0_STAGE8_B2_ADDR, MOD_PARAMEQ5_ALG0_STAGE8_B1_ADDR, MOD_PARAMEQ5_ALG0_STAGE8_B0_ADDR,
-                  MOD_PARAMEQ5_ALG0_STAGE8_A2_ADDR, MOD_PARAMEQ5_ALG0_STAGE8_A1_ADDR,
-                  fs,
-                  ptrdsp );
+                      MOD_PARAMEQ5_ALG0_STAGE8_B2_ADDR, MOD_PARAMEQ5_ALG0_STAGE8_B1_ADDR, MOD_PARAMEQ5_ALG0_STAGE8_B0_ADDR,
+                      MOD_PARAMEQ5_ALG0_STAGE8_A2_ADDR, MOD_PARAMEQ5_ALG0_STAGE8_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq09 );
     channel->addDspBlock( peq09 );
 
     peq10 = new QPeq( 0.0, 10000.0, 2.0,
-                    MOD_PARAMEQ5_ALG0_STAGE9_B2_ADDR, MOD_PARAMEQ5_ALG0_STAGE9_B1_ADDR, MOD_PARAMEQ5_ALG0_STAGE9_B0_ADDR,
-                    MOD_PARAMEQ5_ALG0_STAGE9_A2_ADDR, MOD_PARAMEQ5_ALG0_STAGE9_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ5_ALG0_STAGE9_B2_ADDR, MOD_PARAMEQ5_ALG0_STAGE9_B1_ADDR, MOD_PARAMEQ5_ALG0_STAGE9_B0_ADDR,
+                      MOD_PARAMEQ5_ALG0_STAGE9_A2_ADDR, MOD_PARAMEQ5_ALG0_STAGE9_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq10 );
     channel->addDspBlock( peq10 );
 
@@ -935,6 +1034,17 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     QObject::connect( dly,    SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( gain,   SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( output, SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
+
+    QObject::connect( peq01,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq02,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq03,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq04,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq05,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq06,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq07,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq08,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq09,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq10,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
   }
   else if( chn == 5 )
   {
@@ -945,6 +1055,7 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     input = new QInputSelect( 5, MOD_NX1_1_6_MONOMUXSIGMA300NS6INDEX_ADDR, ptrdsp );
     layout->addWidget( input );
     channel->addDspBlock( input );
+    channel->setName( dspChannel.name );
 
     lshelv = new QLowShelv( 0.0, 100.0, 1.0,
                           MOD_LOWSHELV6_ALG0_STAGE0_B2_ADDR, MOD_LOWSHELV6_ALG0_STAGE0_B1_ADDR, MOD_LOWSHELV6_ALG0_STAGE0_B0_ADDR,
@@ -955,82 +1066,92 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     channel->addDspBlock( lshelv );
 
     peq01 = new QPeq( 0.0, 1000.0, 1.0,
-                    MOD_PARAMEQ6_ALG0_STAGE0_B2_ADDR, MOD_PARAMEQ6_ALG0_STAGE0_B1_ADDR, MOD_PARAMEQ6_ALG0_STAGE0_B0_ADDR,
-                    MOD_PARAMEQ6_ALG0_STAGE0_A2_ADDR, MOD_PARAMEQ6_ALG0_STAGE0_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ6_ALG0_STAGE0_B2_ADDR, MOD_PARAMEQ6_ALG0_STAGE0_B1_ADDR, MOD_PARAMEQ6_ALG0_STAGE0_B0_ADDR,
+                      MOD_PARAMEQ6_ALG0_STAGE0_A2_ADDR, MOD_PARAMEQ6_ALG0_STAGE0_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq01 );
     channel->addDspBlock( peq01 );
 
     peq02 = new QPeq( 0.0, 2000.0, 2.0,
-                    MOD_PARAMEQ6_ALG0_STAGE1_B2_ADDR, MOD_PARAMEQ6_ALG0_STAGE1_B1_ADDR, MOD_PARAMEQ6_ALG0_STAGE1_B0_ADDR,
-                    MOD_PARAMEQ6_ALG0_STAGE1_A2_ADDR, MOD_PARAMEQ6_ALG0_STAGE1_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ6_ALG0_STAGE1_B2_ADDR, MOD_PARAMEQ6_ALG0_STAGE1_B1_ADDR, MOD_PARAMEQ6_ALG0_STAGE1_B0_ADDR,
+                      MOD_PARAMEQ6_ALG0_STAGE1_A2_ADDR, MOD_PARAMEQ6_ALG0_STAGE1_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq02 );
     channel->addDspBlock( peq02 );
 
     peq03 = new QPeq( 0.0, 3000.0, 2.0,
-                    MOD_PARAMEQ6_ALG0_STAGE2_B2_ADDR, MOD_PARAMEQ6_ALG0_STAGE2_B1_ADDR, MOD_PARAMEQ6_ALG0_STAGE2_B0_ADDR,
-                    MOD_PARAMEQ6_ALG0_STAGE2_A2_ADDR, MOD_PARAMEQ6_ALG0_STAGE2_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ6_ALG0_STAGE2_B2_ADDR, MOD_PARAMEQ6_ALG0_STAGE2_B1_ADDR, MOD_PARAMEQ6_ALG0_STAGE2_B0_ADDR,
+                      MOD_PARAMEQ6_ALG0_STAGE2_A2_ADDR, MOD_PARAMEQ6_ALG0_STAGE2_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq03 );
     channel->addDspBlock( peq03 );
 
     peq04 = new QPeq( 0.0, 4000.0, 2.0,
-                    MOD_PARAMEQ6_ALG0_STAGE3_B2_ADDR, MOD_PARAMEQ6_ALG0_STAGE3_B1_ADDR, MOD_PARAMEQ6_ALG0_STAGE3_B0_ADDR,
-                    MOD_PARAMEQ6_ALG0_STAGE3_A2_ADDR, MOD_PARAMEQ6_ALG0_STAGE3_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ6_ALG0_STAGE3_B2_ADDR, MOD_PARAMEQ6_ALG0_STAGE3_B1_ADDR, MOD_PARAMEQ6_ALG0_STAGE3_B0_ADDR,
+                      MOD_PARAMEQ6_ALG0_STAGE3_A2_ADDR, MOD_PARAMEQ6_ALG0_STAGE3_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq04 );
     channel->addDspBlock( peq04 );
 
     peq05 = new QPeq( 0.0, 5000.0, 2.0,
-                    MOD_PARAMEQ6_ALG0_STAGE4_B2_ADDR, MOD_PARAMEQ6_ALG0_STAGE4_B1_ADDR, MOD_PARAMEQ6_ALG0_STAGE4_B0_ADDR,
-                    MOD_PARAMEQ6_ALG0_STAGE4_A2_ADDR, MOD_PARAMEQ6_ALG0_STAGE4_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ6_ALG0_STAGE4_B2_ADDR, MOD_PARAMEQ6_ALG0_STAGE4_B1_ADDR, MOD_PARAMEQ6_ALG0_STAGE4_B0_ADDR,
+                      MOD_PARAMEQ6_ALG0_STAGE4_A2_ADDR, MOD_PARAMEQ6_ALG0_STAGE4_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq05 );
     channel->addDspBlock( peq05 );
 
     peq06 = new QPeq( 0.0, 6000.0, 2.0,
-                    MOD_PARAMEQ6_ALG0_STAGE5_B2_ADDR, MOD_PARAMEQ6_ALG0_STAGE5_B1_ADDR, MOD_PARAMEQ6_ALG0_STAGE5_B0_ADDR,
-                    MOD_PARAMEQ6_ALG0_STAGE5_A2_ADDR, MOD_PARAMEQ6_ALG0_STAGE5_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ6_ALG0_STAGE5_B2_ADDR, MOD_PARAMEQ6_ALG0_STAGE5_B1_ADDR, MOD_PARAMEQ6_ALG0_STAGE5_B0_ADDR,
+                      MOD_PARAMEQ6_ALG0_STAGE5_A2_ADDR, MOD_PARAMEQ6_ALG0_STAGE5_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq06 );
     channel->addDspBlock( peq06 );
 
     peq07 = new QPeq( 0.0, 7000.0, 2.0,
-                    MOD_PARAMEQ6_ALG0_STAGE6_B2_ADDR, MOD_PARAMEQ6_ALG0_STAGE6_B1_ADDR, MOD_PARAMEQ6_ALG0_STAGE6_B0_ADDR,
-                    MOD_PARAMEQ6_ALG0_STAGE6_A2_ADDR, MOD_PARAMEQ6_ALG0_STAGE6_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ6_ALG0_STAGE6_B2_ADDR, MOD_PARAMEQ6_ALG0_STAGE6_B1_ADDR, MOD_PARAMEQ6_ALG0_STAGE6_B0_ADDR,
+                      MOD_PARAMEQ6_ALG0_STAGE6_A2_ADDR, MOD_PARAMEQ6_ALG0_STAGE6_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq07 );
     channel->addDspBlock( peq07 );
 
     peq08 = new QPeq( 0.0, 8000.0, 2.0,
-                    MOD_PARAMEQ6_ALG0_STAGE7_B2_ADDR, MOD_PARAMEQ6_ALG0_STAGE7_B1_ADDR, MOD_PARAMEQ6_ALG0_STAGE7_B0_ADDR,
-                    MOD_PARAMEQ6_ALG0_STAGE7_A2_ADDR, MOD_PARAMEQ6_ALG0_STAGE7_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ6_ALG0_STAGE7_B2_ADDR, MOD_PARAMEQ6_ALG0_STAGE7_B1_ADDR, MOD_PARAMEQ6_ALG0_STAGE7_B0_ADDR,
+                      MOD_PARAMEQ6_ALG0_STAGE7_A2_ADDR, MOD_PARAMEQ6_ALG0_STAGE7_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq08 );
     channel->addDspBlock( peq08 );
 
     peq09 = new QPeq( 0.0, 9000.0, 2.0,
-                    MOD_PARAMEQ6_ALG0_STAGE8_B2_ADDR, MOD_PARAMEQ6_ALG0_STAGE8_B1_ADDR, MOD_PARAMEQ6_ALG0_STAGE8_B0_ADDR,
-                    MOD_PARAMEQ6_ALG0_STAGE8_A2_ADDR, MOD_PARAMEQ6_ALG0_STAGE8_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ6_ALG0_STAGE8_B2_ADDR, MOD_PARAMEQ6_ALG0_STAGE8_B1_ADDR, MOD_PARAMEQ6_ALG0_STAGE8_B0_ADDR,
+                      MOD_PARAMEQ6_ALG0_STAGE8_A2_ADDR, MOD_PARAMEQ6_ALG0_STAGE8_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq09 );
     channel->addDspBlock( peq09 );
 
     peq10 = new QPeq( 0.0, 10000.0, 2.0,
-                    MOD_PARAMEQ6_ALG0_STAGE9_B2_ADDR, MOD_PARAMEQ6_ALG0_STAGE9_B1_ADDR, MOD_PARAMEQ6_ALG0_STAGE9_B0_ADDR,
-                    MOD_PARAMEQ6_ALG0_STAGE9_A2_ADDR, MOD_PARAMEQ6_ALG0_STAGE9_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ6_ALG0_STAGE9_B2_ADDR, MOD_PARAMEQ6_ALG0_STAGE9_B1_ADDR, MOD_PARAMEQ6_ALG0_STAGE9_B0_ADDR,
+                      MOD_PARAMEQ6_ALG0_STAGE9_A2_ADDR, MOD_PARAMEQ6_ALG0_STAGE9_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq10 );
     channel->addDspBlock( peq10 );
 
@@ -1093,6 +1214,17 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     QObject::connect( dly,    SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( gain,   SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( output, SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
+
+    QObject::connect( peq01,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq02,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq03,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq04,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq05,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq06,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq07,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq08,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq09,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq10,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
   }
   else if( chn == 6 )
   {
@@ -1103,6 +1235,7 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     input = new QInputSelect( 6, MOD_NX1_1_7_MONOMUXSIGMA300NS7INDEX_ADDR, ptrdsp );
     layout->addWidget( input );
     channel->addDspBlock( input );
+    channel->setName( dspChannel.name );
 
     lshelv = new QLowShelv( 0.0, 100.0, 1.0,
                           MOD_LOWSHELV7_ALG0_STAGE0_B2_ADDR, MOD_LOWSHELV7_ALG0_STAGE0_B1_ADDR, MOD_LOWSHELV7_ALG0_STAGE0_B0_ADDR,
@@ -1113,82 +1246,92 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     channel->addDspBlock( lshelv );
 
     peq01 = new QPeq( 0.0, 1000.0, 1.0,
-                    MOD_PARAMEQ7_ALG0_STAGE0_B2_ADDR, MOD_PARAMEQ7_ALG0_STAGE0_B1_ADDR, MOD_PARAMEQ7_ALG0_STAGE0_B0_ADDR,
-                    MOD_PARAMEQ7_ALG0_STAGE0_A2_ADDR, MOD_PARAMEQ7_ALG0_STAGE0_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ7_ALG0_STAGE0_B2_ADDR, MOD_PARAMEQ7_ALG0_STAGE0_B1_ADDR, MOD_PARAMEQ7_ALG0_STAGE0_B0_ADDR,
+                      MOD_PARAMEQ7_ALG0_STAGE0_A2_ADDR, MOD_PARAMEQ7_ALG0_STAGE0_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq01 );
     channel->addDspBlock( peq01 );
 
     peq02 = new QPeq( 0.0, 2000.0, 2.0,
-                  MOD_PARAMEQ7_ALG0_STAGE1_B2_ADDR, MOD_PARAMEQ7_ALG0_STAGE1_B1_ADDR, MOD_PARAMEQ7_ALG0_STAGE1_B0_ADDR,
-                  MOD_PARAMEQ7_ALG0_STAGE1_A2_ADDR, MOD_PARAMEQ7_ALG0_STAGE1_A1_ADDR,
-                  fs,
-                  ptrdsp );
+                      MOD_PARAMEQ7_ALG0_STAGE1_B2_ADDR, MOD_PARAMEQ7_ALG0_STAGE1_B1_ADDR, MOD_PARAMEQ7_ALG0_STAGE1_B0_ADDR,
+                      MOD_PARAMEQ7_ALG0_STAGE1_A2_ADDR, MOD_PARAMEQ7_ALG0_STAGE1_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq02 );
     channel->addDspBlock( peq02 );
 
     peq03 = new QPeq( 0.0, 3000.0, 2.0,
-                    MOD_PARAMEQ7_ALG0_STAGE2_B2_ADDR, MOD_PARAMEQ7_ALG0_STAGE2_B1_ADDR, MOD_PARAMEQ7_ALG0_STAGE2_B0_ADDR,
-                    MOD_PARAMEQ7_ALG0_STAGE2_A2_ADDR, MOD_PARAMEQ7_ALG0_STAGE2_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ7_ALG0_STAGE2_B2_ADDR, MOD_PARAMEQ7_ALG0_STAGE2_B1_ADDR, MOD_PARAMEQ7_ALG0_STAGE2_B0_ADDR,
+                      MOD_PARAMEQ7_ALG0_STAGE2_A2_ADDR, MOD_PARAMEQ7_ALG0_STAGE2_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq03 );
     channel->addDspBlock( peq03 );
 
     peq04 = new QPeq( 0.0, 4000.0, 2.0,
-                    MOD_PARAMEQ7_ALG0_STAGE3_B2_ADDR, MOD_PARAMEQ7_ALG0_STAGE3_B1_ADDR, MOD_PARAMEQ7_ALG0_STAGE3_B0_ADDR,
-                    MOD_PARAMEQ7_ALG0_STAGE3_A2_ADDR, MOD_PARAMEQ7_ALG0_STAGE3_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ7_ALG0_STAGE3_B2_ADDR, MOD_PARAMEQ7_ALG0_STAGE3_B1_ADDR, MOD_PARAMEQ7_ALG0_STAGE3_B0_ADDR,
+                      MOD_PARAMEQ7_ALG0_STAGE3_A2_ADDR, MOD_PARAMEQ7_ALG0_STAGE3_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq04 );
     channel->addDspBlock( peq04 );
 
     peq05 = new QPeq( 0.0, 5000.0, 2.0,
-                  MOD_PARAMEQ7_ALG0_STAGE4_B2_ADDR, MOD_PARAMEQ7_ALG0_STAGE4_B1_ADDR, MOD_PARAMEQ7_ALG0_STAGE4_B0_ADDR,
-                  MOD_PARAMEQ7_ALG0_STAGE4_A2_ADDR, MOD_PARAMEQ7_ALG0_STAGE4_A1_ADDR,
-                  fs,
-                  ptrdsp );
+                      MOD_PARAMEQ7_ALG0_STAGE4_B2_ADDR, MOD_PARAMEQ7_ALG0_STAGE4_B1_ADDR, MOD_PARAMEQ7_ALG0_STAGE4_B0_ADDR,
+                      MOD_PARAMEQ7_ALG0_STAGE4_A2_ADDR, MOD_PARAMEQ7_ALG0_STAGE4_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq05 );
     channel->addDspBlock( peq05 );
 
     peq06 = new QPeq( 0.0, 6000.0, 2.0,
-                    MOD_PARAMEQ7_ALG0_STAGE5_B2_ADDR, MOD_PARAMEQ7_ALG0_STAGE5_B1_ADDR, MOD_PARAMEQ7_ALG0_STAGE5_B0_ADDR,
-                    MOD_PARAMEQ7_ALG0_STAGE5_A2_ADDR, MOD_PARAMEQ7_ALG0_STAGE5_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ7_ALG0_STAGE5_B2_ADDR, MOD_PARAMEQ7_ALG0_STAGE5_B1_ADDR, MOD_PARAMEQ7_ALG0_STAGE5_B0_ADDR,
+                      MOD_PARAMEQ7_ALG0_STAGE5_A2_ADDR, MOD_PARAMEQ7_ALG0_STAGE5_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq06 );
     channel->addDspBlock( peq06 );
 
     peq07 = new QPeq( 0.0, 7000.0, 2.0,
-                    MOD_PARAMEQ7_ALG0_STAGE6_B2_ADDR, MOD_PARAMEQ7_ALG0_STAGE6_B1_ADDR, MOD_PARAMEQ7_ALG0_STAGE6_B0_ADDR,
-                    MOD_PARAMEQ7_ALG0_STAGE6_A2_ADDR, MOD_PARAMEQ7_ALG0_STAGE6_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ7_ALG0_STAGE6_B2_ADDR, MOD_PARAMEQ7_ALG0_STAGE6_B1_ADDR, MOD_PARAMEQ7_ALG0_STAGE6_B0_ADDR,
+                      MOD_PARAMEQ7_ALG0_STAGE6_A2_ADDR, MOD_PARAMEQ7_ALG0_STAGE6_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq07 );
     channel->addDspBlock( peq07 );
 
     peq08 = new QPeq( 0.0, 8000.0, 2.0,
-                  MOD_PARAMEQ7_ALG0_STAGE7_B2_ADDR, MOD_PARAMEQ7_ALG0_STAGE7_B1_ADDR, MOD_PARAMEQ7_ALG0_STAGE7_B0_ADDR,
-                  MOD_PARAMEQ7_ALG0_STAGE7_A2_ADDR, MOD_PARAMEQ7_ALG0_STAGE7_A1_ADDR,
-                  fs,
-                  ptrdsp );
+                      MOD_PARAMEQ7_ALG0_STAGE7_B2_ADDR, MOD_PARAMEQ7_ALG0_STAGE7_B1_ADDR, MOD_PARAMEQ7_ALG0_STAGE7_B0_ADDR,
+                      MOD_PARAMEQ7_ALG0_STAGE7_A2_ADDR, MOD_PARAMEQ7_ALG0_STAGE7_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq08 );
     channel->addDspBlock( peq08 );
 
     peq09 = new QPeq( 0.0, 9000.0, 2.0,
-                    MOD_PARAMEQ7_ALG0_STAGE8_B2_ADDR, MOD_PARAMEQ7_ALG0_STAGE8_B1_ADDR, MOD_PARAMEQ7_ALG0_STAGE8_B0_ADDR,
-                    MOD_PARAMEQ7_ALG0_STAGE8_A2_ADDR, MOD_PARAMEQ7_ALG0_STAGE8_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ7_ALG0_STAGE8_B2_ADDR, MOD_PARAMEQ7_ALG0_STAGE8_B1_ADDR, MOD_PARAMEQ7_ALG0_STAGE8_B0_ADDR,
+                      MOD_PARAMEQ7_ALG0_STAGE8_A2_ADDR, MOD_PARAMEQ7_ALG0_STAGE8_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq09 );
     channel->addDspBlock( peq09 );
 
     peq10 = new QPeq( 0.0, 10000.0, 2.0,
-                    MOD_PARAMEQ7_ALG0_STAGE9_B2_ADDR, MOD_PARAMEQ7_ALG0_STAGE9_B1_ADDR, MOD_PARAMEQ7_ALG0_STAGE9_B0_ADDR,
-                    MOD_PARAMEQ7_ALG0_STAGE9_A2_ADDR, MOD_PARAMEQ7_ALG0_STAGE9_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ7_ALG0_STAGE9_B2_ADDR, MOD_PARAMEQ7_ALG0_STAGE9_B1_ADDR, MOD_PARAMEQ7_ALG0_STAGE9_B0_ADDR,
+                      MOD_PARAMEQ7_ALG0_STAGE9_A2_ADDR, MOD_PARAMEQ7_ALG0_STAGE9_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq10 );
     channel->addDspBlock( peq10 );
 
@@ -1251,6 +1394,17 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     QObject::connect( dly,    SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( gain,   SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( output, SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
+
+    QObject::connect( peq01,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq02,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq03,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq04,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq05,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq06,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq07,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq08,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq09,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq10,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
   }
   else if( chn == 7 )
   {
@@ -1261,6 +1415,7 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     input = new QInputSelect( 7, MOD_NX1_1_8_MONOMUXSIGMA300NS8INDEX_ADDR, ptrdsp );
     layout->addWidget( input );
     channel->addDspBlock( input );
+    channel->setName( dspChannel.name );
 
     lp = new QLowPass( QLowPass::kLinkwitzRiley24, 120.0,
                       MOD_LP8_1_ALG0_STAGE0_B2_ADDR, MOD_LP8_1_ALG0_STAGE0_B1_ADDR, MOD_LP8_1_ALG0_STAGE0_B0_ADDR,
@@ -1285,82 +1440,92 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     channel->addDspBlock( lshelv );
 
     peq01 = new QPeq( 0.0, 1000.0, 1.0,
-                  MOD_PARAMEQ8_ALG0_STAGE0_B2_ADDR, MOD_PARAMEQ8_ALG0_STAGE0_B1_ADDR, MOD_PARAMEQ8_ALG0_STAGE0_B0_ADDR,
-                  MOD_PARAMEQ8_ALG0_STAGE0_A2_ADDR, MOD_PARAMEQ8_ALG0_STAGE0_A1_ADDR,
-                  fs,
-                  ptrdsp );
+                      MOD_PARAMEQ8_ALG0_STAGE0_B2_ADDR, MOD_PARAMEQ8_ALG0_STAGE0_B1_ADDR, MOD_PARAMEQ8_ALG0_STAGE0_B0_ADDR,
+                      MOD_PARAMEQ8_ALG0_STAGE0_A2_ADDR, MOD_PARAMEQ8_ALG0_STAGE0_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq01 );
     channel->addDspBlock( peq01 );
 
     peq02 = new QPeq( 0.0, 2000.0, 2.0,
-                    MOD_PARAMEQ8_ALG0_STAGE1_B2_ADDR, MOD_PARAMEQ8_ALG0_STAGE1_B1_ADDR, MOD_PARAMEQ8_ALG0_STAGE1_B0_ADDR,
-                    MOD_PARAMEQ8_ALG0_STAGE1_A2_ADDR, MOD_PARAMEQ8_ALG0_STAGE1_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ8_ALG0_STAGE1_B2_ADDR, MOD_PARAMEQ8_ALG0_STAGE1_B1_ADDR, MOD_PARAMEQ8_ALG0_STAGE1_B0_ADDR,
+                      MOD_PARAMEQ8_ALG0_STAGE1_A2_ADDR, MOD_PARAMEQ8_ALG0_STAGE1_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq02 );
     channel->addDspBlock( peq02 );
 
     peq03 = new QPeq( 0.0, 3000.0, 2.0,
-                    MOD_PARAMEQ8_ALG0_STAGE2_B2_ADDR, MOD_PARAMEQ8_ALG0_STAGE2_B1_ADDR, MOD_PARAMEQ8_ALG0_STAGE2_B0_ADDR,
-                    MOD_PARAMEQ8_ALG0_STAGE2_A2_ADDR, MOD_PARAMEQ8_ALG0_STAGE2_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ8_ALG0_STAGE2_B2_ADDR, MOD_PARAMEQ8_ALG0_STAGE2_B1_ADDR, MOD_PARAMEQ8_ALG0_STAGE2_B0_ADDR,
+                      MOD_PARAMEQ8_ALG0_STAGE2_A2_ADDR, MOD_PARAMEQ8_ALG0_STAGE2_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq03 );
     channel->addDspBlock( peq03 );
 
     peq04 = new QPeq( 0.0, 4000.0, 2.0,
-                    MOD_PARAMEQ8_ALG0_STAGE3_B2_ADDR, MOD_PARAMEQ8_ALG0_STAGE3_B1_ADDR, MOD_PARAMEQ8_ALG0_STAGE3_B0_ADDR,
-                    MOD_PARAMEQ8_ALG0_STAGE3_A2_ADDR, MOD_PARAMEQ8_ALG0_STAGE3_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ8_ALG0_STAGE3_B2_ADDR, MOD_PARAMEQ8_ALG0_STAGE3_B1_ADDR, MOD_PARAMEQ8_ALG0_STAGE3_B0_ADDR,
+                      MOD_PARAMEQ8_ALG0_STAGE3_A2_ADDR, MOD_PARAMEQ8_ALG0_STAGE3_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq04 );
     channel->addDspBlock( peq04 );
 
     peq05 = new QPeq( 0.0, 5000.0, 2.0,
-                  MOD_PARAMEQ8_ALG0_STAGE4_B2_ADDR, MOD_PARAMEQ8_ALG0_STAGE4_B1_ADDR, MOD_PARAMEQ8_ALG0_STAGE4_B0_ADDR,
-                  MOD_PARAMEQ8_ALG0_STAGE4_A2_ADDR, MOD_PARAMEQ8_ALG0_STAGE4_A1_ADDR,
-                  fs,
-                  ptrdsp );
+                      MOD_PARAMEQ8_ALG0_STAGE4_B2_ADDR, MOD_PARAMEQ8_ALG0_STAGE4_B1_ADDR, MOD_PARAMEQ8_ALG0_STAGE4_B0_ADDR,
+                      MOD_PARAMEQ8_ALG0_STAGE4_A2_ADDR, MOD_PARAMEQ8_ALG0_STAGE4_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq05 );
     channel->addDspBlock( peq05 );
 
     peq06 = new QPeq( 0.0, 6000.0, 2.0,
-                    MOD_PARAMEQ8_ALG0_STAGE5_B2_ADDR, MOD_PARAMEQ8_ALG0_STAGE5_B1_ADDR, MOD_PARAMEQ8_ALG0_STAGE5_B0_ADDR,
-                    MOD_PARAMEQ8_ALG0_STAGE5_A2_ADDR, MOD_PARAMEQ8_ALG0_STAGE5_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ8_ALG0_STAGE5_B2_ADDR, MOD_PARAMEQ8_ALG0_STAGE5_B1_ADDR, MOD_PARAMEQ8_ALG0_STAGE5_B0_ADDR,
+                      MOD_PARAMEQ8_ALG0_STAGE5_A2_ADDR, MOD_PARAMEQ8_ALG0_STAGE5_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq06 );
     channel->addDspBlock( peq06 );
 
     peq07 = new QPeq( 0.0, 7000.0, 2.0,
-                    MOD_PARAMEQ8_ALG0_STAGE6_B2_ADDR, MOD_PARAMEQ8_ALG0_STAGE6_B1_ADDR, MOD_PARAMEQ8_ALG0_STAGE6_B0_ADDR,
-                    MOD_PARAMEQ8_ALG0_STAGE6_A2_ADDR, MOD_PARAMEQ8_ALG0_STAGE6_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ8_ALG0_STAGE6_B2_ADDR, MOD_PARAMEQ8_ALG0_STAGE6_B1_ADDR, MOD_PARAMEQ8_ALG0_STAGE6_B0_ADDR,
+                      MOD_PARAMEQ8_ALG0_STAGE6_A2_ADDR, MOD_PARAMEQ8_ALG0_STAGE6_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq07 );
     channel->addDspBlock( peq07 );
 
     peq08 = new QPeq( 0.0, 8000.0, 2.0,
-                  MOD_PARAMEQ8_ALG0_STAGE7_B2_ADDR, MOD_PARAMEQ8_ALG0_STAGE7_B1_ADDR, MOD_PARAMEQ8_ALG0_STAGE7_B0_ADDR,
-                  MOD_PARAMEQ8_ALG0_STAGE7_A2_ADDR, MOD_PARAMEQ8_ALG0_STAGE7_A1_ADDR,
-                  fs,
-                  ptrdsp );
+                      MOD_PARAMEQ8_ALG0_STAGE7_B2_ADDR, MOD_PARAMEQ8_ALG0_STAGE7_B1_ADDR, MOD_PARAMEQ8_ALG0_STAGE7_B0_ADDR,
+                      MOD_PARAMEQ8_ALG0_STAGE7_A2_ADDR, MOD_PARAMEQ8_ALG0_STAGE7_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq08 );
     channel->addDspBlock( peq08 );
 
     peq09 = new QPeq( 0.0, 9000.0, 2.0,
-                    MOD_PARAMEQ8_ALG0_STAGE8_B2_ADDR, MOD_PARAMEQ8_ALG0_STAGE8_B1_ADDR, MOD_PARAMEQ8_ALG0_STAGE8_B0_ADDR,
-                    MOD_PARAMEQ8_ALG0_STAGE8_A2_ADDR, MOD_PARAMEQ8_ALG0_STAGE8_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ8_ALG0_STAGE8_B2_ADDR, MOD_PARAMEQ8_ALG0_STAGE8_B1_ADDR, MOD_PARAMEQ8_ALG0_STAGE8_B0_ADDR,
+                      MOD_PARAMEQ8_ALG0_STAGE8_A2_ADDR, MOD_PARAMEQ8_ALG0_STAGE8_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq09 );
     channel->addDspBlock( peq09 );
 
     peq10 = new QPeq( 0.0, 10000.0, 2.0,
-                    MOD_PARAMEQ8_ALG0_STAGE9_B2_ADDR, MOD_PARAMEQ8_ALG0_STAGE9_B1_ADDR, MOD_PARAMEQ8_ALG0_STAGE9_B0_ADDR,
-                    MOD_PARAMEQ8_ALG0_STAGE9_A2_ADDR, MOD_PARAMEQ8_ALG0_STAGE9_A1_ADDR,
-                    fs,
-                    ptrdsp );
+                      MOD_PARAMEQ8_ALG0_STAGE9_B2_ADDR, MOD_PARAMEQ8_ALG0_STAGE9_B1_ADDR, MOD_PARAMEQ8_ALG0_STAGE9_B0_ADDR,
+                      MOD_PARAMEQ8_ALG0_STAGE9_A2_ADDR, MOD_PARAMEQ8_ALG0_STAGE9_A1_ADDR,
+                      fs,
+                      ptrdsp,
+                      channel );
     layout->addWidget( peq10 );
     channel->addDspBlock( peq10 );
 
@@ -1425,6 +1590,17 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     QObject::connect( dly,    SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( gain,   SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( output, SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
+
+    QObject::connect( peq01,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq02,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq03,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq04,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq05,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq06,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq07,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq08,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq09,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+    QObject::connect( peq10,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
   }
 
 

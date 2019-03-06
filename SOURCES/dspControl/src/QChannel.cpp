@@ -1,7 +1,7 @@
 #include "QChannel.hpp"
 #include "ui_QChannel.h"
 
-QChannel::QChannel(QWidget *parent) :
+QChannel::QChannel( QString chnname, QWidget *parent ) :
   QWidget(parent),
   ui(new Ui::QChannel)
 {
@@ -23,8 +23,11 @@ QChannel::QChannel(QWidget *parent) :
   widgetChannel = ui->widgetChannel;
   figVoltageMagnitude = ui->figVoltageMagnitude;
 
+  name = chnname;
+
   connect( ui->figVoltageMagnitude, SIGNAL(customContextMenuRequested(const QPoint &)),
            this, SLOT(on_showContextMenu(const QPoint &)));
+
 }
 
 QChannel::~QChannel()

@@ -1,13 +1,21 @@
+#include <QAction>
+
 #include "QPeq.hpp"
 #include "ui_QPeq.h"
 
 using namespace Vektorraum;
 
+//==============================================================================
+/*!
+ *
+ */
 QPeq::QPeq( double gain, double freq, double qfactor,
             uint16_t addrB2, uint16_t addrB1, uint16_t addrB0,
             uint16_t addrA2, uint16_t addrA1,
             tfloat samplerate,
-            CFreeDspAurora* ptrdsp, QWidget *parent) :
+            CFreeDspAurora* ptrdsp, 
+            QChannel* ptrchn,
+            QWidget *parent) :
   QDspBlock(parent), ui(new Ui::QPeq)
 {
   addr[kParamB2] = addrB2;
@@ -17,6 +25,7 @@ QPeq::QPeq( double gain, double freq, double qfactor,
   addr[kParamA1] = addrA1;
   fs = samplerate;
   dsp = ptrdsp;
+  channel = ptrchn;
 
   ui->setupUi(this);
   ui->doubleSpinBoxGain->blockSignals( true );
@@ -31,13 +40,30 @@ QPeq::QPeq( double gain, double freq, double qfactor,
   ui->doubleSpinBoxQ->setAttribute( Qt::WA_MacShowFocusRect, 0 );
   ui->doubleSpinBoxQ->setValue( qfactor );
   ui->doubleSpinBoxQ->blockSignals( false );
+
+  QAction* action = new QAction( "Import REW PEQs" );
+  contextMenu.addAction( action );
+
+  connect( this, SIGNAL(customContextMenuRequested(const QPoint &)),
+           this, SLOT(on_showContextMenu(const QPoint &)));
+
+  connect( action, &QAction::triggered, this, &QPeq::on_importRewPeqs );
+
 }
 
+//==============================================================================
+/*!
+ *
+ */
 QPeq::~QPeq()
 {
   delete ui;
 }
 
+//==============================================================================
+/*!
+ *
+ */
 void QPeq::update( Vektorraum::tvector<Vektorraum::tfloat> f )
 {
   updateCoeffs();
@@ -52,7 +78,7 @@ void QPeq::update( Vektorraum::tvector<Vektorraum::tfloat> f )
   H = ( b0 + b1*z + b2*z2 ) / ( a0 + a1*z + a2*z2 );
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -79,23 +105,24 @@ void QPeq::updateCoeffs( void )
   {
     tfloat A = std::pow( 10.0, V0 / 40.0 );
     tfloat w0 = 2.0 * pi * fc / fs;
-    tfloat alpha = sin(w0) / (2.0 * Q );
-    tfloat a0 = 1.0 + alpha / A;
-    tfloat b0 = (1.0 + alpha * A) / a0;
-    tfloat b1 = -2.0*cos(w0) / a0;
-    tfloat b2 = (1.0 - alpha * A) / a0;
-    tfloat a1 = ( -2.0 * cos(w0) ) / a0;
-    tfloat a2 = ( 1.0 - alpha / A ) / a0;
-    a0 = 1.0;
-    coeffs[ kB0 ] = b0;
-    coeffs[ kB1 ] = b1;
-    coeffs[ kB2 ] = b2;
-    coeffs[ kA1 ] = a1;
-    coeffs[ kA2 ] = a2;
+    tfloat BW = asinh( (1.0 / Q) / 2.0 ) / ( log(2.0) / 2.0 );
+    tfloat alpha = sin(w0) * sinh( std::log(2.0)/2.0 * BW * w0 / sin(w0) );
+    tfloat b0 =  1.0 + alpha * A;
+    tfloat b1 = -2.0 * cos(w0);
+    tfloat b2 =  1.0 - alpha * A;
+    tfloat a0 =  1.0 + alpha / A;
+    tfloat a1 = -2.0 * cos(w0);
+    tfloat a2 =  1.0 - alpha / A;
+
+    coeffs[ kB0 ] = b0 / a0;
+    coeffs[ kB1 ] = b1 / a0;
+    coeffs[ kB2 ] = b2 / a0;
+    coeffs[ kA1 ] = a1 / a0;
+    coeffs[ kA2 ] = a2 / a0;
   }
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -106,7 +133,7 @@ void QPeq::on_doubleSpinBoxGain_valueChanged( double  )
   emit valueChanged();
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -117,7 +144,7 @@ void QPeq::on_doubleSpinBoxFc_valueChanged( double  )
   emit valueChanged();
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -128,7 +155,7 @@ void QPeq::on_doubleSpinBoxQ_valueChanged( double  )
   emit valueChanged();
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -140,7 +167,7 @@ void QPeq::on_pushButtonBypass_clicked()
   emit valueChanged();
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -153,7 +180,7 @@ void QPeq::sendDspParameter( void )
   dsp->sendParameter( addr[kParamA1], static_cast<float>(coeffs[kA1]) );
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -162,7 +189,7 @@ uint32_t QPeq::getNumBytes( void )
   return 2*5 + 4*5;
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -180,3 +207,49 @@ void QPeq::writeDspParameter( void )
   dsp->storeValue( static_cast<float>(coeffs[kA1]) );
 
 }
+
+//==============================================================================
+/*!
+ *
+ */
+void QPeq::on_showContextMenu( const QPoint &pos )
+{
+  qDebug()<<"Context Menu";
+  contextMenu.exec( mapToGlobal(pos) );
+}
+
+//==============================================================================
+/*!
+ *
+ */
+void QPeq::on_importRewPeqs( void )
+{
+  qDebug()<<"QPeq::on_importRewPeqs"<<channel->getName();
+  emit importRewPeqs( this );
+}
+
+//==============================================================================
+/*!
+ *
+ */
+void QPeq::setParameters( Vektorraum::tfloat newfc, Vektorraum::tfloat newV0, Vektorraum::tfloat newQ )
+{
+  fc = newfc;
+  Q = newQ;
+  V0 = newV0;
+
+  ui->doubleSpinBoxGain->blockSignals( true );
+  ui->doubleSpinBoxFc->blockSignals( true );
+  ui->doubleSpinBoxQ->blockSignals( true );
+  ui->doubleSpinBoxGain->setValue( V0 );
+  ui->doubleSpinBoxFc->setValue( fc );
+  ui->doubleSpinBoxQ->setValue( Q );
+  ui->doubleSpinBoxGain->blockSignals( false );
+  ui->doubleSpinBoxFc->blockSignals( false );
+  ui->doubleSpinBoxQ->blockSignals( false );
+
+  updateCoeffs();
+  sendDspParameter();
+  emit valueChanged();
+}
+

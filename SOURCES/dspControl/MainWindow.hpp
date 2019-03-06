@@ -39,6 +39,7 @@ public:
 public slots:
   void showLicense( void );
   void updatePlots( void );
+  void importRewPeqs( QWidget* );
 
 private slots:
   void on_actionWrite_to_DSP_triggered();

@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QMenu>
 #include <QVector>
+#include <QString>
 
 #include "QDspBlock.hpp"
 #include "QFigure.h"
@@ -14,12 +15,14 @@ namespace Ui {
 class QChannel;
 }
 
+class QPeq;
+
 class QChannel : public QWidget
 {
   Q_OBJECT
 
 public:
-  explicit QChannel(QWidget *parent = nullptr);
+  explicit QChannel( QString chnname = QString(""), QWidget *parent = nullptr );
   ~QChannel();
 
   void addDspBlock( QDspBlock* dspblock )
@@ -27,9 +30,29 @@ public:
     dspBlocks.append( dspblock );
   }
 
+  void addPeq( QPeq* newpeq )
+  {
+    peqs.append( newpeq );
+  }
+
+  QString getName( void )
+  {
+    return name;
+  }
+
+  QVector<QPeq*> getPeqs( void )
+  {
+    return peqs;
+  }
+
   Vektorraum::tvector<Vektorraum::tcomplex> getTransferFunction( void )
   {
     return H;
+  }
+
+  void setName( QString chnname )
+  {
+    name = chnname;
   }
 
   void update( Vektorraum::tvector<Vektorraum::tfloat> f )
@@ -75,6 +98,8 @@ private:
   Ui::QChannel *ui;
   QVector<QDspBlock*> dspBlocks;
   Vektorraum::tvector<Vektorraum::tcomplex> H;
+  QVector<QPeq*> peqs;
+  QString name;
 
 };
 

@@ -3,8 +3,10 @@
 
 #include <QWidget>
 #include <QDebug>
+#include <QMenu>
 
 #include "QDspBlock.hpp"
+#include "QChannel.hpp"
 
 #include "vektorraum.h"
 
@@ -13,6 +15,7 @@
 namespace Ui {
 class QPeq;
 }
+
 
 class QPeq : public QDspBlock
 {
@@ -43,7 +46,9 @@ public:
                  uint16_t addrB2, uint16_t addrB1, uint16_t addrB0,
                  uint16_t addrA2, uint16_t addrA1,
                  Vektorraum::tfloat samplerate,
-                 CFreeDspAurora* ptrdsp, QWidget *parent = nullptr );
+                 CFreeDspAurora* ptrdsp, 
+                 QChannel* ptrchn,
+                 QWidget *parent = nullptr );
   ~QPeq();
 
   virtual Vektorraum::tvector<Vektorraum::tcomplex> getTransferFunction( void )
@@ -58,20 +63,32 @@ public:
     return kNumParams;
   }
 
-  virtual void sendDspParameter( void );
+  QChannel* getChannel( void )
+  {
+    return channel;
+  }
 
   virtual uint32_t getNumBytes( void );
+
+  virtual void sendDspParameter( void );
+
+  void setParameters( Vektorraum::tfloat newfc, Vektorraum::tfloat newV0, Vektorraum::tfloat newQ );
 
   virtual void writeDspParameter( void );
 
 private:
   void updateCoeffs( void );
 
+signals:
+  void importRewPeqs( QWidget* );
+
 private slots:
   void on_doubleSpinBoxGain_valueChanged( double  );
   void on_doubleSpinBoxFc_valueChanged( double  );
   void on_doubleSpinBoxQ_valueChanged( double  );
   void on_pushButtonBypass_clicked();
+  void on_showContextMenu( const QPoint &pos );
+  void on_importRewPeqs( void );
 
 private:
   Ui::QPeq *ui;
@@ -81,6 +98,8 @@ private:
   Vektorraum::tfloat coeffs[5];
   uint16_t addr[kNumParams];
   CFreeDspAurora* dsp = nullptr;
+  QMenu contextMenu;
+  QChannel* channel = nullptr;
 };
 
 #endif // QPEQ_HPP
