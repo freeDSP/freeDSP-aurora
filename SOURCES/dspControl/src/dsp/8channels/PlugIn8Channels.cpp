@@ -165,8 +165,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                       MOD_HP1_4_ALG0_STAGE0_B2_ADDR, MOD_HP1_4_ALG0_STAGE0_B1_ADDR, MOD_HP1_4_ALG0_STAGE0_B0_ADDR,
                       MOD_HP1_4_ALG0_STAGE0_A2_ADDR, MOD_HP1_4_ALG0_STAGE0_A1_ADDR,
                       fs,
-                      ptrdsp,
-                      channel );
+                      ptrdsp );
     layout->addWidget( hp );
     channel->addDspBlock( hp );
 

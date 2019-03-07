@@ -5,11 +5,13 @@
 #include <QStandardPaths>
 #include <QString>
 #include <QMessageBox>
+#include <QInputDialog>
 
 #include "QOutputSelect.hpp"
 #include "ui_QOutputSelect.h"
 
 using namespace Vektorraum;
+
 
 QOutputSelect::QOutputSelect( uint32_t selection, uint16_t outputaddr, CFreeDspAurora* ptrdsp, QWidget *parent) :
   QDspBlock(parent), ui(new Ui::QOutputSelect)
@@ -131,14 +133,14 @@ bool QOutputSelect::eventFilter( QObject* object, QEvent* event )
   {
     fileName = QFileDialog::getOpenFileName( this, tr("Open Frequency Response"), 
                                              QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory),
-                                             tr("FRD Files (*.frd)") );
+                                             tr("FRD Files (*.frd, *.txt)") );
 
     if( !fileName.isEmpty() )
     {
       QFile fileFRD( fileName );
       QFileInfo infoFRD( fileFRD );
 
-      if( (!fileFRD.exists()) || (QString::compare( infoFRD.suffix(), "frd", Qt::CaseInsensitive) != 0) )
+      if( !fileFRD.exists() )
       {
         QMessageBox::critical( this, tr("Loading file failed"),
                                      tr("You did not select a valid frequency response file. File will be ignored. Sorry."),
@@ -147,6 +149,12 @@ bool QOutputSelect::eventFilter( QObject* object, QEvent* event )
       }
       else 
       {
+        bool ok;
+        double ref = QInputDialog::getDouble( this, tr("Import measurement"),
+                                              tr("SPL Reference:"), refSpl, 1.0, 120.0, 1, &ok );
+        if( ok )
+          refSpl = ref;
+
         unsigned int idx = 0;
         if( fileFRD.open( QIODevice::ReadOnly ) ) 
         {
