@@ -1,9 +1,8 @@
 
 #include <Wire.h>
-#include <WiFi.h>
-//#include "BluetoothSerial.h"
-#include "SPIFFS.h"
 
+#include "BluetoothSerial.h"
+#include "SPIFFS.h"
 
 #define I2C_SDA_PIN 16
 #define I2C_SCL_PIN 4
@@ -35,7 +34,7 @@ enum
   STATUS_RETURN_PARAMS
 };
 
-//BluetoothSerial SerialBT;
+BluetoothSerial SerialBT;
 
 int state;
 int numBytes = 0;
@@ -68,7 +67,6 @@ Serial.print(cnt);
 Serial.println(" I2C Devices found.");
 }
 
-#if 0
 //==============================================================================
 /*! Uploads the firmware from ESP32 SPI flash to DSP.
  */
@@ -264,7 +262,6 @@ void returnDspParameters( void )
     Serial.println( "\n[ERROR] Failed to open file dspinit.hex" );
   Serial.print( "[ok]\n" );
 }
-#endif
 
 //==============================================================================
 /*! Arduino Setup
@@ -283,38 +280,64 @@ void setup()
     return;
   }
 
-  //----------------------------------------------------------------------------
-  //--- Configure ESP for WiFi access
-  //----------------------------------------------------------------------------
-  WiFi.mode( WIFI_AP_STA );
-  // Start access point
-  WiFi.softAP( "freeDSP-aurora" );
-  // print the ESP32 IP-Address
-  Serial.println( WiFi.softAPIP() );
+/*
+  File file = SPIFFS.open( "/test.txt", FILE_WRITE );
+
+  if (!file) {
+    Serial.println("There was an error opening the file for writing");
+    return;
+  }
+  if (file.print("TEST")) {
+    Serial.println("File was written");
+  } else {
+    Serial.println("File write failed");
+  }
+
+  file.close();
+ */
 
   //----------------------------------------------------------------------------
   //--- Download program to DSP
   //----------------------------------------------------------------------------
-  //uploadDspFirmware();
+  uploadDspFirmware();
 
   //----------------------------------------------------------------------------
   //--- Download user parameter to DSP
   //----------------------------------------------------------------------------
-  //uploadDspParameter();
+  uploadDspParameter();
 
+/*
+  Wire.beginTransmission( DSP_ADDR ); // Initialize the Tx buffer
+  Wire.write(0xF0);
+  Wire.write(0x00);
+  Wire.endTransmission( true ); // Send the Tx buffer, but send a restart to keep connection alive
 
+  Wire.requestFrom( DSP_ADDR, 2 ); // Read two bytes from slave
+  while ( Wire.available() )
+    Serial.println( Wire.read(), HEX );
+
+  Wire.endTransmission( true );
+
+  Wire.beginTransmission( DSP_ADDR ); // Initialize the Tx buffer
+  Wire.write(0xF0);
+  Wire.write(0x20);
+  Wire.endTransmission( true ); // Send the Tx buffer, but send a restart to keep connection alive
+
+  Wire.requestFrom( DSP_ADDR, 2 ); // Read two bytes from slave
+  while ( Wire.available() )
+    Serial.println( Wire.read(), HEX );
+
+  Wire.endTransmission( true );
+*/
 
   state = STATUS_IDLE;
 
-  //SerialBT.begin( "freedsp-aurora" );
+  SerialBT.begin( "freedsp-aurora" );
 
 }
 
 void loop()
 {
-
-
-#if 0
   int rxByte;
 
 
@@ -573,8 +596,6 @@ void loop()
       SerialBT.write( rxByte );
     }
   }
-
-  #endif
 
    //Wire.beginTransmission( DSP_ADDR );
    //Wire.endTransmission();
