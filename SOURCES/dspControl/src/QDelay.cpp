@@ -1,3 +1,4 @@
+#include <QDebug>
 #include <cstdint>
 
 #include "QDelay.hpp"
@@ -96,4 +97,43 @@ void QDelay::writeDspParameter( void )
     val = 0;
   dsp->storeRegAddr( addr[kDelay] );
   dsp->storeValue( val );
+}
+
+//==============================================================================
+/*!
+ */
+void QDelay::getUserParams( QByteArray* userParams )
+{
+  float dly = static_cast<float>(ui->doubleSpinBoxDelay->value());
+  userParams->append( reinterpret_cast<const char*>(&dly), sizeof(dly) );
+}
+
+//==============================================================================
+/*!
+ */
+void QDelay::setUserParams( QByteArray& userParams, int& idx )
+{
+  QByteArray param;
+
+  if( userParams.size() >= idx + 4 )
+  {
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+
+    float dly = *reinterpret_cast<const float*>(param.data());
+
+    ui->doubleSpinBoxDelay->blockSignals( true );
+    ui->doubleSpinBoxDelay->setValue( static_cast<double>(dly) );
+    ui->doubleSpinBoxDelay->blockSignals( false );
+  }
+  else
+    qDebug()<<"QDelay::setUserParams: Not enough data";
+
 }

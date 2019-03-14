@@ -1,3 +1,5 @@
+#include <QDebug>
+
 #include "QHighShelv.hpp"
 #include "ui_QHighShelv.h"
 
@@ -179,4 +181,75 @@ void QHighShelv::writeDspParameter( void )
   dsp->storeRegAddr( addr[kParamA1] );
   dsp->storeValue( static_cast<float>(coeffs[kA1]) );
 
+}
+
+//==============================================================================
+/*!
+ */
+void QHighShelv::getUserParams( QByteArray* userParams )
+{
+  float V0t = static_cast<float>(ui->doubleSpinBoxGain->value());
+  userParams->append( reinterpret_cast<const char*>(&V0t), sizeof(V0t) );
+  float fct = static_cast<float>(ui->doubleSpinBoxFc->value());
+  userParams->append( reinterpret_cast<const char*>(&fct), sizeof(fct) );
+  float St = static_cast<float>(ui->doubleSpinBoxS->value());
+  userParams->append( reinterpret_cast<const char*>(&St), sizeof(St) );
+}
+
+//==============================================================================
+/*!
+ */
+void QHighShelv::setUserParams( QByteArray& userParams, int& idx )
+{
+  QByteArray param;
+
+  if( userParams.size() >= idx + 12 )
+  {
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+
+    float V0t = *reinterpret_cast<const float*>(param.data());
+
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+
+    float fct = *reinterpret_cast<const float*>(param.data());
+
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+
+    float St = *reinterpret_cast<const float*>(param.data());
+
+    ui->doubleSpinBoxGain->blockSignals( true );
+    ui->doubleSpinBoxGain->setValue( V0t );
+    ui->doubleSpinBoxGain->blockSignals( false );
+
+    ui->doubleSpinBoxFc->blockSignals( true );
+    ui->doubleSpinBoxFc->setValue( fct );
+    ui->doubleSpinBoxFc->blockSignals( false );
+
+    ui->doubleSpinBoxS->blockSignals( true );
+    ui->doubleSpinBoxS->setValue( St );
+    ui->doubleSpinBoxS->blockSignals( false );
+  }
+  else
+    qDebug()<<"QHighShelv::setUserParams: Not enough data";
 }

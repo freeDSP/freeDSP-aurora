@@ -23,7 +23,7 @@ public:
   /*!
    *
    */
-  unsigned int getNumChannels( void ) { return 8; }
+  virtual unsigned int getNumChannels( void ) { return 8; }
 
   //============================================================================
   /*!

@@ -70,6 +70,8 @@ QHighPass::QHighPass( tfilterdesign design, tfloat fc,
 
   bypass = isbypassed;
   ui->pushButtonBypass->setChecked( bypass );
+
+  type = HIGHPASS;
 }
 
 //==============================================================================
@@ -114,6 +116,9 @@ void QHighPass::update( tvector<tfloat> f )
  */
 void QHighPass::updateCoeffs( void )
 {
+  Vektorraum::tfloat Q[4];
+  Vektorraum::tfloat fc[4];
+
   for( tuint ii = 0; ii < 4; ii++ )
   {
     Q[ii] = -1.0;
@@ -969,4 +974,50 @@ void QHighPass::setName( QString newname )
 {
   ui->label->setText( newname );
   name = newname;
+}
+
+//==============================================================================
+/*!
+ */
+void QHighPass::getUserParams( QByteArray* userParams )
+{
+  userParams->append( static_cast<uint8_t>(filterDesign) );
+  float fc = static_cast<float>(ui->doubleSpinBoxFc->value());
+  userParams->append( reinterpret_cast<const char*>(&fc), sizeof(fc) );
+}
+
+//==============================================================================
+/*!
+ */
+void QHighPass::setUserParams( QByteArray& userParams, int& idx )
+{
+  QByteArray param;
+
+  if( userParams.size() >= idx + 5 )
+  {
+    filterDesign = static_cast<tfilterdesign>(userParams.at(idx));
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+
+    float fc = *reinterpret_cast<const float*>(param.data());
+
+    ui->comboBoxType->blockSignals( true );
+    int index = ui->comboBoxType->findData( filterDesign );
+    if ( index != -1 )
+      ui->comboBoxType->setCurrentIndex(index);
+    ui->comboBoxType->blockSignals( false );
+    ui->doubleSpinBoxFc->blockSignals( true );
+    ui->doubleSpinBoxFc->setValue( static_cast<double>(fc) );
+    ui->doubleSpinBoxFc->blockSignals( false );
+  }
+  else
+    qDebug()<<"QHighPass::setUserParams: Not enough data";
+
 }

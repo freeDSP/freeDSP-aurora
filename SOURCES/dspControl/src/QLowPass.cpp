@@ -831,3 +831,49 @@ void QLowPass::writeDspParameter( void )
   dsp->storeRegAddr( addr[kParamA1_4] );
   dsp->storeValue( static_cast<float>(coeffs[3*5+kA1]) );
 }
+
+//==============================================================================
+/*!
+ */
+void QLowPass::getUserParams( QByteArray* userParams )
+{
+  userParams->append( static_cast<uint8_t>(filterDesign) );
+  float fc = static_cast<float>(ui->doubleSpinBoxFc->value());
+  userParams->append( reinterpret_cast<const char*>(&fc), sizeof(fc) );
+}
+
+//==============================================================================
+/*!
+ */
+void QLowPass::setUserParams( QByteArray& userParams, int& idx )
+{
+  QByteArray param;
+
+  if( userParams.size() >= idx + 5 )
+  {
+    filterDesign = static_cast<tfilterdesign>(userParams.at(idx));
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+
+    float fc = *reinterpret_cast<const float*>(param.data());
+
+    ui->comboBoxType->blockSignals( true );
+    int index = ui->comboBoxType->findData( filterDesign );
+    if ( index != -1 )
+      ui->comboBoxType->setCurrentIndex(index);
+    ui->comboBoxType->blockSignals( false );
+    ui->doubleSpinBoxFc->blockSignals( true );
+    ui->doubleSpinBoxFc->setValue( fc );
+    ui->doubleSpinBoxFc->blockSignals( false );
+  }
+  else
+    qDebug()<<"QLowPass::setUserParams: Not enough data";
+
+}

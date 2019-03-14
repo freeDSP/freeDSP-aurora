@@ -96,6 +96,10 @@ public:
     return kNumParams;
   }
 
+  virtual void getUserParams( QByteArray* userParams );
+
+  virtual void setUserParams( QByteArray& userParams, int& idx );
+
   virtual void sendDspParameter( void );
 
   virtual uint32_t getNumBytes( void );

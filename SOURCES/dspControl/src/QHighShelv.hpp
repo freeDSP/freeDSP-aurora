@@ -51,6 +51,10 @@ public:
 
   void update( Vektorraum::tvector<Vektorraum::tfloat> f );
 
+  virtual void getUserParams( QByteArray* userParams );
+
+  virtual void setUserParams( QByteArray& userParams, int& idx );
+
   unsigned int numParameter( void )
   {
     return kNumParams;

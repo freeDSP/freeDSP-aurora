@@ -21,7 +21,7 @@ public:
   /*!
    *
    */
-  unsigned int getNumChannels( void ) { return 4; }
+  virtual unsigned int getNumChannels( void ) { return 4; }
 
   //============================================================================
   /*!

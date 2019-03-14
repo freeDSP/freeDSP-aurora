@@ -325,6 +325,8 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     QObject::connect( peq08,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
     QObject::connect( peq09,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
     QObject::connect( peq10,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+
+    listChannels.append( channel );
   }
   else if( chn == 1 )
   {
@@ -505,6 +507,8 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     QObject::connect( peq08,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
     QObject::connect( peq09,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
     QObject::connect( peq10,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+
+    listChannels.append( channel );
   }
   else if( chn == 2 )
   {
@@ -685,6 +689,8 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     QObject::connect( peq08,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
     QObject::connect( peq09,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
     QObject::connect( peq10,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+
+    listChannels.append( channel );
   }
   else if( chn == 3 )
   {
@@ -865,6 +871,8 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     QObject::connect( peq08,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
     QObject::connect( peq09,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
     QObject::connect( peq10,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+
+    listChannels.append( channel );
   }
   else if( chn == 4 )
   {
@@ -1045,6 +1053,8 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     QObject::connect( peq08,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
     QObject::connect( peq09,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
     QObject::connect( peq10,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+
+    listChannels.append( channel );
   }
   else if( chn == 5 )
   {
@@ -1225,6 +1235,8 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     QObject::connect( peq08,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
     QObject::connect( peq09,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
     QObject::connect( peq10,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+
+    listChannels.append( channel );
   }
   else if( chn == 6 )
   {
@@ -1405,6 +1417,8 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     QObject::connect( peq08,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
     QObject::connect( peq09,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
     QObject::connect( peq10,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+
+    listChannels.append( channel );
   }
   else if( chn == 7 )
   {
@@ -1601,6 +1615,8 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     QObject::connect( peq08,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
     QObject::connect( peq09,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
     QObject::connect( peq10,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+
+    listChannels.append( channel );
   }
 
 

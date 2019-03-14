@@ -207,3 +207,20 @@ bool QOutputSelect::eventFilter( QObject* object, QEvent* event )
   }
   return false;
 }
+
+//==============================================================================
+/*!
+ */
+void QOutputSelect::getUserParams( QByteArray* userParams )
+{
+
+}
+
+//==============================================================================
+/*!
+ */
+void QOutputSelect::setUserParams( QByteArray& userParams, int& idx )
+{
+
+
+}

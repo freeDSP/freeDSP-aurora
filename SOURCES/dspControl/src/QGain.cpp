@@ -104,3 +104,42 @@ void QGain::writeDspParameter( void )
   dsp->storeRegAddr( addr[kTargetGain] );
   dsp->storeValue( val );
 }
+
+//==============================================================================
+/*!
+ */
+void QGain::getUserParams( QByteArray* userParams )
+{
+  float gain = static_cast<float>(ui->doubleSpinBoxGain->value());
+  userParams->append( reinterpret_cast<const char*>(&gain), sizeof(gain) );
+}
+
+//==============================================================================
+/*!
+ */
+void QGain::setUserParams( QByteArray& userParams, int& idx )
+{
+  QByteArray param;
+
+  if( userParams.size() >= idx + 4 )
+  {
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+
+    float gain = *reinterpret_cast<const float*>(param.data());
+
+    ui->doubleSpinBoxGain->blockSignals( true );
+    ui->doubleSpinBoxGain->setValue( static_cast<double>(gain) );
+    ui->doubleSpinBoxGain->blockSignals( false );
+  }
+  else
+    qDebug()<<"QGain::setUserParams: Not enough data";
+
+}

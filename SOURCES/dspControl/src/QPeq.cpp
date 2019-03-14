@@ -253,3 +253,75 @@ void QPeq::setParameters( Vektorraum::tfloat newfc, Vektorraum::tfloat newV0, Ve
   emit valueChanged();
 }
 
+//==============================================================================
+/*!
+ */
+void QPeq::getUserParams( QByteArray* userParams )
+{
+  float fct = static_cast<float>(ui->doubleSpinBoxFc->value());
+  userParams->append( reinterpret_cast<const char*>(&fct), sizeof(fct) );
+  float Qt = static_cast<float>(ui->doubleSpinBoxQ->value());
+  userParams->append( reinterpret_cast<const char*>(&Qt), sizeof(Qt) );
+  float V0t = static_cast<float>(ui->doubleSpinBoxGain->value());
+  userParams->append( reinterpret_cast<const char*>(&V0t), sizeof(V0t) );
+}
+
+//==============================================================================
+/*!
+ */
+void QPeq::setUserParams( QByteArray& userParams, int& idx )
+{
+  QByteArray param;
+
+  if( userParams.size() >= idx + 12 )
+  {
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+
+    float fct = *reinterpret_cast<const float*>(param.data());
+
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+
+    float Qt = *reinterpret_cast<const float*>(param.data());
+
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+
+    float V0t = *reinterpret_cast<const float*>(param.data());
+
+    ui->doubleSpinBoxFc->blockSignals( true );
+    ui->doubleSpinBoxFc->setValue( fct );
+    ui->doubleSpinBoxFc->blockSignals( false );
+
+    ui->doubleSpinBoxQ->blockSignals( true );
+    ui->doubleSpinBoxQ->setValue( Qt );
+    ui->doubleSpinBoxQ->blockSignals( false );
+
+    ui->doubleSpinBoxGain->blockSignals( true );
+    ui->doubleSpinBoxGain->setValue( V0t );
+    ui->doubleSpinBoxGain->blockSignals( false );
+  }
+  else
+    qDebug()<<"QLowShelv::setUserParams: Not enough data";
+
+}
+

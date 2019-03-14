@@ -1,8 +1,14 @@
+#include <QDebug>
+
 #include "QLowShelv.hpp"
 #include "ui_QLowShelv.h"
 
 using namespace Vektorraum;
 
+//==============================================================================
+/*!
+ *
+ */
 QLowShelv::QLowShelv( double gain, double freq, double slope,
                       uint16_t addrB2, uint16_t addrB1, uint16_t addrB0,
                       uint16_t addrA2, uint16_t addrA1,
@@ -34,11 +40,19 @@ QLowShelv::QLowShelv( double gain, double freq, double slope,
   ui->doubleSpinBoxS->blockSignals( false );
 }
 
+//==============================================================================
+/*!
+ *
+ */
 QLowShelv::~QLowShelv()
 {
   delete ui;
 }
 
+//==============================================================================
+/*!
+ *
+ */
 void QLowShelv::update( Vektorraum::tvector<Vektorraum::tfloat> f )
 {
   updateCoeffs();
@@ -54,7 +68,7 @@ void QLowShelv::update( Vektorraum::tvector<Vektorraum::tfloat> f )
   H = ( b0 + b1*z + b2*z2 ) / ( a0 + a1*z + a2*z2 );
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -98,7 +112,7 @@ void QLowShelv::updateCoeffs( void )
   }
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -109,7 +123,7 @@ void QLowShelv::on_doubleSpinBoxGain_valueChanged( double  )
   emit valueChanged();
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -120,18 +134,18 @@ void QLowShelv::on_doubleSpinBoxFc_valueChanged( double  )
   emit valueChanged();
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
 void QLowShelv::on_doubleSpinBoxS_valueChanged( double  )
 {
   updateCoeffs();
-  sendDspParameter();
+  //sendDspParameter();
   emit valueChanged();
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -139,24 +153,32 @@ void QLowShelv::on_pushButtonBypass_clicked()
 {
   bypass = ui->pushButtonBypass->isChecked();
   updateCoeffs();
-  sendDspParameter();
+  //sendDspParameter();
   emit valueChanged();
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
 void QLowShelv::sendDspParameter( void )
 {
-  dsp->sendParameter( addr[kParamB2], static_cast<float>(coeffs[kB2]) );
-  dsp->sendParameter( addr[kParamB1], static_cast<float>(coeffs[kB1]) );
-  dsp->sendParameter( addr[kParamB0], static_cast<float>(coeffs[kB0]) );
-  dsp->sendParameter( addr[kParamA2], static_cast<float>(coeffs[kA2]) );
-  dsp->sendParameter( addr[kParamA1], static_cast<float>(coeffs[kA1]) );
+  QByteArray content;
+  content.append( dsp->makeParameterForWifi( addr[kParamB2], static_cast<float>(coeffs[kB2]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB1], static_cast<float>(coeffs[kB1]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB0], static_cast<float>(coeffs[kB0]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA2], static_cast<float>(coeffs[kA2]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA1], static_cast<float>(coeffs[kA1]) ) );
+  dsp->sendParameterWifi( content );
+
+  //dsp->sendParameter( addr[kParamB2], static_cast<float>(coeffs[kB2]) );
+  //dsp->sendParameter( addr[kParamB1], static_cast<float>(coeffs[kB1]) );
+  //dsp->sendParameter( addr[kParamB0], static_cast<float>(coeffs[kB0]) );
+  //dsp->sendParameter( addr[kParamA2], static_cast<float>(coeffs[kA2]) );
+  //dsp->sendParameter( addr[kParamA1], static_cast<float>(coeffs[kA1]) );
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -165,7 +187,7 @@ uint32_t QLowShelv::getNumBytes( void )
   return 2*5 + 4*5;
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -182,4 +204,75 @@ void QLowShelv::writeDspParameter( void )
   dsp->storeRegAddr( addr[kParamA1] );
   dsp->storeValue( static_cast<float>(coeffs[kA1]) );
 
+}
+
+//==============================================================================
+/*!
+ */
+void QLowShelv::getUserParams( QByteArray* userParams )
+{
+  float V0t = static_cast<float>(ui->doubleSpinBoxGain->value());
+  userParams->append( reinterpret_cast<const char*>(&V0t), sizeof(V0t) );
+  float fct = static_cast<float>(ui->doubleSpinBoxFc->value());
+  userParams->append( reinterpret_cast<const char*>(&fct), sizeof(fct) );
+  float St = static_cast<float>(ui->doubleSpinBoxS->value());
+  userParams->append( reinterpret_cast<const char*>(&St), sizeof(St) );
+}
+
+//==============================================================================
+/*!
+ */
+void QLowShelv::setUserParams( QByteArray& userParams, int& idx )
+{
+  QByteArray param;
+
+  if( userParams.size() >= idx + 12 )
+  {
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+
+    float V0t = *reinterpret_cast<const float*>(param.data());
+
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+
+    float fct = *reinterpret_cast<const float*>(param.data());
+
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+
+    float St = *reinterpret_cast<const float*>(param.data());
+
+    ui->doubleSpinBoxGain->blockSignals( true );
+    ui->doubleSpinBoxGain->setValue( V0t );
+    ui->doubleSpinBoxGain->blockSignals( false );
+
+    ui->doubleSpinBoxFc->blockSignals( true );
+    ui->doubleSpinBoxFc->setValue( fct );
+    ui->doubleSpinBoxFc->blockSignals( false );
+
+    ui->doubleSpinBoxS->blockSignals( true );
+    ui->doubleSpinBoxS->setValue( St );
+    ui->doubleSpinBoxS->blockSignals( false );
+  }
+  else
+    qDebug()<<"QLowShelv::setUserParams: Not enough data";
 }

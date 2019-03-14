@@ -139,3 +139,21 @@ bool QFir::eventFilter( QObject* object, QEvent* event )
   }
   return false;
 }
+
+//==============================================================================
+/*!
+ */
+void QFir::getUserParams( QByteArray* userParams )
+{
+  #warning QFir::getUserParams not implemented
+  qDebug()<<"QFir::getUserParams not implemented";
+}
+
+//==============================================================================
+/*!
+ */
+void QFir::setUserParams( QByteArray& userParams, int& idx )
+{
+  #warning QFir::setUserParams not implemented
+  qDebug()<<"QFir::setUserParams not implemented";
+}

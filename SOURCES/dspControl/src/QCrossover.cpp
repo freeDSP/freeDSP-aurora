@@ -957,3 +957,21 @@ void QCrossover::writeDspParameter( void )
   dsp->storeRegAddr( addr[kParamA1_4] );
   dsp->storeValue( static_cast<float>(coeffs[3*5+kA1]) );
 }
+
+//==============================================================================
+/*!
+ */
+void QCrossover::getUserParams( QByteArray* userParams )
+{
+  #warning QCrossover::getUserParams not implemented
+  qDebug()<<"QCrossover::getUserParams not implemented";
+}
+
+//==============================================================================
+/*!
+ */
+void QCrossover::setUserParams( QByteArray& userParams, int& idx )
+{
+  #warning QCrossover::setUserParams not implemented
+  qDebug()<<"QCrossover::setUserParams not implemented";
+}

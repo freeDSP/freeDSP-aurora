@@ -101,6 +101,10 @@ public:
 
   void setName( QString newname );
 
+  virtual void getUserParams( QByteArray* userParams );
+
+  virtual void setUserParams( QByteArray& userParams, int& idx );
+
 private:
   void updateCoeffs( void );
 
@@ -114,8 +118,8 @@ private:
   Ui::QHighPass *ui;
 
   tfilterdesign filterDesign;
-  Vektorraum::tfloat Q[4];
-  Vektorraum::tfloat fc[4];
+  //Vektorraum::tfloat Q[4];
+  //Vektorraum::tfloat fc[4];
   Vektorraum::tfloat coeffs[4*5];
   uint16_t addr[kNumParams];
   CFreeDspAurora* dsp;

@@ -1,19 +1,37 @@
+#include <math.h>
+
 #if !defined( __IOS__ )
 #include <QSerialPortInfo>
 #endif
 #include <QDebug>
 #include <QFile>
+#include <QTcpSocket>
+#include <QByteArray>
+#include <QEventLoop>
+#include <QObject>
 
 #include <cstdint>
 #include <cstring>
 
 #include "freeDSP-Aurora.hpp"
 
+extern QTcpSocket* tcpSocket;
+extern QString wifiIpHost;
+extern int wifiPortHost;
+
 //==============================================================================
 /*!
  *
  */
-CFreeDspAurora::CFreeDspAurora()
+CFreeDspAurora::CFreeDspAurora( QWidget* parent ) : QWidget( parent )
+{
+
+}
+
+//==============================================================================
+/*!
+ */
+CFreeDspAurora::~CFreeDspAurora( void )
 {
 
 }
@@ -507,3 +525,116 @@ bool CFreeDspAurora::beginStoreParams( uint32_t numbytes )
     return false;
   return true;
 }
+
+uint32_t convertTo824( double val )
+{
+  double fractpart, intpart;
+  uint32_t ret;
+  fractpart = modf( val, &intpart );
+  if( intpart > 127.0 )
+    intpart = 127.0;
+  if( intpart < -128.0 )
+    intpart = -128.0;
+
+  if( fractpart < 0 )
+    fractpart *= -1.0;
+  
+  
+  intpart = floor( val );
+  fractpart = val - intpart;
+  
+  ret = (((static_cast<int8_t>(intpart))<<24) & 0xff000000)
+      + ((static_cast<uint32_t>(fractpart * 16777216.0)) & 0x00ffffff);
+
+  return ret;
+}
+
+//==============================================================================
+/*!
+ *
+ */
+/*bool CFreeDspAurora::sendParameterWifi( uint16_t reg, double val )
+{
+  qDebug()<<"---------------------------------------------------------------";
+  qDebug()<<"sendParameterWifi()";
+
+  QByteArray content;
+  content.append( (reg >> 8) & 0xFF );
+  content.append( reg & 0xFF );
+
+  uint32_t data = convertTo824( val );
+
+  content.append( (data >> 24) & 0xFF );
+  content.append( (data >> 16) & 0xFF );
+  content.append( (data >> 8) & 0xFF );
+  content.append( data & 0xFF );
+
+  sendParameterWifi( content );
+  
+  return true;
+}*/
+
+//==============================================================================
+/*!
+ *
+ */
+QByteArray CFreeDspAurora::makeParameterForWifi( uint16_t reg, double val )
+{
+  QByteArray content;
+  content.append( (reg >> 8) & 0xFF );
+  content.append( reg & 0xFF );
+
+  uint32_t data = convertTo824( val );
+
+  content.append( (data >> 24) & 0xFF );
+  content.append( (data >> 16) & 0xFF );
+  content.append( (data >> 8) & 0xFF );
+  content.append( data & 0xFF );
+
+  qDebug()<<content.toHex();
+  
+  return content;
+}
+
+//==============================================================================
+/*!
+ *
+ */
+bool CFreeDspAurora::sendParameterWifi( QByteArray content )
+{
+  qDebug()<<"---------------------------------------------------------------";
+  qDebug()<<"sendParameterWifi()";
+
+  tcpSocket->abort();
+  tcpSocket->connectToHost( wifiIpHost, wifiPortHost );
+
+  QEventLoop loopConnect;
+  connect( tcpSocket, SIGNAL(connected()), &loopConnect, SLOT(quit()) );
+  // \TODO Add timeout timer
+  #warning Add timeout timer
+  //connect(timeoutTimer, SIGNAL(timeout()), &loop, SLOT(quit()));
+  loopConnect.exec();
+
+  QString requestString = QString("PUT /param HTTP/1.1\r\nHost: ")
+                        + wifiIpHost
+                        + QString("\r\nContent-type:application/octet-stream\r\nContent-length: ")
+                        + QString::number( content.size()*2 )
+                        + QString("\r\n\r\n");
+  QByteArray request;
+  request.append( requestString );
+  request.append( content.toHex() );  
+  request.append( "\r\n" );
+  
+  qDebug()<<QString( request );
+  tcpSocket->write( request );
+
+  QEventLoop loopDisconnect;
+  connect( tcpSocket, SIGNAL(disconnected()), &loopDisconnect, SLOT(quit()) );
+  // \TODO Add timeout timer
+  #warning Add timeout timer
+  //connect(timeoutTimer, SIGNAL(timeout()), &loop, SLOT(quit()));
+  loopDisconnect.exec();
+
+  return true;
+}
+

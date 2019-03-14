@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui widgets
+QT       += core gui widgets network
 
 TARGET = dspControl
 TEMPLATE = app
@@ -137,7 +137,7 @@ macx {
   DEFINES += MATLIB_USE_UINT64
   DEFINES += __NOSNDFILE__
   DEFINES += USE_APPLEVDSP
-  DEFINES += DEMO
+  #DEFINES += DEMO
 
   LIBS += -framework CoreFoundation -framework Accelerate
 

@@ -1,3 +1,5 @@
+#include <QDebug>
+
 #include "QPhase.hpp"
 #include "ui_QPhase.h"
 
@@ -190,5 +192,62 @@ void QPhase::writeDspParameter( void )
   dsp->storeValue( static_cast<float>(coeffs[kA2]) );
   dsp->storeRegAddr( addr[kParamA1] );
   dsp->storeValue( static_cast<float>(coeffs[kA1]) );
+
+}
+
+//==============================================================================
+/*!
+ */
+void QPhase::getUserParams( QByteArray* userParams )
+{
+  float fct = static_cast<float>(ui->doubleSpinBoxFc->value());
+  userParams->append( reinterpret_cast<const char*>(&fct), sizeof(fct) );
+  float Qt = static_cast<float>(ui->doubleSpinBoxQ->value());
+  userParams->append( reinterpret_cast<const char*>(&Qt), sizeof(Qt) );
+}
+
+//==============================================================================
+/*!
+ */
+void QPhase::setUserParams( QByteArray& userParams, int& idx )
+{
+  QByteArray param;
+
+  if( userParams.size() >= idx + 8 )
+  {
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+
+    float fct = *reinterpret_cast<const float*>(param.data());
+
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+
+    float Qt = *reinterpret_cast<const float*>(param.data());
+
+
+    ui->doubleSpinBoxFc->blockSignals( true );
+    ui->doubleSpinBoxFc->setValue( fct );
+    ui->doubleSpinBoxFc->blockSignals( false );
+
+    ui->doubleSpinBoxQ->blockSignals( true );
+    ui->doubleSpinBoxQ->setValue( Qt );
+    ui->doubleSpinBoxQ->blockSignals( false );
+
+  }
+  else
+    qDebug()<<"QPhase::setUserParams: Not enough data";
 
 }

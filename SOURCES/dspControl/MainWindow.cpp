@@ -6,6 +6,8 @@
 #include <QDialog>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QtNetwork>
+#include <QHostAddress>
 
 #include "MainWindow.hpp"
 #include "ui_MainWindow.h"
@@ -37,6 +39,13 @@ QColor colorPlot[kMaxPlotColors] = { QColor(  81, 158, 228 ),
                         QColor(   0,  94, 240 )
                       };
 
+enum tdspluginid
+{
+  PLUGIN_8CHANNELS    = 0x01,
+  PLUGIN_HOMECINEMA71 = 0x02,
+  PLUGIN_4FIRS        = 0x03
+};
+
 QVolumeSlider* sliderMainVolume;
 
 CPlugIn8Channels plugin8Channels( FS );
@@ -45,14 +54,19 @@ CPlugIn4FIRs plugin4FIRs( FS );
 
 CDspPlugin* dspPlugin;
 
-MainWindow::MainWindow(QWidget *parent) :
-  QMainWindow(parent),
-  ui(new Ui::MainWindow)
+QTcpSocket* tcpSocket = nullptr;
+QString wifiIpHost;
+int wifiPortHost;
+
+MainWindow::MainWindow( QWidget* parent ) :
+  QMainWindow( parent ),
+  ui( new Ui::MainWindow )
 {
   ui->setupUi(this);
   #if defined( __IOS__ ) || defined( __WIN__ )
   ui->menuBar->hide();
   #endif
+  ui->actionWrite_to_DSP->setEnabled( false );
 
   //----------------------------------------------------------------------------
   //--- Setup the channel tabs
@@ -176,7 +190,54 @@ MainWindow::MainWindow(QWidget *parent) :
   }
 
   #else
-  setWindowTitle( "dspControl " + VERSION_STR );
+  setWindowTitle( QString("dspControl DEMO ").append( VERSION_STR ) );
+
+  tcpSocket = new QTcpSocket(this);
+  wifiIpHost = "192.168.5.1";
+  wifiPortHost = 8088;
+  //ipHost = QString( "192.168.5.1" );
+  //connect( tcpSocket, SIGNAL(connected()),                         this, SLOT(connected()) );
+  connect( tcpSocket, SIGNAL(disconnected()),                      this, SLOT(disconnected()) );
+  connect( tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(error(QAbstractSocket::SocketError)) );
+  connect( tcpSocket, SIGNAL(hostFound()),                         this, SLOT(hostFound()) );
+  connect( tcpSocket, SIGNAL(bytesWritten(qint64)),                this, SLOT(bytesWritten(qint64)) );
+  connect( tcpSocket, SIGNAL(readyRead()),                         this, SLOT(readyRead()) );
+
+  //if( dialog.comboBox()->currentText() == QString("8channels") )
+  //{
+    qDebug()<<"Loading plugin 8channels";
+    numChannels = plugin8Channels.getNumChannels();
+    for( unsigned int n = 0; n < numChannels; n++ )
+    {
+      tDspChannel dspChannel = plugin8Channels.getGuiForChannel( n, FS, &dsp, this );
+      listOutputGains.append( dspChannel.gain );
+
+      ui->tabChannels->addTab( dspChannel.channel, "" );
+      lbl1 = new QLabel();
+      lbl1->setText( dspChannel.name );
+      lbl1->setStyleSheet( QString("background-color: transparent; border: 0px solid black; border-left: 2px solid ") + colorPlot[n%kMaxPlotColors].name() + QString("; color: white; ") );
+      lbl1->setFixedWidth( 100 );
+      ui->tabChannels->tabBar()->setTabButton( n, QTabBar::LeftSide, lbl1 );
+
+      dspChannel.layout->setSpacing( 0 );
+      dspChannel.layout->setMargin( 0 );
+      dspChannel.layout->setContentsMargins( 0, 0, 0, 0 );
+      dspChannel.layout->setAlignment( Qt::AlignLeft );
+
+      dspChannel.channel->widgetChannel->setLayout( dspChannel.layout );
+
+      for( unsigned int chn = 0; chn < numChannels; chn++ )
+      {
+        QAction* action = new QAction( "Show " + plugin8Channels.getChannelName( chn ) );
+        action->setCheckable( true );
+        dspChannel.channel->actionsContextMenu.append( action );
+        dspChannel.channel->contextMenu.addAction( action );
+      }
+      dspChannel.channel->actionsContextMenu.at(n)->setChecked( true );
+      connect( dspChannel.channel, SIGNAL(selectionChanged()), this, SLOT(updatePlots()) );
+    }
+    dspPlugin = &plugin8Channels;
+  //}         
   #endif
 
   freq = dspPlugin->getFrequencyVector();
@@ -205,6 +266,9 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
   dsp.close();
+  
+  tcpSocket->disconnectFromHost();
+
   delete ui;
 }
 
@@ -269,25 +333,162 @@ void MainWindow::updatePlots( void )
 //==============================================================================
 /*!
  */
-void MainWindow::on_actionWrite_to_DSP_triggered()
+void MainWindow::on_actionRead_from_DSP_triggered()
 {
-  uint32_t numBytes = 0;
-  for( int chn = 0; chn < ui->tabChannels->count(); chn++ )
+  statusWifi = STATUS_WIFI_IDLE;
+  
+  //--- Connecting to aurora
+  qDebug()<<"Connecting to aurora";
+  tcpSocket->abort();
+  tcpSocket->connectToHost( wifiIpHost, wifiPortHost );
+
+  QEventLoop loopConnect;
+  connect( tcpSocket, SIGNAL(connected()), &loopConnect, SLOT(quit()) );
+  // \TODO Add timeout timer
+  //connect(timeoutTimer, SIGNAL(timeout()), &loop, SLOT(quit()));
+  loopConnect.exec();
+  qDebug()<<"[OK]";
+
+  //----------------------------------------------------------------------------
+  //--- Request the DSP-plugin id
+  //----------------------------------------------------------------------------
+  wifiRxBytes = 0;
+  wifiExpectedBytes = 66;
+  wifiReply.clear();
+  QString requestString = "GET /pid HTTP/1.1\r\nhost: 192.168.5.1\r\n\r\n";
+  QByteArray request;
+  request.append( requestString );
+  tcpSocket->write( request );
+
+  QEventLoop loopPidRequest;
+  connect( this, SIGNAL(replyFinished()), &loopPidRequest, SLOT(quit()) );
+  loopPidRequest.exec();
+  qDebug()<<QString( wifiReply );
+  QStringList listReply = QString( wifiReply ).split( QRegExp("\\s+") );
+
+  bool ok;
+  switch( listReply.at(4).toUInt( &ok, 0 ) )
   {
-    QChannel* channel = static_cast<QChannel*>(ui->tabChannels->widget(chn));
-    if( channel != nullptr )
-      numBytes += channel->getNumBytes();
+  case PLUGIN_8CHANNELS:
+    qDebug()<<"Loading 8channels";
+    // \todo Clear GUI and load new GUI
+    break;
+
+  default:
+    qDebug()<<"Unkown plugin"<<listReply.at(4).toInt( &ok, 0 );
+    // \todo Show MessageBox  
   }
 
-  qDebug()<<numBytes<<"Bytes";
-  dsp.beginStoreParams( numBytes );
-  for( int chn = 0; chn < ui->tabChannels->count(); chn++ )
+  //----------------------------------------------------------------------------
+  //--- Request user parameters
+  //----------------------------------------------------------------------------
+  qDebug()<<"Connecting to aurora";
+  tcpSocket->abort();
+  tcpSocket->connectToHost( "192.168.5.1", 8088 );
+  loopConnect.exec();
+  qDebug()<<"[OK]";
+
+  wifiRxBytes = 0;
+  wifiExpectedBytes = 0;
+  wifiReply.clear();
+  statusWifi = STATUS_WIFI_RECEIVE_USERPARAM;
+  requestString = "GET /userparams HTTP/1.1\r\nhost: 192.168.5.1\r\n\r\n";
+  request.clear();
+  request.append( requestString );
+  tcpSocket->write( request );
+
+  QEventLoop loopUserParamsRequest;
+  connect( this, SIGNAL(replyFinished()), &loopUserParamsRequest, SLOT(quit()) );
+  loopUserParamsRequest.exec();
+  QString strReply( wifiReply );
+  int idx = strReply.indexOf( "\r\n\r\n", Qt::CaseInsensitive );
+  QString strContent = strReply.mid( idx+4 );
+  strContent = strContent.left( strContent.length()-2 );
+  qDebug()<<"strContent"<<strContent;
+
+  QByteArray userParams;
+  for( int ii = 0; ii < strContent.length(); ii = ii + 2 )
   {
-    qDebug()<<"Channel"<<chn;
-    QChannel* channel = static_cast<QChannel*>(ui->tabChannels->widget(chn));
-    if( channel != nullptr )
-      channel->writeDspParameter();
+    QString str;
+    str.append( strContent[ii] );
+    str.append( strContent[ii+1] );
+    userParams.append( static_cast<char>(str.toUInt( &ok, 16 ) & 0xff) );
   }
+
+  qDebug()<<"--- user params ---";
+  for( int ii=0; ii < userParams.size(); ii++ )
+  {
+    unsigned int val = userParams.at(ii);
+    qDebug()<<QString::number(val, 16);
+  }
+
+  qDebug()<<"--- fill gui elements ---";
+
+  idx = 0;
+  for( unsigned int ii = 0; ii < dspPlugin->getNumChannels(); ii++ )
+  {
+    QChannel* channel = dspPlugin->getChannel( ii );
+    for( unsigned int n = 0; n < channel->getNumDspBlocks(); n++ )
+    {
+      QDspBlock* dspBlock = channel->getDspBlock(n);
+      dspBlock->setUserParams( userParams, idx );
+    }
+  }
+
+  // TODO update plots
+
+  ui->actionWrite_to_DSP->setEnabled( true );
+}
+
+//==============================================================================
+/*!
+ */
+void MainWindow::on_actionWrite_to_DSP_triggered()
+{
+  qDebug()<<"Sending userparam.hex";
+
+  //--- Connecting to aurora
+  qDebug()<<"Connecting to aurora";
+  tcpSocket->abort();
+  tcpSocket->connectToHost( "192.168.5.1", 8088 );
+
+  QEventLoop loopConnect;
+  connect( tcpSocket, SIGNAL(connected()), &loopConnect, SLOT(quit()) );
+  // \TODO Add timeout timer
+  //connect(timeoutTimer, SIGNAL(timeout()), &loop, SLOT(quit()));
+  loopConnect.exec();
+  qDebug()<<"[OK]";
+
+  //--- Send the user parameters
+  QByteArray content;
+  for( unsigned int ii = 0; ii < dspPlugin->getNumChannels(); ii++ )
+  {
+    QChannel* channel = dspPlugin->getChannel( ii );
+    for( unsigned int n = 0; n < channel->getNumDspBlocks(); n++ )
+    {
+      QDspBlock* dspBlock = channel->getDspBlock(n);
+      dspBlock->getUserParams( &content );
+    }
+  }
+
+  qDebug()<<"--- Content ---";
+  for( int ii = 0; ii < content.size(); ii++ )
+  {
+    char val = content.at(ii);
+    qDebug()<<QString::number(val, 16);
+  }
+  qDebug()<<"content.size()"<<content.size();
+
+  QString requestString = QString("PUT /userparams HTTP/1.1\r\nhost: 192.168.5.1\r\nContent-type:application/octet-stream\r\nContent-length: ")
+                        + QString::number( content.size() )
+                        + QString("\r\n");
+  QByteArray request;
+  request.append( requestString );
+  request.append( content );  
+  request.append( "\r\n\r\n" );
+  tcpSocket->write( request );
+
+
 }
 
 //==============================================================================
@@ -431,4 +632,133 @@ void MainWindow::importRewPeqs( QWidget* sender )
     QMessageBox::critical( this, tr("Loading file failed"),
                                      tr("I could not open your file. I am sorry."),
                                      QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton );
+}
+
+
+
+//==============================================================================
+/*!
+ */
+//void MainWindow::connected( void )
+//{
+  //qDebug()<<"Connected to server";
+
+  //Ask for the web page.
+  /*
+    GET /index.html HTTP/1.1[CRLF]
+    HOST : www.host.com[CRLF]
+    * */
+
+  //QString requestString ="GET /index.html HTTP/1.1\r\nhost: 192.168.5.1\r\n\r\n";
+  //QString requestString ="GET /pid HTTP/1.1\r\nhost: 192.168.5.1\r\n\r\n";
+
+  //QByteArray request;
+  //request.append( requestString );
+  //tcpSocket->write( request );
+  
+
+  //QNetworkRequest request( QUrl("192.168.5.1:8088") );
+  //request.setHeader( QNetworkRequest::ContentTypeHeader, "application/json" );
+
+  /*
+  QJsonObject json;
+  json.insert( "item1", "value1" );
+  QNetworkAccessManager nam;
+  QNetworkReply *reply = nam.post(request, QJsonDocument(json).toJson());
+
+  while(!reply->isFinished())
+  {
+    qApp->processEvents();
+  }
+
+  QByteArray response_data = reply->readAll();
+  QJsonDocument jsonResponse = QJsonDocument::fromJson(response_data);
+  reply->deleteLater();
+ */ 
+//}
+
+//==============================================================================
+/*!
+ */
+void MainWindow::disconnected( void )
+{
+  qDebug()<<"Disconnected from server";
+}
+
+//==============================================================================
+/*!
+ */
+void MainWindow::error( QAbstractSocket::SocketError socketError )
+{
+  QString errorStr = tcpSocket->errorString();
+  qDebug()<<"An error occured :"<<errorStr;
+}
+
+//==============================================================================
+/*!
+ */
+void MainWindow::hostFound( void )
+{
+  qDebug()<<"Host found";
+}
+
+//==============================================================================
+/*!
+ */
+void MainWindow::bytesWritten( qint64 bytes )
+{
+  QString outString = QString::number(bytes) + " bytes writen.";
+  qDebug()<<outString;
+}
+
+//==============================================================================
+/*!
+ */
+void MainWindow::readyRead( void )
+{
+  qDebug()<<"readyRead "<<tcpSocket->bytesAvailable()<<wifiRxBytes;
+  if( statusWifi == STATUS_WIFI_RECEIVE_USERPARAM )
+  {
+    wifiRxBytes += tcpSocket->bytesAvailable();
+    wifiReply.append( tcpSocket->readAll() );
+    QString strReply( wifiReply );
+    if( strReply.contains( "\r\n\r\n", Qt::CaseInsensitive ) && wifiExpectedBytes == 0  )
+    {
+      qDebug()<<"1"<<strReply;
+      int idx = strReply.indexOf( "\r\n\r\n", Qt::CaseInsensitive );
+      QString strHead = strReply.left( idx );
+      qDebug()<<"strHead"<<strHead;
+      idx = strHead.indexOf( "Content-length", Qt::CaseInsensitive );
+      QString strContentLength = strHead.right( strHead.length() - idx - 15 );
+      int contentLength = strContentLength.toInt();
+      qDebug()<<"strContentLength"<<contentLength;
+      qDebug()<<"strHead.length()"<<strHead.length();
+      wifiExpectedBytes = strHead.length() + 4 + contentLength + 2;
+      qDebug()<<wifiExpectedBytes<<strReply.length();
+      if( wifiRxBytes == wifiExpectedBytes )
+      {
+        qDebug()<<"emit replyFinished();";
+        statusWifi = STATUS_WIFI_IDLE;
+        emit replyFinished();
+      }
+    
+    }
+    else if ( wifiRxBytes <= wifiExpectedBytes  )
+    {
+      qDebug()<<"2"<<QString( wifiReply );
+      if( wifiRxBytes == wifiExpectedBytes )
+      {
+        qDebug()<<"emit replyFinished();";
+        statusWifi = STATUS_WIFI_IDLE;
+        emit replyFinished();
+      }
+    }
+  }
+  else
+  {
+    wifiRxBytes += tcpSocket->bytesAvailable();
+    wifiReply.append( tcpSocket->readAll() );
+    if( wifiRxBytes == wifiExpectedBytes )
+      emit replyFinished();
+  }
 }

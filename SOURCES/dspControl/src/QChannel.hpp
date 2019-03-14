@@ -35,9 +35,19 @@ public:
     peqs.append( newpeq );
   }
 
+  QDspBlock* getDspBlock( unsigned int n )
+  {
+    return dspBlocks.at(n);
+  }
+
   QString getName( void )
   {
     return name;
+  }
+
+  unsigned int getNumDspBlocks( void )
+  {
+    return dspBlocks.size();
   }
 
   QVector<QPeq*> getPeqs( void )
@@ -93,6 +103,9 @@ public:
 
   QMenu contextMenu;
   QVector<QAction*> actionsContextMenu;
+
+protected:
+  
 
 private:
   Ui::QChannel *ui;

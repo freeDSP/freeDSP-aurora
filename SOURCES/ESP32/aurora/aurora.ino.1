@@ -41,6 +41,7 @@ enum twifistatus
   STATE_WIFI_IDLE,
   STATE_WIFI_PUTPARAM,
 
+
   STATE_WIFI_RECEIVE_USERPARAM,
   STATE_WIFI_RECEIVE_SINGLEPARAM
 };
@@ -410,10 +411,17 @@ String WebRequestHostAddress;     // global variable used to store Server IP-Add
 //  returns GET Parameter: everything after the "/?" if ADDRESS/?xxxx was entered by the user in the webbrowser
 //  returns "-" if ADDRESS but no GET Parameter was entered by the user in the webbrowser
 //  remark: client connection stays open after return
+
+
+
 String Webserver_GetRequestGETParameter()
 {
   String GETParameter = "";
+  int wifiExpectedBytes = 0;
+  int wifiRxBytes = 0;
+  int cntrLine = 0;
   bool waitForData = false;
+  
   
   client = server.available();               // listen for incoming clients
   
@@ -426,28 +434,31 @@ String Webserver_GetRequestGETParameter()
     {  
       if( client.available() )            // if there's bytes to read from the client,
       {  
-        char c = client.read();            // read a byte, then
-        if (c != '\r')  // if you got anything else but a carriage return character,
-          currentLine += c;      // add it to the end of the currentLine
-
-        if (c == '\n')                     // if the byte is a newline character
+        char c = client.read();                                                 // read a new byte
+        Serial.print( c );
+        if( c != '\r' )
+          currentLine += c;                                                     // add it to the end of the currentLine
+        if( c == '\n' )                                                         // if the byte is a newline character
         {
+//          cntrLine++;
+          //Serial.println( currentLine );
+         
           if( waitForData )
           {
             //Serial.println( currentLine );
 
             if( wifiStatus == STATE_WIFI_PUTPARAM )
             {
-              //Serial.println( currentLine );
-              //if( currentLine.length() < 12 )
-              //  Serial.println( "Not enough data" );
-              //else
-              //{
-              int sentBytes = 0;
-              while( sentBytes + 12 < currentLine.length() )
+              Serial.println( currentLine );
+              if( currentLine.length() < 12 )
+                Serial.println( "Not enough data" );
+              else
               {
-                String strReg = currentLine.substring( sentBytes + 0, sentBytes + 4 );
-                String strData = currentLine.substring( sentBytes + 4, sentBytes + 12 );
+              //int sentBytes = 0;
+              //while( sentBytes + 12 < currentLine.length() )
+              //{
+                String strReg = currentLine.substring( 0, 4 );
+                String strData = currentLine.substring( 4, 13 );
                 //Serial.println( strReg );
                 //Serial.println( strData );
                 uint16_t reg = (uint16_t)strtoul( strReg.c_str(), NULL, 16 );
@@ -476,7 +487,7 @@ String Webserver_GetRequestGETParameter()
                 Serial.println( byte2string2(byteTx) );
                 Wire.write( byteTx );               
                 Wire.endTransmission( true );
-                sentBytes += 12;
+                //sentBytes += 12;
               } 
               //}
               client.stop();
@@ -524,12 +535,234 @@ String Webserver_GetRequestGETParameter()
               waitForData = true;
               currentLine = "";
             }
-
-            else
-              currentLine = "";
           }
-        } 
+          
+
+          #if 0
+          Serial.print( "CL " );
+          Serial.print( wifiRxBytes );
+          Serial.print( wifiExpectedBytes ); 
+          Serial.println( currentLine );
+          
+
+          
+
+          //--- Empty line
+          else if( currentLine.startsWith( "\n" ) )
+          {
+            Serial.println( "NL" );
+            wifiRxBytes = 0;
+            currentLine = "";
+          }
+
+          //--- Receiving content
+          /*else if( wifiRxBytes < wifiExpectedBytes )
+          {
+            wifiRxBytes++;
+            Serial.println( c );
+            if( wifiRxBytes == wifiExpectedBytes )
+            {
+              Serial.println( currentLine );
+              currentLine = "";
+              wifiStatus = STATE_WIFI_IDLE;
+            }
+          }*/
+
+          else
+            currentLine = "";
+            #endif
+
+        }
+
+        #if 0
+        if( (wifiStatus == STATE_WIFI_RECEIVE_USERPARAM) && (wifiRxBytes < wifiExpectedBytes) )
+        {
+          wifiRxBytes++;
+
+          byte rxByte = c;
+          fileUserParams.write( rxByte );
+          Serial.print( wifiRxBytes );
+          Serial.print( " " );
+          Serial.println( byte2string(rxByte) );
+          if( wifiRxBytes == wifiExpectedBytes )
+          {
+            Serial.println( "Closing usrparam.hex" );
+            fileUserParams.flush();
+            fileUserParams.close();
+            wifiStatus = STATE_WIFI_IDLE;
+            wifiRxBytes = wifiExpectedBytes = 0;
+          } 
+        }
+        if( (wifiStatus == STATE_WIFI_RECEIVE_SINGLEPARAM) && (wifiRxBytes < wifiExpectedBytes) )
+        {
+          wifiRxBytes++;
+
+          byte rxByte = c;
+          fileUserParams.write( rxByte );
+          Serial.print( wifiRxBytes );
+          Serial.print( " " );
+          Serial.println( byte2string(rxByte) );
+          if( wifiRxBytes == wifiExpectedBytes )
+          {
+            Serial.println( "Received param" );
+            wifiStatus = STATE_WIFI_IDLE;
+            wifiRxBytes = wifiExpectedBytes = 0;
+          } 
+        }
+        else
+        {
+          
+          currentLine += c;      // add it to the end of the currentLine
+          if (c == '\n')                     // if the byte is a newline character
+          {
+            // if the current line is blank, you got two newline characters in a row.
+            // that's the end of the client HTTP request
+            /*if (currentLine.length() == 0) 
+            {  
+              if (GETParameter == "") {GETParameter = "-";};    // if no "GET /?" was found so far in the request bytes, return "-"
+              
+              // break out of the while loop:
+              break;
+          
+            } 
+            else {    // if you got a newline, then clear currentLine:
+              currentLine = "";
+            }*/
+            
+          } 
+          else if (c != '\r')  // if you got anything else but a carriage return character,
+            currentLine += c;      // add it to the end of the currentLine
         
+        //if (c=='\r' && currentLine.startsWith("GET /?")) 
+        // we see a "GET /?" in the HTTP data of the client request
+        // user entered ADDRESS/?xxxx in webbrowser, xxxx = GET Parameter
+        //{
+         // 
+        //  GETParameter = currentLine.substring(currentLine.indexOf('?') + 1, currentLine.indexOf(' ', 6));    // extract everything behind the ? and before a space          
+        //}
+
+
+        
+
+        //--- Request of DSP-plugin id
+        if( c=='\r' && currentLine.startsWith("GET /pid") )
+        {
+          Serial.println( "GET pid" );
+          String httpResponse = "";
+          httpResponse += "HTTP/1.1 200 OK\r\n";
+          httpResponse += "Content-type:application/octet-stream\r\n\r\n";
+          httpResponse += byte2string( Settings.pid );
+          httpResponse += "\r\n";
+          client.println(httpResponse);
+          // \TODO Do we need this here?
+          client.stop();
+        }
+
+        //--- Request of user params
+        if( c=='\r' && currentLine.startsWith("GET /userparams") )
+        {
+          Serial.println( "GET userparams" );
+          if( SPIFFS.exists( "/usrparam.hex" ) )
+          {
+            fileUserParams = SPIFFS.open( "/usrparam.hex" );
+            String httpResponse = "HTTP/1.1 200 OK\r\n";
+            httpResponse += "Content-type:application/octet-stream\r\n";
+            httpResponse += "Content-length:" + String( fileUserParams.size()*2 );
+            httpResponse += "\r\n\r\n";
+            while( fileUserParams.available() )
+            {
+              byte byteRead = fileUserParams.read();
+              httpResponse += byte2string2(byteRead);
+              Serial.println( byte2string(byteRead) );
+            }
+            Serial.println( httpResponse );
+            client.println(httpResponse);
+
+            fileUserParams.close();
+          }
+          else
+          {
+            Serial.println( "/usrparam.hex does not exist." );
+            String httpResponse = "HTTP/1.1 200 OK\r\n";
+            httpResponse += "Content-type:application/octet-stream\r\n";
+            httpResponse += "Content-length:0";
+            httpResponse += "\r\n\r\n";
+            client.println(httpResponse);
+          }
+          
+
+          //String httpResponse = "";
+          //httpResponse += "HTTP/1.1 200 OK\r\n";
+          //httpResponse += "Content-type:application/octet-stream\r\n\r\n";
+          //httpResponse += byte2string( Settings.pid );
+          //httpResponse += "\r\n";
+          //client.println(httpResponse);
+          // \TODO Do we need this here?
+          client.stop();
+        }
+
+        //--- New user parameters sent
+        else if( c=='\r' && currentLine.startsWith("PUT /userparams") )
+        {
+          Serial.println( "PUT /userparams" );
+          if( SPIFFS.exists( "/usrparam.hex" ) )
+          {
+            if( SPIFFS.remove( "/usrparam.hex" ) )
+              Serial.println( "usrparam.hex deleted" );
+          }
+
+          fileUserParams = SPIFFS.open( "/usrparam.hex", FILE_APPEND );
+          if( !fileUserParams )
+            Serial.println( "[ERROR] Failed to open file usrparam.hex" );
+
+          wifiExpectedBytes = 0;
+          wifiStatus = STATE_WIFI_RECEIVE_USERPARAM;
+        }
+
+        //--- New single dsp parameter sent
+        else if( c=='\r' && currentLine.startsWith("PUT /param") )
+        {
+          Serial.println( "PUT /param" );
+          wifiExpectedBytes = 0;
+          wifiStatus = STATE_WIFI_RECEIVE_SINGLEPARAM;
+        }
+
+        else if (c=='\r' && currentLine.startsWith("Host:")) 
+        // we see a "Host:" in the HTTP data of the client request
+        // user entered ADDRESS or ADDRESS/... in webbrowser, ADDRESS = Server IP-Address of HTTP-Request
+        {
+          int IndexOfBlank = currentLine.indexOf(' ');
+          WebRequestHostAddress = currentLine.substring(IndexOfBlank + 1, currentLine.length());    // extract everything behind the space character and store Server IP-Address of HTTP-Request
+          
+        }
+
+        else if( c=='\r' && currentLine.startsWith( "Content-length" ) )
+        {
+          Serial.println( currentLine );
+          String str = currentLine.substring( currentLine.indexOf(':') + 1, currentLine.length() );
+          wifiExpectedBytes = str.toInt();
+          wifiRxBytes = wifiExpectedBytes;
+        }
+
+        else if( c=='\n' && wifiExpectedBytes > 0 && wifiStatus != STATE_WIFI_IDLE )
+        {
+          Serial.println( "Start rx Content" );
+          wifiRxBytes = 0;
+        }
+
+        }
+
+        /*
+        else if( c=='\r' && wifiExpectedBytes > 0 )
+        {
+          Serial.println( "Received content" );
+          Serial.println( currentLine );
+          Serial.println( currentLine.length() );
+          wifiExpectedBytes = 0;
+        }*/
+
+
+        #endif
       }
       
     }
@@ -538,6 +771,7 @@ String Webserver_GetRequestGETParameter()
 
   return GETParameter;
 }
+
 
 // Decodes a GET parameter (expression after ? in URI (URI = expression entered in address field of webbrowser)), like "Country=Germany&City=Aachen"
 // and set the ConfigValues
@@ -616,9 +850,10 @@ String WiFi_GetOwnIPAddressInRouterNetwork()
 
 void loop()
 {
-
-  String GETParameter = Webserver_GetRequestGETParameter();   // look for client request
-
+  //client = server.available();               // listen for incoming clients
+  
+   String GETParameter = Webserver_GetRequestGETParameter();   // look for client request
+ 
   /*if( GETParameter.length() > 0 )        // we got a request, client connection stays open
     {
       if (GETParameter.length() > 1)      // request contains some GET parameter

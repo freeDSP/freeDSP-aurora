@@ -68,6 +68,10 @@ public:
     return channel;
   }
 
+  virtual void getUserParams( QByteArray* userParams );
+
+  virtual void setUserParams( QByteArray& userParams, int& idx );
+
   virtual uint32_t getNumBytes( void );
 
   virtual void sendDspParameter( void );

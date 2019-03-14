@@ -2,12 +2,17 @@
 #define SIGMADSP_HPP
 
 #include <cstdint>
+
+#include <QWidget>
+
 #if !defined( __IOS__ )
 #include <QSerialPort>
 #endif
 
-class CFreeDspAurora
+class CFreeDspAurora : public QWidget
 {
+  Q_OBJECT
+
 private:
   typedef char byte;
 
@@ -21,7 +26,9 @@ private:
   };
 
 public:
-  CFreeDspAurora( void );
+  explicit CFreeDspAurora( QWidget* parent = nullptr );
+
+  ~CFreeDspAurora( void );
 
   bool writeFirmwareToESP32viaBluetooth( const QString& hexfilename );
 
@@ -33,6 +40,11 @@ public:
 
   bool sendParameter( uint16_t reg, float val );
   bool sendParameter( uint16_t reg, uint32_t val );
+
+  //bool sendParameterWifi( uint16_t reg, double val );
+  //bool sendParameterWifi( uint16_t reg, uint32_t val );
+  bool sendParameterWifi( QByteArray content );
+  QByteArray makeParameterForWifi( uint16_t reg, double val );
 
   bool storeRegAddr( uint16_t reg );
   bool storeValue( float val );
