@@ -52,6 +52,26 @@ public:
 
   bool beginStoreParams( uint32_t numbytes );
 
+  //============================================================================
+  /*! Starts the transfer of a new dsp firmware.
+   *
+   *  \param content First block of firmware.
+   */
+  bool sendDspFirmwareWifi( QByteArray content );
+
+  //============================================================================
+  /*! Finishes the transfer of a new dsp firmware.
+   *
+   *  \param totalTransmittedBytes Number of transmitted bytes.
+   */
+  bool finishDspFirmwareWifi( uint32_t totalTransmittedBytes );
+
+  //============================================================================
+  /*! Waits for an ACK from WiFi connection.
+   *
+   */
+  bool waitForAckWifi( void );
+
 private:
   bool sendByteSecured( char* txbyte );
   bool sendByteSecured( byte txbyte );

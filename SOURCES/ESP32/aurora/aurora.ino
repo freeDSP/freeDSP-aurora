@@ -40,6 +40,7 @@ enum twifistatus
 {
   STATE_WIFI_IDLE,
   STATE_WIFI_PUTPARAM,
+  STATE_WIFI_DSPFW,
 
   STATE_WIFI_RECEIVE_USERPARAM,
   STATE_WIFI_RECEIVE_SINGLEPARAM
@@ -56,7 +57,7 @@ tSettings Settings;
 
 int state;
 int numBytes = 0;
-int cntr = 0;
+//int cntr = 0;
 uint16_t dspRegister = 0;
 uint32_t dspValueHex = 0;
 float dspValue;
@@ -71,6 +72,7 @@ WiFiServer server( 8088 );
 
 twifistatus wifiStatus = STATE_WIFI_IDLE;
 int cntrPackets = 0;
+uint32_t totalBytesReceived;
 
 //==============================================================================
 /*! 
@@ -117,7 +119,7 @@ Serial.print(cnt);
 Serial.println(" I2C Devices found.");
 }
 
-#if 0
+
 //==============================================================================
 /*! Uploads the firmware from ESP32 SPI flash to DSP.
  */
@@ -125,29 +127,37 @@ void uploadDspFirmware( void )
 {
   Serial.print( "Init dsp......" );
 
-  fileDspProgram = SPIFFS.open( "/dspinit.hex" );
+  fileDspProgram = SPIFFS.open( "/dspfw.hex" );
 
   uint32_t numBytesToRead = 0;
 
   if( fileDspProgram )
   {
-    int file_size = fileDspProgram.size();
 
-    cntr = 0;
+    //int file_size = fileDspProgram.size();
+    Serial.print( "File size:");
+    Serial.println( fileDspProgram.size() );
 
-    while( fileDspProgram.available() )
+    size_t len = fileDspProgram.size();
+
+    int cntr = 0;
+
+    while( cntr < len )
     {
-      uint32_t byteRead = fileDspProgram.read();
-      numBytesToRead = (numBytesToRead << 8) + byteRead;
-      byteRead = fileDspProgram.read();
-      numBytesToRead = (numBytesToRead << 8) + byteRead;
-      byteRead = fileDspProgram.read();
-      numBytesToRead = (numBytesToRead << 8) + byteRead;
-      byteRead = fileDspProgram.read();
-      numBytesToRead = (numBytesToRead << 8) + byteRead;
+      //Serial.print( "Line: ");
+      //Serial.println(cntr);
+      uint8_t byteRead;
+      fileDspProgram.read( &byteRead, 1 );
+      numBytesToRead = (numBytesToRead << 8) + (uint32_t)byteRead;
+      fileDspProgram.read( &byteRead, 1 );
+      numBytesToRead = (numBytesToRead << 8) + (uint32_t)byteRead;
+      fileDspProgram.read( &byteRead, 1 );
+      numBytesToRead = (numBytesToRead << 8) + (uint32_t)byteRead;
+      fileDspProgram.read( &byteRead, 1 );
+      numBytesToRead = (numBytesToRead << 8) + (uint32_t)byteRead;
 
       cntr += 4;
-
+      
       //Serial.print( "numBytesToRead " );
       //Serial.println( numBytesToRead, HEX );
 
@@ -156,40 +166,43 @@ void uploadDspFirmware( void )
       //------------------------------------------------------------------------
       Wire.beginTransmission( DSP_ADDR );
 
-      //Serial.println( "Register" );
-      byteRead = fileDspProgram.read();
-      Wire.write( byteRead );
-      //Serial.println( byteRead, HEX );
-      byteRead = fileDspProgram.read();
+      fileDspProgram.read( &byteRead, 1 );
+      cntr++;
       Wire.write( byteRead );
       //Serial.println( byteRead, HEX );
 
-      cntr += 2;
+      fileDspProgram.read( &byteRead, 1 );
+      cntr++;
+      Wire.write( byteRead );
+      //Serial.println( byteRead, HEX );
+
 
       //Serial.println( "Value" );
-      for( uint32_t n = 0; n < numBytesToRead - 2; n++ )
+      for( uint32_t n = 2; n < numBytesToRead; n++ )
       {
-        byteRead = fileDspProgram.read();
-        Wire.write( byteRead );
+        fileDspProgram.read( &byteRead, 1 );
         cntr++;
+        Wire.write( byteRead );
         //Serial.println( byteRead, HEX );
       }
 
       Wire.endTransmission( true );
 
+      Serial.print(".");
+      
+      //Serial.println( cntr );
+     
     }
 
     fileDspProgram.close();
 
   }
   else
-    Serial.println( "\n[ERROR] Failed to open file dspinit.hex" );
+    Serial.println( "\n[ERROR] Failed to open file dspfw.hex" );
   Serial.print( "[ok]\n" );
-  //Serial.print( "Read ");
-  //Serial.print( cntr );
-  //Serial.println( " bytes");
 }
 
+#if 0
 //==============================================================================
 /*! Uploads the parameters from ESP32 SPI flash to DSP.
  */
@@ -386,7 +399,7 @@ void setup()
   //----------------------------------------------------------------------------
   //--- Download program to DSP
   //----------------------------------------------------------------------------
-  //uploadDspFirmware();
+  uploadDspFirmware();
 
   //----------------------------------------------------------------------------
   //--- Download user parameter to DSP
@@ -404,6 +417,20 @@ void setup()
 
 String WebRequestHostAddress;     // global variable used to store Server IP-Address of HTTP-Request
 
+//==============================================================================
+/*! Sends an ACK via WiFi
+ *
+ */
+void sendAckWifi( void )
+{
+  String httpResponse = "";
+  httpResponse += "HTTP/1.1 200 OK\r\n";
+  httpResponse += "Content-type:text/plain\r\n\r\n";
+  httpResponse += "ACK";
+  httpResponse += "\r\n";
+  client.println( httpResponse );
+}
+
 //  Call this function regularly to look for client requests
 //  template see https://github.com/espressif/arduino-esp32/blob/master/libraries/WiFi/examples/SimpleWiFiServer/SimpleWiFiServer.ino
 //  returns empty string if no request from any client
@@ -414,12 +441,14 @@ String Webserver_GetRequestGETParameter()
 {
   String GETParameter = "";
   bool waitForData = false;
+  uint32_t contentLength = 0;
+  uint32_t receivedBytes = 0;
   
   client = server.available();               // listen for incoming clients
   
   if( client )                              // if you get a client,
   {
-    Serial.println("Webserver_GetRequestGETParameter(): New Client.");           // print a message out the serial port
+    //Serial.println("Webserver_GetRequestGETParameter(): New Client.");           // print a message out the serial port
     String currentLine = "";                 // make a String to hold incoming data from the client
     
     while( client.connected() )            // loop while the client's connected
@@ -479,13 +508,52 @@ String Webserver_GetRequestGETParameter()
                 sentBytes += 12;
               } 
               //}
+              waitForData = false;
               client.stop();
+            }
+
+            else if( wifiStatus == STATE_WIFI_DSPFW )
+            {
+              int offset = 0;
+              while( offset < currentLine.length() )
+              {
+                String str = currentLine.substring( offset, offset + 2 );
+                if( receivedBytes < contentLength )
+                {
+                  //Serial.print( str );
+                  uint8_t rxByte = (uint8_t)strtoul( str.c_str(), NULL, 16 );
+                  Serial.print( rxByte, HEX );
+                  size_t len = fileDspProgram.write( &rxByte, 1 );
+                  if( len != 1 )
+                    Serial.println( "[ERROR] Writing to dspfw.hex" );
+                  receivedBytes += 2;
+                  totalBytesReceived++;
+                }
+                else
+                {
+                  Serial.println("ACK");
+                  fileDspProgram.flush();
+                  //Serial.print( "\nreceivedBytes = ");
+                  //Serial.println( receivedBytes );
+                  //sendAckWifi();
+                }
+                offset += 2;
+              }
+              
+              if( receivedBytes >= contentLength )
+              {
+                client.stop();
+                waitForData = false;
+                //wifiStatus = STATE_WIFI_IDLE;
+              }
+              //currentLine = "";
             }
 
             currentLine = "";
             //Serial.println( cntrPackets );
-            waitForData = false;
+            
           }
+
           else
           {
             //Serial.println( currentLine );
@@ -496,6 +564,52 @@ String Webserver_GetRequestGETParameter()
               wifiStatus = STATE_WIFI_PUTPARAM;
               currentLine = "";
               cntrPackets++;
+            }
+
+            //--- New dsp firmware data block
+            else if( currentLine.startsWith("PUT /dspfw") )
+            {
+              Serial.println( "PUT /dspfw" );
+              if( wifiStatus != STATE_WIFI_DSPFW )                              // start a new transfer
+              {
+                if( SPIFFS.exists( "/dspfw.hex" ) )
+                {
+                  if( SPIFFS.remove( "/dspfw.hex" ) )
+                    Serial.println( "dspfw.hex deleted" );
+                  else
+                    Serial.println( "[ERROR] Deleting dspfw.hex" );
+                }
+
+                fileDspProgram = SPIFFS.open( "/dspfw.hex", "w" );
+                if( !fileDspProgram )
+                  Serial.println( "[ERROR] Failed to open dspfw.hex" );
+                else
+                  Serial.println( "Opened dspfw.hex" );
+
+                totalBytesReceived = 0;
+              }
+              wifiStatus = STATE_WIFI_DSPFW;
+              currentLine = "";
+              //cntrPackets++;
+            }
+
+            //--- Finish dsp firmware transfer
+            else if( currentLine.startsWith("GET /finishdspfw") )
+            {
+              Serial.println( "GET /finishdspfw" );
+              fileDspProgram.flush();
+              fileDspProgram.close();
+              String httpResponse = "";
+              httpResponse += "HTTP/1.1 200 OK\r\n";
+              httpResponse += "Content-type:text/plain\r\n\r\n";
+              httpResponse += String( totalBytesReceived );
+              httpResponse += "\r\n";
+              client.println( httpResponse );
+              client.stop();
+              Serial.println( totalBytesReceived );
+              wifiStatus = STATE_WIFI_IDLE;
+              currentLine = "";
+              //cntrPackets++;
             }
 
             else if( currentLine.startsWith("Host:") )
@@ -514,7 +628,9 @@ String Webserver_GetRequestGETParameter()
             else if( currentLine.startsWith( "Content-length" ) )
             {
               //Serial.println( currentLine );
-              //String str = currentLine.substring( currentLine.indexOf(':') + 1, currentLine.length() );
+              String str = currentLine.substring( currentLine.indexOf(':') + 1, currentLine.length() );
+              contentLength = (uint32_t)strtoul( str.c_str(), NULL, 10 );
+              receivedBytes = 0;
               currentLine = "";
             }
 
@@ -539,72 +655,6 @@ String Webserver_GetRequestGETParameter()
   return GETParameter;
 }
 
-// Decodes a GET parameter (expression after ? in URI (URI = expression entered in address field of webbrowser)), like "Country=Germany&City=Aachen"
-// and set the ConfigValues
-int DecodeGETParameterAndSetConfigValues(String GETParameter)
-{
-   
-   int posFirstCharToSearch = 1;
-   int count = 0;
-   
-   // while a "&" is in the expression, after a start position to search
-   while (GETParameter.indexOf('&', posFirstCharToSearch) > -1)
-   {
-     int posOfSeparatorChar = GETParameter.indexOf('&', posFirstCharToSearch);  // position of & after start position
-     int posOfValueChar = GETParameter.indexOf('=', posFirstCharToSearch);      // position of = after start position
-  
-  //   ConfigValue[count] = GETParameter.substring(posOfValueChar + 1, posOfSeparatorChar);  // extract everything between = and & and enter it in the ConfigValue
-      
-     posFirstCharToSearch = posOfSeparatorChar + 1;  // shift the start position to search after the &-char 
-     count++;
-   }
-
-   // no more & chars found
-   
-   int posOfValueChar = GETParameter.indexOf('=', posFirstCharToSearch);       // search for =
-   
-//   ConfigValue[count] = GETParameter.substring(posOfValueChar + 1, GETParameter.length());  // extract everything between = and end of string
-   count++;
-
-   return count;  // number of values found in GET parameter
-}
-
-// check the ConfigValues and set ConfigStatus
-// process the first ConfigValue to switch something
-void ProcessAndValidateConfigValues(int countValues)
-{
-  if (countValues > 8) {countValues = 8;};
-
-  // if we have more than 1 value, store the second and third value in non-volatile storage
-  if (countValues > 2)
-  {
-    //preferences.putString("SSID", ConfigValue[1]);
-    //preferences.putString("Password", ConfigValue[2]);
-  }
-
-  /*
-  // in our application the first value must be "00" or "FF" (as text string)
-  if ((ConfigValue[0].equals("00")) || (ConfigValue[0].equals("FF")))
-  {
-    ConfigStatus[0] = 1;    // Value is valid
-  }
-  else
-  {
-    ConfigStatus[0] = -1;   // Value is not valid
-  }
-
-  // first config value is used to switch LED ( = Actor)
-  if (ConfigValue[0].equals("00"))   
-  {
-    SwitchActor(ACTOR_OFF);
-  }
-  
-  if (ConfigValue[0].equals("FF"))
-  {
-    SwitchActor(ACTOR_ON);
-  }*/
-  
-}
 
 
 // Get IP-Address of ESP32 in Router network (LAN), in String-format
@@ -619,31 +669,7 @@ void loop()
 
   String GETParameter = Webserver_GetRequestGETParameter();   // look for client request
 
-  /*if( GETParameter.length() > 0 )        // we got a request, client connection stays open
-    {
-      if (GETParameter.length() > 1)      // request contains some GET parameter
-      {
-          int countValues = DecodeGETParameterAndSetConfigValues(GETParameter);     // decode the GET parameter and set ConfigValues
-  
-  
-          ProcessAndValidateConfigValues(1);                 // then only the LED must be switched
-       
-      }
 
-      String HTMLPageWithConfigForm;
-       
-      if (WebRequestHostAddress == "192.168.4.1")                  //   the user entered this address in the browser, to get the configuration webpage               
-      {
-          HTMLPageWithConfigForm = EncodeFormHTMLFromConfigValues("ESP32 Webserver CONFIG", 3) + "<br>IP Address: " + WiFi_GetOwnIPAddressInRouterNetwork();       // build a new Configuration webpage with form and new ConfigValues entered in textboxes
-      }
-      else                                                         // the user entered the ESP32 address in router network in the browser, to get normal webpage
-      {
-          HTMLPageWithConfigForm = EncodeFormHTMLFromConfigValues("ESP32 Webserver Demo", 1);                                       // build a new webpage to control the LED
-      }
-      
-      //Webserver_SendHTMLPage(HTMLPageWithConfigForm);    // send out the webpage to client = webbrowser and close client connection
-      
-  }*/
 
 
   delay( 50 );

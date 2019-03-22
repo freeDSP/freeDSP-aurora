@@ -15,7 +15,7 @@
 #include "DialogSettings.hpp"
 #include "QDialogDemoSelector.hpp"
 
-#include "8channels_IC_1_PARAM.h"
+//#include "8channels_IC_1_PARAM.h"
 
 #include "PlugIn8Channels.hpp"
 #include "PlugInHomeCinema71.hpp"
@@ -201,7 +201,7 @@ MainWindow::MainWindow( QWidget* parent ) :
   connect( tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(error(QAbstractSocket::SocketError)) );
   connect( tcpSocket, SIGNAL(hostFound()),                         this, SLOT(hostFound()) );
   connect( tcpSocket, SIGNAL(bytesWritten(qint64)),                this, SLOT(bytesWritten(qint64)) );
-  connect( tcpSocket, SIGNAL(readyRead()),                         this, SLOT(readyRead()) );
+  //connect( tcpSocket, SIGNAL(readyRead()),                         this, SLOT(readyRead()) );
 
   //if( dialog.comboBox()->currentText() == QString("8channels") )
   //{
@@ -552,17 +552,17 @@ void MainWindow::on_actionAbout_triggered()
  */
 void MainWindow::on_actionSettings_triggered()
 {
-  DialogSettings dialog;
+  DialogSettings dialog( &dsp, this );
   dialog.setPortName( portName );
   int result = dialog.exec();
   if( result == QDialog::Accepted )
   {
-    #if !defined( DEMO )
+    /*#if !defined( DEMO )
     dsp.close();
     dsp.open( dialog.getPortName() );
     #endif
     portName = dialog.getPortName();
-    qDebug()<<portName;
+    qDebug()<<portName;*/
   }
 }
 

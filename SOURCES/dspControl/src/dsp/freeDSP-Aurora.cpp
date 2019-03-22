@@ -553,31 +553,6 @@ uint32_t convertTo824( double val )
 /*!
  *
  */
-/*bool CFreeDspAurora::sendParameterWifi( uint16_t reg, double val )
-{
-  qDebug()<<"---------------------------------------------------------------";
-  qDebug()<<"sendParameterWifi()";
-
-  QByteArray content;
-  content.append( (reg >> 8) & 0xFF );
-  content.append( reg & 0xFF );
-
-  uint32_t data = convertTo824( val );
-
-  content.append( (data >> 24) & 0xFF );
-  content.append( (data >> 16) & 0xFF );
-  content.append( (data >> 8) & 0xFF );
-  content.append( data & 0xFF );
-
-  sendParameterWifi( content );
-  
-  return true;
-}*/
-
-//==============================================================================
-/*!
- *
- */
 QByteArray CFreeDspAurora::makeParameterForWifi( uint16_t reg, double val )
 {
   QByteArray content;
@@ -636,5 +611,137 @@ bool CFreeDspAurora::sendParameterWifi( QByteArray content )
   loopDisconnect.exec();
 
   return true;
+}
+
+//==============================================================================
+/*! Starts the transfer of a new dsp firmware block.
+ *
+ * \param content First block of firmware.
+ */
+bool CFreeDspAurora::sendDspFirmwareWifi( QByteArray content )
+{
+  bool ret = false;
+
+  qDebug()<<"---------------------------------------------------------------";
+  qDebug()<<"sendDspFirmwareWifi()";
+
+  tcpSocket->abort();
+  tcpSocket->connectToHost( wifiIpHost, wifiPortHost );
+
+  QEventLoop loopConnect;
+  connect( tcpSocket, SIGNAL(connected()), &loopConnect, SLOT(quit()) );
+  // \TODO Add timeout timer
+  #warning Add timeout timer
+  //connect(timeoutTimer, SIGNAL(timeout()), &loop, SLOT(quit()));
+  loopConnect.exec();
+
+  QString requestString = QString("PUT /dspfw HTTP/1.1\r\nHost: ")
+                        + wifiIpHost
+                        + QString("\r\nContent-type:application/octet-stream\r\nContent-length: ")
+                        + QString::number( content.size()*2 )
+                        + QString("\r\n\r\n");
+  QByteArray request;
+  request.append( requestString );
+  request.append( content.toHex() );  
+  request.append( "\r\n" );
+  
+  qDebug()<<QString( request );
+  tcpSocket->write( request );
+
+  //ret = waitForAckWifi();
+  //tcpSocket->abort();
+
+  QEventLoop loopDisconnect;
+  connect( tcpSocket, SIGNAL(disconnected()), &loopDisconnect, SLOT(quit()) );
+  // \TODO Add timeout timer
+  #warning Add timeout timer
+  //connect(timeoutTimer, SIGNAL(timeout()), &loop, SLOT(quit()));
+  loopDisconnect.exec();
+
+  return ret;
+}
+
+//==============================================================================
+/*! Finishes the transfer of a new dsp firmware.
+ *
+ */
+bool CFreeDspAurora::finishDspFirmwareWifi( uint32_t totalTransmittedBytes )
+{
+  bool ret = false;
+
+  qDebug()<<"---------------------------------------------------------------";
+  qDebug()<<"finishDspFirmwareWifi";
+
+  tcpSocket->abort();
+  tcpSocket->connectToHost( wifiIpHost, wifiPortHost );
+
+  QEventLoop loopConnect;
+  connect( tcpSocket, SIGNAL(connected()), &loopConnect, SLOT(quit()) );
+  // \TODO Add timeout timer
+  #warning Add timeout timer
+  //connect(timeoutTimer, SIGNAL(timeout()), &loop, SLOT(quit()));
+  loopConnect.exec();
+
+  QString requestString = QString("GET /finishdspfw HTTP/1.1\r\nHost: ")
+                        + wifiIpHost
+                        + QString("\r\n\r\n");
+  QByteArray request;
+  request.append( requestString );
+  
+  qDebug()<<QString( request );
+  tcpSocket->write( request );
+
+  QEventLoop loopWaitForAck;
+  connect( tcpSocket, SIGNAL(readyRead()), &loopWaitForAck, SLOT(quit()) );
+  // \TODO Add timeout timer
+  #warning Add timeout timer
+  loopWaitForAck.exec();
+
+  QByteArray reply;
+  reply.append( tcpSocket->readAll() );
+  qDebug()<<QString( reply );
+  QStringList listReply = QString( reply ).split( QRegExp("\\s+") );
+
+  uint32_t totalReceivedBytes = listReply.at(4).toUInt();
+  qDebug()<<totalTransmittedBytes<<totalReceivedBytes;
+
+/*  tcpSocket->abort();
+
+  QEventLoop loopDisconnect;
+  connect( tcpSocket, SIGNAL(disconnected()), &loopDisconnect, SLOT(quit()) );
+  // \TODO Add timeout timer
+  #warning Add timeout timer
+  //connect(timeoutTimer, SIGNAL(timeout()), &loop, SLOT(quit()));
+  loopDisconnect.exec();
+*/
+
+  if( totalTransmittedBytes == totalReceivedBytes )
+    return true;
+  else
+    return false;
+}
+
+//==============================================================================
+/*! Waits for an ACK from WiFi connection.
+ *
+ */
+bool CFreeDspAurora::waitForAckWifi( void )
+{
+  QEventLoop loopWaitForAck;
+  connect( tcpSocket, SIGNAL(readyRead()), &loopWaitForAck, SLOT(quit()) );
+  loopWaitForAck.exec();
+
+  QByteArray reply;
+  reply.append( tcpSocket->readAll() );
+  qDebug()<<QString( reply );
+
+  QStringList listReply = QString( reply ).split( QRegExp("\\s+") );
+  if( listReply.at(4) == QString("ACK") )
+    return true;
+  else
+  {
+    qDebug()<<"No ACK received"<<listReply.at(4);
+    return false;
+  }
 }
 
