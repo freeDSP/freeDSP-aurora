@@ -38,6 +38,8 @@ QLowShelv::QLowShelv( double gain, double freq, double slope,
   ui->doubleSpinBoxS->setAttribute( Qt::WA_MacShowFocusRect, 0 );
   ui->doubleSpinBoxS->setValue( slope );
   ui->doubleSpinBoxS->blockSignals( false );
+
+  type = LOWSHELV;
 }
 
 //==============================================================================
@@ -169,7 +171,7 @@ void QLowShelv::sendDspParameter( void )
   content.append( dsp->makeParameterForWifi( addr[kParamB0], static_cast<float>(coeffs[kB0]) ) );
   content.append( dsp->makeParameterForWifi( addr[kParamA2], static_cast<float>(coeffs[kA2]) ) );
   content.append( dsp->makeParameterForWifi( addr[kParamA1], static_cast<float>(coeffs[kA1]) ) );
-  dsp->sendParameterWifi( content );
+  //dsp->sendParameterWifi( content );
 
   //dsp->sendParameter( addr[kParamB2], static_cast<float>(coeffs[kB2]) );
   //dsp->sendParameter( addr[kParamB1], static_cast<float>(coeffs[kB1]) );
@@ -228,6 +230,7 @@ void QLowShelv::setUserParams( QByteArray& userParams, int& idx )
 
   if( userParams.size() >= idx + 12 )
   {
+    param.clear();
     param.append( userParams.at(idx) );
     idx++;
     param.append( userParams.at(idx) );
@@ -239,6 +242,7 @@ void QLowShelv::setUserParams( QByteArray& userParams, int& idx )
 
     float V0t = *reinterpret_cast<const float*>(param.data());
 
+    param.clear();
     param.append( userParams.at(idx) );
     idx++;
     param.append( userParams.at(idx) );
@@ -250,6 +254,7 @@ void QLowShelv::setUserParams( QByteArray& userParams, int& idx )
 
     float fct = *reinterpret_cast<const float*>(param.data());
 
+    param.clear();
     param.append( userParams.at(idx) );
     idx++;
     param.append( userParams.at(idx) );

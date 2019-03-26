@@ -15,20 +15,6 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Serial Port:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QComboBox" name="comboBoxSerialPort"/>
-     </item>
-    </layout>
-   </item>
-   <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
       <string>PlugIn</string>

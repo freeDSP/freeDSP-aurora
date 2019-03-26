@@ -16,6 +16,8 @@ using namespace Vektorraum;
 QOutputSelect::QOutputSelect( uint32_t selection, uint16_t outputaddr, CFreeDspAurora* ptrdsp, QWidget *parent) :
   QDspBlock(parent), ui(new Ui::QOutputSelect)
 {
+  type = OUTPUTSELECT;
+  
   addr[kOutput] = outputaddr;
   dsp = ptrdsp;
 

@@ -1,35 +1,32 @@
 #include <math.h>
 
-#if !defined( __IOS__ )
-#include <QSerialPortInfo>
-#endif
 #include <QDebug>
 #include <QFile>
-#include <QTcpSocket>
-#include <QByteArray>
-#include <QEventLoop>
-#include <QObject>
+#include <QMessageBox>
+
 
 #include <cstdint>
 #include <cstring>
 
 #include "freeDSP-Aurora.hpp"
 
-extern QTcpSocket* tcpSocket;
 extern QString wifiIpHost;
 extern int wifiPortHost;
 
 //==============================================================================
-/*!
+/*! Constructor
  *
  */
 CFreeDspAurora::CFreeDspAurora( QWidget* parent ) : QWidget( parent )
 {
-
+  tcpSocket = new QTcpSocket( this );
+  connect( tcpSocket, SIGNAL( readyRead()), this, SLOT(readyReadWifi()) );
+  connect( this, SIGNAL( haveReplyWifi() ), &loopWaitForResponseWiFi, SLOT( quit() ) );
 }
 
 //==============================================================================
-/*!
+/*! Destructor
+ *
  */
 CFreeDspAurora::~CFreeDspAurora( void )
 {
@@ -40,13 +37,15 @@ CFreeDspAurora::~CFreeDspAurora( void )
 /*!
  *
  */
+#if 0
 bool CFreeDspAurora::sendByteSecured( char* txbyte )
 {
   qDebug()<<"TX:"<<"0x" + QString::number( static_cast<uint32_t>(*txbyte), 16 );
 
   if( !isOpen )
     return false;
-#if !defined( __IOS__ )
+
+//#if !defined( __IOS__ )
   const qint64 bytesWritten = serialBT.write( txbyte, 1 );
   if (bytesWritten == -1)
   {
@@ -74,21 +73,24 @@ bool CFreeDspAurora::sendByteSecured( char* txbyte )
     qDebug()<<"[ERROR] Received wrong byte. Connection seems corrupted.";
     return false;
   }
-#endif
+
   return true;
 }
+#endif
 
 //==============================================================================
 /*!
  *
  */
+#if 0
 bool CFreeDspAurora::sendByteSecured( byte txbyte )
 {
   qDebug()<<"TX:"<<"0x" + QString::number( static_cast<uint32_t>(txbyte), 16 );
 
   if( !isOpen )
     return false;
-#if !defined( __IOS__ )
+
+//#if !defined( __IOS__ )
   const qint64 bytesWritten = serialBT.write( &txbyte, 1 );
   if (bytesWritten == -1)
   {
@@ -116,205 +118,11 @@ bool CFreeDspAurora::sendByteSecured( byte txbyte )
     qDebug()<<"[ERROR] Received wrong byte. Connection seems corrupted.";
     return false;
   }
-#endif
+
   return true;
 
 }
-
-//==============================================================================
-/*!
- *
- */
-bool CFreeDspAurora::writeFirmwareToESP32viaBluetooth( const QString& hexfilename )
-{
-  //----------------------------------------------------------------------------
-  //--- Read and convert the TxBuffer_IC_1.dat file
-  //----------------------------------------------------------------------------
-  QFile hexfile( hexfilename );
-  if( !hexfile.open( QIODevice::ReadOnly ) )
-  {
-    qDebug()<<__FILE__<<__LINE__<<"Could not open selected hex file";
-    return false;
-  }
-
-  QTextStream in( &hexfile );
-  QStringList listTxBuffer;
-
-  while( !in.atEnd() )
-  {
-    QString line = in.readLine().simplified();
-    QStringList listStrings = line.split( ',' );
-    for( int ii = 0; ii < listStrings.size(); ii++ )
-    {
-      QString str = listStrings[ii].simplified();
-      if( str.startsWith( "0x" ) )
-        listTxBuffer<<str;
-    }
-  }
-
-  hexfile.close();
-
-  //----------------------------------------------------------------------------
-  //--- Read and convert the NumBytes_IC_1.dat file
-  //----------------------------------------------------------------------------
-  QString path = hexfilename;
-  QString file = path.section("/",-1,-1);
-  QString dir = path.section("/",0,-2);
-  file.replace( QString(".hex"), QString(".dat") );
-
-  QFile datfile( dir + "/" + file );
-  if( !datfile.open( QIODevice::ReadOnly ) )
-  {
-    qDebug()<<__FILE__<<__LINE__<<"Could not open corresponding dat file";
-    return false;
-  }
-
-  QTextStream indat( &datfile );
-  QStringList listNumBytes;
-
-  while( !indat.atEnd() )
-  {
-    QString line = indat.readLine().simplified();
-    QStringList listStrings = line.split( ',' );
-    for( int ii = 0; ii < listStrings.size(); ii++ )
-    {
-      QString str = listStrings[ii].simplified();
-      if( !str.isEmpty() )
-        listNumBytes<<str;
-    }
-  }
-
-  datfile.close();
-
-  uint32_t maxBytes = 0;
-  for( int ii = 0; ii < listNumBytes.size(); ii++ )
-    maxBytes += listNumBytes[ii].toUInt( nullptr, 10 );
-  maxBytes += static_cast<unsigned>(listNumBytes.size()) * 4;
-
-  //----------------------------------------------------------------------------
-  //--- Open the serial port Bluetooth device
-  //----------------------------------------------------------------------------
-#if !defined( __IOS__ )
-  serialBT.setPortName( "/dev/cu.freedsp-aurora-ESP32_SP" );
-  serialBT.open( QIODevice::ReadWrite );
-  serialBT.setBaudRate( QSerialPort::Baud115200 );
-  serialBT.setDataBits( QSerialPort::Data8 );
-  serialBT.setParity( QSerialPort::NoParity );
-  serialBT.setStopBits( QSerialPort::OneStop );
-  serialBT.setFlowControl( QSerialPort::NoFlowControl );
-  if( !serialBT.isOpen() )
-  {
-    if( !serialBT.open( QIODevice::ReadWrite ) )
-    {
-      qDebug()<<"Failed to open serial port"<<serialBT.errorString();
-      return false;
-    }
-  }
-  qDebug()<<"Opened serial port freeDSP-Aurora";
 #endif
-  //----------------------------------------------------------------------------
-  //--- Send data to ESP32 via Bluetooth
-  //----------------------------------------------------------------------------
-
-  char cmd = NEWFW;
-  if( !sendByteSecured( &cmd ) )
-    return false;
-
-  qDebug()<<"Sending"<<maxBytes<<"bytes";
-
-  char data = static_cast<char>( (maxBytes & 0xFF000000) >> 24 );
-  if( !sendByteSecured( &data ) )
-    return false;
-  data = static_cast<char>( (maxBytes & 0x00FF0000) >> 16 );
-  if( !sendByteSecured( &data ) )
-    return false;
-  data = static_cast<char>( (maxBytes & 0x0000FF00) >> 8 );
-  if( !sendByteSecured( &data ) )
-    return false;
-  data = static_cast<char>( maxBytes & 0x000000FF );
-  if( !sendByteSecured( &data ) )
-    return false;
-
-  uint32_t offset = 0;
-  for( int ii = 0; ii < listNumBytes.size(); ii++ )
-  {
-    uint32_t numbytes = listNumBytes[ii].toUInt( nullptr, 10 );
-    qDebug()<<"Bytes: "<<numbytes;
-
-    if( !sendByteSecured( (numbytes >> 24) & 0xFF ) )
-      return false;
-    if( !sendByteSecured( (numbytes >> 16) & 0xFF ) )
-      return false;
-    if( !sendByteSecured( (numbytes >> 8) & 0xFF ) )
-      return false;
-    if( !sendByteSecured( numbytes & 0xFF ) )
-      return false;
-
-    qDebug()<<"Data:";
-    for( uint32_t n = 0; n < numbytes; n++ )
-    {
-      if( offset >= static_cast<unsigned>(listTxBuffer.size()) )
-      {
-        qDebug()<<"TxBuffer too small";
-        return false;
-      }
-
-      data = static_cast<char>( listTxBuffer[offset].toUInt( nullptr, 16 ) & 0xff );
-      if( !sendByteSecured( &data ) )
-        return false;
-      offset++;
-    }
-
-    qDebug()<<"---------------------------------------------------------------";
-  }
-
-  qDebug()<<"Data successfully sent";
-#if !defined( __IOS__ )
-  serialBT.close();
-#endif
-  return true;
-}
-
-//==============================================================================
-/*!
- *
- */
-bool CFreeDspAurora::verifyFirmwareESP32viaBluetooth( const QString& hexfilename )
-{
-  //----------------------------------------------------------------------------
-  //--- Open the serial port Bluetooth device
-  //----------------------------------------------------------------------------
-#if !defined( __IOS__ )
-  serialBT.setPortName( "/dev/cu.freedsp-aurora-ESP32_SP" );
-  serialBT.open( QIODevice::ReadWrite );
-  serialBT.setBaudRate( QSerialPort::Baud115200 );
-  serialBT.setDataBits( QSerialPort::Data8 );
-  serialBT.setParity( QSerialPort::NoParity );
-  serialBT.setStopBits( QSerialPort::OneStop );
-  serialBT.setFlowControl( QSerialPort::NoFlowControl );
-  if( !serialBT.isOpen() )
-  {
-    if( !serialBT.open( QIODevice::ReadWrite ) )
-    {
-      qDebug()<<"Failed to open serial port"<<serialBT.errorString();
-      return false;
-    }
-  }
-  qDebug()<<"Opened serial port freeDSP-Aurora";
-#endif
-  //----------------------------------------------------------------------------
-  //--- Send data to ESP32 via Bluetooth
-  //----------------------------------------------------------------------------
-
-  char cmd = VERIFY;
-  if( !sendByteSecured( &cmd ) )
-    return false;
-
-#if !defined( __IOS__ )
-  serialBT.close();
-#endif
-  return true;
-}
 
 //==============================================================================
 /*!
@@ -323,7 +131,7 @@ bool CFreeDspAurora::verifyFirmwareESP32viaBluetooth( const QString& hexfilename
 bool CFreeDspAurora::open( const QString portname )
 {
   isOpen = false;
-
+#if 0
   #if !defined( DEMO )
   //----------------------------------------------------------------------------
   //--- Open the serial port Bluetooth device
@@ -346,7 +154,7 @@ bool CFreeDspAurora::open( const QString portname )
   qDebug()<<"Opened serial port freeDSP-Aurora";
   isOpen = true;
   #endif
-
+#endif
   return true;
 }
 
@@ -357,9 +165,11 @@ bool CFreeDspAurora::open( const QString portname )
 void CFreeDspAurora::close( void )
 {
   isOpen = false;
+#if 0
   #if !defined( DEMO )
   serialBT.close();
   #endif
+#endif
 }
 
 //==============================================================================
@@ -370,7 +180,7 @@ bool CFreeDspAurora::sendParameter( uint16_t reg, float val )
 {
   qDebug()<<"---------------------------------------------------------------";
   qDebug()<<"sendParameter()";
-
+#if 0
   char cmd = PARAM;
   if( !sendByteSecured( &cmd ) )
     return false;
@@ -403,7 +213,7 @@ bool CFreeDspAurora::sendParameter( uint16_t reg, float val )
     return false;
   if( !sendByteSecured( data & 0xFF ) )
     return false;
-
+#endif
   return true;
 }
 
@@ -415,7 +225,7 @@ bool CFreeDspAurora::sendParameter( uint16_t reg, uint32_t val )
 {
   qDebug()<<"---------------------------------------------------------------";
   qDebug()<<"sendParameter()";
-
+#if 0
   char cmd = PARAM;
   if( !sendByteSecured( &cmd ) )
     return false;
@@ -448,7 +258,7 @@ bool CFreeDspAurora::sendParameter( uint16_t reg, uint32_t val )
     return false;
   if( !sendByteSecured( data & 0xFF ) )
     return false;
-
+#endif
   return true;
 }
 
@@ -458,10 +268,12 @@ bool CFreeDspAurora::sendParameter( uint16_t reg, uint32_t val )
  */
 bool CFreeDspAurora::storeRegAddr( uint16_t reg )
 {
+#if 0
   if( !sendByteSecured( static_cast<byte>((reg >> 8) & 0xFF) ) )
     return false;
   if( !sendByteSecured( static_cast<byte>(reg & 0xFF) ) )
     return false;
+ #endif
   return true;
 }
 
@@ -471,6 +283,7 @@ bool CFreeDspAurora::storeRegAddr( uint16_t reg )
  */
 bool CFreeDspAurora::storeValue( float val )
 {
+#if 0
   uint32_t data;
   std::memcpy( &data, &val, sizeof(float) );
   if( !sendByteSecured( static_cast<byte>((data >> 24) & 0xFF) ) )
@@ -481,6 +294,7 @@ bool CFreeDspAurora::storeValue( float val )
     return false;
   if( !sendByteSecured( static_cast<byte>(data & 0xFF) ) )
     return false;
+#endif
   return true;
 }
 
@@ -490,6 +304,7 @@ bool CFreeDspAurora::storeValue( float val )
  */
 bool CFreeDspAurora::storeValue( uint32_t val )
 {
+#if 0
   uint32_t data = val;
   if( !sendByteSecured( static_cast<byte>((data >> 24) & 0xFF) ) )
     return false;
@@ -499,9 +314,11 @@ bool CFreeDspAurora::storeValue( uint32_t val )
     return false;
   if( !sendByteSecured( static_cast<byte>(data & 0xFF) ) )
     return false;
+#endif
   return true;
 }
 
+#if 0
 //==============================================================================
 /*!
  *
@@ -525,6 +342,7 @@ bool CFreeDspAurora::beginStoreParams( uint32_t numbytes )
     return false;
   return true;
 }
+#endif
 
 uint32_t convertTo824( double val )
 {
@@ -548,6 +366,7 @@ uint32_t convertTo824( double val )
 
   return ret;
 }
+
 
 //==============================================================================
 /*!
@@ -667,8 +486,6 @@ bool CFreeDspAurora::sendDspFirmwareWifi( QByteArray content )
  */
 bool CFreeDspAurora::finishDspFirmwareWifi( uint32_t totalTransmittedBytes )
 {
-  bool ret = false;
-
   qDebug()<<"---------------------------------------------------------------";
   qDebug()<<"finishDspFirmwareWifi";
 
@@ -744,4 +561,256 @@ bool CFreeDspAurora::waitForAckWifi( void )
     return false;
   }
 }
+
+//==============================================================================
+/*! Requests the PID of current installed DSP-Plugin
+ *
+ */
+uint32_t CFreeDspAurora::requestPidWifi( void )
+{
+  qDebug()<<"---------------------------------------------------------------";
+  qDebug()<<"requestPidWifi";
+
+  QString requestString = QString("GET /pid HTTP/1.1\r\nHost: ")
+                        + wifiIpHost
+                        + QString("\r\n\r\n");
+  QByteArray request;
+  request.append( requestString );
+
+  writeRequestWifi( request );
+  waitForResponseWifi();
+
+  //! \TODO Check for valid reply
+
+  QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+  uint32_t pid = 0;
+  if( listReply.size() > 4 )
+    pid = listReply.at(4).toUInt();
+  
+  qDebug()<<pid;
+
+  return pid;
+}
+
+//==============================================================================
+/*! Starts the transfer of a user data block.
+ *
+ * \param content Data block of user data.
+ */
+bool CFreeDspAurora::sendUserParameterWifi( QByteArray content )
+{
+  bool ret = false;
+
+  qDebug()<<"---------------------------------------------------------------";
+  qDebug()<<"sendUserParameterWifi()";
+
+  tcpSocket->abort();
+  tcpSocket->connectToHost( wifiIpHost, wifiPortHost );
+
+  QEventLoop loopConnect;
+  connect( tcpSocket, SIGNAL(connected()), &loopConnect, SLOT(quit()) );
+  // \TODO Add timeout timer
+  #warning Add timeout timer
+  //connect(timeoutTimer, SIGNAL(timeout()), &loop, SLOT(quit()));
+  loopConnect.exec();
+
+  QString requestString = QString("PUT /userparam HTTP/1.1\r\nHost: ")
+                        + wifiIpHost
+                        + QString("\r\nContent-type:application/octet-stream\r\nContent-length: ")
+                        + QString::number( content.size()*2 )
+                        + QString("\r\n\r\n");
+  QByteArray request;
+  request.append( requestString );
+  request.append( content.toHex() );  
+  request.append( "\r\n" );
+  
+  qDebug()<<QString( request );
+  tcpSocket->write( request );
+
+  //ret = waitForAckWifi();
+  //tcpSocket->abort();
+
+  QEventLoop loopDisconnect;
+  connect( tcpSocket, SIGNAL(disconnected()), &loopDisconnect, SLOT(quit()) );
+  // \TODO Add timeout timer
+  #warning Add timeout timer
+  //connect(timeoutTimer, SIGNAL(timeout()), &loop, SLOT(quit()));
+  loopDisconnect.exec();
+
+  return ret;
+}
+
+//==============================================================================
+/*! Finishes the transfer of user parameter file.
+ *
+ */
+bool CFreeDspAurora::finishUserParameterWifi( uint32_t totalTransmittedBytes )
+{
+  qDebug()<<"---------------------------------------------------------------";
+  qDebug()<<"finishUserParameterWifi";
+
+  QString requestString = QString("GET /finishuserparam HTTP/1.1\r\nHost: ")
+                        + wifiIpHost
+                        + QString("\r\n\r\n");
+  QByteArray request;
+  request.append( requestString );
+  
+  writeRequestWifi( request );
+
+  if( !waitForResponseWifi() )
+  {
+    QMessageBox::critical( this, tr("Error"), tr("Could not finish transfer of user parameter file. Please double check everything, reset DSP and try again."), QMessageBox::Ok ); 
+    return false;
+  }
+  else
+  {
+    qDebug()<<QString( replyDSP );
+    QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+    uint32_t totalReceivedBytes = listReply.at(4).toUInt();
+
+    if( totalTransmittedBytes == totalReceivedBytes )
+      return true;
+    else
+      return false;
+  }
+}
+
+//==============================================================================
+/*! Request the user parameter file.
+ *
+ */
+bool CFreeDspAurora::requestUserParameterWifi( QByteArray& userparams )
+{
+  qDebug()<<"---------------------------------------------------------------";
+  qDebug()<<"receiveUserParameterWifi";
+
+  uint32_t totalBytes = 0;
+
+  QString requestString = QString("GET /sizeuserparam HTTP/1.1\r\nHost: ")
+                        + wifiIpHost
+                        + QString("\r\n\r\n");
+  QByteArray request;
+  request.append( requestString );
+
+  writeRequestWifi( request );
+  if( !waitForResponseWifi() )
+  {
+    QMessageBox::critical( this, tr("Error"), tr("Could not receive the size of the user parameter file. Please double check everything and try again."), QMessageBox::Ok ); 
+    return false;
+  }
+  else
+  {
+    qDebug()<<QString( replyDSP );
+    QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+    totalBytes = listReply.at(4).toUInt();
+
+    if( totalBytes > 0 )
+    {
+      requestString = QString("GET /userparam HTTP/1.1\r\nHost: ")
+                    + wifiIpHost
+                    + QString("\r\n\r\n");
+      request.clear();
+      request.append( requestString );
+      writeRequestWifi( request );
+      if( !waitForResponseWifi() )
+      {
+        QMessageBox::critical( this, tr("Error"), tr("Could not receive the user parameter file. Please double check everything and try again."), QMessageBox::Ok ); 
+        return false;
+      }
+      else
+      {
+        listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+        qDebug()<<"Received user parameter"<<listReply.at(4).size();
+        QString str = listReply.at(4);
+        int offset = 0;
+        
+        while( offset < str.length() )
+        {
+          bool ok;
+          uint8_t val = str.mid( offset, 2 ).toUInt( &ok, 16 );
+          userparams.append( val );
+          //qDebug()<<QString::number( val, 16 )<<str.mid( offset, 2 );
+          offset += 2;
+        }
+      }
+    }
+  }  
+
+  qDebug()<<"Done";
+  qDebug()<<"Received: "<<userparams.size()<<"/"<<totalBytes;
+
+  if( userparams.size() < totalBytes )
+  {
+    QMessageBox::critical( this, tr("Error"), tr("Could not receive all bytes of the user parameter file. Please double check all connections and reset all devices and try again."), QMessageBox::Ok ); 
+    return false;
+  }
+
+  return true;
+}
+
+//==============================================================================
+/*! Wait for reply of DSP via WiFi.
+ *
+ */
+void CFreeDspAurora::waitForReplyWifi( void )
+{
+  QEventLoop loopWaitForReply;
+  connect( tcpSocket, SIGNAL(readyRead()), &loopWaitForReply, SLOT(quit()) );
+  // \TODO Add timeout timer
+  #warning Add timeout timer
+  loopWaitForReply.exec();
+}
+
+//==============================================================================
+/*! 
+ *
+ */
+bool CFreeDspAurora::waitForResponseWifi( void )
+{
+  #warning Add timeout timer
+  loopWaitForResponseWiFi.exec();
+  //! \TODO Check for valid response
+  //! \TOOD Disconnect after transfer?
+  return true;
+}
+
+//==============================================================================
+/*!
+ */
+void CFreeDspAurora::readyReadWifi( void )
+{
+  replyWifi.append( tcpSocket->readAll() );
+  qDebug()<<"readyReadWifi "<<QString( replyWifi );
+  QString str = QString( replyWifi );
+  QStringList listReply = str.split( QRegExp("\\s+") );
+  qDebug()<<str.mid( str.length()-2, 2 );
+  if( (listReply.size() > 4) && (str.mid( str.length()-2, 2 ) == QString("\r\n")) )
+  {
+    qDebug()<<"Reply complete";
+    replyDSP = replyWifi;
+    replyWifi.clear();
+    emit haveReplyWifi();
+  }
+}
+
+//==============================================================================
+/*!
+ */
+void CFreeDspAurora::writeRequestWifi( QByteArray& request )
+{
+  tcpSocket->abort();
+  tcpSocket->connectToHost( wifiIpHost, wifiPortHost );
+
+  QEventLoop loopConnect;
+  connect( tcpSocket, SIGNAL(connected()), &loopConnect, SLOT(quit()) );
+  // \TODO Add timeout timer
+  #warning Add timeout timer
+  //connect(timeoutTimer, SIGNAL(timeout()), &loop, SLOT(quit()));
+  loopConnect.exec();
+
+  replyWifi.clear();
+  qDebug()<<QString( request );
+  tcpSocket->write( request );
+}
+
 

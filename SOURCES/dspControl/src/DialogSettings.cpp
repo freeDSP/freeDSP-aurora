@@ -15,12 +15,13 @@ DialogSettings::DialogSettings( CFreeDspAurora* ptrdsp, QWidget* parent ) :
   ui(new Ui::DialogSettings)
 {
   ui->setupUi(this);
+  /*
 #if !defined( __IOS__ )
   foreach( const QSerialPortInfo &info, QSerialPortInfo::availablePorts() )
     ui->comboBoxSerialPort->addItem( info.portName() );
 #endif
   ui->comboBoxSerialPort->view()->setMinimumWidth( 300 );
-
+*/
   dsp = ptrdsp;
 }
 
@@ -28,16 +29,16 @@ DialogSettings::~DialogSettings()
 {
   delete ui;
 }
-
+/*
 QString DialogSettings::getPortName( void )
 {
   return ui->comboBoxSerialPort->currentText();
-}
-
+}*/
+/*
 void DialogSettings::setPortName( const QString portname )
 {
   ui->comboBoxSerialPort->setCurrentText( portname );
-}
+}*/
 
 //==============================================================================
 /*!
@@ -165,7 +166,7 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
   if( dsp->finishDspFirmwareWifi( totalTransmittedBytes ) )
     QMessageBox::information( this, tr("Success"), tr("You have successfully installed the new DSP-Plugin!"), QMessageBox::Ok );
   else
-    QMessageBox::critical( this, tr("Error"), tr("Uup, something went wrong. Please double check everythind and try again."), QMessageBox::Ok );  
+    QMessageBox::critical( this, tr("Error"), tr("Uups, something went wrong. Please double check everythind and try again."), QMessageBox::Ok );  
 
   qDebug()<<"Success";
   qDebug()<<"File size:"<<content.size() * 8 / 1024<<"kBit";

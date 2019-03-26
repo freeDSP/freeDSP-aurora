@@ -11,6 +11,7 @@ QPhase::QPhase( tfloat freq, tfloat qfactor,
                 tfloat samplerate,
                 CFreeDspAurora* ptrdsp, QWidget *parent ) : QDspBlock(parent), ui(new Ui::QPhase)
 {
+  type = PHASE;
 
   fc = freq;
   Q = qfactor;
@@ -204,6 +205,10 @@ void QPhase::getUserParams( QByteArray* userParams )
   userParams->append( reinterpret_cast<const char*>(&fct), sizeof(fct) );
   float Qt = static_cast<float>(ui->doubleSpinBoxQ->value());
   userParams->append( reinterpret_cast<const char*>(&Qt), sizeof(Qt) );
+  uint8_t invert = 0;
+  if( ui->checkBoxInvert->isChecked() )
+    invert = 1;
+  userParams->append( reinterpret_cast<const char*>(&invert), sizeof(invert) );
 }
 
 //==============================================================================
@@ -215,6 +220,7 @@ void QPhase::setUserParams( QByteArray& userParams, int& idx )
 
   if( userParams.size() >= idx + 8 )
   {
+    param.clear();
     param.append( userParams.at(idx) );
     idx++;
     param.append( userParams.at(idx) );
@@ -226,6 +232,7 @@ void QPhase::setUserParams( QByteArray& userParams, int& idx )
 
     float fct = *reinterpret_cast<const float*>(param.data());
 
+    param.clear();
     param.append( userParams.at(idx) );
     idx++;
     param.append( userParams.at(idx) );
@@ -237,6 +244,8 @@ void QPhase::setUserParams( QByteArray& userParams, int& idx )
 
     float Qt = *reinterpret_cast<const float*>(param.data());
 
+    uint8_t invert = static_cast<uint8_t>(userParams.at(idx));
+    idx++;
 
     ui->doubleSpinBoxFc->blockSignals( true );
     ui->doubleSpinBoxFc->setValue( fct );
@@ -245,6 +254,13 @@ void QPhase::setUserParams( QByteArray& userParams, int& idx )
     ui->doubleSpinBoxQ->blockSignals( true );
     ui->doubleSpinBoxQ->setValue( Qt );
     ui->doubleSpinBoxQ->blockSignals( false );
+
+    ui->checkBoxInvert->blockSignals( true );
+    if( invert )
+      ui->checkBoxInvert->setChecked( true );
+    else
+      ui->checkBoxInvert->setChecked( false );
+    ui->checkBoxInvert->blockSignals( false );
 
   }
   else

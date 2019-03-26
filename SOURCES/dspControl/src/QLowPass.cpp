@@ -16,6 +16,8 @@ QLowPass::QLowPass( tfilterdesign design, tfloat fc,
                     CFreeDspAurora* ptrdsp, QWidget *parent ) :
   QDspBlock(parent), ui(new Ui::QLowPass)
 {
+  type = LOWPASS;
+
   addr[kParamB2_1] = addrB2_1;
   addr[kParamB1_1] = addrB1_1;
   addr[kParamB0_1] = addrB0_1;
@@ -61,6 +63,7 @@ QLowPass::QLowPass( tfilterdesign design, tfloat fc,
   ui->doubleSpinBoxFc->blockSignals( false );
 
   updateCoeffs();
+
 }
 
 QLowPass::~QLowPass()
@@ -853,6 +856,8 @@ void QLowPass::setUserParams( QByteArray& userParams, int& idx )
   {
     filterDesign = static_cast<tfilterdesign>(userParams.at(idx));
     idx++;
+    
+    param.clear();
     param.append( userParams.at(idx) );
     idx++;
     param.append( userParams.at(idx) );

@@ -13,6 +13,8 @@ extern QVolumeSlider* sliderMainVolume;
 QGain::QGain( tfloat V0, uint16_t gainaddr, CFreeDspAurora* ptrdsp, QWidget *parent ) :
   QDspBlock(parent), ui(new Ui::QGain)
 {
+  type = GAIN;
+  
   addr[kTargetGain] = gainaddr;
 
   dsp = ptrdsp;
@@ -123,7 +125,7 @@ void QGain::setUserParams( QByteArray& userParams, int& idx )
 
   if( userParams.size() >= idx + 4 )
   {
-    idx++;
+    param.clear();
     param.append( userParams.at(idx) );
     idx++;
     param.append( userParams.at(idx) );

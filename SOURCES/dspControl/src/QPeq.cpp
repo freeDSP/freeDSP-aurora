@@ -49,6 +49,8 @@ QPeq::QPeq( double gain, double freq, double qfactor,
 
   connect( action, &QAction::triggered, this, &QPeq::on_importRewPeqs );
 
+  type = PEQ;
+
 }
 
 //==============================================================================
@@ -275,6 +277,7 @@ void QPeq::setUserParams( QByteArray& userParams, int& idx )
 
   if( userParams.size() >= idx + 12 )
   {
+    param.clear();
     param.append( userParams.at(idx) );
     idx++;
     param.append( userParams.at(idx) );
@@ -286,6 +289,7 @@ void QPeq::setUserParams( QByteArray& userParams, int& idx )
 
     float fct = *reinterpret_cast<const float*>(param.data());
 
+    param.clear();
     param.append( userParams.at(idx) );
     idx++;
     param.append( userParams.at(idx) );
@@ -297,6 +301,7 @@ void QPeq::setUserParams( QByteArray& userParams, int& idx )
 
     float Qt = *reinterpret_cast<const float*>(param.data());
 
+    param.clear();
     param.append( userParams.at(idx) );
     idx++;
     param.append( userParams.at(idx) );

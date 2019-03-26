@@ -4,10 +4,9 @@
 #include <cstdint>
 
 #include <QWidget>
-
-#if !defined( __IOS__ )
-#include <QSerialPort>
-#endif
+#include <QEventLoop>
+#include <QTcpSocket>
+#include <QByteArray>
 
 class CFreeDspAurora : public QWidget
 {
@@ -26,13 +25,17 @@ private:
   };
 
 public:
+  //============================================================================
+  /*! Constructor
+   *
+   */
   explicit CFreeDspAurora( QWidget* parent = nullptr );
 
+  //============================================================================
+  /*! Destructor
+   *
+   */
   ~CFreeDspAurora( void );
-
-  bool writeFirmwareToESP32viaBluetooth( const QString& hexfilename );
-
-  bool verifyFirmwareESP32viaBluetooth( const QString& hexfilename );
 
   bool open( const QString portname );
 
@@ -41,8 +44,6 @@ public:
   bool sendParameter( uint16_t reg, float val );
   bool sendParameter( uint16_t reg, uint32_t val );
 
-  //bool sendParameterWifi( uint16_t reg, double val );
-  //bool sendParameterWifi( uint16_t reg, uint32_t val );
   bool sendParameterWifi( QByteArray content );
   QByteArray makeParameterForWifi( uint16_t reg, double val );
 
@@ -50,7 +51,7 @@ public:
   bool storeValue( float val );
   bool storeValue( uint32_t val );
 
-  bool beginStoreParams( uint32_t numbytes );
+  //bool beginStoreParams( uint32_t numbytes );
 
   //============================================================================
   /*! Starts the transfer of a new dsp firmware.
@@ -72,15 +73,66 @@ public:
    */
   bool waitForAckWifi( void );
 
-private:
-  bool sendByteSecured( char* txbyte );
-  bool sendByteSecured( byte txbyte );
+  //============================================================================
+  /*! Requests the PID of current installed DSP-Plugin
+   *
+   */
+  uint32_t requestPidWifi( void );
+
+  //============================================================================
+  /*! Starts the transfer of a user data block.
+   *
+   * \param content Data block of user data.
+   */
+  bool sendUserParameterWifi( QByteArray content );
+
+  //============================================================================
+  /*! Finishes the transfer of user parameter file.
+   *
+   */
+  bool finishUserParameterWifi( uint32_t totalTransmittedBytes );
+
+  //============================================================================
+  /*! Request the user parameter file.
+   *
+   */
+  bool requestUserParameterWifi( QByteArray& userparams );
 
 private:
-#if !defined( __IOS__ )
-  QSerialPort serialBT;
-#endif
+  //bool sendByteSecured( char* txbyte );
+  //bool sendByteSecured( byte txbyte );
+
+  void waitForReplyWifi( void );
+
+  //==============================================================================
+  /*! 
+   *
+   */
+  bool waitForResponseWifi( void );
+
+  //==============================================================================
+  /*!
+   */
+  void writeRequestWifi( QByteArray& request );
+
+private slots:
+  void readyReadWifi();
+
+signals:
+  void haveReplyWifi( void );
+
+public:
+  QTcpSocket* tcpSocket;
+
+private:
+//#if !defined( __IOS__ )
+//  QSerialPort serialBT;
+//#endif
   bool isOpen = false;
+  
+  QEventLoop loopWaitForResponseWiFi;
+  QByteArray replyWifi;
+  QByteArray replyDSP;
 
 };
 

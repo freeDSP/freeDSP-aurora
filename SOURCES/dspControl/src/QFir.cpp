@@ -17,6 +17,8 @@ using namespace Vektorraum;
 QFir::QFir( uint16_t firaddr, tuint filterlength, CFreeDspAurora* ptrdsp, QWidget *parent) :
   QDspBlock(parent), ui(new Ui::QFir)
 {
+  type = FIR;
+  
   addr[kImpulseResponse] = firaddr;
   dsp = ptrdsp;
 

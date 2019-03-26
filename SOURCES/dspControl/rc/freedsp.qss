@@ -90,6 +90,7 @@ QGroupBox
 {
   background-color: transparent;
   color: white;
+  font-size: 16px;
 }
 
 /* -------------------------------------------------------------------------- */

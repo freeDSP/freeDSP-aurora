@@ -17,9 +17,9 @@ public:
   explicit DialogSettings( CFreeDspAurora* ptrdsp, QWidget* parent = nullptr );
   ~DialogSettings();
 
-  QString getPortName( void );
+  //QString getPortName( void );
 
-  void setPortName( const QString portname );
+  //void setPortName( const QString portname );
 
 private slots:
   void on_pushButtonInstallPlugin_clicked();

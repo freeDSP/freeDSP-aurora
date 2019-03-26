@@ -9,6 +9,8 @@ using namespace Vektorraum;
 QDelay::QDelay( tfloat dly, tfloat samplerate, uint16_t delayaddr, CFreeDspAurora* ptrdsp, QWidget *parent ) :
   QDspBlock(parent), ui(new Ui::QDelay)
 {
+  type = DELAY;
+  
   ui->setupUi(this);
   delay = static_cast<tuint>( dly/1000.0 * fs );
   fs = samplerate;
@@ -117,7 +119,7 @@ void QDelay::setUserParams( QByteArray& userParams, int& idx )
 
   if( userParams.size() >= idx + 4 )
   {
-    idx++;
+    param.clear();
     param.append( userParams.at(idx) );
     idx++;
     param.append( userParams.at(idx) );

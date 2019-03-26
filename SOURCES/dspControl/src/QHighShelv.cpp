@@ -33,6 +33,8 @@ QHighShelv::QHighShelv( double gain, double freq, double slope,
   ui->doubleSpinBoxS->setAttribute( Qt::WA_MacShowFocusRect, 0 );
   ui->doubleSpinBoxS->setValue( slope );
   ui->doubleSpinBoxS->blockSignals( false);
+
+  type = HIGHSHELV;
 }
 
 QHighShelv::~QHighShelv()
@@ -205,6 +207,7 @@ void QHighShelv::setUserParams( QByteArray& userParams, int& idx )
 
   if( userParams.size() >= idx + 12 )
   {
+    param.clear();
     param.append( userParams.at(idx) );
     idx++;
     param.append( userParams.at(idx) );
@@ -216,6 +219,7 @@ void QHighShelv::setUserParams( QByteArray& userParams, int& idx )
 
     float V0t = *reinterpret_cast<const float*>(param.data());
 
+    param.clear();
     param.append( userParams.at(idx) );
     idx++;
     param.append( userParams.at(idx) );
@@ -227,6 +231,7 @@ void QHighShelv::setUserParams( QByteArray& userParams, int& idx )
 
     float fct = *reinterpret_cast<const float*>(param.data());
 
+    param.clear();
     param.append( userParams.at(idx) );
     idx++;
     param.append( userParams.at(idx) );

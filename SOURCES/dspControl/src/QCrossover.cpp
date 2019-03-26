@@ -21,6 +21,8 @@ QCrossover::QCrossover( tfilterdesign design, tfloat fc,
                       QWidget *parent ) :
   QDspBlock(parent), ui(new Ui::QCrossover)
 {
+  type = CROSSOVER;
+  
   tfilterdesign designLp = kLinkwitzRiley24;
 
   #if defined( __MACOSX__ )

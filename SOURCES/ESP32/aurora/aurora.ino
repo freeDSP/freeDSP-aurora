@@ -41,8 +41,8 @@ enum twifistatus
   STATE_WIFI_IDLE,
   STATE_WIFI_PUTPARAM,
   STATE_WIFI_DSPFW,
-
   STATE_WIFI_RECEIVE_USERPARAM,
+
   STATE_WIFI_RECEIVE_SINGLEPARAM
 };
 
@@ -344,6 +344,9 @@ void setup()
     Serial.println( "An Error has occurred while mounting SPIFFS" );
     return;
   }
+  Serial.print( "Free disk space: " );
+  Serial.print( (SPIFFS.totalBytes() - SPIFFS.usedBytes()) / 1024 );
+  Serial.println( "KiB" );
 
   //----------------------------------------------------------------------------
   //--- Configure ESP for WiFi access
@@ -394,8 +397,6 @@ void setup()
     fileSettings.close();
   }
   
-
-
   //----------------------------------------------------------------------------
   //--- Download program to DSP
   //----------------------------------------------------------------------------
@@ -408,11 +409,8 @@ void setup()
 
 
 
-  state = STATUS_IDLE;
+  //state = STATUS_IDLE;
   wifiStatus = STATE_WIFI_IDLE;
-
-  //SerialBT.begin( "freedsp-aurora" );
-
 }
 
 String WebRequestHostAddress;     // global variable used to store Server IP-Address of HTTP-Request
@@ -461,10 +459,9 @@ String Webserver_GetRequestGETParameter()
 
         if (c == '\n')                     // if the byte is a newline character
         {
+          //Serial.println( currentLine );
           if( waitForData )
           {
-            //Serial.println( currentLine );
-
             if( wifiStatus == STATE_WIFI_PUTPARAM )
             {
               //Serial.println( currentLine );
@@ -549,6 +546,39 @@ String Webserver_GetRequestGETParameter()
               //currentLine = "";
             }
 
+            else if( wifiStatus == STATE_WIFI_RECEIVE_USERPARAM )
+            {
+              int offset = 0;
+              while( offset < currentLine.length() )
+              {
+                String str = currentLine.substring( offset, offset + 2 );
+                if( receivedBytes < contentLength )
+                {
+                  //Serial.print( str );
+                  uint8_t rxByte = (uint8_t)strtoul( str.c_str(), NULL, 16 );
+                  Serial.print( rxByte, HEX );
+                  size_t len = fileUserParams.write( &rxByte, 1 );
+                  if( len != 1 )
+                    Serial.println( "[ERROR] Writing to usrparam.hex" );
+                  receivedBytes += 2;
+                  totalBytesReceived++;
+                }
+                else
+                {
+                  Serial.println("ACK");
+                  fileUserParams.flush();
+                }
+                offset += 2;
+              }
+              
+              if( receivedBytes >= contentLength )
+              {
+                client.stop();
+                waitForData = false;
+                //wifiStatus = STATE_WIFI_IDLE;
+              }
+            }
+
             currentLine = "";
             //Serial.println( cntrPackets );
             
@@ -612,6 +642,127 @@ String Webserver_GetRequestGETParameter()
               //cntrPackets++;
             }
 
+            //--- Request of PID
+            else if( currentLine.startsWith("GET /pid") )
+            {
+              Serial.println( "GET /pid" );
+              String httpResponse = "";
+              httpResponse += "HTTP/1.1 200 OK\r\n";
+              httpResponse += "Content-type:text/plain\r\n\r\n";
+              httpResponse += String( Settings.pid );
+              Serial.println( Settings.pid );
+              httpResponse += "\r\n";
+              client.println( httpResponse );
+              client.stop();
+              currentLine = "";
+              //cntrPackets++;
+            }
+
+            //--- New user parameter block
+            else if( currentLine.startsWith("PUT /userparam") )
+            {
+              Serial.println( "PUT /userparam" );
+              if( wifiStatus != STATE_WIFI_RECEIVE_USERPARAM )                  // start a new transfer
+              {
+                if( SPIFFS.exists( "/usrparam.hex" ) )
+                {
+                  if( SPIFFS.remove( "/usrparam.hex" ) )
+                    Serial.println( "usrparam.hex deleted" );
+                  else
+                    Serial.println( "[ERROR] Deleting usrparam.hex" );
+                }
+
+                fileUserParams = SPIFFS.open( "/usrparam.hex", "w" );
+                if( !fileUserParams )
+                  Serial.println( "[ERROR] Failed to open usrparam.hex" );
+                else
+                  Serial.println( "Opened usrparam.hex" );
+
+                totalBytesReceived = 0;
+              }
+              wifiStatus = STATE_WIFI_RECEIVE_USERPARAM;
+              currentLine = "";
+              //cntrPackets++;
+            }
+
+            //--- Finish user parameters transfer
+            else if( currentLine.startsWith("GET /finishuserparam") )
+            {
+              Serial.println( "GET /finishuserparam" );
+              fileUserParams.flush();
+              fileUserParams.close();
+              String httpResponse = "";
+              httpResponse += "HTTP/1.1 200 OK\r\n";
+              httpResponse += "Content-type:text/plain\r\n\r\n";
+              httpResponse += String( totalBytesReceived );
+              httpResponse += "\r\n";
+              client.println( httpResponse );
+              client.stop();
+              Serial.println( totalBytesReceived );
+              wifiStatus = STATE_WIFI_IDLE;
+              currentLine = "";
+              //cntrPackets++;
+            }
+
+            //--- Request of user parameter file size
+            else if( currentLine.startsWith("GET /sizeuserparam") )
+            {
+              Serial.println( "GET /sizeuserparam" );
+              String httpResponse = "";
+              httpResponse += "HTTP/1.1 200 OK\r\n";
+              httpResponse += "Content-type:text/plain\r\n\r\n";
+              if( SPIFFS.exists( "/usrparam.hex" ) )
+              {
+                fileUserParams = SPIFFS.open( "/usrparam.hex", "r" );
+                httpResponse += String( fileUserParams.size() );
+                fileUserParams.close();
+              }
+              else
+                httpResponse += "0";
+              httpResponse += "\r\n";
+              client.println( httpResponse );
+              client.stop();
+              wifiStatus = STATE_WIFI_IDLE;
+              currentLine = "";
+              //cntrPackets++;
+            }
+
+            //--- Request of user parameter file
+            else if( currentLine.startsWith("GET /userparam") )
+            {
+              Serial.println( "GET /userparam" );
+              String httpResponse = "";
+              httpResponse += "HTTP/1.1 200 OK\r\n";
+              httpResponse += "Content-type:text/plain\r\n\r\n";
+              if( SPIFFS.exists( "/usrparam.hex" ) )
+              {
+                fileUserParams = SPIFFS.open( "/usrparam.hex", "r" );
+                if( fileUserParams )
+                {
+                  size_t len = fileUserParams.size();
+                  Serial.println( len );
+                  //len = 100;
+                  int cntr = 0;
+
+                  while( cntr < len )
+                  {
+                    byte byteRead;
+                    fileUserParams.read( &byteRead, 1 );
+                    //Serial.println( byte2string2( byteRead ) );
+                    httpResponse += byte2string2( byteRead );
+                    cntr++;
+                  }
+                }
+                fileUserParams.close();
+              }
+              httpResponse += "\r\n";
+              client.println( httpResponse );
+              client.stop();
+              wifiStatus = STATE_WIFI_IDLE;
+              currentLine = "";
+              //cntrPackets++;
+            }
+
             else if( currentLine.startsWith("Host:") )
             {
               //Serial.println( currentLine );
@@ -653,14 +804,6 @@ String Webserver_GetRequestGETParameter()
   }
 
   return GETParameter;
-}
-
-
-
-// Get IP-Address of ESP32 in Router network (LAN), in String-format
-String WiFi_GetOwnIPAddressInRouterNetwork()
-{
-  return WiFi.localIP().toString();
 }
 
 
