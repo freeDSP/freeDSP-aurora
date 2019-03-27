@@ -2154,7 +2154,7 @@ Wire Wire Line
 Wire Wire Line
 	7250 2450 7250 3350
 Wire Wire Line
-	7250 3350 7250 4950
+	7250 3350 7250 3850
 Wire Wire Line
 	5950 1550 7250 1550
 Wire Wire Line
@@ -3112,4 +3112,9 @@ Wire Wire Line
 Wire Wire Line
 	5100 8350 5100 8450
 Connection ~ 5100 8450
+Wire Wire Line
+	7100 3850 7250 3850
+Connection ~ 7250 3850
+Wire Wire Line
+	7250 3850 7250 4950
 $EndSCHEMATC

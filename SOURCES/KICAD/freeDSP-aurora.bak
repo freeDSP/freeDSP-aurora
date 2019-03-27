@@ -2438,6 +2438,7 @@ F 5 "20% 25V X5R" H 5650 4550 39  0001 C CNN "Value2"
 F 6 "490-10748-1-ND" H 5650 4500 39  0001 C CNN "digikey"
 F 7 "Murata Electronics North America" H 5650 4800 39  0001 C CNN "Manufacturer"
 F 8 "GRM21BR61E106MA73L" H 5650 4800 39  0001 C CNN "pn"
+F 9 "GRM21BR61E106MA73L" H 5650 4800 50  0001 C CNN "manf_num"
 	1    5650 4800
 	0    1    1    0   
 $EndComp
