@@ -956,28 +956,6 @@ RFI auf Anschlussplatine
 Text Notes 5900 10400 0    60   ~ 0
 alternative OpAmps: OPA1652, OPA2365, OPA2353
 $Comp
-L freeDSP-aurora-rescue:+9VA #PWR0142
-U 1 1 5B7A8CB6
-P 3300 10100
-F 0 "#PWR0142" H 3300 9975 50  0001 C CNN
-F 1 "+9VA" H 3300 10250 39  0000 C CNN
-F 2 "" H 3300 10100 50  0001 C CNN
-F 3 "" H 3300 10100 50  0001 C CNN
-	1    3300 10100
-	1    0    0    -1  
-$EndComp
-$Comp
-L freeDSP-aurora-rescue:+9VA #PWR0147
-U 1 1 5B7A98FA
-P 3450 1750
-F 0 "#PWR0147" H 3450 1625 50  0001 C CNN
-F 1 "+9VA" H 3450 1900 39  0000 C CNN
-F 2 "" H 3450 1750 50  0001 C CNN
-F 3 "" H 3450 1750 50  0001 C CNN
-	1    3450 1750
-	1    0    0    -1  
-$EndComp
-$Comp
 L freeDSP-aurora-rescue:CAP_100u_20%_25V_ALUM_RADIAL C203
 U 1 1 5B7D6764
 P 2250 2100
@@ -2426,17 +2404,6 @@ Connection ~ 8000 2000
 Connection ~ 8000 3250
 Text HLabel 7150 3100 2    39   Input ~ 0
 VGROUND
-$Comp
-L freeDSP-aurora-rescue:+9VA #PWR0290
-U 1 1 5DEC3E36
-P 6750 1750
-F 0 "#PWR0290" H 6750 1625 50  0001 C CNN
-F 1 "+9VA" H 6750 1900 39  0000 C CNN
-F 2 "" H 6750 1750 50  0001 C CNN
-F 3 "" H 6750 1750 50  0001 C CNN
-	1    6750 1750
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	7700 2000 8000 2000
 Wire Wire Line
@@ -2818,17 +2785,6 @@ Connection ~ 4700 3900
 Connection ~ 4700 5150
 Text HLabel 3850 5000 2    39   Input ~ 0
 VGROUND
-$Comp
-L freeDSP-aurora-rescue:+9VA #PWR0328
-U 1 1 5E08B9C6
-P 3450 3650
-F 0 "#PWR0328" H 3450 3525 50  0001 C CNN
-F 1 "+9VA" H 3450 3800 39  0000 C CNN
-F 2 "" H 3450 3650 50  0001 C CNN
-F 3 "" H 3450 3650 50  0001 C CNN
-	1    3450 3650
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	4400 3900 4700 3900
 Wire Wire Line
@@ -3210,17 +3166,6 @@ Connection ~ 8000 3900
 Connection ~ 8000 5150
 Text HLabel 7150 5000 2    39   Input ~ 0
 VGROUND
-$Comp
-L freeDSP-aurora-rescue:+9VA #PWR0331
-U 1 1 5E283AA0
-P 6750 3650
-F 0 "#PWR0331" H 6750 3525 50  0001 C CNN
-F 1 "+9VA" H 6750 3800 39  0000 C CNN
-F 2 "" H 6750 3650 50  0001 C CNN
-F 3 "" H 6750 3650 50  0001 C CNN
-	1    6750 3650
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	7700 3900 8000 3900
 Wire Wire Line
@@ -3602,17 +3547,6 @@ Connection ~ 4650 5850
 Connection ~ 4650 7100
 Text HLabel 3800 6950 2    39   Input ~ 0
 VGROUND
-$Comp
-L freeDSP-aurora-rescue:+9VA #PWR0334
-U 1 1 5E4E9374
-P 3400 5600
-F 0 "#PWR0334" H 3400 5475 50  0001 C CNN
-F 1 "+9VA" H 3400 5750 39  0000 C CNN
-F 2 "" H 3400 5600 50  0001 C CNN
-F 3 "" H 3400 5600 50  0001 C CNN
-	1    3400 5600
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	4350 5850 4650 5850
 Wire Wire Line
@@ -3994,17 +3928,6 @@ Connection ~ 8000 5850
 Connection ~ 8000 7100
 Text HLabel 7150 6950 2    39   Input ~ 0
 VGROUND
-$Comp
-L freeDSP-aurora-rescue:+9VA #PWR0337
-U 1 1 5E9DC868
-P 6750 5600
-F 0 "#PWR0337" H 6750 5475 50  0001 C CNN
-F 1 "+9VA" H 6750 5750 39  0000 C CNN
-F 2 "" H 6750 5600 50  0001 C CNN
-F 3 "" H 6750 5600 50  0001 C CNN
-	1    6750 5600
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	7700 5850 8000 5850
 Wire Wire Line
@@ -4386,17 +4309,6 @@ Connection ~ 4650 7800
 Connection ~ 4650 9050
 Text HLabel 3800 8900 2    39   Input ~ 0
 VGROUND
-$Comp
-L freeDSP-aurora-rescue:+9VA #PWR0340
-U 1 1 5CB552BE
-P 3400 7550
-F 0 "#PWR0340" H 3400 7425 50  0001 C CNN
-F 1 "+9VA" H 3400 7700 39  0000 C CNN
-F 2 "" H 3400 7550 50  0001 C CNN
-F 3 "" H 3400 7550 50  0001 C CNN
-	1    3400 7550
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	4350 7800 4650 7800
 Wire Wire Line
@@ -4778,17 +4690,6 @@ Connection ~ 8000 7800
 Connection ~ 8000 9050
 Text HLabel 7150 8900 2    39   Input ~ 0
 VGROUND
-$Comp
-L freeDSP-aurora-rescue:+9VA #PWR0343
-U 1 1 5CD92922
-P 6750 7550
-F 0 "#PWR0343" H 6750 7425 50  0001 C CNN
-F 1 "+9VA" H 6750 7700 39  0000 C CNN
-F 2 "" H 6750 7550 50  0001 C CNN
-F 3 "" H 6750 7550 50  0001 C CNN
-	1    6750 7550
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	7700 7800 8000 7800
 Wire Wire Line
@@ -5133,4 +5034,103 @@ Wire Wire Line
 Connection ~ 7700 8400
 Wire Wire Line
 	7700 8400 7700 8100
+$Comp
+L freeDSP-aurora-rescue:+5VA #PWR0101
+U 1 1 5D081DF6
+P 3300 10100
+F 0 "#PWR0101" H 3300 9950 50  0001 C CNN
+F 1 "+5VA" H 3300 10240 39  0000 C CNN
+F 2 "" H 3300 10100 50  0000 C CNN
+F 3 "" H 3300 10100 50  0000 C CNN
+	1    3300 10100
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:+5VA #PWR0102
+U 1 1 5D0E849E
+P 6750 7550
+F 0 "#PWR0102" H 6750 7400 50  0001 C CNN
+F 1 "+5VA" H 6750 7690 39  0000 C CNN
+F 2 "" H 6750 7550 50  0000 C CNN
+F 3 "" H 6750 7550 50  0000 C CNN
+	1    6750 7550
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:+5VA #PWR0103
+U 1 1 5D14EA62
+P 6750 5600
+F 0 "#PWR0103" H 6750 5450 50  0001 C CNN
+F 1 "+5VA" H 6750 5740 39  0000 C CNN
+F 2 "" H 6750 5600 50  0000 C CNN
+F 3 "" H 6750 5600 50  0000 C CNN
+	1    6750 5600
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:+5VA #PWR0142
+U 1 1 5D1B5050
+P 6750 3650
+F 0 "#PWR0142" H 6750 3500 50  0001 C CNN
+F 1 "+5VA" H 6750 3790 39  0000 C CNN
+F 2 "" H 6750 3650 50  0000 C CNN
+F 3 "" H 6750 3650 50  0000 C CNN
+	1    6750 3650
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:+5VA #PWR0143
+U 1 1 5D21B518
+P 6750 1750
+F 0 "#PWR0143" H 6750 1600 50  0001 C CNN
+F 1 "+5VA" H 6750 1890 39  0000 C CNN
+F 2 "" H 6750 1750 50  0000 C CNN
+F 3 "" H 6750 1750 50  0000 C CNN
+	1    6750 1750
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:+5VA #PWR0144
+U 1 1 5D281A1F
+P 3450 1750
+F 0 "#PWR0144" H 3450 1600 50  0001 C CNN
+F 1 "+5VA" H 3450 1890 39  0000 C CNN
+F 2 "" H 3450 1750 50  0000 C CNN
+F 3 "" H 3450 1750 50  0000 C CNN
+	1    3450 1750
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:+5VA #PWR0145
+U 1 1 5D2E829A
+P 3450 3650
+F 0 "#PWR0145" H 3450 3500 50  0001 C CNN
+F 1 "+5VA" H 3450 3790 39  0000 C CNN
+F 2 "" H 3450 3650 50  0000 C CNN
+F 3 "" H 3450 3650 50  0000 C CNN
+	1    3450 3650
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:+5VA #PWR0146
+U 1 1 5D34E91B
+P 3400 5600
+F 0 "#PWR0146" H 3400 5450 50  0001 C CNN
+F 1 "+5VA" H 3400 5740 39  0000 C CNN
+F 2 "" H 3400 5600 50  0000 C CNN
+F 3 "" H 3400 5600 50  0000 C CNN
+	1    3400 5600
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:+5VA #PWR0147
+U 1 1 5D3B4E37
+P 3400 7550
+F 0 "#PWR0147" H 3400 7400 50  0001 C CNN
+F 1 "+5VA" H 3400 7690 39  0000 C CNN
+F 2 "" H 3400 7550 50  0000 C CNN
+F 3 "" H 3400 7550 50  0000 C CNN
+	1    3400 7550
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
