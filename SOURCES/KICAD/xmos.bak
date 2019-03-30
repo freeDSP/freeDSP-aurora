@@ -1780,17 +1780,6 @@ Wire Wire Line
 Wire Wire Line
 	4500 6400 4500 6550
 $Comp
-L freeDSP-aurora-rescue:VDD #PWR0276
-U 1 1 5B7C58E1
-P 4350 6000
-F 0 "#PWR0276" H 4350 5850 50  0001 C CNN
-F 1 "VDD" H 4350 6150 39  0000 C CNN
-F 2 "" H 4350 6000 50  0000 C CNN
-F 3 "" H 4350 6000 50  0000 C CNN
-	1    4350 6000
-	1    0    0    -1  
-$EndComp
-$Comp
 L freeDSP-aurora-rescue:GND #PWR0277
 U 1 1 5B82F3DB
 P 2500 10550
@@ -3117,4 +3106,17 @@ Wire Wire Line
 Connection ~ 7250 3850
 Wire Wire Line
 	7250 3850 7250 4950
+$Comp
+L power:VD #PWR?
+U 1 1 5CB3676C
+P 4350 6000
+AR Path="/5B77113C/5CB3676C" Ref="#PWR?"  Part="1" 
+AR Path="/5B770691/5CB3676C" Ref="#PWR?"  Part="1" 
+F 0 "#PWR?" H 4350 5850 50  0001 C CNN
+F 1 "VD" H 4350 6150 39  0000 C CNN
+F 2 "" H 4350 6000 50  0001 C CNN
+F 3 "" H 4350 6000 50  0001 C CNN
+	1    4350 6000
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC

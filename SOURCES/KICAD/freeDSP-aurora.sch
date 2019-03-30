@@ -816,22 +816,6 @@ xBCLK
 Text Label 10000 4800 2    39   ~ 0
 xTDMIN
 $Comp
-L freeDSP-aurora-rescue:CONN_01X03 X103
-U 1 1 59EF7C06
-P 4600 5550
-F 0 "X103" H 4600 5750 39  0000 C CNN
-F 1 "HDR_01x03" V 4700 5550 39  0000 C CNN
-F 2 "rklib:HDR_01x03" H 4600 5550 50  0001 C CNN
-F 3 "" H 4600 5550 50  0000 C CNN
-F 4 "HDR_01x03" H 0   0   50  0001 C CNN "Value1"
-F 5 "-" H 0   0   50  0001 C CNN "Value2"
-F 6 "???" H 0   0   50  0001 C CNN "digikey"
-F 7 "Sullins Connector Solutions" H 0   0   50  0001 C CNN "Manufacturer"
-F 8 "PRPC003SAAN-RC" H 0   0   50  0001 C CNN "pn"
-	1    4600 5550
-	-1   0    0    -1  
-$EndComp
-$Comp
 L freeDSP-aurora-rescue:GND #PWR057
 U 1 1 59EF827F
 P 4800 5650
@@ -2926,4 +2910,22 @@ Wire Wire Line
 Wire Wire Line
 	5100 10400 5100 10450
 Connection ~ 4850 10400
+$Comp
+L freeDSP-aurora-rescue:Conn_01x03 X?
+U 1 1 5CBB0535
+P 4600 5550
+AR Path="/5B77113C/5CBB0535" Ref="X?"  Part="1" 
+AR Path="/5CBB0535" Ref="X103"  Part="1" 
+F 0 "X103" H 4600 5750 39  0000 C CNN
+F 1 "Conn_01x03" H 4600 5350 39  0001 C CNN
+F 2 "rklib:Molex_PicoBlade_530470310" H 4600 5550 50  0001 C CNN
+F 3 "" H 4600 5550 50  0001 C CNN
+F 4 "PB-01x03" H -3500 1550 50  0001 C CNN "Value1"
+F 5 "-" H -3500 1550 50  0001 C CNN "Value2"
+F 6 "???" H -3500 1550 50  0001 C CNN "digikey"
+F 7 "Molex, LLC" H -3500 1550 50  0001 C CNN "Manufacturer"
+F 8 "0530470310" H -3500 1550 50  0001 C CNN "pn"
+	1    4600 5550
+	-1   0    0    -1  
+$EndComp
 $EndSCHEMATC
