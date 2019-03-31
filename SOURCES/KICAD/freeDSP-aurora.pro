@@ -1,4 +1,4 @@
-update=2019 March 29, Friday 17:51:28
+update=Sonntag, 31. März 2019 um 22:20:16
 version=1
 last_client=kicad
 [cvpcb]
@@ -22,7 +22,7 @@ ERC_TestSimilarLabels=1
 [pcbnew]
 version=1
 PageLayoutDescrFile=
-LastNetListRead=
+LastNetListRead=freeDSP-aurora.net
 CopperLayerCount=2
 BoardThickness=1.6
 AllowMicroVias=0
