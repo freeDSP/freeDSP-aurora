@@ -436,14 +436,14 @@ F 3 "" H 10500 8450 50  0000 C CNN
 	1    10500 8450
 	1    0    0    -1  
 $EndComp
-Text Notes 14500 6450 0    39   ~ 0
+Text Notes 14250 5650 0    39   ~ 0
 Configuration ADC:\nSlave, PCM, TDM256, MSB, 32bit,\nshort delay, sharp rolloff,\nhigh pass enabled\nMCLK = 24.576Mhz, 512fs
 Text HLabel 13250 6000 2    39   Output ~ 0
 TDM
 NoConn ~ 12750 5900
 NoConn ~ 12750 5800
 NoConn ~ 12750 5700
-Text Notes 13000 4950 0    39   ~ 0
+Text Notes 14250 5750 0    39   ~ 0
 I2C addr: 0x22/0x23
 Text HLabel 13250 5400 2    39   Output ~ 0
 OVF
@@ -698,12 +698,12 @@ NoConn ~ 12750 5500
 Wire Wire Line
 	12750 5300 13250 5300
 $Comp
-L freeDSP-aurora-rescue:CONN_02X13 X201
+L rk:CON_IDC26 X201
 U 1 1 590CECF6
 P 1100 4850
 F 0 "X201" H 1100 5550 39  0000 C CNN
 F 1 "CONN_02X13" V 1100 4850 39  0000 C CNN
-F 2 "rklib:HDR_02x13" H 1100 3700 50  0001 C CNN
+F 2 "rklib:IDC26" H 1100 3700 50  0001 C CNN
 F 3 "" H 1100 3700 50  0000 C CNN
 F 4 "SKT_02x13" H -300 -1150 50  0001 C CNN "Value1"
 F 5 "-" H -300 -1150 50  0001 C CNN "Value2"
@@ -716,114 +716,114 @@ $EndComp
 $Comp
 L freeDSP-aurora-rescue:GND #PWR0140
 U 1 1 590CECFD
-P 1400 5500
-F 0 "#PWR0140" H 1400 5250 50  0001 C CNN
-F 1 "GND" H 1400 5350 39  0000 C CNN
-F 2 "" H 1400 5500 50  0000 C CNN
-F 3 "" H 1400 5500 50  0000 C CNN
-	1    1400 5500
+P 1350 5500
+F 0 "#PWR0140" H 1350 5250 50  0001 C CNN
+F 1 "GND" H 1350 5350 39  0000 C CNN
+F 2 "" H 1350 5500 50  0000 C CNN
+F 3 "" H 1350 5500 50  0000 C CNN
+	1    1350 5500
 	1    0    0    -1  
 $EndComp
 $Comp
 L freeDSP-aurora-rescue:GND #PWR0141
 U 1 1 590CED03
-P 800 5500
-F 0 "#PWR0141" H 800 5250 50  0001 C CNN
-F 1 "GND" H 800 5350 39  0000 C CNN
-F 2 "" H 800 5500 50  0000 C CNN
-F 3 "" H 800 5500 50  0000 C CNN
-	1    800  5500
+P 850 5500
+F 0 "#PWR0141" H 850 5250 50  0001 C CNN
+F 1 "GND" H 850 5350 39  0000 C CNN
+F 2 "" H 850 5500 50  0000 C CNN
+F 3 "" H 850 5500 50  0000 C CNN
+	1    850  5500
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	1400 5350 1350 5350
+	1350 5350 1300 5350
 Wire Wire Line
-	1400 4450 1400 4750
+	1350 4450 1350 4750
 Wire Wire Line
-	1350 5050 1400 5050
-Connection ~ 1400 5350
+	1300 5050 1350 5050
+Connection ~ 1350 5350
 Wire Wire Line
-	1350 4750 1400 4750
-Connection ~ 1400 5050
+	1300 4750 1350 4750
+Connection ~ 1350 5050
 Wire Wire Line
-	1350 4450 1400 4450
-Connection ~ 1400 4750
+	1300 4450 1350 4450
+Connection ~ 1350 4750
 Wire Wire Line
-	800  5250 850  5250
+	850  5250 900  5250
 Wire Wire Line
-	800  4350 800  4650
+	850  4350 850  4650
 Wire Wire Line
-	850  4950 800  4950
-Connection ~ 800  5250
+	900  4950 850  4950
+Connection ~ 850  5250
 Wire Wire Line
-	850  4650 800  4650
-Connection ~ 800  4950
+	900  4650 850  4650
+Connection ~ 850  4950
 Wire Wire Line
-	850  4350 800  4350
-Connection ~ 800  4650
+	900  4350 850  4350
+Connection ~ 850  4650
 Wire Wire Line
-	850  5350 550  5350
-Text Label 550  5350 0    39   ~ 0
+	900  5350 600  5350
+Text Label 600  5350 0    39   ~ 0
 AIN1-
-Text Label 1650 5250 2    39   ~ 0
+Text Label 1600 5250 2    39   ~ 0
 AIN1+
 Wire Wire Line
-	1350 5250 1650 5250
-Text Label 1650 5150 2    39   ~ 0
+	1300 5250 1600 5250
+Text Label 1600 5150 2    39   ~ 0
 AIN2-
 Wire Wire Line
-	1350 5150 1650 5150
-Text Label 1650 4950 2    39   ~ 0
+	1300 5150 1600 5150
+Text Label 1600 4950 2    39   ~ 0
 AIN3+
 Wire Wire Line
-	1350 4950 1650 4950
-Text Label 1650 4850 2    39   ~ 0
+	1300 4950 1600 4950
+Text Label 1600 4850 2    39   ~ 0
 AIN4-
 Wire Wire Line
-	1350 4850 1650 4850
-Text Label 1650 4650 2    39   ~ 0
+	1300 4850 1600 4850
+Text Label 1600 4650 2    39   ~ 0
 AIN5+
 Wire Wire Line
-	1350 4650 1650 4650
-Text Label 1650 4550 2    39   ~ 0
+	1300 4650 1600 4650
+Text Label 1600 4550 2    39   ~ 0
 AIN6-
 Wire Wire Line
-	1350 4550 1650 4550
-Text Label 1650 4350 2    39   ~ 0
+	1300 4550 1600 4550
+Text Label 1600 4350 2    39   ~ 0
 AIN7+
 Wire Wire Line
-	1350 4350 1650 4350
-Text Label 1650 4250 2    39   ~ 0
+	1300 4350 1600 4350
+Text Label 1600 4250 2    39   ~ 0
 AIN8-
 Wire Wire Line
-	1350 4250 1650 4250
+	1300 4250 1600 4250
 Wire Wire Line
-	850  5150 550  5150
-Text Label 550  5150 0    39   ~ 0
+	900  5150 600  5150
+Text Label 600  5150 0    39   ~ 0
 AIN2+
 Wire Wire Line
-	850  5050 550  5050
-Text Label 550  5050 0    39   ~ 0
+	900  5050 600  5050
+Text Label 600  5050 0    39   ~ 0
 AIN3-
 Wire Wire Line
-	850  4850 550  4850
-Text Label 550  4850 0    39   ~ 0
+	900  4850 600  4850
+Text Label 600  4850 0    39   ~ 0
 AIN4+
 Wire Wire Line
-	850  4750 550  4750
-Text Label 550  4750 0    39   ~ 0
+	900  4750 600  4750
+Text Label 600  4750 0    39   ~ 0
 AIN5-
 Wire Wire Line
-	850  4550 550  4550
-Text Label 550  4550 0    39   ~ 0
+	900  4550 600  4550
+Text Label 600  4550 0    39   ~ 0
 AIN6+
 Wire Wire Line
-	850  4450 550  4450
-Text Label 550  4450 0    39   ~ 0
+	900  4450 600  4450
+Text Label 600  4450 0    39   ~ 0
 AIN7-
 Wire Wire Line
-	850  4250 550  4250
-Text Label 550  4250 0    39   ~ 0
+	900  4250 600  4250
+Text Label 600  4250 0    39   ~ 0
 AIN8+
 Text HLabel 3850 3100 2    39   Input ~ 0
 VGROUND
@@ -1194,17 +1194,17 @@ Wire Wire Line
 Wire Wire Line
 	11500 4400 11800 4400
 Wire Wire Line
-	1400 5350 1400 5500
+	1350 5350 1350 5500
 Wire Wire Line
-	1400 5050 1400 5350
+	1350 5050 1350 5350
 Wire Wire Line
-	1400 4750 1400 5050
+	1350 4750 1350 5050
 Wire Wire Line
-	800  5250 800  5500
+	850  5250 850  5500
 Wire Wire Line
-	800  4950 800  5250
+	850  4950 850  5250
 Wire Wire Line
-	800  4650 800  4950
+	850  4650 850  4950
 $Comp
 L rk:CAP_100n_50V_X7R_0805 C?
 U 1 1 5C626AA8

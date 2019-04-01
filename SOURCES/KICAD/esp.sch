@@ -170,34 +170,6 @@ F 3 "" H 4350 3000 50  0000 C CNN
 	1    4350 3000
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	5200 4050 5200 4150
-Wire Wire Line
-	5200 4150 4450 4150
-Wire Wire Line
-	5900 4050 5900 4250
-Wire Wire Line
-	5900 4250 4450 4250
-Wire Wire Line
-	4800 3750 4700 3750
-Wire Wire Line
-	4700 3750 4700 4050
-Wire Wire Line
-	4700 4050 4450 4050
-Wire Wire Line
-	4800 3650 4650 3650
-Wire Wire Line
-	4650 3650 4650 3950
-Wire Wire Line
-	4650 3950 4450 3950
-Text Label 4450 3950 0    39   ~ 0
-MTMS
-Text Label 4450 4050 0    39   ~ 0
-MTDI
-Text Label 4250 4150 0    39   ~ 0
-MTCK
-Text Label 4450 4250 0    39   ~ 0
-MTDO
 Text HLabel 4700 2950 0    39   Output ~ 0
 MOSI
 Text HLabel 4700 3050 0    39   Input ~ 0
@@ -412,10 +384,8 @@ Text HLabel 5900 4300 3    39   Output ~ 0
 SCL2
 Text HLabel 6000 4300 3    39   BiDi ~ 0
 SDA2
-Connection ~ 5900 4250
 Wire Wire Line
 	6300 3450 6400 3450
-Connection ~ 5200 4150
 Wire Wire Line
 	6350 2450 6350 4100
 Wire Wire Line
@@ -430,10 +400,6 @@ Wire Wire Line
 	4150 2550 4350 2550
 Wire Wire Line
 	3350 2550 3350 2650
-Wire Wire Line
-	5900 4250 5900 4300
-Wire Wire Line
-	5200 4150 5200 4500
 $Comp
 L Connector_Generic:Conn_01x06 X504
 U 1 1 5BE7CB1C
@@ -874,4 +840,8 @@ F 8 "GRM21BR61A226ME51L" H 750 -3350 50  0001 C CNN "pn"
 	1    4900 7050
 	0    1    1    0   
 $EndComp
+Wire Wire Line
+	5900 4050 5900 4300
+Wire Wire Line
+	5200 4050 5200 4500
 $EndSCHEMATC
