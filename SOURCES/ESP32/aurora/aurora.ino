@@ -2,7 +2,8 @@
 #include <Wire.h>
 #include <WiFi.h>
 #include <ArduinoJson.h>
-//#include "BluetoothSerial.h"
+#include <ArduinoOTA.h>
+#include <ESPmDNS.h>
 #include "SPIFFS.h"
 
 
@@ -49,6 +50,8 @@ enum twifistatus
 struct tSettings
 {
   byte pid;
+  String ssid;
+  String password;
 };
 
 tSettings Settings;
@@ -57,7 +60,6 @@ tSettings Settings;
 
 int state;
 int numBytes = 0;
-//int cntr = 0;
 uint16_t dspRegister = 0;
 uint32_t dspValueHex = 0;
 float dspValue;
@@ -100,25 +102,46 @@ String byte2string2( byte val )
  */
 void scan()
 {
-Serial.println(" Scanning I2C Addresses");
-uint8_t cnt=0;
-for(uint8_t i=0;i<128;i++){
-  Wire.beginTransmission(i);
-  uint8_t ec=Wire.endTransmission(true);
-  if(ec==0){
-    if(i<16)Serial.print('0');
-    Serial.print(i,HEX);
-    cnt++;
-  }
-  else Serial.print("..");
-  Serial.print(' ');
-  if ((i&0x0f)==0x0f)Serial.println();
-  }
-Serial.print("Scan Completed, ");
-Serial.print(cnt);
-Serial.println(" I2C Devices found.");
+  Serial.println(" Scanning I2C Addresses");
+  uint8_t cnt=0;
+  for(uint8_t i=0;i<128;i++){
+    Wire.beginTransmission(i);
+    uint8_t ec=Wire.endTransmission(true);
+    if(ec==0){
+      if(i<16)Serial.print('0');
+      Serial.print(i,HEX);
+      cnt++;
+    }
+    else Serial.print("..");
+    Serial.print(' ');
+    if ((i&0x0f)==0x0f)Serial.println();
+    }
+  Serial.print("Scan Completed, ");
+  Serial.print(cnt);
+  Serial.println(" I2C Devices found.");
 }
 
+//==============================================================================
+/*! Saves the global settings
+ */
+void saveSettings( void )
+{
+  if( SPIFFS.exists( "/settings.ini" ) )
+    SPIFFS.remove( "/settings.ini" );
+
+  File fileSettings = SPIFFS.open( "/settings.ini", "w" );
+  // Allocate a temporary JsonDocument
+  // Don't forget to change the capacity to match your requirements.
+  // Use arduinojson.org/assistant to compute the capacity.
+  StaticJsonDocument<256> jsonSettings;
+  jsonSettings["pid"] = Settings.pid;
+  jsonSettings["ssid"] = Settings.ssid; // max 32 charachters
+  jsonSettings["pwd"] = Settings.password;  // max 64 charachters
+  // Serialize JSON to file
+  if( serializeJson( jsonSettings, fileSettings ) == 0 )
+    Serial.println( "Failed to write to file" );
+  fileSettings.close();
+}
 
 //==============================================================================
 /*! Uploads the firmware from ESP32 SPI flash to DSP.
@@ -328,6 +351,17 @@ void returnDspParameters( void )
 }
 #endif
 
+/*void WiFiEvent(WiFiEvent_t event){
+    switch(event) {
+      case SYSTEM_EVENT_STA_START:
+            //set sta hostname here
+            WiFi.setHostname( "aurora-test" );
+            break;
+        default:
+            break;
+    }
+}*/
+
 //==============================================================================
 /*! Arduino Setup
  */
@@ -348,19 +382,10 @@ void setup()
   Serial.print( (SPIFFS.totalBytes() - SPIFFS.usedBytes()) / 1024 );
   Serial.println( "KiB" );
 
-  //----------------------------------------------------------------------------
-  //--- Configure ESP for WiFi access
-  //----------------------------------------------------------------------------
-  WiFi.mode( WIFI_AP_STA );
-  // Start access point
-  WiFi.softAP( "freeDSP-aurora" );
-  delay(100);
-  //wait for SYSTEM_EVENT_AP_START
-  if( !WiFi.softAPConfig( IPAddress(192, 168, 5, 1), IPAddress(192, 168, 5, 1), IPAddress(255, 255, 255, 0) ) )
-      Serial.println("AP Config Failed");
-  // print the ESP32 IP-Address
-  Serial.println( WiFi.softAPIP() );
-  server.begin();
+  //Settings.pid = 0x01;
+  //Settings.ssid = "";
+  //Settings.password = "";
+  //saveSettings();
 
   //----------------------------------------------------------------------------
   //--- Load system settings
@@ -378,6 +403,8 @@ void setup()
     if( error )
       Serial.println( "Failed to read settings.ini" );
     Settings.pid = jsonSettings["pid"];
+    Settings.ssid = jsonSettings["ssid"].as<String>();
+    Settings.password = jsonSettings["pwd"].as<String>();
     Serial.print( "pid: " );
     Serial.println( Settings.pid, HEX );
     fileSettings.close();
@@ -391,11 +418,51 @@ void setup()
     // Use arduinojson.org/assistant to compute the capacity.
     StaticJsonDocument<256> jsonSettings;
     jsonSettings["pid"] = 0x01;
+    jsonSettings["ssid"] = "";
+    jsonSettings["pwd"] = "";
     // Serialize JSON to file
     if( serializeJson( jsonSettings, fileSettings ) == 0 )
       Serial.println( "Failed to write to file" );
     fileSettings.close();
   }
+
+  //----------------------------------------------------------------------------
+  //--- Configure ESP for WiFi access
+  //----------------------------------------------------------------------------
+  //if( !MDNS.begin("freeDSP-aurora-mdns") ) 
+  //  Serial.println( "[ERROR] Could not set up mDNS responder!" );   
+
+  WiFi.disconnect();
+  WiFi.mode( WIFI_AP_STA );
+  WiFi.setHostname( "freeDSP-aurora" );
+  // Start access point
+  WiFi.softAP( "AP-freeDSP-aurora" );
+  delay(100);
+  //wait for SYSTEM_EVENT_AP_START
+  if( !WiFi.softAPConfig( IPAddress(192, 168, 5, 1), IPAddress(192, 168, 5, 1), IPAddress(255, 255, 255, 0) ) )
+      Serial.println("AP Config Failed");
+
+  WiFi.begin( Settings.ssid.c_str(), Settings.password.c_str() );
+  
+  int cntrConnect = 0;
+  while( WiFi.waitForConnectResult() != WL_CONNECTED && cntrConnect < 10 )
+  {
+    Serial.println("WiFi Connection Failed! Trying again..");
+    delay(5000);
+    cntrConnect++;
+  }
+  
+  // print the ESP32 IP-Address
+  Serial.print( "Soft AP IP:" );
+  Serial.println( WiFi.softAPIP() );
+  Serial.print( "Local IP:" );
+  Serial.println( WiFi.localIP() );
+  Serial.println(WiFi.getHostname());
+
+  server.begin();
+
+  // Add service to MDNS-SD
+  //MDNS.addService( "http", "tcp", 8088 );
   
   //----------------------------------------------------------------------------
   //--- Download program to DSP
@@ -407,10 +474,51 @@ void setup()
   //----------------------------------------------------------------------------
   //uploadDspParameter();
 
+  //----------------------------------------------------------------------------
+  //--- Start OTA
+  //----------------------------------------------------------------------------
+  // Port defaults to 3232
+  // ArduinoOTA.setPort(3232);
 
+  // Hostname
+  ArduinoOTA.setHostname( "OTA-freeDSP-aurora" );
+  ArduinoOTA.setPassword( "admin" );
 
-  //state = STATUS_IDLE;
+  // Password can be set with it's md5 value as well
+  // MD5(admin) = 21232f297a57a5a743894a0e4a801fc3
+  // ArduinoOTA.setPasswordHash("21232f297a57a5a743894a0e4a801fc3");
+
+  ArduinoOTA
+    .onStart([]() {
+      String type;
+      if (ArduinoOTA.getCommand() == U_FLASH)
+        type = "sketch";
+      else // U_SPIFFS
+        type = "filesystem";
+
+      // NOTE: if updating SPIFFS this would be the place to unmount SPIFFS using SPIFFS.end()
+      SPIFFS.end();
+      Serial.println("[OTA] Start updating " + type);
+    })
+    .onEnd([]() {
+      Serial.println("\n[OTA] End");
+    })
+    .onProgress([](unsigned int progress, unsigned int total) {
+      Serial.printf("[OTA] Progress: %u%%\r", (progress / (total / 100)));
+    })
+    .onError([](ota_error_t error) {
+      Serial.printf("[OTA] Error[%u]: ", error);
+      if (error == OTA_AUTH_ERROR) Serial.println("Auth Failed");
+      else if (error == OTA_BEGIN_ERROR) Serial.println("Begin Failed");
+      else if (error == OTA_CONNECT_ERROR) Serial.println("Connect Failed");
+      else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
+      else if (error == OTA_END_ERROR) Serial.println("End Failed");
+    });
+
+  ArduinoOTA.begin();
+
   wifiStatus = STATE_WIFI_IDLE;
+
 }
 
 String WebRequestHostAddress;     // global variable used to store Server IP-Address of HTTP-Request
@@ -812,8 +920,7 @@ void loop()
 
   String GETParameter = Webserver_GetRequestGETParameter();   // look for client request
 
-
-
+  ArduinoOTA.handle();
 
   delay( 50 );
 
