@@ -54,6 +54,8 @@ F 3 "" H 15600 9900 50  0000 C CNN
 F 4 "-" H 0   0   50  0001 C CNN "Value1"
 F 5 "-" H 0   0   50  0001 C CNN "Value2"
 F 6 "-" H 0   0   50  0001 C CNN "digikey"
+F 7 "-" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "-" H 0   0   50  0001 C CNN "pn"
 	1    15400 9900
 	1    0    0    -1  
 $EndComp
@@ -68,6 +70,8 @@ F 3 "" H 15750 9900 50  0000 C CNN
 F 4 "-" H 0   0   50  0001 C CNN "Value1"
 F 5 "-" H 0   0   50  0001 C CNN "Value2"
 F 6 "-" H 0   0   50  0001 C CNN "digikey"
+F 7 "-" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "-" H 0   0   50  0001 C CNN "pn"
 	1    15550 9900
 	1    0    0    -1  
 $EndComp
@@ -82,6 +86,8 @@ F 3 "" H 15900 9900 50  0000 C CNN
 F 4 "-" H 0   0   50  0001 C CNN "Value1"
 F 5 "-" H 0   0   50  0001 C CNN "Value2"
 F 6 "-" H 0   0   50  0001 C CNN "digikey"
+F 7 "-" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "-" H 0   0   50  0001 C CNN "pn"
 	1    15700 9900
 	1    0    0    -1  
 $EndComp
@@ -96,6 +102,8 @@ F 3 "" H 16050 9900 50  0000 C CNN
 F 4 "-" H 0   0   50  0001 C CNN "Value1"
 F 5 "-" H 0   0   50  0001 C CNN "Value2"
 F 6 "-" H 0   0   50  0001 C CNN "digikey"
+F 7 "-" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "-" H 0   0   50  0001 C CNN "pn"
 	1    15850 9900
 	1    0    0    -1  
 $EndComp
@@ -262,12 +270,12 @@ L freeDSP-aurora-rescue:R R108
 U 1 1 590B6151
 P 7200 6450
 F 0 "R108" V 7200 6450 39  0000 C CNN
-F 1 "100R" V 7275 6450 39  0000 C CNN
+F 1 "RES_100R_1%_0.125W_Thick_0805" V 7275 6450 39  0000 C CNN
 F 2 "rklib:C0805-RES" V 7130 6450 50  0001 C CNN
 F 3 "" H 7200 6450 50  0000 C CNN
 F 4 "100R" H 0   0   50  0001 C CNN "Value1"
 F 5 "1% 0.125W Thick" H 0   0   50  0001 C CNN "Value2"
-F 6 "???" H 0   0   50  0001 C CNN "digikey"
+F 6 "311-100CRCT-ND" H 0   0   50  0001 C CNN "digikey"
 F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
 F 8 "RC0805FR-07100RL" H 0   0   50  0001 C CNN "pn"
 	1    7200 6450
@@ -721,7 +729,7 @@ F 2 "rklib:Crystal-3.2x2.5" H 7000 6650 50  0001 C CNN
 F 3 "" H 7000 6650 50  0000 C CNN
 F 4 "24M576" H 0   0   50  0001 C CNN "Value1"
 F 5 "-" H 0   0   50  0001 C CNN "Value2"
-F 6 "???" H 0   0   50  0001 C CNN "digikey"
+F 6 "SER3690CT-ND" H 0   0   50  0001 C CNN "digikey"
 F 7 "EPSON" H 0   0   50  0001 C CNN "Manufacturer"
 F 8 "FA-238 24.5760MB-K3" H 0   0   50  0001 C CNN "pn"
 	1    7000 6650
@@ -1377,7 +1385,7 @@ F 2 "rklib:MM-14G" H 11650 4150 50  0001 C CNN
 F 3 "" H 11650 4150 50  0001 C CNN
 F 4 "MicroMatch-14" H 50  1250 50  0001 C CNN "Value1"
 F 5 "-" H 50  1250 50  0001 C CNN "Value2"
-F 6 "???" H 50  1250 50  0001 C CNN "digikey"
+F 6 "A110871CT-ND" H 50  1250 50  0001 C CNN "digikey"
 F 7 "TE Connectivity AMP Connectors" H 50  1250 50  0001 C CNN "Manufacturer"
 F 8 "1-215079-4" H 50  1250 50  0001 C CNN "pn"
 	1    11650 4150
@@ -1469,7 +1477,7 @@ F 2 "rklib:HDR_02x08" H 11650 5300 50  0001 C CNN
 F 3 "" H 11650 5300 50  0001 C CNN
 F 4 "HDR_02x08" H 50  1250 50  0001 C CNN "Value1"
 F 5 "-" H 50  1250 50  0001 C CNN "Value2"
-F 6 "???" H 50  1250 50  0001 C CNN "digikey"
+F 6 "S2011EC-08-ND" H 50  1250 50  0001 C CNN "digikey"
 F 7 "Sullins Connector Solutions" H 50  1250 50  0001 C CNN "Manufacturer"
 F 8 "PRPC008DAAN-RC" H 50  1250 50  0001 C CNN "pn"
 	1    11650 5300
@@ -2290,7 +2298,6 @@ F 5 "20% 25V X5R" H 5650 4550 39  0001 C CNN "Value2"
 F 6 "490-10748-1-ND" H 5650 4500 39  0001 C CNN "digikey"
 F 7 "Murata Electronics North America" H 5650 4800 39  0001 C CNN "Manufacturer"
 F 8 "GRM21BR61E106MA73L" H 5650 4800 39  0001 C CNN "pn"
-F 9 "GRM21BR61E106MA73L" H 5650 4800 50  0001 C CNN "manf_num"
 	1    5650 4800
 	0    1    1    0   
 $EndComp
@@ -2705,7 +2712,7 @@ F 2 "Resistors_SMD:R_Array_Convex_4x0603" H 7400 2650 39  0001 C CNN
 F 3 "" H 7400 3100 50  0001 C CNN
 F 4 "33R0" V 7650 3000 39  0000 L CNN "Value1"
 F 5 "5% 62,5mW" H 7400 2700 39  0001 C CNN "Value2"
-F 6 "???" H 7400 2600 39  0001 C CNN "digikey"
+F 6 "TC164J-33CT-ND" H 7400 2600 39  0001 C CNN "digikey"
 F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
 F 8 "TC164-JR-0733RL" H 0   0   50  0001 C CNN "pn"
 	1    7400 3100
@@ -2721,7 +2728,7 @@ F 2 "Resistors_SMD:R_Array_Convex_4x0603" H 8300 2650 39  0001 C CNN
 F 3 "" H 8300 3100 50  0001 C CNN
 F 4 "33R0" V 8550 3000 39  0000 L CNN "Value1"
 F 5 "5% 62,5mW" H 8300 2700 39  0001 C CNN "Value2"
-F 6 "???" H 8300 2600 39  0001 C CNN "digikey"
+F 6 "TC164J-33CT-ND" H 8300 2600 39  0001 C CNN "digikey"
 F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
 F 8 "TC164-JR-0733RL" H 0   0   50  0001 C CNN "pn"
 	1    8300 3100
@@ -2737,7 +2744,7 @@ F 2 "Resistors_SMD:R_Array_Convex_4x0603" H 9400 4350 39  0001 C CNN
 F 3 "" H 9400 4800 50  0001 C CNN
 F 4 "33R0" V 9650 4700 39  0000 L CNN "Value1"
 F 5 "5% 62,5mW" H 9400 4400 39  0001 C CNN "Value2"
-F 6 "???" H 9400 4300 39  0001 C CNN "digikey"
+F 6 "TC164J-33CT-ND" H 9400 4300 39  0001 C CNN "digikey"
 F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
 F 8 "TC164-JR-0733RL" H 0   0   50  0001 C CNN "pn"
 	1    9400 4800
@@ -2753,7 +2760,7 @@ F 2 "Resistors_SMD:R_Array_Convex_4x0603" H 9400 4950 39  0001 C CNN
 F 3 "" H 9400 5400 50  0001 C CNN
 F 4 "33R0" V 9650 5300 39  0000 L CNN "Value1"
 F 5 "5% 62,5mW" H 9400 5000 39  0001 C CNN "Value2"
-F 6 "???" H 9400 4900 39  0001 C CNN "digikey"
+F 6 "TC164J-33CT-ND" H 9400 4900 39  0001 C CNN "digikey"
 F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
 F 8 "TC164-JR-0733RL" H 0   0   50  0001 C CNN "pn"
 	1    9400 5400
@@ -2924,7 +2931,7 @@ F 2 "rklib:Molex_PicoBlade_530470310" H 4600 5550 50  0001 C CNN
 F 3 "" H 4600 5550 50  0001 C CNN
 F 4 "PB-01x03" H -3500 1550 50  0001 C CNN "Value1"
 F 5 "-" H -3500 1550 50  0001 C CNN "Value2"
-F 6 "???" H -3500 1550 50  0001 C CNN "digikey"
+F 6 "WM1732-ND" H -3500 1550 50  0001 C CNN "digikey"
 F 7 "Molex, LLC" H -3500 1550 50  0001 C CNN "Manufacturer"
 F 8 "0530470310" H -3500 1550 50  0001 C CNN "pn"
 	1    4600 5550
@@ -2951,14 +2958,14 @@ L freeDSP-aurora-rescue:R R116
 U 1 1 5CA37EA5
 P 11050 10500
 F 0 "R116" V 11050 10500 39  0000 C CNN
-F 1 "560R" V 11125 10500 39  0000 C CNN
+F 1 "RES_560R_1%_0.125W_Thick_0805" V 11125 10500 39  0000 C CNN
 F 2 "rklib:C0805-RES" V 10980 10500 50  0001 C CNN
 F 3 "" H 11050 10500 50  0000 C CNN
 F 4 "560R" H 3850 4050 50  0001 C CNN "Value1"
 F 5 "1% 0.125W Thick" H 3850 4050 50  0001 C CNN "Value2"
-F 6 "???" H 3850 4050 50  0001 C CNN "digikey"
-F 7 "" H 3850 4050 50  0001 C CNN "Manufacturer"
-F 8 "" H 3850 4050 50  0001 C CNN "pn"
+F 6 "311-560CRCT-ND" H 3850 4050 50  0001 C CNN "digikey"
+F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
+F 8 "RC0805FR-07560RL" H 0   0   50  0001 C CNN "pn"
 	1    11050 10500
 	1    0    0    -1  
 $EndComp
@@ -2981,6 +2988,11 @@ F 0 "X106" H 11330 10684 39  0000 L CNN
 F 1 "Conn_01x02" H 11330 10609 39  0000 L CNN
 F 2 "rklib:HDR_01x02" H 11250 10700 50  0001 C CNN
 F 3 "~" H 11250 10700 50  0001 C CNN
+F 4 "Wurth Electronics Inc." H 0   0   50  0001 C CNN "Manufacturer"
+F 5 "HDR-01x02" H 0   0   50  0001 C CNN "Value1"
+F 6 "-" H 0   0   50  0001 C CNN "Value2"
+F 7 "732-5315-ND" H 0   0   50  0001 C CNN "digikey"
+F 8 "61300211121" H 0   0   50  0001 C CNN "pn"
 	1    11250 10700
 	1    0    0    -1  
 $EndComp

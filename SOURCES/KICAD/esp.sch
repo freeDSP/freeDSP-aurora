@@ -220,7 +220,7 @@ F 2 "rklib:Molex_KK254_0022032041" H 8100 2100 50  0001 C CNN
 F 3 "" H 8100 2100 50  0001 C CNN
 F 4 "KK254-01x04" H 0   0   50  0001 C CNN "Value1"
 F 5 "-" H 0   0   50  0001 C CNN "Value2"
-F 6 "???" H 0   0   50  0001 C CNN "digikey"
+F 6 "WM4202-ND" H 0   0   50  0001 C CNN "digikey"
 F 7 "Molex, LLC" H 0   0   50  0001 C CNN "Manufacturer"
 F 8 "0022232041" H 0   0   50  0001 C CNN "pn"
 	1    8100 2100
@@ -278,7 +278,7 @@ F 2 "rklib:Molex_PicoBlade_530470510" H 8100 2950 39  0001 C CNN
 F 3 "" H 8100 2950 50  0001 C CNN
 F 4 "PB-01x05" H 0   0   50  0001 C CNN "Value1"
 F 5 "-" H 0   0   50  0001 C CNN "Value2"
-F 6 "???" H 0   0   50  0001 C CNN "digikey"
+F 6 "WM1734-ND" H 0   0   50  0001 C CNN "digikey"
 F 7 "Molex, LLC" H 0   0   50  0001 C CNN "Manufacturer"
 F 8 "0530470510" H 0   0   50  0001 C CNN "pn"
 	1    8100 2950
@@ -374,7 +374,7 @@ F 2 "rklib:Molex_PicoBlade_530470310" H 8100 4000 50  0001 C CNN
 F 3 "" H 8100 4000 50  0001 C CNN
 F 4 "PB-01x03" H 0   0   50  0001 C CNN "Value1"
 F 5 "-" H 0   0   50  0001 C CNN "Value2"
-F 6 "???" H 0   0   50  0001 C CNN "digikey"
+F 6 "WM1732-ND" H 0   0   50  0001 C CNN "digikey"
 F 7 "Molex, LLC" H 0   0   50  0001 C CNN "Manufacturer"
 F 8 "0530470310" H 0   0   50  0001 C CNN "pn"
 	1    8100 4000
@@ -410,7 +410,7 @@ F 2 "Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical" H 7750 5200 50 
 F 3 "" H 7750 5200 50  0001 C CNN
 F 4 "HDR-01x06" H 0   0   50  0001 C CNN "Value1"
 F 5 "-" H 0   0   50  0001 C CNN "Value2"
-F 6 "???" H 0   0   50  0001 C CNN "digikey"
+F 6 "S1011EC-06-ND" H 0   0   50  0001 C CNN "digikey"
 F 7 "Sullins Connector Solutions" H 0   0   50  0001 C CNN "Manufacturer"
 F 8 "PRPC006SAAN-RC" H 0   0   50  0001 C CNN "pn"
 	1    7750 5200
@@ -495,7 +495,7 @@ F 2 "Package_TO_SOT_SMD:SOT-23" H 5800 5300 50  0001 C CNN
 F 3 "" H 5600 5200 50  0001 C CNN
 F 4 "SS8050-G" H 5791 5163 39  0000 L CNN "Value1"
 F 5 "-" H 5600 5200 50  0001 C CNN "Value2"
-F 6 "???" H 5600 5200 39  0001 C CNN "digikey"
+F 6 "641-1790-1-ND" H 5600 5200 39  0001 C CNN "digikey"
 F 7 "Comchip Technology" H 0   0   50  0001 C CNN "Manufacturer"
 F 8 "SS8050-G" H 0   0   50  0001 C CNN "pn"
 	1    5600 5200
@@ -513,7 +513,7 @@ F 2 "Package_TO_SOT_SMD:SOT-23" H 5800 5850 50  0001 C CNN
 F 3 "" H 5600 5750 50  0001 C CNN
 F 4 "SS8050-G" H 5800 5800 39  0000 L CNN "Value1"
 F 5 "-" H 5600 5750 50  0001 C CNN "Value2"
-F 6 "???" H 5600 5750 39  0001 C CNN "digikey"
+F 6 "641-1790-1-ND" H 5600 5750 39  0001 C CNN "digikey"
 F 7 "Comchip Technology" H 0   0   50  0001 C CNN "Manufacturer"
 F 8 "SS8050-G" H 0   0   50  0001 C CNN "pn"
 	1    5600 5750

@@ -170,34 +170,6 @@ F 3 "" H 4350 3000 50  0000 C CNN
 	1    4350 3000
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	5200 4050 5200 4150
-Wire Wire Line
-	5200 4150 4450 4150
-Wire Wire Line
-	5900 4050 5900 4250
-Wire Wire Line
-	5900 4250 4450 4250
-Wire Wire Line
-	4800 3750 4700 3750
-Wire Wire Line
-	4700 3750 4700 4050
-Wire Wire Line
-	4700 4050 4450 4050
-Wire Wire Line
-	4800 3650 4650 3650
-Wire Wire Line
-	4650 3650 4650 3950
-Wire Wire Line
-	4650 3950 4450 3950
-Text Label 4450 3950 0    39   ~ 0
-MTMS
-Text Label 4450 4050 0    39   ~ 0
-MTDI
-Text Label 4250 4150 0    39   ~ 0
-MTCK
-Text Label 4450 4250 0    39   ~ 0
-MTDO
 Text HLabel 4700 2950 0    39   Output ~ 0
 MOSI
 Text HLabel 4700 3050 0    39   Input ~ 0
@@ -248,7 +220,7 @@ F 2 "rklib:Molex_KK254_0022032041" H 8100 2100 50  0001 C CNN
 F 3 "" H 8100 2100 50  0001 C CNN
 F 4 "KK254-01x04" H 0   0   50  0001 C CNN "Value1"
 F 5 "-" H 0   0   50  0001 C CNN "Value2"
-F 6 "???" H 0   0   50  0001 C CNN "digikey"
+F 6 "WM4202-ND" H 0   0   50  0001 C CNN "digikey"
 F 7 "Molex, LLC" H 0   0   50  0001 C CNN "Manufacturer"
 F 8 "0022232041" H 0   0   50  0001 C CNN "pn"
 	1    8100 2100
@@ -306,7 +278,7 @@ F 2 "rklib:Molex_PicoBlade_530470510" H 8100 2950 39  0001 C CNN
 F 3 "" H 8100 2950 50  0001 C CNN
 F 4 "PB-01x05" H 0   0   50  0001 C CNN "Value1"
 F 5 "-" H 0   0   50  0001 C CNN "Value2"
-F 6 "???" H 0   0   50  0001 C CNN "digikey"
+F 6 "WM1734-ND" H 0   0   50  0001 C CNN "digikey"
 F 7 "Molex, LLC" H 0   0   50  0001 C CNN "Manufacturer"
 F 8 "0530470510" H 0   0   50  0001 C CNN "pn"
 	1    8100 2950
@@ -402,7 +374,7 @@ F 2 "rklib:Molex_PicoBlade_530470310" H 8100 4000 50  0001 C CNN
 F 3 "" H 8100 4000 50  0001 C CNN
 F 4 "PB-01x03" H 0   0   50  0001 C CNN "Value1"
 F 5 "-" H 0   0   50  0001 C CNN "Value2"
-F 6 "???" H 0   0   50  0001 C CNN "digikey"
+F 6 "WM1732-ND" H 0   0   50  0001 C CNN "digikey"
 F 7 "Molex, LLC" H 0   0   50  0001 C CNN "Manufacturer"
 F 8 "0530470310" H 0   0   50  0001 C CNN "pn"
 	1    8100 4000
@@ -412,10 +384,8 @@ Text HLabel 5900 4300 3    39   Output ~ 0
 SCL2
 Text HLabel 6000 4300 3    39   BiDi ~ 0
 SDA2
-Connection ~ 5900 4250
 Wire Wire Line
 	6300 3450 6400 3450
-Connection ~ 5200 4150
 Wire Wire Line
 	6350 2450 6350 4100
 Wire Wire Line
@@ -430,10 +400,6 @@ Wire Wire Line
 	4150 2550 4350 2550
 Wire Wire Line
 	3350 2550 3350 2650
-Wire Wire Line
-	5900 4250 5900 4300
-Wire Wire Line
-	5200 4150 5200 4500
 $Comp
 L Connector_Generic:Conn_01x06 X504
 U 1 1 5BE7CB1C
@@ -444,7 +410,7 @@ F 2 "Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical" H 7750 5200 50 
 F 3 "" H 7750 5200 50  0001 C CNN
 F 4 "HDR-01x06" H 0   0   50  0001 C CNN "Value1"
 F 5 "-" H 0   0   50  0001 C CNN "Value2"
-F 6 "???" H 0   0   50  0001 C CNN "digikey"
+F 6 "S1011EC-06-ND" H 0   0   50  0001 C CNN "digikey"
 F 7 "Sullins Connector Solutions" H 0   0   50  0001 C CNN "Manufacturer"
 F 8 "PRPC006SAAN-RC" H 0   0   50  0001 C CNN "pn"
 	1    7750 5200
@@ -529,7 +495,7 @@ F 2 "Package_TO_SOT_SMD:SOT-23" H 5800 5300 50  0001 C CNN
 F 3 "" H 5600 5200 50  0001 C CNN
 F 4 "SS8050-G" H 5791 5163 39  0000 L CNN "Value1"
 F 5 "-" H 5600 5200 50  0001 C CNN "Value2"
-F 6 "???" H 5600 5200 39  0001 C CNN "digikey"
+F 6 "641-1790-1-ND" H 5600 5200 39  0001 C CNN "digikey"
 F 7 "Comchip Technology" H 0   0   50  0001 C CNN "Manufacturer"
 F 8 "SS8050-G" H 0   0   50  0001 C CNN "pn"
 	1    5600 5200
@@ -547,7 +513,7 @@ F 2 "Package_TO_SOT_SMD:SOT-23" H 5800 5850 50  0001 C CNN
 F 3 "" H 5600 5750 50  0001 C CNN
 F 4 "SS8050-G" H 5800 5800 39  0000 L CNN "Value1"
 F 5 "-" H 5600 5750 50  0001 C CNN "Value2"
-F 6 "???" H 5600 5750 39  0001 C CNN "digikey"
+F 6 "641-1790-1-ND" H 5600 5750 39  0001 C CNN "digikey"
 F 7 "Comchip Technology" H 0   0   50  0001 C CNN "Manufacturer"
 F 8 "SS8050-G" H 0   0   50  0001 C CNN "pn"
 	1    5600 5750
@@ -874,4 +840,8 @@ F 8 "GRM21BR61A226ME51L" H 750 -3350 50  0001 C CNN "pn"
 	1    4900 7050
 	0    1    1    0   
 $EndComp
+Wire Wire Line
+	5900 4050 5900 4300
+Wire Wire Line
+	5200 4050 5200 4500
 $EndSCHEMATC

@@ -916,7 +916,7 @@ F 2 "TO_SOT_Packages_SMD:SOT-363_SC-70-6" H 10450 3300 79  0001 C CNN
 F 3 "" H 10450 3300 79  0001 C CNN
 F 4 "NC7SZ175" H 0   0   50  0001 C CNN "Value1"
 F 5 "D-Type Flip-Flop with Asynchronous Clear" H 0   0   50  0001 C CNN "Value2"
-F 6 "???" H 0   0   50  0001 C CNN "digikey"
+F 6 "296-16998-1-ND" H 0   0   50  0001 C CNN "digikey"
 F 7 "Texas Instruments" H 0   0   50  0001 C CNN "Manufacturer"
 F 8 "SN74LVC1G175DCKR" H 0   0   50  0001 C CNN "pn"
 	1    10450 3300
@@ -2934,7 +2934,7 @@ F 2 "Resistors_SMD:R_Array_Convex_4x0603" H 2850 2000 39  0001 C CNN
 F 3 "" H 2850 2450 50  0001 C CNN
 F 4 "33R0" V 3100 2350 39  0000 L CNN "Value1"
 F 5 "5% 62,5mW" H 2850 2050 39  0001 C CNN "Value2"
-F 6 "???" H 2850 1950 39  0001 C CNN "digikey"
+F 6 "TC164J-33CT-ND" H 2850 1950 39  0001 C CNN "digikey"
 F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
 F 8 "TC164-JR-0733RL" H 0   0   50  0001 C CNN "pn"
 	1    2850 2450
@@ -3111,6 +3111,11 @@ F 0 "IC407" H 10200 7991 39  0000 C CNN
 F 1 "TLV70025" H 10200 7916 39  0000 C CNN
 F 2 "rklib:SC70-5" H 10200 7650 60  0001 C CNN
 F 3 "" H 10200 7650 60  0001 C CNN
+F 4 "Texas Instruments" H 0   0   50  0001 C CNN "Manufacturer"
+F 5 "296-27793-1-ND" H 0   0   50  0001 C CNN "digikey"
+F 6 "TLV70025DCKR" H 0   0   50  0001 C CNN "pn"
+F 7 "TLV70025" H 0   0   50  0001 C CNN "Value1"
+F 8 "2.5V, 200mA" H 0   0   50  0001 C CNN "Value2"
 	1    10200 7650
 	1    0    0    -1  
 $EndComp
