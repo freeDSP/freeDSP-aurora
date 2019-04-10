@@ -183,7 +183,7 @@ QScrollArea
 /* -------------------------------------------------------------------------- */
 QAbstractScrollArea
 {
-  background-color: green; /*transparent;*/
+  background-color: transparent;
   border: 0px solid #c1c1c1;
   border-radius: 2px;
 }

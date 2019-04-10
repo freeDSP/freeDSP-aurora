@@ -1,6 +1,6 @@
-#if !defined( __IOS__ )
-#include <QSerialPortInfo>
-#endif
+//#if !defined( __IOS__ )
+//#include <QSerialPortInfo>
+//#endif
 #include <QDebug>
 #include <QAbstractItemView>
 #include <QFile>

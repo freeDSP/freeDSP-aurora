@@ -26,6 +26,10 @@ macx {
 include(./vektorraum/vektorraum.pri)
 }
 
+linux {
+include(./vektorraum/vektorraum.pri)
+}
+
 win32 {
 include(vektorraum\vektorraum.pri)
 }
@@ -210,6 +214,23 @@ win32 {
   #QMAKE_CXXFLAGS += -gdwarf-2
 
   DEFINES += __WIN__
+  DEFINES += MATLIB_USE_UINT64
+  DEFINES += __NOFFT__
+  DEFINES += __NOSNDFILE__
+  DEFINES += DEMO
+
+  RC_ICONS = $${PWD}/rc/appicon.ico
+ # ICON = $${PWD}/rc/appicon.icns
+
+}
+
+linux {
+  message( "Building for Linux" )
+
+  #QMAKE_CFLAGS += -gdwarf-2
+  #QMAKE_CXXFLAGS += -gdwarf-2
+
+  DEFINES += __LINUX__
   DEFINES += MATLIB_USE_UINT64
   DEFINES += __NOFFT__
   DEFINES += __NOSNDFILE__

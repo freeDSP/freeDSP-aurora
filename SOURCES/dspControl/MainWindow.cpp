@@ -64,7 +64,7 @@ MainWindow::MainWindow( QWidget* parent ) :
   ui( new Ui::MainWindow )
 {
   ui->setupUi(this);
-  #if defined( __IOS__ ) || defined( __WIN__ )
+  #if defined( __IOS__ ) || defined( __WIN__ ) || defined( __LINUX__ )
   ui->menuBar->hide();
   #endif
   //ui->actionWrite_to_DSP->setEnabled( false );
