@@ -1,6 +1,6 @@
-//#if !defined( __IOS__ )
-//#include <QSerialPortInfo>
-//#endif
+#if !defined( __IOS__ )
+#include <QSerialPortInfo>
+#endif
 #include <QDebug>
 #include <QAbstractItemView>
 #include <QFile>
@@ -15,30 +15,30 @@ DialogSettings::DialogSettings( CFreeDspAurora* ptrdsp, QWidget* parent ) :
   ui(new Ui::DialogSettings)
 {
   ui->setupUi(this);
-  /*
-#if !defined( __IOS__ )
-  foreach( const QSerialPortInfo &info, QSerialPortInfo::availablePorts() )
-    ui->comboBoxSerialPort->addItem( info.portName() );
-#endif
-  ui->comboBoxSerialPort->view()->setMinimumWidth( 300 );
-*/
   dsp = ptrdsp;
+
+  ui->radioButtonAP->blockSignals( true );
+  ui->radioButtonLocalWifi->blockSignals( true );
+  if( dsp->getConnectionTypeWifi() == CFreeDspAurora::ACCESS_POINT )
+  {
+    ui->radioButtonAP->setChecked( true );
+    ui->pushButtonPing->setEnabled( false );
+  }
+  else
+  {
+    ui->radioButtonLocalWifi->setChecked( true );
+    ui->pushButtonPing->setEnabled( true );
+  }
+  ui->radioButtonAP->blockSignals( false );
+  ui->radioButtonLocalWifi->blockSignals( false );
+
+  ui->lineEditIpAddress->setText( dsp->getIpAddressWifi() );
 }
 
 DialogSettings::~DialogSettings()
 {
   delete ui;
 }
-/*
-QString DialogSettings::getPortName( void )
-{
-  return ui->comboBoxSerialPort->currentText();
-}*/
-/*
-void DialogSettings::setPortName( const QString portname )
-{
-  ui->comboBoxSerialPort->setCurrentText( portname );
-}*/
 
 //==============================================================================
 /*!
@@ -118,7 +118,7 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
 
     for( uint32_t n = 0; n < numbytes; n++ )
     {
-      if( offset >= listTxBuffer.size() )
+      if( offset >= static_cast<uint32_t>(listTxBuffer.size()) )
       {
         qDebug()<<"TxBuffer too small";
         return;
@@ -144,17 +144,17 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
     QByteArray packet;
     for( int ii = 0; ii < 64; ii++ )
     {
-      if( offset < content.size() )
+      if( offset < static_cast<uint32_t>(content.size()) )
         packet.append( content.at(offset) );
       else
-        packet.append( (char)0 );
+        packet.append( static_cast<char>(0) );
       offset++;
     }
     //if( npckt == 0 )
     dsp->sendDspFirmwareWifi( packet );
     //if( !dsp->sendDspFirmwareWifi( packet ) )
     //  QMessageBox::critical( this, tr("Error"), tr("Did not receive an ACK. Please check your WiFi"), QMessageBox::Ok );
-    totalTransmittedBytes += packet.size();
+    totalTransmittedBytes += static_cast<uint32_t>(packet.size());
 
     if( offset < content.size() )
       ui->progressBar->setValue( offset );
@@ -171,4 +171,85 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
   qDebug()<<"Success";
   qDebug()<<"File size:"<<content.size() * 8 / 1024<<"kBit";
   
+}
+
+//==============================================================================
+/*!
+ *
+ */
+void DialogSettings::on_pushButtonVerifyPlugin_clicked()
+{
+  //----------------------------------------------------------------------------
+  //--- Receive data from ESP32 via WiFi
+  //----------------------------------------------------------------------------
+  QByteArray packet;
+  dsp->requestDspFirmwareWifi( packet );
+}
+
+#if 0
+//==============================================================================
+/*!
+ *
+ */
+void DialogSettings::on_pushButtonDetect_clicked()
+{
+  if( dsp->detectWifi() )
+  {
+    ui->lineEditIpAddress->blockSignals( true );
+    ui->lineEditIpAddress->setText( dsp->getIpAddressWifi() );
+    ui->lineEditIpAddress->blockSignals( false );
+  }
+}
+#endif
+
+//==============================================================================
+/*!
+ *
+ */
+void DialogSettings::on_pushButtonStoreWiFiConfig_clicked()
+{
+  if( !ui->lineEditSSID->text().isEmpty() )
+  {
+    // --- Send WiFi configuration to DSP ---
+    if( !dsp->storeSettingsWifi( ui->lineEditSSID->text(), ui->lineEditPassword->text() ) )
+      QMessageBox::critical( this, tr("Error"), tr("Uups, something went wrong when sending the SSID. Please double check everythind and try again."), QMessageBox::Ok );  
+  }
+}
+
+//==============================================================================
+/*!
+ *
+ */
+void DialogSettings::on_pushButtonPing_clicked()
+{
+  dsp->pingWifi();
+  ui->lineEditIpAddress->setText( dsp->getIpAddressWifi() );
+}
+
+//==============================================================================
+/*!
+ *
+ */
+void DialogSettings::on_radioButtonAP_toggled(bool checked)
+{
+  if( checked )
+  {
+    dsp->setConnectionTypeWifi( CFreeDspAurora::ACCESS_POINT );
+    ui->lineEditIpAddress->setText( dsp->getIpAddressWifi() );
+    ui->pushButtonPing->setEnabled( false );
+  }
+}
+
+//==============================================================================
+/*!
+ *
+ */
+void DialogSettings::on_radioButtonLocalWifi_toggled(bool checked)
+{
+  if( checked )
+  {
+    dsp->setConnectionTypeWifi( CFreeDspAurora::LOCAL_WIFI );
+    ui->lineEditIpAddress->setText( dsp->getIpAddressWifi() );
+    ui->pushButtonPing->setEnabled( true );
+  }
 }

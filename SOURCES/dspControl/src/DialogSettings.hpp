@@ -17,12 +17,20 @@ public:
   explicit DialogSettings( CFreeDspAurora* ptrdsp, QWidget* parent = nullptr );
   ~DialogSettings();
 
-  //QString getPortName( void );
-
-  //void setPortName( const QString portname );
-
 private slots:
   void on_pushButtonInstallPlugin_clicked();
+
+  void on_pushButtonVerifyPlugin_clicked();
+
+  //void on_pushButtonDetect_clicked();
+
+  void on_pushButtonStoreWiFiConfig_clicked();
+
+  void on_pushButtonPing_clicked();
+
+  void on_radioButtonAP_toggled(bool checked);
+
+  void on_radioButtonLocalWifi_toggled(bool checked);
 
 private:
   Ui::DialogSettings* ui;

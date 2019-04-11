@@ -22,6 +22,11 @@ CFreeDspAurora::CFreeDspAurora( QWidget* parent ) : QWidget( parent )
   tcpSocket = new QTcpSocket( this );
   connect( tcpSocket, SIGNAL( readyRead()), this, SLOT(readyReadWifi()) );
   connect( this, SIGNAL( haveReplyWifi() ), &loopWaitForResponseWiFi, SLOT( quit() ) );
+
+  ipAddressAP = "192.168.5.1";
+  ipAddressLocal = "0.0.0.0";
+  connectionType = LOCAL_WIFI;
+  
 }
 
 //==============================================================================
@@ -752,13 +757,15 @@ bool CFreeDspAurora::requestUserParameterWifi( QByteArray& userparams )
 /*! Wait for reply of DSP via WiFi.
  *
  */
-void CFreeDspAurora::waitForReplyWifi( void )
+bool CFreeDspAurora::waitForReplyWifi( void )
 {
   QEventLoop loopWaitForReply;
   connect( tcpSocket, SIGNAL(readyRead()), &loopWaitForReply, SLOT(quit()) );
   // \TODO Add timeout timer
   #warning Add timeout timer
   loopWaitForReply.exec();
+  disconnect( tcpSocket, SIGNAL(readyRead()), &loopWaitForReply, SLOT(quit()) );
+  return true;
 }
 
 //==============================================================================
@@ -798,8 +805,16 @@ void CFreeDspAurora::readyReadWifi( void )
  */
 void CFreeDspAurora::writeRequestWifi( QByteArray& request )
 {
+  writeRequestWifi( request, wifiIpHost );
+}
+
+//==============================================================================
+/*!
+ */
+void CFreeDspAurora::writeRequestWifi( QByteArray& request, QString host )
+{
   tcpSocket->abort();
-  tcpSocket->connectToHost( wifiIpHost, wifiPortHost );
+  tcpSocket->connectToHost( host, wifiPortHost );
 
   QEventLoop loopConnect;
   connect( tcpSocket, SIGNAL(connected()), &loopConnect, SLOT(quit()) );
@@ -813,4 +828,139 @@ void CFreeDspAurora::writeRequestWifi( QByteArray& request )
   tcpSocket->write( request );
 }
 
+//==============================================================================
+/*! Request the DSP firmware.
+ *
+ * \param content Firmware data.
+ */
+bool CFreeDspAurora::requestDspFirmwareWifi( QByteArray& content )
+{
+  QString requestString = QString("GET /dspfw HTTP/1.1\r\nHost: ")
+                        + wifiIpHost
+                        + QString("\r\n\r\n");
+  QByteArray request;
+  request.append( requestString );
+  writeRequestWifi( request );
+  if( !waitForResponseWifi() )
+  {
+    QMessageBox::critical( this, tr("Error"), tr("Could not receive DSP firmware. Please double check everything and try again."), QMessageBox::Ok ); 
+    return false;
+  }
+  else
+  {
+    qDebug()<<QString( replyDSP );
+    /*QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+    qDebug()<<"Received user parameter"<<listReply.at(4).size();
+    QString str = listReply.at(4);
+    int offset = 0;
+    
+    while( offset < str.length() )
+    {
+      bool ok;
+      uint8_t val = str.mid( offset, 2 ).toUInt( &ok, 16 );
+      userparams.append( val );
+      //qDebug()<<QString::number( val, 16 )<<str.mid( offset, 2 );
+      offset += 2;
+    }*/
+  }
 
+  return true;
+}
+
+//==============================================================================
+/*! 
+ *
+ */
+bool CFreeDspAurora::detectWifi( void )
+{
+  /*QProcess ping;
+  QString command = "ping";
+  QStringList args;
+  args << "-c1"  <<  "www.google.com";
+  ping.start( command, args );
+  ping.waitForStarted( 7000 );
+  if( ping.waitForFinished( 5000 ) )
+  {
+    QStringList listReply = QString( ping.readAll() ).split( QRegExp("\\s+") );
+    //qDebug()<<listReply;
+    for( int ii = 0; ii < listReply.size(); ii++ )
+    {
+      if( listReply.at(ii) == QString("from") && listReply.size() > ii+1 )
+      {
+        QString ipAddr = listReply.at(ii+1);
+        ipAddress = ipAddr.left( ipAddr.length()-1 );
+        qDebug()<<ipAddress;
+        return true;
+      }
+    }
+  }*/
+  return false;
+}
+
+//==============================================================================
+/*! Sends the SSID and password for the Wifi network to DSP and stores it nonvolatile.
+ *
+ * \param ssid New SSID
+ * \parma password New password
+ */
+bool CFreeDspAurora::storeSettingsWifi( QString ssid, QString password )
+{
+  qDebug()<<"---------------------------------------------------------------";
+  qDebug()<<"storeSsidWifi";
+
+  QString content = QString("SSID=") + ssid + QString("&")
+                  + QString("Password=") + password;
+
+  QString requestString = QString("POST /wificonfig HTTP/1.1\r\n")
+                        + QString("Host: ") + wifiIpHost + QString("\r\n")
+                        + QString("Content-type:text/plain\r\n")
+                        + QString("Content-length: ") +  QString::number( content.size() ) + QString("\r\n")
+                        + QString("\r\n")
+                        + content
+                        + QString("\r\n");
+  QByteArray request;
+  request.append( requestString );  
+  
+  writeRequestWifi( request );
+
+  if( !waitForReplyWifi() )
+    return false;
+  else
+  {
+    qDebug()<<QString( replyDSP );
+    QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+    //! \TODO Test for ACK.
+    return true;
+  }
+}
+
+//==============================================================================
+/*! Send a ping to the DSP to see wether it is there.
+ *
+ */
+bool CFreeDspAurora::pingWifi( void )
+{
+  qDebug()<<"---------------------------------------------------------------";
+  qDebug()<<"pingWifi";
+
+  QString requestString = QString("GET /ping HTTP/1.1\r\n")
+                        + QString("Host: freeDSP-aurora\r\n")
+                        + QString("\r\n\r\n");
+  QByteArray request;
+  request.append( requestString );
+  writeRequestWifi( request, "freeDSP-aurora" );
+
+  if( !waitForReplyWifi() )
+  {
+    QMessageBox::critical( this, tr("Error"), tr("Could not ping the DSP. Please double check everything and try again."), QMessageBox::Ok ); 
+    return false;
+  }
+  else
+  {
+    qDebug()<<QString( replyDSP );
+    QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+    ipAddressLocal = listReply.at(4);
+  }
+
+  return true;
+}

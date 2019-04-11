@@ -61,7 +61,6 @@ private slots:
 
   void on_actionSettings_triggered();
 
-  //void on_verticalSliderMainVolume_valueChanged(int value);
   void on_volumeSliderMain_valueChanged( double val );
 
   void on_actionRead_from_DSP_triggered();

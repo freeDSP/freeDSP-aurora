@@ -43,6 +43,7 @@ enum twifistatus
   STATE_WIFI_PUTPARAM,
   STATE_WIFI_DSPFW,
   STATE_WIFI_RECEIVE_USERPARAM,
+  STATE_WIFI_RECEIVE_CONFIG,
 
   STATE_WIFI_RECEIVE_SINGLEPARAM
 };
@@ -66,15 +67,15 @@ float dspValue;
 
 File fileDspProgram;
 File fileDspParams;
-
 File fileUserParams;
 
 WiFiClient client;
-WiFiServer server( 8088 );
+WiFiServer server( 80 );
 
 twifistatus wifiStatus = STATE_WIFI_IDLE;
 int cntrPackets = 0;
 uint32_t totalBytesReceived;
+String receivedPostRequest;
 
 //==============================================================================
 /*! 
@@ -445,10 +446,10 @@ void setup()
   WiFi.begin( Settings.ssid.c_str(), Settings.password.c_str() );
   
   int cntrConnect = 0;
-  while( WiFi.waitForConnectResult() != WL_CONNECTED && cntrConnect < 10 )
+  while( WiFi.waitForConnectResult() != WL_CONNECTED && cntrConnect < 1 )
   {
     Serial.println("WiFi Connection Failed! Trying again..");
-    delay(5000);
+    //delay(1000);
     cntrConnect++;
   }
   
@@ -537,15 +538,12 @@ void sendAckWifi( void )
   client.println( httpResponse );
 }
 
-//  Call this function regularly to look for client requests
-//  template see https://github.com/espressif/arduino-esp32/blob/master/libraries/WiFi/examples/SimpleWiFiServer/SimpleWiFiServer.ino
-//  returns empty string if no request from any client
-//  returns GET Parameter: everything after the "/?" if ADDRESS/?xxxx was entered by the user in the webbrowser
-//  returns "-" if ADDRESS but no GET Parameter was entered by the user in the webbrowser
-//  remark: client connection stays open after return
-String Webserver_GetRequestGETParameter()
+//==============================================================================
+/*! Handles any HTTP request.
+ *
+ */
+void handleHttpRequest()
 {
-  String GETParameter = "";
   bool waitForData = false;
   uint32_t contentLength = 0;
   uint32_t receivedBytes = 0;
@@ -554,7 +552,6 @@ String Webserver_GetRequestGETParameter()
   
   if( client )                              // if you get a client,
   {
-    //Serial.println("Webserver_GetRequestGETParameter(): New Client.");           // print a message out the serial port
     String currentLine = "";                 // make a String to hold incoming data from the client
     
     while( client.connected() )            // loop while the client's connected
@@ -562,7 +559,8 @@ String Webserver_GetRequestGETParameter()
       if( client.available() )            // if there's bytes to read from the client,
       {  
         char c = client.read();            // read a byte, then
-        if (c != '\r')  // if you got anything else but a carriage return character,
+
+        if(c != '\r')   // if you got anything else but a carriage return character,
           currentLine += c;      // add it to the end of the currentLine
 
         if (c == '\n')                     // if the byte is a newline character
@@ -636,7 +634,7 @@ String Webserver_GetRequestGETParameter()
                 }
                 else
                 {
-                  Serial.println("ACK");
+                  Serial.println("OK");
                   fileDspProgram.flush();
                   //Serial.print( "\nreceivedBytes = ");
                   //Serial.println( receivedBytes );
@@ -673,7 +671,7 @@ String Webserver_GetRequestGETParameter()
                 }
                 else
                 {
-                  Serial.println("ACK");
+                  Serial.println("OK");
                   fileUserParams.flush();
                 }
                 offset += 2;
@@ -685,6 +683,48 @@ String Webserver_GetRequestGETParameter()
                 waitForData = false;
                 //wifiStatus = STATE_WIFI_IDLE;
               }
+            }
+
+            else if( wifiStatus = STATE_WIFI_RECEIVE_CONFIG )
+            {
+              receivedPostRequest += currentLine;
+
+              if( receivedPostRequest.length() >= contentLength )
+              {
+                receivedPostRequest = receivedPostRequest.substring( 0, receivedPostRequest.length()-1 );
+                int posStartSearch = 0;
+                String paramName;
+                String paramValue;
+                int posSeparator;
+                int posValue;
+                // search for '&' in received line
+                while( receivedPostRequest.indexOf( '&', posStartSearch) > -1 )
+                {
+                  posSeparator = receivedPostRequest.indexOf( '&', posStartSearch );
+                  posValue = receivedPostRequest.indexOf( '=', posStartSearch );
+                
+                  paramName = receivedPostRequest.substring( posStartSearch, posValue );
+                  paramValue = receivedPostRequest.substring( posValue + 1, posSeparator );
+                  if( paramName == "SSID" )
+                    Settings.ssid = paramValue;
+                  else if( paramName == "Password" )
+                    Settings.password = paramValue;
+                  posStartSearch = posSeparator + 1;
+                }
+                posValue = receivedPostRequest.indexOf( '=', posStartSearch );
+                paramName = receivedPostRequest.substring( posStartSearch, posValue );
+                paramValue = receivedPostRequest.substring( posValue + 1, receivedPostRequest.length() );
+                if( paramName == "SSID" )
+                  Settings.ssid = paramValue;
+                else if( paramName == "Password" )
+                  Settings.password = paramValue;
+                saveSettings();
+                sendAckWifi();
+                client.stop();
+                waitForData = false;
+                Serial.println( "OK" );
+              }
+                
             }
 
             currentLine = "";
@@ -871,6 +911,73 @@ String Webserver_GetRequestGETParameter()
               //cntrPackets++;
             }
 
+            //--- Request of DSP firmware
+            else if( currentLine.startsWith("GET /dspfw") )
+            {
+              Serial.println( "GET /dspfw" );
+              String httpResponse = "";
+              httpResponse += "HTTP/1.1 200 OK\r\n";
+              httpResponse += "Content-type:text/plain\r\n\r\n";
+              if( SPIFFS.exists( "/dspfw.hex" ) )
+              {
+                fileDspProgram = SPIFFS.open( "/dspfw.hex", "r" );
+                if( fileDspProgram )
+                {
+                  size_t len = fileDspProgram.size();
+                  Serial.println( len );
+                  int cntr = 0;
+
+                  while( cntr < len )
+                  {
+                    byte byteRead;
+                    fileDspProgram.read( &byteRead, 1 );
+                    //Serial.println( byte2string2( byteRead ) );
+                    httpResponse += byte2string2( byteRead );
+                    cntr++;
+                  }
+                }
+                fileDspProgram.close();
+              }
+              else
+              {
+                Serial.println( "[ERROR] dspfw.hex does not exist." );
+              }
+              
+              httpResponse += "\r\n";
+              client.println( httpResponse );
+              client.stop();
+              wifiStatus = STATE_WIFI_IDLE;
+              currentLine = "";
+              //cntrPackets++;
+            }
+
+            //--- Receiving new Wifi Configuration
+            else if( currentLine.startsWith("POST /wificonfig") )
+            {
+              Serial.println( "POST /wificonfig" );
+              receivedPostRequest = "";
+              wifiStatus = STATE_WIFI_RECEIVE_CONFIG;
+              waitForData = false;
+              currentLine = "";
+              //cntrPackets++;
+            }
+
+            //--- Received a ping
+            else if( currentLine.startsWith("GET /ping") )
+            {
+              Serial.println( "GET /ping" );
+              String httpResponse = "";
+              httpResponse += "HTTP/1.1 200 OK\r\n";
+              httpResponse += "Content-type:text/plain\r\n\r\n";
+              httpResponse += WiFi.localIP().toString();
+              httpResponse += "\r\n";
+              client.println( httpResponse );
+              client.stop();
+              wifiStatus = STATE_WIFI_IDLE;
+              currentLine = "";
+              //cntrPackets++;
+            }
+
             else if( currentLine.startsWith("Host:") )
             {
               //Serial.println( currentLine );
@@ -910,15 +1017,13 @@ String Webserver_GetRequestGETParameter()
     }
     
   }
-
-  return GETParameter;
 }
 
 
 void loop()
 {
 
-  String GETParameter = Webserver_GetRequestGETParameter();   // look for client request
+  handleHttpRequest();
 
   ArduinoOTA.handle();
 

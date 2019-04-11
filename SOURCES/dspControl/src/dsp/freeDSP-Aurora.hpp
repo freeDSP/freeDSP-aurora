@@ -7,10 +7,18 @@
 #include <QEventLoop>
 #include <QTcpSocket>
 #include <QByteArray>
+#include <QProcess>
 
 class CFreeDspAurora : public QWidget
 {
   Q_OBJECT
+
+public:
+  enum
+  {
+    ACCESS_POINT,
+    LOCAL_WIFI
+  };
 
 private:
   typedef char byte;
@@ -98,15 +106,67 @@ public:
    */
   bool requestUserParameterWifi( QByteArray& userparams );
 
-private:
-  //bool sendByteSecured( char* txbyte );
-  //bool sendByteSecured( byte txbyte );
+  //==============================================================================
+  /*! Request the DSP firmware.
+   *
+   * \param content Firmware data.
+   */
+  bool requestDspFirmwareWifi( QByteArray& content );
 
-  void waitForReplyWifi( void );
+  //==============================================================================
+  /*!
+   */
+  bool detectWifi( void );
+
+  //==============================================================================
+  /*! Returns the IP address of DSP in WiFi network
+   */
+  //QString getIpAddressWifi( void ) { return ipAddress; };
+
+  //==============================================================================
+  /*! Sends the SSID and password for the Wifi network to DSP and stores it nonvolatile.
+   *
+   * \param ssid New SSID
+   * \parma password New password
+   */
+  bool storeSettingsWifi( QString ssid, QString password );
+
+  //==============================================================================
+  /*!
+   */
+  QString getIpAddressWifi( void )
+  {
+    if( connectionType == ACCESS_POINT )
+      return ipAddressAP;
+    else
+      return ipAddressLocal;
+  }
+
+  //==============================================================================
+  /*!
+   */
+  int getConnectionTypeWifi( void ) { return connectionType; }
+
+  //==============================================================================
+  /*!
+   */
+  void setConnectionTypeWifi( int type ) { connectionType = type; }
+
+  //==============================================================================
+  /*! Send a ping to the DSP to see wether it is there.
+   *
+   */
+  bool pingWifi( void );
+
+
+private:
+  //==============================================================================
+  /*!
+   */
+  bool waitForReplyWifi( void );
 
   //==============================================================================
   /*! 
-   *
    */
   bool waitForResponseWifi( void );
 
@@ -115,8 +175,13 @@ private:
    */
   void writeRequestWifi( QByteArray& request );
 
+  //==============================================================================
+  /*!
+   */
+  void writeRequestWifi( QByteArray& request, QString host );
+
 private slots:
-  void readyReadWifi();
+  void readyReadWifi( void );
 
 signals:
   void haveReplyWifi( void );
@@ -125,14 +190,15 @@ public:
   QTcpSocket* tcpSocket;
 
 private:
-//#if !defined( __IOS__ )
-//  QSerialPort serialBT;
-//#endif
+
   bool isOpen = false;
   
   QEventLoop loopWaitForResponseWiFi;
   QByteArray replyWifi;
   QByteArray replyDSP;
+  QString ipAddressAP;
+  QString ipAddressLocal;
+  int connectionType;
 
 };
 
