@@ -55,7 +55,6 @@ CPlugIn4FIRs plugin4FIRs( FS );
 
 CDspPlugin* dspPlugin;
 
-//QTcpSocket* tcpSocket = nullptr;
 QString wifiIpHost;
 int wifiPortHost;
 
@@ -64,7 +63,7 @@ MainWindow::MainWindow( QWidget* parent ) :
   ui( new Ui::MainWindow )
 {
   ui->setupUi(this);
-  #if defined( __IOS__ ) || defined( __WIN__ )
+  #if defined( __IOS__ ) || defined( __WIN__ ) || defined( __LINUX__ )
   ui->menuBar->hide();
   #endif
   //ui->actionWrite_to_DSP->setEnabled( false );
@@ -194,8 +193,8 @@ MainWindow::MainWindow( QWidget* parent ) :
   setWindowTitle( QString("dspControl ").append( VERSION_STR ) );
 
   //tcpSocket = new QTcpSocket(this);
-  //wifiIpHost = "192.168.5.1";
-  wifiIpHost = "192.168.100.62";
+  wifiIpHost = "192.168.5.1";
+  //wifiIpHost = "192.168.100.62";
   //wifiPortHost = 8088;
   wifiPortHost = 80;
   //ipHost = QString( "192.168.5.1" );

@@ -45,9 +45,9 @@ public:
    */
   ~CFreeDspAurora( void );
 
-  bool open( const QString portname );
+  //bool open( const QString portname );
 
-  void close( void );
+  //void close( void );
 
   bool sendParameter( uint16_t reg, float val );
   bool sendParameter( uint16_t reg, uint32_t val );
@@ -114,16 +114,6 @@ public:
   bool requestDspFirmwareWifi( QByteArray& content );
 
   //==============================================================================
-  /*!
-   */
-  bool detectWifi( void );
-
-  //==============================================================================
-  /*! Returns the IP address of DSP in WiFi network
-   */
-  //QString getIpAddressWifi( void ) { return ipAddress; };
-
-  //==============================================================================
   /*! Sends the SSID and password for the Wifi network to DSP and stores it nonvolatile.
    *
    * \param ssid New SSID
@@ -163,7 +153,7 @@ private:
   //==============================================================================
   /*!
    */
-  bool waitForReplyWifi( void );
+  bool waitForReplyWifi( int msec = 5000 );
 
   //==============================================================================
   /*! 
@@ -191,7 +181,7 @@ public:
 
 private:
 
-  bool isOpen = false;
+ // bool isOpen = false;
   
   QEventLoop loopWaitForResponseWiFi;
   QByteArray replyWifi;
@@ -199,6 +189,7 @@ private:
   QString ipAddressAP;
   QString ipAddressLocal;
   int connectionType;
+  bool replyCompleteWifi;
 
 };
 

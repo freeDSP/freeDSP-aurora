@@ -1,7 +1,7 @@
 /*
- * File:           E:\Documents\KiCAD\projekte\freeDSP\freeDSP-Lumiere-master\SIGMASTUDIO\8channels\8channels_IC_1_PARAM.h
+ * File:           E:\Documents\freeDSP\freeDSP-aurora\SOURCES\SIGMASTUDIO\8channels\8channels_IC_1_PARAM.h
  *
- * Created:        Wednesday, October 31, 2018 4:30:26 PM
+ * Created:        Tuesday, January 01, 2019 7:44:06 PM
  * Description:    8channels:IC 1 parameter RAM definitions.
  *
  * This software is distributed in the hope that it will be useful,
@@ -14,7 +14,7 @@
  * are intended for resale to audio product end users. This software
  * may not be distributed whole or in any part to third parties.
  *
- * Copyright ©2018 Analog Devices, Inc. All rights reserved.
+ * Copyright ©2019 Analog Devices, Inc. All rights reserved.
  */
 #ifndef __8CHANNELS_IC_1_PARAM_H__
 #define __8CHANNELS_IC_1_PARAM_H__
