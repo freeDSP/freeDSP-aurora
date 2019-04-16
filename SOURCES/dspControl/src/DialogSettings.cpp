@@ -177,10 +177,107 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
 void DialogSettings::on_pushButtonVerifyPlugin_clicked()
 {
   //----------------------------------------------------------------------------
+  //--- Read and convert the TxBuffer_IC_1.dat file
+  //----------------------------------------------------------------------------
+  #warning Pfad anpassen
+  QFile fileTxBuffer( "/Users/rkn/Documents/freeDSP/freeDSP-aurora/SOURCES/SIGMASTUDIO/8channels/TxBuffer_IC_1.dat" );
+  if( !fileTxBuffer.open( QIODevice::ReadOnly ) )
+  {
+    qDebug()<<__FILE__<<__LINE__<<"Could not open selected file";
+    return;
+  }
+
+  QTextStream in( &fileTxBuffer );
+  QStringList listTxBuffer;
+
+  while( !in.atEnd() )
+  {
+    QString line = in.readLine().simplified();
+    QStringList listStrings = line.split( ',' );
+    for( int ii = 0; ii < listStrings.size(); ii++ )
+    {
+      QString str = listStrings[ii].simplified();
+      if( str.startsWith( "0x" ) )
+        listTxBuffer<<str;
+    }
+  }
+  fileTxBuffer.close();
+
+  //----------------------------------------------------------------------------
+  //--- Read and convert the NumBytes_IC_1.dat file
+  //----------------------------------------------------------------------------
+  #warning Pfad anpassen
+  QFile fileNumBytes( "/Users/rkn/Documents/freeDSP/freeDSP-aurora/SOURCES/SIGMASTUDIO/8channels/NumBytes_IC_1.dat" );
+  if( !fileNumBytes.open( QIODevice::ReadOnly ) )
+  {
+    qDebug()<<__FILE__<<__LINE__<<"Could not open corresponding dat file";
+    return;
+  }
+
+  QTextStream indat( &fileNumBytes );
+  QStringList listNumBytes;
+
+  while( !indat.atEnd() )
+  {
+    QString line = indat.readLine().simplified();
+    QStringList listStrings = line.split( ',' );
+    for( int ii = 0; ii < listStrings.size(); ii++ )
+    {
+      QString str = listStrings[ii].simplified();
+      if( !str.isEmpty() )
+        listNumBytes<<str;
+    }
+  }
+  fileNumBytes.close();
+
+  QByteArray content;
+  uint32_t offset = 0;
+  for( int ii = 0; ii < listNumBytes.size(); ii++ )
+  {
+    uint32_t numbytes = listNumBytes[ii].toUInt( nullptr, 10 );
+
+    content.append( (numbytes >> 24) & 0xFF );
+    content.append( (numbytes >> 16) & 0xFF );
+    content.append( (numbytes >>  8) & 0xFF );
+    content.append(         numbytes & 0xFF );
+
+    for( uint32_t n = 0; n < numbytes; n++ )
+    {
+      if( offset >= static_cast<uint32_t>(listTxBuffer.size()) )
+      {
+        qDebug()<<"TxBuffer too small";
+        return;
+      }
+
+      char data = static_cast<char>( listTxBuffer[offset].toUInt( nullptr, 16 ) & 0xff );
+      content.append( data );
+      offset++;
+    }
+  }
+
+  //----------------------------------------------------------------------------
   //--- Receive data from ESP32 via WiFi
   //----------------------------------------------------------------------------
-  QByteArray packet;
-  dsp->requestDspFirmwareWifi( packet );
+  QByteArray firmware;
+  dsp->requestDspFirmwareWifi( firmware );
+
+  //----------------------------------------------------------------------------
+  //--- Verify DSP firmware
+  //----------------------------------------------------------------------------
+  bool verified = true;
+  for( int ii = 0; ii < content.size(); ii++ )
+  {
+    if( content.at(ii) != firmware.at(ii) )
+    {
+      verified = false;
+      qDebug()<<ii<<":"<<QString::number( content.at(ii), 16 )<<QString::number( firmware.at(ii), 16 );
+    }
+  }
+
+  if( !verified )
+    QMessageBox::critical( this, tr("Error"), tr("DSP Plugin not verfied. You may want to reinstall the DSP plugin."), QMessageBox::Ok ); 
+  else
+    QMessageBox::information( this, tr("Information"), tr("Super! DSP plugin successfully verified."), QMessageBox::Ok );   
 }
 
 #if 0

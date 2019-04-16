@@ -1,7 +1,7 @@
 /*
  * File:           E:\Documents\freeDSP\freeDSP-aurora\SOURCES\SIGMASTUDIO\8channels\8channels_IC_1_REG.h
  *
- * Created:        Tuesday, January 01, 2019 7:44:06 PM
+ * Created:        Monday, April 15, 2019 11:35:43 AM
  * Description:    8channels:IC 1 control register definitions.
  *
  * This software is distributed in the hope that it will be useful,
@@ -313,7 +313,7 @@
 /* SERIAL_BYTE_0_0  - Registers (IC 1) */
 #define REG_SERIAL_BYTE_0_0_IC_1_ADDR             0xF200
 #define REG_SERIAL_BYTE_0_0_IC_1_BYTE             2
-#define REG_SERIAL_BYTE_0_0_IC_1_VALUE            0x914A
+#define REG_SERIAL_BYTE_0_0_IC_1_VALUE            0x93CA
 
 /* SERIAL_BYTE_0_1  - Registers (IC 1) */
 #define REG_SERIAL_BYTE_0_1_IC_1_ADDR             0xF201
@@ -353,7 +353,7 @@
 /* SERIAL_BYTE_4_0  - Registers (IC 1) */
 #define REG_SERIAL_BYTE_4_0_IC_1_ADDR             0xF210
 #define REG_SERIAL_BYTE_4_0_IC_1_BYTE             2
-#define REG_SERIAL_BYTE_4_0_IC_1_VALUE            0x91CA
+#define REG_SERIAL_BYTE_4_0_IC_1_VALUE            0x93CA
 
 /* SERIAL_BYTE_4_1  - Registers (IC 1) */
 #define REG_SERIAL_BYTE_4_1_IC_1_ADDR             0xF211
@@ -3171,9 +3171,9 @@
 #define R58_SERIAL_BYTE_0_0_TDM_MODE_IC_1         0x2    /* 010b	[2:0] */
 #define R58_SERIAL_BYTE_0_0_DATA_FMT_IC_1         0x1    /* 01b	[4:3] */
 #define R58_SERIAL_BYTE_0_0_WORD_LEN_IC_1         0x2    /* 10b	[6:5] */
-#define R58_SERIAL_BYTE_0_0_BCLK_POL_IC_1         0x0    /* 0b	[7] */
+#define R58_SERIAL_BYTE_0_0_BCLK_POL_IC_1         0x1    /* 1b	[7] */
 #define R58_SERIAL_BYTE_0_0_LRCLK_POL_IC_1        0x1    /* 1b	[8] */
-#define R58_SERIAL_BYTE_0_0_LRCLK_MODE_IC_1       0x0    /* 0b	[9] */
+#define R58_SERIAL_BYTE_0_0_LRCLK_MODE_IC_1       0x1    /* 1b	[9] */
 #define R58_SERIAL_BYTE_0_0_BCLK_SRC_IC_1         0x4    /* 100b	[12:10] */
 #define R58_SERIAL_BYTE_0_0_LRCLK_SRC_IC_1        0x4    /* 100b	[15:13] */
 #define R58_SERIAL_BYTE_0_0_TDM_MODE_IC_1_MASK    0x7
@@ -3321,7 +3321,7 @@
 #define R66_SERIAL_BYTE_4_0_WORD_LEN_IC_1         0x2    /* 10b	[6:5] */
 #define R66_SERIAL_BYTE_4_0_BCLK_POL_IC_1         0x1    /* 1b	[7] */
 #define R66_SERIAL_BYTE_4_0_LRCLK_POL_IC_1        0x1    /* 1b	[8] */
-#define R66_SERIAL_BYTE_4_0_LRCLK_MODE_IC_1       0x0    /* 0b	[9] */
+#define R66_SERIAL_BYTE_4_0_LRCLK_MODE_IC_1       0x1    /* 1b	[9] */
 #define R66_SERIAL_BYTE_4_0_BCLK_SRC_IC_1         0x4    /* 100b	[12:10] */
 #define R66_SERIAL_BYTE_4_0_LRCLK_SRC_IC_1        0x4    /* 100b	[15:13] */
 #define R66_SERIAL_BYTE_4_0_TDM_MODE_IC_1_MASK    0x7

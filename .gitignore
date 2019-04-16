@@ -2,3 +2,4 @@ SOURCES/KICAD/freeDSP-aurora.xlsx
 kickstarter
 SOURCES/.vscode
 SOURCES/build-dspControl-Desktop_Qt_5_12_1_clang_64bit-Debug
+SOURCES/build-dspControl-Desktop_Qt_5_12_0_clang_64bit-Debug

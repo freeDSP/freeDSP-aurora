@@ -52,7 +52,14 @@ public:
   bool sendParameter( uint16_t reg, float val );
   bool sendParameter( uint16_t reg, uint32_t val );
 
+  //==============================================================================
+  /*!
+   */
   bool sendParameterWifi( QByteArray content );
+
+  //==============================================================================
+  /*!
+   */
   QByteArray makeParameterForWifi( uint16_t reg, double val );
 
   bool storeRegAddr( uint16_t reg );

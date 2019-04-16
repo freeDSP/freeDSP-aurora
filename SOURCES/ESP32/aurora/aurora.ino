@@ -52,12 +52,12 @@ enum
 enum twifistatus
 {
   STATE_WIFI_IDLE,
-  STATE_WIFI_PUTPARAM,
+  STATE_WIFI_RECEIVE_PARAMETER,
   STATE_WIFI_DSPFW,
   STATE_WIFI_RECEIVE_USERPARAM,
-  STATE_WIFI_RECEIVE_CONFIG,
+  STATE_WIFI_RECEIVE_CONFIG
 
-  STATE_WIFI_RECEIVE_SINGLEPARAM
+  //STATE_WIFI_RECEIVE_SINGLEPARAM
 };
 
 struct tSettings
@@ -755,7 +755,7 @@ void handleHttpRequest()
           //Serial.println( currentLine );
           if( waitForData )
           {
-            if( wifiStatus == STATE_WIFI_PUTPARAM )
+            if( wifiStatus == STATE_WIFI_RECEIVE_PARAMETER )
             {
               //Serial.println( currentLine );
               //if( currentLine.length() < 12 )
@@ -767,8 +767,8 @@ void handleHttpRequest()
               {
                 String strReg = currentLine.substring( sentBytes + 0, sentBytes + 4 );
                 String strData = currentLine.substring( sentBytes + 4, sentBytes + 12 );
-                //Serial.println( strReg );
-                //Serial.println( strData );
+                Serial.println( strReg );
+                Serial.println( strData );
                 uint16_t reg = (uint16_t)strtoul( strReg.c_str(), NULL, 16 );
                 uint32_t data = (uint32_t)strtoul( strData.c_str(), NULL, 16 );
                 
@@ -799,6 +799,7 @@ void handleHttpRequest()
               } 
               //}
               waitForData = false;
+              wifiStatus = STATE_WIFI_IDLE;
               client.stop();
             }
 
@@ -923,12 +924,12 @@ void handleHttpRequest()
           {
             //Serial.println( currentLine );
             //--- New single dsp parameter sent
-            if( currentLine.startsWith("PUT /param") )
+            if( currentLine.startsWith("POST /parameter") )
             {
-              Serial.println( "PUT /param" );
-              wifiStatus = STATE_WIFI_PUTPARAM;
+              Serial.println( "POST /parameter" );
+              wifiStatus = STATE_WIFI_RECEIVE_PARAMETER;
               currentLine = "";
-              cntrPackets++;
+              //cntrPackets++;
             }
 
             //--- New dsp firmware data block
@@ -1149,12 +1150,19 @@ void handleHttpRequest()
                     Serial.println( byte2string2( byteRead ) );
                     httpResponse += byte2string2( byteRead );
                     cntr++;
+                    if( cntr % 1024 == 0 )
+                    {
+                      client.print( httpResponse );
+                      httpResponse = "";
+                    }
                   }
+                  httpResponse += "\r\n";
+                  client.println( httpResponse );
                 }
                 fileDspProgram.close();
               }
-              httpResponse += "\r\n";
-              client.println( httpResponse );
+              //httpResponse += "\r\n";
+              //client.println( httpResponse );
               client.stop();
               wifiStatus = STATE_WIFI_IDLE;
               currentLine = "";
