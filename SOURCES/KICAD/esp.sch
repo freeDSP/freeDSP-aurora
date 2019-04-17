@@ -170,46 +170,20 @@ F 3 "" H 4350 3000 50  0000 C CNN
 	1    4350 3000
 	1    0    0    -1  
 $EndComp
-Text HLabel 4700 2950 0    39   Output ~ 0
-MOSI
-Text HLabel 4700 3050 0    39   Input ~ 0
-MISO
 Text HLabel 4700 3150 0    39   Output ~ 0
-SCK
-Text HLabel 4700 3250 0    39   Output ~ 0
-CS
-Wire Wire Line
-	4700 2950 4800 2950
-Wire Wire Line
-	4700 3050 4800 3050
-Wire Wire Line
-	4700 3150 4800 3150
-Wire Wire Line
-	4700 3250 4800 3250
-Text HLabel 4200 3550 0    39   Output ~ 0
 BCLK
-Text HLabel 4200 3450 0    39   Output ~ 0
+Text HLabel 4700 3050 0    39   Output ~ 0
 LRCK
-Text HLabel 4200 3350 0    39   Output ~ 0
+Text HLabel 4700 2950 0    39   Output ~ 0
 SDATA
-Wire Wire Line
-	4200 3350 4800 3350
-Wire Wire Line
-	4200 3450 4800 3450
-Wire Wire Line
-	4200 3550 4800 3550
-Text HLabel 6400 3650 2    39   Output ~ 0
+Text HLabel 6400 3550 2    39   Output ~ 0
 SCL1
-Wire Wire Line
-	6000 4050 6000 4300
-Text HLabel 6400 3550 2    39   BiDi ~ 0
+Text HLabel 6400 3450 2    39   BiDi ~ 0
 SDA1
 Wire Wire Line
-	6300 3650 6400 3650
-Text HLabel 6400 3450 2    39   Output ~ 0
-~MRST
-Wire Wire Line
 	6300 3550 6400 3550
+Wire Wire Line
+	6300 3450 6400 3450
 $Comp
 L freeDSP-aurora-rescue:Conn_01x04 X501
 U 1 1 5B788B4D
@@ -320,33 +294,33 @@ Rotary Encoder
 $Comp
 L freeDSP-aurora-rescue:GND #PWR0297
 U 1 1 5B789E6E
-P 7850 4150
-F 0 "#PWR0297" H 7850 3900 50  0001 C CNN
-F 1 "GND" H 7850 4000 39  0000 C CNN
-F 2 "" H 7850 4150 50  0000 C CNN
-F 3 "" H 7850 4150 50  0000 C CNN
-	1    7850 4150
+P 7850 4050
+F 0 "#PWR0297" H 7850 3800 50  0001 C CNN
+F 1 "GND" H 7850 3900 39  0000 C CNN
+F 2 "" H 7850 4050 50  0000 C CNN
+F 3 "" H 7850 4050 50  0000 C CNN
+	1    7850 4050
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	7900 4100 7850 4100
-Wire Wire Line
-	7850 4100 7850 4150
-Wire Wire Line
 	7900 4000 7850 4000
 Wire Wire Line
-	7850 4000 7850 3800
+	7850 4000 7850 4050
 Wire Wire Line
-	7900 3900 7500 3900
-Text Label 7500 3900 0    39   ~ 0
+	7900 3900 7850 3900
+Wire Wire Line
+	7850 3900 7850 3700
+Wire Wire Line
+	7900 3800 7500 3800
+Text Label 7500 3800 0    39   ~ 0
 IRREMOTE
-Text Notes 8250 4150 1    39   ~ 0
+Text Notes 8250 4050 1    39   ~ 0
 IR Remote
 Wire Wire Line
 	6300 2550 6700 2550
 Text Label 6700 2550 2    39   ~ 0
 FANCTRL
-Text Label 5200 4500 1    39   ~ 0
+Text Label 4500 3250 0    39   ~ 0
 SENSE
 Wire Wire Line
 	6300 3250 6700 3250
@@ -367,25 +341,19 @@ IRREMOTE
 $Comp
 L freeDSP-aurora-rescue:Conn_01x03 X503
 U 1 1 5B7966B4
-P 8100 4000
-F 0 "X503" H 8100 4200 39  0000 C CNN
-F 1 "Conn_01x03" H 8100 3800 39  0001 C CNN
-F 2 "rklib:Molex_PicoBlade_530470310" H 8100 4000 50  0001 C CNN
-F 3 "" H 8100 4000 50  0001 C CNN
-F 4 "PB-01x03" H 0   0   50  0001 C CNN "Value1"
-F 5 "-" H 0   0   50  0001 C CNN "Value2"
-F 6 "WM1732-ND" H 0   0   50  0001 C CNN "digikey"
-F 7 "Molex, LLC" H 0   0   50  0001 C CNN "Manufacturer"
-F 8 "0530470310" H 0   0   50  0001 C CNN "pn"
-	1    8100 4000
+P 8100 3900
+F 0 "X503" H 8100 4100 39  0000 C CNN
+F 1 "Conn_01x03" H 8100 3700 39  0001 C CNN
+F 2 "rklib:Molex_PicoBlade_530470310" H 8100 3900 50  0001 C CNN
+F 3 "" H 8100 3900 50  0001 C CNN
+F 4 "PB-01x03" H 0   -100 50  0001 C CNN "Value1"
+F 5 "-" H 0   -100 50  0001 C CNN "Value2"
+F 6 "WM1732-ND" H 0   -100 50  0001 C CNN "digikey"
+F 7 "Molex, LLC" H 0   -100 50  0001 C CNN "Manufacturer"
+F 8 "0530470310" H 0   -100 50  0001 C CNN "pn"
+	1    8100 3900
 	1    0    0    1   
 $EndComp
-Text HLabel 5900 4300 3    39   Output ~ 0
-SCL2
-Text HLabel 6000 4300 3    39   BiDi ~ 0
-SDA2
-Wire Wire Line
-	6300 3450 6400 3450
 Wire Wire Line
 	6350 2450 6350 4100
 Wire Wire Line
@@ -403,158 +371,52 @@ Wire Wire Line
 $Comp
 L Connector_Generic:Conn_01x06 X504
 U 1 1 5BE7CB1C
-P 7750 5200
-F 0 "X504" H 7600 4800 39  0000 L CNN
-F 1 "HDR_01x06" H 7600 4750 39  0000 L CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical" H 7750 5200 50  0001 C CNN
-F 3 "" H 7750 5200 50  0001 C CNN
-F 4 "HDR-01x06" H 0   0   50  0001 C CNN "Value1"
-F 5 "-" H 0   0   50  0001 C CNN "Value2"
-F 6 "S1011EC-06-ND" H 0   0   50  0001 C CNN "digikey"
-F 7 "Sullins Connector Solutions" H 0   0   50  0001 C CNN "Manufacturer"
-F 8 "PRPC006SAAN-RC" H 0   0   50  0001 C CNN "pn"
-	1    7750 5200
+P 8100 4700
+F 0 "X504" H 7950 4300 39  0000 L CNN
+F 1 "HDR_01x06" H 7950 4250 39  0000 L CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical" H 8100 4700 50  0001 C CNN
+F 3 "" H 8100 4700 50  0001 C CNN
+F 4 "HDR-01x06" H 350 -500 50  0001 C CNN "Value1"
+F 5 "-" H 350 -500 50  0001 C CNN "Value2"
+F 6 "S1011EC-06-ND" H 350 -500 50  0001 C CNN "digikey"
+F 7 "Sullins Connector Solutions" H 350 -500 50  0001 C CNN "Manufacturer"
+F 8 "PRPC006SAAN-RC" H 350 -500 50  0001 C CNN "pn"
+	1    8100 4700
 	1    0    0    -1  
 $EndComp
-Text Notes 7900 5500 1    39   ~ 0
-FTDI Connector
+Text Notes 8250 4900 1    39   ~ 0
+Program
 $Comp
 L freeDSP-aurora-rescue:GND #PWR0301
 U 1 1 5BE7E28A
-P 7500 5550
-F 0 "#PWR0301" H 7500 5300 50  0001 C CNN
-F 1 "GND" H 7500 5400 39  0000 C CNN
-F 2 "" H 7500 5550 50  0000 C CNN
-F 3 "" H 7500 5550 50  0000 C CNN
-	1    7500 5550
+P 7850 5050
+F 0 "#PWR0301" H 7850 4800 50  0001 C CNN
+F 1 "GND" H 7850 4900 39  0000 C CNN
+F 2 "" H 7850 5050 50  0000 C CNN
+F 3 "" H 7850 5050 50  0000 C CNN
+	1    7850 5050
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	7550 5000 7500 5000
+	7900 4500 7850 4500
 Wire Wire Line
-	7500 5000 7500 5550
+	7850 4500 7850 5000
 Wire Wire Line
-	7550 5100 7300 5100
-Text Label 7300 5100 0    39   ~ 0
-DTR#
+	7900 4600 7650 4600
 Wire Wire Line
-	7550 5200 7300 5200
-Text Label 7300 5200 0    39   ~ 0
-VCC
-Wire Wire Line
-	7550 5300 7300 5300
-Text Label 7300 5300 0    39   ~ 0
+	7900 4700 7650 4700
+Text Label 7650 4700 0    39   ~ 0
 TXD
 Wire Wire Line
-	7550 5400 7300 5400
-Text Label 7300 5400 0    39   ~ 0
+	7900 4800 7650 4800
+Text Label 7650 4800 0    39   ~ 0
 RXD
 Wire Wire Line
-	7550 5500 7300 5500
-Text Label 7300 5500 0    39   ~ 0
-RTS#
-$Comp
-L rk:RES_10K0_1%_0.125W_Thick_0805 R502
-U 1 1 5BE8AACE
-P 5250 5200
-F 0 "R502" H 5250 5200 39  0000 C CNN
-F 1 "RES_10K0_1%_0.125W_Thick_0805" H 5250 5025 39  0001 C CNN
-F 2 "rklib:C0805-RES" H 5250 4975 39  0001 C CNN
-F 3 "" H 5250 5200 50  0000 C CNN
-F 4 "10K0" H 5250 5125 39  0000 C CNN "Value1"
-F 5 "1% 0.125W Thick" H 5250 5075 39  0001 C CNN "Value2"
-F 6 "311-10.0KCRCT-ND" H 5250 4900 39  0001 C CNN "digikey"
-F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
-F 8 "RC0805FR-0710KL" H 0   0   50  0001 C CNN "pn"
-	1    5250 5200
-	1    0    0    -1  
-$EndComp
-$Comp
-L rk:RES_10K0_1%_0.125W_Thick_0805 R503
-U 1 1 5BE8AD50
-P 5250 5750
-F 0 "R503" H 5250 5750 39  0000 C CNN
-F 1 "RES_10K0_1%_0.125W_Thick_0805" H 5250 5575 39  0001 C CNN
-F 2 "rklib:C0805-RES" H 5250 5525 39  0001 C CNN
-F 3 "" H 5250 5750 50  0000 C CNN
-F 4 "10K0" H 5250 5675 39  0000 C CNN "Value1"
-F 5 "1% 0.125W Thick" H 5250 5625 39  0001 C CNN "Value2"
-F 6 "311-10.0KCRCT-ND" H 5250 5450 39  0001 C CNN "digikey"
-F 7 "Yageo" H 0   0   50  0001 C CNN "Manufacturer"
-F 8 "RC0805FR-0710KL" H 0   0   50  0001 C CNN "pn"
-	1    5250 5750
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:Q_NPN_BEC Q501
-U 1 1 5BE7DB1D
-P 5600 5200
-F 0 "Q501" H 5791 5238 39  0000 L CNN
-F 1 "Q_SS8050-G" H 5791 5155 39  0001 L CNN
-F 2 "Package_TO_SOT_SMD:SOT-23" H 5800 5300 50  0001 C CNN
-F 3 "" H 5600 5200 50  0001 C CNN
-F 4 "SS8050-G" H 5791 5163 39  0000 L CNN "Value1"
-F 5 "-" H 5600 5200 50  0001 C CNN "Value2"
-F 6 "641-1790-1-ND" H 5600 5200 39  0001 C CNN "digikey"
-F 7 "Comchip Technology" H 0   0   50  0001 C CNN "Manufacturer"
-F 8 "SS8050-G" H 0   0   50  0001 C CNN "pn"
-	1    5600 5200
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	5700 5400 5700 5450
-$Comp
-L Device:Q_NPN_BEC Q502
-U 1 1 5BE7F899
-P 5600 5750
-F 0 "Q502" H 5800 5750 39  0000 L CNN
-F 1 "Q_SS8050-G" H 5791 5705 39  0001 L CNN
-F 2 "Package_TO_SOT_SMD:SOT-23" H 5800 5850 50  0001 C CNN
-F 3 "" H 5600 5750 50  0001 C CNN
-F 4 "SS8050-G" H 5800 5800 39  0000 L CNN "Value1"
-F 5 "-" H 5600 5750 50  0001 C CNN "Value2"
-F 6 "641-1790-1-ND" H 5600 5750 39  0001 C CNN "digikey"
-F 7 "Comchip Technology" H 0   0   50  0001 C CNN "Manufacturer"
-F 8 "SS8050-G" H 0   0   50  0001 C CNN "pn"
-	1    5600 5750
-	1    0    0    1   
-$EndComp
-Wire Wire Line
-	5700 5550 5700 5500
-Wire Wire Line
-	5700 5000 5700 4950
-Wire Wire Line
-	5700 4950 5950 4950
-Wire Wire Line
-	5700 5950 5700 6000
-Wire Wire Line
-	5700 6000 5950 6000
-Text Label 5950 4950 2    39   ~ 0
+	7900 4900 7650 4900
+Text Label 7650 4600 0    39   ~ 0
 EN
-Text Label 5950 6000 2    39   ~ 0
+Text Label 7650 4900 0    39   ~ 0
 IO0
-Wire Wire Line
-	5000 5500 5000 5200
-Wire Wire Line
-	5000 5200 5100 5200
-Wire Wire Line
-	5000 5500 5700 5500
-Wire Wire Line
-	5100 5750 5050 5750
-Wire Wire Line
-	5050 5750 5050 5450
-Wire Wire Line
-	5050 5450 5700 5450
-Wire Wire Line
-	5000 5200 4800 5200
-Connection ~ 5000 5200
-Text Label 4800 5200 0    39   ~ 0
-DTR#
-Text Label 4800 5750 0    39   ~ 0
-RTS#
-Wire Wire Line
-	4800 5750 5050 5750
-Connection ~ 5050 5750
 Text Label 4600 2650 0    39   ~ 0
 EN
 Text Label 6700 3750 2    39   ~ 0
@@ -803,12 +665,12 @@ $EndComp
 $Comp
 L power:VD #PWR0150
 U 1 1 5D54F10A
-P 7850 3800
-F 0 "#PWR0150" H 7850 3650 50  0001 C CNN
-F 1 "VD" H 7850 3950 39  0000 C CNN
-F 2 "" H 7850 3800 50  0001 C CNN
-F 3 "" H 7850 3800 50  0001 C CNN
-	1    7850 3800
+P 7850 3700
+F 0 "#PWR0150" H 7850 3550 50  0001 C CNN
+F 1 "VD" H 7850 3850 39  0000 C CNN
+F 2 "" H 7850 3700 50  0001 C CNN
+F 3 "" H 7850 3700 50  0001 C CNN
+	1    7850 3700
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -841,7 +703,29 @@ F 8 "GRM21BR61A226ME51L" H 750 -3350 50  0001 C CNN "pn"
 	0    1    1    0   
 $EndComp
 Wire Wire Line
-	5900 4050 5900 4300
+	4800 3250 4500 3250
 Wire Wire Line
-	5200 4050 5200 4500
+	4700 3150 4800 3150
+Wire Wire Line
+	4700 3050 4800 3050
+Wire Wire Line
+	4700 2950 4800 2950
+NoConn ~ 4800 3350
+NoConn ~ 4800 3450
+NoConn ~ 4800 3550
+NoConn ~ 4800 3750
+NoConn ~ 5200 4050
+NoConn ~ 4800 3650
+NoConn ~ 5900 4050
+NoConn ~ 6000 4050
+NoConn ~ 6300 3650
+Text HLabel 6500 2650 2    39   Output ~ 0
+~MRST
+Wire Wire Line
+	6300 2650 6500 2650
+Wire Wire Line
+	7900 5000 7850 5000
+Connection ~ 7850 5000
+Wire Wire Line
+	7850 5000 7850 5050
 $EndSCHEMATC
