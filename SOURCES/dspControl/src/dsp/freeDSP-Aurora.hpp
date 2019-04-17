@@ -8,6 +8,7 @@
 #include <QTcpSocket>
 #include <QByteArray>
 #include <QProcess>
+#include <QProgressBar>
 
 class CFreeDspAurora : public QWidget
 {
@@ -86,7 +87,7 @@ public:
   /*! Waits for an ACK from WiFi connection.
    *
    */
-  bool waitForAckWifi( void );
+  //bool waitForAckWifi( void );
 
   //============================================================================
   /*! Requests the PID of current installed DSP-Plugin
@@ -117,8 +118,9 @@ public:
   /*! Request the DSP firmware.
    *
    * \param content Firmware data.
+   * \param progress Pointer to progress dialog
    */
-  bool requestDspFirmwareWifi( QByteArray& content );
+  bool requestDspFirmwareWifi( QByteArray& content, QProgressBar* progress = nullptr );
 
   //==============================================================================
   /*! Sends the SSID and password for the Wifi network to DSP and stores it nonvolatile.
@@ -197,6 +199,7 @@ private:
   QString ipAddressLocal;
   int connectionType;
   bool replyCompleteWifi;
+  QProgressBar* ptrProgressBar;
 
 };
 
