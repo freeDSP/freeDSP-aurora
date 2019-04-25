@@ -80,9 +80,13 @@ void QGain::sendDspParameter( void )
   double gain = static_cast<double>(sliderMainVolume->value());
   if( !bypass )
     gain += ui->doubleSpinBoxGain->value();
-  qDebug()<<sliderMainVolume->value()<<ui->doubleSpinBoxGain->value()<<gain;
+  //qDebug()<<sliderMainVolume->value()<<ui->doubleSpinBoxGain->value()<<gain;
   float val = static_cast<float>(pow( 10.0, gain/20.0 ));
-  dsp->sendParameter( addr[kTargetGain], val );
+  //dsp->sendParameter( addr[kTargetGain], val );
+
+  QByteArray content;
+  content.append( dsp->makeParameterForWifi( addr[kTargetGain], val ) );
+  dsp->sendParameterWifi( content );
 }
 
 //------------------------------------------------------------------------------

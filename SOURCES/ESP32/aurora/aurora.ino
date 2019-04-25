@@ -52,12 +52,12 @@ enum
 enum twifistatus
 {
   STATE_WIFI_IDLE,
-  STATE_WIFI_PUTPARAM,
+  STATE_WIFI_RECEIVE_PARAMETER,
   STATE_WIFI_DSPFW,
   STATE_WIFI_RECEIVE_USERPARAM,
-  STATE_WIFI_RECEIVE_CONFIG,
+  STATE_WIFI_RECEIVE_CONFIG
 
-  STATE_WIFI_RECEIVE_SINGLEPARAM
+  //STATE_WIFI_RECEIVE_SINGLEPARAM
 };
 
 struct tSettings
@@ -618,17 +618,17 @@ void setup()
   if( !WiFi.softAPConfig( IPAddress(192, 168, 5, 1), IPAddress(192, 168, 5, 1), IPAddress(255, 255, 255, 0) ) )
       Serial.println("AP Config Failed");
 
-  Serial.println( Settings.ssid.c_str() );
-  Serial.println( Settings.password.c_str() );
+  //Serial.println( Settings.ssid.c_str() );
+  //Serial.println( Settings.password.c_str() );
   WiFi.begin( Settings.ssid.c_str(), Settings.password.c_str() );
 
   int cntrConnect = 0;
-  /*while( WiFi.waitForConnectResult() != WL_CONNECTED && cntrConnect < 3 )
+  while( WiFi.waitForConnectResult() != WL_CONNECTED && cntrConnect < 3 )
   {
     Serial.println("WiFi Connection Failed! Trying again..");
     //delay(1000);
     cntrConnect++;
-  }*/
+  }
   
   // print the ESP32 IP-Address
   Serial.print( "Soft AP IP:" );
@@ -755,7 +755,7 @@ void handleHttpRequest()
           //Serial.println( currentLine );
           if( waitForData )
           {
-            if( wifiStatus == STATE_WIFI_PUTPARAM )
+            if( wifiStatus == STATE_WIFI_RECEIVE_PARAMETER )
             {
               //Serial.println( currentLine );
               //if( currentLine.length() < 12 )
@@ -767,8 +767,8 @@ void handleHttpRequest()
               {
                 String strReg = currentLine.substring( sentBytes + 0, sentBytes + 4 );
                 String strData = currentLine.substring( sentBytes + 4, sentBytes + 12 );
-                //Serial.println( strReg );
-                //Serial.println( strData );
+                Serial.println( strReg );
+                Serial.println( strData );
                 uint16_t reg = (uint16_t)strtoul( strReg.c_str(), NULL, 16 );
                 uint32_t data = (uint32_t)strtoul( strData.c_str(), NULL, 16 );
                 
@@ -799,6 +799,7 @@ void handleHttpRequest()
               } 
               //}
               waitForData = false;
+              wifiStatus = STATE_WIFI_IDLE;
               client.stop();
             }
 
@@ -923,12 +924,12 @@ void handleHttpRequest()
           {
             //Serial.println( currentLine );
             //--- New single dsp parameter sent
-            if( currentLine.startsWith("PUT /param") )
+            if( currentLine.startsWith("POST /parameter") )
             {
-              Serial.println( "PUT /param" );
-              wifiStatus = STATE_WIFI_PUTPARAM;
+              Serial.println( "POST /parameter" );
+              wifiStatus = STATE_WIFI_RECEIVE_PARAMETER;
               currentLine = "";
-              cntrPackets++;
+              //cntrPackets++;
             }
 
             //--- New dsp firmware data block

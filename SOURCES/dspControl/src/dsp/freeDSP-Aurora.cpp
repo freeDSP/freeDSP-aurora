@@ -375,7 +375,7 @@ uint32_t convertTo824( double val )
 
 
 //==============================================================================
-/*!
+/*! Prepares a content packet for a parameter
  *
  */
 QByteArray CFreeDspAurora::makeParameterForWifi( uint16_t reg, double val )
@@ -391,6 +391,9 @@ QByteArray CFreeDspAurora::makeParameterForWifi( uint16_t reg, double val )
   content.append( (data >> 8) & 0xFF );
   content.append( data & 0xFF );
 
+  qDebug()<<"CFreeDspAurora::makeParameterForWifi";
+  qDebug()<<val;
+  qDebug()<<QString::number( data, 16 );
   qDebug()<<content.toHex();
   
   return content;
@@ -405,36 +408,28 @@ bool CFreeDspAurora::sendParameterWifi( QByteArray content )
   qDebug()<<"---------------------------------------------------------------";
   qDebug()<<"sendParameterWifi()";
 
-  tcpSocket->abort();
-  tcpSocket->connectToHost( wifiIpHost, wifiPortHost );
-
-  QEventLoop loopConnect;
-  connect( tcpSocket, SIGNAL(connected()), &loopConnect, SLOT(quit()) );
-  // \TODO Add timeout timer
-  #warning Add timeout timer
-  //connect(timeoutTimer, SIGNAL(timeout()), &loop, SLOT(quit()));
-  loopConnect.exec();
-
-  QString requestString = QString("PUT /param HTTP/1.1\r\nHost: ")
-                        + wifiIpHost
-                        + QString("\r\nContent-type:application/octet-stream\r\nContent-length: ")
-                        + QString::number( content.size()*2 )
-                        + QString("\r\n\r\n");
+  QString requestString = QString("POST /parameter HTTP/1.1\r\n")
+                        + QString("Host: ") + wifiIpHost + QString("\r\n")
+                        + QString("Content-type:text/plain\r\n")
+                        + QString("Content-length: ") +  QString::number( content.size()*2 ) + QString("\r\n")
+                        + QString("\r\n");
   QByteArray request;
-  request.append( requestString );
+  request.append( requestString );  
   request.append( content.toHex() );  
   request.append( "\r\n" );
-  
-  qDebug()<<QString( request );
-  tcpSocket->write( request );
 
-  QEventLoop loopDisconnect;
-  connect( tcpSocket, SIGNAL(disconnected()), &loopDisconnect, SLOT(quit()) );
-  // \TODO Add timeout timer
-  #warning Add timeout timer
-  //connect(timeoutTimer, SIGNAL(timeout()), &loop, SLOT(quit()));
-  loopDisconnect.exec();
-
+  writeRequestWifi( request );
+/*
+  if( !waitForReplyWifi() )
+    return false;
+  else
+  {
+    qDebug()<<QString( replyDSP );
+    QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+    //! \TODO Test for ACK.
+    return true;
+  }
+*/
   return true;
 }
 
