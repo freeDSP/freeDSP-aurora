@@ -17,6 +17,13 @@ public:
   explicit DialogSettings( CFreeDspAurora* ptrdsp, QWidget* parent = nullptr );
   ~DialogSettings();
 
+private:
+  //============================================================================
+  /*!
+   *
+   */
+  void enableGui( bool state );
+
 private slots:
   void on_pushButtonInstallPlugin_clicked();
 

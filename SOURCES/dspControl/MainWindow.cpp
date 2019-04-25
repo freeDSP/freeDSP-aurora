@@ -22,7 +22,7 @@
 #include "PlugInHomeCinema71.hpp"
 #include "PlugIn4FIRs.hpp"
 
-#define VERSION_STR "0.9.3"
+#define VERSION_STR "0.9.4"
 #define FS 48000.0
 
 using namespace Vektorraum;

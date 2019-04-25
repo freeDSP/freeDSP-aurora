@@ -26,6 +26,7 @@ CFreeDspAurora::CFreeDspAurora( QWidget* parent ) : QWidget( parent )
   ipAddressLocal = "0.0.0.0";
   connectionType = LOCAL_WIFI;
   
+  ptrProgressBar = nullptr;
 }
 
 //==============================================================================
@@ -36,147 +37,6 @@ CFreeDspAurora::~CFreeDspAurora( void )
 {
 
 }
-
-//==============================================================================
-/*!
- *
- */
-#if 0
-bool CFreeDspAurora::sendByteSecured( char* txbyte )
-{
-  qDebug()<<"TX:"<<"0x" + QString::number( static_cast<uint32_t>(*txbyte), 16 );
-
-  if( !isOpen )
-    return false;
-
-//#if !defined( __IOS__ )
-  const qint64 bytesWritten = serialBT.write( txbyte, 1 );
-  if (bytesWritten == -1)
-  {
-    qDebug()<<"Failed to write the data"<<serialBT.errorString();
-    return false;
-  }
-  else if( bytesWritten != 1 )
-  {
-    qDebug()<<"Failed to write all the data"<<serialBT.errorString();
-    return false;
-  }
-  else if( !serialBT.waitForBytesWritten() )
-  {
-    qDebug()<<"Operation timed out or an error occurred"<<serialBT.errorString();
-    return false;
-  }
-
-  serialBT.waitForReadyRead();
-  QByteArray rxData = serialBT.readAll();
-  char rxByte = rxData[0];
-  //qDebug()<<"RX:"<<"0x" + QString::number( ((int)rxByte & 0xFF), 16 );
-
-  if( *txbyte != rxByte )
-  {
-    qDebug()<<"[ERROR] Received wrong byte. Connection seems corrupted.";
-    return false;
-  }
-
-  return true;
-}
-#endif
-
-//==============================================================================
-/*!
- *
- */
-#if 0
-bool CFreeDspAurora::sendByteSecured( byte txbyte )
-{
-  qDebug()<<"TX:"<<"0x" + QString::number( static_cast<uint32_t>(txbyte), 16 );
-
-  if( !isOpen )
-    return false;
-
-//#if !defined( __IOS__ )
-  const qint64 bytesWritten = serialBT.write( &txbyte, 1 );
-  if (bytesWritten == -1)
-  {
-    qDebug()<<"Failed to write the data"<<serialBT.errorString();
-    return false;
-  }
-  else if( bytesWritten != 1 )
-  {
-    qDebug()<<"Failed to write all the data"<<serialBT.errorString();
-    return false;
-  }
-  else if( !serialBT.waitForBytesWritten() )
-  {
-    qDebug()<<"Operation timed out or an error occurred"<<serialBT.errorString();
-    return false;
-  }
-
-  serialBT.waitForReadyRead();
-  QByteArray rxData = serialBT.readAll();
-  char rxByte = rxData[0];
-  //qDebug()<<"RX:"<<"0x" + QString::number( ((int)rxByte & 0xFF), 16 );
-
-  if( txbyte != rxByte )
-  {
-    qDebug()<<"[ERROR] Received wrong byte. Connection seems corrupted.";
-    return false;
-  }
-
-  return true;
-
-}
-#endif
-
-//==============================================================================
-/*!
- *
- */
-#if 0
-bool CFreeDspAurora::open( const QString portname )
-{
-  isOpen = false;
-
-  #if !defined( DEMO )
-  //----------------------------------------------------------------------------
-  //--- Open the serial port Bluetooth device
-  //----------------------------------------------------------------------------
-  serialBT.setPortName( portname );
-  serialBT.open( QIODevice::ReadWrite );
-  serialBT.setBaudRate( QSerialPort::Baud115200 );
-  serialBT.setDataBits( QSerialPort::Data8 );
-  serialBT.setParity( QSerialPort::NoParity );
-  serialBT.setStopBits( QSerialPort::OneStop );
-  serialBT.setFlowControl( QSerialPort::NoFlowControl );
-  if( !serialBT.isOpen() )
-  {
-    if( !serialBT.open( QIODevice::ReadWrite ) )
-    {
-      qDebug()<<"Failed to open serial port"<<serialBT.errorString();
-      return false;
-    }
-  }
-  qDebug()<<"Opened serial port freeDSP-Aurora";
-  isOpen = true;
-  #endif
-
-  return true;
-}
-
-//==============================================================================
-/*!
- *
- */
-void CFreeDspAurora::close( void )
-{
-  isOpen = false;
-#if 0
-  #if !defined( DEMO )
-  serialBT.close();
-  #endif
-#endif
-}
-#endif
 
 //==============================================================================
 /*!
@@ -324,32 +184,10 @@ bool CFreeDspAurora::storeValue( uint32_t val )
   return true;
 }
 
-#if 0
 //==============================================================================
 /*!
  *
  */
-bool CFreeDspAurora::beginStoreParams( uint32_t numbytes )
-{
-  qDebug()<<"---------------------------------------------------------------";
-  qDebug()<<"beginStoreParams()";
-
-  char cmd = SAVEPARAMS;
-  if( !sendByteSecured( &cmd ) )
-    return false;
-
-  if( !sendByteSecured( (numbytes >> 24) & 0xFF ) )
-    return false;
-  if( !sendByteSecured( (numbytes >> 16) & 0xFF ) )
-    return false;
-  if( !sendByteSecured( (numbytes >> 8) & 0xFF ) )
-    return false;
-  if( !sendByteSecured( numbytes & 0xFF ) )
-    return false;
-  return true;
-}
-#endif
-
 uint32_t convertTo824( double val )
 {
   double fractpart, intpart;
@@ -521,6 +359,7 @@ bool CFreeDspAurora::finishDspFirmwareWifi( uint32_t totalTransmittedBytes )
 /*! Waits for an ACK from WiFi connection.
  *
  */
+#if 0
 bool CFreeDspAurora::waitForAckWifi( void )
 {
   QEventLoop loopWaitForAck;
@@ -540,6 +379,7 @@ bool CFreeDspAurora::waitForAckWifi( void )
     return false;
   }
 }
+#endif
 
 //==============================================================================
 /*! Requests the PID of current installed DSP-Plugin
@@ -733,10 +573,15 @@ bool CFreeDspAurora::requestUserParameterWifi( QByteArray& userparams )
 void CFreeDspAurora::readyReadWifi( void )
 {
   replyWifi.append( tcpSocket->readAll() );
-  qDebug()<<"readyReadWifi"; //<<QString( replyWifi );
+  /*if( ptrProgressBar != nullptr )
+    qDebug()<<"readyReadWifi Progress"<<ptrProgressBar->value();
+  else
+    qDebug()<<"readyReadWifi";*/
   QString str = QString( replyWifi );
   QStringList listReply = str.split( QRegExp("\\s+") );
   //qDebug()<<str.mid( str.length()-2, 2 );
+  if( ptrProgressBar != nullptr )
+    ptrProgressBar->setValue( replyWifi.size() );
   if( (listReply.size() > 4) && (str.mid( str.length()-2, 2 ) == QString("\r\n")) )
   {
     qDebug()<<QString( replyWifi );
@@ -814,8 +659,9 @@ void CFreeDspAurora::writeRequestWifi( QByteArray& request, QString host )
 /*! Request the DSP firmware.
  *
  * \param firmware Firmware data.
+ * \param progress Pointer to progress bar.
  */
-bool CFreeDspAurora::requestDspFirmwareWifi( QByteArray& firmware )
+bool CFreeDspAurora::requestDspFirmwareWifi( QByteArray& firmware, QProgressBar* progress )
 {
   qDebug()<<"---------------------------------------------------------------";
   qDebug()<<"requestDspFirmwareWifi";
@@ -840,7 +686,7 @@ bool CFreeDspAurora::requestDspFirmwareWifi( QByteArray& firmware )
     qDebug()<<QString( replyDSP );
     QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
     totalBytes = listReply.at(4).toUInt();
-
+    
     if( totalBytes > 0 )
     {
       requestString = QString("GET /dspfw HTTP/1.1\r\nHost: ")
@@ -848,10 +694,12 @@ bool CFreeDspAurora::requestDspFirmwareWifi( QByteArray& firmware )
                     + QString("\r\n\r\n");
       request.clear();
       request.append( requestString );
+      ptrProgressBar = progress;
       writeRequestWifi( request );
       if( !waitForReplyWifi(600000) )
       {
         QMessageBox::critical( this, tr("Error"), tr("Uuups, could not receive the DSP firmware. Please double check everything and try again."), QMessageBox::Ok ); 
+        ptrProgressBar = nullptr;
         return false;
       }
       else
@@ -860,6 +708,7 @@ bool CFreeDspAurora::requestDspFirmwareWifi( QByteArray& firmware )
         qDebug()<<"Received dspfw"; //<<listReply.at(4).size();
         QString str = listReply.at(4);
         int offset = 0;
+        ptrProgressBar = nullptr;
         
         while( offset < str.length() )
         {

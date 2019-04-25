@@ -71,6 +71,9 @@ QDialog
 {
   background-color: #111111;
   color: white;
+  border-left: 1px solid white;
+  border-right: 1px solid white;
+  border-bottom: 1px solid white;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -168,6 +171,34 @@ QMenu::item
 QMenu::item:selected
 {
   background: #393939;
+}
+
+/* -------------------------------------------------------------------------- */
+/* QPushButton                                                                */
+/* -------------------------------------------------------------------------- */
+QPushButton
+{
+  background-color: #111111;
+  color: white;
+  border: 1px solid #c1c1c1;
+  border-radius: 2px;
+  padding: 4px;
+}
+QPushButton:hover
+{
+  background-color: #393939;
+}
+QPushButton:disabled
+{
+  color: #393939;
+}
+
+/* -------------------------------------------------------------------------- */
+/* QRadioButton                                                               */
+/* -------------------------------------------------------------------------- */
+QRadioButton
+{
+  color: white;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -340,6 +371,10 @@ QPushButton#pushButtonBypass
 {
   background-color: transparent;
   color: white;
+  border: 0px solid black;
+  border-radius: 0px;
+  margin: 0px;
+  padding: 0px;
 }
 
 QPushButton#pushButtonBypass:hover

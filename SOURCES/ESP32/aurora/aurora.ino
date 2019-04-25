@@ -1150,12 +1150,19 @@ void handleHttpRequest()
                     Serial.println( byte2string2( byteRead ) );
                     httpResponse += byte2string2( byteRead );
                     cntr++;
+                    if( cntr % 1024 == 0 )
+                    {
+                      client.print( httpResponse );
+                      httpResponse = "";
+                    }
                   }
+                  httpResponse += "\r\n";
+                  client.println( httpResponse );
                 }
                 fileDspProgram.close();
               }
-              httpResponse += "\r\n";
-              client.println( httpResponse );
+              //httpResponse += "\r\n";
+              //client.println( httpResponse );
               client.stop();
               wifiStatus = STATE_WIFI_IDLE;
               currentLine = "";
