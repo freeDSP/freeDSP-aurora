@@ -302,7 +302,10 @@ bool CFreeDspAurora::finishDspParameterWifi( uint32_t totalTransmittedBytes )
     if( totalTransmittedBytes == totalReceivedBytes )
       return true;
     else
+    {
+      qDebug()<<"[ERROR] Transmitted "<<totalTransmittedBytes*2<<"but DSP received "<<totalReceivedBytes<<"bytes.";
       return false;
+    }
   }
 }
 

@@ -478,8 +478,11 @@ void MainWindow::on_actionWrite_to_DSP_triggered()
   }
   progress.setValue( dspparams.size() );
 
-  if( !dsp.finishDspParameterWifi( totalTransmittedBytes ) )
+  if( !dsp.finishDspParameterWifi( totalTransmittedBytes*2 ) )
+  {
     QMessageBox::critical( this, tr("Error"), tr("Uups, something went wrong. Please double check everything and try again."), QMessageBox::Ok );  
+    return;
+  }
 
   qDebug()<<"Success";
   qDebug()<<"File size:"<<dspparams.size() / 1024<<"KiB";
