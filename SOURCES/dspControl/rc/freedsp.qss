@@ -21,7 +21,7 @@ QComboBox
 {
   background-color: transparent;
   color: white;
-  border: 1px solid black;
+  border: 1px solid #c1c1c1;
   border-radius: 2px;
   padding: 2px;
 }

@@ -21,17 +21,15 @@ public:
     LOCAL_WIFI
   };
 
-private:
-  typedef char byte;
-
-  enum
+  enum tdspluginid
   {
-    RESET      = 0x01,
-    NEWFW      = 0x02,
-    VERIFY     = 0x03,
-    PARAM      = 0x04,
-    SAVEPARAMS = 0x05
+    PLUGIN_8CHANNELS    = 0x01,
+    PLUGIN_HOMECINEMA71 = 0x02,
+    PLUGIN_4FIRS        = 0x03
   };
+
+private:
+  typedef uint8_t byte;
 
 public:
   //============================================================================
@@ -46,28 +44,22 @@ public:
    */
   ~CFreeDspAurora( void );
 
-  //bool open( const QString portname );
-
-  //void close( void );
-
-  bool sendParameter( uint16_t reg, float val );
-  bool sendParameter( uint16_t reg, uint32_t val );
-
-  //==============================================================================
+  //============================================================================
   /*!
    */
   bool sendParameterWifi( QByteArray content );
 
-  //==============================================================================
+  //============================================================================
   /*!
    */
-  QByteArray makeParameterForWifi( uint16_t reg, double val );
+  QByteArray makeParameterForWifi( uint16_t reg, float val );
 
-  bool storeRegAddr( uint16_t reg );
-  bool storeValue( float val );
-  bool storeValue( uint32_t val );
+  //============================================================================
+  /*! Prepares a content packet for a parameter
+   *
+   */
+  QByteArray makeParameterForWifi( uint16_t reg, int32_t val );
 
-  //bool beginStoreParams( uint32_t numbytes );
 
   //============================================================================
   /*! Starts the transfer of a new dsp firmware.
@@ -82,12 +74,6 @@ public:
    *  \param totalTransmittedBytes Number of transmitted bytes.
    */
   bool finishDspFirmwareWifi( uint32_t totalTransmittedBytes );
-
-  //============================================================================
-  /*! Waits for an ACK from WiFi connection.
-   *
-   */
-  //bool waitForAckWifi( void );
 
   //============================================================================
   /*! Requests the PID of current installed DSP-Plugin
@@ -114,7 +100,20 @@ public:
    */
   bool requestUserParameterWifi( QByteArray& userparams );
 
-  //==============================================================================
+  //============================================================================
+  /*! Starts the transfer of a dsp parameter block.
+   *
+   * \param content Data block of dsp parameter.
+   */
+  bool sendDspParameterWifi( QByteArray content );
+
+  //============================================================================
+  /*! Finishes the transfer of dsp parameter file.
+   *
+   */
+  bool finishDspParameterWifi( uint32_t totalTransmittedBytes );
+
+  //============================================================================
   /*! Request the DSP firmware.
    *
    * \param content Firmware data.
@@ -122,7 +121,7 @@ public:
    */
   bool requestDspFirmwareWifi( QByteArray& content, QProgressBar* progress = nullptr );
 
-  //==============================================================================
+  //============================================================================
   /*! Sends the SSID and password for the Wifi network to DSP and stores it nonvolatile.
    *
    * \param ssid New SSID
@@ -130,7 +129,20 @@ public:
    */
   bool storeSettingsWifi( QString ssid, QString password );
 
-  //==============================================================================
+  //============================================================================
+  /*! Sends the PID to DSP and stores it nonvolatile.
+   *
+   * \param pid New PID
+   */
+  bool storePidWifi( uint8_t pid );
+
+  //============================================================================
+  /*! Program the EEPROM
+   *
+   */
+  bool programEepromWifi( void );
+
+  //============================================================================
   /*!
    */
   QString getIpAddressWifi( void )
@@ -141,17 +153,17 @@ public:
       return ipAddressLocal;
   }
 
-  //==============================================================================
+  //============================================================================
   /*!
    */
   int getConnectionTypeWifi( void ) { return connectionType; }
 
-  //==============================================================================
+  //============================================================================
   /*!
    */
   void setConnectionTypeWifi( int type ) { connectionType = type; }
 
-  //==============================================================================
+  //============================================================================
   /*! Send a ping to the DSP to see wether it is there.
    *
    */
@@ -159,27 +171,31 @@ public:
 
 
 private:
-  //==============================================================================
+  //============================================================================
   /*!
    */
   bool waitForReplyWifi( int msec = 5000 );
 
-  //==============================================================================
+  //============================================================================
   /*! 
    */
   bool waitForResponseWifi( void );
 
-  //==============================================================================
+  //============================================================================
   /*!
    */
   void writeRequestWifi( QByteArray& request );
 
-  //==============================================================================
+  //============================================================================
   /*!
    */
   void writeRequestWifi( QByteArray& request, QString host );
 
 private slots:
+  void bytesWrittenWifi( qint64 bytes );
+  void disconnectedWifi( void );
+  void errorWifi( QAbstractSocket::SocketError socketError );
+  void hostFoundWifi( void );
   void readyReadWifi( void );
 
 signals:

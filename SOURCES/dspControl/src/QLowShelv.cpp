@@ -67,7 +67,7 @@ void QLowShelv::update( Vektorraum::tvector<Vektorraum::tfloat> f )
   tfloat a2 = coeffs[kA2];
   tfloat a0 = 1.0;
 
-  H = ( b0 + b1*z + b2*z2 ) / ( a0 + a1*z + a2*z2 );
+  H = ( b0 + b1*z + b2*z2 ) / ( a0 - a1*z - a2*z2 );
 }
 
 //==============================================================================
@@ -109,8 +109,8 @@ void QLowShelv::updateCoeffs( void )
     coeffs[ kB0 ] = b0;
     coeffs[ kB1 ] = b1;
     coeffs[ kB2 ] = b2;
-    coeffs[ kA1 ] = a1;
-    coeffs[ kA2 ] = a2;
+    coeffs[ kA1 ] = (-1.0)*a1;
+    coeffs[ kA2 ] = (-1.0)*a2;
   }
 }
 
@@ -155,7 +155,7 @@ void QLowShelv::on_pushButtonBypass_clicked()
 {
   bypass = ui->pushButtonBypass->isChecked();
   updateCoeffs();
-  //sendDspParameter();
+  sendDspParameter();
   emit valueChanged();
 }
 
@@ -171,13 +171,7 @@ void QLowShelv::sendDspParameter( void )
   content.append( dsp->makeParameterForWifi( addr[kParamB0], static_cast<float>(coeffs[kB0]) ) );
   content.append( dsp->makeParameterForWifi( addr[kParamA2], static_cast<float>(coeffs[kA2]) ) );
   content.append( dsp->makeParameterForWifi( addr[kParamA1], static_cast<float>(coeffs[kA1]) ) );
-  //dsp->sendParameterWifi( content );
-
-  //dsp->sendParameter( addr[kParamB2], static_cast<float>(coeffs[kB2]) );
-  //dsp->sendParameter( addr[kParamB1], static_cast<float>(coeffs[kB1]) );
-  //dsp->sendParameter( addr[kParamB0], static_cast<float>(coeffs[kB0]) );
-  //dsp->sendParameter( addr[kParamA2], static_cast<float>(coeffs[kA2]) );
-  //dsp->sendParameter( addr[kParamA1], static_cast<float>(coeffs[kA1]) );
+  dsp->sendParameterWifi( content );
 }
 
 //==============================================================================
@@ -193,6 +187,7 @@ uint32_t QLowShelv::getNumBytes( void )
 /*!
  *
  */
+/*
 void QLowShelv::writeDspParameter( void )
 {
   dsp->storeRegAddr( addr[kParamB2] );
@@ -206,7 +201,7 @@ void QLowShelv::writeDspParameter( void )
   dsp->storeRegAddr( addr[kParamA1] );
   dsp->storeValue( static_cast<float>(coeffs[kA1]) );
 
-}
+}*/
 
 //==============================================================================
 /*!
@@ -280,4 +275,23 @@ void QLowShelv::setUserParams( QByteArray& userParams, int& idx )
   }
   else
     qDebug()<<"QLowShelv::setUserParams: Not enough data";
+}
+
+//==============================================================================
+/*! Get the parameters in DSP format. The parameters are returned with register 
+ *  address followed by value dword ready to be sent via i2c to DSP.
+ *
+ * \return Byte array with parameters for DSP. 
+ */
+QByteArray QLowShelv::getDspParams( void )
+{
+  QByteArray content;
+
+  content.append( dsp->makeParameterForWifi( addr[kParamB2], static_cast<float>(coeffs[kB2]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB1], static_cast<float>(coeffs[kB1]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB0], static_cast<float>(coeffs[kB0]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA2], static_cast<float>(coeffs[kA2]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA1], static_cast<float>(coeffs[kA1]) ) );
+
+  return content;
 }

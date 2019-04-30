@@ -1,7 +1,7 @@
 /*
  * File:           E:\Documents\freeDSP\freeDSP-aurora\SOURCES\SIGMASTUDIO\8channels\8channels_IC_1_REG.h
  *
- * Created:        Thursday, April 18, 2019 4:59:15 PM
+ * Created:        Saturday, April 27, 2019 6:05:55 PM
  * Description:    8channels:IC 1 control register definitions.
  *
  * This software is distributed in the hope that it will be useful,
@@ -1058,7 +1058,7 @@
 /* CORE_STATUS  - Registers (IC 1) */
 #define REG_CORE_STATUS_IC_1_ADDR                 0xF405
 #define REG_CORE_STATUS_IC_1_BYTE                 0
-#define REG_CORE_STATUS_IC_1_VALUE                0x2
+#define REG_CORE_STATUS_IC_1_VALUE                0x0
 
 /* DEBUG_MODE  - Registers (IC 1) */
 #define REG_DEBUG_MODE_IC_1_ADDR                  0xF420
@@ -1103,27 +1103,27 @@
 /* PANIC_CODE  - Registers (IC 1) */
 #define REG_PANIC_CODE_IC_1_ADDR                  0xF428
 #define REG_PANIC_CODE_IC_1_BYTE                  0
-#define REG_PANIC_CODE_IC_1_VALUE                 0x80
+#define REG_PANIC_CODE_IC_1_VALUE                 0x8
 
 /* DECODE_OP0  - Registers (IC 1) */
 #define REG_DECODE_OP0_IC_1_ADDR                  0xF429
 #define REG_DECODE_OP0_IC_1_BYTE                  0
-#define REG_DECODE_OP0_IC_1_VALUE                 0x0
+#define REG_DECODE_OP0_IC_1_VALUE                 0x3000
 
 /* DECODE_OP1  - Registers (IC 1) */
 #define REG_DECODE_OP1_IC_1_ADDR                  0xF42A
 #define REG_DECODE_OP1_IC_1_BYTE                  0
-#define REG_DECODE_OP1_IC_1_VALUE                 0x0
+#define REG_DECODE_OP1_IC_1_VALUE                 0xC000
 
 /* DECODE_OP2  - Registers (IC 1) */
 #define REG_DECODE_OP2_IC_1_ADDR                  0xF42B
 #define REG_DECODE_OP2_IC_1_BYTE                  0
-#define REG_DECODE_OP2_IC_1_VALUE                 0xFFA8
+#define REG_DECODE_OP2_IC_1_VALUE                 0xC414
 
 /* DECODE_OP3  - Registers (IC 1) */
 #define REG_DECODE_OP3_IC_1_ADDR                  0xF42C
 #define REG_DECODE_OP3_IC_1_BYTE                  0
-#define REG_DECODE_OP3_IC_1_VALUE                 0xA40
+#define REG_DECODE_OP3_IC_1_VALUE                 0x6762
 
 /* EXECUTE_OP0  - Registers (IC 1) */
 #define REG_EXECUTE_OP0_IC_1_ADDR                 0xF42D
@@ -1148,7 +1148,7 @@
 /* DECODE_COUNT  - Registers (IC 1) */
 #define REG_DECODE_COUNT_IC_1_ADDR                0xF431
 #define REG_DECODE_COUNT_IC_1_BYTE                0
-#define REG_DECODE_COUNT_IC_1_VALUE               0xC0FF
+#define REG_DECODE_COUNT_IC_1_VALUE               0x21
 
 /* EXECUTE_COUNT  - Registers (IC 1) */
 #define REG_EXECUTE_COUNT_IC_1_ADDR               0xF432
@@ -1188,12 +1188,12 @@
 /* PROG_CNTR0  - Registers (IC 1) */
 #define REG_PROG_CNTR0_IC_1_ADDR                  0xF460
 #define REG_PROG_CNTR0_IC_1_BYTE                  0
-#define REG_PROG_CNTR0_IC_1_VALUE                 0x75
+#define REG_PROG_CNTR0_IC_1_VALUE                 0x0
 
 /* PROG_CNTR1  - Registers (IC 1) */
 #define REG_PROG_CNTR1_IC_1_ADDR                  0xF461
 #define REG_PROG_CNTR1_IC_1_BYTE                  0
-#define REG_PROG_CNTR1_IC_1_VALUE                 0x333F
+#define REG_PROG_CNTR1_IC_1_VALUE                 0xC8A
 
 /* PROG_CNTR_CLEAR  - Registers (IC 1) */
 #define REG_PROG_CNTR_CLEAR_IC_1_ADDR             0xF462
@@ -1203,22 +1203,22 @@
 /* PROG_CNTR_LENGTH0  - Registers (IC 1) */
 #define REG_PROG_CNTR_LENGTH0_IC_1_ADDR           0xF463
 #define REG_PROG_CNTR_LENGTH0_IC_1_BYTE           0
-#define REG_PROG_CNTR_LENGTH0_IC_1_VALUE          0x75
+#define REG_PROG_CNTR_LENGTH0_IC_1_VALUE          0x0
 
 /* PROG_CNTR_LENGTH1  - Registers (IC 1) */
 #define REG_PROG_CNTR_LENGTH1_IC_1_ADDR           0xF464
 #define REG_PROG_CNTR_LENGTH1_IC_1_BYTE           0
-#define REG_PROG_CNTR_LENGTH1_IC_1_VALUE          0x6E97
+#define REG_PROG_CNTR_LENGTH1_IC_1_VALUE          0x43E
 
 /* PROG_CNTR_MAXLENGTH0  - Registers (IC 1) */
 #define REG_PROG_CNTR_MAXLENGTH0_IC_1_ADDR        0xF465
 #define REG_PROG_CNTR_MAXLENGTH0_IC_1_BYTE        0
-#define REG_PROG_CNTR_MAXLENGTH0_IC_1_VALUE       0x9A
+#define REG_PROG_CNTR_MAXLENGTH0_IC_1_VALUE       0x0
 
 /* PROG_CNTR_MAXLENGTH1  - Registers (IC 1) */
 #define REG_PROG_CNTR_MAXLENGTH1_IC_1_ADDR        0xF466
 #define REG_PROG_CNTR_MAXLENGTH1_IC_1_BYTE        0
-#define REG_PROG_CNTR_MAXLENGTH1_IC_1_VALUE       0xF736
+#define REG_PROG_CNTR_MAXLENGTH1_IC_1_VALUE       0x43E
 
 /* MP0_MODE  - Registers (IC 1) */
 #define REG_MP0_MODE_IC_1_ADDR                    0xF510
@@ -5665,7 +5665,7 @@
 #define R206_START_ADDRESS_START_ADDRESS_IC_1_SHIFT 0
 
 /* CORE_STATUS (IC 1) */
-#define R207_CORE_STATUS_CORE_STATUS_IC_1         0x2    /* 010b	[2:0] */
+#define R207_CORE_STATUS_CORE_STATUS_IC_1         0x0    /* 000b	[2:0] */
 #define R207_CORE_STATUS_CORE_STATUS_IC_1_MASK    0x7
 #define R207_CORE_STATUS_CORE_STATUS_IC_1_SHIFT   0
 
@@ -5746,11 +5746,11 @@
 #define R216_PANIC_CODE_ERR_ASRC0_IC_1            0x0    /* 0b	[0] */
 #define R216_PANIC_CODE_ERR_ASRC1_IC_1            0x0    /* 0b	[1] */
 #define R216_PANIC_CODE_ERR_PM0_IC_1              0x0    /* 0b	[2] */
-#define R216_PANIC_CODE_ERR_PM1_IC_1              0x0    /* 0b	[3] */
+#define R216_PANIC_CODE_ERR_PM1_IC_1              0x1    /* 1b	[3] */
 #define R216_PANIC_CODE_ERR_DM0B0_IC_1            0x0    /* 0b	[4] */
 #define R216_PANIC_CODE_ERR_DM0B1_IC_1            0x0    /* 0b	[5] */
 #define R216_PANIC_CODE_ERR_DM0B2_IC_1            0x0    /* 0b	[6] */
-#define R216_PANIC_CODE_ERR_DM0B3_IC_1            0x1    /* 1b	[7] */
+#define R216_PANIC_CODE_ERR_DM0B3_IC_1            0x0    /* 0b	[7] */
 #define R216_PANIC_CODE_ERR_DM1B0_IC_1            0x0    /* 0b	[8] */
 #define R216_PANIC_CODE_ERR_DM1B1_IC_1            0x0    /* 0b	[9] */
 #define R216_PANIC_CODE_ERR_DM1B2_IC_1            0x0    /* 0b	[10] */
@@ -5793,22 +5793,22 @@
 #define R216_PANIC_CODE_ERR_SOFT_IC_1_SHIFT       15
 
 /* DECODE_OP0 (IC 1) */
-#define R217_DECODE_OP0_DECODE_OP0_IC_1           0x0000 /* 0000000000000000b	[15:0] */
+#define R217_DECODE_OP0_DECODE_OP0_IC_1           0x3000 /* 0011000000000000b	[15:0] */
 #define R217_DECODE_OP0_DECODE_OP0_IC_1_MASK      0xFFFF
 #define R217_DECODE_OP0_DECODE_OP0_IC_1_SHIFT     0
 
 /* DECODE_OP1 (IC 1) */
-#define R218_DECODE_OP1_DECODE_OP1_IC_1           0x0000 /* 0000000000000000b	[15:0] */
+#define R218_DECODE_OP1_DECODE_OP1_IC_1           0xC000 /* 1100000000000000b	[15:0] */
 #define R218_DECODE_OP1_DECODE_OP1_IC_1_MASK      0xFFFF
 #define R218_DECODE_OP1_DECODE_OP1_IC_1_SHIFT     0
 
 /* DECODE_OP2 (IC 1) */
-#define R219_DECODE_OP2_DECODE_OP2_IC_1           0xFFA8 /* 1111111110101000b	[15:0] */
+#define R219_DECODE_OP2_DECODE_OP2_IC_1           0xC414 /* 1100010000010100b	[15:0] */
 #define R219_DECODE_OP2_DECODE_OP2_IC_1_MASK      0xFFFF
 #define R219_DECODE_OP2_DECODE_OP2_IC_1_SHIFT     0
 
 /* DECODE_OP3 (IC 1) */
-#define R220_DECODE_OP3_DECODE_OP3_IC_1           0x0A40 /* 0000101001000000b	[15:0] */
+#define R220_DECODE_OP3_DECODE_OP3_IC_1           0x6762 /* 0110011101100010b	[15:0] */
 #define R220_DECODE_OP3_DECODE_OP3_IC_1_MASK      0xFFFF
 #define R220_DECODE_OP3_DECODE_OP3_IC_1_SHIFT     0
 
@@ -5833,7 +5833,7 @@
 #define R224_EXECUTE_OP3_DECODE_EX3_IC_1_SHIFT    0
 
 /* DECODE_COUNT (IC 1) */
-#define R225_DECODE_COUNT_DECODE_COUNT_IC_1       0xC0FF /* 1100000011111111b	[15:0] */
+#define R225_DECODE_COUNT_DECODE_COUNT_IC_1       0x0021 /* 0000000000100001b	[15:0] */
 #define R225_DECODE_COUNT_DECODE_COUNT_IC_1_MASK  0xFFFF
 #define R225_DECODE_COUNT_DECODE_COUNT_IC_1_SHIFT 0
 
@@ -5873,12 +5873,12 @@
 #define R232_BLOCKINT_VALUE_BLOCKINT_VALUE_IC_1_SHIFT 0
 
 /* PROG_CNTR0 (IC 1) */
-#define R233_PROG_CNTR0_PROG_CNTR_MSB_IC_1        0x75   /* 01110101b	[7:0] */
+#define R233_PROG_CNTR0_PROG_CNTR_MSB_IC_1        0x00   /* 00000000b	[7:0] */
 #define R233_PROG_CNTR0_PROG_CNTR_MSB_IC_1_MASK   0xFF
 #define R233_PROG_CNTR0_PROG_CNTR_MSB_IC_1_SHIFT  0
 
 /* PROG_CNTR1 (IC 1) */
-#define R234_PROG_CNTR1_PROG_CNTR_LSB_IC_1        0x333F /* 0011001100111111b	[15:0] */
+#define R234_PROG_CNTR1_PROG_CNTR_LSB_IC_1        0x0C8A /* 0000110010001010b	[15:0] */
 #define R234_PROG_CNTR1_PROG_CNTR_LSB_IC_1_MASK   0xFFFF
 #define R234_PROG_CNTR1_PROG_CNTR_LSB_IC_1_SHIFT  0
 
@@ -5888,22 +5888,22 @@
 #define R235_PROG_CNTR_CLEAR_PROG_CNTR_CLEAR_IC_1_SHIFT 0
 
 /* PROG_CNTR_LENGTH0 (IC 1) */
-#define R236_PROG_CNTR_LENGTH0_PROG_LENGTH_MSB_IC_1 0x75 /* 01110101b	[7:0] */
+#define R236_PROG_CNTR_LENGTH0_PROG_LENGTH_MSB_IC_1 0x00 /* 00000000b	[7:0] */
 #define R236_PROG_CNTR_LENGTH0_PROG_LENGTH_MSB_IC_1_MASK 0xFF
 #define R236_PROG_CNTR_LENGTH0_PROG_LENGTH_MSB_IC_1_SHIFT 0
 
 /* PROG_CNTR_LENGTH1 (IC 1) */
-#define R237_PROG_CNTR_LENGTH1_PROG_LENGTH_LSB_IC_1 0x6E97 /* 0110111010010111b	[15:0] */
+#define R237_PROG_CNTR_LENGTH1_PROG_LENGTH_LSB_IC_1 0x043E /* 0000010000111110b	[15:0] */
 #define R237_PROG_CNTR_LENGTH1_PROG_LENGTH_LSB_IC_1_MASK 0xFFFF
 #define R237_PROG_CNTR_LENGTH1_PROG_LENGTH_LSB_IC_1_SHIFT 0
 
 /* PROG_CNTR_MAXLENGTH0 (IC 1) */
-#define R238_PROG_CNTR_MAXLENGTH0_PROG_MAXLENGTH_MSB_IC_1 0x9A /* 10011010b	[7:0] */
+#define R238_PROG_CNTR_MAXLENGTH0_PROG_MAXLENGTH_MSB_IC_1 0x00 /* 00000000b	[7:0] */
 #define R238_PROG_CNTR_MAXLENGTH0_PROG_MAXLENGTH_MSB_IC_1_MASK 0xFF
 #define R238_PROG_CNTR_MAXLENGTH0_PROG_MAXLENGTH_MSB_IC_1_SHIFT 0
 
 /* PROG_CNTR_MAXLENGTH1 (IC 1) */
-#define R239_PROG_CNTR_MAXLENGTH1_PROG_MAXLENGTH_LSB_IC_1 0xF736 /* 1111011100110110b	[15:0] */
+#define R239_PROG_CNTR_MAXLENGTH1_PROG_MAXLENGTH_LSB_IC_1 0x043E /* 0000010000111110b	[15:0] */
 #define R239_PROG_CNTR_MAXLENGTH1_PROG_MAXLENGTH_LSB_IC_1_MASK 0xFFFF
 #define R239_PROG_CNTR_MAXLENGTH1_PROG_MAXLENGTH_LSB_IC_1_SHIFT 0
 

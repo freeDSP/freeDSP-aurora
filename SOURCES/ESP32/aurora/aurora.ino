@@ -11,6 +11,9 @@
 
 #define I2C_SDA_PIN 16
 #define I2C_SCL_PIN 4
+#define I2C_SCL_DSP_PIN 33
+
+#define USBRESET 17
 
 #define FORMAT_SPIFFS_IF_FAILED true
 
@@ -21,43 +24,15 @@
 // DAC address on I2C bus
 #define AK4458_I2C_ADDR    (0x20>>1)
 
-//
-
-
-//#define AK4458_REGREAD(reg, val)  { AKM_i2c_shared_master_read_reg(r_i2c, AK4458_I2C_ADDR, reg, val, 1);}
-
-enum
-{
-  RESET      = 0x01,
-  NEWFW      = 0x02,
-  VERIFY     = 0x03,
-  PARAM      = 0x04,
-  SAVEPARAMS = 0x05
-};
-
-enum
-{
-  STATUS_IDLE,
-  STATUS_WAITDATASIZE,
-  STATUS_RECVFW,
-  STATUS_VERIFY,
-  STATUS_PARAM_NUMBYTES,
-  STATUS_PARAM_REG,
-  STATUS_PARAM_VALUE,
-  STATUS_WAIT_NUMBYTES,
-  STATUS_STORE_PARAMS,
-  STATUS_RETURN_PARAMS
-};
-
 enum twifistatus
 {
   STATE_WIFI_IDLE,
   STATE_WIFI_RECEIVE_PARAMETER,
   STATE_WIFI_DSPFW,
   STATE_WIFI_RECEIVE_USERPARAM,
-  STATE_WIFI_RECEIVE_CONFIG
-
-  //STATE_WIFI_RECEIVE_SINGLEPARAM
+  STATE_WIFI_RECEIVE_CONFIG,
+  STATE_WIFI_RECEIVE_PID,
+  STATE_WIFI_RECEIVE_DSPPARAM
 };
 
 struct tSettings
@@ -68,8 +43,6 @@ struct tSettings
 };
 
 tSettings Settings;
-
-//BluetoothSerial SerialBT;
 
 int state;
 int numBytes = 0;
@@ -88,6 +61,62 @@ twifistatus wifiStatus = STATE_WIFI_IDLE;
 int cntrPackets = 0;
 uint32_t totalBytesReceived;
 String receivedPostRequest;
+
+TwoWire WireDSP(1);
+
+//==============================================================================
+/*! 
+ */
+void ADAU1452_WRITE_REGISTER( uint16_t reg, byte msb, byte lsb ) 
+{
+  WireDSP.beginTransmission( DSP_ADDR );
+
+  WireDSP.write( (byte)( (reg >> 8) & 0xFF ) );
+  WireDSP.write( (byte)(  reg       & 0xFF ) );
+  //Serial.print( reg, HEX );
+  //Serial.print( " " );
+
+  WireDSP.write( msb );
+  //Serial.print( msb, HEX );
+  //Serial.print( ", " );
+
+  WireDSP.write( lsb );
+  //Serial.println( lsb, HEX );
+  
+  WireDSP.endTransmission( true );
+}
+
+//==============================================================================
+/*! 
+ */
+void ADAU1452_WRITE_BLOCK( uint16_t regaddr, byte val[], uint16_t len ) 
+{
+  for( uint16_t ii = 0; ii < len; ii = ii + 4 )
+  {
+    WireDSP.beginTransmission( DSP_ADDR );
+    WireDSP.write( (byte)( (regaddr >> 8) & 0xFF ) );
+    WireDSP.write( (byte)(  regaddr       & 0xFF ) );
+    //Serial.print( regaddr, HEX );
+    //Serial.print( " " );
+
+    WireDSP.write( (byte)( val[ii] & 0xFF ) );
+    //Serial.print( val[ii], HEX );
+    //Serial.print( ", " );
+
+    WireDSP.write( (byte)( val[ii+1] & 0xFF ) );
+    //Serial.print( val[ii+1], HEX );
+    //Serial.print( ", " );
+
+    WireDSP.write( (byte)( val[ii+2] & 0xFF ) );
+    //Serial.print( val[ii+2], HEX );
+    //Serial.print( ", " );
+
+    WireDSP.write( (byte)( val[ii+3] & 0xFF ) );
+    //Serial.println( val[ii+3], HEX );   
+
+    WireDSP.endTransmission( true );
+  }
+}
 
 //==============================================================================
 /*! 
@@ -120,6 +149,7 @@ String byte2string( byte val )
   if( val < 0x10 )
     str += "0";
   str += String( val, HEX );  
+  str += ", ";
   return str;
 }
 
@@ -188,18 +218,18 @@ void uploadDspFirmware( void )
   fileDspProgram = SPIFFS.open( "/dspfw.hex" );
 
   uint32_t numBytesToRead = 0;
+  byte byteReadMSB;
+  byte byteReadLSB;
+  byte byteRead;
+  uint16_t regaddr;
 
   if( fileDspProgram )
   {
-
-    //int file_size = fileDspProgram.size();
-    Serial.print( "File size:");
-    Serial.println( fileDspProgram.size() );
+    //Serial.print( "File size:");
+    //Serial.println( fileDspProgram.size() );
 
     size_t len = fileDspProgram.size();
-
     int cntr = 0;
-
     while( cntr < len )
     {
       //Serial.print( "Line: ");
@@ -217,36 +247,64 @@ void uploadDspFirmware( void )
       cntr += 4;
       
       //Serial.print( "numBytesToRead " );
-      //Serial.println( numBytesToRead, HEX );
+      //Serial.println( numBytesToRead );
 
       //------------------------------------------------------------------------
-      //--- Send register address
+      //--- Send register address and value
       //------------------------------------------------------------------------
-      Wire.beginTransmission( DSP_ADDR );
-
-      fileDspProgram.read( &byteRead, 1 );
-      cntr++;
-      Wire.write( byteRead );
-      //Serial.println( byteRead, HEX );
-
-      fileDspProgram.read( &byteRead, 1 );
-      cntr++;
-      Wire.write( byteRead );
-      //Serial.println( byteRead, HEX );
-
-
-      //Serial.println( "Value" );
-      for( uint32_t n = 2; n < numBytesToRead; n++ )
+      if( numBytesToRead > 0 )
       {
         fileDspProgram.read( &byteRead, 1 );
+        regaddr = ((uint16_t)byteRead) << 8;
         cntr++;
-        Wire.write( byteRead );
-        //Serial.println( byteRead, HEX );
+        
+        fileDspProgram.read( &byteRead, 1 );
+        regaddr += byteRead;
+        cntr++;
+
+        if( numBytesToRead == 4 )
+        {
+          fileDspProgram.read( &byteReadMSB, 1 );
+          cntr++;
+          fileDspProgram.read( &byteReadLSB, 1 );
+          cntr++;
+
+          if( regaddr == 0x0000 )
+          {
+            //Serial.println( "DELAY" );
+            delay( 500 );
+          }
+          else
+          {
+            ADAU1452_WRITE_REGISTER( regaddr, byteReadMSB, byteReadLSB );
+            Serial.print( "." );
+          }
+        }
+        else if( numBytesToRead > 4 )
+        {
+          uint16_t addr = regaddr;
+          byte val[4];
+
+          for( uint16_t ii = 0; ii < numBytesToRead - 2; ii = ii + 4 )
+          {
+            fileDspProgram.read( &(val[0]), 1 );
+            fileDspProgram.read( &(val[1]), 1 );
+            fileDspProgram.read( &(val[2]), 1 );
+            fileDspProgram.read( &(val[3]), 1 );
+            cntr += 4;
+            ADAU1452_WRITE_BLOCK( addr, val, 4 );
+            Serial.print( "." );
+            addr++;
+          }
+        }
+        else
+        {
+          Serial.print( "[ERROR] Bad number of bytes: " );
+          Serial.println( numBytesToRead );
+        }
       }
 
-      Wire.endTransmission( true );
-
-      Serial.print(".");
+      //Serial.print(".");
       
       //Serial.println( cntr );
      
@@ -259,6 +317,9 @@ void uploadDspFirmware( void )
     Serial.println( "\n[ERROR] Failed to open file dspfw.hex" );
   Serial.print( "[ok]\n" );
 }
+
+
+
 
 #if 0
 //==============================================================================
@@ -463,6 +524,9 @@ void configDAC( void )
    */
   AK4458_REGWRITE( AK4458_CONTROL3, 0b00000000 );
 
+  AK4458_REGWRITE( AK4458_L1CHATT, 0xFF );
+  AK4458_REGWRITE( AK4458_R1CHATT, 0xFF );
+
   /* Control 4 (Address: 0x05)
    * bit[0]   : SSLOW Digital Filter Bypass Mode Enable               :   0 Enable digital filter selected by SD and SLOW bits
    * bit[1]   : DFS2 Sampling Speed Control                           :   0 Normal Speed
@@ -474,6 +538,10 @@ void configDAC( void )
    */
   AK4458_REGWRITE( AK4458_CONTROL4, 0b00000000 );
 
+  /* DSD1 (Address: 0x06)
+   */
+  AK4458_REGWRITE( AK4458_DSD1, 0b00000000 );
+
   /* Control 5 (Address: 0x07)
    * bit[0]   : SYNCE SYNCModeEnable                                  :   1 SYNC Mode Enable
    * bit[7:4] : L3-4,R3-4 Zero Detect Flag Enable Bit for the DZF pin :   0 Disable
@@ -484,7 +552,11 @@ void configDAC( void )
    * bit[1:0] : SC1-0 Sound Control                                   :  00 Mode 1
    * bit[7:4] : L1-2,R1-2 Zero Detect Flag Enable Bit for the DZF pin :   0 Disable
    */
-  AK4458_REGWRITE( AK4458_CONTROL5, 0b00000000 );
+  AK4458_REGWRITE( AK4458_SOUNDCONTROL, 0b00000000 );
+
+  /* DSD1 (Address: 0x09)
+   */
+  AK4458_REGWRITE( AK4458_DSD2, 0b00000000 );
 
   /* Control 6 (Address: 0x0A)
    * bit[1:0] : DEM21-0 DAC2 De-emphasis Response                     :  01 Off
@@ -528,6 +600,12 @@ void configDAC( void )
    */
   AK4458_REGWRITE( AK4458_CONTROL10, 0b01010000 );
 
+  AK4458_REGWRITE( AK4458_L2CHATT, 0xFF );
+  AK4458_REGWRITE( AK4458_R2CHATT, 0xFF );
+  AK4458_REGWRITE( AK4458_L3CHATT, 0xFF );
+  AK4458_REGWRITE( AK4458_R3CHATT, 0xFF );
+  AK4458_REGWRITE( AK4458_L4CHATT, 0xFF );
+  AK4458_REGWRITE( AK4458_R4CHATT, 0xFF );
 
   // Release Reset by rewriting Control1
   /* Control 1 (Address: 0x00)
@@ -543,8 +621,14 @@ void configDAC( void )
  */
 void setup()
 {
-  Wire.begin( I2C_SDA_PIN, I2C_SCL_PIN );
-  Wire.setClock( 100000 );
+  /*pinMode( USBRESET, OUTPUT );
+  digitalWrite( USBRESET, LOW );
+  delay(1000);
+  digitalWrite( USBRESET, HIGH );
+  delay(1000);*/
+
+  //Wire.begin( I2C_SDA_PIN, I2C_SCL_PIN );
+  //Wire.setClock( 100000 );
 
   Serial.begin(115200);
   Serial.println( "aurora Debug" );
@@ -593,7 +677,7 @@ void setup()
     // Don't forget to change the capacity to match your requirements.
     // Use arduinojson.org/assistant to compute the capacity.
     StaticJsonDocument<256> jsonSettings;
-    jsonSettings["pid"] = 0x01;
+    jsonSettings["pid"] = 0x00;
     jsonSettings["ssid"] = "";
     jsonSettings["pwd"] = "";
     // Serialize JSON to file
@@ -609,7 +693,7 @@ void setup()
   //  Serial.println( "[ERROR] Could not set up mDNS responder!" );   
 
   WiFi.disconnect();
-  WiFi.mode( WIFI_AP_STA );
+  WiFi.mode( WIFI_AP );
   WiFi.setHostname( "freeDSP-aurora" );
   // Start access point
   WiFi.softAP( "AP-freeDSP-aurora" );
@@ -618,30 +702,38 @@ void setup()
   if( !WiFi.softAPConfig( IPAddress(192, 168, 5, 1), IPAddress(192, 168, 5, 1), IPAddress(255, 255, 255, 0) ) )
       Serial.println("AP Config Failed");
 
-  //Serial.println( Settings.ssid.c_str() );
+  Serial.print( "Connecting to " );
+  Serial.println( Settings.ssid.c_str() );
   //Serial.println( Settings.password.c_str() );
-  WiFi.begin( Settings.ssid.c_str(), Settings.password.c_str() );
+  //WiFi.begin( Settings.ssid.c_str(), Settings.password.c_str() );
 
   int cntrConnect = 0;
-  while( WiFi.waitForConnectResult() != WL_CONNECTED && cntrConnect < 3 )
+  /*while( WiFi.waitForConnectResult() != WL_CONNECTED && cntrConnect < 3 )
   {
     Serial.println("WiFi Connection Failed! Trying again..");
     //delay(1000);
     cntrConnect++;
-  }
+  }*/
   
   // print the ESP32 IP-Address
   Serial.print( "Soft AP IP:" );
   Serial.println( WiFi.softAPIP() );
   Serial.print( "Local IP:" );
   Serial.println( WiFi.localIP() );
-  Serial.println(WiFi.getHostname());
+  Serial.println( WiFi.getHostname() );
 
   server.begin();
 
   // Add service to MDNS-SD
   //MDNS.addService( "http", "tcp", 8088 );
   
+
+  Wire.begin( I2C_SDA_PIN, I2C_SCL_PIN );
+  Wire.setClock( 100000 );
+
+  WireDSP.begin( I2C_SDA_PIN, I2C_SCL_DSP_PIN );
+  WireDSP.setClock( 100000 );
+
   //----------------------------------------------------------------------------
   //--- Download program to DSP
   //----------------------------------------------------------------------------
@@ -655,12 +747,16 @@ void setup()
   //----------------------------------------------------------------------------
   //--- Configure ADC
   //----------------------------------------------------------------------------
+  Serial.println( "Config ADC" );
   configADC();
 
   //----------------------------------------------------------------------------
   //--- Configure DAC
   //----------------------------------------------------------------------------
+  Serial.println( "Config DAC" );
   configDAC();
+
+  
 
   //----------------------------------------------------------------------------
   //--- Start OTA
@@ -707,15 +803,15 @@ void setup()
 
   wifiStatus = STATE_WIFI_IDLE;
 
-}
+  Serial.println( "Ready" );
 
-String WebRequestHostAddress;     // global variable used to store Server IP-Address of HTTP-Request
+}
 
 //==============================================================================
 /*! Sends an ACK via WiFi
  *
  */
-void sendAckWifi( void )
+/*void sendAckWifi( void )
 {
   String httpResponse = "";
   httpResponse += "HTTP/1.1 200 OK\r\n";
@@ -723,10 +819,10 @@ void sendAckWifi( void )
   httpResponse += "ACK";
   httpResponse += "\r\n";
   client.println( httpResponse );
-}
+}*/
 
 //==============================================================================
-/*! Handles any HTTP request.
+/*! Handle any HTTP request.
  *
  */
 void handleHttpRequest()
@@ -755,90 +851,144 @@ void handleHttpRequest()
           //Serial.println( currentLine );
           if( waitForData )
           {
+            //-----------------------------------------------------------------
+            //--- Receiving new parameters
+            //-----------------------------------------------------------------
             if( wifiStatus == STATE_WIFI_RECEIVE_PARAMETER )
             {
-              //Serial.println( currentLine );
-              //if( currentLine.length() < 12 )
-              //  Serial.println( "Not enough data" );
-              //else
-              //{
-              int sentBytes = 0;
-              while( sentBytes + 12 < currentLine.length() )
+              receivedPostRequest += currentLine;
+
+              if( receivedPostRequest.length() > contentLength )
               {
-                String strReg = currentLine.substring( sentBytes + 0, sentBytes + 4 );
-                String strData = currentLine.substring( sentBytes + 4, sentBytes + 12 );
-                Serial.println( strReg );
-                Serial.println( strData );
-                uint16_t reg = (uint16_t)strtoul( strReg.c_str(), NULL, 16 );
-                uint32_t data = (uint32_t)strtoul( strData.c_str(), NULL, 16 );
-                
-                Wire.beginTransmission( DSP_ADDR );
-                Serial.print( "I2C " );
-                byte byteTx = (reg>>8) & 0xff;
-                Serial.print( byte2string2(byteTx) );
-                Wire.write( byteTx );
-                byteTx = reg & 0xff;
-                Serial.print( byte2string2(byteTx) );
-                Wire.write( byteTx );
-                Serial.print( " " ); 
-                
-                byteTx = (data>>24) & 0xff;
-                Serial.print( byte2string2(byteTx) );
-                Wire.write( byteTx );
-                byteTx = (data>>16) & 0xff;
-                Serial.print( byte2string2(byteTx) );
-                Wire.write( byteTx );
-                byteTx = (data>>8) & 0xff;
-                Serial.print( byte2string2(byteTx) );
-                Wire.write( byteTx );
-                byteTx = data & 0xff;
-                Serial.println( byte2string2(byteTx) );
-                Wire.write( byteTx );               
-                Wire.endTransmission( true );
-                sentBytes += 12;
-              } 
-              //}
-              waitForData = false;
-              wifiStatus = STATE_WIFI_IDLE;
-              client.stop();
+                int sentBytes = 0;
+                while( sentBytes + 12 < currentLine.length() )
+                {
+                  String strReg = currentLine.substring( sentBytes + 0, sentBytes + 4 );
+                  String strData = currentLine.substring( sentBytes + 4, sentBytes + 12 );
+                  Serial.println( strReg );
+                  Serial.println( strData );
+                  uint16_t reg = (uint16_t)strtoul( strReg.c_str(), NULL, 16 );
+                  uint32_t data = (uint32_t)strtoul( strData.c_str(), NULL, 16 );
+                  
+                  Wire.beginTransmission( DSP_ADDR );
+                  Serial.print( "I2C " );
+                  byte byteTx = (reg>>8) & 0xff;
+                  Serial.print( byte2string2(byteTx) );
+                  Wire.write( byteTx );
+                  byteTx = reg & 0xff;
+                  Serial.print( byte2string2(byteTx) );
+                  Wire.write( byteTx );
+                  Serial.print( " " ); 
+                  
+                  byteTx = (data>>24) & 0xff;
+                  Serial.print( byte2string2(byteTx) );
+                  Wire.write( byteTx );
+                  byteTx = (data>>16) & 0xff;
+                  Serial.print( byte2string2(byteTx) );
+                  Wire.write( byteTx );
+                  byteTx = (data>>8) & 0xff;
+                  Serial.print( byte2string2(byteTx) );
+                  Wire.write( byteTx );
+                  byteTx = data & 0xff;
+                  Serial.println( byte2string2(byteTx) );
+                  Wire.write( byteTx );               
+                  Wire.endTransmission( true );
+                  sentBytes += 12;
+                } 
+                //}
+                waitForData = false;
+                wifiStatus = STATE_WIFI_IDLE;
+                client.stop();
+              }
             }
 
+            //-----------------------------------------------------------------
+            //--- Receiving new DSP firmware block
+            //-----------------------------------------------------------------
             else if( wifiStatus == STATE_WIFI_DSPFW )
             {
-              int offset = 0;
-              while( offset < currentLine.length() )
+              receivedPostRequest += currentLine;
+              if( receivedPostRequest.length() > contentLength )
               {
-                String str = currentLine.substring( offset, offset + 2 );
-                if( receivedBytes < contentLength )
+                receivedPostRequest = receivedPostRequest.substring( 0, receivedPostRequest.length()-1 );
+                totalBytesReceived += receivedPostRequest.length();
+
+                int offset = 0;
+                Serial.print( "Writing to file..." );
+                while( offset < receivedPostRequest.length() )
                 {
-                  //Serial.print( str );
+                  String str = receivedPostRequest.substring( offset, offset + 2 );
                   uint8_t rxByte = (uint8_t)strtoul( str.c_str(), NULL, 16 );
-                  Serial.print( rxByte, HEX );
                   size_t len = fileDspProgram.write( &rxByte, 1 );
                   if( len != 1 )
                     Serial.println( "[ERROR] Writing to dspfw.hex" );
-                  receivedBytes += 2;
-                  totalBytesReceived++;
+                  offset += 2;
                 }
-                else
-                {
-                  Serial.println("OK");
-                  fileDspProgram.flush();
-                  //Serial.print( "\nreceivedBytes = ");
-                  //Serial.println( receivedBytes );
-                  //sendAckWifi();
-                }
-                offset += 2;
-              }
-              
-              if( receivedBytes >= contentLength )
-              {
+                Serial.println("OK");
+                fileDspProgram.flush();
+
+                Serial.print( "Received bytes:" );
+                Serial.println( receivedPostRequest.length() );
+                receivedPostRequest = "";
+
+                String httpResponse = "";
+                httpResponse += "HTTP/1.1 200 OK\r\n";
+                httpResponse += "Content-type:text/plain\r\n\r\n";
+                httpResponse += "ACK";
+                httpResponse += "\r\n";
+                client.println( httpResponse );
+
                 client.stop();
                 waitForData = false;
-                //wifiStatus = STATE_WIFI_IDLE;
               }
               //currentLine = "";
             }
+
+            //-----------------------------------------------------------------
+            //--- Receiving new DSP parameter block
+            //-----------------------------------------------------------------
+            else if( wifiStatus == STATE_WIFI_RECEIVE_DSPPARAM )
+            {
+              receivedPostRequest += currentLine;
+              if( receivedPostRequest.length() > contentLength )
+              {
+                receivedPostRequest = receivedPostRequest.substring( 0, receivedPostRequest.length()-1 );
+                totalBytesReceived += receivedPostRequest.length();
+
+                int offset = 0;
+                Serial.print( "Writing to file..." );
+                while( offset < receivedPostRequest.length() )
+                {
+                  String str = receivedPostRequest.substring( offset, offset + 2 );
+                  uint8_t rxByte = (uint8_t)strtoul( str.c_str(), NULL, 16 );
+                  size_t len = fileDspParams.write( &rxByte, 1 );
+                  if( len != 1 )
+                    Serial.println( "[ERROR] Writing to dspparam.hex" );
+                  offset += 2;
+                }
+                Serial.println("OK");
+                fileDspParams.flush();
+
+                Serial.print( "Received bytes:" );
+                Serial.println( receivedPostRequest.length() );
+                receivedPostRequest = "";
+
+                String httpResponse = "";
+                httpResponse += "HTTP/1.1 200 OK\r\n";
+                httpResponse += "Content-type:text/plain\r\n\r\n";
+                httpResponse += "ACK";
+                httpResponse += "\r\n";
+                client.println( httpResponse );
+
+                client.stop();
+                waitForData = false;
+              }
+              //currentLine = "";
+            }
+
+
+
+
 
             else if( wifiStatus == STATE_WIFI_RECEIVE_USERPARAM )
             {
@@ -873,11 +1023,11 @@ void handleHttpRequest()
               }
             }
 
-            else if( wifiStatus = STATE_WIFI_RECEIVE_CONFIG )
+            else if( wifiStatus == STATE_WIFI_RECEIVE_CONFIG )
             {
               receivedPostRequest += currentLine;
 
-              if( receivedPostRequest.length() >= contentLength )
+              if( receivedPostRequest.length() > contentLength )
               {
                 receivedPostRequest = receivedPostRequest.substring( 0, receivedPostRequest.length()-1 );
                 int posStartSearch = 0;
@@ -907,12 +1057,59 @@ void handleHttpRequest()
                 else if( paramName == "Password" )
                   Settings.password = paramValue;
                 saveSettings();
-                sendAckWifi();
+
+                WiFi.disconnect();
+                Serial.println( "Connecting to new network..." );
+                WiFi.begin( Settings.ssid.c_str(), Settings.password.c_str() );
+                int cntrConnect = 0;
+                while( WiFi.waitForConnectResult() != WL_CONNECTED && cntrConnect < 3 )
+                {
+                  Serial.println( "WiFi Connection Failed! Trying again..." );
+                  cntrConnect++;
+                }
+                String httpResponse = "";
+                httpResponse += "HTTP/1.1 200 OK\r\n";
+                httpResponse += "Content-type:text/plain\r\n\r\n";
+                if( WiFi.status() == WL_CONNECTED )
+                  httpResponse += "CONNECTED";
+                else
+                  httpResponse += "FAILED";
+                httpResponse += "\r\n";
+                client.println( httpResponse );
+
                 client.stop();
                 waitForData = false;
                 Serial.println( "OK" );
               }
                 
+            }
+
+            else if( wifiStatus == STATE_WIFI_RECEIVE_PID )
+            {
+              receivedPostRequest += currentLine;
+
+              if( receivedPostRequest.length() > contentLength )
+              {
+                receivedPostRequest = receivedPostRequest.substring( 0, receivedPostRequest.length()-1 );
+
+                Settings.pid = (byte)strtoul( receivedPostRequest.c_str(), NULL, 16 );
+
+                Serial.print( "PID: " );
+                Serial.println( Settings.pid, HEX );
+
+                saveSettings();
+
+                String httpResponse = "";
+                httpResponse += "HTTP/1.1 200 OK\r\n";
+                httpResponse += "Content-type:text/plain\r\n\r\n";
+                httpResponse += "ACK";
+                httpResponse += "\r\n";
+                client.println( httpResponse );
+
+                client.stop();
+                waitForData = false;
+                wifiStatus = STATE_WIFI_IDLE;
+              }
             }
 
             currentLine = "";
@@ -922,20 +1119,54 @@ void handleHttpRequest()
 
           else
           {
-            //Serial.println( currentLine );
+            //-----------------------------------------------------------------
             //--- New single dsp parameter sent
+            //-----------------------------------------------------------------
             if( currentLine.startsWith("POST /parameter") )
             {
               Serial.println( "POST /parameter" );
+              receivedPostRequest = "";
               wifiStatus = STATE_WIFI_RECEIVE_PARAMETER;
               currentLine = "";
               //cntrPackets++;
             }
 
+            //-----------------------------------------------------------------
+            //--- Request of PID
+            //-----------------------------------------------------------------
+            else if( currentLine.startsWith("GET /pid") )
+            {
+              Serial.println( "GET /pid" );
+              String httpResponse = "";
+              httpResponse += "HTTP/1.1 200 OK\r\n";
+              httpResponse += "Content-type:text/plain\r\n\r\n";
+              httpResponse += String( Settings.pid );
+              httpResponse += "\r\n";
+              client.println( httpResponse );
+              client.stop();
+              currentLine = "";
+              //cntrPackets++;
+            }
+
+            //-----------------------------------------------------------------
+            //--- New PID
+            //-----------------------------------------------------------------
+            else if( currentLine.startsWith("POST /pid") )
+            {
+              Serial.println( "POST /pid" );
+              receivedPostRequest = "";
+              wifiStatus = STATE_WIFI_RECEIVE_PID;
+              currentLine = "";
+              //cntrPackets++;
+            }
+
+            //-----------------------------------------------------------------
             //--- New dsp firmware data block
+            //-----------------------------------------------------------------
             else if( currentLine.startsWith("PUT /dspfw") )
             {
               Serial.println( "PUT /dspfw" );
+              receivedPostRequest = "";
               if( wifiStatus != STATE_WIFI_DSPFW )                              // start a new transfer
               {
                 if( SPIFFS.exists( "/dspfw.hex" ) )
@@ -952,14 +1183,17 @@ void handleHttpRequest()
                 else
                   Serial.println( "Opened dspfw.hex" );
 
-                totalBytesReceived = 0;
               }
+              if( wifiStatus != STATE_WIFI_DSPFW )
+                totalBytesReceived = 0;
               wifiStatus = STATE_WIFI_DSPFW;
               currentLine = "";
               //cntrPackets++;
             }
 
-            //--- Finish dsp firmware transfer
+            //-----------------------------------------------------------------
+            //--- Finish dsp firmware file transfer
+            //-----------------------------------------------------------------
             else if( currentLine.startsWith("GET /finishdspfw") )
             {
               Serial.println( "GET /finishdspfw" );
@@ -974,25 +1208,64 @@ void handleHttpRequest()
               client.stop();
               Serial.println( totalBytesReceived );
               wifiStatus = STATE_WIFI_IDLE;
+              totalBytesReceived = 0;
               currentLine = "";
               //cntrPackets++;
             }
 
-            //--- Request of PID
-            else if( currentLine.startsWith("GET /pid") )
+            //-----------------------------------------------------------------
+            //--- New dsp parameter data block
+            //-----------------------------------------------------------------
+            else if( currentLine.startsWith("PUT /dspparam") )
             {
-              Serial.println( "GET /pid" );
-              String httpResponse = "";
-              httpResponse += "HTTP/1.1 200 OK\r\n";
-              httpResponse += "Content-type:text/plain\r\n\r\n";
-              httpResponse += String( Settings.pid );
-              Serial.println( Settings.pid );
-              httpResponse += "\r\n";
-              client.println( httpResponse );
-              client.stop();
+              Serial.println( "PUT /dspparam" );
+              receivedPostRequest = "";
+              if( wifiStatus != STATE_WIFI_RECEIVE_DSPPARAM )                   // start a new transfer
+              {
+                if( SPIFFS.exists( "/dspparam.hex" ) )
+                {
+                  if( SPIFFS.remove( "/dspparam.hex" ) )
+                    Serial.println( "dspparam.hex deleted" );
+                  else
+                    Serial.println( "[ERROR] Deleting dspparam.hex failed." );
+                }
+
+                fileDspParams = SPIFFS.open( "/dspparam.hex", "w" );
+                if( !fileDspParams )
+                  Serial.println( "[ERROR] Opening dspparam.hex failed." );
+                else
+                  Serial.println( "Opened dspparam.hex" );
+
+                totalBytesReceived = 0;
+              }
+                
+              wifiStatus = STATE_WIFI_RECEIVE_DSPPARAM;
               currentLine = "";
               //cntrPackets++;
             }
+
+            //-----------------------------------------------------------------
+            //--- Finish dsp parameter file transfer
+            //-----------------------------------------------------------------
+            else if( currentLine.startsWith("GET /finishdspparameter") )
+            {
+              Serial.println( "GET /finishdspparameter" );
+              fileDspParams.flush();
+              fileDspParams.close();
+              String httpResponse = "";
+              httpResponse += "HTTP/1.1 200 OK\r\n";
+              httpResponse += "Content-type:text/plain\r\n\r\n";
+              httpResponse += String( totalBytesReceived );
+              httpResponse += "\r\n";
+              client.println( httpResponse );
+              client.stop();
+              Serial.println( totalBytesReceived );
+              wifiStatus = STATE_WIFI_IDLE;
+              totalBytesReceived = 0;
+              currentLine = "";
+              //cntrPackets++;
+            }
+
 
             //--- New user parameter block
             else if( currentLine.startsWith("PUT /userparam") )
@@ -1175,7 +1448,6 @@ void handleHttpRequest()
               Serial.println( "POST /wificonfig" );
               receivedPostRequest = "";
               wifiStatus = STATE_WIFI_RECEIVE_CONFIG;
-              waitForData = false;
               currentLine = "";
               //cntrPackets++;
             }
@@ -1211,7 +1483,7 @@ void handleHttpRequest()
             //--- Content-length
             else if( currentLine.startsWith( "Content-length" ) )
             {
-              //Serial.println( currentLine );
+              Serial.println( currentLine );
               String str = currentLine.substring( currentLine.indexOf(':') + 1, currentLine.length() );
               contentLength = (uint32_t)strtoul( str.c_str(), NULL, 10 );
               receivedBytes = 0;

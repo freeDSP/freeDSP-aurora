@@ -6,6 +6,10 @@
 
 using namespace Vektorraum;
 
+//==============================================================================
+/*!
+ *
+ */
 QDelay::QDelay( tfloat dly, tfloat samplerate, uint16_t delayaddr, CFreeDspAurora* ptrdsp, QWidget *parent ) :
   QDspBlock(parent), ui(new Ui::QDelay)
 {
@@ -24,11 +28,19 @@ QDelay::QDelay( tfloat dly, tfloat samplerate, uint16_t delayaddr, CFreeDspAuror
 
 }
 
+//==============================================================================
+/*!
+ *
+ */
 QDelay::~QDelay()
 {
   delete ui;
 }
 
+//==============================================================================
+/*!
+ *
+ */
 void QDelay::update( tvector<tfloat> f )
 {
   H = tvector<tcomplex>( length(f) );
@@ -46,7 +58,7 @@ void QDelay::update( tvector<tfloat> f )
   }
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -56,7 +68,7 @@ void QDelay::on_doubleSpinBoxDelay_valueChanged( double  )
   sendDspParameter();
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -67,19 +79,23 @@ void QDelay::on_pushButtonBypass_clicked()
   emit valueChanged();
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
 void QDelay::sendDspParameter( void )
 {
-  uint32_t val = static_cast<uint32_t>(ui->doubleSpinBoxDelay->value()/1000.0 * fs + 0.5);
+  int32_t val = static_cast<int32_t>(ui->doubleSpinBoxDelay->value()/1000.0 * fs + 0.5);
   if( bypass )
     val = 0;
-  dsp->sendParameter( addr[kDelay], val );
+  //dsp->sendParameter( addr[kDelay], val );
+
+  QByteArray content;
+  content.append( dsp->makeParameterForWifi( addr[kDelay], val ) );
+  dsp->sendParameterWifi( content );
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -88,7 +104,8 @@ uint32_t QDelay::getNumBytes( void )
   return 6;
 }
 
-//------------------------------------------------------------------------------
+#if 0
+//==============================================================================
 /*!
  *
  */
@@ -100,6 +117,7 @@ void QDelay::writeDspParameter( void )
   dsp->storeRegAddr( addr[kDelay] );
   dsp->storeValue( val );
 }
+#endif
 
 //==============================================================================
 /*!
@@ -138,4 +156,23 @@ void QDelay::setUserParams( QByteArray& userParams, int& idx )
   else
     qDebug()<<"QDelay::setUserParams: Not enough data";
 
+}
+
+//==============================================================================
+/*! Get the parameters in DSP format. The parameters are returned with register 
+ *  address followed by value dword ready to be sent via i2c to DSP.
+ *
+ * \return Byte array with parameters for DSP. 
+ */
+QByteArray QDelay::getDspParams( void )
+{
+  QByteArray content;
+
+  int32_t val = static_cast<int32_t>(ui->doubleSpinBoxDelay->value()/1000.0 * fs + 0.5);
+  if( bypass )
+    val = 0;
+
+  content.append( dsp->makeParameterForWifi( addr[kDelay], val ) );
+
+  return content;
 }

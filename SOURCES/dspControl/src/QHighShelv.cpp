@@ -5,6 +5,10 @@
 
 using namespace Vektorraum;
 
+//==============================================================================
+/*!
+ *
+ */
 QHighShelv::QHighShelv( double gain, double freq, double slope,
                         uint16_t addrB2, uint16_t addrB1, uint16_t addrB0,
                         uint16_t addrA2, uint16_t addrA1,
@@ -37,11 +41,19 @@ QHighShelv::QHighShelv( double gain, double freq, double slope,
   type = HIGHSHELV;
 }
 
+//==============================================================================
+/*!
+ *
+ */
 QHighShelv::~QHighShelv()
 {
   delete ui;
 }
 
+//==============================================================================
+/*!
+ *
+ */
 void QHighShelv::update( Vektorraum::tvector<Vektorraum::tfloat> f )
 {
   updateCoeffs();
@@ -53,10 +65,10 @@ void QHighShelv::update( Vektorraum::tvector<Vektorraum::tfloat> f )
   tfloat a1 = coeffs[kA1];
   tfloat a2 = coeffs[kA2];
   tfloat a0 = 1.0;
-  H = ( b0 + b1*z + b2*z2 ) / ( a0 + a1*z + a2*z2 );
+  H = ( b0 + b1*z + b2*z2 ) / ( a0 - a1*z - a2*z2 );
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -94,12 +106,12 @@ void QHighShelv::updateCoeffs( void )
     coeffs[ kB0 ] = b0;
     coeffs[ kB1 ] = b1;
     coeffs[ kB2 ] = b2;
-    coeffs[ kA1 ] = a1;
-    coeffs[ kA2 ] = a2;
+    coeffs[ kA1 ] = (-1.0)*a1;
+    coeffs[ kA2 ] = (-1.0)*a2;
   }
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -110,7 +122,7 @@ void QHighShelv::on_doubleSpinBoxGain_valueChanged( double  )
   emit valueChanged();
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -121,7 +133,7 @@ void QHighShelv::on_doubleSpinBoxFc_valueChanged( double  )
   emit valueChanged();
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -132,7 +144,7 @@ void QHighShelv::on_doubleSpinBoxS_valueChanged( double  )
   emit valueChanged();
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -144,20 +156,22 @@ void QHighShelv::on_pushButtonBypass_clicked()
   emit valueChanged();
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
 void QHighShelv::sendDspParameter( void )
 {
-  dsp->sendParameter( addr[kParamB2], static_cast<float>(coeffs[kB2]) );
-  dsp->sendParameter( addr[kParamB1], static_cast<float>(coeffs[kB1]) );
-  dsp->sendParameter( addr[kParamB0], static_cast<float>(coeffs[kB0]) );
-  dsp->sendParameter( addr[kParamA2], static_cast<float>(coeffs[kA2]) );
-  dsp->sendParameter( addr[kParamA1], static_cast<float>(coeffs[kA1]) );
+  QByteArray content;
+  content.append( dsp->makeParameterForWifi( addr[kParamB2], static_cast<float>(coeffs[kB2]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB1], static_cast<float>(coeffs[kB1]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB0], static_cast<float>(coeffs[kB0]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA2], static_cast<float>(coeffs[kA2]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA1], static_cast<float>(coeffs[kA1]) ) );
+  dsp->sendParameterWifi( content );
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -166,11 +180,11 @@ uint32_t QHighShelv::getNumBytes( void )
   return 2*5 + 4*5;
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
-void QHighShelv::writeDspParameter( void )
+/*void QHighShelv::writeDspParameter( void )
 {
   dsp->storeRegAddr( addr[kParamB2] );
   dsp->storeValue( static_cast<float>(coeffs[kB2]) );
@@ -183,7 +197,7 @@ void QHighShelv::writeDspParameter( void )
   dsp->storeRegAddr( addr[kParamA1] );
   dsp->storeValue( static_cast<float>(coeffs[kA1]) );
 
-}
+}*/
 
 //==============================================================================
 /*!
@@ -257,4 +271,23 @@ void QHighShelv::setUserParams( QByteArray& userParams, int& idx )
   }
   else
     qDebug()<<"QHighShelv::setUserParams: Not enough data";
+}
+
+//==============================================================================
+/*! Get the parameters in DSP format. The parameters are returned with register 
+ *  address followed by value dword ready to be sent via i2c to DSP.
+ *
+ * \return Byte array with parameters for DSP. 
+ */
+QByteArray QHighShelv::getDspParams( void )
+{
+  QByteArray content;
+
+  content.append( dsp->makeParameterForWifi( addr[kParamB2], static_cast<float>(coeffs[kB2]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB1], static_cast<float>(coeffs[kB1]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB0], static_cast<float>(coeffs[kB0]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA2], static_cast<float>(coeffs[kA2]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA1], static_cast<float>(coeffs[kA1]) ) );
+
+  return content;
 }

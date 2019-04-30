@@ -110,7 +110,7 @@ CPlugIn8Channels::CPlugIn8Channels( tfloat samplerate )
  */
 CPlugIn8Channels::~CPlugIn8Channels( void )
 {
-
+  qDebug()<<"~CPlugIn8Channels";
 }
 
 //==============================================================================

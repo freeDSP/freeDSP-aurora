@@ -65,13 +65,6 @@ private slots:
 
   void on_actionRead_from_DSP_triggered();
 
-  //void connected();
-  void disconnected();
-  void error(QAbstractSocket::SocketError socketError);
-  void hostFound();
-  void bytesWritten(qint64 bytes);
-  void readyRead();
-
 signals:
   void replyFinished( void );  
 
@@ -91,7 +84,7 @@ private:
   int wifiExpectedBytes;
   QByteArray wifiReply;
 
-  twifistatus statusWifi;
+  //twifistatus statusWifi;
 };
 
 #endif // MAINWINDOW_HPP

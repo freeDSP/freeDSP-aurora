@@ -84,6 +84,7 @@ uint32_t QFir::getNumBytes( void )
 /*!
  *
  */
+/*
 void QFir::writeDspParameter( void )
 {
   qDebug()<<"QFir::writeDspParameter not implemented";
@@ -91,7 +92,7 @@ void QFir::writeDspParameter( void )
   //dsp->storeRegAddr( addr[kOutput] );
   //dsp->storeValue( val );
 }
-
+*/
 
 //==============================================================================
 /*!
@@ -158,4 +159,20 @@ void QFir::setUserParams( QByteArray& userParams, int& idx )
 {
   #warning QFir::setUserParams not implemented
   qDebug()<<"QFir::setUserParams not implemented";
+}
+
+//==============================================================================
+/*! Get the parameters in DSP format. The parameters are returned with register 
+ *  address followed by value dword ready to be sent via i2c to DSP.
+ *
+ * \return Byte array with parameters for DSP. 
+ */
+QByteArray QFir::getDspParams( void )
+{
+  QByteArray ret;
+
+  #warning QFir::getDspParam not implemented
+  qDebug()<<"QFir::getDspParam not implemented";
+
+  return ret;
 }

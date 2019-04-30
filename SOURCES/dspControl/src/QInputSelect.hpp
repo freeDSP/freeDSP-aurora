@@ -44,7 +44,9 @@ public:
 
   virtual uint32_t getNumBytes( void );
 
-  virtual void writeDspParameter( void );
+  //virtual void writeDspParameter( void );
+
+  virtual QByteArray getDspParams( void );
 
 private slots:
   void on_comboBoxInput_currentIndexChanged( int  );

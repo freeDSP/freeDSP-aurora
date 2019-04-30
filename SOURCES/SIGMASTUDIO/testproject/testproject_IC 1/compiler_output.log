@@ -1,11 +1,11 @@
 ADAU145X Assembler, Analog Devices Inc.
 Version: 3.16.4,1747  (built 12/21/2017)
 
-##### Compile Started: Wednesday, April 03, 2019 6:52:47 PM #####
+##### Compile Started: Saturday, April 27, 2019 7:16:46 PM #####
 ADAU145X Assembler, Analog Devices Inc.
 Version: 3.16.4,1747  (built 12/21/2017)
 
-##### Compile Started: Wednesday, April 03, 2019 6:52:47 PM #####
+##### Compile Started: Saturday, April 27, 2019 7:16:46 PM #####
 ##### Compile succeeded:  0 errors, 0 warnings #####
 
 ##### Summary #####
@@ -24,13 +24,13 @@ FRAMEWORK                     52        33        11      0       0
 Tone1                         18        18        10      1       0
 Input1                        16        16        0       8       0
 Output1                       2         2         0       0       0
+Output2                       2         2         0       0       0
 Output3                       2         2         0       0       0
 Output4                       2         2         0       0       0
 Output5                       2         2         0       0       0
 Output6                       2         2         0       0       0
 Output7                       2         2         0       0       0
 Output8                       2         2         0       0       0
-Output2                       2         2         0       0       0
 --------------------------------------------------------------------------------------
 Total                         102       83        37      9       0
 --------------------------------------------------------------------------------------

@@ -4,6 +4,11 @@
 #include <QByteArray>
 #include <QMessageBox>
 #include <QProgressDialog>
+#include <QStandardPaths>
+#include <QtGui>
+
+#include <CoreFoundation/CoreFoundation.h>
+#include <CoreFoundation/CFBundle.h>
 
 #include "DialogSettings.hpp"
 #include "ui_DialogSettings.h"
@@ -14,6 +19,10 @@ DialogSettings::DialogSettings( CFreeDspAurora* ptrdsp, QWidget* parent ) :
 {
   ui->setupUi(this);
   dsp = ptrdsp;
+
+  ui->comboBoxPlugIn->blockSignals( true );
+  ui->comboBoxPlugIn->addItem( "8 Channels", CFreeDspAurora::PLUGIN_8CHANNELS );
+  ui->comboBoxPlugIn->blockSignals( false );
 
   ui->radioButtonAP->blockSignals( true );
   ui->radioButtonLocalWifi->blockSignals( true );
@@ -46,11 +55,37 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
 {
   enableGui( false );
 
+  //dsp->programEepromWifi();
+
+  QString pathTxBuffer;
+  QString pathNumBytes;
+
+  #if defined( __MACOSX__ )
+  CFURLRef appUrlRef = CFBundleCopyBundleURL( CFBundleGetMainBundle() );
+  CFStringRef macPath = CFURLCopyFileSystemPath( appUrlRef, kCFURLPOSIXPathStyle );
+  const char *pathPtr = CFStringGetCStringPtr( macPath, CFStringGetSystemEncoding() );
+  QString pathAppBundle = QString( CFStringGetCStringPtr( macPath, CFStringGetSystemEncoding() ) );
+  CFRelease(appUrlRef);
+  CFRelease(macPath);
+  #endif
+  qDebug()<<pathAppBundle;
+
+  if( ui->comboBoxPlugIn->currentData().toInt() == CFreeDspAurora::PLUGIN_8CHANNELS )
+  {
+    pathTxBuffer = pathAppBundle + QString( "/Contents/Resources/8channels/TxBuffer_IC_1.dat");
+    pathNumBytes = pathAppBundle + QString( "/Contents/Resources/8channels/NumBytes_IC_1.dat");
+  }
+  else
+  {
+    qDebug()<<"[ERROR] Unknown plugin id"<<ui->comboBoxPlugIn->currentData().toInt();
+  }
+  
   //----------------------------------------------------------------------------
   //--- Read and convert the TxBuffer_IC_1.dat file
   //----------------------------------------------------------------------------
+  
   #warning Pfad anpassen
-  QFile fileTxBuffer( "/Users/rkn/Documents/freeDSP/freeDSP-aurora/SOURCES/SIGMASTUDIO/8channels/TxBuffer_IC_1.dat" );
+  QFile fileTxBuffer( "/Users/rkn/Documents/freeDSP/freeDSP-aurora/SOURCES/SIGMASTUDIO/testproject2/TxBuffer_IC_1.dat" );
   if( !fileTxBuffer.open( QIODevice::ReadOnly ) )
   {
     qDebug()<<__FILE__<<__LINE__<<"Could not open selected file";
@@ -79,7 +114,7 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
   //--- Read and convert the NumBytes_IC_1.dat file
   //----------------------------------------------------------------------------
   #warning Pfad anpassen
-  QFile fileNumBytes( "/Users/rkn/Documents/freeDSP/freeDSP-aurora/SOURCES/SIGMASTUDIO/8channels/NumBytes_IC_1.dat" );
+  QFile fileNumBytes( "/Users/rkn/Documents/freeDSP/freeDSP-aurora/SOURCES/SIGMASTUDIO/testproject2/NumBytes_IC_1.dat" );
   if( !fileNumBytes.open( QIODevice::ReadOnly ) )
   {
     qDebug()<<__FILE__<<__LINE__<<"Could not open corresponding dat file";
@@ -103,6 +138,11 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
   }
 
   fileNumBytes.close();
+
+  //----------------------------------------------------------------------------
+  //--- Send plugin id via WiFi
+  //----------------------------------------------------------------------------
+  dsp->storePidWifi( static_cast<uint8_t>(ui->comboBoxPlugIn->currentData().toInt()) );
 
   //----------------------------------------------------------------------------
   //--- Send data to ESP32 via WiFi
@@ -136,9 +176,6 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
   ui->progressBar->setMaximum( content.size() );
   ui->progressBar->setValue( 0 );
 
-  //qDebug()<<content.toHex();
-  //qDebug()<<"Content size:"<<content.size();
-
   offset = 0;
   int npckt = 0;
   uint32_t totalTransmittedBytes = 0;
@@ -166,13 +203,14 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
     npckt++;
   }
 
-  if( dsp->finishDspFirmwareWifi( totalTransmittedBytes ) )
+  if( dsp->finishDspFirmwareWifi( totalTransmittedBytes * 2 ) )
     QMessageBox::information( this, tr("Success"), tr("You have successfully installed the new DSP-Plugin!"), QMessageBox::Ok );
   else
     QMessageBox::critical( this, tr("Error"), tr("Uups, something went wrong. Please double check everythind and try again."), QMessageBox::Ok );  
 
   qDebug()<<"Success";
   qDebug()<<"File size:"<<content.size() * 8 / 1024<<"kBit";
+  qDebug()<<"PID: "<<ui->comboBoxPlugIn->currentData().toInt();
 
   enableGui( true );
 }
@@ -189,7 +227,7 @@ void DialogSettings::on_pushButtonVerifyPlugin_clicked()
   //--- Read and convert the TxBuffer_IC_1.dat file
   //----------------------------------------------------------------------------
   #warning Pfad anpassen
-  QFile fileTxBuffer( "/Users/rkn/Documents/freeDSP/freeDSP-aurora/SOURCES/SIGMASTUDIO/8channels/TxBuffer_IC_1.dat" );
+  QFile fileTxBuffer( "/Users/rkn/Documents/freeDSP/freeDSP-aurora/SOURCES/SIGMASTUDIO/testproject2/TxBuffer_IC_1.dat" );
   if( !fileTxBuffer.open( QIODevice::ReadOnly ) )
   {
     qDebug()<<__FILE__<<__LINE__<<"Could not open selected file";
@@ -217,7 +255,7 @@ void DialogSettings::on_pushButtonVerifyPlugin_clicked()
   //--- Read and convert the NumBytes_IC_1.dat file
   //----------------------------------------------------------------------------
   #warning Pfad anpassen
-  QFile fileNumBytes( "/Users/rkn/Documents/freeDSP/freeDSP-aurora/SOURCES/SIGMASTUDIO/8channels/NumBytes_IC_1.dat" );
+  QFile fileNumBytes( "/Users/rkn/Documents/freeDSP/freeDSP-aurora/SOURCES/SIGMASTUDIO/testproject2/NumBytes_IC_1.dat" );
   if( !fileNumBytes.open( QIODevice::ReadOnly ) )
   {
     qDebug()<<__FILE__<<__LINE__<<"Could not open corresponding dat file";

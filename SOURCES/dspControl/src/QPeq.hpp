@@ -78,7 +78,9 @@ public:
 
   void setParameters( Vektorraum::tfloat newfc, Vektorraum::tfloat newV0, Vektorraum::tfloat newQ );
 
-  virtual void writeDspParameter( void );
+  //virtual void writeDspParameter( void );
+
+  virtual QByteArray getDspParams( void );
 
 private:
   void updateCoeffs( void );

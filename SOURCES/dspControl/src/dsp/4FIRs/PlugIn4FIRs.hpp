@@ -15,7 +15,7 @@ class CPlugIn4FIRs : public CDspPlugin
 
 public:
   explicit CPlugIn4FIRs( Vektorraum::tfloat samplerate );
-  ~CPlugIn4FIRs( void );
+  virtual ~CPlugIn4FIRs( void );
 
   //============================================================================
   /*!
@@ -27,7 +27,7 @@ public:
   /*!
    *
    */
-  tDspChannel getGuiForChannel( unsigned int chn, Vektorraum::tfloat fs, CFreeDspAurora* ptrdsp, QWidget* parent );
+  virtual tDspChannel getGuiForChannel( unsigned int chn, Vektorraum::tfloat fs, CFreeDspAurora* ptrdsp, QWidget* parent );
 
   //============================================================================
   /*!

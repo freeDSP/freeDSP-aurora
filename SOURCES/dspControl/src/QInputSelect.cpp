@@ -76,7 +76,10 @@ void QInputSelect::sendDspParameter( void )
 {
   qDebug()<<"Selected index"<<ui->comboBoxInput->currentIndex();
   uint32_t val = static_cast<uint32_t>(ui->comboBoxInput->currentIndex());
-  dsp->sendParameter( addr[kInput], val );
+  //dsp->sendParameter( addr[kInput], val );
+
+  #warning QInputSelect::sendDspParameter not implemented
+  qDebug()<<"QInputSelect::sendDspParameter not implemented";
 }
 
 //==============================================================================
@@ -92,12 +95,12 @@ uint32_t QInputSelect::getNumBytes( void )
 /*!
  *
  */
-void QInputSelect::writeDspParameter( void )
+/*void QInputSelect::writeDspParameter( void )
 {
   uint32_t val = static_cast<uint32_t>(ui->comboBoxInput->currentIndex());
   dsp->storeRegAddr( addr[kInput] );
   dsp->storeValue( val );
-}
+}*/
 
 //==============================================================================
 /*!
@@ -137,6 +140,20 @@ void QInputSelect::setUserParams( QByteArray& userParams, int& idx )
   }
   else
     qDebug()<<"QInputSelect::setUserParams: Not enough data";
+}
 
+//==============================================================================
+/*! Get the parameters in DSP format. The parameters are returned with register 
+ *  address followed by value dword ready to be sent via i2c to DSP.
+ *
+ * \return Byte array with parameters for DSP. 
+ */
+QByteArray QInputSelect::getDspParams( void )
+{
+  QByteArray content;
 
+  #warning QInputSelect::getDspParams not implemented
+  qDebug()<<"QInputSelect::getDspParams not implemented";
+
+  return content;
 }

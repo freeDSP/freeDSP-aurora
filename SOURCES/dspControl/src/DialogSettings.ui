@@ -30,6 +30,16 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
+         <widget class="QComboBox" name="comboBoxPlugIn">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QPushButton" name="pushButtonInstallPlugin">
           <property name="text">
            <string>Install</string>

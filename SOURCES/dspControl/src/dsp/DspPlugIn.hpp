@@ -26,9 +26,9 @@ public:
     flagSummation = true;
   }
 
-  ~CDspPlugin( void )
+  virtual ~CDspPlugin( void )
   {
-    
+    qDebug()<<" ~CDspPlugin";
   }
 
   //============================================================================
@@ -47,6 +47,8 @@ public:
   virtual QString getChannelName( unsigned int channel ) = 0;
 
   virtual unsigned int getNumChannels( void ) = 0;
+
+  virtual tDspChannel getGuiForChannel( unsigned int chn, Vektorraum::tfloat fs, CFreeDspAurora* ptrdsp, QWidget* parent ) = 0;
 
   //============================================================================
   /*! Returns a channel of the DSP-Plugin.

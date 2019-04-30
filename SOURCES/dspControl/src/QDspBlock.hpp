@@ -52,7 +52,9 @@ public:
 
   virtual uint32_t getNumBytes( void ) = 0;
 
-  virtual void writeDspParameter( void ) = 0;
+  //virtual void writeDspParameter( void ) = 0;
+
+  virtual QByteArray getDspParams( void ) = 0;
 
 protected:
   void paintEvent(QPaintEvent *);

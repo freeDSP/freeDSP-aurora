@@ -5,6 +5,10 @@
 
 using namespace Vektorraum;
 
+//==============================================================================
+/*!
+ *
+ */
 QPhase::QPhase( tfloat freq, tfloat qfactor,
                 uint16_t addrB2, uint16_t addrB1, uint16_t addrB0,
                 uint16_t addrA2, uint16_t addrA1,
@@ -38,12 +42,16 @@ QPhase::QPhase( tfloat freq, tfloat qfactor,
 
 }
 
+//==============================================================================
+/*!
+ *
+ */
 QPhase::~QPhase()
 {
   delete ui;
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*! \brief Updates the filter.
  *
  */
@@ -58,10 +66,10 @@ void QPhase::update( tvector<tfloat> f )
   tfloat a1 = coeffs[kA1];
   tfloat a2 = coeffs[kA2];
   tfloat a0 = 1.0;
-  H = ( b0 + b1*z + b2*z2 ) / ( a0 + a1*z + a2*z2 );
+  H = ( b0 + b1*z + b2*z2 ) / ( a0 - a1*z - a2*z2 );
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -98,8 +106,8 @@ void QPhase::updateCoeffs( void )
     coeffs[kB0] = b0;
     coeffs[kB1] = b1;
     coeffs[kB2] = b2;
-    coeffs[kA1] = a1;
-    coeffs[kA2] = a2;
+    coeffs[kA1] = (-1.0)*a1;
+    coeffs[kA2] = (-1.0)*a2;
   }
 
   if( ui->checkBoxInvert->isChecked() )
@@ -110,7 +118,7 @@ void QPhase::updateCoeffs( void )
   }
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -121,7 +129,7 @@ void QPhase::on_checkBoxInvert_stateChanged(int arg1)
   emit valueChanged();
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -132,7 +140,7 @@ void QPhase::on_doubleSpinBoxFc_valueChanged( double  )
   emit valueChanged();
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -143,7 +151,7 @@ void QPhase::on_doubleSpinBoxQ_valueChanged( double  )
   emit valueChanged();
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -155,20 +163,22 @@ void QPhase::on_pushButtonBypass_clicked()
   emit valueChanged();
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
 void QPhase::sendDspParameter( void )
 {
-  dsp->sendParameter( addr[kParamB2], static_cast<float>(coeffs[kB2]) );
-  dsp->sendParameter( addr[kParamB1], static_cast<float>(coeffs[kB1]) );
-  dsp->sendParameter( addr[kParamB0], static_cast<float>(coeffs[kB0]) );
-  dsp->sendParameter( addr[kParamA2], static_cast<float>(coeffs[kA2]) );
-  dsp->sendParameter( addr[kParamA1], static_cast<float>(coeffs[kA1]) );
+  QByteArray content;
+  content.append( dsp->makeParameterForWifi( addr[kParamB2], static_cast<float>(coeffs[kB2]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB1], static_cast<float>(coeffs[kB1]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB0], static_cast<float>(coeffs[kB0]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA2], static_cast<float>(coeffs[kA2]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA1], static_cast<float>(coeffs[kA1]) ) );
+  dsp->sendParameterWifi( content );
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -177,11 +187,11 @@ uint32_t QPhase::getNumBytes( void )
   return 2*5 + 4*5;
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
-void QPhase::writeDspParameter( void )
+/*void QPhase::writeDspParameter( void )
 {
   dsp->storeRegAddr( addr[kParamB2] );
   dsp->storeValue( static_cast<float>(coeffs[kB2]) );
@@ -194,7 +204,7 @@ void QPhase::writeDspParameter( void )
   dsp->storeRegAddr( addr[kParamA1] );
   dsp->storeValue( static_cast<float>(coeffs[kA1]) );
 
-}
+}*/
 
 //==============================================================================
 /*!
@@ -265,5 +275,21 @@ void QPhase::setUserParams( QByteArray& userParams, int& idx )
   }
   else
     qDebug()<<"QPhase::setUserParams: Not enough data";
+}
 
+//==============================================================================
+/*! Get the parameters in DSP format. The parameters are returned with register 
+ *  address followed by value dword ready to be sent via i2c to DSP.
+ *
+ * \return Byte array with parameters for DSP. 
+ */
+QByteArray QPhase::getDspParams( void )
+{
+  QByteArray content;
+  content.append( dsp->makeParameterForWifi( addr[kParamB2], static_cast<float>(coeffs[kB2]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB1], static_cast<float>(coeffs[kB1]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB0], static_cast<float>(coeffs[kB0]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA2], static_cast<float>(coeffs[kA2]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA1], static_cast<float>(coeffs[kA1]) ) );
+  return content;
 }

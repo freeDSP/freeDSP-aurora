@@ -85,11 +85,11 @@ public:
     return ret;
   }
 
-  void writeDspParameter( void )
+  /*void writeDspParameter( void )
   {
     for( int ii = 0; ii < dspBlocks.size(); ii++ )
       dspBlocks.at(ii)->writeDspParameter();
-  }
+  }*/
 
 signals:
   void selectionChanged( void );

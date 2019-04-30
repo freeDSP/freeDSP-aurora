@@ -19,12 +19,17 @@ extern int wifiPortHost;
 CFreeDspAurora::CFreeDspAurora( QWidget* parent ) : QWidget( parent )
 {
   tcpSocket = new QTcpSocket( this );
-  connect( tcpSocket, SIGNAL( readyRead()), this, SLOT(readyReadWifi()) );
+  connect( tcpSocket, SIGNAL( bytesWritten(qint64) ),                this, SLOT( bytesWrittenWifi(qint64)                ) );
+  connect( tcpSocket, SIGNAL( disconnected() ),                      this, SLOT( disconnectedWifi()                      ) );
+  connect( tcpSocket, SIGNAL( error(QAbstractSocket::SocketError) ), this, SLOT( errorWifi(QAbstractSocket::SocketError) ) );
+  connect( tcpSocket, SIGNAL( hostFound() ),                         this, SLOT( hostFoundWifi()                         ) );
+  connect( tcpSocket, SIGNAL( readyRead() ),                         this, SLOT( readyReadWifi()                         ) );
+  
   connect( this, SIGNAL( haveReplyWifi() ), &loopWaitForResponseWiFi, SLOT( quit() ) );
 
   ipAddressAP = "192.168.5.1";
   ipAddressLocal = "0.0.0.0";
-  connectionType = LOCAL_WIFI;
+  connectionType = ACCESS_POINT;
   
   ptrProgressBar = nullptr;
 }
@@ -36,152 +41,6 @@ CFreeDspAurora::CFreeDspAurora( QWidget* parent ) : QWidget( parent )
 CFreeDspAurora::~CFreeDspAurora( void )
 {
 
-}
-
-//==============================================================================
-/*!
- *
- */
-bool CFreeDspAurora::sendParameter( uint16_t reg, float val )
-{
-  qDebug()<<"---------------------------------------------------------------";
-  qDebug()<<"sendParameter()";
-#if 0
-  char cmd = PARAM;
-  if( !sendByteSecured( &cmd ) )
-    return false;
-
-/*  uint32_t numbytes = 6;
-  qDebug()<<"Bytes: "<<numbytes;
-
-  if( !sendByteSecured( (numbytes >> 24) & 0xFF ) )
-    return false;
-  if( !sendByteSecured( (numbytes >> 16) & 0xFF ) )
-    return false;
-  if( !sendByteSecured( (numbytes >> 8) & 0xFF ) )
-    return false;
-  if( !sendByteSecured( numbytes & 0xFF ) )
-    return false;
-*/
-
-  if( !sendByteSecured( (reg >> 8) & 0xFF ) )
-    return false;
-  if( !sendByteSecured( reg & 0xFF ) )
-    return false;
-
-  uint32_t data;
-  std::memcpy( &data, &val, sizeof(float) );
-  if( !sendByteSecured( (data >> 24) & 0xFF ) )
-    return false;
-  if( !sendByteSecured( (data >> 16) & 0xFF ) )
-    return false;
-  if( !sendByteSecured( (data >> 8) & 0xFF ) )
-    return false;
-  if( !sendByteSecured( data & 0xFF ) )
-    return false;
-#endif
-  return true;
-}
-
-//==============================================================================
-/*!
- *
- */
-bool CFreeDspAurora::sendParameter( uint16_t reg, uint32_t val )
-{
-  qDebug()<<"---------------------------------------------------------------";
-  qDebug()<<"sendParameter()";
-#if 0
-  char cmd = PARAM;
-  if( !sendByteSecured( &cmd ) )
-    return false;
-
-/*  uint32_t numbytes = 6;
-  qDebug()<<"Bytes: "<<numbytes;
-
-  if( !sendByteSecured( (numbytes >> 24) & 0xFF ) )
-    return false;
-  if( !sendByteSecured( (numbytes >> 16) & 0xFF ) )
-    return false;
-  if( !sendByteSecured( (numbytes >> 8) & 0xFF ) )
-    return false;
-  if( !sendByteSecured( numbytes & 0xFF ) )
-    return false;
-*/
-
-  if( !sendByteSecured( (reg >> 8) & 0xFF ) )
-    return false;
-  if( !sendByteSecured( reg & 0xFF ) )
-    return false;
-
-  uint32_t data = val;
-  //std::memcpy( &data, &val, sizeof(float) );
-  if( !sendByteSecured( (data >> 24) & 0xFF ) )
-    return false;
-  if( !sendByteSecured( (data >> 16) & 0xFF ) )
-    return false;
-  if( !sendByteSecured( (data >> 8) & 0xFF ) )
-    return false;
-  if( !sendByteSecured( data & 0xFF ) )
-    return false;
-#endif
-  return true;
-}
-
-//==============================================================================
-/*!
- *
- */
-bool CFreeDspAurora::storeRegAddr( uint16_t reg )
-{
-#if 0
-  if( !sendByteSecured( static_cast<byte>((reg >> 8) & 0xFF) ) )
-    return false;
-  if( !sendByteSecured( static_cast<byte>(reg & 0xFF) ) )
-    return false;
- #endif
-  return true;
-}
-
-//==============================================================================
-/*!
- *
- */
-bool CFreeDspAurora::storeValue( float val )
-{
-#if 0
-  uint32_t data;
-  std::memcpy( &data, &val, sizeof(float) );
-  if( !sendByteSecured( static_cast<byte>((data >> 24) & 0xFF) ) )
-    return false;
-  if( !sendByteSecured( static_cast<byte>((data >> 16) & 0xFF) ) )
-    return false;
-  if( !sendByteSecured( static_cast<byte>((data >> 8) & 0xFF) ) )
-    return false;
-  if( !sendByteSecured( static_cast<byte>(data & 0xFF) ) )
-    return false;
-#endif
-  return true;
-}
-
-//==============================================================================
-/*!
- *
- */
-bool CFreeDspAurora::storeValue( uint32_t val )
-{
-#if 0
-  uint32_t data = val;
-  if( !sendByteSecured( static_cast<byte>((data >> 24) & 0xFF) ) )
-    return false;
-  if( !sendByteSecured( static_cast<byte>((data >> 16) & 0xFF) ) )
-    return false;
-  if( !sendByteSecured( static_cast<byte>((data >> 8) & 0xFF) ) )
-    return false;
-  if( !sendByteSecured( static_cast<byte>(data & 0xFF) ) )
-    return false;
-#endif
-  return true;
 }
 
 //==============================================================================
@@ -216,13 +75,38 @@ uint32_t convertTo824( double val )
 /*! Prepares a content packet for a parameter
  *
  */
-QByteArray CFreeDspAurora::makeParameterForWifi( uint16_t reg, double val )
+QByteArray CFreeDspAurora::makeParameterForWifi( uint16_t reg, float val )
 {
   QByteArray content;
   content.append( (reg >> 8) & 0xFF );
   content.append( reg & 0xFF );
 
   uint32_t data = convertTo824( val );
+
+  content.append( (data >> 24) & 0xFF );
+  content.append( (data >> 16) & 0xFF );
+  content.append( (data >> 8) & 0xFF );
+  content.append( data & 0xFF );
+
+  //qDebug()<<"CFreeDspAurora::makeParameterForWifi";
+  //qDebug()<<val;
+  //qDebug()<<QString::number( data, 16 );
+  //qDebug()<<content.toHex();
+  
+  return content;
+}
+
+//==============================================================================
+/*! Prepares a content packet for a parameter
+ *
+ */
+QByteArray CFreeDspAurora::makeParameterForWifi( uint16_t reg, int32_t val )
+{
+  QByteArray content;
+  content.append( (reg >> 8) & 0xFF );
+  content.append( reg & 0xFF );
+
+  uint32_t data = static_cast<uint32_t>(val);
 
   content.append( (data >> 24) & 0xFF );
   content.append( (data >> 16) & 0xFF );
@@ -356,30 +240,71 @@ bool CFreeDspAurora::finishDspFirmwareWifi( uint32_t totalTransmittedBytes )
 }
 
 //==============================================================================
-/*! Waits for an ACK from WiFi connection.
+/*! Starts the transfer of a new block of the dsp parameter file.
  *
+ * \param content Block of parameter file.
  */
-#if 0
-bool CFreeDspAurora::waitForAckWifi( void )
+bool CFreeDspAurora::sendDspParameterWifi( QByteArray content )
 {
-  QEventLoop loopWaitForAck;
-  connect( tcpSocket, SIGNAL(readyRead()), &loopWaitForAck, SLOT(quit()) );
-  loopWaitForAck.exec();
+  qDebug()<<"---------------------------------------------------------------";
+  qDebug()<<"sendDspParameterWifi()";
 
-  QByteArray reply;
-  reply.append( tcpSocket->readAll() );
-  qDebug()<<QString( reply );
+  QString requestString = QString( "PUT /dspparam HTTP/1.1\r\n" )
+                        + QString( "Host: " ) + wifiIpHost + QString( "\r\n" )
+                        + QString( "Content-type:application/octet-stream\r\n" )
+                        + QString( "Content-length: " ) + QString::number( content.size()*2 ) + QString( "\r\n" )
+                        + QString( "\r\n" );
+  QByteArray request;
+  request.append( requestString );
+  request.append( content.toHex() );  
+  request.append( "\r\n" );
+  
+  writeRequestWifi( request );
 
-  QStringList listReply = QString( reply ).split( QRegExp("\\s+") );
-  if( listReply.at(4) == QString("ACK") )
-    return true;
-  else
+  if( !waitForReplyWifi() )
   {
-    qDebug()<<"No ACK received"<<listReply.at(4);
+    QMessageBox::critical( this, tr("Error"), tr("Uups, writing parameters to DSP failed. Please double check everything, reset DSP and try again."), QMessageBox::Ok ); 
     return false;
   }
+  else
+    return true;
 }
-#endif
+
+//==============================================================================
+/*! Finishes the transfer of the DSP parameter file.
+ *
+ */
+bool CFreeDspAurora::finishDspParameterWifi( uint32_t totalTransmittedBytes )
+{
+  qDebug()<<"---------------------------------------------------------------";
+  qDebug()<<"finishDspParameterWifi";
+
+  QString requestString = QString( "GET /finishdspparameter HTTP/1.1\r\n" )
+                        + QString( "Host: " ) + wifiIpHost + QString( "\r\n" )
+                        + QString( "\r\n" );
+  QByteArray request;
+  request.append( requestString );
+  
+  writeRequestWifi( request );
+
+  if( !waitForReplyWifi() )
+  {
+    QMessageBox::critical( this, tr("Error"), tr("Uups, could not finish transfer of DSP parameter file. Please double check everything, reset DSP and try again."), QMessageBox::Ok ); 
+    return false;
+  }
+  else
+  {
+    qDebug()<<QString( replyDSP );
+    QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+    uint32_t totalReceivedBytes = listReply.at(4).toUInt();
+    qDebug()<<totalTransmittedBytes<<totalReceivedBytes;
+
+    if( totalTransmittedBytes == totalReceivedBytes )
+      return true;
+    else
+      return false;
+  }
+}
 
 //==============================================================================
 /*! Requests the PID of current installed DSP-Plugin
@@ -771,8 +696,59 @@ bool CFreeDspAurora::storeSettingsWifi( QString ssid, QString password )
   {
     qDebug()<<QString( replyDSP );
     QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
-    //! \TODO Test for ACK.
-    return true;
+    if( listReply.at(4) == "CONNECTED" )
+    {
+      QMessageBox::information( this, tr("Information"), tr("Your DSP is now connected to the local WiFi network."), QMessageBox::Ok ); 
+      return true;
+    }
+    else
+    {
+      QMessageBox::critical( this, tr("Error"), tr("Your DSP cannot connect to the local WiFi network. Please double-check SSID and password."), QMessageBox::Ok ); 
+      return false;
+    }
+  }
+}
+
+//==============================================================================
+/*! Sends the PID to DSP and stores it nonvolatile.
+ *
+ * \param pid New PID
+ */
+bool CFreeDspAurora::storePidWifi( uint8_t pid )
+{
+  qDebug()<<"---------------------------------------------------------------";
+  qDebug()<<"storePidWifi";
+
+  QByteArray content;
+  content.append( static_cast<char>(pid) );
+
+  QString requestString = QString("POST /pid HTTP/1.1\r\n")
+                        + QString("Host: ") + wifiIpHost + QString("\r\n")
+                        + QString("Content-type:text/plain\r\n")
+                        + QString("Content-length: ") +  QString::number( content.size()*2 ) + QString("\r\n")
+                        + QString("\r\n")
+                        + content.toHex()
+                        + QString("\r\n");
+  QByteArray request;
+  request.append( requestString );  
+  
+  writeRequestWifi( request );
+
+  if( !waitForReplyWifi() )
+    return false;
+  else
+  {
+    qDebug()<<QString( replyDSP );
+    QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+    if( listReply.at(4) == "ACK" )
+    {
+      return true;
+    }
+    else
+    {
+      QMessageBox::critical( this, tr("Error"), tr("Could not store the plugin id. Please double-check everything and try again."), QMessageBox::Ok ); 
+      return false;
+    }
   }
 }
 
@@ -805,4 +781,38 @@ bool CFreeDspAurora::pingWifi( void )
   }
 
   return true;
+}
+
+//==============================================================================
+/*!
+ */
+void CFreeDspAurora::disconnectedWifi( void )
+{
+  qDebug()<<"Disconnected from server";
+}
+
+//==============================================================================
+/*!
+ */
+void CFreeDspAurora::bytesWrittenWifi( qint64  )
+{
+  //QString outString = QString::number(bytes) + " bytes writen.";
+  //qDebug()<<outString;
+}
+
+//==============================================================================
+/*!
+ */
+void CFreeDspAurora::errorWifi( QAbstractSocket::SocketError )
+{
+  QString errorStr = tcpSocket->errorString();
+  qDebug()<<"An error occured :"<<errorStr;
+}
+
+//==============================================================================
+/*!
+ */
+void CFreeDspAurora::hostFoundWifi( void )
+{
+  qDebug()<<"Host found";
 }
