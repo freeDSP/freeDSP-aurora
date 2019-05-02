@@ -45,8 +45,8 @@ QVolumeSlider* sliderMainVolume;
 
 CDspPlugin* dspPlugin;
 
-QString wifiIpHost;
-int wifiPortHost;
+//QString wifiIpHost;
+//int wifiPortHost;
 
 MainWindow::MainWindow( QWidget* parent ) :
   QMainWindow( parent ),
@@ -186,22 +186,14 @@ MainWindow::MainWindow( QWidget* parent ) :
 
   #else
   setWindowTitle( QString("dspControl ").append( VERSION_STR ) );
-
-  //tcpSocket = new QTcpSocket(this);
-  wifiIpHost = "192.168.5.1";
-  //wifiIpHost = "192.168.100.62";
-  //wifiPortHost = 8088;
-  wifiPortHost = 80;
  
   //if( dialog.comboBox()->currentText() == QString("8channels") )
   //{
     qDebug()<<"Loading plugin 8channels";
     dspPlugin = new CPlugIn8Channels( FS );
     numChannels = dspPlugin->getNumChannels();
-    //numChannels = plugin8Channels.getNumChannels();
     for( unsigned int n = 0; n < numChannels; n++ )
     {
-      //tDspChannel dspChannel = plugin8Channels.getGuiForChannel( n, FS, &dsp, this );
       tDspChannel dspChannel = dspPlugin->getGuiForChannel( n, FS, &dsp, this );
 
       listOutputGains.append( dspChannel.gain );
@@ -248,11 +240,6 @@ MainWindow::MainWindow( QWidget* parent ) :
   logo->move( 6, 6 );
   logo->show();
 
-  //portName = "/dev/cu.freedsp-aurora-ESP32_SP";
-  //#if !defined( DEMO )
-  //dsp.open( "/dev/cu.freedsp-aurora-ESP32_SP" );
-  //#endif
-
 }
 
 //==============================================================================
@@ -260,9 +247,9 @@ MainWindow::MainWindow( QWidget* parent ) :
  */
 MainWindow::~MainWindow()
 {
-  //dsp.close();
+  dsp.disconnectWifi();
   
-  dsp.tcpSocket->disconnectFromHost();
+  //dsp.tcpSocket->disconnectFromHost();
 
   delete ui;
 }

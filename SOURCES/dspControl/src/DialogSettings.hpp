@@ -39,6 +39,8 @@ private slots:
 
   void on_radioButtonLocalWifi_toggled(bool checked);
 
+  void on_lineEditIpAddress_editingFinished();
+
 private:
   Ui::DialogSettings* ui;
   CFreeDspAurora* dsp = nullptr;

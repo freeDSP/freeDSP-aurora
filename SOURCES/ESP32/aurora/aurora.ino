@@ -320,18 +320,29 @@ void uploadDspFirmware( void )
 
 
 
+                  
+                  byteTx = (data>>24) & 0xff;
+                  Serial.print( byte2string2(byteTx) );
+                  Wire.write( byteTx );
+                  byteTx = (data>>16) & 0xff;
+                  Serial.print( byte2string2(byteTx) );
+                  Wire.write( byteTx );
+                  byteTx = (data>>8) & 0xff;
+                  Serial.print( byte2string2(byteTx) );
+                  Wire.write( byteTx );
+                  byteTx = data & 0xff;
+                  Serial.println( byte2string2(byteTx) );
+                  Wire.write( byteTx );               
+                  Wire.endTransmission( true );
 
-#if 0
 //==============================================================================
 /*! Uploads the parameters from ESP32 SPI flash to DSP.
  */
 void uploadDspParameter( void )
 {
-  Serial.print( "Loading dsp parameter......" );
+  Serial.print( "Loading dsp parameter preset......" );
 
   fileDspParams = SPIFFS.open( "/dspparam.hex" );
-
-  //uint32_t numBytesToRead = 0;
 
   if( fileDspParams )
   {
@@ -341,31 +352,33 @@ void uploadDspParameter( void )
 
     while( fileDspParams.available() )
     {
+      Wire.beginTransmission( DSP_ADDR );
+      Serial.print( "I2C " );
       //------------------------------------------------------------------------
       //--- Send register address
       //------------------------------------------------------------------------
-      Wire.beginTransmission( DSP_ADDR );
-
-      Serial.println( "Register" );
       uint32_t byteRead = fileDspParams.read();
       Wire.write( byteRead );
-      Serial.println( byteRead, HEX );
+      Serial.print( "0x" );
+      Serial.print( byte2string2(byteRead) );
       byteRead = fileDspParams.read();
       Wire.write( byteRead );
-      Serial.println( byteRead, HEX );
+      Serial.print( byte2string2(byteRead) );
       cntr += 2;
+      Serial.print( " " ); 
 
       //------------------------------------------------------------------------
       //--- Send value
       //------------------------------------------------------------------------
-      Serial.println( "Value" );
+      Serial.print( "0x" );
       for( uint32_t n = 0; n < 4; n++ )
       {
         byteRead = fileDspParams.read();
         Wire.write( byteRead );
         cntr++;
-        Serial.println( byteRead, HEX );
+        Serial.print( byte2string2(byteRead) );
       }
+      Serial.println( " " );
 
       Wire.endTransmission( true );
 
@@ -382,6 +395,7 @@ void uploadDspParameter( void )
   Serial.print( "[ok]\n" );
 }
 
+#if 0
 //==============================================================================
 /*! Returns the parameter to host.
  */
@@ -742,7 +756,7 @@ void setup()
   //----------------------------------------------------------------------------
   //--- Download user parameter to DSP
   //----------------------------------------------------------------------------
-  //uploadDspParameter();
+  uploadDspParameter();
 
   //----------------------------------------------------------------------------
   //--- Configure ADC

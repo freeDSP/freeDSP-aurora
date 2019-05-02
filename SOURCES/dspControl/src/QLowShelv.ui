@@ -10,6 +10,9 @@
     <height>300</height>
    </rect>
   </property>
+  <property name="contextMenuPolicy">
+   <enum>Qt::NoContextMenu</enum>
+  </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
@@ -57,6 +60,9 @@
    </item>
    <item>
     <widget class="QDoubleSpinBox" name="doubleSpinBoxGain">
+     <property name="contextMenuPolicy">
+      <enum>Qt::NoContextMenu</enum>
+     </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
      </property>
@@ -89,6 +95,9 @@
    </item>
    <item>
     <widget class="QDoubleSpinBox" name="doubleSpinBoxFc">
+     <property name="contextMenuPolicy">
+      <enum>Qt::NoContextMenu</enum>
+     </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
      </property>
@@ -121,6 +130,9 @@
    </item>
    <item>
     <widget class="QDoubleSpinBox" name="doubleSpinBoxS">
+     <property name="contextMenuPolicy">
+      <enum>Qt::NoContextMenu</enum>
+     </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
      </property>

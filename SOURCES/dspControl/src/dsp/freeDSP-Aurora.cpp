@@ -9,8 +9,8 @@
 
 #include "freeDSP-Aurora.hpp"
 
-extern QString wifiIpHost;
-extern int wifiPortHost;
+//extern QString wifiIpHost;
+//extern int wifiPortHost;
 
 //==============================================================================
 /*! Constructor
@@ -30,6 +30,7 @@ CFreeDspAurora::CFreeDspAurora( QWidget* parent ) : QWidget( parent )
   ipAddressAP = "192.168.5.1";
   ipAddressLocal = "0.0.0.0";
   connectionType = ACCESS_POINT;
+  portHostWifi = 80;
   
   ptrProgressBar = nullptr;
 }
@@ -40,26 +41,26 @@ CFreeDspAurora::CFreeDspAurora( QWidget* parent ) : QWidget( parent )
  */
 CFreeDspAurora::~CFreeDspAurora( void )
 {
-
+  if( tcpSocket != nullptr )
+    delete tcpSocket;
 }
 
 //==============================================================================
 /*!
  *
  */
-uint32_t convertTo824( double val )
+uint32_t convertTo824( float val )
 {
-  double fractpart, intpart;
+  float fractpart, intpart;
   uint32_t ret;
   fractpart = modf( val, &intpart );
-  if( intpart > 127.0 )
-    intpart = 127.0;
-  if( intpart < -128.0 )
-    intpart = -128.0;
+  if( intpart > 127.0f )
+    intpart = 127.0f;
+  if( intpart < -128.0f )
+    intpart = -128.0f;
 
-  if( fractpart < 0 )
-    fractpart *= -1.0;
-  
+  if( fractpart < 0.0f )
+    fractpart *= -1.0f;
   
   intpart = floor( val );
   fractpart = val - intpart;
@@ -129,6 +130,8 @@ bool CFreeDspAurora::sendParameterWifi( QByteArray content )
 {
   qDebug()<<"---------------------------------------------------------------";
   qDebug()<<"sendParameterWifi()";
+  
+  QString wifiIpHost = getIpAddressWifi();
 
   QString requestString = QString("POST /parameter HTTP/1.1\r\n")
                         + QString("Host: ") + wifiIpHost + QString("\r\n")
@@ -167,8 +170,10 @@ bool CFreeDspAurora::sendDspFirmwareWifi( QByteArray content )
   qDebug()<<"---------------------------------------------------------------";
   qDebug()<<"sendDspFirmwareWifi()";
 
+  QString wifiIpHost = getIpAddressWifi();
+
   tcpSocket->abort();
-  tcpSocket->connectToHost( wifiIpHost, wifiPortHost );
+  tcpSocket->connectToHost( wifiIpHost, portHostWifi );
 
   QEventLoop loopConnect;
   connect( tcpSocket, SIGNAL(connected()), &loopConnect, SLOT(quit()) );
@@ -212,6 +217,8 @@ bool CFreeDspAurora::finishDspFirmwareWifi( uint32_t totalTransmittedBytes )
   qDebug()<<"---------------------------------------------------------------";
   qDebug()<<"finishDspFirmwareWifi";
 
+  QString wifiIpHost = getIpAddressWifi();
+
   QString requestString = QString( "GET /finishdspfw HTTP/1.1\r\n" )
                         + QString( "Host: " ) + wifiIpHost + QString( "\r\n" )
                         + QString( "\r\n" );
@@ -249,6 +256,8 @@ bool CFreeDspAurora::sendDspParameterWifi( QByteArray content )
   qDebug()<<"---------------------------------------------------------------";
   qDebug()<<"sendDspParameterWifi()";
 
+  QString wifiIpHost = getIpAddressWifi();
+
   QString requestString = QString( "PUT /dspparam HTTP/1.1\r\n" )
                         + QString( "Host: " ) + wifiIpHost + QString( "\r\n" )
                         + QString( "Content-type:application/octet-stream\r\n" )
@@ -278,6 +287,8 @@ bool CFreeDspAurora::finishDspParameterWifi( uint32_t totalTransmittedBytes )
 {
   qDebug()<<"---------------------------------------------------------------";
   qDebug()<<"finishDspParameterWifi";
+
+  QString wifiIpHost = getIpAddressWifi();
 
   QString requestString = QString( "GET /finishdspparameter HTTP/1.1\r\n" )
                         + QString( "Host: " ) + wifiIpHost + QString( "\r\n" )
@@ -318,6 +329,8 @@ uint32_t CFreeDspAurora::requestPidWifi( void )
   qDebug()<<"---------------------------------------------------------------";
   qDebug()<<"requestPidWifi";
 
+  QString wifiIpHost = getIpAddressWifi();
+
   QString requestString = QString("GET /pid HTTP/1.1\r\nHost: ")
                         + wifiIpHost
                         + QString("\r\n\r\n");
@@ -351,8 +364,10 @@ bool CFreeDspAurora::sendUserParameterWifi( QByteArray content )
   qDebug()<<"---------------------------------------------------------------";
   qDebug()<<"sendUserParameterWifi()";
 
+  QString wifiIpHost = getIpAddressWifi();
+
   tcpSocket->abort();
-  tcpSocket->connectToHost( wifiIpHost, wifiPortHost );
+  tcpSocket->connectToHost( wifiIpHost, portHostWifi );
 
   QEventLoop loopConnect;
   connect( tcpSocket, SIGNAL(connected()), &loopConnect, SLOT(quit()) );
@@ -396,6 +411,8 @@ bool CFreeDspAurora::finishUserParameterWifi( uint32_t totalTransmittedBytes )
   qDebug()<<"---------------------------------------------------------------";
   qDebug()<<"finishUserParameterWifi";
 
+  QString wifiIpHost = getIpAddressWifi();
+
   QString requestString = QString("GET /finishuserparam HTTP/1.1\r\nHost: ")
                         + wifiIpHost
                         + QString("\r\n\r\n");
@@ -430,6 +447,8 @@ bool CFreeDspAurora::requestUserParameterWifi( QByteArray& userparams )
 {
   qDebug()<<"---------------------------------------------------------------";
   qDebug()<<"receiveUserParameterWifi";
+
+  QString wifiIpHost = getIpAddressWifi();
 
   uint32_t totalBytes = 0;
 
@@ -560,6 +579,7 @@ bool CFreeDspAurora::waitForResponseWifi( void )
  */
 void CFreeDspAurora::writeRequestWifi( QByteArray& request )
 {
+  QString wifiIpHost = getIpAddressWifi();
   writeRequestWifi( request, wifiIpHost );
 }
 
@@ -569,7 +589,7 @@ void CFreeDspAurora::writeRequestWifi( QByteArray& request )
 void CFreeDspAurora::writeRequestWifi( QByteArray& request, QString host )
 {
   tcpSocket->abort();
-  tcpSocket->connectToHost( host, wifiPortHost );
+  tcpSocket->connectToHost( host, portHostWifi );
 
   QEventLoop loopConnect;
   connect( tcpSocket, SIGNAL(connected()), &loopConnect, SLOT(quit()) );
@@ -593,6 +613,8 @@ bool CFreeDspAurora::requestDspFirmwareWifi( QByteArray& firmware, QProgressBar*
 {
   qDebug()<<"---------------------------------------------------------------";
   qDebug()<<"requestDspFirmwareWifi";
+
+  QString wifiIpHost = getIpAddressWifi();
 
   uint32_t totalBytes = 0;
 
@@ -678,6 +700,8 @@ bool CFreeDspAurora::storeSettingsWifi( QString ssid, QString password )
   qDebug()<<"---------------------------------------------------------------";
   qDebug()<<"storeSsidWifi";
 
+  QString wifiIpHost = getIpAddressWifi();
+
   QString content = QString("SSID=") + ssid + QString("&")
                   + QString("Password=") + password;
 
@@ -722,6 +746,8 @@ bool CFreeDspAurora::storePidWifi( uint8_t pid )
   qDebug()<<"---------------------------------------------------------------";
   qDebug()<<"storePidWifi";
 
+  QString wifiIpHost = getIpAddressWifi();
+
   QByteArray content;
   content.append( static_cast<char>(pid) );
 
@@ -763,6 +789,8 @@ bool CFreeDspAurora::pingWifi( void )
 {
   qDebug()<<"---------------------------------------------------------------";
   qDebug()<<"pingWifi";
+
+  QString wifiIpHost = getIpAddressWifi();
 
   QString requestString = QString("GET /ping HTTP/1.1\r\n")
                         + QString("Host: freeDSP-aurora\r\n")

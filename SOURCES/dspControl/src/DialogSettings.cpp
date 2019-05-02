@@ -30,11 +30,13 @@ DialogSettings::DialogSettings( CFreeDspAurora* ptrdsp, QWidget* parent ) :
   {
     ui->radioButtonAP->setChecked( true );
     ui->pushButtonPing->setEnabled( false );
+    ui->lineEditIpAddress->setEnabled( false );
   }
   else
   {
     ui->radioButtonLocalWifi->setChecked( true );
     ui->pushButtonPing->setEnabled( true );
+    ui->lineEditIpAddress->setEnabled( true );
   }
   ui->radioButtonAP->blockSignals( false );
   ui->radioButtonLocalWifi->blockSignals( false );
@@ -55,21 +57,15 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
 {
   enableGui( false );
 
-  //dsp->programEepromWifi();
-
   QString pathTxBuffer;
   QString pathNumBytes;
 
   #if defined( __MACOSX__ )
   CFURLRef appUrlRef = CFBundleCopyBundleURL( CFBundleGetMainBundle() );
   CFStringRef macPath = CFURLCopyFileSystemPath( appUrlRef, kCFURLPOSIXPathStyle );
-  const char *pathPtr = CFStringGetCStringPtr( macPath, CFStringGetSystemEncoding() );
   QString pathAppBundle = QString( CFStringGetCStringPtr( macPath, CFStringGetSystemEncoding() ) );
   CFRelease(appUrlRef);
   CFRelease(macPath);
-  #endif
-  qDebug()<<pathAppBundle;
-
   if( ui->comboBoxPlugIn->currentData().toInt() == CFreeDspAurora::PLUGIN_8CHANNELS )
   {
     pathTxBuffer = pathAppBundle + QString( "/Contents/Resources/8channels/TxBuffer_IC_1.dat");
@@ -79,13 +75,13 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
   {
     qDebug()<<"[ERROR] Unknown plugin id"<<ui->comboBoxPlugIn->currentData().toInt();
   }
+  #endif
   
   //----------------------------------------------------------------------------
   //--- Read and convert the TxBuffer_IC_1.dat file
   //----------------------------------------------------------------------------
-  
-  #warning Pfad anpassen
-  QFile fileTxBuffer( "/Users/rkn/Documents/freeDSP/freeDSP-aurora/SOURCES/SIGMASTUDIO/testproject2/TxBuffer_IC_1.dat" );
+  //QFile fileTxBuffer( "/Users/rkn/Documents/freeDSP/freeDSP-aurora/SOURCES/SIGMASTUDIO/testproject2/TxBuffer_IC_1.dat" );
+  QFile fileTxBuffer( pathTxBuffer );
   if( !fileTxBuffer.open( QIODevice::ReadOnly ) )
   {
     qDebug()<<__FILE__<<__LINE__<<"Could not open selected file";
@@ -113,8 +109,8 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
   //----------------------------------------------------------------------------
   //--- Read and convert the NumBytes_IC_1.dat file
   //----------------------------------------------------------------------------
-  #warning Pfad anpassen
-  QFile fileNumBytes( "/Users/rkn/Documents/freeDSP/freeDSP-aurora/SOURCES/SIGMASTUDIO/testproject2/NumBytes_IC_1.dat" );
+  //QFile fileNumBytes( "/Users/rkn/Documents/freeDSP/freeDSP-aurora/SOURCES/SIGMASTUDIO/testproject2/NumBytes_IC_1.dat" );
+  QFile fileNumBytes( pathNumBytes );
   if( !fileNumBytes.open( QIODevice::ReadOnly ) )
   {
     qDebug()<<__FILE__<<__LINE__<<"Could not open corresponding dat file";
@@ -223,11 +219,31 @@ void DialogSettings::on_pushButtonVerifyPlugin_clicked()
 {
   enableGui( false );
 
+  QString pathTxBuffer;
+  QString pathNumBytes;
+
+  #if defined( __MACOSX__ )
+  CFURLRef appUrlRef = CFBundleCopyBundleURL( CFBundleGetMainBundle() );
+  CFStringRef macPath = CFURLCopyFileSystemPath( appUrlRef, kCFURLPOSIXPathStyle );
+  QString pathAppBundle = QString( CFStringGetCStringPtr( macPath, CFStringGetSystemEncoding() ) );
+  CFRelease(appUrlRef);
+  CFRelease(macPath);
+  if( ui->comboBoxPlugIn->currentData().toInt() == CFreeDspAurora::PLUGIN_8CHANNELS )
+  {
+    pathTxBuffer = pathAppBundle + QString( "/Contents/Resources/8channels/TxBuffer_IC_1.dat");
+    pathNumBytes = pathAppBundle + QString( "/Contents/Resources/8channels/NumBytes_IC_1.dat");
+  }
+  else
+  {
+    qDebug()<<"[ERROR] Unknown plugin id"<<ui->comboBoxPlugIn->currentData().toInt();
+  }
+  #endif
+
   //----------------------------------------------------------------------------
   //--- Read and convert the TxBuffer_IC_1.dat file
   //----------------------------------------------------------------------------
-  #warning Pfad anpassen
-  QFile fileTxBuffer( "/Users/rkn/Documents/freeDSP/freeDSP-aurora/SOURCES/SIGMASTUDIO/testproject2/TxBuffer_IC_1.dat" );
+  //QFile fileTxBuffer( "/Users/rkn/Documents/freeDSP/freeDSP-aurora/SOURCES/SIGMASTUDIO/testproject2/TxBuffer_IC_1.dat" );
+  QFile fileTxBuffer( pathTxBuffer );
   if( !fileTxBuffer.open( QIODevice::ReadOnly ) )
   {
     qDebug()<<__FILE__<<__LINE__<<"Could not open selected file";
@@ -254,8 +270,8 @@ void DialogSettings::on_pushButtonVerifyPlugin_clicked()
   //----------------------------------------------------------------------------
   //--- Read and convert the NumBytes_IC_1.dat file
   //----------------------------------------------------------------------------
-  #warning Pfad anpassen
-  QFile fileNumBytes( "/Users/rkn/Documents/freeDSP/freeDSP-aurora/SOURCES/SIGMASTUDIO/testproject2/NumBytes_IC_1.dat" );
+  //QFile fileNumBytes( "/Users/rkn/Documents/freeDSP/freeDSP-aurora/SOURCES/SIGMASTUDIO/testproject2/NumBytes_IC_1.dat" );
+  QFile fileNumBytes( pathNumBytes );
   if( !fileNumBytes.open( QIODevice::ReadOnly ) )
   {
     qDebug()<<__FILE__<<__LINE__<<"Could not open corresponding dat file";
@@ -378,6 +394,7 @@ void DialogSettings::on_radioButtonAP_toggled(bool checked)
     dsp->setConnectionTypeWifi( CFreeDspAurora::ACCESS_POINT );
     ui->lineEditIpAddress->setText( dsp->getIpAddressWifi() );
     ui->pushButtonPing->setEnabled( false );
+    ui->lineEditIpAddress->setEnabled( false );
   }
 }
 
@@ -392,6 +409,7 @@ void DialogSettings::on_radioButtonLocalWifi_toggled(bool checked)
     dsp->setConnectionTypeWifi( CFreeDspAurora::LOCAL_WIFI );
     ui->lineEditIpAddress->setText( dsp->getIpAddressWifi() );
     ui->pushButtonPing->setEnabled( true );
+    ui->lineEditIpAddress->setEnabled( true );
   }
 }
 
@@ -430,5 +448,17 @@ void DialogSettings::enableGui( bool state )
     ui->pushButtonPing->setEnabled( false );
     ui->buttonBox->setEnabled( false );
   }
+
+}
+
+//==============================================================================
+/*!
+ *
+ */
+void DialogSettings::on_lineEditIpAddress_editingFinished()
+{
+  qDebug()<<"DialogSettings::on_lineEditIpAddress_editingFinished";
+  if( ui->radioButtonLocalWifi->isChecked() )
+    dsp->setIpAddressWifi( ui->lineEditIpAddress->text() );
 
 }

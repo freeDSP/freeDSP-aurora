@@ -79,12 +79,6 @@ private:
 
   QString portName;
   QList<QGain*> listOutputGains;
-
-  int wifiRxBytes;
-  int wifiExpectedBytes;
-  QByteArray wifiReply;
-
-  //twifistatus statusWifi;
 };
 
 #endif // MAINWINDOW_HPP

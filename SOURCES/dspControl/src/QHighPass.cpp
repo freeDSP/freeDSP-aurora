@@ -20,7 +20,7 @@ QHighPass::QHighPass( tfilterdesign design, tfloat fc,
                       uint16_t addrB2_4, uint16_t addrB1_4, uint16_t addrB0_4,
                       uint16_t addrA2_4, uint16_t addrA1_4,
                       tfloat samplerate,
-                      CFreeDspAurora* ptrdsp, bool isbypassed,
+                      CFreeDspAurora* ptrdsp,
                       QWidget *parent ) :
   QDspBlock(parent), ui(new Ui::QHighPass)
 {
@@ -68,7 +68,6 @@ QHighPass::QHighPass( tfilterdesign design, tfloat fc,
   ui->doubleSpinBoxFc->setValue( fc );
   ui->doubleSpinBoxFc->blockSignals( false );
 
-  bypass = isbypassed;
   ui->pushButtonBypass->setChecked( bypass );
 
   type = HIGHPASS;
@@ -950,58 +949,6 @@ uint32_t QHighPass::getNumBytes( void )
 {
   return 2*5*4 + 4*5*4;
 }
-
-//==============================================================================
-/*!
- */
-#if 0
-void QHighPass::writeDspParameter( void )
-{
-  dsp->storeRegAddr( addr[kParamB2_1] );
-  dsp->storeValue( static_cast<float>(coeffs[kB2]) );
-  dsp->storeRegAddr( addr[kParamB1_1] );
-  dsp->storeValue( static_cast<float>(coeffs[kB1]) );
-  dsp->storeRegAddr( addr[kParamB0_1] );
-  dsp->storeValue( static_cast<float>(coeffs[kB0]) );
-  dsp->storeRegAddr( addr[kParamA2_1] );
-  dsp->storeValue( static_cast<float>(coeffs[kA2]) );
-  dsp->storeRegAddr( addr[kParamA1_1] );
-  dsp->storeValue( static_cast<float>(coeffs[kA1]) );
-
-  dsp->storeRegAddr( addr[kParamB2_2] );
-  dsp->storeValue( static_cast<float>(coeffs[5+kB2]) );
-  dsp->storeRegAddr( addr[kParamB1_2] );
-  dsp->storeValue( static_cast<float>(coeffs[5+kB1]) );
-  dsp->storeRegAddr( addr[kParamB0_2] );
-  dsp->storeValue( static_cast<float>(coeffs[5+kB0]) );
-  dsp->storeRegAddr( addr[kParamA2_2] );
-  dsp->storeValue( static_cast<float>(coeffs[5+kA2]) );
-  dsp->storeRegAddr( addr[kParamA1_2] );
-  dsp->storeValue( static_cast<float>(coeffs[5+kA1]) );
-
-  dsp->storeRegAddr( addr[kParamB2_3] );
-  dsp->storeValue( static_cast<float>(coeffs[2*5+kB2]) );
-  dsp->storeRegAddr( addr[kParamB1_3] );
-  dsp->storeValue( static_cast<float>(coeffs[2*5+kB1]) );
-  dsp->storeRegAddr( addr[kParamB0_3] );
-  dsp->storeValue( static_cast<float>(coeffs[2*5+kB0]) );
-  dsp->storeRegAddr( addr[kParamA2_3] );
-  dsp->storeValue( static_cast<float>(coeffs[2*5+kA2]) );
-  dsp->storeRegAddr( addr[kParamA1_3] );
-  dsp->storeValue( static_cast<float>(coeffs[2*5+kA1]) );
-
-  dsp->storeRegAddr( addr[kParamB2_4] );
-  dsp->storeValue( static_cast<float>(coeffs[3*5+kB2]) );
-  dsp->storeRegAddr( addr[kParamB1_4] );
-  dsp->storeValue( static_cast<float>(coeffs[3*5+kB1]) );
-  dsp->storeRegAddr( addr[kParamB0_4] );
-  dsp->storeValue( static_cast<float>(coeffs[3*5+kB0]) );
-  dsp->storeRegAddr( addr[kParamA2_4] );
-  dsp->storeValue( static_cast<float>(coeffs[3*5+kA2]) );
-  dsp->storeRegAddr( addr[kParamA1_4] );
-  dsp->storeValue( static_cast<float>(coeffs[3*5+kA1]) );
-}
-#endif
 
 //==============================================================================
 /*!

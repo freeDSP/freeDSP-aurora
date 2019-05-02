@@ -10,6 +10,9 @@
     <height>300</height>
    </rect>
   </property>
+  <property name="contextMenuPolicy">
+   <enum>Qt::NoContextMenu</enum>
+  </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
@@ -63,6 +66,9 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="contextMenuPolicy">
+      <enum>Qt::NoContextMenu</enum>
+     </property>
     </widget>
    </item>
    <item>
@@ -80,6 +86,9 @@
    </item>
    <item>
     <widget class="QDoubleSpinBox" name="doubleSpinBoxFc">
+     <property name="contextMenuPolicy">
+      <enum>Qt::NoContextMenu</enum>
+     </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
      </property>

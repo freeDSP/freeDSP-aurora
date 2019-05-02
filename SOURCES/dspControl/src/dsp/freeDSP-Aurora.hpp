@@ -60,7 +60,6 @@ public:
    */
   QByteArray makeParameterForWifi( uint16_t reg, int32_t val );
 
-
   //============================================================================
   /*! Starts the transfer of a new dsp firmware.
    *
@@ -137,13 +136,7 @@ public:
   bool storePidWifi( uint8_t pid );
 
   //============================================================================
-  /*! Program the EEPROM
-   *
-   */
-  bool programEepromWifi( void );
-
-  //============================================================================
-  /*!
+  /*! Returns the currently used ip address for communication with DSP.
    */
   QString getIpAddressWifi( void )
   {
@@ -154,7 +147,15 @@ public:
   }
 
   //============================================================================
-  /*!
+  /*! Sets the currently used ip address for communication with DSP.
+   */
+  void setIpAddressWifi( QString ip )
+  {
+    ipAddressLocal = ip;
+  }
+
+  //============================================================================
+  /*! Returns wether the DSP is connected via access point mode or local WiFi.
    */
   int getConnectionTypeWifi( void ) { return connectionType; }
 
@@ -169,7 +170,14 @@ public:
    */
   bool pingWifi( void );
 
-
+  //============================================================================
+  /*! Disconnect from DSP.
+   */
+  void disconnectWifi( void )
+  {
+    tcpSocket->disconnectFromHost();
+  }
+  
 private:
   //============================================================================
   /*!
@@ -202,17 +210,15 @@ signals:
   void haveReplyWifi( void );
 
 public:
-  QTcpSocket* tcpSocket;
-
-private:
-
- // bool isOpen = false;
   
+private: 
+  QTcpSocket* tcpSocket;
   QEventLoop loopWaitForResponseWiFi;
   QByteArray replyWifi;
   QByteArray replyDSP;
   QString ipAddressAP;
   QString ipAddressLocal;
+  quint16 portHostWifi;
   int connectionType;
   bool replyCompleteWifi;
   QProgressBar* ptrProgressBar;
