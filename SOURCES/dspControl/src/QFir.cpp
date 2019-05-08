@@ -84,20 +84,6 @@ uint32_t QFir::getNumBytes( void )
 /*!
  *
  */
-/*
-void QFir::writeDspParameter( void )
-{
-  qDebug()<<"QFir::writeDspParameter not implemented";
-  //uint32_t val = static_cast<uint32_t>(ui->comboBoxInput->currentIndex());
-  //dsp->storeRegAddr( addr[kOutput] );
-  //dsp->storeValue( val );
-}
-*/
-
-//==============================================================================
-/*!
- *
- */
 bool QFir::eventFilter( QObject* object, QEvent* event )
 {
   if( object == ui->lineEditResponseFile && event->type() == QEvent::MouseButtonDblClick )
@@ -146,10 +132,14 @@ bool QFir::eventFilter( QObject* object, QEvent* event )
 //==============================================================================
 /*!
  */
-void QFir::getUserParams( QByteArray* userParams )
+QByteArray QFir::getUserParams( void )
 {
+  QByteArray ret;
+
   #warning QFir::getUserParams not implemented
   qDebug()<<"QFir::getUserParams not implemented";
+
+  return ret;
 }
 
 //==============================================================================

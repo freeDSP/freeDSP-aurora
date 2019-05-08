@@ -881,32 +881,6 @@ void QCrossover::sendDspParameter( void )
   #warning QCrossover::sendDspParameter not fully implemented
   qDebug()<<"QCrossover::sendDspParameter not fully implemented";
 
-  /*
-  dsp->sendParameter( addr[kParamB2_1], static_cast<float>(coeffs[kB2]) );
-  dsp->sendParameter( addr[kParamB1_1], static_cast<float>(coeffs[kB1]) );
-  dsp->sendParameter( addr[kParamB0_1], static_cast<float>(coeffs[kB0]) );
-  dsp->sendParameter( addr[kParamA2_1], static_cast<float>(coeffs[kA2]) );
-  dsp->sendParameter( addr[kParamA1_1], static_cast<float>(coeffs[kA1]) );
-
-  dsp->sendParameter( addr[kParamB2_2], static_cast<float>(coeffs[5+kB2]) );
-  dsp->sendParameter( addr[kParamB1_2], static_cast<float>(coeffs[5+kB1]) );
-  dsp->sendParameter( addr[kParamB0_2], static_cast<float>(coeffs[5+kB0]) );
-  dsp->sendParameter( addr[kParamA2_2], static_cast<float>(coeffs[5+kA2]) );
-  dsp->sendParameter( addr[kParamA1_2], static_cast<float>(coeffs[5+kA1]) );
-
-  dsp->sendParameter( addr[kParamB2_3], static_cast<float>(coeffs[2*5+kB2]) );
-  dsp->sendParameter( addr[kParamB1_3], static_cast<float>(coeffs[2*5+kB1]) );
-  dsp->sendParameter( addr[kParamB0_3], static_cast<float>(coeffs[2*5+kB0]) );
-  dsp->sendParameter( addr[kParamA2_3], static_cast<float>(coeffs[2*5+kA2]) );
-  dsp->sendParameter( addr[kParamA1_3], static_cast<float>(coeffs[2*5+kA1]) );
-
-  dsp->sendParameter( addr[kParamB2_4], static_cast<float>(coeffs[3*5+kB2]) );
-  dsp->sendParameter( addr[kParamB1_4], static_cast<float>(coeffs[3*5+kB1]) );
-  dsp->sendParameter( addr[kParamB0_4], static_cast<float>(coeffs[3*5+kB0]) );
-  dsp->sendParameter( addr[kParamA2_4], static_cast<float>(coeffs[3*5+kA2]) );
-  dsp->sendParameter( addr[kParamA1_4], static_cast<float>(coeffs[3*5+kA1]) );
-  */
-
   QByteArray content;
 
   content.append( dsp->makeParameterForWifi( addr[kParamB2_1], static_cast<float>(coeffs[kB2]) ) );
@@ -950,69 +924,15 @@ uint32_t QCrossover::getNumBytes( void )
   return 2*5*4 + 4*5*4;
 }
 
-//------------------------------------------------------------------------------
-/*!
- *
- */
-#if 0
-void QCrossover::writeDspParameter( void )
-{
-  #warning QCrossover::writeDspParameter not fully implemented
-  qDebug()<<"QCrossover::writeDspParameter not fully implemented";
-
-  dsp->storeRegAddr( addr[kParamB2_1] );
-  dsp->storeValue( static_cast<float>(coeffs[kB2]) );
-  dsp->storeRegAddr( addr[kParamB1_1] );
-  dsp->storeValue( static_cast<float>(coeffs[kB1]) );
-  dsp->storeRegAddr( addr[kParamB0_1] );
-  dsp->storeValue( static_cast<float>(coeffs[kB0]) );
-  dsp->storeRegAddr( addr[kParamA2_1] );
-  dsp->storeValue( static_cast<float>(coeffs[kA2]) );
-  dsp->storeRegAddr( addr[kParamA1_1] );
-  dsp->storeValue( static_cast<float>(coeffs[kA1]) );
-
-  dsp->storeRegAddr( addr[kParamB2_2] );
-  dsp->storeValue( static_cast<float>(coeffs[5+kB2]) );
-  dsp->storeRegAddr( addr[kParamB1_2] );
-  dsp->storeValue( static_cast<float>(coeffs[5+kB1]) );
-  dsp->storeRegAddr( addr[kParamB0_2] );
-  dsp->storeValue( static_cast<float>(coeffs[5+kB0]) );
-  dsp->storeRegAddr( addr[kParamA2_2] );
-  dsp->storeValue( static_cast<float>(coeffs[5+kA2]) );
-  dsp->storeRegAddr( addr[kParamA1_2] );
-  dsp->storeValue( static_cast<float>(coeffs[5+kA1]) );
-
-  dsp->storeRegAddr( addr[kParamB2_3] );
-  dsp->storeValue( static_cast<float>(coeffs[2*5+kB2]) );
-  dsp->storeRegAddr( addr[kParamB1_3] );
-  dsp->storeValue( static_cast<float>(coeffs[2*5+kB1]) );
-  dsp->storeRegAddr( addr[kParamB0_3] );
-  dsp->storeValue( static_cast<float>(coeffs[2*5+kB0]) );
-  dsp->storeRegAddr( addr[kParamA2_3] );
-  dsp->storeValue( static_cast<float>(coeffs[2*5+kA2]) );
-  dsp->storeRegAddr( addr[kParamA1_3] );
-  dsp->storeValue( static_cast<float>(coeffs[2*5+kA1]) );
-
-  dsp->storeRegAddr( addr[kParamB2_4] );
-  dsp->storeValue( static_cast<float>(coeffs[3*5+kB2]) );
-  dsp->storeRegAddr( addr[kParamB1_4] );
-  dsp->storeValue( static_cast<float>(coeffs[3*5+kB1]) );
-  dsp->storeRegAddr( addr[kParamB0_4] );
-  dsp->storeValue( static_cast<float>(coeffs[3*5+kB0]) );
-  dsp->storeRegAddr( addr[kParamA2_4] );
-  dsp->storeValue( static_cast<float>(coeffs[3*5+kA2]) );
-  dsp->storeRegAddr( addr[kParamA1_4] );
-  dsp->storeValue( static_cast<float>(coeffs[3*5+kA1]) );
-}
-#endif
-
 //==============================================================================
 /*!
  */
-void QCrossover::getUserParams( QByteArray* userParams )
+QByteArray QCrossover::getUserParams( void )
 {
+  QByteArray ret;
   #warning QCrossover::getUserParams not implemented
   qDebug()<<"QCrossover::getUserParams not implemented";
+  return ret;
 }
 
 //==============================================================================

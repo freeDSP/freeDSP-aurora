@@ -122,7 +122,7 @@ void QPhase::updateCoeffs( void )
 /*!
  *
  */
-void QPhase::on_checkBoxInvert_stateChanged(int arg1)
+void QPhase::on_checkBoxInvert_stateChanged( int )
 {
   updateCoeffs();
   sendDspParameter();
@@ -189,36 +189,20 @@ uint32_t QPhase::getNumBytes( void )
 
 //==============================================================================
 /*!
- *
  */
-/*void QPhase::writeDspParameter( void )
+QByteArray QPhase::getUserParams( void )
 {
-  dsp->storeRegAddr( addr[kParamB2] );
-  dsp->storeValue( static_cast<float>(coeffs[kB2]) );
-  dsp->storeRegAddr( addr[kParamB1] );
-  dsp->storeValue( static_cast<float>(coeffs[kB1]) );
-  dsp->storeRegAddr( addr[kParamB0] );
-  dsp->storeValue( static_cast<float>(coeffs[kB0]) );
-  dsp->storeRegAddr( addr[kParamA2] );
-  dsp->storeValue( static_cast<float>(coeffs[kA2]) );
-  dsp->storeRegAddr( addr[kParamA1] );
-  dsp->storeValue( static_cast<float>(coeffs[kA1]) );
-
-}*/
-
-//==============================================================================
-/*!
- */
-void QPhase::getUserParams( QByteArray* userParams )
-{
+  QByteArray content;
   float fct = static_cast<float>(ui->doubleSpinBoxFc->value());
-  userParams->append( reinterpret_cast<const char*>(&fct), sizeof(fct) );
+  content.append( reinterpret_cast<const char*>(&fct), sizeof(fct) );
   float Qt = static_cast<float>(ui->doubleSpinBoxQ->value());
-  userParams->append( reinterpret_cast<const char*>(&Qt), sizeof(Qt) );
+  content.append( reinterpret_cast<const char*>(&Qt), sizeof(Qt) );
   uint8_t invert = 0;
   if( ui->checkBoxInvert->isChecked() )
     invert = 1;
-  userParams->append( reinterpret_cast<const char*>(&invert), sizeof(invert) );
+  content.append( reinterpret_cast<const char*>(&invert), sizeof(invert) );
+  content.append( reinterpret_cast<const char*>(&bypass), sizeof(bypass) );
+  return content;
 }
 
 //==============================================================================
@@ -257,12 +241,15 @@ void QPhase::setUserParams( QByteArray& userParams, int& idx )
     uint8_t invert = static_cast<uint8_t>(userParams.at(idx));
     idx++;
 
+    bypass = static_cast<bool>(userParams.at(idx));
+    idx++;
+
     ui->doubleSpinBoxFc->blockSignals( true );
-    ui->doubleSpinBoxFc->setValue( fct );
+    ui->doubleSpinBoxFc->setValue( static_cast<double>(fct) );
     ui->doubleSpinBoxFc->blockSignals( false );
 
     ui->doubleSpinBoxQ->blockSignals( true );
-    ui->doubleSpinBoxQ->setValue( Qt );
+    ui->doubleSpinBoxQ->setValue( static_cast<double>(Qt) );
     ui->doubleSpinBoxQ->blockSignals( false );
 
     ui->checkBoxInvert->blockSignals( true );
@@ -271,6 +258,11 @@ void QPhase::setUserParams( QByteArray& userParams, int& idx )
     else
       ui->checkBoxInvert->setChecked( false );
     ui->checkBoxInvert->blockSignals( false );
+
+    ui->pushButtonBypass->blockSignals( true );
+    ui->pushButtonBypass->setChecked( bypass );
+    ui->pushButtonBypass->blockSignals( false );
+    
 
   }
   else

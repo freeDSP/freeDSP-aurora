@@ -147,6 +147,14 @@ public:
   }
 
   //============================================================================
+  /*! Returns the ip address in local wifi network.
+   */
+  QString getIpAddressLocalWifi( void )
+  {
+    return ipAddressLocal;
+  }
+
+  //============================================================================
   /*! Sets the currently used ip address for communication with DSP.
    */
   void setIpAddressWifi( QString ip )
@@ -163,6 +171,22 @@ public:
   /*!
    */
   void setConnectionTypeWifi( int type ) { connectionType = type; }
+
+  //============================================================================
+  /*! Returns the ssid of local wifi network.
+   */
+  QString getSsidWifi( void )
+  {
+    return ssidWifi;
+  }
+
+  //============================================================================
+  /*! Sets the ssid of local wifi network.
+   */
+  void setSsidWifi( QString ssid )
+  {
+    ssidWifi = ssid;
+  }
 
   //============================================================================
   /*! Send a ping to the DSP to see wether it is there.
@@ -222,6 +246,7 @@ private:
   int connectionType;
   bool replyCompleteWifi;
   QProgressBar* ptrProgressBar;
+  QString ssidWifi;
 
 };
 

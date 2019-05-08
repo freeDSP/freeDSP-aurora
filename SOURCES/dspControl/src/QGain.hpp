@@ -33,7 +33,7 @@ public:
 
   void update( Vektorraum::tvector<Vektorraum::tfloat> f );
 
-  virtual void getUserParams( QByteArray* userParams );
+  virtual QByteArray getUserParams( void );
 
   virtual void setUserParams( QByteArray& userParams, int& idx );
 
@@ -45,8 +45,6 @@ public:
   virtual void sendDspParameter( void );
 
   virtual uint32_t getNumBytes( void );
-
-  //virtual void writeDspParameter( void );
 
   virtual QByteArray getDspParams( void );
 

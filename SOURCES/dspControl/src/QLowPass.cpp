@@ -831,65 +831,16 @@ uint32_t QLowPass::getNumBytes( void )
 
 //==============================================================================
 /*!
- *
  */
-/*
-void QLowPass::writeDspParameter( void )
+QByteArray QLowPass::getUserParams( void )
 {
-  dsp->storeRegAddr( addr[kParamB2_1] );
-  dsp->storeValue( static_cast<float>(coeffs[kB2]) );
-  dsp->storeRegAddr( addr[kParamB1_1] );
-  dsp->storeValue( static_cast<float>(coeffs[kB1]) );
-  dsp->storeRegAddr( addr[kParamB0_1] );
-  dsp->storeValue( static_cast<float>(coeffs[kB0]) );
-  dsp->storeRegAddr( addr[kParamA2_1] );
-  dsp->storeValue( static_cast<float>(coeffs[kA2]) );
-  dsp->storeRegAddr( addr[kParamA1_1] );
-  dsp->storeValue( static_cast<float>(coeffs[kA1]) );
-
-  dsp->storeRegAddr( addr[kParamB2_2] );
-  dsp->storeValue( static_cast<float>(coeffs[5+kB2]) );
-  dsp->storeRegAddr( addr[kParamB1_2] );
-  dsp->storeValue( static_cast<float>(coeffs[5+kB1]) );
-  dsp->storeRegAddr( addr[kParamB0_2] );
-  dsp->storeValue( static_cast<float>(coeffs[5+kB0]) );
-  dsp->storeRegAddr( addr[kParamA2_2] );
-  dsp->storeValue( static_cast<float>(coeffs[5+kA2]) );
-  dsp->storeRegAddr( addr[kParamA1_2] );
-  dsp->storeValue( static_cast<float>(coeffs[5+kA1]) );
-
-  dsp->storeRegAddr( addr[kParamB2_3] );
-  dsp->storeValue( static_cast<float>(coeffs[2*5+kB2]) );
-  dsp->storeRegAddr( addr[kParamB1_3] );
-  dsp->storeValue( static_cast<float>(coeffs[2*5+kB1]) );
-  dsp->storeRegAddr( addr[kParamB0_3] );
-  dsp->storeValue( static_cast<float>(coeffs[2*5+kB0]) );
-  dsp->storeRegAddr( addr[kParamA2_3] );
-  dsp->storeValue( static_cast<float>(coeffs[2*5+kA2]) );
-  dsp->storeRegAddr( addr[kParamA1_3] );
-  dsp->storeValue( static_cast<float>(coeffs[2*5+kA1]) );
-
-  dsp->storeRegAddr( addr[kParamB2_4] );
-  dsp->storeValue( static_cast<float>(coeffs[3*5+kB2]) );
-  dsp->storeRegAddr( addr[kParamB1_4] );
-  dsp->storeValue( static_cast<float>(coeffs[3*5+kB1]) );
-  dsp->storeRegAddr( addr[kParamB0_4] );
-  dsp->storeValue( static_cast<float>(coeffs[3*5+kB0]) );
-  dsp->storeRegAddr( addr[kParamA2_4] );
-  dsp->storeValue( static_cast<float>(coeffs[3*5+kA2]) );
-  dsp->storeRegAddr( addr[kParamA1_4] );
-  dsp->storeValue( static_cast<float>(coeffs[3*5+kA1]) );
-}
-*/
-
-//==============================================================================
-/*!
- */
-void QLowPass::getUserParams( QByteArray* userParams )
-{
-  userParams->append( static_cast<uint8_t>(filterDesign) );
+  QByteArray content;
+  content.append( static_cast<uint8_t>(filterDesign) );
   float fc = static_cast<float>(ui->doubleSpinBoxFc->value());
-  userParams->append( reinterpret_cast<const char*>(&fc), sizeof(fc) );
+  content.append( reinterpret_cast<const char*>(&fc), sizeof(fc) );
+  bypass = ui->pushButtonBypass->isChecked();
+  content.append( reinterpret_cast<const char*>(&bypass), sizeof(bypass) );
+  return content;
 }
 
 //==============================================================================
@@ -916,6 +867,9 @@ void QLowPass::setUserParams( QByteArray& userParams, int& idx )
 
     float fc = *reinterpret_cast<const float*>(param.data());
 
+    bypass = static_cast<bool>(userParams.at(idx));
+    idx++;
+
     ui->comboBoxType->blockSignals( true );
     int index = ui->comboBoxType->findData( filterDesign );
     if ( index != -1 )
@@ -924,6 +878,10 @@ void QLowPass::setUserParams( QByteArray& userParams, int& idx )
     ui->doubleSpinBoxFc->blockSignals( true );
     ui->doubleSpinBoxFc->setValue( fc );
     ui->doubleSpinBoxFc->blockSignals( false );
+
+    ui->pushButtonBypass->blockSignals( true );
+    ui->pushButtonBypass->setChecked( bypass );
+    ui->pushButtonBypass->blockSignals( false );
   }
   else
     qDebug()<<"QLowPass::setUserParams: Not enough data";

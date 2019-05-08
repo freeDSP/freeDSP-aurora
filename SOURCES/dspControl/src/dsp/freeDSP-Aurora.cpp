@@ -114,10 +114,10 @@ QByteArray CFreeDspAurora::makeParameterForWifi( uint16_t reg, int32_t val )
   content.append( (data >> 8) & 0xFF );
   content.append( data & 0xFF );
 
-  qDebug()<<"CFreeDspAurora::makeParameterForWifi";
-  qDebug()<<val;
-  qDebug()<<QString::number( data, 16 );
-  qDebug()<<content.toHex();
+  //qDebug()<<"CFreeDspAurora::makeParameterForWifi";
+  //qDebug()<<val;
+  //qDebug()<<QString::number( data, 16 );
+  //qDebug()<<content.toHex();
   
   return content;
 }
@@ -366,40 +366,25 @@ bool CFreeDspAurora::sendUserParameterWifi( QByteArray content )
 
   QString wifiIpHost = getIpAddressWifi();
 
-  tcpSocket->abort();
-  tcpSocket->connectToHost( wifiIpHost, portHostWifi );
-
-  QEventLoop loopConnect;
-  connect( tcpSocket, SIGNAL(connected()), &loopConnect, SLOT(quit()) );
-  // \TODO Add timeout timer
-  #warning Add timeout timer
-  //connect(timeoutTimer, SIGNAL(timeout()), &loop, SLOT(quit()));
-  loopConnect.exec();
-
-  QString requestString = QString("PUT /userparam HTTP/1.1\r\nHost: ")
-                        + wifiIpHost
-                        + QString("\r\nContent-type:application/octet-stream\r\nContent-length: ")
-                        + QString::number( content.size()*2 )
-                        + QString("\r\n\r\n");
+  QString requestString = QString( "PUT /userparam HTTP/1.1\r\n" )
+                        + QString( "Host: " ) + wifiIpHost + QString( "\r\n" )
+                        + QString( "Content-type:application/octet-stream\r\n" )
+                        + QString( "Content-length: " ) + QString::number( content.size()*2 ) + QString( "\r\n" )
+                        + QString( "\r\n" );
   QByteArray request;
   request.append( requestString );
   request.append( content.toHex() );  
   request.append( "\r\n" );
-  
-  qDebug()<<QString( request );
-  tcpSocket->write( request );
 
-  //ret = waitForAckWifi();
-  //tcpSocket->abort();
+  writeRequestWifi( request );
 
-  QEventLoop loopDisconnect;
-  connect( tcpSocket, SIGNAL(disconnected()), &loopDisconnect, SLOT(quit()) );
-  // \TODO Add timeout timer
-  #warning Add timeout timer
-  //connect(timeoutTimer, SIGNAL(timeout()), &loop, SLOT(quit()));
-  loopDisconnect.exec();
-
-  return ret;
+  if( !waitForReplyWifi() )
+  {
+    QMessageBox::critical( this, tr("Error"), tr("Uups, writing parameters to DSP failed. Please double check everything, reset DSP and try again."), QMessageBox::Ok ); 
+    return false;
+  }
+  else
+    return true;
 }
 
 //==============================================================================
@@ -435,7 +420,10 @@ bool CFreeDspAurora::finishUserParameterWifi( uint32_t totalTransmittedBytes )
     if( totalTransmittedBytes == totalReceivedBytes )
       return true;
     else
+    {
+      qDebug()<<"[ERROR] Transmitted "<<totalTransmittedBytes*2<<"but DSP received "<<totalReceivedBytes<<"bytes.";
       return false;
+    }
   }
 }
 
@@ -701,6 +689,7 @@ bool CFreeDspAurora::storeSettingsWifi( QString ssid, QString password )
   qDebug()<<"storeSsidWifi";
 
   QString wifiIpHost = getIpAddressWifi();
+  ssidWifi = ssid;
 
   QString content = QString("SSID=") + ssid + QString("&")
                   + QString("Password=") + password;

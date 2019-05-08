@@ -95,17 +95,6 @@ uint32_t QInputSelect::getNumBytes( void )
 /*!
  *
  */
-/*void QInputSelect::writeDspParameter( void )
-{
-  uint32_t val = static_cast<uint32_t>(ui->comboBoxInput->currentIndex());
-  dsp->storeRegAddr( addr[kInput] );
-  dsp->storeValue( val );
-}*/
-
-//==============================================================================
-/*!
- *
- */
 void QInputSelect::on_comboBoxInput_currentIndexChanged( int  )
 {
   sendDspParameter();
@@ -115,9 +104,11 @@ void QInputSelect::on_comboBoxInput_currentIndexChanged( int  )
 //==============================================================================
 /*!
  */
-void QInputSelect::getUserParams( QByteArray* userParams )
+QByteArray QInputSelect::getUserParams( void )
 {
-  userParams->append( static_cast<uint8_t>(ui->comboBoxInput->currentIndex()) );
+  QByteArray content;
+  content.append( static_cast<uint8_t>(ui->comboBoxInput->currentIndex()) );
+  return content;
 }
 
 //==============================================================================

@@ -9,6 +9,8 @@
 #include <QtNetwork>
 #include <QHostAddress>
 #include <QProgressDialog>
+#include <QJsonObject>
+#include <QJsonDocument>
 
 #include "MainWindow.hpp"
 #include "ui_MainWindow.h"
@@ -57,6 +59,22 @@ MainWindow::MainWindow( QWidget* parent ) :
   ui->menuBar->hide();
   #endif
   //ui->actionWrite_to_DSP->setEnabled( false );
+
+  #if defined( __MACOSX__ )
+  QFile fileSettings( "./settings.json" );
+  #endif
+
+  if( fileSettings.open( QIODevice::ReadOnly ) )
+  {
+    QByteArray settings = fileSettings.readAll();
+    QJsonDocument jsonDoc( QJsonDocument::fromJson( settings ) );
+    QJsonObject jsonObj = jsonDoc.object();
+    dsp.setConnectionTypeWifi( jsonObj[ "network" ].toInt() );
+    dsp.setSsidWifi( jsonObj[ "ssid" ].toString() );
+    dsp.setIpAddressWifi( jsonObj[ "ip" ].toString() );
+    fileSettings.close();
+  }
+  
 
   //----------------------------------------------------------------------------
   //--- Setup the channel tabs
@@ -185,7 +203,7 @@ MainWindow::MainWindow( QWidget* parent ) :
   }
 
   #else
-  setWindowTitle( QString("dspControl ").append( VERSION_STR ) );
+  setWindowTitle( QString("auverdionControl ").append( VERSION_STR ) );
  
   //if( dialog.comboBox()->currentText() == QString("8channels") )
   //{
@@ -378,7 +396,6 @@ void MainWindow::on_actionRead_from_DSP_triggered()
     // \todo Show MessageBox  
   }
 
-  #if 0
   //----------------------------------------------------------------------------
   //--- Request user parameters
   //----------------------------------------------------------------------------
@@ -393,20 +410,10 @@ void MainWindow::on_actionRead_from_DSP_triggered()
       for( unsigned int n = 0; n < channel->getNumDspBlocks(); n++ )
       {
         QDspBlock* dspBlock = channel->getDspBlock(n);
-        if( dspBlock->getType() == QDspBlock::INPUTSELECT ||
-            dspBlock->getType() == QDspBlock::LOWSHELV ||
-            dspBlock->getType() == QDspBlock::PEQ ||
-            dspBlock->getType() == QDspBlock::HIGHSHELV ||
-            dspBlock->getType() == QDspBlock::LOWPASS ||
-            dspBlock->getType() == QDspBlock::PHASE ||
-            dspBlock->getType() == QDspBlock::DELAY ||
-            dspBlock->getType() == QDspBlock::GAIN ||
-            dspBlock->getType() == QDspBlock::HIGHPASS )
         dspBlock->setUserParams( userparams, idx );
       }
     }
   }
-  #endif
 
   updatePlots();
 
@@ -422,6 +429,7 @@ void MainWindow::on_actionWrite_to_DSP_triggered()
   //----------------------------------------------------------------------------
   //--- Build dspparam.hex file
   //----------------------------------------------------------------------------
+  qDebug()<<"Build dspparam.hex file";
   QByteArray dspparams;
   for( unsigned int ii = 0; ii < dspPlugin->getNumChannels(); ii++ )
   {
@@ -436,9 +444,28 @@ void MainWindow::on_actionWrite_to_DSP_triggered()
   }
 
   //----------------------------------------------------------------------------
+  //--- Build usrparam.hex file
+  //----------------------------------------------------------------------------
+  qDebug()<<"Build usrparam.hex file";
+  QByteArray usrparams;
+  for( unsigned int ii = 0; ii < dspPlugin->getNumChannels(); ii++ )
+  {
+    QChannel* channel = dspPlugin->getChannel( ii );
+    for( unsigned int n = 0; n < channel->getNumDspBlocks(); n++ )
+    {
+      QDspBlock* dspBlock = channel->getDspBlock(n);
+      qDebug()<<n;
+      QByteArray params = dspBlock->getUserParams();
+      if( params.size() )
+        usrparams.append( params );
+    }
+  }
+
+  //----------------------------------------------------------------------------
   //--- Send dspparam.hex file
   //----------------------------------------------------------------------------
-  QProgressDialog progress( tr("Storing your DSP settings..."), tr("Abort"), 0, dspparams.size(), this );
+  qDebug()<<"Send dspparam.hex file";
+  QProgressDialog progress( tr("Storing your DSP settings..."), tr("Abort"), 0, dspparams.size() + usrparams.size(), this );
   progress.setWindowModality(Qt::WindowModal);
 
   int offset = 0;
@@ -450,8 +477,6 @@ void MainWindow::on_actionWrite_to_DSP_triggered()
     {
       if( offset < dspparams.size() )
         packet.append( dspparams.at(offset) );
-      //else
-      //  packet.append( (char)0 );
       offset++;
     }
     dsp.sendDspParameterWifi( packet );
@@ -467,38 +492,50 @@ void MainWindow::on_actionWrite_to_DSP_triggered()
 
   if( !dsp.finishDspParameterWifi( totalTransmittedBytes*2 ) )
   {
-    QMessageBox::critical( this, tr("Error"), tr("Uups, something went wrong. Please double check everything and try again."), QMessageBox::Ok );  
+    QMessageBox::critical( this, tr("Error"), tr("Uups, something went wrong with storing the DSP parameters. Please double check everything and try again."), QMessageBox::Ok );  
+    return;
+  }
+
+  //----------------------------------------------------------------------------
+  //--- Send userparam.hex file
+  //----------------------------------------------------------------------------
+  qDebug()<<"Send userparam.hex file";
+  offset = 0;
+  totalTransmittedBytes = 0;
+  while( offset < usrparams.size() )
+  {
+    QByteArray packet;
+    for( int ii = 0; ii < 64; ii++ )
+    {
+      if( offset < usrparams.size() )
+        packet.append( usrparams.at(offset) );
+      offset++;
+    }
+    dsp.sendUserParameterWifi( packet );
+    totalTransmittedBytes += static_cast<uint32_t>(packet.size());
+
+    progress.setValue( dspparams.size() + offset );
+
+    if( progress.wasCanceled() )
+      /* \TODO Handle cancel */
+      return;
+  }
+  progress.setValue( dspparams.size() + usrparams.size() );
+
+  if( !dsp.finishUserParameterWifi( totalTransmittedBytes*2 ) )
+  {
+    QMessageBox::critical( this, tr("Error"), tr("Uups, something went wrong with storing the user settings. Please double check everything and try again."), QMessageBox::Ok );  
     return;
   }
 
   qDebug()<<"Success";
-  qDebug()<<"File size:"<<dspparams.size() / 1024<<"KiB";
+  qDebug()<<"File size dspparam.hex:"<<dspparams.size() / 1024<<"KiB";
+  qDebug()<<"File size usrparam.hex:"<<usrparams.size() / 1024<<"KiB";
 
   QMessageBox::information( this, tr("Success"), tr("You have successfully stored your settings!"), QMessageBox::Ok );
 
 #if 0
-  //----------------------------------------------------------------------------
-  //--- Build usrparam.hex file
-  //----------------------------------------------------------------------------
-  QByteArray content;
-  for( unsigned int ii = 0; ii < dspPlugin->getNumChannels(); ii++ )
-  {
-    QChannel* channel = dspPlugin->getChannel( ii );
-    for( unsigned int n = 0; n < channel->getNumDspBlocks(); n++ )
-    {
-      QDspBlock* dspBlock = channel->getDspBlock(n);
-      if( dspBlock->getType() == QDspBlock::INPUTSELECT ||
-          dspBlock->getType() == QDspBlock::LOWSHELV ||
-          dspBlock->getType() == QDspBlock::PEQ ||
-          dspBlock->getType() == QDspBlock::HIGHSHELV ||
-          dspBlock->getType() == QDspBlock::LOWPASS ||
-          dspBlock->getType() == QDspBlock::PHASE ||
-          dspBlock->getType() == QDspBlock::DELAY ||
-          dspBlock->getType() == QDspBlock::GAIN ||
-          dspBlock->getType() == QDspBlock::HIGHPASS )
-      dspBlock->getUserParams( &content );
-    }
-  }
+  
 
   QProgressDialog progress( tr("Storing user parameter..."), tr("Abort"), 0, content.size(), this );
   progress.setWindowModality(Qt::WindowModal);
@@ -604,10 +641,27 @@ void MainWindow::on_actionSettings_triggered()
 {
   DialogSettings dialog( &dsp, this );
   int result = dialog.exec();
-  /*if( result == QDialog::Accepted )
-  {
+  if( result == QDialog::Accepted )
+  { 
+    #if defined( __MACOSX__ )
+    QFile fileSettings( "./settings.json" );
+    #endif
 
-  }*/
+    QJsonObject jsonObj;
+    jsonObj[ "network" ] = dsp.getConnectionTypeWifi();
+    jsonObj[ "ssid" ] = dsp.getSsidWifi();
+    jsonObj[ "ip" ] = dsp.getIpAddressLocalWifi();
+
+    QJsonDocument jsonDoc( jsonObj );
+
+    if( !fileSettings.open( QIODevice::WriteOnly ) )
+    {
+      qWarning( "Couldn't open file for saving user settings" );
+      return;
+    }
+    fileSettings.write( jsonDoc.toJson() );
+    fileSettings.close();
+  }
 }
 
 //==============================================================================

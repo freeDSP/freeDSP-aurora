@@ -182,34 +182,18 @@ uint32_t QHighShelv::getNumBytes( void )
 
 //==============================================================================
 /*!
- *
  */
-/*void QHighShelv::writeDspParameter( void )
+QByteArray QHighShelv::getUserParams( void )
 {
-  dsp->storeRegAddr( addr[kParamB2] );
-  dsp->storeValue( static_cast<float>(coeffs[kB2]) );
-  dsp->storeRegAddr( addr[kParamB1] );
-  dsp->storeValue( static_cast<float>(coeffs[kB1]) );
-  dsp->storeRegAddr( addr[kParamB0] );
-  dsp->storeValue( static_cast<float>(coeffs[kB0]) );
-  dsp->storeRegAddr( addr[kParamA2] );
-  dsp->storeValue( static_cast<float>(coeffs[kA2]) );
-  dsp->storeRegAddr( addr[kParamA1] );
-  dsp->storeValue( static_cast<float>(coeffs[kA1]) );
-
-}*/
-
-//==============================================================================
-/*!
- */
-void QHighShelv::getUserParams( QByteArray* userParams )
-{
+  QByteArray content;
   float V0t = static_cast<float>(ui->doubleSpinBoxGain->value());
-  userParams->append( reinterpret_cast<const char*>(&V0t), sizeof(V0t) );
+  content.append( reinterpret_cast<const char*>(&V0t), sizeof(V0t) );
   float fct = static_cast<float>(ui->doubleSpinBoxFc->value());
-  userParams->append( reinterpret_cast<const char*>(&fct), sizeof(fct) );
+  content.append( reinterpret_cast<const char*>(&fct), sizeof(fct) );
   float St = static_cast<float>(ui->doubleSpinBoxS->value());
-  userParams->append( reinterpret_cast<const char*>(&St), sizeof(St) );
+  content.append( reinterpret_cast<const char*>(&St), sizeof(St) );
+  content.append( reinterpret_cast<const char*>(&bypass), sizeof(bypass) );
+  return content;
 }
 
 //==============================================================================
@@ -257,6 +241,9 @@ void QHighShelv::setUserParams( QByteArray& userParams, int& idx )
 
     float St = *reinterpret_cast<const float*>(param.data());
 
+    bypass = static_cast<bool>(userParams.at(idx));
+    idx++;
+
     ui->doubleSpinBoxGain->blockSignals( true );
     ui->doubleSpinBoxGain->setValue( V0t );
     ui->doubleSpinBoxGain->blockSignals( false );
@@ -268,6 +255,10 @@ void QHighShelv::setUserParams( QByteArray& userParams, int& idx )
     ui->doubleSpinBoxS->blockSignals( true );
     ui->doubleSpinBoxS->setValue( St );
     ui->doubleSpinBoxS->blockSignals( false );
+
+    ui->pushButtonBypass->blockSignals( true );
+    ui->pushButtonBypass->setChecked( bypass );
+    ui->pushButtonBypass->blockSignals( false );
   }
   else
     qDebug()<<"QHighShelv::setUserParams: Not enough data";

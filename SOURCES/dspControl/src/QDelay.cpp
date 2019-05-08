@@ -104,28 +104,16 @@ uint32_t QDelay::getNumBytes( void )
   return 6;
 }
 
-#if 0
-//==============================================================================
-/*!
- *
- */
-void QDelay::writeDspParameter( void )
-{
-  uint32_t val = static_cast<uint32_t>(ui->doubleSpinBoxDelay->value()/1000.0 * fs + 0.5);
-  if( bypass )
-    val = 0;
-  dsp->storeRegAddr( addr[kDelay] );
-  dsp->storeValue( val );
-}
-#endif
-
 //==============================================================================
 /*!
  */
-void QDelay::getUserParams( QByteArray* userParams )
+QByteArray QDelay::getUserParams( void )
 {
+  QByteArray content;
   float dly = static_cast<float>(ui->doubleSpinBoxDelay->value());
-  userParams->append( reinterpret_cast<const char*>(&dly), sizeof(dly) );
+  content.append( reinterpret_cast<const char*>(&dly), sizeof(dly) );
+  content.append( reinterpret_cast<const char*>(&bypass), sizeof(bypass) );
+  return content;
 }
 
 //==============================================================================
@@ -149,9 +137,16 @@ void QDelay::setUserParams( QByteArray& userParams, int& idx )
 
     float dly = *reinterpret_cast<const float*>(param.data());
 
+    bypass = static_cast<bool>(userParams.at(idx));
+    idx++;
+
     ui->doubleSpinBoxDelay->blockSignals( true );
     ui->doubleSpinBoxDelay->setValue( static_cast<double>(dly) );
     ui->doubleSpinBoxDelay->blockSignals( false );
+
+    ui->pushButtonBypass->blockSignals( true );
+    ui->pushButtonBypass->setChecked( bypass );
+    ui->pushButtonBypass->blockSignals( false );
   }
   else
     qDebug()<<"QDelay::setUserParams: Not enough data";

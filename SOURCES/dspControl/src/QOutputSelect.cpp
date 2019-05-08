@@ -115,29 +115,6 @@ uint32_t QOutputSelect::getNumBytes( void )
 /*!
  *
  */
-/*
-void QOutputSelect::writeDspParameter( void )
-{
-  //uint32_t val = static_cast<uint32_t>(ui->comboBoxInput->currentIndex());
-  //dsp->storeRegAddr( addr[kOutput] );
-  //dsp->storeValue( val );
-}
-*/
-
-//==============================================================================
-/*!
- *
- */
-/*void QOutputSelect::on_comboBoxInput_currentIndexChanged( int  )
-{
-  sendDspParameter();
-  emit valueChanged();
-}*/
-
-//==============================================================================
-/*!
- *
- */
 bool QOutputSelect::eventFilter( QObject* object, QEvent* event )
 {
   if( object == ui->lineEditResponseFile && event->type() == QEvent::MouseButtonDblClick )
@@ -222,9 +199,11 @@ bool QOutputSelect::eventFilter( QObject* object, QEvent* event )
 //==============================================================================
 /*!
  */
-void QOutputSelect::getUserParams( QByteArray* userParams )
+QByteArray QOutputSelect::getUserParams( void )
 {
+  QByteArray content;
 
+  return content;
 }
 
 //==============================================================================

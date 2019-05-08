@@ -97,11 +97,9 @@ public:
 
   virtual uint32_t getNumBytes( void );
 
-  //virtual void writeDspParameter( void );
-
   void setName( QString newname );
 
-  virtual void getUserParams( QByteArray* userParams );
+  virtual QByteArray getUserParams( void );
 
   virtual void setUserParams( QByteArray& userParams, int& idx );
 

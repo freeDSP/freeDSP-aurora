@@ -44,15 +44,13 @@ public:
 
   tdspblocktype getType( void ) { return type; }
 
-  virtual void getUserParams( QByteArray* userParams ) = 0;
+  virtual QByteArray getUserParams( void ) = 0;
 
   virtual void setUserParams( QByteArray& userParams, int& idx ) = 0;
 
   virtual void sendDspParameter( void ) = 0;
 
   virtual uint32_t getNumBytes( void ) = 0;
-
-  //virtual void writeDspParameter( void ) = 0;
 
   virtual QByteArray getDspParams( void ) = 0;
 

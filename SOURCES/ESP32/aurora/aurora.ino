@@ -319,22 +319,6 @@ void uploadDspFirmware( void )
 }
 
 
-
-                  
-                  byteTx = (data>>24) & 0xff;
-                  Serial.print( byte2string2(byteTx) );
-                  Wire.write( byteTx );
-                  byteTx = (data>>16) & 0xff;
-                  Serial.print( byte2string2(byteTx) );
-                  Wire.write( byteTx );
-                  byteTx = (data>>8) & 0xff;
-                  Serial.print( byte2string2(byteTx) );
-                  Wire.write( byteTx );
-                  byteTx = data & 0xff;
-                  Serial.println( byte2string2(byteTx) );
-                  Wire.write( byteTx );               
-                  Wire.endTransmission( true );
-
 //==============================================================================
 /*! Uploads the parameters from ESP32 SPI flash to DSP.
  */
@@ -348,7 +332,7 @@ void uploadDspParameter( void )
   {
     int file_size = fileDspParams.size();
 
-    cntr = 0;
+    int cntr = 0;
 
     while( fileDspParams.available() )
     {
@@ -822,20 +806,6 @@ void setup()
 }
 
 //==============================================================================
-/*! Sends an ACK via WiFi
- *
- */
-/*void sendAckWifi( void )
-{
-  String httpResponse = "";
-  httpResponse += "HTTP/1.1 200 OK\r\n";
-  httpResponse += "Content-type:text/plain\r\n\r\n";
-  httpResponse += "ACK";
-  httpResponse += "\r\n";
-  client.println( httpResponse );
-}*/
-
-//==============================================================================
 /*! Handle any HTTP request.
  *
  */
@@ -1000,11 +970,50 @@ void handleHttpRequest()
               //currentLine = "";
             }
 
-
-
-
-
+            //-----------------------------------------------------------------
+            //--- Receiving new User parameter block
+            //-----------------------------------------------------------------
             else if( wifiStatus == STATE_WIFI_RECEIVE_USERPARAM )
+            {
+              receivedPostRequest += currentLine;
+              if( receivedPostRequest.length() > contentLength )
+              {
+                receivedPostRequest = receivedPostRequest.substring( 0, receivedPostRequest.length()-1 );
+                totalBytesReceived += receivedPostRequest.length();
+
+                int offset = 0;
+                Serial.print( "Writing to file..." );
+                while( offset < receivedPostRequest.length() )
+                {
+                  String str = receivedPostRequest.substring( offset, offset + 2 );
+                  uint8_t rxByte = (uint8_t)strtoul( str.c_str(), NULL, 16 );
+                  size_t len = fileUserParams.write( &rxByte, 1 );
+                  if( len != 1 )
+                    Serial.println( "[ERROR] Writing to usrparam.hex" );
+                  offset += 2;
+                }
+                Serial.println("OK");
+                fileUserParams.flush();
+
+                Serial.print( "Received bytes:" );
+                Serial.println( receivedPostRequest.length() );
+                receivedPostRequest = "";
+
+                String httpResponse = "";
+                httpResponse += "HTTP/1.1 200 OK\r\n";
+                httpResponse += "Content-type:text/plain\r\n\r\n";
+                httpResponse += "ACK";
+                httpResponse += "\r\n";
+                client.println( httpResponse );
+
+                client.stop();
+                waitForData = false;
+              }
+              //currentLine = "";
+            }
+            
+            
+            /*else if( wifiStatus == STATE_WIFI_RECEIVE_USERPARAM )
             {
               int offset = 0;
               while( offset < currentLine.length() )
@@ -1035,7 +1044,11 @@ void handleHttpRequest()
                 waitForData = false;
                 //wifiStatus = STATE_WIFI_IDLE;
               }
-            }
+            }*/
+
+
+
+
 
             else if( wifiStatus == STATE_WIFI_RECEIVE_CONFIG )
             {
@@ -1280,11 +1293,13 @@ void handleHttpRequest()
               //cntrPackets++;
             }
 
-
+            //-----------------------------------------------------------------
             //--- New user parameter block
+            //-----------------------------------------------------------------
             else if( currentLine.startsWith("PUT /userparam") )
             {
               Serial.println( "PUT /userparam" );
+              receivedPostRequest = "";
               if( wifiStatus != STATE_WIFI_RECEIVE_USERPARAM )                  // start a new transfer
               {
                 if( SPIFFS.exists( "/usrparam.hex" ) )
@@ -1308,7 +1323,9 @@ void handleHttpRequest()
               //cntrPackets++;
             }
 
+            //-----------------------------------------------------------------
             //--- Finish user parameters transfer
+            //-----------------------------------------------------------------
             else if( currentLine.startsWith("GET /finishuserparam") )
             {
               Serial.println( "GET /finishuserparam" );
@@ -1326,6 +1343,7 @@ void handleHttpRequest()
               currentLine = "";
               //cntrPackets++;
             }
+
 
             //--- Request of user parameter file size
             else if( currentLine.startsWith("GET /sizeuserparam") )

@@ -68,7 +68,7 @@ public:
     return channel;
   }
 
-  virtual void getUserParams( QByteArray* userParams );
+  virtual QByteArray getUserParams( void );
 
   virtual void setUserParams( QByteArray& userParams, int& idx );
 
@@ -77,8 +77,6 @@ public:
   virtual void sendDspParameter( void );
 
   void setParameters( Vektorraum::tfloat newfc, Vektorraum::tfloat newV0, Vektorraum::tfloat newQ );
-
-  //virtual void writeDspParameter( void );
 
   virtual QByteArray getDspParams( void );
 

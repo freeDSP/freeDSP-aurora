@@ -206,14 +206,17 @@ void QLowShelv::writeDspParameter( void )
 //==============================================================================
 /*!
  */
-void QLowShelv::getUserParams( QByteArray* userParams )
+QByteArray QLowShelv::getUserParams( void )
 {
+  QByteArray content;
   float V0t = static_cast<float>(ui->doubleSpinBoxGain->value());
-  userParams->append( reinterpret_cast<const char*>(&V0t), sizeof(V0t) );
+  content.append( reinterpret_cast<const char*>(&V0t), sizeof(V0t) );
   float fct = static_cast<float>(ui->doubleSpinBoxFc->value());
-  userParams->append( reinterpret_cast<const char*>(&fct), sizeof(fct) );
+  content.append( reinterpret_cast<const char*>(&fct), sizeof(fct) );
   float St = static_cast<float>(ui->doubleSpinBoxS->value());
-  userParams->append( reinterpret_cast<const char*>(&St), sizeof(St) );
+  content.append( reinterpret_cast<const char*>(&St), sizeof(St) );
+  content.append( reinterpret_cast<const char*>(&bypass), sizeof(bypass) );
+  return content;
 }
 
 //==============================================================================
@@ -261,6 +264,9 @@ void QLowShelv::setUserParams( QByteArray& userParams, int& idx )
 
     float St = *reinterpret_cast<const float*>(param.data());
 
+    bypass = static_cast<bool>(userParams.at(idx));
+    idx++;
+
     ui->doubleSpinBoxGain->blockSignals( true );
     ui->doubleSpinBoxGain->setValue( V0t );
     ui->doubleSpinBoxGain->blockSignals( false );
@@ -272,6 +278,10 @@ void QLowShelv::setUserParams( QByteArray& userParams, int& idx )
     ui->doubleSpinBoxS->blockSignals( true );
     ui->doubleSpinBoxS->setValue( St );
     ui->doubleSpinBoxS->blockSignals( false );
+
+    ui->pushButtonBypass->blockSignals( true );
+    ui->pushButtonBypass->setChecked( bypass );
+    ui->pushButtonBypass->blockSignals( false );
   }
   else
     qDebug()<<"QLowShelv::setUserParams: Not enough data";

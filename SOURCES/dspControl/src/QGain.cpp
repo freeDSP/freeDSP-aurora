@@ -124,10 +124,13 @@ uint32_t QGain::getNumBytes( void )
 //==============================================================================
 /*!
  */
-void QGain::getUserParams( QByteArray* userParams )
+QByteArray QGain::getUserParams( void )
 {
+  QByteArray content;
   float gain = static_cast<float>(ui->doubleSpinBoxGain->value());
-  userParams->append( reinterpret_cast<const char*>(&gain), sizeof(gain) );
+  content.append( reinterpret_cast<const char*>(&gain), sizeof(gain) );
+  content.append( reinterpret_cast<const char*>(&bypass), sizeof(bypass) );
+  return content;
 }
 
 //==============================================================================
@@ -151,9 +154,16 @@ void QGain::setUserParams( QByteArray& userParams, int& idx )
 
     float gain = *reinterpret_cast<const float*>(param.data());
 
+    bypass = static_cast<bool>(userParams.at(idx));
+    idx++;
+
     ui->doubleSpinBoxGain->blockSignals( true );
     ui->doubleSpinBoxGain->setValue( static_cast<double>(gain) );
     ui->doubleSpinBoxGain->blockSignals( false );
+
+    ui->pushButtonBypass->blockSignals( true );
+    ui->pushButtonBypass->setChecked( bypass );
+    ui->pushButtonBypass->blockSignals( false );
   }
   else
     qDebug()<<"QGain::setUserParams: Not enough data";

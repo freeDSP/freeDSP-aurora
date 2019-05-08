@@ -197,26 +197,6 @@ uint32_t QPeq::getNumBytes( void )
 /*!
  *
  */
-/*void QPeq::writeDspParameter( void )
-{
-  dsp->storeRegAddr( addr[kParamB2] );
-  dsp->storeValue( static_cast<float>(coeffs[kB2]) );
-  dsp->storeRegAddr( addr[kParamB1] );
-  dsp->storeValue( static_cast<float>(coeffs[kB1]) );
-  dsp->storeRegAddr( addr[kParamB0] );
-  dsp->storeValue( static_cast<float>(coeffs[kB0]) );
-  dsp->storeRegAddr( addr[kParamA2] );
-  dsp->storeValue( static_cast<float>(coeffs[kA2]) );
-  dsp->storeRegAddr( addr[kParamA1] );
-  dsp->storeValue( static_cast<float>(coeffs[kA1]) );
-
-}
-*/
-
-//==============================================================================
-/*!
- *
- */
 void QPeq::on_showContextMenu( const QPoint &pos )
 {
   qDebug()<<"Context Menu";
@@ -261,14 +241,17 @@ void QPeq::setParameters( Vektorraum::tfloat newfc, Vektorraum::tfloat newV0, Ve
 //==============================================================================
 /*!
  */
-void QPeq::getUserParams( QByteArray* userParams )
+QByteArray QPeq::getUserParams( void )
 {
+  QByteArray content;
   float fct = static_cast<float>(ui->doubleSpinBoxFc->value());
-  userParams->append( reinterpret_cast<const char*>(&fct), sizeof(fct) );
+  content.append( reinterpret_cast<const char*>(&fct), sizeof(fct) );
   float Qt = static_cast<float>(ui->doubleSpinBoxQ->value());
-  userParams->append( reinterpret_cast<const char*>(&Qt), sizeof(Qt) );
+  content.append( reinterpret_cast<const char*>(&Qt), sizeof(Qt) );
   float V0t = static_cast<float>(ui->doubleSpinBoxGain->value());
-  userParams->append( reinterpret_cast<const char*>(&V0t), sizeof(V0t) );
+  content.append( reinterpret_cast<const char*>(&V0t), sizeof(V0t) );
+  content.append( reinterpret_cast<const char*>(&bypass), sizeof(bypass) );
+  return content;
 }
 
 //==============================================================================
@@ -316,6 +299,9 @@ void QPeq::setUserParams( QByteArray& userParams, int& idx )
 
     float V0t = *reinterpret_cast<const float*>(param.data());
 
+    bypass = static_cast<bool>(userParams.at(idx));
+    idx++;
+
     ui->doubleSpinBoxFc->blockSignals( true );
     ui->doubleSpinBoxFc->setValue( fct );
     ui->doubleSpinBoxFc->blockSignals( false );
@@ -327,6 +313,11 @@ void QPeq::setUserParams( QByteArray& userParams, int& idx )
     ui->doubleSpinBoxGain->blockSignals( true );
     ui->doubleSpinBoxGain->setValue( V0t );
     ui->doubleSpinBoxGain->blockSignals( false );
+
+    ui->pushButtonBypass->blockSignals( true );
+    ui->pushButtonBypass->setChecked( bypass );
+    ui->pushButtonBypass->blockSignals( false );
+
   }
   else
     qDebug()<<"QLowShelv::setUserParams: Not enough data";
