@@ -49,6 +49,8 @@ QPeq::QPeq( double gain, double freq, double qfactor,
 
   connect( action, &QAction::triggered, this, &QPeq::on_importRewPeqs );
 
+  type = PEQ;
+
 }
 
 //==============================================================================
@@ -75,7 +77,7 @@ void QPeq::update( Vektorraum::tvector<Vektorraum::tfloat> f )
   tfloat a1 = coeffs[kA1];
   tfloat a2 = coeffs[kA2];
   tfloat a0 = 1.0;
-  H = ( b0 + b1*z + b2*z2 ) / ( a0 + a1*z + a2*z2 );
+  H = ( b0 + b1*z + b2*z2 ) / ( a0 - a1*z - a2*z2 );
 }
 
 //==============================================================================
@@ -111,8 +113,8 @@ void QPeq::updateCoeffs( void )
     tfloat b1 = -2.0 * cos(w0);
     tfloat b2 =  1.0 - alpha * A;
     tfloat a0 =  1.0 + alpha / A;
-    tfloat a1 = -2.0 * cos(w0);
-    tfloat a2 =  1.0 - alpha / A;
+    tfloat a1 =  2.0 * cos(w0);
+    tfloat a2 = -1.0 + alpha / A;
 
     coeffs[ kB0 ] = b0 / a0;
     coeffs[ kB1 ] = b1 / a0;
@@ -173,11 +175,13 @@ void QPeq::on_pushButtonBypass_clicked()
  */
 void QPeq::sendDspParameter( void )
 {
-  dsp->sendParameter( addr[kParamB2], static_cast<float>(coeffs[kB2]) );
-  dsp->sendParameter( addr[kParamB1], static_cast<float>(coeffs[kB1]) );
-  dsp->sendParameter( addr[kParamB0], static_cast<float>(coeffs[kB0]) );
-  dsp->sendParameter( addr[kParamA2], static_cast<float>(coeffs[kA2]) );
-  dsp->sendParameter( addr[kParamA1], static_cast<float>(coeffs[kA1]) );
+  QByteArray content;
+  content.append( dsp->makeParameterForWifi( addr[kParamB2], static_cast<float>(coeffs[kB2]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB1], static_cast<float>(coeffs[kB1]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB0], static_cast<float>(coeffs[kB0]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA2], static_cast<float>(coeffs[kA2]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA1], static_cast<float>(coeffs[kA1]) ) );
+  dsp->sendParameterWifi( content );
 }
 
 //==============================================================================
@@ -187,25 +191,6 @@ void QPeq::sendDspParameter( void )
 uint32_t QPeq::getNumBytes( void )
 {
   return 2*5 + 4*5;
-}
-
-//==============================================================================
-/*!
- *
- */
-void QPeq::writeDspParameter( void )
-{
-  dsp->storeRegAddr( addr[kParamB2] );
-  dsp->storeValue( static_cast<float>(coeffs[kB2]) );
-  dsp->storeRegAddr( addr[kParamB1] );
-  dsp->storeValue( static_cast<float>(coeffs[kB1]) );
-  dsp->storeRegAddr( addr[kParamB0] );
-  dsp->storeValue( static_cast<float>(coeffs[kB0]) );
-  dsp->storeRegAddr( addr[kParamA2] );
-  dsp->storeValue( static_cast<float>(coeffs[kA2]) );
-  dsp->storeRegAddr( addr[kParamA1] );
-  dsp->storeValue( static_cast<float>(coeffs[kA1]) );
-
 }
 
 //==============================================================================
@@ -251,5 +236,107 @@ void QPeq::setParameters( Vektorraum::tfloat newfc, Vektorraum::tfloat newV0, Ve
   updateCoeffs();
   sendDspParameter();
   emit valueChanged();
+}
+
+//==============================================================================
+/*!
+ */
+QByteArray QPeq::getUserParams( void )
+{
+  QByteArray content;
+  float fct = static_cast<float>(ui->doubleSpinBoxFc->value());
+  content.append( reinterpret_cast<const char*>(&fct), sizeof(fct) );
+  float Qt = static_cast<float>(ui->doubleSpinBoxQ->value());
+  content.append( reinterpret_cast<const char*>(&Qt), sizeof(Qt) );
+  float V0t = static_cast<float>(ui->doubleSpinBoxGain->value());
+  content.append( reinterpret_cast<const char*>(&V0t), sizeof(V0t) );
+  content.append( reinterpret_cast<const char*>(&bypass), sizeof(bypass) );
+  return content;
+}
+
+//==============================================================================
+/*!
+ */
+void QPeq::setUserParams( QByteArray& userParams, int& idx )
+{
+  QByteArray param;
+
+  if( userParams.size() >= idx + 12 )
+  {
+    param.clear();
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+
+    float fct = *reinterpret_cast<const float*>(param.data());
+
+    param.clear();
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+
+    float Qt = *reinterpret_cast<const float*>(param.data());
+
+    param.clear();
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+
+    float V0t = *reinterpret_cast<const float*>(param.data());
+
+    bypass = static_cast<bool>(userParams.at(idx));
+    idx++;
+
+    ui->doubleSpinBoxFc->blockSignals( true );
+    ui->doubleSpinBoxFc->setValue( fct );
+    ui->doubleSpinBoxFc->blockSignals( false );
+
+    ui->doubleSpinBoxQ->blockSignals( true );
+    ui->doubleSpinBoxQ->setValue( Qt );
+    ui->doubleSpinBoxQ->blockSignals( false );
+
+    ui->doubleSpinBoxGain->blockSignals( true );
+    ui->doubleSpinBoxGain->setValue( V0t );
+    ui->doubleSpinBoxGain->blockSignals( false );
+
+    ui->pushButtonBypass->blockSignals( true );
+    ui->pushButtonBypass->setChecked( bypass );
+    ui->pushButtonBypass->blockSignals( false );
+
+  }
+  else
+    qDebug()<<"QLowShelv::setUserParams: Not enough data";
+}
+
+//==============================================================================
+/*! Get the parameters in DSP format. The parameters are returned with register 
+ *  address followed by value dword ready to be sent via i2c to DSP.
+ *
+ * \return Byte array with parameters for DSP. 
+ */
+QByteArray QPeq::getDspParams( void )
+{
+  QByteArray content;
+  content.append( dsp->makeParameterForWifi( addr[kParamB2], static_cast<float>(coeffs[kB2]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB1], static_cast<float>(coeffs[kB1]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB0], static_cast<float>(coeffs[kB0]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA2], static_cast<float>(coeffs[kA2]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA1], static_cast<float>(coeffs[kA1]) ) );
+  return content;
 }
 

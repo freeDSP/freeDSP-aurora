@@ -35,11 +35,15 @@ public:
 
   void update( Vektorraum::tvector<Vektorraum::tfloat> f );
 
+  virtual QByteArray getUserParams( void );
+
+  virtual void setUserParams( QByteArray& userParams, int& idx );
+
   virtual void sendDspParameter( void );
 
   virtual uint32_t getNumBytes( void );
 
-  virtual void writeDspParameter( void );
+  virtual QByteArray getDspParams( void );
 
 private slots:
   void on_comboBoxInput_currentIndexChanged( int  );

@@ -110,7 +110,7 @@ CPlugIn8Channels::CPlugIn8Channels( tfloat samplerate )
  */
 CPlugIn8Channels::~CPlugIn8Channels( void )
 {
-
+  qDebug()<<"~CPlugIn8Channels";
 }
 
 //==============================================================================
@@ -150,7 +150,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     //--- Channel 1
     dspChannel.name = QString( "Channel 1" );
 
-    input = new QInputSelect( 0, MOD_NX1_1_1_MONOMUXSIGMA300NS1INDEX_ADDR, ptrdsp );
+    input = new QInputSelect( 0, MOD_NX1_1_1_MONOMUXSIGMA300NS1INDEX_ADDR, ptrdsp, channel );
     layout->addWidget( input );
     channel->addDspBlock( input );
     channel->setName( dspChannel.name );
@@ -165,7 +165,8 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                       MOD_HP1_4_ALG0_STAGE0_B2_ADDR, MOD_HP1_4_ALG0_STAGE0_B1_ADDR, MOD_HP1_4_ALG0_STAGE0_B0_ADDR,
                       MOD_HP1_4_ALG0_STAGE0_A2_ADDR, MOD_HP1_4_ALG0_STAGE0_A1_ADDR,
                       fs,
-                      ptrdsp );
+                      ptrdsp,
+                      channel );
     layout->addWidget( hp );
     channel->addDspBlock( hp );
 
@@ -173,7 +174,8 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                             MOD_LOWSHELV1_ALG0_STAGE0_B2_ADDR, MOD_LOWSHELV1_ALG0_STAGE0_B1_ADDR, MOD_LOWSHELV1_ALG0_STAGE0_B0_ADDR,
                             MOD_LOWSHELV1_ALG0_STAGE0_A2_ADDR, MOD_LOWSHELV1_ALG0_STAGE0_A1_ADDR,
                             fs,
-                            ptrdsp );
+                            ptrdsp,
+                            channel );
     layout->addWidget( lshelv );
     channel->addDspBlock( lshelv );
 
@@ -281,7 +283,8 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                             MOD_HIGHSHELV1_ALG0_STAGE0_B2_ADDR, MOD_HIGHSHELV1_ALG0_STAGE0_B1_ADDR, MOD_HIGHSHELV1_ALG0_STAGE0_B0_ADDR,
                             MOD_HIGHSHELV1_ALG0_STAGE0_A2_ADDR, MOD_HIGHSHELV1_ALG0_STAGE0_A1_ADDR,
                             fs,
-                            ptrdsp );
+                            ptrdsp,
+                            channel );
     layout->addWidget( hshelv );
     channel->addDspBlock( hshelv );
 
@@ -295,7 +298,8 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                       MOD_LP1_4_ALG0_STAGE0_B2_ADDR, MOD_LP1_4_ALG0_STAGE0_B1_ADDR, MOD_LP1_4_ALG0_STAGE0_B0_ADDR,
                       MOD_LP1_4_ALG0_STAGE0_A2_ADDR, MOD_LP1_4_ALG0_STAGE0_A1_ADDR,
                       fs,
-                      ptrdsp );
+                      ptrdsp,
+                      channel );
     layout->addWidget( lp );
     channel->addDspBlock( lp );
 
@@ -303,19 +307,20 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                       MOD_PHASE1_ALG0_STAGE0_B2_ADDR, MOD_PHASE1_ALG0_STAGE0_B1_ADDR, MOD_PHASE1_ALG0_STAGE0_B0_ADDR,
                       MOD_PHASE1_ALG0_STAGE0_A2_ADDR, MOD_PHASE1_ALG0_STAGE0_A1_ADDR,
                       fs,
-                      ptrdsp );
+                      ptrdsp,
+                      channel );
     layout->addWidget( phase );
     channel->addDspBlock( phase );
     
-    dly = new QDelay( 0.0, fs, MOD_DELAY1_DELAYAMT_ADDR, ptrdsp );
+    dly = new QDelay( 0.0, fs, MOD_DELAY1_DELAYAMT_ADDR, ptrdsp, channel );
     layout->addWidget( dly );
     channel->addDspBlock( dly ); 
 
-    gain = new QGain( 0.0, MOD_GAIN1_ALG0_TARGET_ADDR, ptrdsp );
+    gain = new QGain( 0.0, MOD_GAIN1_ALG0_TARGET_ADDR, ptrdsp, channel );
     layout->addWidget( gain );
     channel->addDspBlock( gain );
  
-    output = new QOutputSelect( 1, 0, ptrdsp );
+    output = new QOutputSelect( 1, 0, ptrdsp, channel );
     layout->addWidget( output );
     channel->addDspBlock( output );
 
@@ -348,6 +353,8 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     QObject::connect( peq08,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
     QObject::connect( peq09,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
     QObject::connect( peq10,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+
+    listChannels.append( channel );
   }
   else if( chn == 1 )
   {
@@ -355,7 +362,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     //--- Channel 2
     dspChannel.name = QString( "Channel 2" );
 
-    input = new QInputSelect( 1, MOD_NX1_1_2_MONOMUXSIGMA300NS2INDEX_ADDR, ptrdsp );
+    input = new QInputSelect( 1, MOD_NX1_1_2_MONOMUXSIGMA300NS2INDEX_ADDR, ptrdsp, channel );
     layout->addWidget( input );
     channel->addDspBlock( input );
     channel->setName( dspChannel.name );
@@ -370,7 +377,8 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                       MOD_HP2_4_ALG0_STAGE0_B2_ADDR, MOD_HP2_4_ALG0_STAGE0_B1_ADDR, MOD_HP2_4_ALG0_STAGE0_B0_ADDR,
                       MOD_HP2_4_ALG0_STAGE0_A2_ADDR, MOD_HP2_4_ALG0_STAGE0_A1_ADDR,
                       fs,
-                      ptrdsp );
+                      ptrdsp,
+                      channel );
     layout->addWidget( hp );
     channel->addDspBlock( hp );
 
@@ -378,7 +386,8 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                             MOD_LOWSHELV2_ALG0_STAGE0_B2_ADDR, MOD_LOWSHELV2_ALG0_STAGE0_B1_ADDR, MOD_LOWSHELV2_ALG0_STAGE0_B0_ADDR,
                             MOD_LOWSHELV2_ALG0_STAGE0_A2_ADDR, MOD_LOWSHELV2_ALG0_STAGE0_A1_ADDR,
                             fs,
-                            ptrdsp );
+                            ptrdsp,
+                            channel );
     layout->addWidget( lshelv );
     channel->addDspBlock( lshelv );
 
@@ -486,7 +495,8 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                            MOD_HIGHSHELV2_ALG0_STAGE0_B2_ADDR, MOD_HIGHSHELV2_ALG0_STAGE0_B1_ADDR, MOD_HIGHSHELV2_ALG0_STAGE0_B0_ADDR,
                            MOD_HIGHSHELV2_ALG0_STAGE0_A2_ADDR, MOD_HIGHSHELV2_ALG0_STAGE0_A1_ADDR,
                            fs,
-                           ptrdsp );
+                           ptrdsp,
+                           channel );
     layout->addWidget( hshelv );
     channel->addDspBlock( hshelv );
 
@@ -500,7 +510,8 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                       MOD_LP2_4_ALG0_STAGE0_B2_ADDR, MOD_LP2_4_ALG0_STAGE0_B1_ADDR, MOD_LP2_4_ALG0_STAGE0_B0_ADDR,
                       MOD_LP2_4_ALG0_STAGE0_A2_ADDR, MOD_LP2_4_ALG0_STAGE0_A1_ADDR,
                       fs,
-                      ptrdsp );
+                      ptrdsp,
+                      channel );
     layout->addWidget( lp );
     channel->addDspBlock( lp );
 
@@ -508,19 +519,20 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                         MOD_PHASE2_ALG0_STAGE0_B2_ADDR, MOD_PHASE2_ALG0_STAGE0_B1_ADDR, MOD_PHASE2_ALG0_STAGE0_B0_ADDR,
                         MOD_PHASE2_ALG0_STAGE0_A2_ADDR, MOD_PHASE2_ALG0_STAGE0_A1_ADDR,
                         fs,
-                        ptrdsp );
+                        ptrdsp,
+                        channel );
     layout->addWidget( phase );
     channel->addDspBlock( phase );
 
-    dly = new QDelay( 0.0, fs, MOD_DELAY2_DELAYAMT_ADDR, ptrdsp );
+    dly = new QDelay( 0.0, fs, MOD_DELAY2_DELAYAMT_ADDR, ptrdsp, channel );
     layout->addWidget( dly );
     channel->addDspBlock( dly );
 
-    gain = new QGain( 0.0, MOD_GAIN2_ALG0_TARGET_ADDR, ptrdsp );
+    gain = new QGain( 0.0, MOD_GAIN2_ALG0_TARGET_ADDR, ptrdsp, channel );
     layout->addWidget( gain );
     channel->addDspBlock( gain );
 
-    output = new QOutputSelect( 1, 0, ptrdsp );
+    output = new QOutputSelect( 1, 0, ptrdsp, channel );
     layout->addWidget( output );
     channel->addDspBlock( output );
 
@@ -553,6 +565,8 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     QObject::connect( peq08,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
     QObject::connect( peq09,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
     QObject::connect( peq10,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+
+    listChannels.append( channel );
   }
   else if( chn == 2 )
   {
@@ -560,7 +574,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     //--- Channel 3
     dspChannel.name = QString( "Channel 3" );
 
-    input = new QInputSelect( 2, MOD_NX1_1_3_MONOMUXSIGMA300NS3INDEX_ADDR, ptrdsp );
+    input = new QInputSelect( 2, MOD_NX1_1_3_MONOMUXSIGMA300NS3INDEX_ADDR, ptrdsp, channel );
     layout->addWidget( input );
     channel->addDspBlock( input );
     channel->setName( dspChannel.name );
@@ -575,7 +589,8 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                         MOD_HP3_4_ALG0_STAGE0_B2_ADDR, MOD_HP3_4_ALG0_STAGE0_B1_ADDR, MOD_HP3_4_ALG0_STAGE0_B0_ADDR,
                         MOD_HP3_4_ALG0_STAGE0_A2_ADDR, MOD_HP3_4_ALG0_STAGE0_A1_ADDR,
                         fs,
-                        ptrdsp );
+                        ptrdsp,
+                        channel );
     layout->addWidget( hp );
     channel->addDspBlock( hp );
 
@@ -583,7 +598,8 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                             MOD_LOWSHELV3_ALG0_STAGE0_B2_ADDR, MOD_LOWSHELV3_ALG0_STAGE0_B1_ADDR, MOD_LOWSHELV3_ALG0_STAGE0_B0_ADDR,
                             MOD_LOWSHELV3_ALG0_STAGE0_A2_ADDR, MOD_LOWSHELV3_ALG0_STAGE0_A1_ADDR,
                             fs,
-                            ptrdsp );
+                            ptrdsp,
+                            channel );
     layout->addWidget( lshelv );
     channel->addDspBlock( lshelv );
 
@@ -691,7 +707,8 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                             MOD_HIGHSHELV3_ALG0_STAGE0_B2_ADDR, MOD_HIGHSHELV3_ALG0_STAGE0_B1_ADDR, MOD_HIGHSHELV3_ALG0_STAGE0_B0_ADDR,
                             MOD_HIGHSHELV3_ALG0_STAGE0_A2_ADDR, MOD_HIGHSHELV3_ALG0_STAGE0_A1_ADDR,
                             fs,
-                            ptrdsp );
+                            ptrdsp,
+                            channel );
     layout->addWidget( hshelv );
     channel->addDspBlock( hshelv );
 
@@ -705,7 +722,8 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                      MOD_LP3_4_ALG0_STAGE0_B2_ADDR, MOD_LP3_4_ALG0_STAGE0_B1_ADDR, MOD_LP3_4_ALG0_STAGE0_B0_ADDR,
                      MOD_LP3_4_ALG0_STAGE0_A2_ADDR, MOD_LP3_4_ALG0_STAGE0_A1_ADDR,
                      fs,
-                     ptrdsp );
+                     ptrdsp,
+                     channel );
     layout->addWidget( lp );
     channel->addDspBlock( lp );
 
@@ -713,19 +731,20 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                       MOD_PHASE3_ALG0_STAGE0_B2_ADDR, MOD_PHASE3_ALG0_STAGE0_B1_ADDR, MOD_PHASE3_ALG0_STAGE0_B0_ADDR,
                       MOD_PHASE3_ALG0_STAGE0_A2_ADDR, MOD_PHASE3_ALG0_STAGE0_A1_ADDR,
                       fs,
-                      ptrdsp );
+                      ptrdsp,
+                      channel );
     layout->addWidget( phase );
     channel->addDspBlock( phase );
 
-    dly = new QDelay( 0.0, 48000.0, MOD_DELAY3_DELAYAMT_ADDR, ptrdsp );
+    dly = new QDelay( 0.0, 48000.0, MOD_DELAY3_DELAYAMT_ADDR, ptrdsp, channel );
     layout->addWidget( dly );
     channel->addDspBlock( dly );
 
-    gain = new QGain( 0.0, MOD_GAIN3_ALG0_TARGET_ADDR, ptrdsp );
+    gain = new QGain( 0.0, MOD_GAIN3_ALG0_TARGET_ADDR, ptrdsp, channel );
     layout->addWidget( gain );
     channel->addDspBlock( gain );
 
-    output = new QOutputSelect( 1, 0, ptrdsp );
+    output = new QOutputSelect( 1, 0, ptrdsp, channel );
     layout->addWidget( output );
     channel->addDspBlock( output );
 
@@ -758,6 +777,8 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     QObject::connect( peq08,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
     QObject::connect( peq09,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
     QObject::connect( peq10,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+
+    listChannels.append( channel );
   }
   else if( chn == 3 )
   {
@@ -765,7 +786,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     //--- Channel 4
     dspChannel.name = QString( "Channel 4" );
 
-    input = new QInputSelect( 3, MOD_NX1_1_4_MONOMUXSIGMA300NS4INDEX_ADDR, ptrdsp );
+    input = new QInputSelect( 3, MOD_NX1_1_4_MONOMUXSIGMA300NS4INDEX_ADDR, ptrdsp, channel );
     layout->addWidget( input );
     channel->addDspBlock( input );
     channel->setName( dspChannel.name );
@@ -780,7 +801,8 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                         MOD_HP4_4_ALG0_STAGE0_B2_ADDR, MOD_HP4_4_ALG0_STAGE0_B1_ADDR, MOD_HP4_4_ALG0_STAGE0_B0_ADDR,
                         MOD_HP4_4_ALG0_STAGE0_A2_ADDR, MOD_HP4_4_ALG0_STAGE0_A1_ADDR,
                         fs,
-                        ptrdsp );
+                        ptrdsp,
+                        channel );
     layout->addWidget( hp );
     channel->addDspBlock( hp );
 
@@ -788,7 +810,8 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                             MOD_LOWSHELV4_ALG0_STAGE0_B2_ADDR, MOD_LOWSHELV4_ALG0_STAGE0_B1_ADDR, MOD_LOWSHELV4_ALG0_STAGE0_B0_ADDR,
                             MOD_LOWSHELV4_ALG0_STAGE0_A2_ADDR, MOD_LOWSHELV4_ALG0_STAGE0_A1_ADDR,
                             fs,
-                            ptrdsp );
+                            ptrdsp,
+                            channel );
     layout->addWidget( lshelv );
     channel->addDspBlock( lshelv );
 
@@ -896,7 +919,8 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                             MOD_HIGHSHELV4_ALG0_STAGE0_B2_ADDR, MOD_HIGHSHELV4_ALG0_STAGE0_B1_ADDR, MOD_HIGHSHELV4_ALG0_STAGE0_B0_ADDR,
                             MOD_HIGHSHELV4_ALG0_STAGE0_A2_ADDR, MOD_HIGHSHELV4_ALG0_STAGE0_A1_ADDR,
                             fs,
-                            ptrdsp );
+                            ptrdsp,
+                            channel );
     layout->addWidget( hshelv );
     channel->addDspBlock( hshelv );
 
@@ -910,7 +934,8 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                      MOD_LP4_4_ALG0_STAGE0_B2_ADDR, MOD_LP4_4_ALG0_STAGE0_B1_ADDR, MOD_LP4_4_ALG0_STAGE0_B0_ADDR,
                      MOD_LP4_4_ALG0_STAGE0_A2_ADDR, MOD_LP4_4_ALG0_STAGE0_A1_ADDR,
                      fs,
-                     ptrdsp );
+                     ptrdsp,
+                     channel );
     layout->addWidget( lp );
     channel->addDspBlock( lp );
 
@@ -918,19 +943,20 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                       MOD_PHASE4_ALG0_STAGE0_B2_ADDR, MOD_PHASE4_ALG0_STAGE0_B1_ADDR, MOD_PHASE4_ALG0_STAGE0_B0_ADDR,
                       MOD_PHASE4_ALG0_STAGE0_A2_ADDR, MOD_PHASE4_ALG0_STAGE0_A1_ADDR,
                       fs,
-                      ptrdsp );
+                      ptrdsp,
+                      channel );
     layout->addWidget( phase );
     channel->addDspBlock( phase );
 
-    dly = new QDelay( 0.0, 48000.0, MOD_DELAY4_DELAYAMT_ADDR, ptrdsp );
+    dly = new QDelay( 0.0, 48000.0, MOD_DELAY4_DELAYAMT_ADDR, ptrdsp, channel );
     layout->addWidget( dly );
     channel->addDspBlock( dly );
 
-    gain = new QGain( 0.0, MOD_GAIN4_ALG0_TARGET_ADDR, ptrdsp );
+    gain = new QGain( 0.0, MOD_GAIN4_ALG0_TARGET_ADDR, ptrdsp, channel );
     layout->addWidget( gain );
     channel->addDspBlock( gain );
 
-    output = new QOutputSelect( 1, 0, ptrdsp );
+    output = new QOutputSelect( 1, 0, ptrdsp, channel );
     layout->addWidget( output );
     channel->addDspBlock( output );
 
@@ -963,6 +989,8 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     QObject::connect( peq08,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
     QObject::connect( peq09,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
     QObject::connect( peq10,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+
+    listChannels.append( channel );
   }
   else if( chn == 4 )
   {
@@ -970,7 +998,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     //--- Channel 5
     dspChannel.name = QString( "Channel 5" );
 
-    input = new QInputSelect( 4, MOD_NX1_1_5_MONOMUXSIGMA300NS5INDEX_ADDR, ptrdsp );
+    input = new QInputSelect( 4, MOD_NX1_1_5_MONOMUXSIGMA300NS5INDEX_ADDR, ptrdsp, channel );
     layout->addWidget( input );
     channel->addDspBlock( input );
     channel->setName( dspChannel.name );
@@ -985,7 +1013,8 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                         MOD_HP5_4_ALG0_STAGE0_B2_ADDR, MOD_HP5_4_ALG0_STAGE0_B1_ADDR, MOD_HP5_4_ALG0_STAGE0_B0_ADDR,
                         MOD_HP5_4_ALG0_STAGE0_A2_ADDR, MOD_HP5_4_ALG0_STAGE0_A1_ADDR,
                         fs,
-                        ptrdsp );
+                        ptrdsp,
+                        channel );
     layout->addWidget( hp );
     channel->addDspBlock( hp );
 
@@ -993,7 +1022,8 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                             MOD_LOWSHELV5_ALG0_STAGE0_B2_ADDR, MOD_LOWSHELV5_ALG0_STAGE0_B1_ADDR, MOD_LOWSHELV5_ALG0_STAGE0_B0_ADDR,
                             MOD_LOWSHELV5_ALG0_STAGE0_A2_ADDR, MOD_LOWSHELV5_ALG0_STAGE0_A1_ADDR,
                             fs,
-                            ptrdsp );
+                            ptrdsp,
+                            channel );
     layout->addWidget( lshelv );
     channel->addDspBlock( lshelv );
 
@@ -1101,7 +1131,8 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                             MOD_HIGHSHELV5_ALG0_STAGE0_B2_ADDR, MOD_HIGHSHELV5_ALG0_STAGE0_B1_ADDR, MOD_HIGHSHELV5_ALG0_STAGE0_B0_ADDR,
                             MOD_HIGHSHELV5_ALG0_STAGE0_A2_ADDR, MOD_HIGHSHELV5_ALG0_STAGE0_A1_ADDR,
                             fs,
-                            ptrdsp );
+                            ptrdsp,
+                            channel );
     layout->addWidget( hshelv );
     channel->addDspBlock( hshelv );
 
@@ -1115,7 +1146,8 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                      MOD_LP5_4_ALG0_STAGE0_B2_ADDR, MOD_LP5_4_ALG0_STAGE0_B1_ADDR, MOD_LP5_4_ALG0_STAGE0_B0_ADDR,
                      MOD_LP5_4_ALG0_STAGE0_A2_ADDR, MOD_LP5_4_ALG0_STAGE0_A1_ADDR,
                      fs,
-                     ptrdsp );
+                     ptrdsp,
+                     channel );
     layout->addWidget( lp );
     channel->addDspBlock( lp );
 
@@ -1123,19 +1155,20 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                         MOD_PHASE5_ALG0_STAGE0_B2_ADDR, MOD_PHASE5_ALG0_STAGE0_B1_ADDR, MOD_PHASE5_ALG0_STAGE0_B0_ADDR,
                         MOD_PHASE5_ALG0_STAGE0_A2_ADDR, MOD_PHASE5_ALG0_STAGE0_A1_ADDR,
                         fs,
-                        ptrdsp );
+                        ptrdsp,
+                        channel );
     layout->addWidget( phase );
     channel->addDspBlock( phase );
 
-    dly = new QDelay( 0.0, 48000.0, MOD_DELAY5_DELAYAMT_ADDR, ptrdsp );
+    dly = new QDelay( 0.0, 48000.0, MOD_DELAY5_DELAYAMT_ADDR, ptrdsp, channel );
     layout->addWidget( dly );
     channel->addDspBlock( dly );
 
-    gain = new QGain( 0.0, MOD_GAIN5_ALG0_TARGET_ADDR, ptrdsp );
+    gain = new QGain( 0.0, MOD_GAIN5_ALG0_TARGET_ADDR, ptrdsp, channel );
     layout->addWidget( gain );
     channel->addDspBlock( gain );
 
-    output = new QOutputSelect( 1, 0, ptrdsp );
+    output = new QOutputSelect( 1, 0, ptrdsp, channel );
     layout->addWidget( output );
     channel->addDspBlock( output );
 
@@ -1168,6 +1201,8 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     QObject::connect( peq08,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
     QObject::connect( peq09,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
     QObject::connect( peq10,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+
+    listChannels.append( channel );
   }
   else if( chn == 5 )
   {
@@ -1175,7 +1210,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     //--- Channel 6
     dspChannel.name = QString( "Channel 6" );
 
-    input = new QInputSelect( 5, MOD_NX1_1_6_MONOMUXSIGMA300NS6INDEX_ADDR, ptrdsp );
+    input = new QInputSelect( 5, MOD_NX1_1_6_MONOMUXSIGMA300NS6INDEX_ADDR, ptrdsp, channel );
     layout->addWidget( input );
     channel->addDspBlock( input );
     channel->setName( dspChannel.name );
@@ -1190,7 +1225,8 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                         MOD_HP6_4_ALG0_STAGE0_B2_ADDR, MOD_HP6_4_ALG0_STAGE0_B1_ADDR, MOD_HP6_4_ALG0_STAGE0_B0_ADDR,
                         MOD_HP6_4_ALG0_STAGE0_A2_ADDR, MOD_HP6_4_ALG0_STAGE0_A1_ADDR,
                         fs,
-                        ptrdsp );
+                        ptrdsp,
+                        channel );
     layout->addWidget( hp );
     channel->addDspBlock( hp );
 
@@ -1198,7 +1234,8 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                           MOD_LOWSHELV6_ALG0_STAGE0_B2_ADDR, MOD_LOWSHELV6_ALG0_STAGE0_B1_ADDR, MOD_LOWSHELV6_ALG0_STAGE0_B0_ADDR,
                           MOD_LOWSHELV6_ALG0_STAGE0_A2_ADDR, MOD_LOWSHELV6_ALG0_STAGE0_A1_ADDR,
                           fs,
-                          ptrdsp );
+                          ptrdsp,
+                          channel );
     layout->addWidget( lshelv );
     channel->addDspBlock( lshelv );
 
@@ -1306,7 +1343,8 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                             MOD_HIGHSHELV6_ALG0_STAGE0_B2_ADDR, MOD_HIGHSHELV6_ALG0_STAGE0_B1_ADDR, MOD_HIGHSHELV6_ALG0_STAGE0_B0_ADDR,
                             MOD_HIGHSHELV6_ALG0_STAGE0_A2_ADDR, MOD_HIGHSHELV6_ALG0_STAGE0_A1_ADDR,
                             fs,
-                            ptrdsp );
+                            ptrdsp,
+                            channel );
     layout->addWidget( hshelv );
     channel->addDspBlock( hshelv );
 
@@ -1320,7 +1358,8 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                      MOD_LP6_4_ALG0_STAGE0_B2_ADDR, MOD_LP6_4_ALG0_STAGE0_B1_ADDR, MOD_LP6_4_ALG0_STAGE0_B0_ADDR,
                      MOD_LP6_4_ALG0_STAGE0_A2_ADDR, MOD_LP6_4_ALG0_STAGE0_A1_ADDR,
                      fs,
-                     ptrdsp );
+                     ptrdsp,
+                     channel );
     layout->addWidget( lp );
     channel->addDspBlock( lp );
 
@@ -1328,19 +1367,20 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                       MOD_PHASE6_ALG0_STAGE0_B2_ADDR, MOD_PHASE6_ALG0_STAGE0_B1_ADDR, MOD_PHASE6_ALG0_STAGE0_B0_ADDR,
                       MOD_PHASE6_ALG0_STAGE0_A2_ADDR, MOD_PHASE6_ALG0_STAGE0_A1_ADDR,
                       fs,
-                      ptrdsp );
+                      ptrdsp,
+                      channel );
     layout->addWidget( phase );
     channel->addDspBlock( phase );
 
-    dly = new QDelay( 0.0, 48000.0, MOD_DELAY6_DELAYAMT_ADDR, ptrdsp );
+    dly = new QDelay( 0.0, 48000.0, MOD_DELAY6_DELAYAMT_ADDR, ptrdsp, channel );
     layout->addWidget( dly );
     channel->addDspBlock( dly );
 
-    gain = new QGain( 0.0, MOD_GAIN6_ALG0_TARGET_ADDR, ptrdsp );
+    gain = new QGain( 0.0, MOD_GAIN6_ALG0_TARGET_ADDR, ptrdsp, channel );
     layout->addWidget( gain );
     channel->addDspBlock( gain );
 
-    output = new QOutputSelect( 1, 0, ptrdsp );
+    output = new QOutputSelect( 1, 0, ptrdsp, channel );
     layout->addWidget( output );
     channel->addDspBlock( output );
 
@@ -1373,6 +1413,8 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     QObject::connect( peq08,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
     QObject::connect( peq09,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
     QObject::connect( peq10,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+
+    listChannels.append( channel );
   }
   else if( chn == 6 )
   {
@@ -1380,7 +1422,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     //--- Channel 7
     dspChannel.name = QString( "Channel 7" );
 
-    input = new QInputSelect( 6, MOD_NX1_1_7_MONOMUXSIGMA300NS7INDEX_ADDR, ptrdsp );
+    input = new QInputSelect( 6, MOD_NX1_1_7_MONOMUXSIGMA300NS7INDEX_ADDR, ptrdsp, channel );
     layout->addWidget( input );
     channel->addDspBlock( input );
     channel->setName( dspChannel.name );
@@ -1395,7 +1437,8 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                         MOD_HP7_4_ALG0_STAGE0_B2_ADDR, MOD_HP7_4_ALG0_STAGE0_B1_ADDR, MOD_HP7_4_ALG0_STAGE0_B0_ADDR,
                         MOD_HP7_4_ALG0_STAGE0_A2_ADDR, MOD_HP7_4_ALG0_STAGE0_A1_ADDR,
                         fs,
-                        ptrdsp );
+                        ptrdsp,
+                        channel );
     layout->addWidget( hp );
     channel->addDspBlock( hp );
 
@@ -1403,7 +1446,8 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                           MOD_LOWSHELV7_ALG0_STAGE0_B2_ADDR, MOD_LOWSHELV7_ALG0_STAGE0_B1_ADDR, MOD_LOWSHELV7_ALG0_STAGE0_B0_ADDR,
                           MOD_LOWSHELV7_ALG0_STAGE0_A2_ADDR, MOD_LOWSHELV7_ALG0_STAGE0_A1_ADDR,
                           fs,
-                          ptrdsp );
+                          ptrdsp,
+                          channel );
     layout->addWidget( lshelv );
     channel->addDspBlock( lshelv );
 
@@ -1511,7 +1555,8 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                            MOD_HIGHSHELV7_ALG0_STAGE0_B2_ADDR, MOD_HIGHSHELV7_ALG0_STAGE0_B1_ADDR, MOD_HIGHSHELV7_ALG0_STAGE0_B0_ADDR,
                            MOD_HIGHSHELV7_ALG0_STAGE0_A2_ADDR, MOD_HIGHSHELV7_ALG0_STAGE0_A1_ADDR,
                            fs,
-                           ptrdsp );
+                           ptrdsp,
+                           channel );
     layout->addWidget( hshelv );
     channel->addDspBlock( hshelv );
 
@@ -1525,7 +1570,8 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                       MOD_LP7_4_ALG0_STAGE0_B2_ADDR, MOD_LP7_4_ALG0_STAGE0_B1_ADDR, MOD_LP7_4_ALG0_STAGE0_B0_ADDR,
                       MOD_LP7_4_ALG0_STAGE0_A2_ADDR, MOD_LP7_4_ALG0_STAGE0_A1_ADDR,
                       fs,
-                      ptrdsp );
+                      ptrdsp,
+                      channel );
     layout->addWidget( lp );
     channel->addDspBlock( lp );
 
@@ -1533,19 +1579,20 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                       MOD_PHASE7_ALG0_STAGE0_B2_ADDR, MOD_PHASE7_ALG0_STAGE0_B1_ADDR, MOD_PHASE7_ALG0_STAGE0_B0_ADDR,
                       MOD_PHASE7_ALG0_STAGE0_A2_ADDR, MOD_PHASE7_ALG0_STAGE0_A1_ADDR,
                       fs,
-                      ptrdsp );
+                      ptrdsp,
+                      channel );
     layout->addWidget( phase );
     channel->addDspBlock( phase );
 
-    dly = new QDelay( 0.0, 48000.0, MOD_DELAY7_DELAYAMT_ADDR, ptrdsp );
+    dly = new QDelay( 0.0, 48000.0, MOD_DELAY7_DELAYAMT_ADDR, ptrdsp, channel );
     layout->addWidget( dly );
     channel->addDspBlock( dly );
 
-    gain = new QGain( 0.0, MOD_GAIN7_ALG0_TARGET_ADDR, ptrdsp );
+    gain = new QGain( 0.0, MOD_GAIN7_ALG0_TARGET_ADDR, ptrdsp, channel );
     layout->addWidget( gain );
     channel->addDspBlock( gain );
 
-    output = new QOutputSelect( 1, 0, ptrdsp );
+    output = new QOutputSelect( 1, 0, ptrdsp, channel );
     layout->addWidget( output );
     channel->addDspBlock( output );
 
@@ -1578,6 +1625,8 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     QObject::connect( peq08,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
     QObject::connect( peq09,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
     QObject::connect( peq10,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+
+    listChannels.append( channel );
   }
   else if( chn == 7 )
   {
@@ -1585,7 +1634,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     //--- Channel 8
     dspChannel.name = QString( "Channel 8" );
 
-    input = new QInputSelect( 7, MOD_NX1_1_8_MONOMUXSIGMA300NS8INDEX_ADDR, ptrdsp );
+    input = new QInputSelect( 7, MOD_NX1_1_8_MONOMUXSIGMA300NS8INDEX_ADDR, ptrdsp, channel );
     layout->addWidget( input );
     channel->addDspBlock( input );
     channel->setName( dspChannel.name );
@@ -1600,7 +1649,8 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                         MOD_HP8_4_ALG0_STAGE0_B2_ADDR, MOD_HP8_4_ALG0_STAGE0_B1_ADDR, MOD_HP8_4_ALG0_STAGE0_B0_ADDR,
                         MOD_HP8_4_ALG0_STAGE0_A2_ADDR, MOD_HP8_4_ALG0_STAGE0_A1_ADDR,
                         fs,
-                        ptrdsp );
+                        ptrdsp,
+                        channel );
     layout->addWidget( hp );
     channel->addDspBlock( hp );
 
@@ -1608,7 +1658,8 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                             MOD_LOWSHELV8_ALG0_STAGE0_B2_ADDR, MOD_LOWSHELV8_ALG0_STAGE0_B1_ADDR, MOD_LOWSHELV8_ALG0_STAGE0_B0_ADDR,
                             MOD_LOWSHELV8_ALG0_STAGE0_A2_ADDR, MOD_LOWSHELV8_ALG0_STAGE0_A1_ADDR,
                             fs,
-                            ptrdsp );
+                            ptrdsp,
+                            channel );
     layout->addWidget( lshelv );
     channel->addDspBlock( lshelv );
 
@@ -1716,7 +1767,8 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                            MOD_HIGHSHELV8_ALG0_STAGE0_B2_ADDR, MOD_HIGHSHELV8_ALG0_STAGE0_B1_ADDR, MOD_HIGHSHELV8_ALG0_STAGE0_B0_ADDR,
                            MOD_HIGHSHELV8_ALG0_STAGE0_A2_ADDR, MOD_HIGHSHELV8_ALG0_STAGE0_A1_ADDR,
                            fs,
-                           ptrdsp );
+                           ptrdsp,
+                           channel );
     layout->addWidget( hshelv );
     channel->addDspBlock( hshelv );
 
@@ -1730,7 +1782,8 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                       MOD_LP8_4_ALG0_STAGE0_B2_ADDR, MOD_LP8_4_ALG0_STAGE0_B1_ADDR, MOD_LP8_4_ALG0_STAGE0_B0_ADDR,
                       MOD_LP8_4_ALG0_STAGE0_A2_ADDR, MOD_LP8_4_ALG0_STAGE0_A1_ADDR,
                       fs,
-                      ptrdsp );
+                      ptrdsp,
+                      channel );
     layout->addWidget( lp );
     channel->addDspBlock( lp );
 
@@ -1738,19 +1791,20 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                       MOD_PHASE8_ALG0_STAGE0_B2_ADDR, MOD_PHASE8_ALG0_STAGE0_B1_ADDR, MOD_PHASE8_ALG0_STAGE0_B0_ADDR,
                       MOD_PHASE8_ALG0_STAGE0_A2_ADDR, MOD_PHASE8_ALG0_STAGE0_A1_ADDR,
                       fs,
-                      ptrdsp );
+                      ptrdsp,
+                      channel );
     layout->addWidget( phase );
     channel->addDspBlock( phase );
 
-    dly = new QDelay( 0.0, 48000.0, MOD_DELAY8_DELAYAMT_ADDR, ptrdsp );
+    dly = new QDelay( 0.0, 48000.0, MOD_DELAY8_DELAYAMT_ADDR, ptrdsp, channel );
     layout->addWidget( dly );
     channel->addDspBlock( dly );
 
-    gain = new QGain( 0.0, MOD_GAIN8_ALG0_TARGET_ADDR, ptrdsp );
+    gain = new QGain( 0.0, MOD_GAIN8_ALG0_TARGET_ADDR, ptrdsp, channel );
     layout->addWidget( gain );
     channel->addDspBlock( gain );
 
-    output = new QOutputSelect( 1, 0, ptrdsp );
+    output = new QOutputSelect( 1, 0, ptrdsp, channel );
     layout->addWidget( output );
     channel->addDspBlock( output );
 
@@ -1783,6 +1837,8 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     QObject::connect( peq08,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
     QObject::connect( peq09,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
     QObject::connect( peq10,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+
+    listChannels.append( channel );
 
   }
 

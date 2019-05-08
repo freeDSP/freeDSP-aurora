@@ -17,6 +17,8 @@ using namespace Vektorraum;
 QFir::QFir( uint16_t firaddr, tuint filterlength, CFreeDspAurora* ptrdsp, QWidget *parent) :
   QDspBlock(parent), ui(new Ui::QFir)
 {
+  type = FIR;
+  
   addr[kImpulseResponse] = firaddr;
   dsp = ptrdsp;
 
@@ -82,19 +84,6 @@ uint32_t QFir::getNumBytes( void )
 /*!
  *
  */
-void QFir::writeDspParameter( void )
-{
-  qDebug()<<"QFir::writeDspParameter not implemented";
-  //uint32_t val = static_cast<uint32_t>(ui->comboBoxInput->currentIndex());
-  //dsp->storeRegAddr( addr[kOutput] );
-  //dsp->storeValue( val );
-}
-
-
-//==============================================================================
-/*!
- *
- */
 bool QFir::eventFilter( QObject* object, QEvent* event )
 {
   if( object == ui->lineEditResponseFile && event->type() == QEvent::MouseButtonDblClick )
@@ -138,4 +127,42 @@ bool QFir::eventFilter( QObject* object, QEvent* event )
     return true;
   }
   return false;
+}
+
+//==============================================================================
+/*!
+ */
+QByteArray QFir::getUserParams( void )
+{
+  QByteArray ret;
+
+  #warning QFir::getUserParams not implemented
+  qDebug()<<"QFir::getUserParams not implemented";
+
+  return ret;
+}
+
+//==============================================================================
+/*!
+ */
+void QFir::setUserParams( QByteArray& userParams, int& idx )
+{
+  #warning QFir::setUserParams not implemented
+  qDebug()<<"QFir::setUserParams not implemented";
+}
+
+//==============================================================================
+/*! Get the parameters in DSP format. The parameters are returned with register 
+ *  address followed by value dword ready to be sent via i2c to DSP.
+ *
+ * \return Byte array with parameters for DSP. 
+ */
+QByteArray QFir::getDspParams( void )
+{
+  QByteArray ret;
+
+  #warning QFir::getDspParam not implemented
+  qDebug()<<"QFir::getDspParam not implemented";
+
+  return ret;
 }

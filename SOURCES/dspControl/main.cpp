@@ -1,11 +1,12 @@
 #include "MainWindow.hpp"
 #include <QApplication>
 #include <QFile>
+#include <QStandardPaths>
 
 int main(int argc, char *argv[])
 {
   QApplication::setOrganizationName("Raphael Knoop");
-  QApplication::setApplicationName( "dspControl" );
+  QApplication::setApplicationName( "auverdionControl" );
   #if defined( __IOS__ )
   QGuiApplication::setAttribute( Qt::AA_UseHighDpiPixmaps );
   QGuiApplication::setAttribute( Qt::AA_EnableHighDpiScaling );

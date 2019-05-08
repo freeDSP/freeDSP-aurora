@@ -12,10 +12,15 @@
 
 using namespace Vektorraum;
 
-
+//==============================================================================
+/*!
+ *
+ */
 QOutputSelect::QOutputSelect( uint32_t selection, uint16_t outputaddr, CFreeDspAurora* ptrdsp, QWidget *parent) :
   QDspBlock(parent), ui(new Ui::QOutputSelect)
 {
+  type = OUTPUTSELECT;
+  
   addr[kOutput] = outputaddr;
   dsp = ptrdsp;
 
@@ -53,12 +58,16 @@ QOutputSelect::QOutputSelect( uint32_t selection, uint16_t outputaddr, CFreeDspA
   //ui->comboBoxInput->setMaxVisibleItems( 16 );
 }
 
+//==============================================================================
+/*!
+ *
+ */
 QOutputSelect::~QOutputSelect()
 {
   delete ui;
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*! \brief Updates the filter.
  *
  */
@@ -83,7 +92,7 @@ void QOutputSelect::update( tvector<tfloat> f )
   }
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -93,7 +102,7 @@ void QOutputSelect::sendDspParameter( void )
   //dsp->sendParameter( addr[kInput], val );
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -102,28 +111,7 @@ uint32_t QOutputSelect::getNumBytes( void )
   return 0;
 }
 
-//------------------------------------------------------------------------------
-/*!
- *
- */
-void QOutputSelect::writeDspParameter( void )
-{
-  //uint32_t val = static_cast<uint32_t>(ui->comboBoxInput->currentIndex());
-  //dsp->storeRegAddr( addr[kOutput] );
-  //dsp->storeValue( val );
-}
-
-//------------------------------------------------------------------------------
-/*!
- *
- */
-/*void QOutputSelect::on_comboBoxInput_currentIndexChanged( int  )
-{
-  sendDspParameter();
-  emit valueChanged();
-}*/
-
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -206,4 +194,36 @@ bool QOutputSelect::eventFilter( QObject* object, QEvent* event )
     return true;
   }
   return false;
+}
+
+//==============================================================================
+/*!
+ */
+QByteArray QOutputSelect::getUserParams( void )
+{
+  QByteArray content;
+
+  return content;
+}
+
+//==============================================================================
+/*!
+ */
+void QOutputSelect::setUserParams( QByteArray& userParams, int& idx )
+{
+
+
+}
+
+//==============================================================================
+/*! Get the parameters in DSP format. The parameters are returned with register 
+ *  address followed by value dword ready to be sent via i2c to DSP.
+ *
+ * \return Byte array with parameters for DSP. 
+ */
+QByteArray QOutputSelect::getDspParams( void )
+{
+  QByteArray content;
+
+  return content;
 }

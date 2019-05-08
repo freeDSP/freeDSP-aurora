@@ -1,8 +1,14 @@
+#include <QDebug>
+
 #include "QLowShelv.hpp"
 #include "ui_QLowShelv.h"
 
 using namespace Vektorraum;
 
+//==============================================================================
+/*!
+ *
+ */
 QLowShelv::QLowShelv( double gain, double freq, double slope,
                       uint16_t addrB2, uint16_t addrB1, uint16_t addrB0,
                       uint16_t addrA2, uint16_t addrA1,
@@ -32,13 +38,23 @@ QLowShelv::QLowShelv( double gain, double freq, double slope,
   ui->doubleSpinBoxS->setAttribute( Qt::WA_MacShowFocusRect, 0 );
   ui->doubleSpinBoxS->setValue( slope );
   ui->doubleSpinBoxS->blockSignals( false );
+
+  type = LOWSHELV;
 }
 
+//==============================================================================
+/*!
+ *
+ */
 QLowShelv::~QLowShelv()
 {
   delete ui;
 }
 
+//==============================================================================
+/*!
+ *
+ */
 void QLowShelv::update( Vektorraum::tvector<Vektorraum::tfloat> f )
 {
   updateCoeffs();
@@ -51,10 +67,10 @@ void QLowShelv::update( Vektorraum::tvector<Vektorraum::tfloat> f )
   tfloat a2 = coeffs[kA2];
   tfloat a0 = 1.0;
 
-  H = ( b0 + b1*z + b2*z2 ) / ( a0 + a1*z + a2*z2 );
+  H = ( b0 + b1*z + b2*z2 ) / ( a0 - a1*z - a2*z2 );
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -93,12 +109,12 @@ void QLowShelv::updateCoeffs( void )
     coeffs[ kB0 ] = b0;
     coeffs[ kB1 ] = b1;
     coeffs[ kB2 ] = b2;
-    coeffs[ kA1 ] = a1;
-    coeffs[ kA2 ] = a2;
+    coeffs[ kA1 ] = (-1.0)*a1;
+    coeffs[ kA2 ] = (-1.0)*a2;
   }
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -109,7 +125,7 @@ void QLowShelv::on_doubleSpinBoxGain_valueChanged( double  )
   emit valueChanged();
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -120,18 +136,18 @@ void QLowShelv::on_doubleSpinBoxFc_valueChanged( double  )
   emit valueChanged();
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
 void QLowShelv::on_doubleSpinBoxS_valueChanged( double  )
 {
   updateCoeffs();
-  sendDspParameter();
+  //sendDspParameter();
   emit valueChanged();
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -143,20 +159,22 @@ void QLowShelv::on_pushButtonBypass_clicked()
   emit valueChanged();
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
 void QLowShelv::sendDspParameter( void )
 {
-  dsp->sendParameter( addr[kParamB2], static_cast<float>(coeffs[kB2]) );
-  dsp->sendParameter( addr[kParamB1], static_cast<float>(coeffs[kB1]) );
-  dsp->sendParameter( addr[kParamB0], static_cast<float>(coeffs[kB0]) );
-  dsp->sendParameter( addr[kParamA2], static_cast<float>(coeffs[kA2]) );
-  dsp->sendParameter( addr[kParamA1], static_cast<float>(coeffs[kA1]) );
+  QByteArray content;
+  content.append( dsp->makeParameterForWifi( addr[kParamB2], static_cast<float>(coeffs[kB2]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB1], static_cast<float>(coeffs[kB1]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB0], static_cast<float>(coeffs[kB0]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA2], static_cast<float>(coeffs[kA2]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA1], static_cast<float>(coeffs[kA1]) ) );
+  dsp->sendParameterWifi( content );
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -165,10 +183,11 @@ uint32_t QLowShelv::getNumBytes( void )
   return 2*5 + 4*5;
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
+/*
 void QLowShelv::writeDspParameter( void )
 {
   dsp->storeRegAddr( addr[kParamB2] );
@@ -182,4 +201,107 @@ void QLowShelv::writeDspParameter( void )
   dsp->storeRegAddr( addr[kParamA1] );
   dsp->storeValue( static_cast<float>(coeffs[kA1]) );
 
+}*/
+
+//==============================================================================
+/*!
+ */
+QByteArray QLowShelv::getUserParams( void )
+{
+  QByteArray content;
+  float V0t = static_cast<float>(ui->doubleSpinBoxGain->value());
+  content.append( reinterpret_cast<const char*>(&V0t), sizeof(V0t) );
+  float fct = static_cast<float>(ui->doubleSpinBoxFc->value());
+  content.append( reinterpret_cast<const char*>(&fct), sizeof(fct) );
+  float St = static_cast<float>(ui->doubleSpinBoxS->value());
+  content.append( reinterpret_cast<const char*>(&St), sizeof(St) );
+  content.append( reinterpret_cast<const char*>(&bypass), sizeof(bypass) );
+  return content;
+}
+
+//==============================================================================
+/*!
+ */
+void QLowShelv::setUserParams( QByteArray& userParams, int& idx )
+{
+  QByteArray param;
+
+  if( userParams.size() >= idx + 12 )
+  {
+    param.clear();
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+
+    float V0t = *reinterpret_cast<const float*>(param.data());
+
+    param.clear();
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+
+    float fct = *reinterpret_cast<const float*>(param.data());
+
+    param.clear();
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+
+    float St = *reinterpret_cast<const float*>(param.data());
+
+    bypass = static_cast<bool>(userParams.at(idx));
+    idx++;
+
+    ui->doubleSpinBoxGain->blockSignals( true );
+    ui->doubleSpinBoxGain->setValue( V0t );
+    ui->doubleSpinBoxGain->blockSignals( false );
+
+    ui->doubleSpinBoxFc->blockSignals( true );
+    ui->doubleSpinBoxFc->setValue( fct );
+    ui->doubleSpinBoxFc->blockSignals( false );
+
+    ui->doubleSpinBoxS->blockSignals( true );
+    ui->doubleSpinBoxS->setValue( St );
+    ui->doubleSpinBoxS->blockSignals( false );
+
+    ui->pushButtonBypass->blockSignals( true );
+    ui->pushButtonBypass->setChecked( bypass );
+    ui->pushButtonBypass->blockSignals( false );
+  }
+  else
+    qDebug()<<"QLowShelv::setUserParams: Not enough data";
+}
+
+//==============================================================================
+/*! Get the parameters in DSP format. The parameters are returned with register 
+ *  address followed by value dword ready to be sent via i2c to DSP.
+ *
+ * \return Byte array with parameters for DSP. 
+ */
+QByteArray QLowShelv::getDspParams( void )
+{
+  QByteArray content;
+
+  content.append( dsp->makeParameterForWifi( addr[kParamB2], static_cast<float>(coeffs[kB2]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB1], static_cast<float>(coeffs[kB1]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB0], static_cast<float>(coeffs[kB0]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA2], static_cast<float>(coeffs[kA2]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA1], static_cast<float>(coeffs[kA1]) ) );
+
+  return content;
 }

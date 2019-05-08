@@ -68,13 +68,17 @@ public:
     return channel;
   }
 
+  virtual QByteArray getUserParams( void );
+
+  virtual void setUserParams( QByteArray& userParams, int& idx );
+
   virtual uint32_t getNumBytes( void );
 
   virtual void sendDspParameter( void );
 
   void setParameters( Vektorraum::tfloat newfc, Vektorraum::tfloat newV0, Vektorraum::tfloat newQ );
 
-  virtual void writeDspParameter( void );
+  virtual QByteArray getDspParams( void );
 
 private:
   void updateCoeffs( void );

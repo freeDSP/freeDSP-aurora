@@ -20,7 +20,7 @@ QHighPass::QHighPass( tfilterdesign design, tfloat fc,
                       uint16_t addrB2_4, uint16_t addrB1_4, uint16_t addrB0_4,
                       uint16_t addrA2_4, uint16_t addrA1_4,
                       tfloat samplerate,
-                      CFreeDspAurora* ptrdsp, bool isbypassed,
+                      CFreeDspAurora* ptrdsp,
                       QWidget *parent ) :
   QDspBlock(parent), ui(new Ui::QHighPass)
 {
@@ -68,8 +68,9 @@ QHighPass::QHighPass( tfilterdesign design, tfloat fc,
   ui->doubleSpinBoxFc->setValue( fc );
   ui->doubleSpinBoxFc->blockSignals( false );
 
-  bypass = isbypassed;
-  ui->pushButtonBypass->setChecked( bypass );
+  //ui->pushButtonBypass->setChecked( bypass );
+
+  type = HIGHPASS;
 }
 
 //==============================================================================
@@ -94,7 +95,7 @@ void QHighPass::update( tvector<tfloat> f )
   tfloat a1 = coeffs[kA1];
   tfloat a2 = coeffs[kA2];
   tfloat a0 = 1.0;
-  H = ( b0 + b1*z + b2*z2 ) / ( a0 + a1*z + a2*z2 );
+  H = ( b0 + b1*z + b2*z2 ) / ( a0 - a1*z - a2*z2 );
 
   for( tuint ii = 1; ii < 4; ii++ )
   {
@@ -105,7 +106,7 @@ void QHighPass::update( tvector<tfloat> f )
     a2 = coeffs[ii*5+kA2];
     a0 = 1.0;
 
-    H = H * ( b0 + b1*z + b2*z2 ) / ( a0 + a1*z + a2*z2 );
+    H = H * ( b0 + b1*z + b2*z2 ) / ( a0 - a1*z - a2*z2 );
   }
 }
 
@@ -114,6 +115,9 @@ void QHighPass::update( tvector<tfloat> f )
  */
 void QHighPass::updateCoeffs( void )
 {
+  Vektorraum::tfloat Q[4];
+  Vektorraum::tfloat fc[4];
+
   for( tuint ii = 0; ii < 4; ii++ )
   {
     Q[ii] = -1.0;
@@ -176,8 +180,8 @@ void QHighPass::updateCoeffs( void )
       b0 = ( ( 1.0 + cos(w0) ) * 0.5 ) / a0;
       b1 = ( -( 1.0 + cos(w0) ) ) / a0;
       b2 = ( ( 1.0 + cos(w0) ) * 0.5 ) / a0;
-      a1 = ( -2.0 * cos(w0) ) / a0;
-      a2 = ( 1.0 - alpha ) / a0;
+      a1 = (-1.0)*( -2.0 * cos(w0) ) / a0;
+      a2 = (-1.0)*( 1.0 - alpha ) / a0;
       a0 = 1.0;
       coeffs[kB0] = b0;
       coeffs[kB1] = b1;
@@ -199,8 +203,8 @@ void QHighPass::updateCoeffs( void )
       b0 = ( ( 1.0 + cos(w0) ) * 0.5 ) / a0;
       b1 = ( -( 1.0 + cos(w0) ) ) / a0;
       b2 = ( ( 1.0 + cos(w0) ) * 0.5 ) / a0;
-      a1 = ( -2.0 * cos(w0) ) / a0;
-      a2 = ( 1.0 - alpha ) / a0;
+      a1 = (-1.0)*( -2.0 * cos(w0) ) / a0;
+      a2 = (-1.0)*( 1.0 - alpha ) / a0;
       a0 = 1.0;
       coeffs[kB0] = b0;
       coeffs[kB1] = b1;
@@ -214,8 +218,8 @@ void QHighPass::updateCoeffs( void )
       b0 = ( ( 1.0 + cos(w0) ) * 0.5 ) / a0;
       b1 = ( -( 1.0 + cos(w0) ) ) / a0;
       b2 = ( ( 1.0 + cos(w0) ) * 0.5 ) / a0;
-      a1 = ( -2.0 * cos(w0) ) / a0;
-      a2 = ( 1.0 - alpha ) / a0;
+      a1 = (-1.0)*( -2.0 * cos(w0) ) / a0;
+      a2 = (-1.0)*( 1.0 - alpha ) / a0;
       a0 = 1.0;
       coeffs[5+kB0] = b0;
       coeffs[5+kB1] = b1;
@@ -239,8 +243,8 @@ void QHighPass::updateCoeffs( void )
       b0 = ( ( 1.0 + cos(w0) ) * 0.5 ) / a0;
       b1 = ( -( 1.0 + cos(w0) ) ) / a0;
       b2 = ( ( 1.0 + cos(w0) ) * 0.5 ) / a0;
-      a1 = ( -2.0 * cos(w0) ) / a0;
-      a2 = ( 1.0 - alpha ) / a0;
+      a1 = (-1.0)*( -2.0 * cos(w0) ) / a0;
+      a2 = (-1.0)*( 1.0 - alpha ) / a0;
       a0 = 1.0;
       coeffs[kB0] = b0;
       coeffs[kB1] = b1;
@@ -254,8 +258,8 @@ void QHighPass::updateCoeffs( void )
       b0 = ( ( 1.0 + cos(w0) ) * 0.5 ) / a0;
       b1 = ( -( 1.0 + cos(w0) ) ) / a0;
       b2 = ( ( 1.0 + cos(w0) ) * 0.5 ) / a0;
-      a1 = ( -2.0 * cos(w0) ) / a0;
-      a2 = ( 1.0 - alpha ) / a0;
+      a1 = (-1.0)*( -2.0 * cos(w0) ) / a0;
+      a2 = (-1.0)*( 1.0 - alpha ) / a0;
       a0 = 1.0;
       coeffs[5+kB0] = b0;
       coeffs[5+kB1] = b1;
@@ -269,8 +273,8 @@ void QHighPass::updateCoeffs( void )
       b0 = ( ( 1.0 + cos(w0) ) * 0.5 ) / a0;
       b1 = ( -( 1.0 + cos(w0) ) ) / a0;
       b2 = ( ( 1.0 + cos(w0) ) * 0.5 ) / a0;
-      a1 = ( -2.0 * cos(w0) ) / a0;
-      a2 = ( 1.0 - alpha ) / a0;
+      a1 = (-1.0)*( -2.0 * cos(w0) ) / a0;
+      a2 = (-1.0)*( 1.0 - alpha ) / a0;
       a0 = 1.0;
       coeffs[10+kB0] = b0;
       coeffs[10+kB1] = b1;
@@ -296,8 +300,8 @@ void QHighPass::updateCoeffs( void )
       b0 = ( ( 1.0 + cos(w0) ) * 0.5 ) / a0;
       b1 = ( -( 1.0 + cos(w0) ) ) / a0;
       b2 = ( ( 1.0 + cos(w0) ) * 0.5 ) / a0;
-      a1 = ( -2.0 * cos(w0) ) / a0;
-      a2 = ( 1.0 - alpha ) / a0;
+      a1 = (-1.0)*( -2.0 * cos(w0) ) / a0;
+      a2 = (-1.0)*( 1.0 - alpha ) / a0;
       a0 = 1.0;
       coeffs[kB0] = b0;
       coeffs[kB1] = b1;
@@ -311,8 +315,8 @@ void QHighPass::updateCoeffs( void )
       b0 = ( ( 1.0 + cos(w0) ) * 0.5 ) / a0;
       b1 = ( -( 1.0 + cos(w0) ) ) / a0;
       b2 = ( ( 1.0 + cos(w0) ) * 0.5 ) / a0;
-      a1 = ( -2.0 * cos(w0) ) / a0;
-      a2 = ( 1.0 - alpha ) / a0;
+      a1 = (-1.0)*( -2.0 * cos(w0) ) / a0;
+      a2 = (-1.0)*( 1.0 - alpha ) / a0;
       a0 = 1.0;
       coeffs[5+kB0] = b0;
       coeffs[5+kB1] = b1;
@@ -326,8 +330,8 @@ void QHighPass::updateCoeffs( void )
       b0 = ( ( 1.0 + cos(w0) ) * 0.5 ) / a0;
       b1 = ( -( 1.0 + cos(w0) ) ) / a0;
       b2 = ( ( 1.0 + cos(w0) ) * 0.5 ) / a0;
-      a1 = ( -2.0 * cos(w0) ) / a0;
-      a2 = ( 1.0 - alpha ) / a0;
+      a1 = (-1.0)*( -2.0 * cos(w0) ) / a0;
+      a2 = (-1.0)*( 1.0 - alpha ) / a0;
       a0 = 1.0;
       coeffs[10+kB0] = b0;
       coeffs[10+kB1] = b1;
@@ -341,8 +345,8 @@ void QHighPass::updateCoeffs( void )
       b0 = ( ( 1.0 + cos(w0) ) * 0.5 ) / a0;
       b1 = ( -( 1.0 + cos(w0) ) ) / a0;
       b2 = ( ( 1.0 + cos(w0) ) * 0.5 ) / a0;
-      a1 = ( -2.0 * cos(w0) ) / a0;
-      a2 = ( 1.0 - alpha ) / a0;
+      a1 = (-1.0)*( -2.0 * cos(w0) ) / a0;
+      a2 = (-1.0)*( 1.0 - alpha ) / a0;
       a0 = 1.0;
       coeffs[15+kB0] = b0;
       coeffs[15+kB1] = b1;
@@ -388,8 +392,16 @@ void QHighPass::updateCoeffs( void )
       coeffs[ kB0 ] = zb[0] / za[0];
       coeffs[ kB1 ] = zb[1] / za[0];
       coeffs[ kB2 ] = zb[2] / za[0];
-      coeffs[ kA1 ] = za[1] / za[0];
-      coeffs[ kA2 ] = za[2] / za[0];
+      coeffs[ kA1 ] = (-1.0)*za[1] / za[0];
+      coeffs[ kA2 ] = (-1.0)*za[2] / za[0];
+
+      //! \TODO Check, why calculation above does not work on ADAU1452
+      a1 = pow( 2.7, -Omega ); 
+      coeffs[ kB0 ] = a1;
+      coeffs[ kB1 ] = -a1;
+      coeffs[ kB2 ] = 0.0;
+      coeffs[ kA1 ] = a1;
+      coeffs[ kA2 ] = 0.0;
 
       break;
 
@@ -428,8 +440,8 @@ void QHighPass::updateCoeffs( void )
       coeffs[ kB0 ] = zb[0] / za[0];
       coeffs[ kB1 ] = zb[1] / za[0];
       coeffs[ kB2 ] = zb[2] / za[0];
-      coeffs[ kA1 ] = za[1] / za[0];
-      coeffs[ kA2 ] = za[2] / za[0];
+      coeffs[ kA1 ] = (-1.0)*za[1] / za[0];
+      coeffs[ kA2 ] = (-1.0)*za[2] / za[0];
 
       break;
 
@@ -471,8 +483,16 @@ void QHighPass::updateCoeffs( void )
       coeffs[ kB0 ] = zb[0] / za[0];
       coeffs[ kB1 ] = zb[1] / za[0];
       coeffs[ kB2 ] = zb[2] / za[0];
-      coeffs[ kA1 ] = za[1] / za[0];
-      coeffs[ kA2 ] = za[2] / za[0];
+      coeffs[ kA1 ] = (-1.0)*za[1] / za[0];
+      coeffs[ kA2 ] = (-1.0)*za[2] / za[0];
+
+      //! \TODO Check, why calculation above does not work on ADAU1452
+      a1 = pow( 2.7, -Omega ); 
+      coeffs[ kB0 ] = a1;
+      coeffs[ kB1 ] = -a1;
+      coeffs[ kB2 ] = 0.0;
+      coeffs[ kA1 ] = a1;
+      coeffs[ kA2 ] = 0.0;
      
       a0 = 0.4772;  // bi
       a1 = 0.9996;  // ai
@@ -499,8 +519,8 @@ void QHighPass::updateCoeffs( void )
       coeffs[ 5 + kB0 ] = zb[0] / za[0];
       coeffs[ 5 + kB1 ] = zb[1] / za[0];
       coeffs[ 5 + kB2 ] = zb[2] / za[0];
-      coeffs[ 5 + kA1 ] = za[1] / za[0];
-      coeffs[ 5 + kA2 ] = za[2] / za[0];
+      coeffs[ 5 + kA1 ] = (-1.0)*za[1] / za[0];
+      coeffs[ 5 + kA2 ] = (-1.0)*za[2] / za[0];
 
       break;
 
@@ -542,8 +562,8 @@ void QHighPass::updateCoeffs( void )
       coeffs[ kB0 ] = zb[0] / za[0];
       coeffs[ kB1 ] = zb[1] / za[0];
       coeffs[ kB2 ] = zb[2] / za[0];
-      coeffs[ kA1 ] = za[1] / za[0];
-      coeffs[ kA2 ] = za[2] / za[0];
+      coeffs[ kA1 ] = (-1.0)*za[1] / za[0];
+      coeffs[ kA2 ] = (-1.0)*za[2] / za[0];
      
       sa[0] = 0.3890 / (wn*wn);  // bi
       sa[1] = 0.7743 / wn;       // ai
@@ -570,8 +590,8 @@ void QHighPass::updateCoeffs( void )
       coeffs[ 5 + kB0 ] = zb[0] / za[0];
       coeffs[ 5 + kB1 ] = zb[1] / za[0];
       coeffs[ 5 + kB2 ] = zb[2] / za[0];
-      coeffs[ 5 + kA1 ] = za[1] / za[0];
-      coeffs[ 5 + kA2 ] = za[2] / za[0];
+      coeffs[ 5 + kA1 ] = (-1.0)*za[1] / za[0];
+      coeffs[ 5 + kA2 ] = (-1.0)*za[2] / za[0];
 
       break;
 
@@ -611,8 +631,16 @@ void QHighPass::updateCoeffs( void )
       coeffs[ kB0 ] = zb[0] / za[0];
       coeffs[ kB1 ] = zb[1] / za[0];
       coeffs[ kB2 ] = zb[2] / za[0];
-      coeffs[ kA1 ] = za[1] / za[0];
-      coeffs[ kA2 ] = za[2] / za[0];
+      coeffs[ kA1 ] = (-1.0)*za[1] / za[0];
+      coeffs[ kA2 ] = (-1.0)*za[2] / za[0];
+
+      //! \TODO Check, why calculation above does not work on ADAU1452
+      a1 = pow( 2.7, -Omega ); 
+      coeffs[ kB0 ] = a1;
+      coeffs[ kB1 ] = -a1;
+      coeffs[ kB2 ] = 0.0;
+      coeffs[ kA1 ] = a1;
+      coeffs[ kA2 ] = 0.0;
 
       break;
 
@@ -651,8 +679,8 @@ void QHighPass::updateCoeffs( void )
       coeffs[ kB0 ] = zb[0] / za[0];
       coeffs[ kB1 ] = zb[1] / za[0];
       coeffs[ kB2 ] = zb[2] / za[0];
-      coeffs[ kA1 ] = za[1] / za[0];
-      coeffs[ kA2 ] = za[2] / za[0];
+      coeffs[ kA1 ] = (-1.0)*za[1] / za[0];
+      coeffs[ kA2 ] = (-1.0)*za[2] / za[0];
 
       break;
 
@@ -694,8 +722,16 @@ void QHighPass::updateCoeffs( void )
       coeffs[ kB0 ] = zb[0] / za[0];
       coeffs[ kB1 ] = zb[1] / za[0];
       coeffs[ kB2 ] = zb[2] / za[0];
-      coeffs[ kA1 ] = za[1] / za[0];
-      coeffs[ kA2 ] = za[2] / za[0];
+      coeffs[ kA1 ] = (-1.0)*za[1] / za[0];
+      coeffs[ kA2 ] = (-1.0)*za[2] / za[0];
+
+      //! \TODO Check, why calculation above does not work on ADAU1452
+      a1 = pow( 2.7, -Omega ); 
+      coeffs[ kB0 ] = a1;
+      coeffs[ kB1 ] = -a1;
+      coeffs[ kB2 ] = 0.0;
+      coeffs[ kA1 ] = a1;
+      coeffs[ kA2 ] = 0.0;
      
       a0 = 1.0000;  // bi
       a1 = 1.0000;  // ai
@@ -722,8 +758,8 @@ void QHighPass::updateCoeffs( void )
       coeffs[ 5 + kB0 ] = zb[0] / za[0];
       coeffs[ 5 + kB1 ] = zb[1] / za[0];
       coeffs[ 5 + kB2 ] = zb[2] / za[0];
-      coeffs[ 5 + kA1 ] = za[1] / za[0];
-      coeffs[ 5 + kA2 ] = za[2] / za[0];
+      coeffs[ 5 + kA1 ] = (-1.0)*za[1] / za[0];
+      coeffs[ 5 + kA2 ] = (-1.0)*za[2] / za[0];
 
       break;
 
@@ -765,8 +801,8 @@ void QHighPass::updateCoeffs( void )
       coeffs[ kB0 ] = zb[0] / za[0];
       coeffs[ kB1 ] = zb[1] / za[0];
       coeffs[ kB2 ] = zb[2] / za[0];
-      coeffs[ kA1 ] = za[1] / za[0];
-      coeffs[ kA2 ] = za[2] / za[0];
+      coeffs[ kA1 ] = (-1.0)*za[1] / za[0];
+      coeffs[ kA2 ] = (-1.0)*za[2] / za[0];
      
       a0 = 1.0000;  // bi
       a1 = 0.7654;  // ai
@@ -793,53 +829,13 @@ void QHighPass::updateCoeffs( void )
       coeffs[ 5 + kB0 ] = zb[0] / za[0];
       coeffs[ 5 + kB1 ] = zb[1] / za[0];
       coeffs[ 5 + kB2 ] = zb[2] / za[0];
-      coeffs[ 5 + kA1 ] = za[1] / za[0];
-      coeffs[ 5 + kA2 ] = za[2] / za[0];
+      coeffs[ 5 + kA1 ] = (-1.0)*za[1] / za[0];
+      coeffs[ 5 + kA2 ] = (-1.0)*za[2] / za[0];
 
       break;
 
     }
 
-    
-
-    //H = ( b0 + b1*z + b2*z2 ) / ( a0 - a1*z - a2*z2 );
-    #if 0
-    for( tuint ii = 1; ii < 4; ii++ )
-    {
-      if( Q[ii] > 0.0 )
-      {
-        w0 = 2.0 * pi * fc[ii] / fs;
-        alpha = sin(w0) / (2.0 * Q[ii]);
-        a0 = 1.0 + alpha;
-        b0 = ( ( 1.0 + cos(w0) ) * 0.5 ) / a0;
-        b1 = ( -( 1.0 + cos(w0) ) ) / a0;
-        b2 = ( ( 1.0 + cos(w0) ) * 0.5 ) / a0;
-        a1 = ( -2.0 * cos(w0) ) / a0;
-        a2 = ( 1.0 - alpha ) / a0;
-        a0 = 1.0;
-        coeffs[ii*5+kB0] = b0;
-        coeffs[ii*5+kB1] = b1;
-        coeffs[ii*5+kB2] = b2;
-        coeffs[ii*5+kA1] = a1;
-        coeffs[ii*5+kA2] = a2;
-
-      }
-      else
-      {
-        b0 = 1.0;
-        b1 = 0.0;
-        b2 = 0.0;
-        a1 = 0.0;
-        a2 = 0.0;
-        a0 = 1.0;
-        coeffs[ii*5+kB0] = b0;
-        coeffs[ii*5+kB1] = b1;
-        coeffs[ii*5+kB2] = b2;
-        coeffs[ii*5+kA1] = a1;
-        coeffs[ii*5+kA2] = a2;
-      }
-    }
-    #endif
   }
 }
 
@@ -879,29 +875,71 @@ void QHighPass::on_pushButtonBypass_clicked()
  */
 void QHighPass::sendDspParameter( void )
 {
-  dsp->sendParameter( addr[kParamB2_1], static_cast<float>(coeffs[kB2]) );
-  dsp->sendParameter( addr[kParamB1_1], static_cast<float>(coeffs[kB1]) );
-  dsp->sendParameter( addr[kParamB0_1], static_cast<float>(coeffs[kB0]) );
-  dsp->sendParameter( addr[kParamA2_1], static_cast<float>(coeffs[kA2]) );
-  dsp->sendParameter( addr[kParamA1_1], static_cast<float>(coeffs[kA1]) );
+  QByteArray content;
+/*
+  content.append( dsp->makeParameterForWifi( addr[kParamB2_1], static_cast<float>(0.0) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB1_1], static_cast<float>(0.0) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB0_1], static_cast<float>(1.0) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA2_1], static_cast<float>(0.0) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA1_1], static_cast<float>(0.0) ) );
 
-  dsp->sendParameter( addr[kParamB2_2], static_cast<float>(coeffs[5+kB2]) );
-  dsp->sendParameter( addr[kParamB1_2], static_cast<float>(coeffs[5+kB1]) );
-  dsp->sendParameter( addr[kParamB0_2], static_cast<float>(coeffs[5+kB0]) );
-  dsp->sendParameter( addr[kParamA2_2], static_cast<float>(coeffs[5+kA2]) );
-  dsp->sendParameter( addr[kParamA1_2], static_cast<float>(coeffs[5+kA1]) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB2_2], static_cast<float>(0.0) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB1_2], static_cast<float>(0.0) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB0_2], static_cast<float>(1.0) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA2_2], static_cast<float>(0.0) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA1_2], static_cast<float>(0.0) ) );
 
-  dsp->sendParameter( addr[kParamB2_3], static_cast<float>(coeffs[2*5+kB2]) );
-  dsp->sendParameter( addr[kParamB1_3], static_cast<float>(coeffs[2*5+kB1]) );
-  dsp->sendParameter( addr[kParamB0_3], static_cast<float>(coeffs[2*5+kB0]) );
-  dsp->sendParameter( addr[kParamA2_3], static_cast<float>(coeffs[2*5+kA2]) );
-  dsp->sendParameter( addr[kParamA1_3], static_cast<float>(coeffs[2*5+kA1]) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB2_3], static_cast<float>(0.0) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB1_3], static_cast<float>(0.0) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB0_3], static_cast<float>(1.0) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA2_3], static_cast<float>(0.0) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA1_3], static_cast<float>(0.0) ) );
 
-  dsp->sendParameter( addr[kParamB2_4], static_cast<float>(coeffs[3*5+kB2]) );
-  dsp->sendParameter( addr[kParamB1_4], static_cast<float>(coeffs[3*5+kB1]) );
-  dsp->sendParameter( addr[kParamB0_4], static_cast<float>(coeffs[3*5+kB0]) );
-  dsp->sendParameter( addr[kParamA2_4], static_cast<float>(coeffs[3*5+kA2]) );
-  dsp->sendParameter( addr[kParamA1_4], static_cast<float>(coeffs[3*5+kA1]) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB2_4], static_cast<float>(0.0) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB1_4], static_cast<float>(0.0) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB0_4], static_cast<float>(1.0) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA2_4], static_cast<float>(0.0) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA1_4], static_cast<float>(0.0) ) );
+  
+  dsp->sendParameterWifi( content );
+
+  QEventLoop loopWait;
+  QTimer timerWait;
+  timerWait.setSingleShot( true );
+  connect( &timerWait, SIGNAL(timeout()), &loopWait, SLOT(quit()) );
+  timerWait.start( 100 );
+  loopWait.exec();
+  disconnect( &timerWait, SIGNAL(timeout()), &loopWait, SLOT(quit()) );
+
+  content.clear();
+*/
+  content.append( dsp->makeParameterForWifi( addr[kParamB2_1], static_cast<float>(coeffs[kB2]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB1_1], static_cast<float>(coeffs[kB1]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB0_1], static_cast<float>(coeffs[kB0]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA2_1], static_cast<float>(coeffs[kA2]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA1_1], static_cast<float>(coeffs[kA1]) ) );
+
+  content.append( dsp->makeParameterForWifi( addr[kParamB2_2], static_cast<float>(coeffs[5+kB2]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB1_2], static_cast<float>(coeffs[5+kB1]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB0_2], static_cast<float>(coeffs[5+kB0]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA2_2], static_cast<float>(coeffs[5+kA2]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA1_2], static_cast<float>(coeffs[5+kA1]) ) );
+
+  content.append( dsp->makeParameterForWifi( addr[kParamB2_3], static_cast<float>(coeffs[2*5+kB2]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB1_3], static_cast<float>(coeffs[2*5+kB1]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB0_3], static_cast<float>(coeffs[2*5+kB0]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA2_3], static_cast<float>(coeffs[2*5+kA2]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA1_3], static_cast<float>(coeffs[2*5+kA1]) ) );
+
+  content.append( dsp->makeParameterForWifi( addr[kParamB2_4], static_cast<float>(coeffs[3*5+kB2]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB1_4], static_cast<float>(coeffs[3*5+kB1]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB0_4], static_cast<float>(coeffs[3*5+kB0]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA2_4], static_cast<float>(coeffs[3*5+kA2]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA1_4], static_cast<float>(coeffs[3*5+kA1]) ) );
+
+  dsp->sendParameterWifi( content );
+
+
 }
 
 //==============================================================================
@@ -915,58 +953,101 @@ uint32_t QHighPass::getNumBytes( void )
 //==============================================================================
 /*!
  */
-void QHighPass::writeDspParameter( void )
+void QHighPass::setName( QString newname )
 {
-  dsp->storeRegAddr( addr[kParamB2_1] );
-  dsp->storeValue( static_cast<float>(coeffs[kB2]) );
-  dsp->storeRegAddr( addr[kParamB1_1] );
-  dsp->storeValue( static_cast<float>(coeffs[kB1]) );
-  dsp->storeRegAddr( addr[kParamB0_1] );
-  dsp->storeValue( static_cast<float>(coeffs[kB0]) );
-  dsp->storeRegAddr( addr[kParamA2_1] );
-  dsp->storeValue( static_cast<float>(coeffs[kA2]) );
-  dsp->storeRegAddr( addr[kParamA1_1] );
-  dsp->storeValue( static_cast<float>(coeffs[kA1]) );
-
-  dsp->storeRegAddr( addr[kParamB2_2] );
-  dsp->storeValue( static_cast<float>(coeffs[5+kB2]) );
-  dsp->storeRegAddr( addr[kParamB1_2] );
-  dsp->storeValue( static_cast<float>(coeffs[5+kB1]) );
-  dsp->storeRegAddr( addr[kParamB0_2] );
-  dsp->storeValue( static_cast<float>(coeffs[5+kB0]) );
-  dsp->storeRegAddr( addr[kParamA2_2] );
-  dsp->storeValue( static_cast<float>(coeffs[5+kA2]) );
-  dsp->storeRegAddr( addr[kParamA1_2] );
-  dsp->storeValue( static_cast<float>(coeffs[5+kA1]) );
-
-  dsp->storeRegAddr( addr[kParamB2_3] );
-  dsp->storeValue( static_cast<float>(coeffs[2*5+kB2]) );
-  dsp->storeRegAddr( addr[kParamB1_3] );
-  dsp->storeValue( static_cast<float>(coeffs[2*5+kB1]) );
-  dsp->storeRegAddr( addr[kParamB0_3] );
-  dsp->storeValue( static_cast<float>(coeffs[2*5+kB0]) );
-  dsp->storeRegAddr( addr[kParamA2_3] );
-  dsp->storeValue( static_cast<float>(coeffs[2*5+kA2]) );
-  dsp->storeRegAddr( addr[kParamA1_3] );
-  dsp->storeValue( static_cast<float>(coeffs[2*5+kA1]) );
-
-  dsp->storeRegAddr( addr[kParamB2_4] );
-  dsp->storeValue( static_cast<float>(coeffs[3*5+kB2]) );
-  dsp->storeRegAddr( addr[kParamB1_4] );
-  dsp->storeValue( static_cast<float>(coeffs[3*5+kB1]) );
-  dsp->storeRegAddr( addr[kParamB0_4] );
-  dsp->storeValue( static_cast<float>(coeffs[3*5+kB0]) );
-  dsp->storeRegAddr( addr[kParamA2_4] );
-  dsp->storeValue( static_cast<float>(coeffs[3*5+kA2]) );
-  dsp->storeRegAddr( addr[kParamA1_4] );
-  dsp->storeValue( static_cast<float>(coeffs[3*5+kA1]) );
+  ui->label->setText( newname );
+  name = newname;
 }
 
 //==============================================================================
 /*!
  */
-void QHighPass::setName( QString newname )
+QByteArray QHighPass::getUserParams( void )
 {
-  ui->label->setText( newname );
-  name = newname;
+  QByteArray content;
+  content.append( static_cast<uint8_t>(filterDesign) );
+  float fc = static_cast<float>(ui->doubleSpinBoxFc->value());
+  content.append( reinterpret_cast<const char*>(&fc), sizeof(fc) );
+  content.append( reinterpret_cast<const char*>(&bypass), sizeof(bypass) );
+  return content;
+}
+
+//==============================================================================
+/*!
+ */
+void QHighPass::setUserParams( QByteArray& userParams, int& idx )
+{
+  QByteArray param;
+
+  if( userParams.size() >= idx + 5 )
+  {
+    filterDesign = static_cast<tfilterdesign>(userParams.at(idx));
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+
+    float fc = *reinterpret_cast<const float*>(param.data());
+
+    bypass = static_cast<bool>(userParams.at(idx));
+    idx++;
+
+    ui->comboBoxType->blockSignals( true );
+    int index = ui->comboBoxType->findData( filterDesign );
+    if ( index != -1 )
+      ui->comboBoxType->setCurrentIndex(index);
+    ui->comboBoxType->blockSignals( false );
+    ui->doubleSpinBoxFc->blockSignals( true );
+    ui->doubleSpinBoxFc->setValue( static_cast<double>(fc) );
+    ui->doubleSpinBoxFc->blockSignals( false );
+
+    ui->pushButtonBypass->blockSignals( true );
+    ui->pushButtonBypass->setChecked( bypass );
+    ui->pushButtonBypass->blockSignals( false );
+  }
+  else
+    qDebug()<<"QHighPass::setUserParams: Not enough data";
+
+}
+
+//==============================================================================
+/*! Get the parameters in DSP format. The parameters are returned with register 
+ *  address followed by value dword ready to be sent via i2c to DSP.
+ *
+ * \return Byte array with parameters for DSP. 
+ */
+QByteArray QHighPass::getDspParams( void )
+{
+  QByteArray content;
+
+  content.append( dsp->makeParameterForWifi( addr[kParamB2_1], static_cast<float>(coeffs[kB2]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB1_1], static_cast<float>(coeffs[kB1]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB0_1], static_cast<float>(coeffs[kB0]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA2_1], static_cast<float>(coeffs[kA2]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA1_1], static_cast<float>(coeffs[kA1]) ) );
+
+  content.append( dsp->makeParameterForWifi( addr[kParamB2_2], static_cast<float>(coeffs[5+kB2]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB1_2], static_cast<float>(coeffs[5+kB1]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB0_2], static_cast<float>(coeffs[5+kB0]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA2_2], static_cast<float>(coeffs[5+kA2]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA1_2], static_cast<float>(coeffs[5+kA1]) ) );
+
+  content.append( dsp->makeParameterForWifi( addr[kParamB2_3], static_cast<float>(coeffs[2*5+kB2]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB1_3], static_cast<float>(coeffs[2*5+kB1]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB0_3], static_cast<float>(coeffs[2*5+kB0]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA2_3], static_cast<float>(coeffs[2*5+kA2]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA1_3], static_cast<float>(coeffs[2*5+kA1]) ) );
+
+  content.append( dsp->makeParameterForWifi( addr[kParamB2_4], static_cast<float>(coeffs[3*5+kB2]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB1_4], static_cast<float>(coeffs[3*5+kB1]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamB0_4], static_cast<float>(coeffs[3*5+kB0]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA2_4], static_cast<float>(coeffs[3*5+kA2]) ) );
+  content.append( dsp->makeParameterForWifi( addr[kParamA1_4], static_cast<float>(coeffs[3*5+kA1]) ) );
+
+  return content;
 }

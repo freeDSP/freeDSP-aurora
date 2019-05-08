@@ -33,6 +33,10 @@ public:
 
   void update( Vektorraum::tvector<Vektorraum::tfloat> f );
 
+  virtual QByteArray getUserParams( void );
+
+  virtual void setUserParams( QByteArray& userParams, int& idx );
+
   unsigned int numParameter( void )
   {
     return kNumParams;
@@ -42,7 +46,7 @@ public:
 
   virtual uint32_t getNumBytes( void );
 
-  virtual void writeDspParameter( void );
+  virtual QByteArray getDspParams( void );
 
 private slots:
   void on_doubleSpinBoxGain_valueChanged(double arg1);
