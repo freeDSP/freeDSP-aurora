@@ -17,19 +17,19 @@ class CPlugIn8Channels : public CDspPlugin
 
 public:
   explicit CPlugIn8Channels( Vektorraum::tfloat samplerate );
-  ~CPlugIn8Channels( void );
+  virtual ~CPlugIn8Channels( void );
 
   //============================================================================
   /*!
    *
    */
-  unsigned int getNumChannels( void ) { return 8; }
+  virtual unsigned int getNumChannels( void ) { return 8; }
 
   //============================================================================
   /*!
    *
    */
-  tDspChannel getGuiForChannel( unsigned int chn, Vektorraum::tfloat fs, CFreeDspAurora* ptrdsp, QWidget* parent );
+  virtual tDspChannel getGuiForChannel( unsigned int chn, Vektorraum::tfloat fs, CFreeDspAurora* ptrdsp, QWidget* parent );
 
   //============================================================================
   /*!

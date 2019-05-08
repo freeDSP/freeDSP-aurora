@@ -3,6 +3,7 @@
 
 #include <QHBoxLayout>
 #include <QString>
+#include <QList>
 
 #include "vektorraum.h"
 
@@ -25,9 +26,9 @@ public:
     flagSummation = true;
   }
 
-  ~CDspPlugin( void )
+  virtual ~CDspPlugin( void )
   {
-    
+    qDebug()<<" ~CDspPlugin";
   }
 
   //============================================================================
@@ -45,6 +46,20 @@ public:
 
   virtual QString getChannelName( unsigned int channel ) = 0;
 
+  virtual unsigned int getNumChannels( void ) = 0;
+
+  virtual tDspChannel getGuiForChannel( unsigned int chn, Vektorraum::tfloat fs, CFreeDspAurora* ptrdsp, QWidget* parent ) = 0;
+
+  //============================================================================
+  /*! Returns a channel of the DSP-Plugin.
+   *
+   * \param chn Index of channel to be returned.
+   */
+  QChannel* getChannel( unsigned int chn )
+  {
+    return listChannels.at(chn);
+  }
+
   //============================================================================
   //
   // Member Variables
@@ -54,8 +69,7 @@ protected:
   Vektorraum::tvector<Vektorraum::tfloat> freq;
   Vektorraum::tfloat fs;
   bool flagSummation;
-
-private:
+  QList<QChannel*> listChannels;
 };
 
 #endif

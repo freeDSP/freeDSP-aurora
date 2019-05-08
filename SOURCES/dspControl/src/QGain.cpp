@@ -10,9 +10,15 @@ using namespace Vektorraum;
 
 extern QVolumeSlider* sliderMainVolume;
 
+//==============================================================================
+/*!
+ *
+ */
 QGain::QGain( tfloat V0, uint16_t gainaddr, CFreeDspAurora* ptrdsp, QWidget *parent ) :
   QDspBlock(parent), ui(new Ui::QGain)
 {
+  type = GAIN;
+  
   addr[kTargetGain] = gainaddr;
 
   dsp = ptrdsp;
@@ -24,12 +30,16 @@ QGain::QGain( tfloat V0, uint16_t gainaddr, CFreeDspAurora* ptrdsp, QWidget *par
   ui->doubleSpinBoxGain->blockSignals( false );
 }
 
+//==============================================================================
+/*!
+ *
+ */
 QGain::~QGain()
 {
   delete ui;
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*! \brief Updates the filter.
  *
  */
@@ -48,7 +58,7 @@ void QGain::update( tvector<tfloat> f )
   }
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -58,7 +68,7 @@ void QGain::on_doubleSpinBoxGain_valueChanged( double )
   emit valueChanged();
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -69,21 +79,27 @@ void QGain::on_pushButtonBypass_clicked()
   emit valueChanged();
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
 void QGain::sendDspParameter( void )
 {
-  double gain = static_cast<double>(sliderMainVolume->value());
+  double gain = 0.0; //static_cast<double>(sliderMainVolume->value());
   if( !bypass )
     gain += ui->doubleSpinBoxGain->value();
-  qDebug()<<sliderMainVolume->value()<<ui->doubleSpinBoxGain->value()<<gain;
+  //qDebug()<<sliderMainVolume->value()<<ui->doubleSpinBoxGain->value()<<gain;
   float val = static_cast<float>(pow( 10.0, gain/20.0 ));
-  dsp->sendParameter( addr[kTargetGain], val );
+  //dsp->sendParameter( addr[kTargetGain], val );
+
+  qDebug()<<"Gain"<<gain<<val;
+
+  QByteArray content;
+  content.append( dsp->makeParameterForWifi( addr[kTargetGain], val ) );
+  dsp->sendParameterWifi( content );
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -92,15 +108,84 @@ uint32_t QGain::getNumBytes( void )
   return 6;
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
-void QGain::writeDspParameter( void )
+/*void QGain::writeDspParameter( void )
 {
   float val = static_cast<float>(pow( 10.0, ui->doubleSpinBoxGain->value()/20.0 ));
   if( bypass )
     val = 1.0;
   dsp->storeRegAddr( addr[kTargetGain] );
   dsp->storeValue( val );
+}
+*/
+//==============================================================================
+/*!
+ */
+QByteArray QGain::getUserParams( void )
+{
+  QByteArray content;
+  float gain = static_cast<float>(ui->doubleSpinBoxGain->value());
+  content.append( reinterpret_cast<const char*>(&gain), sizeof(gain) );
+  content.append( reinterpret_cast<const char*>(&bypass), sizeof(bypass) );
+  return content;
+}
+
+//==============================================================================
+/*!
+ */
+void QGain::setUserParams( QByteArray& userParams, int& idx )
+{
+  QByteArray param;
+
+  if( userParams.size() >= idx + 4 )
+  {
+    param.clear();
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+
+    float gain = *reinterpret_cast<const float*>(param.data());
+
+    bypass = static_cast<bool>(userParams.at(idx));
+    idx++;
+
+    ui->doubleSpinBoxGain->blockSignals( true );
+    ui->doubleSpinBoxGain->setValue( static_cast<double>(gain) );
+    ui->doubleSpinBoxGain->blockSignals( false );
+
+    ui->pushButtonBypass->blockSignals( true );
+    ui->pushButtonBypass->setChecked( bypass );
+    ui->pushButtonBypass->blockSignals( false );
+  }
+  else
+    qDebug()<<"QGain::setUserParams: Not enough data";
+
+}
+
+//==============================================================================
+/*! Get the parameters in DSP format. The parameters are returned with register 
+ *  address followed by value dword ready to be sent via i2c to DSP.
+ *
+ * \return Byte array with parameters for DSP. 
+ */
+QByteArray QGain::getDspParams( void )
+{
+  QByteArray ret;
+
+  double gain = 0.0;
+  if( !bypass )
+    gain += ui->doubleSpinBoxGain->value();
+  float val = static_cast<float>(pow( 10.0, gain/20.0 ));
+  
+  ret.append( dsp->makeParameterForWifi( addr[kTargetGain], val ) );
+  
+  return ret;
 }

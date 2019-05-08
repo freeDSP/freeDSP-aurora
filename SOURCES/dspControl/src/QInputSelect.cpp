@@ -7,6 +7,10 @@
 
 using namespace Vektorraum;
 
+//==============================================================================
+/*!
+ *
+ */
 QInputSelect::QInputSelect( uint32_t selection, uint16_t inputaddr, CFreeDspAurora* ptrdsp, QWidget *parent) :
   QDspBlock(parent), ui(new Ui::QInputSelect)
 {
@@ -40,14 +44,20 @@ QInputSelect::QInputSelect( uint32_t selection, uint16_t inputaddr, CFreeDspAuro
   ui->comboBoxInput->setCurrentIndex( selection );
   ui->comboBoxInput->blockSignals( false );
   //ui->comboBoxInput->setMaxVisibleItems( 16 );
+
+  type = INPUTSELECT;
 }
 
+//==============================================================================
+/*!
+ *
+ */
 QInputSelect::~QInputSelect()
 {
   delete ui;
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*! \brief Updates the filter.
  *
  */
@@ -58,7 +68,7 @@ void QInputSelect::update( tvector<tfloat> f )
     H[ii] = 1.0;
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -66,10 +76,13 @@ void QInputSelect::sendDspParameter( void )
 {
   qDebug()<<"Selected index"<<ui->comboBoxInput->currentIndex();
   uint32_t val = static_cast<uint32_t>(ui->comboBoxInput->currentIndex());
-  dsp->sendParameter( addr[kInput], val );
+  //dsp->sendParameter( addr[kInput], val );
+
+  #warning QInputSelect::sendDspParameter not implemented
+  qDebug()<<"QInputSelect::sendDspParameter not implemented";
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -78,18 +91,7 @@ uint32_t QInputSelect::getNumBytes( void )
   return 6;
 }
 
-//------------------------------------------------------------------------------
-/*!
- *
- */
-void QInputSelect::writeDspParameter( void )
-{
-  uint32_t val = static_cast<uint32_t>(ui->comboBoxInput->currentIndex());
-  dsp->storeRegAddr( addr[kInput] );
-  dsp->storeValue( val );
-}
-
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -97,4 +99,52 @@ void QInputSelect::on_comboBoxInput_currentIndexChanged( int  )
 {
   sendDspParameter();
   emit valueChanged();
+}
+
+//==============================================================================
+/*!
+ */
+QByteArray QInputSelect::getUserParams( void )
+{
+  QByteArray content;
+  content.append( static_cast<uint8_t>(ui->comboBoxInput->currentIndex()) );
+  return content;
+}
+
+//==============================================================================
+/*!
+ */
+void QInputSelect::setUserParams( QByteArray& userParams, int& idx )
+{
+  QByteArray param;
+
+  if( userParams.size() >= idx + 1 )
+  {
+    uint8_t inputSelect = static_cast<uint8_t>(userParams.at(idx));
+    idx++;
+
+    ui->comboBoxInput->blockSignals( true );
+    int index = ui->comboBoxInput->findData( inputSelect );
+    if ( index != -1 )
+      ui->comboBoxInput->setCurrentIndex(index);
+    ui->comboBoxInput->blockSignals( false );
+  }
+  else
+    qDebug()<<"QInputSelect::setUserParams: Not enough data";
+}
+
+//==============================================================================
+/*! Get the parameters in DSP format. The parameters are returned with register 
+ *  address followed by value dword ready to be sent via i2c to DSP.
+ *
+ * \return Byte array with parameters for DSP. 
+ */
+QByteArray QInputSelect::getDspParams( void )
+{
+  QByteArray content;
+
+  #warning QInputSelect::getDspParams not implemented
+  qDebug()<<"QInputSelect::getDspParams not implemented";
+
+  return content;
 }

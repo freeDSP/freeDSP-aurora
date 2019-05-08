@@ -82,12 +82,12 @@ tDspChannel CPlugIn4FIRs::getGuiForChannel( unsigned int chn, tfloat fs, CFreeDs
     //--- Channel 1
     dspChannel.name = getChannelName(chn);
 
-    input = new QInputSelect( 0, MOD_NX1_1_1_MONOMUXSIGMA300NS1INDEX_ADDR, ptrdsp );
+    input = new QInputSelect( 0, MOD_NX1_1_1_MONOMUXSIGMA300NS1INDEX_ADDR, ptrdsp, channel );
     layout->addWidget( input );
     channel->addDspBlock( input );
     channel->setName( dspChannel.name );
 
-    fir = new QFir( MOD_FIR1_ALG0_FIRSIGMA300ALG1FIRCOEFF0_ADDR, NFFT, ptrdsp );
+    fir = new QFir( MOD_FIR1_ALG0_FIRSIGMA300ALG1FIRCOEFF0_ADDR, NFFT, ptrdsp, channel );
     layout->addWidget( fir );
     channel->addDspBlock( fir );
 
@@ -181,15 +181,15 @@ tDspChannel CPlugIn4FIRs::getGuiForChannel( unsigned int chn, tfloat fs, CFreeDs
     layout->addWidget( peq10 );
     channel->addDspBlock( peq10 );
     
-    dly = new QDelay( 0.0, fs, MOD_DELAY1_DELAYAMT_ADDR, ptrdsp );
+    dly = new QDelay( 0.0, fs, MOD_DELAY1_DELAYAMT_ADDR, ptrdsp, channel );
     layout->addWidget( dly );
     channel->addDspBlock( dly ); 
 
-    gain = new QGain( 0.0, MOD_GAIN1_ALG0_TARGET_ADDR, ptrdsp );
+    gain = new QGain( 0.0, MOD_GAIN1_ALG0_TARGET_ADDR, ptrdsp, channel );
     layout->addWidget( gain );
     channel->addDspBlock( gain );
  
-    output = new QOutputSelect( 1, 0, ptrdsp );
+    output = new QOutputSelect( 1, 0, ptrdsp, channel );
     layout->addWidget( output );
     channel->addDspBlock( output );
 
@@ -218,6 +218,8 @@ tDspChannel CPlugIn4FIRs::getGuiForChannel( unsigned int chn, tfloat fs, CFreeDs
     QObject::connect( peq08,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
     QObject::connect( peq09,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
     QObject::connect( peq10,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+
+    listChannels.append( channel );
   }
   else if( chn == 1 )
   {
@@ -225,12 +227,12 @@ tDspChannel CPlugIn4FIRs::getGuiForChannel( unsigned int chn, tfloat fs, CFreeDs
     //--- Channel 2
     dspChannel.name = getChannelName(chn);
 
-    input = new QInputSelect( 1, MOD_NX1_1_2_MONOMUXSIGMA300NS2INDEX_ADDR, ptrdsp );
+    input = new QInputSelect( 1, MOD_NX1_1_2_MONOMUXSIGMA300NS2INDEX_ADDR, ptrdsp, channel );
     layout->addWidget( input );
     channel->addDspBlock( input );
     channel->setName( dspChannel.name );
 
-    fir = new QFir( MOD_FIR2_ALG0_FIRSIGMA300ALG2FIRCOEFF0_ADDR, NFFT, ptrdsp );
+    fir = new QFir( MOD_FIR2_ALG0_FIRSIGMA300ALG2FIRCOEFF0_ADDR, NFFT, ptrdsp, channel );
     layout->addWidget( fir );
     channel->addDspBlock( fir );
 
@@ -324,15 +326,15 @@ tDspChannel CPlugIn4FIRs::getGuiForChannel( unsigned int chn, tfloat fs, CFreeDs
     layout->addWidget( peq10 );
     channel->addDspBlock( peq10 );
 
-    dly = new QDelay( 0.0, fs, MOD_DELAY2_DELAYAMT_ADDR, ptrdsp );
+    dly = new QDelay( 0.0, fs, MOD_DELAY2_DELAYAMT_ADDR, ptrdsp, channel );
     layout->addWidget( dly );
     channel->addDspBlock( dly );
 
-    gain = new QGain( 0.0, MOD_GAIN2_ALG0_TARGET_ADDR, ptrdsp );
+    gain = new QGain( 0.0, MOD_GAIN2_ALG0_TARGET_ADDR, ptrdsp, channel );
     layout->addWidget( gain );
     channel->addDspBlock( gain );
 
-    output = new QOutputSelect( 1, 0, ptrdsp );
+    output = new QOutputSelect( 1, 0, ptrdsp, channel );
     layout->addWidget( output );
     channel->addDspBlock( output );
 
@@ -361,6 +363,8 @@ tDspChannel CPlugIn4FIRs::getGuiForChannel( unsigned int chn, tfloat fs, CFreeDs
     QObject::connect( peq08,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
     QObject::connect( peq09,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
     QObject::connect( peq10,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+
+    listChannels.append( channel );
   }
   else if( chn == 2 )
   {
@@ -368,12 +372,12 @@ tDspChannel CPlugIn4FIRs::getGuiForChannel( unsigned int chn, tfloat fs, CFreeDs
     //--- Channel 3
     dspChannel.name = getChannelName(chn);
 
-    input = new QInputSelect( 2, MOD_NX1_1_3_MONOMUXSIGMA300NS3INDEX_ADDR, ptrdsp );
+    input = new QInputSelect( 2, MOD_NX1_1_3_MONOMUXSIGMA300NS3INDEX_ADDR, ptrdsp, channel );
     layout->addWidget( input );
     channel->addDspBlock( input );
     channel->setName( dspChannel.name );
 
-    fir = new QFir( MOD_FIR3_ALG0_FIRSIGMA300ALG3FIRCOEFF0_ADDR, NFFT, ptrdsp );
+    fir = new QFir( MOD_FIR3_ALG0_FIRSIGMA300ALG3FIRCOEFF0_ADDR, NFFT, ptrdsp, channel );
     layout->addWidget( fir );
     channel->addDspBlock( fir );
 
@@ -467,15 +471,15 @@ tDspChannel CPlugIn4FIRs::getGuiForChannel( unsigned int chn, tfloat fs, CFreeDs
     layout->addWidget( peq10 );
     channel->addDspBlock( peq10 );
 
-    dly = new QDelay( 0.0, 48000.0, MOD_DELAY3_DELAYAMT_ADDR, ptrdsp );
+    dly = new QDelay( 0.0, 48000.0, MOD_DELAY3_DELAYAMT_ADDR, ptrdsp, channel );
     layout->addWidget( dly );
     channel->addDspBlock( dly );
 
-    gain = new QGain( 0.0, MOD_GAIN3_ALG0_TARGET_ADDR, ptrdsp );
+    gain = new QGain( 0.0, MOD_GAIN3_ALG0_TARGET_ADDR, ptrdsp, channel );
     layout->addWidget( gain );
     channel->addDspBlock( gain );
 
-    output = new QOutputSelect( 1, 0, ptrdsp );
+    output = new QOutputSelect( 1, 0, ptrdsp, channel );
     layout->addWidget( output );
     channel->addDspBlock( output );
 
@@ -504,6 +508,8 @@ tDspChannel CPlugIn4FIRs::getGuiForChannel( unsigned int chn, tfloat fs, CFreeDs
     QObject::connect( peq08,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
     QObject::connect( peq09,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
     QObject::connect( peq10,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+
+    listChannels.append( channel );
   }
   else if( chn == 3 )
   {
@@ -511,12 +517,12 @@ tDspChannel CPlugIn4FIRs::getGuiForChannel( unsigned int chn, tfloat fs, CFreeDs
     //--- Channel 4
     dspChannel.name = getChannelName(chn);
 
-    input = new QInputSelect( 3, MOD_NX1_1_4_MONOMUXSIGMA300NS4INDEX_ADDR, ptrdsp );
+    input = new QInputSelect( 3, MOD_NX1_1_4_MONOMUXSIGMA300NS4INDEX_ADDR, ptrdsp, channel );
     layout->addWidget( input );
     channel->addDspBlock( input );
     channel->setName( dspChannel.name );
 
-    fir = new QFir( MOD_FIR4_ALG0_FIRSIGMA300ALG4FIRCOEFF0_ADDR, NFFT, ptrdsp );
+    fir = new QFir( MOD_FIR4_ALG0_FIRSIGMA300ALG4FIRCOEFF0_ADDR, NFFT, ptrdsp, channel );
     layout->addWidget( fir );
     channel->addDspBlock( fir );
 
@@ -610,15 +616,15 @@ tDspChannel CPlugIn4FIRs::getGuiForChannel( unsigned int chn, tfloat fs, CFreeDs
     layout->addWidget( peq10 );
     channel->addDspBlock( peq10 );
 
-    dly = new QDelay( 0.0, 48000.0, MOD_DELAY4_DELAYAMT_ADDR, ptrdsp );
+    dly = new QDelay( 0.0, 48000.0, MOD_DELAY4_DELAYAMT_ADDR, ptrdsp, channel );
     layout->addWidget( dly );
     channel->addDspBlock( dly );
 
-    gain = new QGain( 0.0, MOD_GAIN4_ALG0_TARGET_ADDR, ptrdsp );
+    gain = new QGain( 0.0, MOD_GAIN4_ALG0_TARGET_ADDR, ptrdsp, channel );
     layout->addWidget( gain );
     channel->addDspBlock( gain );
 
-    output = new QOutputSelect( 1, 0, ptrdsp );
+    output = new QOutputSelect( 1, 0, ptrdsp, channel );
     layout->addWidget( output );
     channel->addDspBlock( output );
 
@@ -647,6 +653,8 @@ tDspChannel CPlugIn4FIRs::getGuiForChannel( unsigned int chn, tfloat fs, CFreeDs
     QObject::connect( peq08,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
     QObject::connect( peq09,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
     QObject::connect( peq10,  SIGNAL(importRewPeqs( QWidget* )), parent, SLOT(importRewPeqs( QWidget* )) );
+
+    listChannels.append( channel );
   }
 
   dspChannel.layout = layout;

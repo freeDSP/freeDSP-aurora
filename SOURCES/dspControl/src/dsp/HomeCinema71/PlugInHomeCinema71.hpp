@@ -17,19 +17,19 @@ class CPlugInHomeCinema71 : public CDspPlugin
 
 public:
   explicit CPlugInHomeCinema71( Vektorraum::tfloat samplerate );
-  ~CPlugInHomeCinema71( void );
+  virtual ~CPlugInHomeCinema71( void );
 
   //============================================================================
   /*!
    *
    */
-  unsigned int getNumChannels( void ) { return 8; }
+  virtual unsigned int getNumChannels( void ) { return 8; }
 
   //============================================================================
   /*!
    *
    */
-  tDspChannel getGuiForChannel( unsigned int chn, Vektorraum::tfloat fs, CFreeDspAurora* ptrdsp, QWidget* parent );
+  virtual tDspChannel getGuiForChannel( unsigned int chn, Vektorraum::tfloat fs, CFreeDspAurora* ptrdsp, QWidget* parent );
 
   //============================================================================
   /*!

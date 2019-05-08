@@ -10,6 +10,9 @@
     <height>300</height>
    </rect>
   </property>
+  <property name="contextMenuPolicy">
+   <enum>Qt::NoContextMenu</enum>
+  </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
@@ -77,6 +80,9 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="contextMenuPolicy">
+          <enum>Qt::NoContextMenu</enum>
+         </property>
         </widget>
        </item>
        <item>
@@ -94,6 +100,9 @@
        </item>
        <item>
         <widget class="QDoubleSpinBox" name="doubleSpinBoxFcLp">
+         <property name="contextMenuPolicy">
+          <enum>Qt::NoContextMenu</enum>
+         </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
          </property>
@@ -126,6 +135,9 @@
        </item>
        <item>
         <widget class="QDoubleSpinBox" name="doubleSpinBoxGainLp">
+         <property name="contextMenuPolicy">
+          <enum>Qt::NoContextMenu</enum>
+         </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
          </property>
@@ -178,6 +190,9 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="contextMenuPolicy">
+          <enum>Qt::NoContextMenu</enum>
+         </property>
         </widget>
        </item>
        <item>
@@ -195,6 +210,9 @@
        </item>
        <item>
         <widget class="QDoubleSpinBox" name="doubleSpinBoxFcHp">
+         <property name="contextMenuPolicy">
+          <enum>Qt::NoContextMenu</enum>
+         </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
          </property>
@@ -227,6 +245,9 @@
        </item>
        <item>
         <widget class="QDoubleSpinBox" name="doubleSpinBox">
+         <property name="contextMenuPolicy">
+          <enum>Qt::NoContextMenu</enum>
+         </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
          </property>

@@ -10,6 +10,9 @@
     <height>300</height>
    </rect>
   </property>
+  <property name="contextMenuPolicy">
+   <enum>Qt::NoContextMenu</enum>
+  </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
@@ -63,7 +66,11 @@
     </widget>
    </item>
    <item>
-    <widget class="QLineEdit" name="lineEditResponseFile"/>
+    <widget class="QLineEdit" name="lineEditResponseFile">
+     <property name="contextMenuPolicy">
+      <enum>Qt::NoContextMenu</enum>
+     </property>
+    </widget>
    </item>
    <item>
     <spacer name="verticalSpacer">

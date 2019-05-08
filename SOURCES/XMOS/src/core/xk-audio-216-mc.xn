@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Network xmlns="http://www.xmos.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.xmos.com http://www.xmos.com" ManuallySpecifiedRouting="true">
+  <Type>Board</Type>
+  <Name>XS2 MC Audio</Name>
+  <Declarations>
+    <Declaration>tileref tile[2]</Declaration>
+    <Declaration>tileref usb_tile</Declaration>
+  </Declarations>
+  <Packages>
+    <Package id="0" Type="XS2-UnA-512-FB236">
+      <Nodes>
+        <Node Id="0" InPackageId="0" Type="XS2-L16A-512" Oscillator="24MHz" SystemFrequency="500MHz" referencefrequency="100MHz">
+          <Boot>
+            <Source Location="SPI:bootFlash"/>
+          </Boot>
+          <Tile Number="0" Reference="tile[0]">
+            <Port Location="XS1_PORT_1B" Name="PORT_SQI_CS"/>
+            <Port Location="XS1_PORT_1C" Name="PORT_SQI_SCLK"/>
+            <Port Location="XS1_PORT_4B" Name="PORT_SQI_SIO"/>
+        
+            <!-- Audio Ports -->         
+            <Port Location="XS1_PORT_1A"  Name="PORT_PLL_REF"/>
+            <Port Location="XS1_PORT_1H"  Name="PORT_MCLK_IN"/>
+            <Port Location="XS1_PORT_1P"  Name="PORT_I2S_LRCLK"/>
+            <Port Location="XS1_PORT_1O"  Name="PORT_I2S_BCLK"/>
+            <Port Location="XS1_PORT_1M"  Name="PORT_I2S_DAC0"/>
+            <port Location="XS1_PORT_1F"  Name="PORT_I2S_DAC1"/>
+            <port Location="XS1_PORT_1G"  Name="PORT_I2S_DAC2"/>
+            <port Location="XS1_PORT_1I"  Name="PORT_I2S_DAC3"/>
+            <Port Location="XS1_PORT_1N"  Name="PORT_I2S_ADC0"/>
+            <Port Location="XS1_PORT_1J"  Name="PORT_I2S_ADC1"/>
+            <Port Location="XS1_PORT_1K"  Name="PORT_I2S_ADC2"/>
+            <Port Location="XS1_PORT_1L"  Name="PORT_I2S_ADC3"/>
+            <Port Location="XS1_PORT_4A"  Name="PORT_I2C"/>
+            <Port Location="XS1_PORT_1M"  Name="PORT_DSD_DAC0"/>
+            <port Location="XS1_PORT_1I"  Name="PORT_DSD_DAC1"/>
+            <Port Location="XS1_PORT_1G"  Name="PORT_DSD_CLK"/>
+            <Port Location="XS1_PORT_1E"  Name="PORT_ADAT_OUT"/>-->  <!-- D: COAX E: OPT --> 
+            <Port Location="XS1_PORT_1D"  Name="PORT_SPDIF_OUT"/>--> <!-- D: COAX E: OPT --> 
+          </Tile>
+          <Tile Number="1" Reference="tile[1]">
+            <Port Location="XS1_PORT_1H"  Name="PORT_USB_TX_READYIN"/>
+            <Port Location="XS1_PORT_1J"  Name="PORT_USB_CLK"/>
+            <Port Location="XS1_PORT_1K"  Name="PORT_USB_TX_READYOUT"/>
+            <Port Location="XS1_PORT_1I"  Name="PORT_USB_RX_READY"/>
+            <Port Location="XS1_PORT_1E"  Name="PORT_USB_FLAG0"/>
+            <Port Location="XS1_PORT_1F"  Name="PORT_USB_FLAG1"/>
+            <Port Location="XS1_PORT_1G"  Name="PORT_USB_FLAG2"/>
+            <Port Location="XS1_PORT_8A"  Name="PORT_USB_TXD"/>
+            <Port Location="XS1_PORT_8B"  Name="PORT_USB_RXD"/>
+            
+            <!-- Audio Ports -->
+            <Port Location="XS1_PORT_16B" Name="PORT_MCLK_COUNT"/>              
+            <Port Location="XS1_PORT_1L"  Name="PORT_MCLK_IN2"/>
+            <Port Location="XS1_PORT_1M"  Name="PORT_MIDI_IN"></Port>
+            <Port Location="XS1_PORT_1N"  Name="PORT_MIDI_OUT"/>
+            <Port Location="XS1_PORT_1O"  Name="PORT_ADAT_IN"/>-->  <!-- P: COAX O: OPT --> 
+            <Port Location="XS1_PORT_1P"  Name="PORT_SPDIF_IN"/>--> <!-- P: COAX O: OPT --> 
+          </Tile>
+        </Node>
+        <Node Id="1" InPackageId="1" Type="periph:XS1-SU" Reference="usb_tile" Oscillator="24MHz">
+        </Node>
+      </Nodes>
+      <Links>
+        <Link Encoding="5wire">
+          <LinkEndpoint NodeId="0" Link="8" Delays="52clk,52clk"/>
+          <LinkEndpoint NodeId="1" Link="XL0" Delays="1clk,1clk"/>
+        </Link>
+      </Links>
+    </Package>
+  </Packages>
+  <Nodes>
+    <Node Id="2" Type="device:" RoutingId="0x8000">
+      <Service Id="0" Proto="xscope_host_data(chanend c);">
+        <Chanend Identifier="c" end="3"/>
+      </Service>
+    </Node>
+  </Nodes>
+  <Links>
+    <Link Encoding="2wire" Delays="4,4" Flags="XSCOPE">
+      <LinkEndpoint NodeId="0" Link="XL0"/>
+      <LinkEndpoint NodeId="2" Chanend="1"/>
+    </Link>
+  </Links>
+  <ExternalDevices>
+    <Device NodeId="0" Tile="0" Class="SQIFlash" Name="bootFlash" Type="IS25LP080D">
+      <Attribute Name="PORT_SQI_CS"   Value="PORT_SQI_CS"/>
+      <Attribute Name="PORT_SQI_SCLK" Value="PORT_SQI_SCLK"/>
+      <Attribute Name="PORT_SQI_SIO"  Value="PORT_SQI_SIO"/>
+      <Attribute Name="QE_REGISTER"   Value="quad_spi_qe_location_status_reg_0"/>
+      <Attribute Name="QE_BIT"        Value="quad_spi_qe_bit_6"/>
+    </Device>
+  </ExternalDevices>
+  <JTAGChain>
+    <JTAGDevice NodeId="0"/>
+    <JTAGDevice NodeId="1"/>
+  </JTAGChain>
+</Network>

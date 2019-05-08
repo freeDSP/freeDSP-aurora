@@ -3,6 +3,9 @@
 
 #include <QMainWindow>
 #include <QList>
+#include <QDataStream>
+#include <QTcpSocket>
+#include <QByteArray>
 
 #include "figure/QFigure.h"
 #include "QChannel.hpp"
@@ -23,6 +26,9 @@
 
 #include "freeDSP-Aurora.hpp"
 
+class QTcpSocket;
+class QNetworkSession;
+
 namespace Ui {
 class MainWindow;
 }
@@ -30,6 +36,13 @@ class MainWindow;
 class MainWindow : public QMainWindow
 {
   Q_OBJECT
+
+public:
+  enum twifistatus
+  {
+    STATUS_WIFI_IDLE,
+    STATUS_WIFI_RECEIVE_USERPARAM
+  };
 
 public:
   explicit MainWindow(QWidget *parent = nullptr);
@@ -48,8 +61,12 @@ private slots:
 
   void on_actionSettings_triggered();
 
-  //void on_verticalSliderMainVolume_valueChanged(int value);
   void on_volumeSliderMain_valueChanged( double val );
+
+  void on_actionRead_from_DSP_triggered();
+
+signals:
+  void replyFinished( void );  
 
 private:
   Ui::MainWindow *ui;
@@ -62,7 +79,6 @@ private:
 
   QString portName;
   QList<QGain*> listOutputGains;
-
 };
 
 #endif // MAINWINDOW_HPP

@@ -77,7 +77,7 @@ public:
                       uint16_t addrB2_4, uint16_t addrB1_4, uint16_t addrB0_4,
                       uint16_t addrA2_4, uint16_t addrA1_4,
                       Vektorraum::tfloat samplerate,
-                      CFreeDspAurora* ptrdsp, bool isbypassed = false,
+                      CFreeDspAurora* ptrdsp,
                       QWidget *parent = nullptr );
   ~QHighPass();
 
@@ -97,9 +97,13 @@ public:
 
   virtual uint32_t getNumBytes( void );
 
-  virtual void writeDspParameter( void );
-
   void setName( QString newname );
+
+  virtual QByteArray getUserParams( void );
+
+  virtual void setUserParams( QByteArray& userParams, int& idx );
+
+  virtual QByteArray getDspParams( void );
 
 private:
   void updateCoeffs( void );
@@ -114,8 +118,8 @@ private:
   Ui::QHighPass *ui;
 
   tfilterdesign filterDesign;
-  Vektorraum::tfloat Q[4];
-  Vektorraum::tfloat fc[4];
+  //Vektorraum::tfloat Q[4];
+  //Vektorraum::tfloat fc[4];
   Vektorraum::tfloat coeffs[4*5];
   uint16_t addr[kNumParams];
   CFreeDspAurora* dsp;

@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui widgets
+QT       += core gui widgets network
 
 TARGET = dspControl
 TEMPLATE = app
@@ -23,6 +23,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 macx {
+include(./vektorraum/vektorraum.pri)
+}
+
+linux {
 include(./vektorraum/vektorraum.pri)
 }
 
@@ -137,7 +141,7 @@ macx {
   DEFINES += MATLIB_USE_UINT64
   DEFINES += __NOSNDFILE__
   DEFINES += USE_APPLEVDSP
-  DEFINES += DEMO
+  #DEFINES += DEMO
 
   LIBS += -framework CoreFoundation -framework Accelerate
 
@@ -157,9 +161,12 @@ macx {
 
   OTHER_FILES += $${ENTITLEMENTS}
 
+  APP_DSPPLUGIN_8CHANNELS.files = /Users/rkn/Documents/freeDSP/freeDSP-aurora/SOURCES/SIGMASTUDIO/8channels/TxBuffer_IC_1.dat /Users/rkn/Documents/freeDSP/freeDSP-aurora/SOURCES/SIGMASTUDIO/8channels/NumBytes_IC_1.dat
+  APP_DSPPLUGIN_8CHANNELS.path = Contents/Resources/8channels
+  QMAKE_BUNDLE_DATA += APP_DSPPLUGIN_8CHANNELS
+
   codesign.depends  += all
   codesign.commands += /Users/rkn/Qt5.12.0/5.12.0/clang_64/bin/macdeployqt $${TARGET}.app -appstore-compliant;
-
 
   # Extract debug symbols
   codesign.commands += dsymutil $${TARGET}.app/Contents/MacOS/$${TARGET} -o $${TARGET}.app.dSYM;
@@ -210,6 +217,23 @@ win32 {
   #QMAKE_CXXFLAGS += -gdwarf-2
 
   DEFINES += __WIN__
+  DEFINES += MATLIB_USE_UINT64
+  DEFINES += __NOFFT__
+  DEFINES += __NOSNDFILE__
+  DEFINES += DEMO
+
+  RC_ICONS = $${PWD}/rc/appicon.ico
+ # ICON = $${PWD}/rc/appicon.icns
+
+}
+
+linux {
+  message( "Building for Linux" )
+
+  #QMAKE_CFLAGS += -gdwarf-2
+  #QMAKE_CXXFLAGS += -gdwarf-2
+
+  DEFINES += __LINUX__
   DEFINES += MATLIB_USE_UINT64
   DEFINES += __NOFFT__
   DEFINES += __NOSNDFILE__
