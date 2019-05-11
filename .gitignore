@@ -1,1 +1,14 @@
 SOURCES/KICAD/freeDSP-aurora.xlsx
+kickstarter
+keynote
+SOURCES/.vscode
+<<<<<<< HEAD
+=======
+SOURCES/build-dspControl-Desktop_Qt_5_12_1_clang_64bit-Debug
+>>>>>>> feature/hardware_improvement
+SOURCES/build-dspControl-Desktop_Qt_5_12_0_clang_64bit-Debug
+ADDONS/AddOnL
+<<<<<<< HEAD
+ADDONS/AddOnL mit SPDIF
+=======
+>>>>>>> 8fb46410882df1ebfc089022c4d463d7053c8d87
