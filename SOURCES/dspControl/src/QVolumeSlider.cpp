@@ -10,6 +10,10 @@
 class QPaintEvent;
 class QWidget;
 
+//==============================================================================
+/*! 
+ *
+ */
 QVolumeSlider::QVolumeSlider( QWidget* parent ) : QWidget( parent )
 {
   backgroundColor = QApplication::palette().color( QPalette::Background );
@@ -22,6 +26,10 @@ QVolumeSlider::QVolumeSlider( QWidget* parent ) : QWidget( parent )
   fontHeight = fontMetrics.height();
 }
 
+//==============================================================================
+/*! 
+ *
+ */
 void QVolumeSlider::paintEvent( QPaintEvent* event )
 {
   QStyleOption opt;
@@ -80,7 +88,7 @@ void QVolumeSlider::paintEvent( QPaintEvent* event )
 
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*! \brief Reimplements the mouse press event handler.
  *
  *  \param event Pointer to event.
@@ -100,12 +108,12 @@ void QVolumeSlider::mousePressEvent( QMouseEvent* event )
       sliderPos = minVal;
     if( sliderPos > maxVal )
       sliderPos = maxVal;
-    emit valueChanged( sliderPos );
+    //emit valueChanged( sliderPos );
     update();
   }
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*! \brief Reimplements the mouse move event handler.
  *
  *  \param event Pointer to event.
@@ -125,7 +133,43 @@ void QVolumeSlider::mouseMoveEvent( QMouseEvent* event )
       sliderPos = minVal;
     if( sliderPos > maxVal )
       sliderPos = maxVal;
+    //emit valueChanged( sliderPos );
+    update();
+  }
+}
+
+//==============================================================================
+/*! \brief Reimplements the mouse release event handler.
+ *
+ *  \param event Pointer to event.
+ */
+void QVolumeSlider::mouseReleaseEvent( QMouseEvent* event )
+{
+  if( event->type() == QEvent::MouseButtonRelease )
+  {
+    qreal sliderHeight = height()-2*fontHeight;
+    qreal scaleFactor = sliderHeight / (minVal - maxVal);
+    #ifdef __MACOSX__
+    sliderPos = (event->y()-8-fontHeight/2) / scaleFactor;
+    #else
+    sliderPos = (event->y()-8-fontHeight/2) / scaleFactor;
+    #endif
+    if( sliderPos < minVal )
+      sliderPos = minVal;
+    if( sliderPos > maxVal )
+      sliderPos = maxVal;
     emit valueChanged( sliderPos );
     update();
   }
+}
+
+//==============================================================================
+/*!
+ */
+QByteArray QVolumeSlider::getUserParams( void )
+{
+  QByteArray content;
+  float gain = static_cast<float>(value());
+  content.append( reinterpret_cast<const char*>(&gain), sizeof(gain) );
+  return content;
 }

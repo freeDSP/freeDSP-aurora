@@ -225,8 +225,8 @@ void uploadDspFirmware( void )
 
   if( fileDspProgram )
   {
-    //Serial.print( "File size:");
-    //Serial.println( fileDspProgram.size() );
+    Serial.print( "File size:");
+    Serial.println( fileDspProgram.size() );
 
     size_t len = fileDspProgram.size();
     int cntr = 0;
@@ -285,7 +285,7 @@ void uploadDspFirmware( void )
           uint16_t addr = regaddr;
           byte val[4];
 
-          for( uint16_t ii = 0; ii < numBytesToRead - 2; ii = ii + 4 )
+          for( uint32_t ii = 0; ii < numBytesToRead - 2; ii = ii + 4 )
           {
             fileDspProgram.read( &(val[0]), 1 );
             fileDspProgram.read( &(val[1]), 1 );
@@ -294,6 +294,7 @@ void uploadDspFirmware( void )
             cntr += 4;
             ADAU1452_WRITE_BLOCK( addr, val, 4 );
             Serial.print( "." );
+            //Serial.println(ii);
             addr++;
           }
         }
@@ -336,7 +337,31 @@ void uploadDspParameter( void )
 
     while( fileDspParams.available() )
     {
-      Wire.beginTransmission( DSP_ADDR );
+      Serial.print( "I2C " );
+      byte byteRead; 
+      fileDspParams.read( &byteRead, 1 );
+      Serial.print( "0x" );
+      Serial.print( byte2string2(byteRead) );
+      uint16_t regaddr = ((uint16_t)byteRead) << 8;
+      fileDspParams.read( &byteRead, 1 );
+      Serial.print( byte2string2(byteRead) );
+      Serial.print( " " ); 
+      regaddr += byteRead;
+
+      byte val[4];
+      fileDspParams.read( &(val[0]), 1 );
+      fileDspParams.read( &(val[1]), 1 );
+      fileDspParams.read( &(val[2]), 1 );
+      fileDspParams.read( &(val[3]), 1 );
+      ADAU1452_WRITE_BLOCK( regaddr, val, 4 );  
+
+      Serial.print( "0x" );
+      Serial.print( byte2string2(val[0]) );
+      Serial.print( byte2string2(val[1]) );
+      Serial.print( byte2string2(val[2]) );
+      Serial.println( byte2string2(val[3]) );
+
+      /*Wire.beginTransmission( DSP_ADDR );
       Serial.print( "I2C " );
       //------------------------------------------------------------------------
       //--- Send register address
@@ -365,11 +390,11 @@ void uploadDspParameter( void )
       Serial.println( " " );
 
       Wire.endTransmission( true );
-
+      */
     }
 
-    Serial.print( cntr );
-    Serial.println( "Bytes" );
+    //Serial.print( cntr );
+    //Serial.println( "Bytes" );
 
     fileDspParams.close();
 
@@ -378,72 +403,6 @@ void uploadDspParameter( void )
     Serial.println( "\n[ERROR] Failed to open file dspinit.hex" );
   Serial.print( "[ok]\n" );
 }
-
-#if 0
-//==============================================================================
-/*! Returns the parameter to host.
- */
-void returnDspParameters( void )
-{
-  Serial.print( "Returning dsp parameter......" );
-
-  fileDspParams = SPIFFS.open( "/dspparam.hex" );
-
-  if( fileDspParams )
-  {
-    int file_size = fileDspParams.size();
-
-    cntr = 0;
-
-    //--------------------------------------------------------------------------
-    //--- Send file size
-    //--------------------------------------------------------------------------
-    SerialBT.write( (file_size>>24) & 0xFF );
-    SerialBT.write( (file_size>>16) & 0xFF );
-    SerialBT.write( (file_size>>8) & 0xFF );
-    SerialBT.write( file_size & 0xFF );
-
-    Serial.print( "File size:" );
-    Serial.println( file_size, HEX );
-
-    while( fileDspParams.available() )
-    {
-      //------------------------------------------------------------------------
-      //--- Send register address
-      //------------------------------------------------------------------------
-      Serial.println( "Register" );
-      uint32_t byteRead = fileDspParams.read();
-      SerialBT.write( byteRead );
-      Serial.println( byteRead, HEX );
-      byteRead = fileDspParams.read();
-      SerialBT.write( byteRead );
-      Serial.println( byteRead, HEX );
-      cntr += 2;
-
-
-      //------------------------------------------------------------------------
-      //--- Send value
-      //------------------------------------------------------------------------
-      Serial.println( "Value" );
-      for( uint32_t n = 0; n < 4; n++ )
-      {
-        byteRead = fileDspParams.read();
-        SerialBT.write( byteRead );
-        cntr++;
-        Serial.println( byteRead, HEX );
-      }
-    }
-
-    Serial.print( cntr );
-    Serial.println( "Bytes" );
-
-    fileDspParams.close();
-  }
-  else
-    Serial.println( "\n[ERROR] Failed to open file dspinit.hex" );
-  Serial.print( "[ok]\n" );
-}
-#endif
 
 //==============================================================================
 /*! Configure AK5558 ADC
@@ -703,7 +662,7 @@ void setup()
   Serial.print( "Connecting to " );
   Serial.println( Settings.ssid.c_str() );
   //Serial.println( Settings.password.c_str() );
-  //WiFi.begin( Settings.ssid.c_str(), Settings.password.c_str() );
+  WiFi.begin( Settings.ssid.c_str(), Settings.password.c_str() );
 
   int cntrConnect = 0;
   /*while( WiFi.waitForConnectResult() != WL_CONNECTED && cntrConnect < 3 )
@@ -853,30 +812,37 @@ void handleHttpRequest()
                   Serial.println( strData );
                   uint16_t reg = (uint16_t)strtoul( strReg.c_str(), NULL, 16 );
                   uint32_t data = (uint32_t)strtoul( strData.c_str(), NULL, 16 );
+
+                  byte val[4];
+                  val[0] = (data >> 24 ) & 0xFF;
+                  val[1] = (data >> 16 ) & 0xFF;
+                  val[2] = (data >> 8 ) & 0xFF;
+                  val[4] = data & 0xFF;
+                  ADAU1452_WRITE_BLOCK( reg, val, 4 );         
                   
-                  Wire.beginTransmission( DSP_ADDR );
+                  //Wire.beginTransmission( DSP_ADDR );
                   Serial.print( "I2C " );
                   byte byteTx = (reg>>8) & 0xff;
                   Serial.print( byte2string2(byteTx) );
-                  Wire.write( byteTx );
+                  //Wire.write( byteTx );
                   byteTx = reg & 0xff;
                   Serial.print( byte2string2(byteTx) );
-                  Wire.write( byteTx );
+                  //Wire.write( byteTx );
                   Serial.print( " " ); 
                   
                   byteTx = (data>>24) & 0xff;
                   Serial.print( byte2string2(byteTx) );
-                  Wire.write( byteTx );
+                  //Wire.write( byteTx );
                   byteTx = (data>>16) & 0xff;
                   Serial.print( byte2string2(byteTx) );
-                  Wire.write( byteTx );
+                  //Wire.write( byteTx );
                   byteTx = (data>>8) & 0xff;
                   Serial.print( byte2string2(byteTx) );
-                  Wire.write( byteTx );
+                  //Wire.write( byteTx );
                   byteTx = data & 0xff;
                   Serial.println( byte2string2(byteTx) );
-                  Wire.write( byteTx );               
-                  Wire.endTransmission( true );
+                  //Wire.write( byteTx );               
+                  //Wire.endTransmission( true );
                   sentBytes += 12;
                 } 
                 //}
@@ -1226,6 +1192,23 @@ void handleHttpRequest()
               Serial.println( "GET /finishdspfw" );
               fileDspProgram.flush();
               fileDspProgram.close();
+
+              if( SPIFFS.exists( "/dspparam.hex" ) )
+              {
+                if( SPIFFS.remove( "/dspparam.hex" ) )
+                  Serial.println( "dspparam.hex deleted" );
+                else
+                  Serial.println( "[ERROR] Deleting dspparam.hex failed." );
+              }
+
+              if( SPIFFS.exists( "/usrparam.hex" ) )
+              {
+                if( SPIFFS.remove( "/usrparam.hex" ) )
+                  Serial.println( "usrparam.hex deleted" );
+                else
+                  Serial.println( "[ERROR] Deleting usrparam.hex" );
+              }
+
               String httpResponse = "";
               httpResponse += "HTTP/1.1 200 OK\r\n";
               httpResponse += "Content-type:text/plain\r\n\r\n";
@@ -1550,268 +1533,6 @@ void loop()
   ArduinoOTA.handle();
 
   delay( 50 );
-
-#if 0
-  int rxByte;
-
-
-  if( state == STATUS_IDLE )
-  {
-    if( SerialBT.available() )
-    {
-      rxByte = SerialBT.read();
-      if( rxByte == NEWFW )
-      {
-        Serial.println( "Receiving new image" );
-        numBytes = 0;
-        cntr = 0;
-        state = STATUS_WAITDATASIZE;
-      }
-      else if( rxByte == VERIFY )
-      {
-        Serial.println( "Verifying DSP firmware" );
-        state = STATUS_VERIFY;
-      }
-      else if( rxByte == PARAM )
-      {
-        Serial.println( "Receiving Parameter" );
-        numBytes = 0;
-        cntr = 0;
-        state = STATUS_PARAM_REG;
-      }
-      else if( rxByte == SAVEPARAMS )
-      {
-        Serial.println( "Storing Parameters" );
-        numBytes = 0;
-        cntr = 0;
-        state = STATUS_WAIT_NUMBYTES;
-      }
-      else if( rxByte == GETPARAMS )
-      {
-        Serial.println( "Returning Parameters" );
-        numBytes = 0;
-        cntr = 0;
-        status = STATUS_RETURN_PARAMS;
-      }
-      else
-        Serial.println( "Unkown command" );
-      SerialBT.write( rxByte );
-    }
-  }
-
-  else if( state == STATUS_WAITDATASIZE )
-  {
-    if( SerialBT.available() )
-    {
-      rxByte = SerialBT.read();
-      numBytes = (numBytes << 8) + rxByte;
-      cntr++;
-
-      if( cntr == 4 )
-      {
-        Serial.print( numBytes );
-        Serial.println( "bytes" );
-
-        if( SPIFFS.exists( "/dspinit.hex" ) )
-        {
-          if( SPIFFS.remove( "/dspinit.hex" ) )
-            Serial.println( "dspinit.hex deleted" );
-        }
-
-        fileDspProgram = SPIFFS.open( "/dspinit.hex", FILE_APPEND );
-        if( !fileDspProgram )
-          Serial.println( "[ERROR] Failed to open file dspinit.hex" );
-        cntr = 0;
-        state = STATUS_RECVFW;
-      }
-
-      SerialBT.write( rxByte );
-    }
-
-  }
-
-  else if( state == STATUS_RECVFW )
-  {
-    if( SerialBT.available() )
-    {
-      rxByte = SerialBT.read();
-
-      size_t len = fileDspProgram.write( rxByte );
-      if( len != 1 )
-        Serial.println( "Error writing to file dspinit.hex" );
-      else
-      {
-        Serial.print( cntr+1 );
-        Serial.print( " : " );
-        Serial.print( rxByte, HEX );
-        Serial.print( "\n" );
-      }
-
-      cntr++;
-      if( cntr == numBytes )
-      {
-        fileDspProgram.flush();
-        fileDspProgram.close();
-        Serial.println( "Closed dspinit.hex" );
-
-        cntr = 0;
-        state = STATUS_IDLE;
-      }
-      SerialBT.write( rxByte );
-    }
-  }
-
-  else if( state == STATUS_VERIFY )
-  {
-    fileDspProgram = SPIFFS.open( "/dspinit.hex" );
-
-    if( fileDspProgram )
-    {
-      int file_size = fileDspProgram.size();
-      Serial.print( "File size: " );
-      Serial.println( file_size );
-
-      for( int ii = 0; ii < file_size; ii++ )
-      {
-        uint8_t nextByte = fileDspProgram.read();
-
-        Serial.println( nextByte, HEX );
-      }
-
-      fileDspProgram.close();
-
-    }
-    else
-      Serial.println( "[ERROR] Failed to open file dspinit.hex" );
-
-    state = STATUS_IDLE;
-  }
-
-  else if( state == STATUS_PARAM_NUMBYTES )
-  {
-    if( SerialBT.available() )
-    {
-      rxByte = SerialBT.read();
-      numBytes = (numBytes << 8) + rxByte;
-      cntr++;
-
-      if( cntr == 4 )
-      {
-        Serial.print( numBytes );
-        Serial.println( "bytes" );
-        cntr = 0;
-        state = STATUS_PARAM_REG;
-      }
-
-      SerialBT.write( rxByte );
-    }
-  }
-
-  else if( state == STATUS_PARAM_REG )
-  {
-    if( SerialBT.available() )
-    {
-      rxByte = SerialBT.read();
-      dspRegister = (dspRegister << 8) + rxByte;
-      cntr++;
-
-      if( cntr == 2 )
-      {
-        Serial.println( dspRegister );
-        cntr = 0;
-        dspValueHex = 0;
-        state = STATUS_PARAM_VALUE;
-      }
-
-      SerialBT.write( rxByte );
-    }
-  }
-
-  //----------------------------------------------------------------------------
-  //--- Get the register value
-  //----------------------------------------------------------------------------
-  else if( state == STATUS_PARAM_VALUE )
-  {
-    if( SerialBT.available() )
-    {
-      rxByte = SerialBT.read();
-      dspValueHex = (dspValueHex << 8) + rxByte;
-      cntr++;
-
-      if( cntr == 4 )
-      {
-        memcpy( &dspValue, &dspValueHex, sizeof(float) );
-        Serial.println( dspValue );
-        cntr = 0;
-        dspValueHex = 0;
-        state = STATUS_IDLE;
-      }
-
-      SerialBT.write( rxByte );
-    }
-  }
-
-  //----------------------------------------------------------------------------
-  //--- Get the length of dspparams.hex in bytes
-  //----------------------------------------------------------------------------
-  else if( state == STATUS_WAIT_NUMBYTES )
-  {
-    if( SerialBT.available() )
-    {
-      rxByte = SerialBT.read();
-      numBytes = (numBytes << 8) + rxByte;
-      cntr++;
-
-      if( cntr == 4 )
-      {
-        Serial.print( numBytes );
-        Serial.println( "bytes" );
-
-        if( SPIFFS.exists( "/dspparam.hex" ) )
-        {
-          if( SPIFFS.remove( "/dspparam.hex" ) )
-            Serial.println( "dspparams.hex deleted" );
-        }
-
-        fileDspParams = SPIFFS.open( "/dspparam.hex", FILE_APPEND );
-        if( !fileDspParams )
-          Serial.println( "[ERROR] Failed to open file dspparam.hex" );
-
-        cntr = 0;
-        state = STATUS_STORE_PARAMS;
-      }
-
-      SerialBT.write( rxByte );
-    }
-  }
-
-  //----------------------------------------------------------------------------
-  //--- Get the file dspparams.hex byte by byte
-  //----------------------------------------------------------------------------
-  else if( state == STATUS_STORE_PARAMS )
-  {
-    if( SerialBT.available() )
-    {
-      rxByte = SerialBT.read();
-
-      fileDspParams.write( rxByte );
-      Serial.println( rxByte, HEX );
-
-      cntr++;
-      if( cntr == numBytes )
-      {
-        fileDspParams.flush();
-        fileDspParams.close();
-        Serial.println( "Closed dspparam.hex" );
-        cntr = 0;
-        state = STATUS_IDLE;
-      }
-
-      SerialBT.write( rxByte );
-    }
-  }
-
-  #endif
 
    //Wire.beginTransmission( DSP_ADDR );
    //Wire.endTransmission();

@@ -50,6 +50,14 @@ public:
 
   virtual tDspChannel getGuiForChannel( unsigned int chn, Vektorraum::tfloat fs, CFreeDspAurora* ptrdsp, QWidget* parent ) = 0;
 
+  virtual void setMasterVolume( double val ) = 0;
+
+  //============================================================================
+  /*!
+   *
+   */
+  virtual uint16_t getAddressMasterVolume( void ) = 0;
+  
   //============================================================================
   /*! Returns a channel of the DSP-Plugin.
    *

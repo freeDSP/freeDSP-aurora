@@ -413,6 +413,28 @@ void MainWindow::on_actionRead_from_DSP_triggered()
         dspBlock->setUserParams( userparams, idx );
       }
     }
+    
+    if( userparams.size() >= idx + 4 )
+    {
+      QByteArray param;
+      param.append( userparams.at(idx) );
+      idx++;
+      param.append( userparams.at(idx) );
+      idx++;
+      param.append( userparams.at(idx) );
+      idx++;
+      param.append( userparams.at(idx) );
+      idx++;
+
+      float gain = *reinterpret_cast<const float*>(param.data());
+
+      ui->volumeSliderMain->blockSignals( true );
+      ui->volumeSliderMain->setValue( static_cast<double>(gain) );
+      ui->volumeSliderMain->blockSignals( false );
+    }
+    else
+      qDebug()<<"Set volume slider: Not enough data";
+
   }
 
   updatePlots();
@@ -442,7 +464,8 @@ void MainWindow::on_actionWrite_to_DSP_triggered()
         dspparams.append( params );
     }
   }
-
+  dspparams.append( dsp.makeParameterForWifi( dspPlugin->getAddressMasterVolume(), static_cast<float>(pow( 10.0, ui->volumeSliderMain->value()/20.0 ) ) ) );
+  
   //----------------------------------------------------------------------------
   //--- Build usrparam.hex file
   //----------------------------------------------------------------------------
@@ -460,6 +483,7 @@ void MainWindow::on_actionWrite_to_DSP_triggered()
         usrparams.append( params );
     }
   }
+  usrparams.append( ui->volumeSliderMain->getUserParams() );
 
   //----------------------------------------------------------------------------
   //--- Send dspparam.hex file
@@ -669,8 +693,7 @@ void MainWindow::on_actionSettings_triggered()
  */
 void MainWindow::on_volumeSliderMain_valueChanged( double val )
 {
-  for( int ii = 0; ii < listOutputGains.size(); ii++ )
-    listOutputGains.at(ii)->sendDspParameter();
+  dspPlugin->setMasterVolume( val );
 }
 
 //==============================================================================
