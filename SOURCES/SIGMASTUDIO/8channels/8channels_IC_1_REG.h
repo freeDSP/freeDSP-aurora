@@ -1,7 +1,7 @@
 /*
  * File:           E:\Documents\freeDSP\freeDSP-aurora\SOURCES\SIGMASTUDIO\8channels\8channels_IC_1_REG.h
  *
- * Created:        Saturday, April 27, 2019 6:05:55 PM
+ * Created:        Saturday, May 11, 2019 6:07:10 PM
  * Description:    8channels:IC 1 control register definitions.
  *
  * This software is distributed in the hope that it will be useful,
@@ -98,17 +98,17 @@
 /* POWER_ENABLE0  - Registers (IC 1) */
 #define REG_POWER_ENABLE0_IC_1_ADDR               0xF050
 #define REG_POWER_ENABLE0_IC_1_BYTE               2
-#define REG_POWER_ENABLE0_IC_1_VALUE              0x4FF
+#define REG_POWER_ENABLE0_IC_1_VALUE              0x5FF
 
 /* POWER_ENABLE1  - Registers (IC 1) */
 #define REG_POWER_ENABLE1_IC_1_ADDR               0xF051
 #define REG_POWER_ENABLE1_IC_1_BYTE               2
-#define REG_POWER_ENABLE1_IC_1_VALUE              0x0
+#define REG_POWER_ENABLE1_IC_1_VALUE              0x2
 
 /* ASRC_INPUT0  - Registers (IC 1) */
 #define REG_ASRC_INPUT0_IC_1_ADDR                 0xF100
 #define REG_ASRC_INPUT0_IC_1_BYTE                 2
-#define REG_ASRC_INPUT0_IC_1_VALUE                0x0
+#define REG_ASRC_INPUT0_IC_1_VALUE                0x3
 
 /* ASRC_INPUT1  - Registers (IC 1) */
 #define REG_ASRC_INPUT1_IC_1_ADDR                 0xF101
@@ -148,7 +148,7 @@
 /* ASRC_OUT_RATE0  - Registers (IC 1) */
 #define REG_ASRC_OUT_RATE0_IC_1_ADDR              0xF140
 #define REG_ASRC_OUT_RATE0_IC_1_BYTE              2
-#define REG_ASRC_OUT_RATE0_IC_1_VALUE             0x0
+#define REG_ASRC_OUT_RATE0_IC_1_VALUE             0x6
 
 /* ASRC_OUT_RATE1  - Registers (IC 1) */
 #define REG_ASRC_OUT_RATE1_IC_1_ADDR              0xF141
@@ -333,7 +333,7 @@
 /* SERIAL_BYTE_2_0  - Registers (IC 1) */
 #define REG_SERIAL_BYTE_2_0_IC_1_ADDR             0xF208
 #define REG_SERIAL_BYTE_2_0_IC_1_BYTE             2
-#define REG_SERIAL_BYTE_2_0_IC_1_VALUE            0x0
+#define REG_SERIAL_BYTE_2_0_IC_1_VALUE            0x93CA
 
 /* SERIAL_BYTE_2_1  - Registers (IC 1) */
 #define REG_SERIAL_BYTE_2_1_IC_1_ADDR             0xF209
@@ -343,7 +343,7 @@
 /* SERIAL_BYTE_3_0  - Registers (IC 1) */
 #define REG_SERIAL_BYTE_3_0_IC_1_ADDR             0xF20C
 #define REG_SERIAL_BYTE_3_0_IC_1_BYTE             2
-#define REG_SERIAL_BYTE_3_0_IC_1_VALUE            0x0
+#define REG_SERIAL_BYTE_3_0_IC_1_VALUE            0x93CA
 
 /* SERIAL_BYTE_3_1  - Registers (IC 1) */
 #define REG_SERIAL_BYTE_3_1_IC_1_ADDR             0xF20D
@@ -2817,7 +2817,7 @@
 #define R15_POWER_ENABLE0_SOUT1_PWR_IC_1          0x1    /* 1b	[5] */
 #define R15_POWER_ENABLE0_SOUT2_PWR_IC_1          0x1    /* 1b	[6] */
 #define R15_POWER_ENABLE0_SOUT3_PWR_IC_1          0x1    /* 1b	[7] */
-#define R15_POWER_ENABLE0_ASRCBANK0_PWR_IC_1      0x0    /* 0b	[8] */
+#define R15_POWER_ENABLE0_ASRCBANK0_PWR_IC_1      0x1    /* 1b	[8] */
 #define R15_POWER_ENABLE0_ASRCBANK1_PWR_IC_1      0x0    /* 0b	[9] */
 #define R15_POWER_ENABLE0_CLK_GEN1_PWR_IC_1       0x1    /* 1b	[10] */
 #define R15_POWER_ENABLE0_CLK_GEN2_PWR_IC_1       0x0    /* 0b	[11] */
@@ -2851,7 +2851,7 @@
 
 /* POWER_ENABLE1 (IC 1) */
 #define R16_POWER_ENABLE1_ADC_PWR_IC_1            0x0    /* 0b	[0] */
-#define R16_POWER_ENABLE1_RX_PWR_IC_1             0x0    /* 0b	[1] */
+#define R16_POWER_ENABLE1_RX_PWR_IC_1             0x1    /* 1b	[1] */
 #define R16_POWER_ENABLE1_TX_PWR_IC_1             0x0    /* 0b	[2] */
 #define R16_POWER_ENABLE1_PDM0_PWR_IC_1           0x0    /* 0b	[3] */
 #define R16_POWER_ENABLE1_PDM1_PWR_IC_1           0x0    /* 0b	[4] */
@@ -2867,7 +2867,7 @@
 #define R16_POWER_ENABLE1_PDM1_PWR_IC_1_SHIFT     4
 
 /* ASRC_INPUT0 (IC 1) */
-#define R17_ASRC_INPUT0_ASRC_SOURCE_IC_1          0x0    /* 000b	[2:0] */
+#define R17_ASRC_INPUT0_ASRC_SOURCE_IC_1          0x3    /* 011b	[2:0] */
 #define R17_ASRC_INPUT0_ASRC_SIN_CHANNEL_IC_1     0x0    /* 00000b	[7:3] */
 #define R17_ASRC_INPUT0_ASRC_SOURCE_IC_1_MASK     0x7
 #define R17_ASRC_INPUT0_ASRC_SOURCE_IC_1_SHIFT    0
@@ -2931,7 +2931,7 @@
 #define R24_ASRC_INPUT7_ASRC_SIN_CHANNEL_IC_1_SHIFT 3
 
 /* ASRC_OUT_RATE0 (IC 1) */
-#define R25_ASRC_OUT_RATE0_ASRC_RATE_IC_1         0x0    /* 0000b	[3:0] */
+#define R25_ASRC_OUT_RATE0_ASRC_RATE_IC_1         0x6    /* 0110b	[3:0] */
 #define R25_ASRC_OUT_RATE0_ASRC_RATE_IC_1_MASK    0xF
 #define R25_ASRC_OUT_RATE0_ASRC_RATE_IC_1_SHIFT   0
 
@@ -3242,14 +3242,14 @@
 #define R61_SERIAL_BYTE_1_1_TRISTATE_IC_1_SHIFT   5
 
 /* SERIAL_BYTE_2_0 (IC 1) */
-#define R62_SERIAL_BYTE_2_0_TDM_MODE_IC_1         0x0    /* 000b	[2:0] */
-#define R62_SERIAL_BYTE_2_0_DATA_FMT_IC_1         0x0    /* 00b	[4:3] */
-#define R62_SERIAL_BYTE_2_0_WORD_LEN_IC_1         0x0    /* 00b	[6:5] */
-#define R62_SERIAL_BYTE_2_0_BCLK_POL_IC_1         0x0    /* 0b	[7] */
-#define R62_SERIAL_BYTE_2_0_LRCLK_POL_IC_1        0x0    /* 0b	[8] */
-#define R62_SERIAL_BYTE_2_0_LRCLK_MODE_IC_1       0x0    /* 0b	[9] */
-#define R62_SERIAL_BYTE_2_0_BCLK_SRC_IC_1         0x0    /* 000b	[12:10] */
-#define R62_SERIAL_BYTE_2_0_LRCLK_SRC_IC_1        0x0    /* 000b	[15:13] */
+#define R62_SERIAL_BYTE_2_0_TDM_MODE_IC_1         0x2    /* 010b	[2:0] */
+#define R62_SERIAL_BYTE_2_0_DATA_FMT_IC_1         0x1    /* 01b	[4:3] */
+#define R62_SERIAL_BYTE_2_0_WORD_LEN_IC_1         0x2    /* 10b	[6:5] */
+#define R62_SERIAL_BYTE_2_0_BCLK_POL_IC_1         0x1    /* 1b	[7] */
+#define R62_SERIAL_BYTE_2_0_LRCLK_POL_IC_1        0x1    /* 1b	[8] */
+#define R62_SERIAL_BYTE_2_0_LRCLK_MODE_IC_1       0x1    /* 1b	[9] */
+#define R62_SERIAL_BYTE_2_0_BCLK_SRC_IC_1         0x4    /* 100b	[12:10] */
+#define R62_SERIAL_BYTE_2_0_LRCLK_SRC_IC_1        0x4    /* 100b	[15:13] */
 #define R62_SERIAL_BYTE_2_0_TDM_MODE_IC_1_MASK    0x7
 #define R62_SERIAL_BYTE_2_0_TDM_MODE_IC_1_SHIFT   0
 #define R62_SERIAL_BYTE_2_0_DATA_FMT_IC_1_MASK    0x18
@@ -3279,14 +3279,14 @@
 #define R63_SERIAL_BYTE_2_1_TRISTATE_IC_1_SHIFT   5
 
 /* SERIAL_BYTE_3_0 (IC 1) */
-#define R64_SERIAL_BYTE_3_0_TDM_MODE_IC_1         0x0    /* 000b	[2:0] */
-#define R64_SERIAL_BYTE_3_0_DATA_FMT_IC_1         0x0    /* 00b	[4:3] */
-#define R64_SERIAL_BYTE_3_0_WORD_LEN_IC_1         0x0    /* 00b	[6:5] */
-#define R64_SERIAL_BYTE_3_0_BCLK_POL_IC_1         0x0    /* 0b	[7] */
-#define R64_SERIAL_BYTE_3_0_LRCLK_POL_IC_1        0x0    /* 0b	[8] */
-#define R64_SERIAL_BYTE_3_0_LRCLK_MODE_IC_1       0x0    /* 0b	[9] */
-#define R64_SERIAL_BYTE_3_0_BCLK_SRC_IC_1         0x0    /* 000b	[12:10] */
-#define R64_SERIAL_BYTE_3_0_LRCLK_SRC_IC_1        0x0    /* 000b	[15:13] */
+#define R64_SERIAL_BYTE_3_0_TDM_MODE_IC_1         0x2    /* 010b	[2:0] */
+#define R64_SERIAL_BYTE_3_0_DATA_FMT_IC_1         0x1    /* 01b	[4:3] */
+#define R64_SERIAL_BYTE_3_0_WORD_LEN_IC_1         0x2    /* 10b	[6:5] */
+#define R64_SERIAL_BYTE_3_0_BCLK_POL_IC_1         0x1    /* 1b	[7] */
+#define R64_SERIAL_BYTE_3_0_LRCLK_POL_IC_1        0x1    /* 1b	[8] */
+#define R64_SERIAL_BYTE_3_0_LRCLK_MODE_IC_1       0x1    /* 1b	[9] */
+#define R64_SERIAL_BYTE_3_0_BCLK_SRC_IC_1         0x4    /* 100b	[12:10] */
+#define R64_SERIAL_BYTE_3_0_LRCLK_SRC_IC_1        0x4    /* 100b	[15:13] */
 #define R64_SERIAL_BYTE_3_0_TDM_MODE_IC_1_MASK    0x7
 #define R64_SERIAL_BYTE_3_0_TDM_MODE_IC_1_SHIFT   0
 #define R64_SERIAL_BYTE_3_0_DATA_FMT_IC_1_MASK    0x18

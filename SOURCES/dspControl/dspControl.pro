@@ -39,7 +39,8 @@ INCLUDEPATH += src \
                src/dsp \
                src/dsp/8channels \
                src/dsp/4FIRs \
-               src/dsp/HomeCinema71
+               src/dsp/HomeCinema71 \
+               ../SIGMASTUDIO/8channels
 
 SOURCES += \
         main.cpp \
@@ -95,7 +96,10 @@ HEADERS += \
         src/dsp/HomeCinema71/PlugInHomeCinema71.hpp \
         src/dsp/4FIRs/PlugIn4FIRs.hpp \
         src/QDialogDemoSelector.hpp \
-        src/dsp/DspPlugIn.hpp
+        src/dsp/DspPlugIn.hpp \
+        ../SIGMASTUDIO/8channels/8channels_IC_1.h \
+        ../SIGMASTUDIO/8channels/8channels_IC_1_REG.h \
+        ../SIGMASTUDIO/8channels/8channels_IC_1_PARAM.h
 
 FORMS += \
         MainWindow.ui \

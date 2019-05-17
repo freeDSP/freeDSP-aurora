@@ -110,19 +110,6 @@ uint32_t QGain::getNumBytes( void )
 
 //==============================================================================
 /*!
- *
- */
-/*void QGain::writeDspParameter( void )
-{
-  float val = static_cast<float>(pow( 10.0, ui->doubleSpinBoxGain->value()/20.0 ));
-  if( bypass )
-    val = 1.0;
-  dsp->storeRegAddr( addr[kTargetGain] );
-  dsp->storeValue( val );
-}
-*/
-//==============================================================================
-/*!
  */
 QByteArray QGain::getUserParams( void )
 {

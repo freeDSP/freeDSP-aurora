@@ -14,31 +14,60 @@ public:
   explicit QVolumeSlider( QWidget* parent = nullptr );
   ~QVolumeSlider() override {  }
 
-  //----------------------------------------------------------------------------
+  //============================================================================
+  /*!
+   */
   QColor getBackgroundColor( void ) const { return backgroundColor; }
 
-  //----------------------------------------------------------------------------
+  //============================================================================
+  /*!
+   */
   void setBackgroundColor( const QColor color ) { backgroundColor = color; }
 
-  //----------------------------------------------------------------------------
+  //============================================================================
+  /*!
+   */
   QColor getTextColor( void ) const { return textColor; }
 
-  //----------------------------------------------------------------------------
+  //============================================================================
+  /*!
+   */
   void setTextColor( const QColor color ) { textColor = color; }
 
-  //----------------------------------------------------------------------------
+  //============================================================================
+  /*!
+   */
   QColor getSliderColor( void ) const { return sliderColor; }
 
-  //----------------------------------------------------------------------------
+  //============================================================================
+  /*!
+   */
   void setSliderColor( const QColor color ) { sliderColor = color; }
 
-  //----------------------------------------------------------------------------
+  //============================================================================
+  /*!
+   */
   qreal value( void ) { return sliderPos; }
+
+  //============================================================================
+  /*!
+   */
+  void setValue( qreal val )
+  { 
+    sliderPos = val;
+    update();
+  }
+
+  //============================================================================
+  /*!
+   */
+  QByteArray getUserParams( void );
 
 protected:
   void paintEvent( QPaintEvent* event ) override;
   void mousePressEvent( QMouseEvent* event ) override;
   void mouseMoveEvent( QMouseEvent* event ) override;
+  void mouseReleaseEvent( QMouseEvent* event ) override;
 
 signals:
   void valueChanged( double val );

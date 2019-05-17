@@ -665,3 +665,22 @@ tDspChannel CPlugIn4FIRs::getGuiForChannel( unsigned int chn, tfloat fs, CFreeDs
 
   return dspChannel;
 }
+
+//==============================================================================
+/*!
+ *
+ */
+void CPlugIn4FIRs::setMasterVolume( double val )
+{
+  qDebug()<<"CPlugInHomeCinema71::setMasterVolume not implemented";
+}
+
+//==============================================================================
+/*!
+ *
+ */
+uint16_t CPlugIn4FIRs::getAddressMasterVolume( void )
+{
+  qDebug()<<"CPlugIn4FIRs::getAddressMasterVolume not implemented";
+  return 0;
+}

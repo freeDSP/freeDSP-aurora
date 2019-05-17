@@ -141,6 +141,8 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
   QGain* gain = nullptr;
   QOutputSelect* output;
 
+  dsp = ptrdsp;
+
   QHBoxLayout* layout = new QHBoxLayout;
   QChannel* channel = new QChannel;
 
@@ -150,7 +152,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     //--- Channel 1
     dspChannel.name = QString( "Channel 1" );
 
-    input = new QInputSelect( 0, MOD_NX1_1_1_MONOMUXSIGMA300NS1INDEX_ADDR, ptrdsp, channel );
+    input = new QInputSelect( 0, MOD_INPUTSELECT_1_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS9INDEX_ADDR, ptrdsp, channel );
     layout->addWidget( input );
     channel->addDspBlock( input );
     channel->setName( dspChannel.name );
@@ -362,7 +364,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     //--- Channel 2
     dspChannel.name = QString( "Channel 2" );
 
-    input = new QInputSelect( 1, MOD_NX1_1_2_MONOMUXSIGMA300NS2INDEX_ADDR, ptrdsp, channel );
+    input = new QInputSelect( 1, MOD_INPUTSELECT_2_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS1INDEX_ADDR, ptrdsp, channel );
     layout->addWidget( input );
     channel->addDspBlock( input );
     channel->setName( dspChannel.name );
@@ -574,7 +576,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     //--- Channel 3
     dspChannel.name = QString( "Channel 3" );
 
-    input = new QInputSelect( 2, MOD_NX1_1_3_MONOMUXSIGMA300NS3INDEX_ADDR, ptrdsp, channel );
+    input = new QInputSelect( 2, MOD_INPUTSELECT_3_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS7INDEX_ADDR, ptrdsp, channel );
     layout->addWidget( input );
     channel->addDspBlock( input );
     channel->setName( dspChannel.name );
@@ -786,7 +788,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     //--- Channel 4
     dspChannel.name = QString( "Channel 4" );
 
-    input = new QInputSelect( 3, MOD_NX1_1_4_MONOMUXSIGMA300NS4INDEX_ADDR, ptrdsp, channel );
+    input = new QInputSelect( 3, MOD_INPUTSELECT_4_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS19INDEX_ADDR, ptrdsp, channel );
     layout->addWidget( input );
     channel->addDspBlock( input );
     channel->setName( dspChannel.name );
@@ -998,7 +1000,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     //--- Channel 5
     dspChannel.name = QString( "Channel 5" );
 
-    input = new QInputSelect( 4, MOD_NX1_1_5_MONOMUXSIGMA300NS5INDEX_ADDR, ptrdsp, channel );
+    input = new QInputSelect( 4, MOD_INPUTSELECT_5_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS25INDEX_ADDR, ptrdsp, channel );
     layout->addWidget( input );
     channel->addDspBlock( input );
     channel->setName( dspChannel.name );
@@ -1210,7 +1212,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     //--- Channel 6
     dspChannel.name = QString( "Channel 6" );
 
-    input = new QInputSelect( 5, MOD_NX1_1_6_MONOMUXSIGMA300NS6INDEX_ADDR, ptrdsp, channel );
+    input = new QInputSelect( 5, MOD_INPUTSELECT_6_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS31INDEX_ADDR, ptrdsp, channel );
     layout->addWidget( input );
     channel->addDspBlock( input );
     channel->setName( dspChannel.name );
@@ -1422,7 +1424,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     //--- Channel 7
     dspChannel.name = QString( "Channel 7" );
 
-    input = new QInputSelect( 6, MOD_NX1_1_7_MONOMUXSIGMA300NS7INDEX_ADDR, ptrdsp, channel );
+    input = new QInputSelect( 6, MOD_INPUTSELECT_7_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS37INDEX_ADDR, ptrdsp, channel );
     layout->addWidget( input );
     channel->addDspBlock( input );
     channel->setName( dspChannel.name );
@@ -1634,7 +1636,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     //--- Channel 8
     dspChannel.name = QString( "Channel 8" );
 
-    input = new QInputSelect( 7, MOD_NX1_1_8_MONOMUXSIGMA300NS8INDEX_ADDR, ptrdsp, channel );
+    input = new QInputSelect( 7, MOD_INPUTSELECT_8_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS43INDEX_ADDR, ptrdsp, channel );
     layout->addWidget( input );
     channel->addDspBlock( input );
     channel->setName( dspChannel.name );
@@ -1850,4 +1852,27 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
   flagSummation = true;
 
   return dspChannel;
+}
+
+//==============================================================================
+/*!
+ *
+ */
+void CPlugIn8Channels::setMasterVolume( double val )
+{
+  qDebug()<<"CPlugIn8Channels::setMasterVolume";
+  qDebug()<<val;
+
+  QByteArray content;
+  content.append( dsp->makeParameterForWifi( MOD_MASTERVOLUME_ALG0_TARGET_ADDR, static_cast<float>(pow( 10.0, val/20.0 )) ) );
+  dsp->sendParameterWifi( content );
+}
+
+//==============================================================================
+/*!
+ *
+ */
+uint16_t CPlugIn8Channels::getAddressMasterVolume( void )
+{
+  return MOD_MASTERVOLUME_ALG0_TARGET_ADDR;
 }
