@@ -9,3 +9,7 @@ SOURCES/build-dspControl-Desktop_Qt_5_12_1_clang_64bit-Debug
 SOURCES/build-dspControl-Desktop_Qt_5_12_0_clang_64bit-Debug
 ADDONS/AddOnL
 ADDONS/AddOnL mit SPDIF
+PARTSLIST_assembly
+GERBER/.DS_Store
+PARTSLIST/.DS_Store
+SOURCES/KICAD/.DS_Store
