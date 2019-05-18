@@ -19,7 +19,7 @@ freeDSP with
 * One freeDSP expansion header
 * USB Audio Class 2 Bidirectional streaming with 8 channels in and 8 channels out, full-duplex. Works with ASIO driver under Windows 10 and driverless under macOS and Linux.
 * Realtime control software for Windows, macOS, Linux, iOS connecting by WiFi or Bluetooth available under an open source license
-* Board dimensions: 100mm x 100mm
+* Board dimensions: 110mm x 110mm
 
 BOARD STATUS: BETA-TESTING
 
@@ -36,4 +36,6 @@ master - this branch always holds the latest released revision
 develop - this is the develop branch with new features
 
 ## License
-This work is licensed under <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons Lizenzvertrag" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />Dieses Werk ist lizenziert unter einer <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Namensnennung - Nicht-kommerziell - Weitergabe unter gleichen Bedingungen 4.0 International Lizenz</a>.
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+
+dspControl is licensed under GNU General Public License. Please see LICENSE.md in folder SOURCE/dspControl
