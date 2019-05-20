@@ -18,14 +18,35 @@ class QInputSelect : public QDspBlock
 {
   Q_OBJECT
 
+public:
+
   enum
   {
-    kInput = 0,
+    kChannelADC = 0,
+    kChannelUAC2,
+    kChannelESP32,
+    kChannelEXP,
+    kChannelSPDIF,
+    kSelectPort,
+    kInput,
     kNumParams
+  };
+
+  enum
+  {
+    kPortAnalog = 0x00000000,
+    kPortUSB = 0x00000001,
+    kPortESP32 = 0x00000002,
+    kPortEXP = 0x00000003,
+    kPortSPDIF = 0x00000004
   };
 
 public:
   explicit QInputSelect( uint32_t selection, uint16_t inputaddr, CFreeDspAurora* ptrdsp, QWidget *parent = nullptr );
+  explicit QInputSelect( uint32_t selection, 
+                         uint16_t addrADC, uint16_t addrUAC2, uint16_t addrESP32, uint16_t addrExp, uint16_t addrSPDIF,
+                         uint16_t addrPort, 
+                         CFreeDspAurora* ptrdsp, QWidget *parent = nullptr );
   ~QInputSelect();
 
   virtual Vektorraum::tvector<Vektorraum::tcomplex> getTransferFunction( void )
