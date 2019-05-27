@@ -214,14 +214,17 @@ private:
   bool waitForResponseWifi( void );
 
   //============================================================================
-  /*!
+  /*! Sends a request to the current DSP.
+   *  \param request Contains the reques
    */
-  void writeRequestWifi( QByteArray& request );
+  bool writeRequestWifi( QByteArray& request );
 
   //============================================================================
-  /*!
+  /*! Sends a request to a DSP identified by an ip address.
+   *  \param request Contains the request.
+   *  \param host Ip address of host.
    */
-  void writeRequestWifi( QByteArray& request, QString host );
+  bool writeRequestWifi( QByteArray& request, QString host );
 
 private slots:
   void bytesWrittenWifi( qint64 bytes );

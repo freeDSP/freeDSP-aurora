@@ -9,8 +9,7 @@
 
 #include "freeDSP-Aurora.hpp"
 
-//extern QString wifiIpHost;
-//extern int wifiPortHost;
+#define TIMEOUT_WIFI (60000)
 
 //==============================================================================
 /*! Constructor
@@ -161,7 +160,7 @@ bool CFreeDspAurora::sendParameterWifi( QByteArray content )
 //==============================================================================
 /*! Starts the transfer of a new dsp firmware block.
  *
- * \param content First block of firmware.
+ * \param content Data block of firmware.
  */
 bool CFreeDspAurora::sendDspFirmwareWifi( QByteArray content )
 {
@@ -172,38 +171,28 @@ bool CFreeDspAurora::sendDspFirmwareWifi( QByteArray content )
 
   QString wifiIpHost = getIpAddressWifi();
 
-  tcpSocket->abort();
-  tcpSocket->connectToHost( wifiIpHost, portHostWifi );
-
-  QEventLoop loopConnect;
-  connect( tcpSocket, SIGNAL(connected()), &loopConnect, SLOT(quit()) );
-  // \TODO Add timeout timer
-  #warning Add timeout timer
-  //connect(timeoutTimer, SIGNAL(timeout()), &loop, SLOT(quit()));
-  loopConnect.exec();
-
-  QString requestString = QString("PUT /dspfw HTTP/1.1\r\nHost: ")
-                        + wifiIpHost
-                        + QString("\r\nContent-type:application/octet-stream\r\nContent-length: ")
-                        + QString::number( content.size()*2 )
-                        + QString("\r\n\r\n");
+  QString requestString = QString( "PUT /dspfw HTTP/1.1\r\n" )
+                        + QString( "Host: " ) + wifiIpHost + QString( "\r\n" )
+                        + QString( "Content-type:application/octet-stream\r\n" )
+                        + QString( "Content-length: " ) + QString::number( content.size()*2 ) + QString( "\r\n" )
+                        + QString( "\r\n" );
   QByteArray request;
   request.append( requestString );
   request.append( content.toHex() );  
   request.append( "\r\n" );
-  
-  qDebug()<<QString( request );
-  tcpSocket->write( request );
-
-  //ret = waitForAckWifi();
-  //tcpSocket->abort();
-
-  QEventLoop loopDisconnect;
-  connect( tcpSocket, SIGNAL(disconnected()), &loopDisconnect, SLOT(quit()) );
-  // \TODO Add timeout timer
-  #warning Add timeout timer
-  //connect(timeoutTimer, SIGNAL(timeout()), &loop, SLOT(quit()));
-  loopDisconnect.exec();
+ 
+  if( writeRequestWifi( request ) )
+  {
+    if( !waitForReplyWifi() )
+    {
+      QMessageBox::critical( this, tr("Error"), tr("Uups, writing parameters to DSP failed. Please double check everything, reset DSP and try again."), QMessageBox::Ok ); 
+      return false;
+    }
+    else
+      return true;
+  }
+  else
+    QMessageBox::critical( this, tr("Error"), tr("Uups, could not connect to DSP. Did you switch it on?"), QMessageBox::Ok );
 
   return ret;
 }
@@ -337,17 +326,21 @@ uint32_t CFreeDspAurora::requestPidWifi( void )
   QByteArray request;
   request.append( requestString );
 
-  writeRequestWifi( request );
-  waitForResponseWifi();
-
-  //! \TODO Check for valid reply
-
-  QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
   uint32_t pid = 0;
-  if( listReply.size() > 4 )
-    pid = listReply.at(4).toUInt();
+  if( writeRequestWifi( request ) )
+  {
+    waitForResponseWifi();
+
+    //! \TODO Check for valid reply
+
+    QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+    if( listReply.size() > 4 )
+      pid = listReply.at(4).toUInt();
   
-  qDebug()<<pid;
+    qDebug()<<pid;
+  }
+  else
+    QMessageBox::critical( this, tr("Error"), tr("Uups, could not connect to DSP. Did you switch it on?"), QMessageBox::Ok );
 
   return pid;
 }
@@ -538,12 +531,10 @@ bool CFreeDspAurora::waitForReplyWifi( int msec )
   QTimer timerWait;
   timerWait.setSingleShot( true );
   replyCompleteWifi = false;
-  //connect( tcpSocket, SIGNAL(readyRead()), &loopWaitForReply, SLOT(quit()) );
   connect( this, SIGNAL(haveReplyWifi()), &loopWaitForReply, SLOT(quit()) );
   connect( &timerWait, SIGNAL(timeout()), &loopWaitForReply, SLOT(quit()) );
   timerWait.start( msec );
   loopWaitForReply.exec();
-  //disconnect( tcpSocket, SIGNAL(readyRead()), &loopWaitForReply, SLOT(quit()) );
   disconnect( this, SIGNAL(haveReplyWifi()), &loopWaitForReply, SLOT(quit()) );
   disconnect( &timerWait, SIGNAL(timeout()), &loopWaitForReply, SLOT(quit()) );
   return replyCompleteWifi;
@@ -555,40 +546,47 @@ bool CFreeDspAurora::waitForReplyWifi( int msec )
  */
 bool CFreeDspAurora::waitForResponseWifi( void )
 {
-  #warning Add timeout timer
+  QTimer::singleShot( TIMEOUT_WIFI, &loopWaitForResponseWiFi, SLOT(quit()) );
   loopWaitForResponseWiFi.exec();
-  //! \TODO Check for valid response
-  //! \TOOD Disconnect after transfer?
   return true;
 }
 
 //==============================================================================
-/*!
+/*! Sends a request to the current DSP.
+ *  \param request Contains the reques
  */
-void CFreeDspAurora::writeRequestWifi( QByteArray& request )
+bool CFreeDspAurora::writeRequestWifi( QByteArray& request )
 {
-  QString wifiIpHost = getIpAddressWifi();
-  writeRequestWifi( request, wifiIpHost );
+  return writeRequestWifi( request, getIpAddressWifi() );
 }
 
 //==============================================================================
-/*!
+/*! Sends a request to a DSP identified by an ip address.
+ *  \param request Contains the request.
+ *  \param host Ip address of host.
  */
-void CFreeDspAurora::writeRequestWifi( QByteArray& request, QString host )
+bool CFreeDspAurora::writeRequestWifi( QByteArray& request, QString host )
 {
   tcpSocket->abort();
   tcpSocket->connectToHost( host, portHostWifi );
 
   QEventLoop loopConnect;
   connect( tcpSocket, SIGNAL(connected()), &loopConnect, SLOT(quit()) );
-  // \TODO Add timeout timer
-  #warning Add timeout timer
-  //connect(timeoutTimer, SIGNAL(timeout()), &loop, SLOT(quit()));
+  QTimer::singleShot( TIMEOUT_WIFI, &loopConnect, SLOT(quit()) );
   loopConnect.exec();
 
-  replyWifi.clear();
-  qDebug()<<QString( request );
-  tcpSocket->write( request );
+  if( tcpSocket->state() == QTcpSocket::ConnectedState )
+  {
+    replyWifi.clear();
+    qDebug()<<QString( request );
+    tcpSocket->write( request );
+    return true;
+  }
+  else
+  {
+    qDebug()<<"[ERROR] CFreeDspAurora::writeRequestWifi() could not connect to DSP.";
+    return false;
+  }
 }
 
 //==============================================================================
@@ -634,7 +632,7 @@ bool CFreeDspAurora::requestDspFirmwareWifi( QByteArray& firmware, QProgressBar*
       request.append( requestString );
       ptrProgressBar = progress;
       writeRequestWifi( request );
-      if( !waitForReplyWifi(600000) )
+      if( !waitForReplyWifi(TIMEOUT_WIFI) )
       {
         QMessageBox::critical( this, tr("Error"), tr("Uuups, could not receive the DSP firmware. Please double check everything and try again."), QMessageBox::Ok ); 
         ptrProgressBar = nullptr;

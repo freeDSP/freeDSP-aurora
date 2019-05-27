@@ -45,9 +45,6 @@ QVolumeSlider* sliderMainVolume;
 
 CDspPlugin* dspPlugin;
 
-//QString wifiIpHost;
-//int wifiPortHost;
-
 MainWindow::MainWindow( QWidget* parent ) :
   QMainWindow( parent ),
   ui( new Ui::MainWindow )
@@ -391,6 +388,8 @@ void MainWindow::on_actionRead_from_DSP_triggered()
 
   default:
     qDebug()<<"Unkown plugin"<<pid;
+    ui->statusBar->showMessage("Ready");
+    return;
     // \todo Show MessageBox  
   }
 
