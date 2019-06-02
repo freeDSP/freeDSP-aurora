@@ -6,6 +6,7 @@
 #include <QDataStream>
 #include <QTcpSocket>
 #include <QByteArray>
+#include <QMessageBox>
 
 #include "figure/QFigure.h"
 #include "QChannel.hpp"
@@ -48,6 +49,11 @@ public:
   explicit MainWindow(QWidget *parent = nullptr);
   ~MainWindow();
 
+  //============================================================================
+  /*!
+   */
+  void rotateIconConnect( int rotation );
+
 
 public slots:
   void showLicense( void );
@@ -63,7 +69,9 @@ private slots:
 
   void on_volumeSliderMain_valueChanged( double val );
 
-  void on_actionRead_from_DSP_triggered();
+  void on_actionRead_from_DSP_triggered( void );
+
+  void updateWaitingForConnect( void );
 
 signals:
   void replyFinished( void );  
@@ -79,6 +87,9 @@ private:
 
   QString portName;
   QList<QGain*> listOutputGains;
+
+  int currentWaitRotation = 0;
+  QMessageBox* msgBox;
 };
 
 #endif // MAINWINDOW_HPP

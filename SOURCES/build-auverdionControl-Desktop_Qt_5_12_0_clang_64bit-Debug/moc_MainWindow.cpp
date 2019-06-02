@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[13];
-    char stringdata0[228];
+    QByteArrayData data[14];
+    char stringdata0[252];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -43,7 +43,8 @@ QT_MOC_LITERAL(8, 105, 24), // "on_actionAbout_triggered"
 QT_MOC_LITERAL(9, 130, 27), // "on_actionSettings_triggered"
 QT_MOC_LITERAL(10, 158, 32), // "on_volumeSliderMain_valueChanged"
 QT_MOC_LITERAL(11, 191, 3), // "val"
-QT_MOC_LITERAL(12, 195, 32) // "on_actionRead_from_DSP_triggered"
+QT_MOC_LITERAL(12, 195, 32), // "on_actionRead_from_DSP_triggered"
+QT_MOC_LITERAL(13, 228, 23) // "updateWaitingForConnect"
 
     },
     "MainWindow\0replyFinished\0\0showLicense\0"
@@ -52,7 +53,8 @@ QT_MOC_LITERAL(12, 195, 32) // "on_actionRead_from_DSP_triggered"
     "on_actionAbout_triggered\0"
     "on_actionSettings_triggered\0"
     "on_volumeSliderMain_valueChanged\0val\0"
-    "on_actionRead_from_DSP_triggered"
+    "on_actionRead_from_DSP_triggered\0"
+    "updateWaitingForConnect"
 };
 #undef QT_MOC_LITERAL
 
@@ -62,7 +64,7 @@ static const uint qt_meta_data_MainWindow[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-       9,   14, // methods
+      10,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -70,17 +72,18 @@ static const uint qt_meta_data_MainWindow[] = {
        1,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    0,   59,    2, 0x06 /* Public */,
+       1,    0,   64,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       3,    0,   60,    2, 0x0a /* Public */,
-       4,    0,   61,    2, 0x0a /* Public */,
-       5,    1,   62,    2, 0x0a /* Public */,
-       7,    0,   65,    2, 0x08 /* Private */,
-       8,    0,   66,    2, 0x08 /* Private */,
-       9,    0,   67,    2, 0x08 /* Private */,
-      10,    1,   68,    2, 0x08 /* Private */,
-      12,    0,   71,    2, 0x08 /* Private */,
+       3,    0,   65,    2, 0x0a /* Public */,
+       4,    0,   66,    2, 0x0a /* Public */,
+       5,    1,   67,    2, 0x0a /* Public */,
+       7,    0,   70,    2, 0x08 /* Private */,
+       8,    0,   71,    2, 0x08 /* Private */,
+       9,    0,   72,    2, 0x08 /* Private */,
+      10,    1,   73,    2, 0x08 /* Private */,
+      12,    0,   76,    2, 0x08 /* Private */,
+      13,    0,   77,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void,
@@ -93,6 +96,7 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void, QMetaType::Double,   11,
+    QMetaType::Void,
     QMetaType::Void,
 
        0        // eod
@@ -113,6 +117,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 6: _t->on_actionSettings_triggered(); break;
         case 7: _t->on_volumeSliderMain_valueChanged((*reinterpret_cast< double(*)>(_a[1]))); break;
         case 8: _t->on_actionRead_from_DSP_triggered(); break;
+        case 9: _t->updateWaitingForConnect(); break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
@@ -167,13 +172,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 9)
+        if (_id < 10)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 9;
+        _id -= 10;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 9)
+        if (_id < 10)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 9;
+        _id -= 10;
     }
     return _id;
 }

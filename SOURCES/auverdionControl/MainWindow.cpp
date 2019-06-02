@@ -5,7 +5,6 @@
 #include <QPushButton>
 #include <QDialog>
 #include <QFileDialog>
-#include <QMessageBox>
 #include <QtNetwork>
 #include <QHostAddress>
 #include <QProgressDialog>
@@ -334,6 +333,20 @@ void MainWindow::on_actionRead_from_DSP_triggered()
   //----------------------------------------------------------------------------
   //--- Request the DSP-plugin id
   //----------------------------------------------------------------------------
+  setEnabled( false );
+
+  QTimer timerWait;
+  connect( &timerWait, SIGNAL(timeout()), this, SLOT(updateWaitingForConnect()) );
+  timerWait.start( 100 );
+  currentWaitRotation = 0;
+
+  msgBox = new QMessageBox( QMessageBox::Information, tr("Waiting"), tr("Connecting to DSP..."), QMessageBox::Cancel, this );
+  QImage srcImg = QImage(":/reload_128x128.png").scaled(64,64);
+  srcImg = srcImg.copy( 0, 0, 70, 70 );
+  msgBox->setIconPixmap( QPixmap::fromImage( srcImg ) );
+  msgBox->setStandardButtons(0);
+  msgBox->open();
+
   ui->statusBar->showMessage("Reading PID.......");
   uint32_t pid = dsp.requestPidWifi();
 
@@ -386,11 +399,23 @@ void MainWindow::on_actionRead_from_DSP_triggered()
     }
     break;
 
-  default:
-    qDebug()<<"Unkown plugin"<<pid;
+  case 0:
+    qDebug()<<"PID"<<pid;
+    setEnabled( true );
+    disconnect( &timerWait, SIGNAL(timeout()), this, SLOT(updateWaitingForConnect()) );
+    msgBox->accept();
+    QMessageBox::warning( this, tr("Warning"), tr("It seems that there is no plugin installed. Please install a valid plugin on your board."), QMessageBox::Ok ); 
     ui->statusBar->showMessage("Ready");
     return;
-    // \todo Show MessageBox  
+
+  default:
+    qDebug()<<"Unkown plugin"<<pid;
+    setEnabled( true );
+    disconnect( &timerWait, SIGNAL(timeout()), this, SLOT(updateWaitingForConnect()) );
+    msgBox->accept();
+    QMessageBox::critical( this, tr("Error"), tr("Your DSP reports an unkown PID. Please reinstall a valid plugin on your board."), QMessageBox::Ok ); 
+    ui->statusBar->showMessage("Ready");
+    return;
   }
 
   //----------------------------------------------------------------------------
@@ -436,6 +461,11 @@ void MainWindow::on_actionRead_from_DSP_triggered()
 
   updatePlots();
 
+  setEnabled( true );
+  disconnect( &timerWait, SIGNAL(timeout()), this, SLOT(updateWaitingForConnect()) );
+  currentWaitRotation = 0;
+  //rotateIconConnect( currentWaitRotation );
+  msgBox->accept();
   ui->statusBar->showMessage("Ready");
   ui->actionWrite_to_DSP->setEnabled( true );
 }
@@ -752,99 +782,28 @@ void MainWindow::importRewPeqs( QWidget* sender )
                                      QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton );
 }
 
-
-
 //==============================================================================
 /*!
  */
-//void MainWindow::connected( void )
-//{
-  //qDebug()<<"Connected to server";
-
-  //Ask for the web page.
-  /*
-    GET /index.html HTTP/1.1[CRLF]
-    HOST : www.host.com[CRLF]
-    * */
-
-  //QString requestString ="GET /index.html HTTP/1.1\r\nhost: 192.168.5.1\r\n\r\n";
-  //QString requestString ="GET /pid HTTP/1.1\r\nhost: 192.168.5.1\r\n\r\n";
-
-  //QByteArray request;
-  //request.append( requestString );
-  //tcpSocket->write( request );
-  
-
-  //QNetworkRequest request( QUrl("192.168.5.1:8088") );
-  //request.setHeader( QNetworkRequest::ContentTypeHeader, "application/json" );
-
-  /*
-  QJsonObject json;
-  json.insert( "item1", "value1" );
-  QNetworkAccessManager nam;
-  QNetworkReply *reply = nam.post(request, QJsonDocument(json).toJson());
-
-  while(!reply->isFinished())
-  {
-    qApp->processEvents();
-  }
-
-  QByteArray response_data = reply->readAll();
-  QJsonDocument jsonResponse = QJsonDocument::fromJson(response_data);
-  reply->deleteLater();
- */ 
-//}
-
-//==============================================================================
-/*!
- */
-#if 0
-void MainWindow::readyRead( void )
+void MainWindow::updateWaitingForConnect( void )
 {
-  qDebug()<<"readyRead "<<dsp.tcpSocket->bytesAvailable()<<wifiRxBytes;
-  if( statusWifi == STATUS_WIFI_RECEIVE_USERPARAM )
-  {
-    wifiRxBytes += dsp.tcpSocket->bytesAvailable();
-    wifiReply.append( dsp.tcpSocket->readAll() );
-    QString strReply( wifiReply );
-    if( strReply.contains( "\r\n\r\n", Qt::CaseInsensitive ) && wifiExpectedBytes == 0  )
-    {
-      qDebug()<<"1"<<strReply;
-      int idx = strReply.indexOf( "\r\n\r\n", Qt::CaseInsensitive );
-      QString strHead = strReply.left( idx );
-      qDebug()<<"strHead"<<strHead;
-      idx = strHead.indexOf( "Content-length", Qt::CaseInsensitive );
-      QString strContentLength = strHead.right( strHead.length() - idx - 15 );
-      int contentLength = strContentLength.toInt();
-      qDebug()<<"strContentLength"<<contentLength;
-      qDebug()<<"strHead.length()"<<strHead.length();
-      wifiExpectedBytes = strHead.length() + 4 + contentLength + 2;
-      qDebug()<<wifiExpectedBytes<<strReply.length();
-      if( wifiRxBytes == wifiExpectedBytes )
-      {
-        qDebug()<<"emit replyFinished();";
-        statusWifi = STATUS_WIFI_IDLE;
-        emit replyFinished();
-      }
-    
-    }
-    else if ( wifiRxBytes <= wifiExpectedBytes  )
-    {
-      qDebug()<<"2"<<QString( wifiReply );
-      if( wifiRxBytes == wifiExpectedBytes )
-      {
-        qDebug()<<"emit replyFinished();";
-        statusWifi = STATUS_WIFI_IDLE;
-        emit replyFinished();
-      }
-    }
-  }
-  else
-  {
-    wifiRxBytes += dsp.tcpSocket->bytesAvailable();
-    wifiReply.append( dsp.tcpSocket->readAll() );
-    if( wifiRxBytes == wifiExpectedBytes )
-      emit replyFinished();
-  }
+  currentWaitRotation -= 10;
+  rotateIconConnect( currentWaitRotation );
 }
-#endif
+
+//==============================================================================
+/*!
+ */
+void MainWindow::rotateIconConnect( int rotation )
+{
+  QImage srcImg(":/reload_128x128.png");
+  srcImg = srcImg.scaled( 64, 64 );
+  QPoint center = srcImg.rect().center();
+  QMatrix matrix;
+  matrix.translate(center.x(), center.y());
+  matrix.rotate( rotation );
+  QImage dstImg = srcImg.transformed(matrix, Qt::SmoothTransformation);
+  dstImg = dstImg.copy( (dstImg.width()-64)/2, (dstImg.height()-64)/2, 70, 70 );
+  //ui->actionRead_from_DSP->setIcon( QPixmap::fromImage(dstImg) );
+  msgBox->setIconPixmap( QPixmap::fromImage(dstImg) );
+}

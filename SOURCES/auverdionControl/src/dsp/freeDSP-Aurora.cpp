@@ -329,15 +329,18 @@ uint32_t CFreeDspAurora::requestPidWifi( void )
   uint32_t pid = 0;
   if( writeRequestWifi( request ) )
   {
-    waitForResponseWifi();
-
-    //! \TODO Check for valid reply
-
-    QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
-    if( listReply.size() > 4 )
-      pid = listReply.at(4).toUInt();
-  
-    qDebug()<<pid;
+    if( !waitForReplyWifi() )
+    {
+      QMessageBox::critical( this, tr("Error"), tr("Uuups, could not receive PID. Please double check everything and try again."), QMessageBox::Ok ); 
+      return 0;
+    }
+    else
+    {
+      QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+      if( listReply.size() > 4 )
+        pid = listReply.at(4).toUInt();
+      qDebug()<<"PID:"<<pid;  
+    }
   }
   else
     QMessageBox::critical( this, tr("Error"), tr("Uups, could not connect to DSP. Did you switch it on?"), QMessageBox::Ok );
