@@ -24,7 +24,7 @@ CFreeDspAurora::CFreeDspAurora( QWidget* parent ) : QWidget( parent )
   connect( tcpSocket, SIGNAL( hostFound() ),                         this, SLOT( hostFoundWifi()                         ) );
   connect( tcpSocket, SIGNAL( readyRead() ),                         this, SLOT( readyReadWifi()                         ) );
   
-  connect( this, SIGNAL( haveReplyWifi() ), &loopWaitForResponseWiFi, SLOT( quit() ) );
+  //connect( this, SIGNAL( haveReplyWifi() ), &loopWaitForResponseWiFi, SLOT( quit() ) );
 
   ipAddressAP = "192.168.5.1";
   ipAddressLocal = "0.0.0.0";
@@ -402,7 +402,7 @@ bool CFreeDspAurora::finishUserParameterWifi( uint32_t totalTransmittedBytes )
   
   writeRequestWifi( request );
 
-  if( !waitForResponseWifi() )
+  if( !waitForReplyWifi() )
   {
     QMessageBox::critical( this, tr("Error"), tr("Could not finish transfer of user parameter file. Please double check everything, reset DSP and try again."), QMessageBox::Ok ); 
     return false;
@@ -443,7 +443,7 @@ bool CFreeDspAurora::requestUserParameterWifi( QByteArray& userparams )
   request.append( requestString );
 
   writeRequestWifi( request );
-  if( !waitForResponseWifi() )
+  if( !waitForReplyWifi() )
   {
     QMessageBox::critical( this, tr("Error"), tr("Could not receive the size of the user parameter file. Please double check everything and try again."), QMessageBox::Ok ); 
     return false;
@@ -462,7 +462,7 @@ bool CFreeDspAurora::requestUserParameterWifi( QByteArray& userparams )
       request.clear();
       request.append( requestString );
       writeRequestWifi( request );
-      if( !waitForResponseWifi() )
+      if( !waitForReplyWifi() )
       {
         QMessageBox::critical( this, tr("Error"), tr("Could not receive the user parameter file. Please double check everything and try again."), QMessageBox::Ok ); 
         return false;
@@ -504,10 +504,6 @@ bool CFreeDspAurora::requestUserParameterWifi( QByteArray& userparams )
 void CFreeDspAurora::readyReadWifi( void )
 {
   replyWifi.append( tcpSocket->readAll() );
-  /*if( ptrProgressBar != nullptr )
-    qDebug()<<"readyReadWifi Progress"<<ptrProgressBar->value();
-  else
-    qDebug()<<"readyReadWifi";*/
   QString str = QString( replyWifi );
   QStringList listReply = str.split( QRegExp("\\s+") );
   //qDebug()<<str.mid( str.length()-2, 2 );
@@ -534,12 +530,12 @@ bool CFreeDspAurora::waitForReplyWifi( int msec )
   QTimer timerWait;
   timerWait.setSingleShot( true );
   replyCompleteWifi = false;
-  connect( this, SIGNAL(haveReplyWifi()), &loopWaitForReply, SLOT(quit()) );
-  connect( &timerWait, SIGNAL(timeout()), &loopWaitForReply, SLOT(quit()) );
+  connect( this,       SIGNAL(haveReplyWifi()), &loopWaitForReply, SLOT(quit()) );
+  connect( &timerWait, SIGNAL(timeout()),       &loopWaitForReply, SLOT(quit()) );
   timerWait.start( msec );
   loopWaitForReply.exec();
-  disconnect( this, SIGNAL(haveReplyWifi()), &loopWaitForReply, SLOT(quit()) );
-  disconnect( &timerWait, SIGNAL(timeout()), &loopWaitForReply, SLOT(quit()) );
+  disconnect( this,       SIGNAL(haveReplyWifi()), &loopWaitForReply, SLOT(quit()) );
+  disconnect( &timerWait, SIGNAL(timeout()),       &loopWaitForReply, SLOT(quit()) );
   return replyCompleteWifi;
 }
 
@@ -547,12 +543,12 @@ bool CFreeDspAurora::waitForReplyWifi( int msec )
 /*! 
  *
  */
-bool CFreeDspAurora::waitForResponseWifi( void )
+/*bool CFreeDspAurora::waitForResponseWifi( void )
 {
   QTimer::singleShot( TIMEOUT_WIFI, &loopWaitForResponseWiFi, SLOT(quit()) );
   loopWaitForResponseWiFi.exec();
   return true;
-}
+}*/
 
 //==============================================================================
 /*! Sends a request to the current DSP.

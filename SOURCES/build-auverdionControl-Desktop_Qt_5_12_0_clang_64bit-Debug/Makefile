@@ -317,6 +317,7 @@ DIST          = /Users/rkn/Qt/5.12.0/clang_64/mkspecs/features/spec_pre.prf \
 		/Users/rkn/Qt/5.12.0/clang_64/mkspecs/features/qt_config.prf \
 		/Users/rkn/Qt/5.12.0/clang_64/mkspecs/macx-clang/qmake.conf \
 		/Users/rkn/Qt/5.12.0/clang_64/mkspecs/features/spec_post.prf \
+		../auverdionControl/.qmake.stash \
 		/Users/rkn/Qt/5.12.0/clang_64/mkspecs/features/exclusive_builds.prf \
 		/Users/rkn/Qt/5.12.0/clang_64/mkspecs/features/mac/sdk.prf \
 		/Users/rkn/Qt/5.12.0/clang_64/mkspecs/features/toolchain.prf \
@@ -591,6 +592,7 @@ Makefile: ../auverdionControl/auverdionControl.pro /Users/rkn/Qt/5.12.0/clang_64
 		/Users/rkn/Qt/5.12.0/clang_64/mkspecs/features/qt_config.prf \
 		/Users/rkn/Qt/5.12.0/clang_64/mkspecs/macx-clang/qmake.conf \
 		/Users/rkn/Qt/5.12.0/clang_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/Users/rkn/Qt/5.12.0/clang_64/mkspecs/features/exclusive_builds.prf \
 		/Users/rkn/Qt/5.12.0/clang_64/mkspecs/features/mac/sdk.prf \
 		/Users/rkn/Qt/5.12.0/clang_64/mkspecs/features/toolchain.prf \
@@ -779,6 +781,7 @@ Makefile: ../auverdionControl/auverdionControl.pro /Users/rkn/Qt/5.12.0/clang_64
 /Users/rkn/Qt/5.12.0/clang_64/mkspecs/features/qt_config.prf:
 /Users/rkn/Qt/5.12.0/clang_64/mkspecs/macx-clang/qmake.conf:
 /Users/rkn/Qt/5.12.0/clang_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 /Users/rkn/Qt/5.12.0/clang_64/mkspecs/features/exclusive_builds.prf:
 /Users/rkn/Qt/5.12.0/clang_64/mkspecs/features/mac/sdk.prf:
 /Users/rkn/Qt/5.12.0/clang_64/mkspecs/features/toolchain.prf:
@@ -872,6 +875,7 @@ clean: compiler_clean
 
 distclean: clean 
 	-$(DEL_FILE) -r auverdionControl.app
+	-$(DEL_FILE) .qmake.stash
 	-$(DEL_FILE) Makefile
 
 
@@ -931,6 +935,8 @@ moc_MainWindow.cpp: /Users/rkn/Qt/5.12.0/clang_64/lib/QtWidgets.framework/Header
 		/Users/rkn/Qt/5.12.0/clang_64/lib/QtNetwork.framework/Headers/qtcpsocket.h \
 		/Users/rkn/Qt/5.12.0/clang_64/lib/QtCore.framework/Headers/QByteArray \
 		/Users/rkn/Qt/5.12.0/clang_64/lib/QtCore.framework/Headers/qbytearray.h \
+		/Users/rkn/Qt/5.12.0/clang_64/lib/QtWidgets.framework/Headers/QMessageBox \
+		/Users/rkn/Qt/5.12.0/clang_64/lib/QtWidgets.framework/Headers/qmessagebox.h \
 		../auverdionControl/src/figure/QFigure.h \
 		/Users/rkn/Qt/5.12.0/clang_64/lib/QtGui.framework/Headers/QtGui \
 		/Users/rkn/Qt/5.12.0/clang_64/lib/QtGui.framework/Headers/qtguiglobal.h \
@@ -2314,6 +2320,8 @@ main.o: ../auverdionControl/main.cpp ../auverdionControl/MainWindow.hpp \
 		/Users/rkn/Qt/5.12.0/clang_64/lib/QtNetwork.framework/Headers/qtcpsocket.h \
 		/Users/rkn/Qt/5.12.0/clang_64/lib/QtCore.framework/Headers/QByteArray \
 		/Users/rkn/Qt/5.12.0/clang_64/lib/QtCore.framework/Headers/qbytearray.h \
+		/Users/rkn/Qt/5.12.0/clang_64/lib/QtWidgets.framework/Headers/QMessageBox \
+		/Users/rkn/Qt/5.12.0/clang_64/lib/QtWidgets.framework/Headers/qmessagebox.h \
 		../auverdionControl/src/figure/QFigure.h \
 		/Users/rkn/Qt/5.12.0/clang_64/lib/QtGui.framework/Headers/QtGui \
 		/Users/rkn/Qt/5.12.0/clang_64/lib/QtGui.framework/Headers/qtguiglobal.h \
@@ -2492,8 +2500,6 @@ MainWindow.o: ../auverdionControl/MainWindow.cpp /Users/rkn/Qt/5.12.0/clang_64/l
 		/Users/rkn/Qt/5.12.0/clang_64/lib/QtWidgets.framework/Headers/qdialog.h \
 		/Users/rkn/Qt/5.12.0/clang_64/lib/QtWidgets.framework/Headers/QFileDialog \
 		/Users/rkn/Qt/5.12.0/clang_64/lib/QtWidgets.framework/Headers/qfiledialog.h \
-		/Users/rkn/Qt/5.12.0/clang_64/lib/QtWidgets.framework/Headers/QMessageBox \
-		/Users/rkn/Qt/5.12.0/clang_64/lib/QtWidgets.framework/Headers/qmessagebox.h \
 		/Users/rkn/Qt/5.12.0/clang_64/lib/QtNetwork.framework/Headers/QtNetwork \
 		/Users/rkn/Qt/5.12.0/clang_64/lib/QtNetwork.framework/Headers/qtnetworkglobal.h \
 		/Users/rkn/Qt/5.12.0/clang_64/lib/QtNetwork.framework/Headers/qabstractnetworkcache.h \
@@ -2554,6 +2560,8 @@ MainWindow.o: ../auverdionControl/MainWindow.cpp /Users/rkn/Qt/5.12.0/clang_64/l
 		/Users/rkn/Qt/5.12.0/clang_64/lib/QtNetwork.framework/Headers/QTcpSocket \
 		/Users/rkn/Qt/5.12.0/clang_64/lib/QtCore.framework/Headers/QByteArray \
 		/Users/rkn/Qt/5.12.0/clang_64/lib/QtCore.framework/Headers/qbytearray.h \
+		/Users/rkn/Qt/5.12.0/clang_64/lib/QtWidgets.framework/Headers/QMessageBox \
+		/Users/rkn/Qt/5.12.0/clang_64/lib/QtWidgets.framework/Headers/qmessagebox.h \
 		../auverdionControl/src/figure/QFigure.h \
 		/Users/rkn/Qt/5.12.0/clang_64/lib/QtGui.framework/Headers/QtGui \
 		/Users/rkn/Qt/5.12.0/clang_64/lib/QtGui.framework/Headers/qtguiglobal.h \
@@ -2707,6 +2715,7 @@ MainWindow.o: ../auverdionControl/MainWindow.cpp /Users/rkn/Qt/5.12.0/clang_64/l
 		../auverdionControl/src/QOutputSelect.hpp \
 		../auverdionControl/src/dialoglicense.hpp \
 		ui_MainWindow.h \
+		../auverdionControl/src/QVolumeSlider.hpp \
 		../auverdionControl/src/DialogSettings.hpp \
 		../auverdionControl/src/QDialogDemoSelector.hpp \
 		/Users/rkn/Qt/5.12.0/clang_64/lib/QtWidgets.framework/Headers/QComboBox \
