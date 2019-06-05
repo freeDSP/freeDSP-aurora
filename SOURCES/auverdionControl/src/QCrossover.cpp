@@ -114,7 +114,9 @@ QCrossover::~QCrossover()
  */
 void QCrossover::update( tvector<tfloat> f )
 {
+  #if !defined( __WIN__ )
   #warning QCrossover::update not fully implemented
+  #endif
   qDebug()<<"QCrossover::update not fully implemented";
 
   updateCoeffs();
@@ -147,7 +149,9 @@ void QCrossover::update( tvector<tfloat> f )
  */
 void QCrossover::updateCoeffs( void )
 {
+  #if !defined( __WIN__ )
   #warning Add LP coeffs
+  #endif
 
   for( tuint ii = 0; ii < 4; ii++ )
   {
@@ -878,7 +882,9 @@ void QCrossover::on_pushButtonBypass_clicked()
  */
 void QCrossover::sendDspParameter( void )
 {
+  #if !defined( __WIN__ )
   #warning QCrossover::sendDspParameter not fully implemented
+  #endif
   qDebug()<<"QCrossover::sendDspParameter not fully implemented";
 
   QByteArray content;
@@ -930,7 +936,9 @@ uint32_t QCrossover::getNumBytes( void )
 QByteArray QCrossover::getUserParams( void )
 {
   QByteArray ret;
+  #if !defined( __WIN__ )
   #warning QCrossover::getUserParams not implemented
+  #endif
   qDebug()<<"QCrossover::getUserParams not implemented";
   return ret;
 }
@@ -940,7 +948,9 @@ QByteArray QCrossover::getUserParams( void )
  */
 void QCrossover::setUserParams( QByteArray& userParams, int& idx )
 {
+  #if !defined( __WIN__ )
   #warning QCrossover::setUserParams not implemented
+  #endif
   qDebug()<<"QCrossover::setUserParams not implemented";
 }
 
@@ -950,7 +960,9 @@ void QCrossover::setUserParams( QByteArray& userParams, int& idx )
 QByteArray QCrossover::getDspParams( void )
 {
   QByteArray ret;
+  #if !defined( __WIN__ )
   #warning QCrossover::getDspParams not implemented
+  #endif
   qDebug()<<"QCrossover::getDspParams not implemented";
 
   return ret;

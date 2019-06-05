@@ -7,8 +7,10 @@
 #include <QStandardPaths>
 #include <QtGui>
 
+#if defined( __MACOSX__ )
 #include <CoreFoundation/CoreFoundation.h>
 #include <CoreFoundation/CFBundle.h>
+#endif
 
 #include "DialogSettings.hpp"
 #include "ui_DialogSettings.h"
@@ -75,16 +77,28 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
   {
     qDebug()<<"[ERROR] Unknown plugin id"<<ui->comboBoxPlugIn->currentData().toInt();
   }
+  #elif defined( __WIN__ )
+  QString pathAppBundle = QCoreApplication::applicationDirPath();
+  if( ui->comboBoxPlugIn->currentData().toInt() == CFreeDspAurora::PLUGIN_8CHANNELS )
+  {
+    pathTxBuffer = pathAppBundle + QString( "/dspplugins/8channels/TxBuffer_IC_1.dat");
+    pathNumBytes = pathAppBundle + QString( "/dspplugins/8channels/NumBytes_IC_1.dat");
+  }
+  else
+  {
+    qDebug()<<"[ERROR] Unknown plugin id"<<ui->comboBoxPlugIn->currentData().toInt();
+  }
   #endif
   
   //----------------------------------------------------------------------------
   //--- Read and convert the TxBuffer_IC_1.dat file
   //----------------------------------------------------------------------------
-  //QFile fileTxBuffer( "/Users/rkn/Documents/freeDSP/freeDSP-aurora/SOURCES/SIGMASTUDIO/testproject2/TxBuffer_IC_1.dat" );
+  qDebug()<<pathTxBuffer;
   QFile fileTxBuffer( pathTxBuffer );
   if( !fileTxBuffer.open( QIODevice::ReadOnly ) )
   {
     qDebug()<<__FILE__<<__LINE__<<"Could not open selected file";
+    QMessageBox::critical( this, tr("Error"), tr("Uups, could not open ") + pathTxBuffer + tr(". Was the file deleted?"), QMessageBox::Ok );
     enableGui( true );
     return;
   }
@@ -109,11 +123,12 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
   //----------------------------------------------------------------------------
   //--- Read and convert the NumBytes_IC_1.dat file
   //----------------------------------------------------------------------------
-  //QFile fileNumBytes( "/Users/rkn/Documents/freeDSP/freeDSP-aurora/SOURCES/SIGMASTUDIO/testproject2/NumBytes_IC_1.dat" );
+  qDebug()<<pathNumBytes;
   QFile fileNumBytes( pathNumBytes );
   if( !fileNumBytes.open( QIODevice::ReadOnly ) )
   {
     qDebug()<<__FILE__<<__LINE__<<"Could not open corresponding dat file";
+    QMessageBox::critical( this, tr("Error"), tr("Uups, could not open ") + pathNumBytes + tr(". Was the file deleted?"), QMessageBox::Ok );
     enableGui( true );
     return;
   }
@@ -237,16 +252,27 @@ void DialogSettings::on_pushButtonVerifyPlugin_clicked()
   {
     qDebug()<<"[ERROR] Unknown plugin id"<<ui->comboBoxPlugIn->currentData().toInt();
   }
+  #elif defined( __WIN__ )
+  QString pathAppBundle = QCoreApplication::applicationDirPath();
+  if( ui->comboBoxPlugIn->currentData().toInt() == CFreeDspAurora::PLUGIN_8CHANNELS )
+  {
+    pathTxBuffer = pathAppBundle + QString( "/dspplugins/8channels/TxBuffer_IC_1.dat");
+    pathNumBytes = pathAppBundle + QString( "/dspplugins/8channels/NumBytes_IC_1.dat");
+  }
+  else
+  {
+    qDebug()<<"[ERROR] Unknown plugin id"<<ui->comboBoxPlugIn->currentData().toInt();
+  }
   #endif
 
   //----------------------------------------------------------------------------
   //--- Read and convert the TxBuffer_IC_1.dat file
   //----------------------------------------------------------------------------
-  //QFile fileTxBuffer( "/Users/rkn/Documents/freeDSP/freeDSP-aurora/SOURCES/SIGMASTUDIO/testproject2/TxBuffer_IC_1.dat" );
   QFile fileTxBuffer( pathTxBuffer );
   if( !fileTxBuffer.open( QIODevice::ReadOnly ) )
   {
     qDebug()<<__FILE__<<__LINE__<<"Could not open selected file";
+    QMessageBox::critical( this, tr("Error"), tr("Uups, could not open ") + pathTxBuffer + tr(". Was the file deleted?"), QMessageBox::Ok );
     enableGui( true );
     return;
   }
@@ -270,11 +296,11 @@ void DialogSettings::on_pushButtonVerifyPlugin_clicked()
   //----------------------------------------------------------------------------
   //--- Read and convert the NumBytes_IC_1.dat file
   //----------------------------------------------------------------------------
-  //QFile fileNumBytes( "/Users/rkn/Documents/freeDSP/freeDSP-aurora/SOURCES/SIGMASTUDIO/testproject2/NumBytes_IC_1.dat" );
   QFile fileNumBytes( pathNumBytes );
   if( !fileNumBytes.open( QIODevice::ReadOnly ) )
   {
     qDebug()<<__FILE__<<__LINE__<<"Could not open corresponding dat file";
+    QMessageBox::critical( this, tr("Error"), tr("Uups, could not open ") + pathNumBytes + tr(". Was the file deleted?"), QMessageBox::Ok );
     enableGui( true );
     return;
   }
