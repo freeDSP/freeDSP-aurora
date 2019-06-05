@@ -42,9 +42,11 @@ tvector<double> fftconv( tvector<double> x, tvector<double> y )
 
 tvector<double> fftconv( tvector<double>, tvector<double> )
 {
-	#warning fftconv() not implemented.
+#if !defined( __WIN__ )
+  #warning fftconv() not implemented.
+#endif
   tvector<double> y;
-	return y;
+  return y;
 }
 
 #endif

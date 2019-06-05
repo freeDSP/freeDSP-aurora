@@ -21,7 +21,7 @@
 #include "PlugInHomeCinema71.hpp"
 #include "PlugIn4FIRs.hpp"
 
-#define VERSION_STR "0.9.6"
+#define VERSION_STR "0.9.7"
 #define FS 48000.0
 
 using namespace Vektorraum;
@@ -56,6 +56,8 @@ MainWindow::MainWindow( QWidget* parent ) :
 
   #if defined( __MACOSX__ )
   QFile fileSettings( "./settings.json" );
+  #elif defined( __WIN__ )
+  QFile fileSettings( "settings.json" );
   #endif
 
   if( fileSettings.open( QIODevice::ReadOnly ) )
@@ -696,6 +698,8 @@ void MainWindow::on_actionSettings_triggered()
   { 
     #if defined( __MACOSX__ )
     QFile fileSettings( "./settings.json" );
+    #elif defined( __WIN__ )
+    QFile fileSettings( "settings.json" );
     #endif
 
     QJsonObject jsonObj;

@@ -136,7 +136,9 @@ QByteArray QFir::getUserParams( void )
 {
   QByteArray ret;
 
+  #if !defined( __WIN__ )
   #warning QFir::getUserParams not implemented
+  #endif
   qDebug()<<"QFir::getUserParams not implemented";
 
   return ret;
@@ -147,7 +149,9 @@ QByteArray QFir::getUserParams( void )
  */
 void QFir::setUserParams( QByteArray& userParams, int& idx )
 {
+  #if !defined( __WIN__ )
   #warning QFir::setUserParams not implemented
+  #endif
   qDebug()<<"QFir::setUserParams not implemented";
 }
 
@@ -161,7 +165,9 @@ QByteArray QFir::getDspParams( void )
 {
   QByteArray ret;
 
+  #if !defined( __WIN__ )
   #warning QFir::getDspParam not implemented
+  #endif
   qDebug()<<"QFir::getDspParam not implemented";
 
   return ret;

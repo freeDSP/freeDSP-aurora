@@ -127,7 +127,9 @@ tvector<tcomplex> ifft( tvector<tcomplex> Y, tuint nfft )
 
 tvector<tcomplex> ifft( tvector<tcomplex>, tuint )
 {
+#if !defined( __WIN__ )
 	#warning fft() not implemented.
+#endif
 	tvector<tcomplex> x;
 	return x;
 }

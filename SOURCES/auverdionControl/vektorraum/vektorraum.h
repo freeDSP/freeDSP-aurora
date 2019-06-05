@@ -18,6 +18,10 @@
 #include "./signal/signal.h"
 #include "./statistics/statistics.h"
 
+#if !defined( M_PI )
+#define M_PI (3.141592653589793)
+#endif
+
 namespace Vektorraum
 {
 

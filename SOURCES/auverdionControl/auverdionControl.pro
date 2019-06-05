@@ -213,10 +213,10 @@ macx {
 
 }
 
-win32 {
+win32
+{
   message( "Building for Windows" )
-  QT += serialport
-
+  
   #QMAKE_CFLAGS += -gdwarf-2
   #QMAKE_CXXFLAGS += -gdwarf-2
 
@@ -224,10 +224,44 @@ win32 {
   DEFINES += MATLIB_USE_UINT64
   DEFINES += __NOFFT__
   DEFINES += __NOSNDFILE__
-  DEFINES += DEMO
+  #DEFINES += DEMO
 
   RC_ICONS = $${PWD}/rc/appicon.ico
- # ICON = $${PWD}/rc/appicon.icns
+
+  TARGET_DIR = $${OUT_PWD}/release/dspplugins/8channels
+  TARGET_SRC_TXBUFFER = E:/Documents/freeDSP/freeDSP-aurora/SOURCES/SIGMASTUDIO/8channels/TxBuffer_IC_1.dat
+  TARGET_DEST_TXBUFFER = $$TARGET_DIR/TxBuffer_IC_1.dat
+  TARGET_SRC_NUMBYTES = E:/Documents/freeDSP/freeDSP-aurora/SOURCES/SIGMASTUDIO/8channels/NumBytes_IC_1.dat
+  TARGET_DEST_NUMBYTES = $$TARGET_DIR/NumBytes_IC_1.dat
+
+  TARGET_DIR ~= s,/,\\,g
+  TARGET_SRC_TXBUFFER ~= s,/,\\,g
+  TARGET_DEST_TXBUFFER ~= s,/,\\,g
+  TARGET_SRC_NUMBYTES ~= s,/,\\,g
+  TARGET_DEST_NUMBYTES ~= s,/,\\,g
+
+  QMAKE_POST_LINK +=$$quote(cmd /c if not exist "$${TARGET_DIR}" mkdir $${TARGET_DIR} $$escape_expand(\n\t))
+  QMAKE_POST_LINK +=$$quote(cmd /c copy /y $${TARGET_SRC_TXBUFFER} $${TARGET_DEST_TXBUFFER}$$escape_expand(\n\t))
+  QMAKE_POST_LINK +=$$quote(cmd /c copy /y $${TARGET_SRC_NUMBYTES} $${TARGET_DEST_NUMBYTES}$$escape_expand(\n\t))
+
+  product.depends += all
+
+  # Build the product package
+  DEPLOY_CMD = $$shell_quote($$shell_path($$dirname(QMAKE_QMAKE)/windeployqt.exe))
+  DEPLOY_TARGET = $$shell_quote($$shell_path($${OUT_PWD}/release/$${TARGET}.exe))
+  product.commands += $$quote( $${DEPLOY_CMD} $${DEPLOY_TARGET} $$escape_expand(\n\t))
+  product.commands += $$quote( $$shell_quote($$shell_path($$dirname(QMAKE_QMAKE)/../../../Tools/QtCreator/bin/jom.exe)) -f Makefile.Release clean $$escape_expand(\n\t))
+
+  product.commands += $$quote(cd release $$escape_expand(\n\t))
+  product.commands += $$quote( $$shell_quote($$shell_path($$dirname(QMAKE_QMAKE)/../../../Tools/QtInstallerFramework/3.1/bin/archivegen.exe)) auverdionControl.7z * $$escape_expand(\n\t))
+  product.commands += $$quote(cd.. $$escape_expand(\n\t))
+
+  product.commands += $$quote(cmd /c move /y $$shell_quote($$shell_path($${OUT_PWD}/release/auverdionControl.7z)) $$shell_quote($$shell_path($${PWD}/installer/win64/packages/com.auverdion.auverdionControl/data/auverdionControl.7z))$$escape_expand(\n\t))
+
+  product.commands += $$quote( $$shell_quote($$shell_path($$dirname(QMAKE_QMAKE)/../../../Tools/QtInstallerFramework/3.1/bin/binarycreator.exe))  -c $$shell_quote($$shell_path($${PWD}/installer/win64/config/config.xml)) -p $$shell_quote($$shell_path($${PWD}/installer/win64/packages)) $$shell_quote($$shell_path($${PWD}/installer/win64/auverdionInstaller.exe)) $$escape_expand(\n\t))
+
+  QMAKE_EXTRA_TARGETS += product
+
 
 }
 
