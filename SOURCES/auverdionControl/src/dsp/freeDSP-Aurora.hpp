@@ -211,7 +211,7 @@ private:
   //============================================================================
   /*! 
    */
-  bool waitForResponseWifi( void );
+  //bool waitForResponseWifi( void );
 
   //============================================================================
   /*! Sends a request to the current DSP.
@@ -240,7 +240,7 @@ public:
   
 private: 
   QTcpSocket* tcpSocket;
-  QEventLoop loopWaitForResponseWiFi;
+  //QEventLoop loopWaitForResponseWiFi;
   QByteArray replyWifi;
   QByteArray replyDSP;
   QString ipAddressAP;
