@@ -1051,3 +1051,14 @@ QByteArray QHighPass::getDspParams( void )
 
   return content;
 }
+
+
+//==============================================================================
+/*! 
+ *
+ */
+void QHighPass::setBypassed( bool bypss )
+{
+  bypass = bypss;
+  ui->pushButtonBypass->setChecked( bypss );
+}

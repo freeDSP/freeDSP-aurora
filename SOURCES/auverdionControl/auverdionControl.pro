@@ -130,7 +130,8 @@ RESOURCES += \
 
 
 macx {
-  QT += serialport
+  message( "Building for macOS" )
+  #QT += serialport
 
   QMAKE_CFLAGS += -gdwarf-2
   QMAKE_CXXFLAGS += -gdwarf-2
@@ -170,7 +171,7 @@ macx {
   QMAKE_BUNDLE_DATA += APP_DSPPLUGIN_8CHANNELS
 
   codesign.depends  += all
-  codesign.commands += /Users/rkn/Qt5.12.0/5.12.0/clang_64/bin/macdeployqt $${TARGET}.app -appstore-compliant;
+  codesign.commands += $$dirname(QMAKE_QMAKE)/macdeployqt $${TARGET}.app -appstore-compliant;
 
   # Extract debug symbols
   codesign.commands += dsymutil $${TARGET}.app/Contents/MacOS/$${TARGET} -o $${TARGET}.app.dSYM;
@@ -182,7 +183,8 @@ macx {
   codesign.commands += codesign -f -s \"$${APPCERT}\" $${TARGET}.app/Contents/Frameworks/QtPrintSupport.framework/Versions/5/QtPrintSupport;
   codesign.commands += codesign -f -s \"$${APPCERT}\" $${TARGET}.app/Contents/Frameworks/QtSvg.framework/Versions/5/QtSvg;
   codesign.commands += codesign -f -s \"$${APPCERT}\" $${TARGET}.app/Contents/Frameworks/QtWidgets.framework/Versions/5/QtWidgets;
-  codesign.commands += codesign -f -s \"$${APPCERT}\" $${TARGET}.app/Contents/Frameworks/QtSerialPort.framework/Versions/5/QtSerialPort;
+  #codesign.commands += codesign -f -s \"$${APPCERT}\" $${TARGET}.app/Contents/Frameworks/QtSerialPort.framework/Versions/5/QtSerialPort;
+  codesign.commands += codesign -f -s \"$${APPCERT}\" $${TARGET}.app/Contents/Frameworks/QtNetwork.framework/Versions/5/QtNetwork;
 
   codesign.commands += codesign -f -s \"$${APPCERT}\" $${TARGET}.app/Contents/PlugIns/bearer/libqgenericbearer.dylib;
   codesign.commands += codesign -f -s \"$${APPCERT}\" $${TARGET}.app/Contents/PlugIns/iconengines/libqsvgicon.dylib;
@@ -213,8 +215,7 @@ macx {
 
 }
 
-win32
-{
+win32 {
   message( "Building for Windows" )
   
   #QMAKE_CFLAGS += -gdwarf-2

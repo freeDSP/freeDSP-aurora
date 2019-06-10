@@ -106,6 +106,8 @@ public:
 
   virtual QByteArray getDspParams( void );
 
+  void setBypassed( bool bypss );
+
 private:
   void updateCoeffs( void );
 

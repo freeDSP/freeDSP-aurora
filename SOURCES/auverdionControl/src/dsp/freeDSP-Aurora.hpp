@@ -250,6 +250,7 @@ private:
   bool replyCompleteWifi;
   QProgressBar* ptrProgressBar;
   QString ssidWifi;
+  bool isConnected = false;
 
 };
 

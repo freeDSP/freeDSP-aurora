@@ -179,6 +179,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                       channel );
     layout->addWidget( hp );
     channel->addDspBlock( hp );
+    hp->setBypassed( true );
 
     lshelv = new QLowShelv( 0.0, 100.0, 1.0,
                             MOD_LOWSHELV1_ALG0_STAGE0_B2_ADDR, MOD_LOWSHELV1_ALG0_STAGE0_B1_ADDR, MOD_LOWSHELV1_ALG0_STAGE0_B0_ADDR,
@@ -312,6 +313,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                       channel );
     layout->addWidget( lp );
     channel->addDspBlock( lp );
+    lp->setBypassed( true );
 
     phase = new QPhase( 1000.0, 1.0,
                       MOD_PHASE1_ALG0_STAGE0_B2_ADDR, MOD_PHASE1_ALG0_STAGE0_B1_ADDR, MOD_PHASE1_ALG0_STAGE0_B0_ADDR,
@@ -399,6 +401,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                       channel );
     layout->addWidget( hp );
     channel->addDspBlock( hp );
+    hp->setBypassed( true );
 
     lshelv = new QLowShelv( 0.0, 100.0, 1.0,
                             MOD_LOWSHELV2_ALG0_STAGE0_B2_ADDR, MOD_LOWSHELV2_ALG0_STAGE0_B1_ADDR, MOD_LOWSHELV2_ALG0_STAGE0_B0_ADDR,
@@ -532,6 +535,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                       channel );
     layout->addWidget( lp );
     channel->addDspBlock( lp );
+    lp->setBypassed( true );
 
     phase = new QPhase( 1000.0, 1.0,
                         MOD_PHASE2_ALG0_STAGE0_B2_ADDR, MOD_PHASE2_ALG0_STAGE0_B1_ADDR, MOD_PHASE2_ALG0_STAGE0_B0_ADDR,
@@ -619,8 +623,9 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                         channel );
     layout->addWidget( hp );
     channel->addDspBlock( hp );
+    hp->setBypassed( true );
 
-    lshelv = new QLowShelv( 6.0, 100.0, 1.0,
+    lshelv = new QLowShelv( 0.0, 100.0, 1.0,
                             MOD_LOWSHELV3_ALG0_STAGE0_B2_ADDR, MOD_LOWSHELV3_ALG0_STAGE0_B1_ADDR, MOD_LOWSHELV3_ALG0_STAGE0_B0_ADDR,
                             MOD_LOWSHELV3_ALG0_STAGE0_A2_ADDR, MOD_LOWSHELV3_ALG0_STAGE0_A1_ADDR,
                             fs,
@@ -629,7 +634,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     layout->addWidget( lshelv );
     channel->addDspBlock( lshelv );
 
-    peq01 = new QPeq( 6.0, 1000.0, 1.0,
+    peq01 = new QPeq( 0.0, 1000.0, 1.0,
                       MOD_PARAMEQ3_ALG0_STAGE0_B2_ADDR, MOD_PARAMEQ3_ALG0_STAGE0_B1_ADDR, MOD_PARAMEQ3_ALG0_STAGE0_B0_ADDR,
                       MOD_PARAMEQ3_ALG0_STAGE0_A2_ADDR, MOD_PARAMEQ3_ALG0_STAGE0_A1_ADDR,
                       fs,
@@ -639,7 +644,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq01 );
     channel->addPeq( peq01 );
 
-    peq02 = new QPeq( -6.0, 2000.0, 2.0,
+    peq02 = new QPeq( 0.0, 2000.0, 2.0,
                       MOD_PARAMEQ3_ALG0_STAGE1_B2_ADDR, MOD_PARAMEQ3_ALG0_STAGE1_B1_ADDR, MOD_PARAMEQ3_ALG0_STAGE1_B0_ADDR,
                       MOD_PARAMEQ3_ALG0_STAGE1_A2_ADDR, MOD_PARAMEQ3_ALG0_STAGE1_A1_ADDR,
                       fs,
@@ -649,7 +654,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq02 );
     channel->addPeq( peq02 );
 
-    peq03 = new QPeq( 6.0, 3000.0, 2.0,
+    peq03 = new QPeq( 0.0, 3000.0, 2.0,
                       MOD_PARAMEQ3_ALG0_STAGE2_B2_ADDR, MOD_PARAMEQ3_ALG0_STAGE2_B1_ADDR, MOD_PARAMEQ3_ALG0_STAGE2_B0_ADDR,
                       MOD_PARAMEQ3_ALG0_STAGE2_A2_ADDR, MOD_PARAMEQ3_ALG0_STAGE2_A1_ADDR,
                       fs,
@@ -659,7 +664,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq03 );
     channel->addPeq( peq03 );
 
-    peq04 = new QPeq( -6.0, 4000.0, 2.0,
+    peq04 = new QPeq( 0.0, 4000.0, 2.0,
                       MOD_PARAMEQ3_ALG0_STAGE3_B2_ADDR, MOD_PARAMEQ3_ALG0_STAGE3_B1_ADDR, MOD_PARAMEQ3_ALG0_STAGE3_B0_ADDR,
                       MOD_PARAMEQ3_ALG0_STAGE3_A2_ADDR, MOD_PARAMEQ3_ALG0_STAGE3_A1_ADDR,
                       fs,
@@ -669,7 +674,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq04 );
     channel->addPeq( peq04 );
 
-    peq05 = new QPeq( 6.0, 5000.0, 2.0,
+    peq05 = new QPeq( 0.0, 5000.0, 2.0,
                       MOD_PARAMEQ3_ALG0_STAGE4_B2_ADDR, MOD_PARAMEQ3_ALG0_STAGE4_B1_ADDR, MOD_PARAMEQ3_ALG0_STAGE4_B0_ADDR,
                       MOD_PARAMEQ3_ALG0_STAGE4_A2_ADDR, MOD_PARAMEQ3_ALG0_STAGE4_A1_ADDR,
                       fs,
@@ -679,7 +684,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq05 );
     channel->addPeq( peq05 );
 
-    peq06 = new QPeq( -6.0, 6000.0, 2.0,
+    peq06 = new QPeq( 0.0, 6000.0, 2.0,
                       MOD_PARAMEQ3_ALG0_STAGE5_B2_ADDR, MOD_PARAMEQ3_ALG0_STAGE5_B1_ADDR, MOD_PARAMEQ3_ALG0_STAGE5_B0_ADDR,
                       MOD_PARAMEQ3_ALG0_STAGE5_A2_ADDR, MOD_PARAMEQ3_ALG0_STAGE5_A1_ADDR,
                       fs,
@@ -689,7 +694,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq06 );
     channel->addPeq( peq06 );
 
-    peq07 = new QPeq( 6.0, 7000.0, 2.0,
+    peq07 = new QPeq( 0.0, 7000.0, 2.0,
                       MOD_PARAMEQ3_ALG0_STAGE6_B2_ADDR, MOD_PARAMEQ3_ALG0_STAGE6_B1_ADDR, MOD_PARAMEQ3_ALG0_STAGE6_B0_ADDR,
                       MOD_PARAMEQ3_ALG0_STAGE6_A2_ADDR, MOD_PARAMEQ3_ALG0_STAGE6_A1_ADDR,
                       fs,
@@ -699,7 +704,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq07 );
     channel->addPeq( peq07 );
 
-    peq08 = new QPeq( -6.0, 8000.0, 2.0,
+    peq08 = new QPeq( 0.0, 8000.0, 2.0,
                       MOD_PARAMEQ3_ALG0_STAGE7_B2_ADDR, MOD_PARAMEQ3_ALG0_STAGE7_B1_ADDR, MOD_PARAMEQ3_ALG0_STAGE7_B0_ADDR,
                       MOD_PARAMEQ3_ALG0_STAGE7_A2_ADDR, MOD_PARAMEQ3_ALG0_STAGE7_A1_ADDR,
                       fs,
@@ -709,7 +714,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq08 );
     channel->addPeq( peq08 );
 
-    peq09 = new QPeq( 6.0, 9000.0, 2.0,
+    peq09 = new QPeq( 0.0, 9000.0, 2.0,
                       MOD_PARAMEQ3_ALG0_STAGE8_B2_ADDR, MOD_PARAMEQ3_ALG0_STAGE8_B1_ADDR, MOD_PARAMEQ3_ALG0_STAGE8_B0_ADDR,
                       MOD_PARAMEQ3_ALG0_STAGE8_A2_ADDR, MOD_PARAMEQ3_ALG0_STAGE8_A1_ADDR,
                       fs,
@@ -719,7 +724,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq09 );
     channel->addPeq( peq09 );
 
-    peq10 = new QPeq( -6.0, 10000.0, 2.0,
+    peq10 = new QPeq( 0.0, 10000.0, 2.0,
                       MOD_PARAMEQ3_ALG0_STAGE9_B2_ADDR, MOD_PARAMEQ3_ALG0_STAGE9_B1_ADDR, MOD_PARAMEQ3_ALG0_STAGE9_B0_ADDR,
                       MOD_PARAMEQ3_ALG0_STAGE9_A2_ADDR, MOD_PARAMEQ3_ALG0_STAGE9_A1_ADDR,
                       fs,
@@ -729,7 +734,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq10 );
     channel->addPeq( peq10 );
 
-    hshelv = new QHighShelv( 6.0, 5000.0, 1.0,
+    hshelv = new QHighShelv( 0.0, 5000.0, 1.0,
                             MOD_HIGHSHELV3_ALG0_STAGE0_B2_ADDR, MOD_HIGHSHELV3_ALG0_STAGE0_B1_ADDR, MOD_HIGHSHELV3_ALG0_STAGE0_B0_ADDR,
                             MOD_HIGHSHELV3_ALG0_STAGE0_A2_ADDR, MOD_HIGHSHELV3_ALG0_STAGE0_A1_ADDR,
                             fs,
@@ -752,6 +757,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                      channel );
     layout->addWidget( lp );
     channel->addDspBlock( lp );
+    lp->setBypassed( true );
 
     phase = new QPhase( 1000.0, 1.0,
                       MOD_PHASE3_ALG0_STAGE0_B2_ADDR, MOD_PHASE3_ALG0_STAGE0_B1_ADDR, MOD_PHASE3_ALG0_STAGE0_B0_ADDR,
@@ -839,8 +845,9 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                         channel );
     layout->addWidget( hp );
     channel->addDspBlock( hp );
+    hp->setBypassed( true );
 
-    lshelv = new QLowShelv( 6.0, 100.0, 1.0,
+    lshelv = new QLowShelv( 0.0, 100.0, 1.0,
                             MOD_LOWSHELV4_ALG0_STAGE0_B2_ADDR, MOD_LOWSHELV4_ALG0_STAGE0_B1_ADDR, MOD_LOWSHELV4_ALG0_STAGE0_B0_ADDR,
                             MOD_LOWSHELV4_ALG0_STAGE0_A2_ADDR, MOD_LOWSHELV4_ALG0_STAGE0_A1_ADDR,
                             fs,
@@ -849,7 +856,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     layout->addWidget( lshelv );
     channel->addDspBlock( lshelv );
 
-    peq01 = new QPeq( 6.0, 1000.0, 1.0,
+    peq01 = new QPeq( 0.0, 1000.0, 1.0,
                       MOD_PARAMEQ4_ALG0_STAGE0_B2_ADDR, MOD_PARAMEQ4_ALG0_STAGE0_B1_ADDR, MOD_PARAMEQ4_ALG0_STAGE0_B0_ADDR,
                       MOD_PARAMEQ4_ALG0_STAGE0_A2_ADDR, MOD_PARAMEQ4_ALG0_STAGE0_A1_ADDR,
                       fs,
@@ -859,7 +866,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq01 );
     channel->addPeq( peq01 );
 
-    peq02 = new QPeq( -6.0, 2000.0, 2.0,
+    peq02 = new QPeq( 0.0, 2000.0, 2.0,
                       MOD_PARAMEQ4_ALG0_STAGE1_B2_ADDR, MOD_PARAMEQ4_ALG0_STAGE1_B1_ADDR, MOD_PARAMEQ4_ALG0_STAGE1_B0_ADDR,
                       MOD_PARAMEQ4_ALG0_STAGE1_A2_ADDR, MOD_PARAMEQ4_ALG0_STAGE1_A1_ADDR,
                       fs,
@@ -869,7 +876,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq02 );
     channel->addPeq( peq02 );
 
-    peq03 = new QPeq( 6.0, 3000.0, 2.0,
+    peq03 = new QPeq( 0.0, 3000.0, 2.0,
                       MOD_PARAMEQ4_ALG0_STAGE2_B2_ADDR, MOD_PARAMEQ4_ALG0_STAGE2_B1_ADDR, MOD_PARAMEQ4_ALG0_STAGE2_B0_ADDR,
                       MOD_PARAMEQ4_ALG0_STAGE2_A2_ADDR, MOD_PARAMEQ4_ALG0_STAGE2_A1_ADDR,
                       fs,
@@ -879,7 +886,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq03 );
     channel->addPeq( peq03 );
 
-    peq04 = new QPeq( -6.0, 4000.0, 2.0,
+    peq04 = new QPeq( 0.0, 4000.0, 2.0,
                       MOD_PARAMEQ4_ALG0_STAGE3_B2_ADDR, MOD_PARAMEQ4_ALG0_STAGE3_B1_ADDR, MOD_PARAMEQ4_ALG0_STAGE3_B0_ADDR,
                       MOD_PARAMEQ4_ALG0_STAGE3_A2_ADDR, MOD_PARAMEQ4_ALG0_STAGE3_A1_ADDR,
                       fs,
@@ -889,7 +896,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq04 );
     channel->addPeq( peq04 );
 
-    peq05 = new QPeq( 6.0, 5000.0, 2.0,
+    peq05 = new QPeq( 0.0, 5000.0, 2.0,
                       MOD_PARAMEQ4_ALG0_STAGE4_B2_ADDR, MOD_PARAMEQ4_ALG0_STAGE4_B1_ADDR, MOD_PARAMEQ4_ALG0_STAGE4_B0_ADDR,
                       MOD_PARAMEQ4_ALG0_STAGE4_A2_ADDR, MOD_PARAMEQ4_ALG0_STAGE4_A1_ADDR,
                       fs,
@@ -899,7 +906,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq05 );
     channel->addPeq( peq05 );
 
-    peq06 = new QPeq( -6.0, 6000.0, 2.0,
+    peq06 = new QPeq( 0.0, 6000.0, 2.0,
                       MOD_PARAMEQ4_ALG0_STAGE5_B2_ADDR, MOD_PARAMEQ4_ALG0_STAGE5_B1_ADDR, MOD_PARAMEQ4_ALG0_STAGE5_B0_ADDR,
                       MOD_PARAMEQ4_ALG0_STAGE5_A2_ADDR, MOD_PARAMEQ4_ALG0_STAGE5_A1_ADDR,
                       fs,
@@ -909,7 +916,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq06 );
     channel->addPeq( peq06 );
 
-    peq07 = new QPeq( 6.0, 7000.0, 2.0,
+    peq07 = new QPeq( 0.0, 7000.0, 2.0,
                       MOD_PARAMEQ4_ALG0_STAGE6_B2_ADDR, MOD_PARAMEQ4_ALG0_STAGE6_B1_ADDR, MOD_PARAMEQ4_ALG0_STAGE6_B0_ADDR,
                       MOD_PARAMEQ4_ALG0_STAGE6_A2_ADDR, MOD_PARAMEQ4_ALG0_STAGE6_A1_ADDR,
                       fs,
@@ -919,7 +926,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq07 );
     channel->addPeq( peq07 );
 
-    peq08 = new QPeq( -6.0, 8000.0, 2.0,
+    peq08 = new QPeq( 0.0, 8000.0, 2.0,
                       MOD_PARAMEQ4_ALG0_STAGE7_B2_ADDR, MOD_PARAMEQ4_ALG0_STAGE7_B1_ADDR, MOD_PARAMEQ4_ALG0_STAGE7_B0_ADDR,
                       MOD_PARAMEQ4_ALG0_STAGE7_A2_ADDR, MOD_PARAMEQ4_ALG0_STAGE7_A1_ADDR,
                       fs,
@@ -929,7 +936,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq08 );
     channel->addPeq( peq08 );
 
-    peq09 = new QPeq( 6.0, 9000.0, 2.0,
+    peq09 = new QPeq( 0.0, 9000.0, 2.0,
                       MOD_PARAMEQ4_ALG0_STAGE8_B2_ADDR, MOD_PARAMEQ4_ALG0_STAGE8_B1_ADDR, MOD_PARAMEQ4_ALG0_STAGE8_B0_ADDR,
                       MOD_PARAMEQ4_ALG0_STAGE8_A2_ADDR, MOD_PARAMEQ4_ALG0_STAGE8_A1_ADDR,
                       fs,
@@ -939,7 +946,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq09 );
     channel->addPeq( peq09 );
 
-    peq10 = new QPeq( -6.0, 10000.0, 2.0,
+    peq10 = new QPeq( 0.0, 10000.0, 2.0,
                       MOD_PARAMEQ4_ALG0_STAGE9_B2_ADDR, MOD_PARAMEQ4_ALG0_STAGE9_B1_ADDR, MOD_PARAMEQ4_ALG0_STAGE9_B0_ADDR,
                       MOD_PARAMEQ4_ALG0_STAGE9_A2_ADDR, MOD_PARAMEQ4_ALG0_STAGE9_A1_ADDR,
                       fs,
@@ -949,7 +956,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq10 );
     channel->addPeq( peq10 );
 
-    hshelv = new QHighShelv( 6.0, 5000.0, 1.0,
+    hshelv = new QHighShelv( 0.0, 5000.0, 1.0,
                             MOD_HIGHSHELV4_ALG0_STAGE0_B2_ADDR, MOD_HIGHSHELV4_ALG0_STAGE0_B1_ADDR, MOD_HIGHSHELV4_ALG0_STAGE0_B0_ADDR,
                             MOD_HIGHSHELV4_ALG0_STAGE0_A2_ADDR, MOD_HIGHSHELV4_ALG0_STAGE0_A1_ADDR,
                             fs,
@@ -972,6 +979,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                      channel );
     layout->addWidget( lp );
     channel->addDspBlock( lp );
+    lp->setBypassed( true );
 
     phase = new QPhase( 1000.0, 1.0,
                       MOD_PHASE4_ALG0_STAGE0_B2_ADDR, MOD_PHASE4_ALG0_STAGE0_B1_ADDR, MOD_PHASE4_ALG0_STAGE0_B0_ADDR,
@@ -1059,8 +1067,9 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                         channel );
     layout->addWidget( hp );
     channel->addDspBlock( hp );
+    hp->setBypassed( true );
 
-    lshelv = new QLowShelv( 6.0, 100.0, 1.0,
+    lshelv = new QLowShelv( 0.0, 100.0, 1.0,
                             MOD_LOWSHELV5_ALG0_STAGE0_B2_ADDR, MOD_LOWSHELV5_ALG0_STAGE0_B1_ADDR, MOD_LOWSHELV5_ALG0_STAGE0_B0_ADDR,
                             MOD_LOWSHELV5_ALG0_STAGE0_A2_ADDR, MOD_LOWSHELV5_ALG0_STAGE0_A1_ADDR,
                             fs,
@@ -1069,7 +1078,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     layout->addWidget( lshelv );
     channel->addDspBlock( lshelv );
 
-    peq01 = new QPeq( 6.0, 1000.0, 1.0,
+    peq01 = new QPeq( 0.0, 1000.0, 1.0,
                       MOD_PARAMEQ5_ALG0_STAGE0_B2_ADDR, MOD_PARAMEQ5_ALG0_STAGE0_B1_ADDR, MOD_PARAMEQ5_ALG0_STAGE0_B0_ADDR,
                       MOD_PARAMEQ5_ALG0_STAGE0_A2_ADDR, MOD_PARAMEQ5_ALG0_STAGE0_A1_ADDR,
                       fs,
@@ -1079,7 +1088,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq01 );
     channel->addPeq( peq01 );
 
-    peq02 = new QPeq( -6.0, 2000.0, 2.0,
+    peq02 = new QPeq( 0.0, 2000.0, 2.0,
                       MOD_PARAMEQ5_ALG0_STAGE1_B2_ADDR, MOD_PARAMEQ5_ALG0_STAGE1_B1_ADDR, MOD_PARAMEQ5_ALG0_STAGE1_B0_ADDR,
                       MOD_PARAMEQ5_ALG0_STAGE1_A2_ADDR, MOD_PARAMEQ5_ALG0_STAGE1_A1_ADDR,
                       fs,
@@ -1089,7 +1098,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq02 );
     channel->addPeq( peq02 );
 
-    peq03 = new QPeq( 6.0, 3000.0, 2.0,
+    peq03 = new QPeq( 0.0, 3000.0, 2.0,
                       MOD_PARAMEQ5_ALG0_STAGE2_B2_ADDR, MOD_PARAMEQ5_ALG0_STAGE2_B1_ADDR, MOD_PARAMEQ5_ALG0_STAGE2_B0_ADDR,
                       MOD_PARAMEQ5_ALG0_STAGE2_A2_ADDR, MOD_PARAMEQ5_ALG0_STAGE2_A1_ADDR,
                       fs,
@@ -1099,7 +1108,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq03 );
     channel->addPeq( peq03 );
 
-    peq04 = new QPeq( -6.0, 4000.0, 2.0,
+    peq04 = new QPeq( 0.0, 4000.0, 2.0,
                       MOD_PARAMEQ5_ALG0_STAGE3_B2_ADDR, MOD_PARAMEQ5_ALG0_STAGE3_B1_ADDR, MOD_PARAMEQ5_ALG0_STAGE3_B0_ADDR,
                       MOD_PARAMEQ5_ALG0_STAGE3_A2_ADDR, MOD_PARAMEQ5_ALG0_STAGE3_A1_ADDR,
                       fs,
@@ -1109,7 +1118,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq04 );
     channel->addPeq( peq04 );
 
-    peq05 = new QPeq( 6.0, 5000.0, 2.0,
+    peq05 = new QPeq( 0.0, 5000.0, 2.0,
                       MOD_PARAMEQ5_ALG0_STAGE4_B2_ADDR, MOD_PARAMEQ5_ALG0_STAGE4_B1_ADDR, MOD_PARAMEQ5_ALG0_STAGE4_B0_ADDR,
                       MOD_PARAMEQ5_ALG0_STAGE4_A2_ADDR, MOD_PARAMEQ5_ALG0_STAGE4_A1_ADDR,
                       fs,
@@ -1119,7 +1128,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq05 );
     channel->addPeq( peq05 );
 
-    peq06 = new QPeq( -6.0, 6000.0, 2.0,
+    peq06 = new QPeq( 0.0, 6000.0, 2.0,
                       MOD_PARAMEQ5_ALG0_STAGE5_B2_ADDR, MOD_PARAMEQ5_ALG0_STAGE5_B1_ADDR, MOD_PARAMEQ5_ALG0_STAGE5_B0_ADDR,
                       MOD_PARAMEQ5_ALG0_STAGE5_A2_ADDR, MOD_PARAMEQ5_ALG0_STAGE5_A1_ADDR,
                       fs,
@@ -1129,7 +1138,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq06 );
     channel->addPeq( peq06 );
 
-    peq07 = new QPeq( 6.0, 7000.0, 2.0,
+    peq07 = new QPeq( 0.0, 7000.0, 2.0,
                       MOD_PARAMEQ5_ALG0_STAGE6_B2_ADDR, MOD_PARAMEQ5_ALG0_STAGE6_B1_ADDR, MOD_PARAMEQ5_ALG0_STAGE6_B0_ADDR,
                       MOD_PARAMEQ5_ALG0_STAGE6_A2_ADDR, MOD_PARAMEQ5_ALG0_STAGE6_A1_ADDR,
                       fs,
@@ -1139,7 +1148,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq07 );
     channel->addPeq( peq07 );
 
-    peq08 = new QPeq( -6.0, 8000.0, 2.0,
+    peq08 = new QPeq( 0.0, 8000.0, 2.0,
                       MOD_PARAMEQ5_ALG0_STAGE7_B2_ADDR, MOD_PARAMEQ5_ALG0_STAGE7_B1_ADDR, MOD_PARAMEQ5_ALG0_STAGE7_B0_ADDR,
                       MOD_PARAMEQ5_ALG0_STAGE7_A2_ADDR, MOD_PARAMEQ5_ALG0_STAGE7_A1_ADDR,
                       fs,
@@ -1149,7 +1158,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq08 );
     channel->addPeq( peq08 );
 
-    peq09 = new QPeq( 6.0, 9000.0, 2.0,
+    peq09 = new QPeq( 0.0, 9000.0, 2.0,
                       MOD_PARAMEQ5_ALG0_STAGE8_B2_ADDR, MOD_PARAMEQ5_ALG0_STAGE8_B1_ADDR, MOD_PARAMEQ5_ALG0_STAGE8_B0_ADDR,
                       MOD_PARAMEQ5_ALG0_STAGE8_A2_ADDR, MOD_PARAMEQ5_ALG0_STAGE8_A1_ADDR,
                       fs,
@@ -1159,7 +1168,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq09 );
     channel->addPeq( peq09 );
 
-    peq10 = new QPeq( -6.0, 10000.0, 2.0,
+    peq10 = new QPeq( 0.0, 10000.0, 2.0,
                       MOD_PARAMEQ5_ALG0_STAGE9_B2_ADDR, MOD_PARAMEQ5_ALG0_STAGE9_B1_ADDR, MOD_PARAMEQ5_ALG0_STAGE9_B0_ADDR,
                       MOD_PARAMEQ5_ALG0_STAGE9_A2_ADDR, MOD_PARAMEQ5_ALG0_STAGE9_A1_ADDR,
                       fs,
@@ -1169,7 +1178,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq10 );
     channel->addPeq( peq10 );
 
-    hshelv = new QHighShelv( 6.0, 5000.0, 1.0,
+    hshelv = new QHighShelv( 0.0, 5000.0, 1.0,
                             MOD_HIGHSHELV5_ALG0_STAGE0_B2_ADDR, MOD_HIGHSHELV5_ALG0_STAGE0_B1_ADDR, MOD_HIGHSHELV5_ALG0_STAGE0_B0_ADDR,
                             MOD_HIGHSHELV5_ALG0_STAGE0_A2_ADDR, MOD_HIGHSHELV5_ALG0_STAGE0_A1_ADDR,
                             fs,
@@ -1192,6 +1201,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                      channel );
     layout->addWidget( lp );
     channel->addDspBlock( lp );
+    lp->setBypassed( true );
 
     phase = new QPhase( 1000.0, 1.0,
                         MOD_PHASE5_ALG0_STAGE0_B2_ADDR, MOD_PHASE5_ALG0_STAGE0_B1_ADDR, MOD_PHASE5_ALG0_STAGE0_B0_ADDR,
@@ -1279,8 +1289,9 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                         channel );
     layout->addWidget( hp );
     channel->addDspBlock( hp );
+    hp->setBypassed( true );
 
-    lshelv = new QLowShelv( 6.0, 100.0, 1.0,
+    lshelv = new QLowShelv( 0.0, 100.0, 1.0,
                           MOD_LOWSHELV6_ALG0_STAGE0_B2_ADDR, MOD_LOWSHELV6_ALG0_STAGE0_B1_ADDR, MOD_LOWSHELV6_ALG0_STAGE0_B0_ADDR,
                           MOD_LOWSHELV6_ALG0_STAGE0_A2_ADDR, MOD_LOWSHELV6_ALG0_STAGE0_A1_ADDR,
                           fs,
@@ -1289,7 +1300,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     layout->addWidget( lshelv );
     channel->addDspBlock( lshelv );
 
-    peq01 = new QPeq( 6.0, 1000.0, 1.0,
+    peq01 = new QPeq( 0.0, 1000.0, 1.0,
                     MOD_PARAMEQ6_ALG0_STAGE0_B2_ADDR, MOD_PARAMEQ6_ALG0_STAGE0_B1_ADDR, MOD_PARAMEQ6_ALG0_STAGE0_B0_ADDR,
                     MOD_PARAMEQ6_ALG0_STAGE0_A2_ADDR, MOD_PARAMEQ6_ALG0_STAGE0_A1_ADDR,
                     fs,
@@ -1299,7 +1310,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq01 );
     channel->addPeq( peq01 );
 
-    peq02 = new QPeq( -6.0, 2000.0, 2.0,
+    peq02 = new QPeq( 0.0, 2000.0, 2.0,
                     MOD_PARAMEQ6_ALG0_STAGE1_B2_ADDR, MOD_PARAMEQ6_ALG0_STAGE1_B1_ADDR, MOD_PARAMEQ6_ALG0_STAGE1_B0_ADDR,
                     MOD_PARAMEQ6_ALG0_STAGE1_A2_ADDR, MOD_PARAMEQ6_ALG0_STAGE1_A1_ADDR,
                     fs,
@@ -1309,7 +1320,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq02 );
     channel->addPeq( peq02 );
 
-    peq03 = new QPeq( 6.0, 3000.0, 2.0,
+    peq03 = new QPeq( 0.0, 3000.0, 2.0,
                     MOD_PARAMEQ6_ALG0_STAGE2_B2_ADDR, MOD_PARAMEQ6_ALG0_STAGE2_B1_ADDR, MOD_PARAMEQ6_ALG0_STAGE2_B0_ADDR,
                     MOD_PARAMEQ6_ALG0_STAGE2_A2_ADDR, MOD_PARAMEQ6_ALG0_STAGE2_A1_ADDR,
                     fs,
@@ -1319,7 +1330,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq03 );
     channel->addPeq( peq03 );
 
-    peq04 = new QPeq( -6.0, 4000.0, 2.0,
+    peq04 = new QPeq( 0.0, 4000.0, 2.0,
                     MOD_PARAMEQ6_ALG0_STAGE3_B2_ADDR, MOD_PARAMEQ6_ALG0_STAGE3_B1_ADDR, MOD_PARAMEQ6_ALG0_STAGE3_B0_ADDR,
                     MOD_PARAMEQ6_ALG0_STAGE3_A2_ADDR, MOD_PARAMEQ6_ALG0_STAGE3_A1_ADDR,
                     fs,
@@ -1329,7 +1340,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq04 );
     channel->addPeq( peq04 );
 
-    peq05 = new QPeq( 6.0, 5000.0, 2.0,
+    peq05 = new QPeq( 0.0, 5000.0, 2.0,
                     MOD_PARAMEQ6_ALG0_STAGE4_B2_ADDR, MOD_PARAMEQ6_ALG0_STAGE4_B1_ADDR, MOD_PARAMEQ6_ALG0_STAGE4_B0_ADDR,
                     MOD_PARAMEQ6_ALG0_STAGE4_A2_ADDR, MOD_PARAMEQ6_ALG0_STAGE4_A1_ADDR,
                     fs,
@@ -1339,7 +1350,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq05 );
     channel->addPeq( peq05 );
 
-    peq06 = new QPeq( -6.0, 6000.0, 2.0,
+    peq06 = new QPeq( 0.0, 6000.0, 2.0,
                     MOD_PARAMEQ6_ALG0_STAGE5_B2_ADDR, MOD_PARAMEQ6_ALG0_STAGE5_B1_ADDR, MOD_PARAMEQ6_ALG0_STAGE5_B0_ADDR,
                     MOD_PARAMEQ6_ALG0_STAGE5_A2_ADDR, MOD_PARAMEQ6_ALG0_STAGE5_A1_ADDR,
                     fs,
@@ -1349,7 +1360,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq06 );
     channel->addPeq( peq06 );
 
-    peq07 = new QPeq( 6.0, 7000.0, 2.0,
+    peq07 = new QPeq( 0.0, 7000.0, 2.0,
                     MOD_PARAMEQ6_ALG0_STAGE6_B2_ADDR, MOD_PARAMEQ6_ALG0_STAGE6_B1_ADDR, MOD_PARAMEQ6_ALG0_STAGE6_B0_ADDR,
                     MOD_PARAMEQ6_ALG0_STAGE6_A2_ADDR, MOD_PARAMEQ6_ALG0_STAGE6_A1_ADDR,
                     fs,
@@ -1359,7 +1370,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq07 );
     channel->addPeq( peq07 );
 
-    peq08 = new QPeq( -6.0, 8000.0, 2.0,
+    peq08 = new QPeq( 0.0, 8000.0, 2.0,
                     MOD_PARAMEQ6_ALG0_STAGE7_B2_ADDR, MOD_PARAMEQ6_ALG0_STAGE7_B1_ADDR, MOD_PARAMEQ6_ALG0_STAGE7_B0_ADDR,
                     MOD_PARAMEQ6_ALG0_STAGE7_A2_ADDR, MOD_PARAMEQ6_ALG0_STAGE7_A1_ADDR,
                     fs,
@@ -1369,7 +1380,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq08 );
     channel->addPeq( peq08 );
 
-    peq09 = new QPeq( 6.0, 9000.0, 2.0,
+    peq09 = new QPeq( 0.0, 9000.0, 2.0,
                     MOD_PARAMEQ6_ALG0_STAGE8_B2_ADDR, MOD_PARAMEQ6_ALG0_STAGE8_B1_ADDR, MOD_PARAMEQ6_ALG0_STAGE8_B0_ADDR,
                     MOD_PARAMEQ6_ALG0_STAGE8_A2_ADDR, MOD_PARAMEQ6_ALG0_STAGE8_A1_ADDR,
                     fs,
@@ -1379,7 +1390,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq09 );
     channel->addPeq( peq09 );
 
-    peq10 = new QPeq( -6.0, 10000.0, 2.0,
+    peq10 = new QPeq( 0.0, 10000.0, 2.0,
                     MOD_PARAMEQ6_ALG0_STAGE9_B2_ADDR, MOD_PARAMEQ6_ALG0_STAGE9_B1_ADDR, MOD_PARAMEQ6_ALG0_STAGE9_B0_ADDR,
                     MOD_PARAMEQ6_ALG0_STAGE9_A2_ADDR, MOD_PARAMEQ6_ALG0_STAGE9_A1_ADDR,
                     fs,
@@ -1389,7 +1400,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq10 );
     channel->addPeq( peq10 );
 
-    hshelv = new QHighShelv( 6.0, 5000.0, 1.0,
+    hshelv = new QHighShelv( 0.0, 5000.0, 1.0,
                             MOD_HIGHSHELV6_ALG0_STAGE0_B2_ADDR, MOD_HIGHSHELV6_ALG0_STAGE0_B1_ADDR, MOD_HIGHSHELV6_ALG0_STAGE0_B0_ADDR,
                             MOD_HIGHSHELV6_ALG0_STAGE0_A2_ADDR, MOD_HIGHSHELV6_ALG0_STAGE0_A1_ADDR,
                             fs,
@@ -1412,6 +1423,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                      channel );
     layout->addWidget( lp );
     channel->addDspBlock( lp );
+    lp->setBypassed( true );
 
     phase = new QPhase( 1000.0, 1.0,
                       MOD_PHASE6_ALG0_STAGE0_B2_ADDR, MOD_PHASE6_ALG0_STAGE0_B1_ADDR, MOD_PHASE6_ALG0_STAGE0_B0_ADDR,
@@ -1499,8 +1511,9 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                         channel );
     layout->addWidget( hp );
     channel->addDspBlock( hp );
+    hp->setBypassed( true );
 
-    lshelv = new QLowShelv( 6.0, 100.0, 1.0,
+    lshelv = new QLowShelv( 0.0, 100.0, 1.0,
                           MOD_LOWSHELV7_ALG0_STAGE0_B2_ADDR, MOD_LOWSHELV7_ALG0_STAGE0_B1_ADDR, MOD_LOWSHELV7_ALG0_STAGE0_B0_ADDR,
                           MOD_LOWSHELV7_ALG0_STAGE0_A2_ADDR, MOD_LOWSHELV7_ALG0_STAGE0_A1_ADDR,
                           fs,
@@ -1509,7 +1522,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     layout->addWidget( lshelv );
     channel->addDspBlock( lshelv );
 
-    peq01 = new QPeq( 6.0, 1000.0, 1.0,
+    peq01 = new QPeq( 0.0, 1000.0, 1.0,
                       MOD_PARAMEQ7_ALG0_STAGE0_B2_ADDR, MOD_PARAMEQ7_ALG0_STAGE0_B1_ADDR, MOD_PARAMEQ7_ALG0_STAGE0_B0_ADDR,
                       MOD_PARAMEQ7_ALG0_STAGE0_A2_ADDR, MOD_PARAMEQ7_ALG0_STAGE0_A1_ADDR,
                       fs,
@@ -1519,7 +1532,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq01 );
     channel->addPeq( peq01 );
 
-    peq02 = new QPeq( -6.0, 2000.0, 2.0,
+    peq02 = new QPeq( 0.0, 2000.0, 2.0,
                       MOD_PARAMEQ7_ALG0_STAGE1_B2_ADDR, MOD_PARAMEQ7_ALG0_STAGE1_B1_ADDR, MOD_PARAMEQ7_ALG0_STAGE1_B0_ADDR,
                       MOD_PARAMEQ7_ALG0_STAGE1_A2_ADDR, MOD_PARAMEQ7_ALG0_STAGE1_A1_ADDR,
                       fs,
@@ -1529,7 +1542,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq02 );
     channel->addPeq( peq02 );
 
-    peq03 = new QPeq( 6.0, 3000.0, 2.0,
+    peq03 = new QPeq( 0.0, 3000.0, 2.0,
                       MOD_PARAMEQ7_ALG0_STAGE2_B2_ADDR, MOD_PARAMEQ7_ALG0_STAGE2_B1_ADDR, MOD_PARAMEQ7_ALG0_STAGE2_B0_ADDR,
                       MOD_PARAMEQ7_ALG0_STAGE2_A2_ADDR, MOD_PARAMEQ7_ALG0_STAGE2_A1_ADDR,
                       fs,
@@ -1539,7 +1552,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq03 );
     channel->addPeq( peq03 );
 
-    peq04 = new QPeq( -6.0, 4000.0, 2.0,
+    peq04 = new QPeq( 0.0, 4000.0, 2.0,
                       MOD_PARAMEQ7_ALG0_STAGE3_B2_ADDR, MOD_PARAMEQ7_ALG0_STAGE3_B1_ADDR, MOD_PARAMEQ7_ALG0_STAGE3_B0_ADDR,
                       MOD_PARAMEQ7_ALG0_STAGE3_A2_ADDR, MOD_PARAMEQ7_ALG0_STAGE3_A1_ADDR,
                       fs,
@@ -1549,7 +1562,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq04 );
     channel->addPeq( peq04 );
 
-    peq05 = new QPeq( 6.0, 5000.0, 2.0,
+    peq05 = new QPeq( 0.0, 5000.0, 2.0,
                       MOD_PARAMEQ7_ALG0_STAGE4_B2_ADDR, MOD_PARAMEQ7_ALG0_STAGE4_B1_ADDR, MOD_PARAMEQ7_ALG0_STAGE4_B0_ADDR,
                       MOD_PARAMEQ7_ALG0_STAGE4_A2_ADDR, MOD_PARAMEQ7_ALG0_STAGE4_A1_ADDR,
                       fs,
@@ -1559,7 +1572,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq05 );
     channel->addPeq( peq05 );
 
-    peq06 = new QPeq( -6.0, 6000.0, 2.0,
+    peq06 = new QPeq( 0.0, 6000.0, 2.0,
                       MOD_PARAMEQ7_ALG0_STAGE5_B2_ADDR, MOD_PARAMEQ7_ALG0_STAGE5_B1_ADDR, MOD_PARAMEQ7_ALG0_STAGE5_B0_ADDR,
                       MOD_PARAMEQ7_ALG0_STAGE5_A2_ADDR, MOD_PARAMEQ7_ALG0_STAGE5_A1_ADDR,
                       fs,
@@ -1569,7 +1582,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq06 );
     channel->addPeq( peq06 );
 
-    peq07 = new QPeq( 6.0, 7000.0, 2.0,
+    peq07 = new QPeq( 0.0, 7000.0, 2.0,
                       MOD_PARAMEQ7_ALG0_STAGE6_B2_ADDR, MOD_PARAMEQ7_ALG0_STAGE6_B1_ADDR, MOD_PARAMEQ7_ALG0_STAGE6_B0_ADDR,
                       MOD_PARAMEQ7_ALG0_STAGE6_A2_ADDR, MOD_PARAMEQ7_ALG0_STAGE6_A1_ADDR,
                       fs,
@@ -1579,7 +1592,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq07 );
     channel->addPeq( peq07 );
 
-    peq08 = new QPeq( -6.0, 8000.0, 2.0,
+    peq08 = new QPeq( 0.0, 8000.0, 2.0,
                       MOD_PARAMEQ7_ALG0_STAGE7_B2_ADDR, MOD_PARAMEQ7_ALG0_STAGE7_B1_ADDR, MOD_PARAMEQ7_ALG0_STAGE7_B0_ADDR,
                       MOD_PARAMEQ7_ALG0_STAGE7_A2_ADDR, MOD_PARAMEQ7_ALG0_STAGE7_A1_ADDR,
                       fs,
@@ -1589,7 +1602,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq08 );
     channel->addPeq( peq08 );
 
-    peq09 = new QPeq( 6.0, 9000.0, 2.0,
+    peq09 = new QPeq( 0.0, 9000.0, 2.0,
                       MOD_PARAMEQ7_ALG0_STAGE8_B2_ADDR, MOD_PARAMEQ7_ALG0_STAGE8_B1_ADDR, MOD_PARAMEQ7_ALG0_STAGE8_B0_ADDR,
                       MOD_PARAMEQ7_ALG0_STAGE8_A2_ADDR, MOD_PARAMEQ7_ALG0_STAGE8_A1_ADDR,
                       fs,
@@ -1599,7 +1612,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq09 );
     channel->addPeq( peq09 );
 
-    peq10 = new QPeq( -6.0, 10000.0, 2.0,
+    peq10 = new QPeq( 0.0, 10000.0, 2.0,
                       MOD_PARAMEQ7_ALG0_STAGE9_B2_ADDR, MOD_PARAMEQ7_ALG0_STAGE9_B1_ADDR, MOD_PARAMEQ7_ALG0_STAGE9_B0_ADDR,
                       MOD_PARAMEQ7_ALG0_STAGE9_A2_ADDR, MOD_PARAMEQ7_ALG0_STAGE9_A1_ADDR,
                       fs,
@@ -1609,7 +1622,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq10 );
     channel->addPeq( peq10 );
 
-    hshelv = new QHighShelv( 6.0, 5000.0, 1.0,
+    hshelv = new QHighShelv( 0.0, 5000.0, 1.0,
                            MOD_HIGHSHELV7_ALG0_STAGE0_B2_ADDR, MOD_HIGHSHELV7_ALG0_STAGE0_B1_ADDR, MOD_HIGHSHELV7_ALG0_STAGE0_B0_ADDR,
                            MOD_HIGHSHELV7_ALG0_STAGE0_A2_ADDR, MOD_HIGHSHELV7_ALG0_STAGE0_A1_ADDR,
                            fs,
@@ -1632,6 +1645,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                       channel );
     layout->addWidget( lp );
     channel->addDspBlock( lp );
+    lp->setBypassed( true );
 
     phase = new QPhase( 1000.0, 1.0,
                       MOD_PHASE7_ALG0_STAGE0_B2_ADDR, MOD_PHASE7_ALG0_STAGE0_B1_ADDR, MOD_PHASE7_ALG0_STAGE0_B0_ADDR,
@@ -1719,8 +1733,9 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                         channel );
     layout->addWidget( hp );
     channel->addDspBlock( hp );
+    hp->setBypassed( true );
 
-    lshelv = new QLowShelv( 6.0, 100.0, 1.0,
+    lshelv = new QLowShelv( 0.0, 100.0, 1.0,
                             MOD_LOWSHELV8_ALG0_STAGE0_B2_ADDR, MOD_LOWSHELV8_ALG0_STAGE0_B1_ADDR, MOD_LOWSHELV8_ALG0_STAGE0_B0_ADDR,
                             MOD_LOWSHELV8_ALG0_STAGE0_A2_ADDR, MOD_LOWSHELV8_ALG0_STAGE0_A1_ADDR,
                             fs,
@@ -1729,7 +1744,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     layout->addWidget( lshelv );
     channel->addDspBlock( lshelv );
 
-    peq01 = new QPeq( 6.0, 1000.0, 1.0,
+    peq01 = new QPeq( 0.0, 1000.0, 1.0,
                       MOD_PARAMEQ8_ALG0_STAGE0_B2_ADDR, MOD_PARAMEQ8_ALG0_STAGE0_B1_ADDR, MOD_PARAMEQ8_ALG0_STAGE0_B0_ADDR,
                       MOD_PARAMEQ8_ALG0_STAGE0_A2_ADDR, MOD_PARAMEQ8_ALG0_STAGE0_A1_ADDR,
                       fs,
@@ -1739,7 +1754,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq01 );
     channel->addPeq( peq01 );
 
-    peq02 = new QPeq( -6.0, 2000.0, 2.0,
+    peq02 = new QPeq( 0.0, 2000.0, 2.0,
                       MOD_PARAMEQ8_ALG0_STAGE1_B2_ADDR, MOD_PARAMEQ8_ALG0_STAGE1_B1_ADDR, MOD_PARAMEQ8_ALG0_STAGE1_B0_ADDR,
                       MOD_PARAMEQ8_ALG0_STAGE1_A2_ADDR, MOD_PARAMEQ8_ALG0_STAGE1_A1_ADDR,
                       fs,
@@ -1749,7 +1764,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq02 );
     channel->addPeq( peq02 );
 
-    peq03 = new QPeq( 6.0, 3000.0, 2.0,
+    peq03 = new QPeq( 0.0, 3000.0, 2.0,
                       MOD_PARAMEQ8_ALG0_STAGE2_B2_ADDR, MOD_PARAMEQ8_ALG0_STAGE2_B1_ADDR, MOD_PARAMEQ8_ALG0_STAGE2_B0_ADDR,
                       MOD_PARAMEQ8_ALG0_STAGE2_A2_ADDR, MOD_PARAMEQ8_ALG0_STAGE2_A1_ADDR,
                       fs,
@@ -1759,7 +1774,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq03 );
     channel->addPeq( peq03 );
 
-    peq04 = new QPeq( -6.0, 4000.0, 2.0,
+    peq04 = new QPeq( 0.0, 4000.0, 2.0,
                       MOD_PARAMEQ8_ALG0_STAGE3_B2_ADDR, MOD_PARAMEQ8_ALG0_STAGE3_B1_ADDR, MOD_PARAMEQ8_ALG0_STAGE3_B0_ADDR,
                       MOD_PARAMEQ8_ALG0_STAGE3_A2_ADDR, MOD_PARAMEQ8_ALG0_STAGE3_A1_ADDR,
                       fs,
@@ -1769,7 +1784,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq04 );
     channel->addPeq( peq04 );
 
-    peq05 = new QPeq( 6.0, 5000.0, 2.0,
+    peq05 = new QPeq( 0.0, 5000.0, 2.0,
                       MOD_PARAMEQ8_ALG0_STAGE4_B2_ADDR, MOD_PARAMEQ8_ALG0_STAGE4_B1_ADDR, MOD_PARAMEQ8_ALG0_STAGE4_B0_ADDR,
                       MOD_PARAMEQ8_ALG0_STAGE4_A2_ADDR, MOD_PARAMEQ8_ALG0_STAGE4_A1_ADDR,
                       fs,
@@ -1779,7 +1794,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq05 );
     channel->addPeq( peq05 );
 
-    peq06 = new QPeq( -6.0, 6000.0, 2.0,
+    peq06 = new QPeq( 0.0, 6000.0, 2.0,
                       MOD_PARAMEQ8_ALG0_STAGE5_B2_ADDR, MOD_PARAMEQ8_ALG0_STAGE5_B1_ADDR, MOD_PARAMEQ8_ALG0_STAGE5_B0_ADDR,
                       MOD_PARAMEQ8_ALG0_STAGE5_A2_ADDR, MOD_PARAMEQ8_ALG0_STAGE5_A1_ADDR,
                       fs,
@@ -1789,7 +1804,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq06 );
     channel->addPeq( peq06 );
 
-    peq07 = new QPeq( 6.0, 7000.0, 2.0,
+    peq07 = new QPeq( 0.0, 7000.0, 2.0,
                       MOD_PARAMEQ8_ALG0_STAGE6_B2_ADDR, MOD_PARAMEQ8_ALG0_STAGE6_B1_ADDR, MOD_PARAMEQ8_ALG0_STAGE6_B0_ADDR,
                       MOD_PARAMEQ8_ALG0_STAGE6_A2_ADDR, MOD_PARAMEQ8_ALG0_STAGE6_A1_ADDR,
                       fs,
@@ -1799,7 +1814,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq07 );
     channel->addPeq( peq07 );
 
-    peq08 = new QPeq( -6.0, 8000.0, 2.0,
+    peq08 = new QPeq( 0.0, 8000.0, 2.0,
                       MOD_PARAMEQ8_ALG0_STAGE7_B2_ADDR, MOD_PARAMEQ8_ALG0_STAGE7_B1_ADDR, MOD_PARAMEQ8_ALG0_STAGE7_B0_ADDR,
                       MOD_PARAMEQ8_ALG0_STAGE7_A2_ADDR, MOD_PARAMEQ8_ALG0_STAGE7_A1_ADDR,
                       fs,
@@ -1809,7 +1824,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq08 );
     channel->addPeq( peq08 );
 
-    peq09 = new QPeq( 6.0, 9000.0, 2.0,
+    peq09 = new QPeq( 0.0, 9000.0, 2.0,
                       MOD_PARAMEQ8_ALG0_STAGE8_B2_ADDR, MOD_PARAMEQ8_ALG0_STAGE8_B1_ADDR, MOD_PARAMEQ8_ALG0_STAGE8_B0_ADDR,
                       MOD_PARAMEQ8_ALG0_STAGE8_A2_ADDR, MOD_PARAMEQ8_ALG0_STAGE8_A1_ADDR,
                       fs,
@@ -1819,7 +1834,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq09 );
     channel->addPeq( peq09 );
 
-    peq10 = new QPeq( -6.0, 10000.0, 2.0,
+    peq10 = new QPeq( 0.0, 10000.0, 2.0,
                       MOD_PARAMEQ8_ALG0_STAGE9_B2_ADDR, MOD_PARAMEQ8_ALG0_STAGE9_B1_ADDR, MOD_PARAMEQ8_ALG0_STAGE9_B0_ADDR,
                       MOD_PARAMEQ8_ALG0_STAGE9_A2_ADDR, MOD_PARAMEQ8_ALG0_STAGE9_A1_ADDR,
                       fs,
@@ -1829,7 +1844,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     channel->addDspBlock( peq10 );
     channel->addPeq( peq10 );
 
-    hshelv = new QHighShelv( 6.0, 5000.0, 1.0,
+    hshelv = new QHighShelv( 0.0, 5000.0, 1.0,
                            MOD_HIGHSHELV8_ALG0_STAGE0_B2_ADDR, MOD_HIGHSHELV8_ALG0_STAGE0_B1_ADDR, MOD_HIGHSHELV8_ALG0_STAGE0_B0_ADDR,
                            MOD_HIGHSHELV8_ALG0_STAGE0_A2_ADDR, MOD_HIGHSHELV8_ALG0_STAGE0_A1_ADDR,
                            fs,
@@ -1852,6 +1867,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
                       channel );
     layout->addWidget( lp );
     channel->addDspBlock( lp );
+    lp->setBypassed( true );
 
     phase = new QPhase( 1000.0, 1.0,
                       MOD_PHASE8_ALG0_STAGE0_B2_ADDR, MOD_PHASE8_ALG0_STAGE0_B1_ADDR, MOD_PHASE8_ALG0_STAGE0_B0_ADDR,

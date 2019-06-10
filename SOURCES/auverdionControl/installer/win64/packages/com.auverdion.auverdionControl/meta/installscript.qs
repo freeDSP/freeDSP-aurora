@@ -46,6 +46,8 @@ Component.prototype.createOperations = function()
         // call the base create operations function
         component.createOperations();
         component.addOperation("Execute", "@TargetDir@\\vc_redist.x64.exe", "/quiet", "/norestart");
+
+        component.addOperation("CreateShortcut", "@TargetDir@/auverdionControl.exe", "@StartMenuDir@/auverdionControl.lnk");
     } catch (e) {
         console.log(e);
     }
