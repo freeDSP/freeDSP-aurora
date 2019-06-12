@@ -1,0 +1,4 @@
+(sym_lib_table
+  (lib (name rk)(type Legacy)(uri /Users/rkn/Documents/KiCAD/lib/rk.lib)(options "")(descr ""))
+  (lib (name rkdev)(type Legacy)(uri /Users/rkn/Documents/KiCAD/lib/rkdev.lib)(options "")(descr ""))
+)
