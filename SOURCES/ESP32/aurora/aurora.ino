@@ -9,9 +9,15 @@
 #include "AK4458.h"
 #include "AK5558.h"
 
-#define I2C_SDA_PIN 16
-#define I2C_SCL_PIN 4
-#define I2C_SCL_DSP_PIN 33
+// Configuration for hardware rev. 0.9.x
+//#define I2C_SDA_PIN 16
+//#define I2C_SCL_PIN 4
+//#define I2C_SCL_DSP_PIN 33
+
+// Configuration for hardware rev. 1.0.0
+#define I2C_SDA_PIN 17
+#define I2C_SCL_PIN 16
+
 
 #define USBRESET 17
 
@@ -62,28 +68,28 @@ int cntrPackets = 0;
 uint32_t totalBytesReceived;
 String receivedPostRequest;
 
-TwoWire WireDSP(1);
+//TwoWire WireDSP(1);
 
 //==============================================================================
 /*! 
  */
 void ADAU1452_WRITE_REGISTER( uint16_t reg, byte msb, byte lsb ) 
 {
-  WireDSP.beginTransmission( DSP_ADDR );
+  Wire.beginTransmission( DSP_ADDR );
 
-  WireDSP.write( (byte)( (reg >> 8) & 0xFF ) );
-  WireDSP.write( (byte)(  reg       & 0xFF ) );
+  Wire.write( (byte)( (reg >> 8) & 0xFF ) );
+  Wire.write( (byte)(  reg       & 0xFF ) );
   //Serial.print( reg, HEX );
   //Serial.print( " " );
 
-  WireDSP.write( msb );
+  Wire.write( msb );
   //Serial.print( msb, HEX );
   //Serial.print( ", " );
 
-  WireDSP.write( lsb );
+  Wire.write( lsb );
   //Serial.println( lsb, HEX );
   
-  WireDSP.endTransmission( true );
+  Wire.endTransmission( true );
 }
 
 //==============================================================================
@@ -93,28 +99,28 @@ void ADAU1452_WRITE_BLOCK( uint16_t regaddr, byte val[], uint16_t len )
 {
   for( uint16_t ii = 0; ii < len; ii = ii + 4 )
   {
-    WireDSP.beginTransmission( DSP_ADDR );
-    WireDSP.write( (byte)( (regaddr >> 8) & 0xFF ) );
-    WireDSP.write( (byte)(  regaddr       & 0xFF ) );
+    Wire.beginTransmission( DSP_ADDR );
+    Wire.write( (byte)( (regaddr >> 8) & 0xFF ) );
+    Wire.write( (byte)(  regaddr       & 0xFF ) );
     //Serial.print( regaddr, HEX );
     //Serial.print( " " );
 
-    WireDSP.write( (byte)( val[ii] & 0xFF ) );
+    Wire.write( (byte)( val[ii] & 0xFF ) );
     //Serial.print( val[ii], HEX );
     //Serial.print( ", " );
 
-    WireDSP.write( (byte)( val[ii+1] & 0xFF ) );
+    Wire.write( (byte)( val[ii+1] & 0xFF ) );
     //Serial.print( val[ii+1], HEX );
     //Serial.print( ", " );
 
-    WireDSP.write( (byte)( val[ii+2] & 0xFF ) );
+    Wire.write( (byte)( val[ii+2] & 0xFF ) );
     //Serial.print( val[ii+2], HEX );
     //Serial.print( ", " );
 
-    WireDSP.write( (byte)( val[ii+3] & 0xFF ) );
+    Wire.write( (byte)( val[ii+3] & 0xFF ) );
     //Serial.println( val[ii+3], HEX );   
 
-    WireDSP.endTransmission( true );
+    Wire.endTransmission( true );
   }
 }
 
@@ -650,7 +656,7 @@ void setup()
   //  Serial.println( "[ERROR] Could not set up mDNS responder!" );   
 
   WiFi.disconnect();
-  WiFi.mode( WIFI_AP );
+  WiFi.mode( WIFI_AP_STA );
   WiFi.setHostname( "freeDSP-aurora" );
   // Start access point
   WiFi.softAP( "AP-freeDSP-aurora" );
@@ -665,12 +671,12 @@ void setup()
   WiFi.begin( Settings.ssid.c_str(), Settings.password.c_str() );
 
   int cntrConnect = 0;
-  /*while( WiFi.waitForConnectResult() != WL_CONNECTED && cntrConnect < 3 )
-  {
-    Serial.println("WiFi Connection Failed! Trying again..");
-    //delay(1000);
-    cntrConnect++;
-  }*/
+  //while( WiFi.waitForConnectResult() != WL_CONNECTED && cntrConnect < 3 )
+  //{
+  //  Serial.println("WiFi Connection Failed! Trying again..");
+  //  //delay(1000);
+  //  cntrConnect++;
+  //}
   
   // print the ESP32 IP-Address
   Serial.print( "Soft AP IP:" );
@@ -688,8 +694,8 @@ void setup()
   Wire.begin( I2C_SDA_PIN, I2C_SCL_PIN );
   Wire.setClock( 100000 );
 
-  WireDSP.begin( I2C_SDA_PIN, I2C_SCL_DSP_PIN );
-  WireDSP.setClock( 100000 );
+  //WireDSP.begin( I2C_SDA_PIN, I2C_SCL_DSP_PIN );
+  //WireDSP.setClock( 100000 );
 
   //----------------------------------------------------------------------------
   //--- Download program to DSP

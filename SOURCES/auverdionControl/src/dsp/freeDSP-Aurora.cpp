@@ -204,41 +204,36 @@ bool CFreeDspAurora::finishDspFirmwareWifi( uint32_t totalTransmittedBytes )
   qDebug()<<"---------------------------------------------------------------";
   qDebug()<<"finishDspFirmwareWifi";
 
-  if( isConnected )
+
+  QString wifiIpHost = getIpAddressWifi();
+
+  QString requestString = QString( "GET /finishdspfw HTTP/1.1\r\n" )
+                        + QString( "Host: " ) + wifiIpHost + QString( "\r\n" )
+                        + QString( "\r\n" );
+  QByteArray request;
+  request.append( requestString );
+  
+  writeRequestWifi( request );
+
+  if( !waitForReplyWifi() )
   {
-    QString wifiIpHost = getIpAddressWifi();
-
-    QString requestString = QString( "GET /finishdspfw HTTP/1.1\r\n" )
-                          + QString( "Host: " ) + wifiIpHost + QString( "\r\n" )
-                          + QString( "\r\n" );
-    QByteArray request;
-    request.append( requestString );
-    
-    writeRequestWifi( request );
-
-    if( !waitForReplyWifi() )
-    {
-      QMessageBox::critical( this, tr("Error"), tr("Uups, could not finish transfer of DSP firmware. Please double check everything, reset DSP and try again."), QMessageBox::Ok ); 
-      return false;
-    }
-    else
-    {
-      qDebug()<<QString( replyDSP );
-      QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
-      uint32_t totalReceivedBytes = listReply.at(4).toUInt();
-      qDebug()<<totalTransmittedBytes<<totalReceivedBytes;
-
-      if( totalTransmittedBytes == totalReceivedBytes )
-        return true;
-      else
-        return false;
-    }
+    QMessageBox::critical( this, tr("Error"), tr("Uups, could not finish transfer of DSP firmware. Please double check everything, reset DSP and try again."), QMessageBox::Ok ); 
+    qDebug()<<"CFreeDspAurora::finishDspFirmwareWifi: Did not receive reply.";
+    return false;
   }
   else
   {
-    qDebug()<<"Not connected to DSP.";
-    return false;
+    qDebug()<<QString( replyDSP );
+    QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+    uint32_t totalReceivedBytes = listReply.at(4).toUInt();
+    qDebug()<<totalTransmittedBytes<<totalReceivedBytes;
+
+    if( totalTransmittedBytes == totalReceivedBytes )
+      return true;
+    else
+      return false;
   }
+
 }
 
 //==============================================================================
