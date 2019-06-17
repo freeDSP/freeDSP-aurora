@@ -3,6 +3,10 @@
 #include <QFile>
 #include <QStandardPaths>
 
+#include "LogFile.h"
+
+CLogFile myLog;
+
 int main(int argc, char *argv[])
 {
   QApplication::setOrganizationName("Raphael Knoop");

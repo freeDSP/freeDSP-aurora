@@ -22,6 +22,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 CONFIG += c++11
 
+CONFIG(debug, debug|release) {
+  message( "Debug" )
+  DEFINES += DEBUG
+} else {
+  message( "Release" )
+  DEFINES += RELEASE
+}
+
 macx {
 include(./vektorraum/vektorraum.pri)
 }
@@ -99,7 +107,8 @@ HEADERS += \
         src/dsp/DspPlugIn.hpp \
         ../SIGMASTUDIO/8channels/8channels_IC_1.h \
         ../SIGMASTUDIO/8channels/8channels_IC_1_REG.h \
-        ../SIGMASTUDIO/8channels/8channels_IC_1_PARAM.h
+        ../SIGMASTUDIO/8channels/8channels_IC_1_PARAM.h \
+        src/LogFile.h
 
 FORMS += \
         MainWindow.ui \
@@ -131,7 +140,6 @@ RESOURCES += \
 
 macx {
   message( "Building for macOS" )
-  #QT += serialport
 
   QMAKE_CFLAGS += -gdwarf-2
   QMAKE_CXXFLAGS += -gdwarf-2
@@ -225,7 +233,6 @@ win32 {
   DEFINES += MATLIB_USE_UINT64
   DEFINES += __NOFFT__
   DEFINES += __NOSNDFILE__
-  #DEFINES += DEMO
 
   RC_ICONS = $${PWD}/rc/appicon.ico
 
