@@ -17,6 +17,8 @@ public:
       delete logfile;
     }
     logfile = new QFile( "auverdionControl.log" );
+    if( logfile->exists() )
+      logfile->remove();
     if( logfile->open( QIODevice::ReadWrite ) )
     {
       ts.setDevice( logfile );

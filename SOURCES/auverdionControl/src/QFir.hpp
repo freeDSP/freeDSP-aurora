@@ -51,6 +51,17 @@ public:
 
 private slots:
 
+protected slots:
+  //============================================================================
+  /*! 
+   *
+   */
+  virtual void updateDsp( void )
+  {
+    updateCoeffs();
+    sendDspParameter();
+  }
+
 private:
   Ui::QFir *ui;
 

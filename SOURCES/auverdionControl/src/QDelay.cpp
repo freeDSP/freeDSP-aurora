@@ -65,7 +65,9 @@ void QDelay::update( tvector<tfloat> f )
 void QDelay::on_doubleSpinBoxDelay_valueChanged( double  )
 {
   emit valueChanged();
-  sendDspParameter();
+  //sendDspParameter();
+  timerDspUpdate.stop();
+  timerDspUpdate.start( DSPUPDATELATENCY );
 }
 
 //==============================================================================

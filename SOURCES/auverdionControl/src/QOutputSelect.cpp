@@ -209,7 +209,7 @@ QByteArray QOutputSelect::getUserParams( void )
 //==============================================================================
 /*!
  */
-void QOutputSelect::setUserParams( QByteArray& userParams, int& idx )
+void QOutputSelect::setUserParams( QByteArray&, int& )
 {
 
 

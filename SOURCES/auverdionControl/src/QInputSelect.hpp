@@ -69,6 +69,16 @@ public:
 private slots:
   void on_comboBoxInput_currentIndexChanged( int  );
 
+protected slots:
+  //============================================================================
+  /*! 
+   *
+   */
+  virtual void updateDsp( void )
+  {
+
+  }
+
 private:
   Ui::QInputSelect *ui;
 

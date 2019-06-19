@@ -121,8 +121,10 @@ void QLowShelv::updateCoeffs( void )
 void QLowShelv::on_doubleSpinBoxGain_valueChanged( double  )
 {
   updateCoeffs();
-  sendDspParameter();
+  //sendDspParameter();
   emit valueChanged();
+  timerDspUpdate.stop();
+  timerDspUpdate.start( DSPUPDATELATENCY );
 }
 
 //==============================================================================
@@ -132,8 +134,10 @@ void QLowShelv::on_doubleSpinBoxGain_valueChanged( double  )
 void QLowShelv::on_doubleSpinBoxFc_valueChanged( double  )
 {
   updateCoeffs();
-  sendDspParameter();
+  //sendDspParameter();
   emit valueChanged();
+  timerDspUpdate.stop();
+  timerDspUpdate.start( DSPUPDATELATENCY );
 }
 
 //==============================================================================
@@ -145,6 +149,8 @@ void QLowShelv::on_doubleSpinBoxS_valueChanged( double  )
   updateCoeffs();
   //sendDspParameter();
   emit valueChanged();
+  timerDspUpdate.stop();
+  timerDspUpdate.start( DSPUPDATELATENCY );
 }
 
 //==============================================================================
