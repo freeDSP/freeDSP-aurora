@@ -110,9 +110,9 @@
 //:
 /***** Defines relating to USB descriptors etc *****/
 //:usb_defs
-#define VENDOR_ID          (0x20B1) /* XMOS VID */
-#define PID_AUDIO_2        (0x0008) /* SKC_SU1 USB Audio Reference Design PID */
-#define PID_AUDIO_1        (0x0009) /* SKC_SU1 Audio Reference Design PID */
+#define VENDOR_ID          (0x1209) /* pid.codes VID */
+#define PID_AUDIO_2        (0x4000) /* freeDSP-aurora PID */
+#define PID_AUDIO_1        (0x4000) /* freeDSP-aurora PID */
 //:
 #define PRODUCT_STR        "freeDSP-aurora"
 #define VENDOR_STR         "XMOS"
