@@ -94,6 +94,17 @@ private slots:
   void on_showContextMenu( const QPoint &pos );
   void on_importRewPeqs( void );
 
+protected slots:
+  //============================================================================
+  /*! 
+   *
+   */
+  virtual void updateDsp( void )
+  {
+    updateCoeffs();
+    sendDspParameter();
+  }
+
 private:
   Ui::QPeq *ui;
   Vektorraum::tfloat fc;

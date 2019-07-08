@@ -22,10 +22,12 @@
 #include "QInputSelect.hpp"
 #include "QOutputSelect.hpp"
 #include "dialoglicense.hpp"
+#include "QPreset.h"
 
 #include "vektorraum.h"
 
 #include "freeDSP-Aurora.hpp"
+#include "DspPlugIn.hpp"
 
 class QTcpSocket;
 class QNetworkSession;
@@ -39,20 +41,19 @@ class MainWindow : public QMainWindow
   Q_OBJECT
 
 public:
-  enum twifistatus
-  {
-    STATUS_WIFI_IDLE,
-    STATUS_WIFI_RECEIVE_USERPARAM
-  };
-
-public:
   explicit MainWindow(QWidget *parent = nullptr);
   ~MainWindow();
 
+private:
   //============================================================================
   /*!
    */
   void rotateIconConnect( int rotation );
+
+  //============================================================================
+  /*!
+   */
+  void updatePresetGui( int p, QByteArray& userparams );
 
 
 public slots:
@@ -73,6 +74,8 @@ private slots:
 
   void updateWaitingForConnect( void );
 
+  void on_tabPresets_currentChanged(int index);
+
 signals:
   void replyFinished( void );  
 
@@ -84,12 +87,16 @@ private:
   unsigned int numChannels;
 
   CFreeDspAurora dsp;
+  CDspPlugin* dspPlugin[NUMPRESETS];
 
   QString portName;
-  QList<QGain*> listOutputGains;
 
   int currentWaitRotation = 0;
   QMessageBox* msgBox;
+
+  QPreset* presets[NUMPRESETS];
+  int currentPreset = 0;
+  QByteArray presetUserParams[NUMPRESETS];
 };
 
 #endif // MAINWINDOW_HPP

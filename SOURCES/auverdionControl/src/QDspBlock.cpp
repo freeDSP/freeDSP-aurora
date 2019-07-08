@@ -18,6 +18,9 @@ QDspBlock::QDspBlock(QWidget *parent) :
   #endif
 
   type = NONE;
+
+  timerDspUpdate.setSingleShot( true );
+  connect( &timerDspUpdate, SIGNAL(timeout()), this, SLOT(updateDsp()) );
 }
 
 QDspBlock::~QDspBlock()

@@ -849,8 +849,10 @@ void QCrossover::updateCoeffs( void )
 void QCrossover::on_doubleSpinBoxFcHp_valueChanged( double  )
 {
   updateCoeffs();
-  sendDspParameter();
+  //sendDspParameter();
   emit valueChanged();
+  timerDspUpdate.stop();
+  timerDspUpdate.start( DSPUPDATELATENCY );
 }
 
 //------------------------------------------------------------------------------

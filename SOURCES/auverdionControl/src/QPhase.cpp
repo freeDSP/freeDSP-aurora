@@ -125,8 +125,10 @@ void QPhase::updateCoeffs( void )
 void QPhase::on_checkBoxInvert_stateChanged( int )
 {
   updateCoeffs();
-  sendDspParameter();
+  //sendDspParameter();
   emit valueChanged();
+  timerDspUpdate.stop();
+  timerDspUpdate.start( DSPUPDATELATENCY );
 }
 
 //==============================================================================
@@ -136,8 +138,10 @@ void QPhase::on_checkBoxInvert_stateChanged( int )
 void QPhase::on_doubleSpinBoxFc_valueChanged( double  )
 {
   updateCoeffs();
-  sendDspParameter();
+  //sendDspParameter();
   emit valueChanged();
+  timerDspUpdate.stop();
+  timerDspUpdate.start( DSPUPDATELATENCY );
 }
 
 //==============================================================================
@@ -147,8 +151,10 @@ void QPhase::on_doubleSpinBoxFc_valueChanged( double  )
 void QPhase::on_doubleSpinBoxQ_valueChanged( double  )
 {
   updateCoeffs();
-  sendDspParameter();
+  //sendDspParameter();
   emit valueChanged();
+  timerDspUpdate.stop();
+  timerDspUpdate.start( DSPUPDATELATENCY );
 }
 
 //==============================================================================
@@ -262,8 +268,6 @@ void QPhase::setUserParams( QByteArray& userParams, int& idx )
     ui->pushButtonBypass->blockSignals( true );
     ui->pushButtonBypass->setChecked( bypass );
     ui->pushButtonBypass->blockSignals( false );
-    
-
   }
   else
     qDebug()<<"QPhase::setUserParams: Not enough data";

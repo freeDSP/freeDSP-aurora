@@ -75,6 +75,17 @@ private slots:
   void on_doubleSpinBoxS_valueChanged( double  );
   void on_pushButtonBypass_clicked();
 
+protected slots:
+  //============================================================================
+  /*! 
+   *
+   */
+  virtual void updateDsp( void )
+  {
+    updateCoeffs();
+    sendDspParameter();
+  }
+
 private:
   Ui::QHighShelv *ui;
   Vektorraum::tfloat fc;

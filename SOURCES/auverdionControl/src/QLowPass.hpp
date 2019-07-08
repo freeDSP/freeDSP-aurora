@@ -118,6 +118,17 @@ private slots:
 
   void on_pushButtonBypass_clicked();
 
+protected slots:
+  //============================================================================
+  /*! 
+   *
+   */
+  virtual void updateDsp( void )
+  {
+    updateCoeffs();
+    sendDspParameter();
+  }
+
 private:
   Ui::QLowPass *ui;
 

@@ -29,6 +29,8 @@
 // DAC address on I2C bus
 #define AK4458_I2C_ADDR    (0x20>>1)
 
+#define NUMPRESETS (4)
+
 enum twifistatus
 {
   STATE_WIFI_IDLE,
@@ -38,7 +40,8 @@ enum twifistatus
   STATE_WIFI_RECEIVE_CONFIG,
   STATE_WIFI_RECEIVE_PID,
   STATE_WIFI_RECEIVE_DSPPARAM,
-  STATE_WIFI_RECEIVE_AID
+  STATE_WIFI_RECEIVE_AID,
+  STATE_WIFI_RECEIVE_PRESETID
 };
 
 enum taddonid
@@ -55,6 +58,7 @@ struct tSettings
   String ssid;
   String password;
   uint32_t addonid;
+  byte currentPreset;
 };
 
 tSettings Settings;
@@ -76,6 +80,9 @@ twifistatus wifiStatus = STATE_WIFI_IDLE;
 int cntrPackets = 0;
 uint32_t totalBytesReceived;
 String receivedPostRequest;
+
+String presetUsrparamFile[4] = { "/usrparam.001", "/usrparam.002", "/usrparam.003", "/usrparam.004" };
+String presetDspparamFile[4] = { "/dspparam.001", "/dspparam.002", "/dspparam.003", "/dspparam.004" };
 
 //TwoWire WireDSP(1);
 
@@ -217,6 +224,7 @@ void saveSettings( void )
   jsonSettings["pid"] = Settings.pid;
   jsonSettings["ssid"] = Settings.ssid; // max 32 charachters
   jsonSettings["pwd"] = Settings.password;  // max 64 charachters
+  jsonSettings["preset"] = Settings.currentPreset;
   // Serialize JSON to file
   if( serializeJson( jsonSettings, fileSettings ) == 0 )
     Serial.println( "Failed to write to file" );
@@ -340,12 +348,15 @@ void uploadDspFirmware( void )
  */
 void uploadDspParameter( void )
 {
-  Serial.print( "Loading dsp parameter preset......" );
+  Serial.print( "Loading dsp parameter preset " + presetDspparamFile[Settings.currentPreset] + "......" );
 
-  fileDspParams = SPIFFS.open( "/dspparam.hex" );
+  fileDspParams = SPIFFS.open( presetDspparamFile[Settings.currentPreset] );
 
   if( fileDspParams )
   {
+    Serial.print( "File size:");
+    Serial.println( fileDspParams.size() );
+
     int file_size = fileDspParams.size();
 
     int cntr = 0;
@@ -385,7 +396,7 @@ void uploadDspParameter( void )
 
   }
   else
-    Serial.println( "\n[ERROR] Failed to open file dspinit.hex" );
+    Serial.println( "\n[ERROR] Failed to open file " + presetDspparamFile[Settings.currentPreset] );
   Serial.print( "[ok]\n" );
 }
 
@@ -602,8 +613,7 @@ void setup()
     Settings.ssid = jsonSettings["ssid"].as<String>();
     Settings.password = jsonSettings["pwd"].as<String>();
     Settings.addonid = jsonSettings["aid"];
-    Serial.print( "pid: " );
-    Serial.println( Settings.pid, HEX );
+    Settings.currentPreset = jsonSettings["preset"];
     fileSettings.close();
   }
   else
@@ -618,6 +628,7 @@ void setup()
     jsonSettings["ssid"] = "";
     jsonSettings["pwd"] = "";
     jsonSettings["aid"] = ADDON_CUSTOM;
+    jsonSettings["preset"] = 0x00;
     // Serialize JSON to file
     if( serializeJson( jsonSettings, fileSettings ) == 0 )
       Serial.println( "Failed to write to file" );
@@ -897,7 +908,7 @@ void handleHttpRequest()
                   uint8_t rxByte = (uint8_t)strtoul( str.c_str(), NULL, 16 );
                   size_t len = fileDspParams.write( &rxByte, 1 );
                   if( len != 1 )
-                    Serial.println( "[ERROR] Writing to dspparam.hex" );
+                    Serial.println( "[ERROR] Writing to " + presetDspparamFile[Settings.currentPreset] );
                   offset += 2;
                 }
                 Serial.println("OK");
@@ -939,7 +950,7 @@ void handleHttpRequest()
                   uint8_t rxByte = (uint8_t)strtoul( str.c_str(), NULL, 16 );
                   size_t len = fileUserParams.write( &rxByte, 1 );
                   if( len != 1 )
-                    Serial.println( "[ERROR] Writing to usrparam.hex" );
+                    Serial.println( "[ERROR] Writing to " + presetUsrparamFile[Settings.currentPreset] );
                   offset += 2;
                 }
                 Serial.println("OK");
@@ -962,6 +973,9 @@ void handleHttpRequest()
               //currentLine = "";
             }
             
+            //-----------------------------------------------------------------
+            //--- 
+            //-----------------------------------------------------------------
             else if( wifiStatus == STATE_WIFI_RECEIVE_CONFIG )
             {
               receivedPostRequest += currentLine;
@@ -1023,6 +1037,9 @@ void handleHttpRequest()
                 
             }
 
+            //-----------------------------------------------------------------
+            //--- 
+            //-----------------------------------------------------------------
             else if( wifiStatus == STATE_WIFI_RECEIVE_PID )
             {
               receivedPostRequest += currentLine;
@@ -1051,6 +1068,9 @@ void handleHttpRequest()
               }
             }
 
+            //-----------------------------------------------------------------
+            //--- Receiving new AddOn-ID
+            //-----------------------------------------------------------------
             else if( wifiStatus == STATE_WIFI_RECEIVE_AID )
             {
               receivedPostRequest += currentLine;
@@ -1065,6 +1085,39 @@ void handleHttpRequest()
                 Serial.println( Settings.addonid, HEX );
 
                 saveSettings();
+
+                String httpResponse = "";
+                httpResponse += "HTTP/1.1 200 OK\r\n";
+                httpResponse += "Content-type:text/plain\r\n\r\n";
+                httpResponse += "ACK";
+                httpResponse += "\r\n";
+                client.println( httpResponse );
+
+                client.stop();
+                waitForData = false;
+                wifiStatus = STATE_WIFI_IDLE;
+              }
+            }
+            
+            //-----------------------------------------------------------------
+            //--- Receiving new preset selection
+            //-----------------------------------------------------------------
+            else if( wifiStatus == STATE_WIFI_RECEIVE_PRESETID )
+            {
+              receivedPostRequest += currentLine;
+
+              if( receivedPostRequest.length() > contentLength )
+              {
+                receivedPostRequest = receivedPostRequest.substring( 0, receivedPostRequest.length()-1 );
+
+                Settings.currentPreset = (byte)strtoul( receivedPostRequest.c_str(), NULL, 16 );
+                if( Settings.currentPreset > 3 )
+                  Settings.currentPreset = 3;
+
+                Serial.print( "Preset: " );
+                Serial.println( Settings.currentPreset, HEX );
+
+                uploadDspParameter();
 
                 String httpResponse = "";
                 httpResponse += "HTTP/1.1 200 OK\r\n";
@@ -1167,20 +1220,31 @@ void handleHttpRequest()
               fileDspProgram.flush();
               fileDspProgram.close();
 
-              if( SPIFFS.exists( "/dspparam.hex" ) )
+              if( SPIFFS.exists( presetDspparamFile[Settings.currentPreset] ) )
               {
-                if( SPIFFS.remove( "/dspparam.hex" ) )
-                  Serial.println( "dspparam.hex deleted" );
+                if( SPIFFS.remove( presetDspparamFile[Settings.currentPreset] ) )
+                  Serial.println( presetDspparamFile[Settings.currentPreset] + " deleted" );
                 else
-                  Serial.println( "[ERROR] Deleting dspparam.hex failed." );
+                  Serial.println( "[ERROR] Deleting " + presetDspparamFile[Settings.currentPreset] + " failed." );
               }
 
-              if( SPIFFS.exists( "/usrparam.hex" ) )
+              for( int p = 0; p < NUMPRESETS; p++ )
               {
-                if( SPIFFS.remove( "/usrparam.hex" ) )
-                  Serial.println( "usrparam.hex deleted" );
-                else
-                  Serial.println( "[ERROR] Deleting usrparam.hex" );
+                if( SPIFFS.exists( presetDspparamFile[p] ) )
+                {
+                  if( SPIFFS.remove( presetDspparamFile[p] ) )
+                    Serial.println( presetDspparamFile[p] + " deleted" );
+                  else
+                    Serial.println( "[ERROR] Deleting " + presetDspparamFile[p] );
+                }
+
+                if( SPIFFS.exists( presetUsrparamFile[p] ) )
+                {
+                  if( SPIFFS.remove( presetUsrparamFile[p] ) )
+                    Serial.println( presetUsrparamFile[p] + " deleted" );
+                  else
+                    Serial.println( "[ERROR] Deleting " + presetUsrparamFile[p] );
+                }
               }
 
               String httpResponse = "";
@@ -1206,19 +1270,24 @@ void handleHttpRequest()
               receivedPostRequest = "";
               if( wifiStatus != STATE_WIFI_RECEIVE_DSPPARAM )                   // start a new transfer
               {
-                if( SPIFFS.exists( "/dspparam.hex" ) )
+                String fileName = presetDspparamFile[Settings.currentPreset];
+
+                if( SPIFFS.exists( fileName ) )
                 {
-                  if( SPIFFS.remove( "/dspparam.hex" ) )
-                    Serial.println( "dspparam.hex deleted" );
+                  if( SPIFFS.remove( fileName ) )
+                    Serial.println( fileName + " deleted" );
                   else
-                    Serial.println( "[ERROR] Deleting dspparam.hex failed." );
+                    Serial.println( "[ERROR] Deleting " + fileName );
                 }
 
-                fileDspParams = SPIFFS.open( "/dspparam.hex", "w" );
+                Serial.println( "Writing " + fileName );
+
+                //fileDspParams = SPIFFS.open( "/dspparam.hex", "w" );
+                fileDspParams = SPIFFS.open( fileName, "w" );
                 if( !fileDspParams )
-                  Serial.println( "[ERROR] Opening dspparam.hex failed." );
+                  Serial.println( "[ERROR] Opening " + fileName + " failed." );
                 else
-                  Serial.println( "Opened dspparam.hex" );
+                  Serial.println( "Opened " + fileName );
 
                 totalBytesReceived = 0;
               }
@@ -1259,19 +1328,22 @@ void handleHttpRequest()
               receivedPostRequest = "";
               if( wifiStatus != STATE_WIFI_RECEIVE_USERPARAM )                  // start a new transfer
               {
-                if( SPIFFS.exists( "/usrparam.hex" ) )
+                String fileName = presetUsrparamFile[Settings.currentPreset];
+
+                if( SPIFFS.exists( fileName ) )
                 {
-                  if( SPIFFS.remove( "/usrparam.hex" ) )
-                    Serial.println( "usrparam.hex deleted" );
+                  if( SPIFFS.remove( fileName ) )
+                    Serial.println( fileName + " deleted" );
                   else
-                    Serial.println( "[ERROR] Deleting usrparam.hex" );
+                    Serial.println( "[ERROR] Deleting " + fileName );
                 }
 
-                fileUserParams = SPIFFS.open( "/usrparam.hex", "w" );
+                Serial.println( "Writing " + fileName );
+                fileUserParams = SPIFFS.open( fileName, "w" );
                 if( !fileUserParams )
-                  Serial.println( "[ERROR] Failed to open usrparam.hex" );
+                  Serial.println( "[ERROR] Failed to open " + fileName );
                 else
-                  Serial.println( "Opened usrparam.hex" );
+                  Serial.println( "Opened " + fileName );
 
                 totalBytesReceived = 0;
               }
@@ -1347,16 +1419,18 @@ void handleHttpRequest()
               //cntrPackets++;
             }
 
+            //-----------------------------------------------------------------
             //--- Request of user parameter file size
+            //-----------------------------------------------------------------
             else if( currentLine.startsWith("GET /sizeuserparam") )
             {
               Serial.println( "GET /sizeuserparam" );
               String httpResponse = "";
               httpResponse += "HTTP/1.1 200 OK\r\n";
               httpResponse += "Content-type:text/plain\r\n\r\n";
-              if( SPIFFS.exists( "/usrparam.hex" ) )
+              if( SPIFFS.exists( presetUsrparamFile[Settings.currentPreset] ) )
               {
-                fileUserParams = SPIFFS.open( "/usrparam.hex", "r" );
+                fileUserParams = SPIFFS.open( presetUsrparamFile[Settings.currentPreset], "r" );
                 httpResponse += String( fileUserParams.size() );
                 fileUserParams.close();
               }
@@ -1370,16 +1444,18 @@ void handleHttpRequest()
               //cntrPackets++;
             }
 
+            //-----------------------------------------------------------------
             //--- Request of user parameter file
+            //-----------------------------------------------------------------
             else if( currentLine.startsWith("GET /userparam") )
             {
               Serial.println( "GET /userparam" );
               String httpResponse = "";
               httpResponse += "HTTP/1.1 200 OK\r\n";
               httpResponse += "Content-type:text/plain\r\n\r\n";
-              if( SPIFFS.exists( "/usrparam.hex" ) )
+              if( SPIFFS.exists( presetUsrparamFile[Settings.currentPreset] ) )
               {
-                fileUserParams = SPIFFS.open( "/usrparam.hex", "r" );
+                fileUserParams = SPIFFS.open( presetUsrparamFile[Settings.currentPreset], "r" );
                 if( fileUserParams )
                 {
                   size_t len = fileUserParams.size();
@@ -1406,7 +1482,9 @@ void handleHttpRequest()
               //cntrPackets++;
             }
 
+            //-----------------------------------------------------------------
             //--- Request of DSP firmware size
+            //-----------------------------------------------------------------
             else if( currentLine.startsWith("GET /sizedspfw") )
             {
               Serial.println( "GET /sizedspfw" );
@@ -1432,7 +1510,9 @@ void handleHttpRequest()
               //cntrPackets++;
             }
 
+            //-----------------------------------------------------------------
             //--- Request of DSP firmware
+            //-----------------------------------------------------------------
             else if( currentLine.startsWith("GET /dspfw") )
             {
               Serial.println( "GET /dspfw" );
@@ -1476,7 +1556,9 @@ void handleHttpRequest()
               //cntrPackets++;
             }
 
+            //-----------------------------------------------------------------
             //--- Receiving new Wifi Configuration
+            //-----------------------------------------------------------------
             else if( currentLine.startsWith("POST /wificonfig") )
             {
               Serial.println( "POST /wificonfig" );
@@ -1486,7 +1568,9 @@ void handleHttpRequest()
               //cntrPackets++;
             }
 
+            //-----------------------------------------------------------------
             //--- Received a ping
+            //-----------------------------------------------------------------
             else if( currentLine.startsWith("GET /ping") )
             {
               Serial.println( "GET /ping" );
@@ -1498,6 +1582,54 @@ void handleHttpRequest()
               client.println( httpResponse );
               client.stop();
               wifiStatus = STATE_WIFI_IDLE;
+              currentLine = "";
+              //cntrPackets++;
+            }
+
+            //-----------------------------------------------------------------
+            //--- Preset select
+            //-----------------------------------------------------------------
+            else if( currentLine.startsWith("POST /preset") )
+            {
+              Serial.println( "POST /preset" );
+              receivedPostRequest = "";
+              wifiStatus = STATE_WIFI_RECEIVE_PRESETID;
+              currentLine = "";
+              //cntrPackets++;
+            }
+
+            //-----------------------------------------------------------------
+            //--- Save preset selection
+            //-----------------------------------------------------------------
+            else if( currentLine.startsWith("POST /savepreset") )
+            {
+              Serial.println( "POST /savepreset" );
+              saveSettings();
+              String httpResponse = "";
+              httpResponse += "HTTP/1.1 200 OK\r\n";
+              httpResponse += "Content-type:text/plain\r\n\r\n";
+              httpResponse += "ACK";
+              httpResponse += "\r\n";
+              client.println( httpResponse );
+              client.stop();
+              wifiStatus = STATE_WIFI_IDLE;
+              currentLine = "";
+              //cntrPackets++;
+            }
+
+            //-----------------------------------------------------------------
+            //--- Request of current preset
+            //-----------------------------------------------------------------
+            else if( currentLine.startsWith("GET /currentpreset") )
+            {
+              Serial.println( "GET /currentpreset" );
+              String httpResponse = "";
+              httpResponse += "HTTP/1.1 200 OK\r\n";
+              httpResponse += "Content-type:text/plain\r\n\r\n";
+              httpResponse += String( Settings.currentPreset );
+              httpResponse += "\r\n";
+              client.println( httpResponse );
+              client.stop();
               currentLine = "";
               //cntrPackets++;
             }
@@ -1543,7 +1675,10 @@ void handleHttpRequest()
   }
 }
 
-
+//==============================================================================
+/* 
+ * Main Loop
+ */
 void loop()
 {
 
@@ -1552,8 +1687,5 @@ void loop()
   ArduinoOTA.handle();
 
   delay( 50 );
-
-   //Wire.beginTransmission( DSP_ADDR );
-   //Wire.endTransmission();
 
 }

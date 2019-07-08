@@ -48,7 +48,16 @@ public:
   bool eventFilter( QObject* object, QEvent* event );
 
 private slots:
-  //void on_comboBoxInput_currentIndexChanged( int  );
+  
+protected slots:
+  //============================================================================
+  /*! 
+   *
+   */
+  virtual void updateDsp( void )
+  {
+
+  }
 
 private:
   Ui::QOutputSelect *ui;

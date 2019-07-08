@@ -2,6 +2,7 @@
 #define QHIGHPASS_HPP
 
 #include <QWidget>
+
 #include "QDspBlock.hpp"
 
 #include "freeDSP-Aurora.hpp"
@@ -116,16 +117,27 @@ private slots:
 
   void on_pushButtonBypass_clicked();
 
+protected slots:
+  //============================================================================
+  /*! 
+   *
+   */
+  virtual void updateDsp( void )
+  {
+    updateCoeffs();
+    sendDspParameter();
+  }
+
 private:
   Ui::QHighPass *ui;
 
   tfilterdesign filterDesign;
-  //Vektorraum::tfloat Q[4];
-  //Vektorraum::tfloat fc[4];
   Vektorraum::tfloat coeffs[4*5];
   uint16_t addr[kNumParams];
   CFreeDspAurora* dsp;
   Vektorraum::tuint stages;
+
+  //QTimer timerDspUpdate;
 };
 
 #endif // QHIGHPASS_HPP

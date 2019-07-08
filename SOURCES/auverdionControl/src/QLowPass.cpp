@@ -757,8 +757,10 @@ void QLowPass::updateCoeffs( void )
 void QLowPass::on_doubleSpinBoxFc_valueChanged( double  )
 {
   updateCoeffs();
-  sendDspParameter();
+  //sendDspParameter();
   emit valueChanged();
+  timerDspUpdate.stop();
+  timerDspUpdate.start( DSPUPDATELATENCY );
 }
 
 //==============================================================================

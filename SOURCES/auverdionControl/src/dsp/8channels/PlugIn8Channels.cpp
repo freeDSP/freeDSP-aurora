@@ -1938,14 +1938,17 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
 /*!
  *
  */
-void CPlugIn8Channels::setMasterVolume( double val )
+void CPlugIn8Channels::setMasterVolume( double val, bool doSend )
 {
   qDebug()<<"CPlugIn8Channels::setMasterVolume";
   qDebug()<<val;
 
-  QByteArray content;
-  content.append( dsp->makeParameterForWifi( MOD_MASTERVOLUME_ALG0_TARGET_ADDR, static_cast<float>(pow( 10.0, val/20.0 )) ) );
-  dsp->sendParameterWifi( content );
+  if( doSend )
+  {
+    QByteArray content;
+    content.append( dsp->makeParameterForWifi( MOD_MASTERVOLUME_ALG0_TARGET_ADDR, static_cast<float>(pow( 10.0, val/20.0 )) ) );
+    dsp->sendParameterWifi( content );
+  }
 }
 
 //==============================================================================
