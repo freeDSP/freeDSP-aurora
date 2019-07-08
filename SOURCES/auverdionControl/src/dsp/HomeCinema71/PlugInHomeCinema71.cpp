@@ -1666,7 +1666,7 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
 /*!
  *
  */
-void CPlugInHomeCinema71::setMasterVolume( double val )
+void CPlugInHomeCinema71::setMasterVolume( double val, bool doSend )
 {
   qDebug()<<"CPlugInHomeCinema71::setMasterVolume not implemented";
 }

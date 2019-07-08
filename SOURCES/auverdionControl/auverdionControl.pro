@@ -53,6 +53,7 @@ INCLUDEPATH += src \
 SOURCES += \
         main.cpp \
         MainWindow.cpp \
+        src/QPreset.cpp \
         src/figure/ccolormap.cpp \
         src/figure/QFigure.cpp \
         src/QDspBlock.cpp \
@@ -79,6 +80,7 @@ SOURCES += \
 
 HEADERS += \
         MainWindow.hpp \
+        src/QPreset.h \
         src/figure/ccolormap.h \
         src/figure/QDialogAxisProperties.h \
         src/figure/QFigure.h \
@@ -123,6 +125,7 @@ FORMS += \
         src/QHighShelv.ui \
         src/QLowShelv.ui  \
         src/QCrossover.ui \
+        src/QPreset.ui \
         src/dialoglicense.ui \
         src/QInputSelect.ui \
         src/QOutputSelect.ui \

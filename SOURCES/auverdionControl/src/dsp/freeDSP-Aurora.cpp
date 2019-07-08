@@ -382,6 +382,49 @@ uint32_t CFreeDspAurora::requestPidWifi( void )
 }
 
 //==============================================================================
+/*! Requests index of current selected preset
+ *
+ */
+int32_t CFreeDspAurora::requestCurrentPresetWifi( void )
+{
+  myLog()<<"---------------------------------------------------------------";
+  myLog()<<"requestCurrentPresetWifi";
+
+  QString wifiIpHost = getIpAddressWifi();
+
+  QString requestString = QString("GET /currentpreset HTTP/1.1\r\nHost: ")
+                        + wifiIpHost
+                        + QString("\r\n\r\n");
+  QByteArray request;
+  request.append( requestString );
+
+  int32_t preset = -1;
+  if( writeRequestWifi( request ) )
+  {
+    if( !waitForReplyWifi() )
+    {
+      myLog()<<"Did not receive index of current preset.";
+      QMessageBox::critical( this, tr("Error"), tr("Uuups, could not receive index of current preset. Please double check everything and try again."), QMessageBox::Ok ); 
+      return -1;
+    }
+    else
+    {
+      QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+      if( listReply.size() > 4 )
+        preset = listReply.at(4).toUInt();
+      myLog()<<"Current preset:"<<preset;  
+    }
+  }
+  else
+  {
+    myLog()<<"Could not connect to DSP";
+    QMessageBox::critical( this, tr("Error"), tr("Uups, could not connect to DSP. Did you switch it on?"), QMessageBox::Ok );
+  }
+  
+  return preset;
+}
+
+//==============================================================================
 /*! Starts the transfer of a user data block.
  *
  * \param content Data block of user data.
@@ -698,7 +741,7 @@ bool CFreeDspAurora::requestDspFirmwareWifi( QByteArray& firmware, QProgressBar*
         while( offset < str.length() )
         {
           bool ok;
-          uint8_t val = str.mid( offset, 2 ).toUInt( &ok, 16 );
+          int8_t val = str.mid( offset, 2 ).toUInt( &ok, 16 );
           firmware.append( val );
           offset += 2;
         }
@@ -888,4 +931,99 @@ void CFreeDspAurora::errorWifi( QAbstractSocket::SocketError )
 void CFreeDspAurora::hostFoundWifi( void )
 {
   myLog()<<"CFreeDspAurora::hostFoundWifi()";
+}
+
+//==============================================================================
+/*! Select preset on DSP
+ *
+ * \param presetid New preset id.
+ */
+bool CFreeDspAurora::selectPresetWifi( int presetid )
+{
+  myLog()<<"---------------------------------------------------------------";
+  myLog()<<"selectPresetWifi";
+
+  if( isConnected )
+  {
+    QString wifiIpHost = getIpAddressWifi();
+
+    QByteArray content;
+    content.append( static_cast<char>(presetid) );
+
+    QString requestString = QString("POST /preset HTTP/1.1\r\n")
+                          + QString("Host: ") + wifiIpHost + QString("\r\n")
+                          + QString("Content-type:text/plain\r\n")
+                          + QString("Content-length: ") +  QString::number( content.size()*2 ) + QString("\r\n")
+                          + QString("\r\n")
+                          + content.toHex()
+                          + QString("\r\n");
+    QByteArray request;
+    request.append( requestString );  
+    
+    writeRequestWifi( request );
+
+    if( !waitForReplyWifi() )
+      return false;
+    else
+    {
+      myLog()<<QString( replyDSP );
+      QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+      if( listReply.at(4) == "ACK" )
+      {
+        return true;
+      }
+      else
+      {
+        myLog()<<"Could not select the preset";
+        QMessageBox::critical( this, tr("Error"), tr("Could not select the preset. Please double-check everything and try again."), QMessageBox::Ok ); 
+        return false;
+      }
+    }
+  }
+  else
+  {
+    myLog()<<"Not connected to DSP.";
+    return false;
+  }
+}
+
+//==============================================================================
+/*! Stores the current selected preset as default.
+ *
+ */
+bool CFreeDspAurora::storePresetSelection( void )
+{
+  myLog()<<"---------------------------------------------------------------";
+  myLog()<<"storePresetSelection";
+
+  QString wifiIpHost = getIpAddressWifi();
+
+  QString requestString = QString("POST /savepreset HTTP/1.1\r\n")
+                        + QString("Host: ") + wifiIpHost + QString("\r\n")
+                        + QString("Content-type:text/plain\r\n")
+                        + QString("Content-length: 0\r\n")
+                        + QString("\r\n")
+                        + QString("\r\n");
+  QByteArray request;
+  request.append( requestString );  
+  
+  writeRequestWifi( request );
+
+  if( !waitForReplyWifi() )
+    return false;
+  else
+  {
+    myLog()<<QString( replyDSP );
+    QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+    if( listReply.at(4) == "ACK" )
+    {
+      return true;
+    }
+    else
+    {
+      myLog()<<"Could not save the preset selection";
+      QMessageBox::critical( this, tr("Error"), tr("Could not save the preset selection. Please double-check everything and try again."), QMessageBox::Ok ); 
+      return false;
+    }
+  }
 }

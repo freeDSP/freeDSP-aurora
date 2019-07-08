@@ -24,6 +24,8 @@ QHighPass::QHighPass( tfilterdesign design, tfloat fc,
                       QWidget *parent ) :
   QDspBlock(parent), ui(new Ui::QHighPass)
 {
+  type = HIGHPASS;
+
   addr[kParamB2_1] = addrB2_1;
   addr[kParamB1_1] = addrB1_1;
   addr[kParamB0_1] = addrB0_1;
@@ -61,7 +63,9 @@ QHighPass::QHighPass( tfilterdesign design, tfloat fc,
   ui->comboBoxType->addItem( "LR 24dB",  kLinkwitzRiley24 );
   ui->comboBoxType->addItem( "LR 36dB",  kLinkwitzRiley36 );
   ui->comboBoxType->addItem( "LR 48dB",  kLinkwitzRiley48 );
-  ui->comboBoxType->setCurrentIndex( design );
+  int index = ui->comboBoxType->findData( design );
+  if ( index != -1 )
+    ui->comboBoxType->setCurrentIndex(index);
   ui->comboBoxType->blockSignals( false );
   ui->doubleSpinBoxFc->blockSignals( true );
   ui->doubleSpinBoxFc->setAttribute( Qt::WA_MacShowFocusRect, 0 );
@@ -70,10 +74,7 @@ QHighPass::QHighPass( tfilterdesign design, tfloat fc,
 
   //ui->pushButtonBypass->setChecked( bypass );
 
-  type = HIGHPASS;
-
-  //timerDspUpdate.setSingleShot( true );
-  //connect( &timerDspUpdate, SIGNAL(timeout()), this, SLOT(updateDsp()) );
+  updateCoeffs();
 }
 
 //==============================================================================
@@ -969,7 +970,7 @@ void QHighPass::setUserParams( QByteArray& userParams, int& idx )
     ui->comboBoxType->blockSignals( true );
     int index = ui->comboBoxType->findData( filterDesign );
     if ( index != -1 )
-      ui->comboBoxType->setCurrentIndex(index);
+      ui->comboBoxType->setCurrentIndex( index );
     ui->comboBoxType->blockSignals( false );
     ui->doubleSpinBoxFc->blockSignals( true );
     ui->doubleSpinBoxFc->setValue( static_cast<double>(fc) );
@@ -1031,13 +1032,3 @@ void QHighPass::setBypassed( bool bypss )
   bypass = bypss;
   ui->pushButtonBypass->setChecked( bypss );
 }
-
-//==============================================================================
-/*! 
- *
- */
-/*void QHighPass::updateDsp( void )
-{
-  updateCoeffs();
-  sendDspParameter();
-}*/

@@ -16,16 +16,16 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QHBoxLayout" name="horizontalLayout_2">
     <item>
-     <widget class="QTabWidget" name="tabChannels">
+     <widget class="QTabWidget" name="tabPresets">
       <property name="tabPosition">
-       <enum>QTabWidget::West</enum>
+       <enum>QTabWidget::South</enum>
       </property>
-      <property name="usesScrollButtons">
-       <bool>true</bool>
+      <property name="currentIndex">
+       <number>0</number>
       </property>
-      <widget class="QWidget" name="tab">
+      <widget class="QWidget" name="tabPresetA">
        <attribute name="title">
-        <string>Tab 1</string>
+        <string>Preset A</string>
        </attribute>
       </widget>
      </widget>
@@ -47,7 +47,7 @@
      </spacer>
     </item>
     <item>
-     <layout class="QVBoxLayout" name="verticalLayoutVolume">
+     <layout class="QVBoxLayout" name="verticalLayout">
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
@@ -133,7 +133,7 @@
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionWrite_to_DSP">
    <property name="icon">
-    <iconset resource="auverdioncontrol.qrc">
+    <iconset resource="auverdionControl.qrc">
      <normaloff>:/upload_128x128.png</normaloff>:/upload_128x128.png</iconset>
    </property>
    <property name="text">
@@ -145,7 +145,7 @@
   </action>
   <action name="actionRead_from_DSP">
    <property name="icon">
-    <iconset resource="auverdioncontrol.qrc">
+    <iconset resource="auverdionControl.qrc">
      <normaloff>:/reload_128x128.png</normaloff>:/reload_128x128.png</iconset>
    </property>
    <property name="text">
@@ -157,7 +157,7 @@
   </action>
   <action name="actionAbout">
    <property name="icon">
-    <iconset resource="auverdioncontrol.qrc">
+    <iconset resource="auverdionControl.qrc">
      <normaloff>:/info_128x128.png</normaloff>:/info_128x128.png</iconset>
    </property>
    <property name="text">
@@ -166,7 +166,7 @@
   </action>
   <action name="actionSettings">
    <property name="icon">
-    <iconset resource="auverdioncontrol.qrc">
+    <iconset resource="auverdionControl.qrc">
      <normaloff>:/kcmsystem.png</normaloff>:/kcmsystem.png</iconset>
    </property>
    <property name="text">
@@ -184,7 +184,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="auverdioncontrol.qrc"/>
+  <include location="auverdionControl.qrc"/>
  </resources>
  <connections/>
 </ui>

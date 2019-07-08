@@ -10,6 +10,8 @@
 #include <QProcess>
 #include <QProgressBar>
 
+#define NUMPRESETS (4)
+
 class CFreeDspAurora : public QWidget
 {
   Q_OBJECT
@@ -75,6 +77,12 @@ public:
   bool finishDspFirmwareWifi( uint32_t totalTransmittedBytes );
 
   //============================================================================
+  /*! Requests index of current selected preset
+   *
+   */
+  int32_t requestCurrentPresetWifi( void );
+
+  //============================================================================
   /*! Requests the PID of current installed DSP-Plugin
    *
    */
@@ -134,6 +142,12 @@ public:
    * \param pid New PID
    */
   bool storePidWifi( uint8_t pid );
+
+  //============================================================================
+  /*! Stores the current selected preset as default.
+   *
+   */
+  bool storePresetSelection( void );
 
   //============================================================================
   /*! Returns the currently used ip address for communication with DSP.
@@ -201,17 +215,19 @@ public:
   {
     tcpSocket->disconnectFromHost();
   }
+
+  //============================================================================
+  /*! Select preset on DSP
+   *
+   * \param presetid New preset id.
+   */
+  bool selectPresetWifi( int presetid );
   
 private:
   //============================================================================
   /*!
    */
   bool waitForReplyWifi( int msec = 5000 );
-
-  //============================================================================
-  /*! 
-   */
-  //bool waitForResponseWifi( void );
 
   //============================================================================
   /*! Sends a request to the current DSP.
