@@ -44,6 +44,44 @@ public:
    */
   ~CFreeDspAurora( void );
 
+
+
+  //============================================================================
+  /*! Requests the AddOn-Id of the board (if there is one installed).
+   */
+  bool requestAddOnIdWifi( void );
+
+  //============================================================================
+  /*! Requests the DSP firmware.
+   *
+   * \param content Firmware data.
+   * \param progress Pointer to progress dialog
+   */
+  bool requestDspFirmwareWifi( QByteArray& content, QProgressBar* progress = nullptr );
+
+  //============================================================================
+  /*! Requests the firmware version of the board.
+   */
+  bool requestFirmwareVersionWifi( void );
+
+  //============================================================================
+  /*! Requests the PID of current installed DSP-Plugin
+   *
+   */
+  uint32_t requestPidWifi( void );
+
+  //============================================================================
+  /*! Request the user parameter file.
+   *
+   */
+  bool requestUserParameterWifi( QByteArray& userparams );
+
+  
+
+
+
+
+
   //============================================================================
   /*!
    */
@@ -75,12 +113,6 @@ public:
   bool finishDspFirmwareWifi( uint32_t totalTransmittedBytes );
 
   //============================================================================
-  /*! Requests the PID of current installed DSP-Plugin
-   *
-   */
-  uint32_t requestPidWifi( void );
-
-  //============================================================================
   /*! Starts the transfer of a user data block.
    *
    * \param content Data block of user data.
@@ -92,12 +124,6 @@ public:
    *
    */
   bool finishUserParameterWifi( uint32_t totalTransmittedBytes );
-
-  //============================================================================
-  /*! Request the user parameter file.
-   *
-   */
-  bool requestUserParameterWifi( QByteArray& userparams );
 
   //============================================================================
   /*! Starts the transfer of a dsp parameter block.
@@ -113,14 +139,6 @@ public:
   bool finishDspParameterWifi( uint32_t totalTransmittedBytes );
 
   //============================================================================
-  /*! Request the DSP firmware.
-   *
-   * \param content Firmware data.
-   * \param progress Pointer to progress dialog
-   */
-  bool requestDspFirmwareWifi( QByteArray& content, QProgressBar* progress = nullptr );
-
-  //============================================================================
   /*! Sends the SSID and password for the Wifi network to DSP and stores it nonvolatile.
    *
    * \param ssid New SSID
@@ -134,6 +152,29 @@ public:
    * \param pid New PID
    */
   bool storePidWifi( uint8_t pid );
+
+  //============================================================================
+  /*! Sends the AddOn-Id to DSP and stores it nonvolatile.
+   *
+   * \param aid New AddOn-Id
+   */
+  bool storeAddOnIdWifi( quint32 aid );
+
+  //============================================================================
+  /*! Returns the AddOn-Id of the connected board.
+   */
+  quint32 getAddOnId( void )
+  {
+    return addon;
+  }
+
+  //============================================================================
+  /*! Returns the firmware version of the connected board.
+   */
+  QString getFirmwareVersion( void )
+  {
+    return versionstr;
+  }
 
   //============================================================================
   /*! Returns the currently used ip address for communication with DSP.
@@ -209,11 +250,6 @@ private:
   bool waitForReplyWifi( int msec = 5000 );
 
   //============================================================================
-  /*! 
-   */
-  //bool waitForResponseWifi( void );
-
-  //============================================================================
   /*! Sends a request to the current DSP.
    *  \param request Contains the reques
    */
@@ -240,7 +276,6 @@ public:
   
 private: 
   QTcpSocket* tcpSocket;
-  //QEventLoop loopWaitForResponseWiFi;
   QByteArray replyWifi;
   QByteArray replyDSP;
   QString ipAddressAP;
@@ -251,6 +286,8 @@ private:
   QProgressBar* ptrProgressBar;
   QString ssidWifi;
   bool isConnected = false;
+  QString versionstr = "0.0.0";
+  quint32 addon;
 
 };
 

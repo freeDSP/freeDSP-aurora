@@ -115,7 +115,7 @@
 #define PID_AUDIO_1        (0x4000) /* freeDSP-aurora PID */
 //:
 #define PRODUCT_STR        "freeDSP-aurora"
-#define VENDOR_STR         "XMOS"
+#define VENDOR_STR         "auverdion"
 
 /* Enable/Disable example HID code */
 #ifndef HID_CONTROLS

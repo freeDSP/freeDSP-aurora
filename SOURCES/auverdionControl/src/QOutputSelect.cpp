@@ -16,7 +16,7 @@ using namespace Vektorraum;
 /*!
  *
  */
-QOutputSelect::QOutputSelect( uint32_t selection, uint16_t outputaddr, CFreeDspAurora* ptrdsp, QWidget *parent) :
+QOutputSelect::QOutputSelect( uint32_t, uint16_t outputaddr, CFreeDspAurora* ptrdsp, QWidget *parent) :
   QDspBlock(parent), ui(new Ui::QOutputSelect)
 {
   type = OUTPUTSELECT;
@@ -153,7 +153,7 @@ bool QOutputSelect::eventFilter( QObject* object, QEvent* event )
             line = line.simplified();
             QStringList values = line.split( ' ' );
             bool flagNumber;
-            tfloat num = values.value(0).toDouble( &flagNumber );
+            values.value(0).toDouble( &flagNumber );
             if( flagNumber ) 
               idx++;
           }
@@ -209,7 +209,7 @@ QByteArray QOutputSelect::getUserParams( void )
 //==============================================================================
 /*!
  */
-void QOutputSelect::setUserParams( QByteArray& userParams, int& idx )
+void QOutputSelect::setUserParams( QByteArray&, int& )
 {
 
 

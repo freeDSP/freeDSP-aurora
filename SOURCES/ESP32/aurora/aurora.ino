@@ -18,8 +18,7 @@
 #define I2C_SDA_PIN 17
 #define I2C_SCL_PIN 16
 
-
-#define USBRESET 17
+#define VERSION_STR "1.0.0"
 
 #define FORMAT_SPIFFS_IF_FAILED true
 
@@ -38,7 +37,16 @@ enum twifistatus
   STATE_WIFI_RECEIVE_USERPARAM,
   STATE_WIFI_RECEIVE_CONFIG,
   STATE_WIFI_RECEIVE_PID,
-  STATE_WIFI_RECEIVE_DSPPARAM
+  STATE_WIFI_RECEIVE_DSPPARAM,
+  STATE_WIFI_RECEIVE_AID
+};
+
+enum taddonid
+{
+  ADDON_CUSTOM = 0x00,
+  ADDON_A = 0x01,
+  ADDON_B = 0x02,
+  ADDON_C = 0x04
 };
 
 struct tSettings
@@ -46,6 +54,7 @@ struct tSettings
   byte pid;
   String ssid;
   String password;
+  uint32_t addonid;
 };
 
 tSettings Settings;
@@ -343,15 +352,15 @@ void uploadDspParameter( void )
 
     while( fileDspParams.available() )
     {
-      Serial.print( "I2C " );
+      //Serial.print( "I2C " );
       byte byteRead; 
       fileDspParams.read( &byteRead, 1 );
-      Serial.print( "0x" );
-      Serial.print( byte2string2(byteRead) );
+      //Serial.print( "0x" );
+      //Serial.print( byte2string2(byteRead) );
       uint16_t regaddr = ((uint16_t)byteRead) << 8;
       fileDspParams.read( &byteRead, 1 );
-      Serial.print( byte2string2(byteRead) );
-      Serial.print( " " ); 
+      //Serial.print( byte2string2(byteRead) );
+      //Serial.print( " " ); 
       regaddr += byteRead;
 
       byte val[4];
@@ -361,42 +370,12 @@ void uploadDspParameter( void )
       fileDspParams.read( &(val[3]), 1 );
       ADAU1452_WRITE_BLOCK( regaddr, val, 4 );  
 
-      Serial.print( "0x" );
-      Serial.print( byte2string2(val[0]) );
-      Serial.print( byte2string2(val[1]) );
-      Serial.print( byte2string2(val[2]) );
-      Serial.println( byte2string2(val[3]) );
+      //Serial.print( "0x" );
+      //Serial.print( byte2string2(val[0]) );
+      //Serial.print( byte2string2(val[1]) );
+      //Serial.print( byte2string2(val[2]) );
+      //Serial.println( byte2string2(val[3]) );
 
-      /*Wire.beginTransmission( DSP_ADDR );
-      Serial.print( "I2C " );
-      //------------------------------------------------------------------------
-      //--- Send register address
-      //------------------------------------------------------------------------
-      uint32_t byteRead = fileDspParams.read();
-      Wire.write( byteRead );
-      Serial.print( "0x" );
-      Serial.print( byte2string2(byteRead) );
-      byteRead = fileDspParams.read();
-      Wire.write( byteRead );
-      Serial.print( byte2string2(byteRead) );
-      cntr += 2;
-      Serial.print( " " ); 
-
-      //------------------------------------------------------------------------
-      //--- Send value
-      //------------------------------------------------------------------------
-      Serial.print( "0x" );
-      for( uint32_t n = 0; n < 4; n++ )
-      {
-        byteRead = fileDspParams.read();
-        Wire.write( byteRead );
-        cntr++;
-        Serial.print( byte2string2(byteRead) );
-      }
-      Serial.println( " " );
-
-      Wire.endTransmission( true );
-      */
     }
 
     //Serial.print( cntr );
@@ -584,12 +563,6 @@ void configDAC( void )
  */
 void setup()
 {
-  /*pinMode( USBRESET, OUTPUT );
-  digitalWrite( USBRESET, LOW );
-  delay(1000);
-  digitalWrite( USBRESET, HIGH );
-  delay(1000);*/
-
   //Wire.begin( I2C_SDA_PIN, I2C_SCL_PIN );
   //Wire.setClock( 100000 );
 
@@ -605,10 +578,10 @@ void setup()
   Serial.print( (SPIFFS.totalBytes() - SPIFFS.usedBytes()) / 1024 );
   Serial.println( "KiB" );
 
-  //Settings.pid = 0x01;
-  //Settings.ssid = "";
-  //Settings.password = "";
-  //saveSettings();
+  Settings.pid = 0x01;
+  Settings.ssid = "";
+  Settings.password = "";
+  Settings.addonid = ADDON_CUSTOM;
 
   //----------------------------------------------------------------------------
   //--- Load system settings
@@ -628,6 +601,7 @@ void setup()
     Settings.pid = jsonSettings["pid"];
     Settings.ssid = jsonSettings["ssid"].as<String>();
     Settings.password = jsonSettings["pwd"].as<String>();
+    Settings.addonid = jsonSettings["aid"];
     Serial.print( "pid: " );
     Serial.println( Settings.pid, HEX );
     fileSettings.close();
@@ -643,6 +617,7 @@ void setup()
     jsonSettings["pid"] = 0x00;
     jsonSettings["ssid"] = "";
     jsonSettings["pwd"] = "";
+    jsonSettings["aid"] = ADDON_CUSTOM;
     // Serialize JSON to file
     if( serializeJson( jsonSettings, fileSettings ) == 0 )
       Serial.println( "Failed to write to file" );
@@ -665,18 +640,21 @@ void setup()
   if( !WiFi.softAPConfig( IPAddress(192, 168, 5, 1), IPAddress(192, 168, 5, 1), IPAddress(255, 255, 255, 0) ) )
       Serial.println("AP Config Failed");
 
-  Serial.print( "Connecting to " );
-  Serial.println( Settings.ssid.c_str() );
-  //Serial.println( Settings.password.c_str() );
+  Serial.print( "Connecting to \"" );
+  Serial.print( Settings.ssid.c_str() );
+  Serial.println( "\"" );
   WiFi.begin( Settings.ssid.c_str(), Settings.password.c_str() );
 
   int cntrConnect = 0;
-  //while( WiFi.waitForConnectResult() != WL_CONNECTED && cntrConnect < 3 )
-  //{
-  //  Serial.println("WiFi Connection Failed! Trying again..");
-  //  //delay(1000);
-  //  cntrConnect++;
-  //}
+  if( Settings.ssid.length() > 0 )
+  {
+    while( WiFi.waitForConnectResult() != WL_CONNECTED && cntrConnect < 3 )
+    {
+      Serial.println("WiFi Connection Failed! Trying again..");
+      delay(100);
+      cntrConnect++;
+    }
+  }
   
   // print the ESP32 IP-Address
   Serial.print( "Soft AP IP:" );
@@ -984,44 +962,6 @@ void handleHttpRequest()
               //currentLine = "";
             }
             
-            
-            /*else if( wifiStatus == STATE_WIFI_RECEIVE_USERPARAM )
-            {
-              int offset = 0;
-              while( offset < currentLine.length() )
-              {
-                String str = currentLine.substring( offset, offset + 2 );
-                if( receivedBytes < contentLength )
-                {
-                  //Serial.print( str );
-                  uint8_t rxByte = (uint8_t)strtoul( str.c_str(), NULL, 16 );
-                  Serial.print( rxByte, HEX );
-                  size_t len = fileUserParams.write( &rxByte, 1 );
-                  if( len != 1 )
-                    Serial.println( "[ERROR] Writing to usrparam.hex" );
-                  receivedBytes += 2;
-                  totalBytesReceived++;
-                }
-                else
-                {
-                  Serial.println("OK");
-                  fileUserParams.flush();
-                }
-                offset += 2;
-              }
-              
-              if( receivedBytes >= contentLength )
-              {
-                client.stop();
-                waitForData = false;
-                //wifiStatus = STATE_WIFI_IDLE;
-              }
-            }*/
-
-
-
-
-
             else if( wifiStatus == STATE_WIFI_RECEIVE_CONFIG )
             {
               receivedPostRequest += currentLine;
@@ -1095,6 +1035,34 @@ void handleHttpRequest()
 
                 Serial.print( "PID: " );
                 Serial.println( Settings.pid, HEX );
+
+                saveSettings();
+
+                String httpResponse = "";
+                httpResponse += "HTTP/1.1 200 OK\r\n";
+                httpResponse += "Content-type:text/plain\r\n\r\n";
+                httpResponse += "ACK";
+                httpResponse += "\r\n";
+                client.println( httpResponse );
+
+                client.stop();
+                waitForData = false;
+                wifiStatus = STATE_WIFI_IDLE;
+              }
+            }
+
+            else if( wifiStatus == STATE_WIFI_RECEIVE_AID )
+            {
+              receivedPostRequest += currentLine;
+
+              if( receivedPostRequest.length() > contentLength )
+              {
+                receivedPostRequest = receivedPostRequest.substring( 0, receivedPostRequest.length()-1 );
+
+                Settings.addonid = (uint32_t)strtoul( receivedPostRequest.c_str(), NULL, 16 );
+
+                Serial.print( "AID: " );
+                Serial.println( Settings.addonid, HEX );
 
                 saveSettings();
 
@@ -1333,6 +1301,51 @@ void handleHttpRequest()
               //cntrPackets++;
             }
 
+            //-----------------------------------------------------------------
+            //--- Request of AddOn-ID
+            //-----------------------------------------------------------------
+            else if( currentLine.startsWith("GET /aid") )
+            {
+              Serial.println( "GET /aid" );
+              String httpResponse = "";
+              httpResponse += "HTTP/1.1 200 OK\r\n";
+              httpResponse += "Content-type:text/plain\r\n\r\n";
+              httpResponse += String( Settings.addonid );
+              httpResponse += "\r\n";
+              client.println( httpResponse );
+              client.stop();
+              currentLine = "";
+              //cntrPackets++;
+            }
+
+            //-----------------------------------------------------------------
+            //--- Request of firmware version
+            //-----------------------------------------------------------------
+            else if( currentLine.startsWith("GET /version") )
+            {
+              Serial.println( "GET /version" );
+              String httpResponse = "";
+              httpResponse += "HTTP/1.1 200 OK\r\n";
+              httpResponse += "Content-type:text/plain\r\n\r\n";
+              httpResponse += VERSION_STR;
+              httpResponse += "\r\n";
+              client.println( httpResponse );
+              client.stop();
+              currentLine = "";
+              //cntrPackets++;
+            }
+
+            //-----------------------------------------------------------------
+            //--- New AID
+            //-----------------------------------------------------------------
+            else if( currentLine.startsWith("POST /aid") )
+            {
+              Serial.println( "POST /pid" );
+              receivedPostRequest = "";
+              wifiStatus = STATE_WIFI_RECEIVE_AID;
+              currentLine = "";
+              //cntrPackets++;
+            }
 
             //--- Request of user parameter file size
             else if( currentLine.startsWith("GET /sizeuserparam") )

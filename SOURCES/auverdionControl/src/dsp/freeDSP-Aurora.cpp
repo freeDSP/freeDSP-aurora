@@ -882,3 +882,143 @@ void CFreeDspAurora::hostFoundWifi( void )
 {
   qDebug()<<"CFreeDspAurora::hostFoundWifi()";
 }
+
+//==============================================================================
+/*! Returns the firmware version of the board.
+ *
+ */
+bool CFreeDspAurora::requestFirmwareVersionWifi( void )
+{
+  qDebug()<<"---------------------------------------------------------------";
+  qDebug()<<"requestFirmwareVersionWifi";
+
+  versionstr = "0.0.0";
+
+  if( isConnected )
+  {
+    QString wifiIpHost = getIpAddressWifi();
+
+    QString requestString = QString( "GET /version HTTP/1.1\r\n" )
+                          + QString( "Host: " ) + wifiIpHost + QString( "\r\n" )
+                          + QString( "\r\n" );
+    QByteArray request;
+    request.append( requestString );
+
+    if( writeRequestWifi( request ) )
+    {
+      if( !waitForReplyWifi() )
+      {
+        QMessageBox::critical( this, tr("Error"), tr("Uuups, could not receive firmware version. Please double check everything and try again."), QMessageBox::Ok ); 
+        return false;
+      }
+      else
+      {
+        QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+        if( listReply.size() > 4 )
+          versionstr = listReply.at(4);
+        qDebug()<<"Firmware version:"<<versionstr;  
+        return true;
+      }
+    }
+    else
+    {
+      QMessageBox::critical( this, tr("Error"), tr("Uups, could not connect to DSP. Did you switch it on?"), QMessageBox::Ok );
+      return false;
+    }
+  }
+
+  return false;
+}
+
+//==============================================================================
+/*! Requests the AddOn-Id of the board (if there is one installed).
+ *
+ */
+bool CFreeDspAurora::requestAddOnIdWifi( void )
+{
+  qDebug()<<"---------------------------------------------------------------";
+  qDebug()<<"requestAddOnIdWifi";
+
+  addon = 0;
+
+  if( isConnected )
+  {
+    QString wifiIpHost = getIpAddressWifi();
+
+    QString requestString = QString( "GET /aid HTTP/1.1\r\n" )
+                          + QString( "Host: " ) + wifiIpHost + QString( "\r\n" )
+                          + QString( "\r\n" );
+    QByteArray request;
+    request.append( requestString );
+
+    if( writeRequestWifi( request ) )
+    {
+      if( !waitForReplyWifi() )
+      {
+        QMessageBox::critical( this, tr("Error"), tr("Uuups, could not receive AddOn-Id. Please double check everything and try again."), QMessageBox::Ok ); 
+        return false;
+      }
+      else
+      {
+        QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+        if( listReply.size() > 4 )
+          addon = listReply.at(4).toUInt();
+        qDebug()<<"Installed AddOn: "<<addon;  
+        return true;
+      }
+    }
+    else
+    {
+      QMessageBox::critical( this, tr("Error"), tr("Uups, could not connect to DSP. Did you switch it on?"), QMessageBox::Ok );
+      return false;
+    }
+  }
+
+  return false;
+}
+
+//==============================================================================
+/*! Sends the AddOn-Id to DSP and stores it nonvolatile.
+ *
+ * \param aid New AddOn-Id
+ */
+bool CFreeDspAurora::storeAddOnIdWifi( quint32 aid )
+{
+  qDebug()<<"---------------------------------------------------------------";
+  qDebug()<<"storeAddOnIdWifi";
+
+  QString wifiIpHost = getIpAddressWifi();
+
+  QByteArray content;
+  content.append( aid );
+
+  QString requestString = QString("POST /aid HTTP/1.1\r\n")
+                        + QString("Host: ") + wifiIpHost + QString("\r\n")
+                        + QString("Content-type:text/plain\r\n")
+                        + QString("Content-length: ") +  QString::number( content.size()*2 ) + QString("\r\n")
+                        + QString("\r\n")
+                        + content.toHex()
+                        + QString("\r\n");
+  QByteArray request;
+  request.append( requestString );  
+  
+  writeRequestWifi( request );
+
+  if( !waitForReplyWifi() )
+    return false;
+  else
+  {
+    qDebug()<<QString( replyDSP );
+    QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+    if( listReply.at(4) == "ACK" )
+    {
+      addon = aid;
+      return true;
+    }
+    else
+    {
+      QMessageBox::critical( this, tr("Error"), tr("Could not store the AddOn-Id. Please double-check everything and try again."), QMessageBox::Ok ); 
+      return false;
+    }
+  }
+}

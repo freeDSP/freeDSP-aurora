@@ -41,6 +41,8 @@ private slots:
 
   void on_lineEditIpAddress_editingFinished();
 
+  void on_comboBoxAddOnId_currentIndexChanged(int index);
+
 private:
   Ui::DialogSettings* ui;
   CFreeDspAurora* dsp = nullptr;

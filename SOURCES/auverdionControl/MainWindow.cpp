@@ -52,7 +52,7 @@ MainWindow::MainWindow( QWidget* parent ) :
   #if defined( __IOS__ ) || defined( __WIN__ ) || defined( __LINUX__ )
   ui->menuBar->hide();
   #endif
-  //ui->actionWrite_to_DSP->setEnabled( false );
+  ui->actionWrite_to_DSP->setEnabled( false );
 
   #if defined( __MACOSX__ )
   QFile fileSettings( "./settings.json" );
@@ -419,6 +419,18 @@ void MainWindow::on_actionRead_from_DSP_triggered()
     ui->statusBar->showMessage("Ready");
     return;
   }
+
+  //----------------------------------------------------------------------------
+  //--- Request the firmware version
+  //----------------------------------------------------------------------------
+  ui->statusBar->showMessage("Reading firmware version.......");
+  dsp.requestFirmwareVersionWifi();
+
+  //----------------------------------------------------------------------------
+  //--- Request the AddOn-Id
+  //----------------------------------------------------------------------------
+  ui->statusBar->showMessage("Reading AddOn-Id.......");
+  dsp.requestAddOnIdWifi();
 
   //----------------------------------------------------------------------------
   //--- Request user parameters

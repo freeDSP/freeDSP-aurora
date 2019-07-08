@@ -44,6 +44,18 @@ DialogSettings::DialogSettings( CFreeDspAurora* ptrdsp, QWidget* parent ) :
   ui->radioButtonLocalWifi->blockSignals( false );
 
   ui->lineEditIpAddress->setText( dsp->getIpAddressWifi() );
+
+  ui->comboBoxAddOnId->blockSignals( true );
+  ui->comboBoxAddOnId->addItem( "None or Custom", 0x00 );
+  ui->comboBoxAddOnId->addItem( "A Woodworker's friend", 0x01 );
+  ui->comboBoxAddOnId->addItem( "B Down with developers", 0x02 );
+  ui->comboBoxAddOnId->addItem( "C Control over the crowd", 0x04 );
+  int index = ui->comboBoxAddOnId->findData( dsp->getAddOnId() );
+  if( index != -1 )
+    ui->comboBoxAddOnId->setCurrentIndex( index );
+  ui->comboBoxAddOnId->blockSignals( false );
+
+  ui->labelFirmwareVersion->setText( dsp->getFirmwareVersion() );
 }
 
 DialogSettings::~DialogSettings()
@@ -487,4 +499,13 @@ void DialogSettings::on_lineEditIpAddress_editingFinished()
   if( ui->radioButtonLocalWifi->isChecked() )
     dsp->setIpAddressWifi( ui->lineEditIpAddress->text() );
 
+}
+
+//==============================================================================
+/*!
+ *
+ */
+void DialogSettings::on_comboBoxAddOnId_currentIndexChanged( int index )
+{
+  dsp->storeAddOnIdWifi( ui->comboBoxAddOnId->itemData( index ).toUInt() );
 }
