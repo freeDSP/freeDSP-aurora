@@ -799,13 +799,22 @@ bool CFreeDspAurora::storeSettingsWifi( QString ssid, QString password )
   writeRequestWifi( request );
 
   if( !waitForReplyWifi() )
+  {
+    myLog()<<"Did not get a reply by DSP";
+    QMessageBox::critical( this, tr("Error"), tr("Uups, something went wrong when connecting to DSP. Please double check everythind and try again."), QMessageBox::Ok );
     return false;
+  }
   else
   {
     myLog()<<QString( replyDSP );
     QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
-    if( listReply.at(4) == "CONNECTED" )
+    QStringList listResult = listReply.at(4).split( "?" );
+    QString strResult = listResult.at(0);
+    QString strIP = listResult.at(1);
+    qDebug()<<strResult<<strIP;
+    if( strResult == "CONNECTED" )
     {
+      ipAddressLocal = strIP;
       myLog()<<"DSP is now connected to local WiFi network";
       QMessageBox::information( this, tr("Information"), tr("Your DSP is now connected to local WiFi network."), QMessageBox::Ok ); 
       return true;

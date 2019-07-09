@@ -208,6 +208,14 @@ public:
   }
 
   //============================================================================
+  /*! Returns the ip address of access point.
+   */
+  QString getIpAddressAP( void )
+  {
+    return ipAddressAP;
+  }
+
+  //============================================================================
   /*! Sets the currently used ip address for communication with DSP.
    */
   void setIpAddressWifi( QString ip )

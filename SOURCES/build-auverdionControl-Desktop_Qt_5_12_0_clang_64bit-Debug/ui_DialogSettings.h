@@ -14,6 +14,7 @@
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QDialogButtonBox>
+#include <QtWidgets/QFormLayout>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHBoxLayout>
@@ -55,15 +56,25 @@ public:
     QLabel *label_3;
     QLineEdit *lineEditIpAddress;
     QPushButton *pushButtonPing;
+    QFormLayout *formLayout;
+    QLabel *label_4;
+    QLabel *labelFirmwareVersion;
+    QLabel *label_5;
+    QComboBox *comboBoxAddOnId;
+    QLabel *label_6;
+    QLabel *labelAccessPointIP;
+    QLabel *label_7;
+    QLabel *labelLocalWiFiIP;
     QDialogButtonBox *buttonBox;
 
     void setupUi(QDialog *DialogSettings)
     {
         if (DialogSettings->objectName().isEmpty())
             DialogSettings->setObjectName(QString::fromUtf8("DialogSettings"));
-        DialogSettings->resize(580, 463);
+        DialogSettings->resize(580, 500);
         verticalLayout = new QVBoxLayout(DialogSettings);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        verticalLayout->setContentsMargins(-1, -1, 12, -1);
         groupBox = new QGroupBox(DialogSettings);
         groupBox->setObjectName(QString::fromUtf8("groupBox"));
         verticalLayout_2 = new QVBoxLayout(groupBox);
@@ -188,6 +199,51 @@ public:
 
         verticalLayout->addWidget(groupBoxWifiConfiguration);
 
+        formLayout = new QFormLayout();
+        formLayout->setObjectName(QString::fromUtf8("formLayout"));
+        label_4 = new QLabel(DialogSettings);
+        label_4->setObjectName(QString::fromUtf8("label_4"));
+
+        formLayout->setWidget(1, QFormLayout::LabelRole, label_4);
+
+        labelFirmwareVersion = new QLabel(DialogSettings);
+        labelFirmwareVersion->setObjectName(QString::fromUtf8("labelFirmwareVersion"));
+
+        formLayout->setWidget(1, QFormLayout::FieldRole, labelFirmwareVersion);
+
+        label_5 = new QLabel(DialogSettings);
+        label_5->setObjectName(QString::fromUtf8("label_5"));
+
+        formLayout->setWidget(0, QFormLayout::LabelRole, label_5);
+
+        comboBoxAddOnId = new QComboBox(DialogSettings);
+        comboBoxAddOnId->setObjectName(QString::fromUtf8("comboBoxAddOnId"));
+
+        formLayout->setWidget(0, QFormLayout::FieldRole, comboBoxAddOnId);
+
+        label_6 = new QLabel(DialogSettings);
+        label_6->setObjectName(QString::fromUtf8("label_6"));
+
+        formLayout->setWidget(2, QFormLayout::LabelRole, label_6);
+
+        labelAccessPointIP = new QLabel(DialogSettings);
+        labelAccessPointIP->setObjectName(QString::fromUtf8("labelAccessPointIP"));
+
+        formLayout->setWidget(2, QFormLayout::FieldRole, labelAccessPointIP);
+
+        label_7 = new QLabel(DialogSettings);
+        label_7->setObjectName(QString::fromUtf8("label_7"));
+
+        formLayout->setWidget(3, QFormLayout::LabelRole, label_7);
+
+        labelLocalWiFiIP = new QLabel(DialogSettings);
+        labelLocalWiFiIP->setObjectName(QString::fromUtf8("labelLocalWiFiIP"));
+
+        formLayout->setWidget(3, QFormLayout::FieldRole, labelLocalWiFiIP);
+
+
+        verticalLayout->addLayout(formLayout);
+
         buttonBox = new QDialogButtonBox(DialogSettings);
         buttonBox->setObjectName(QString::fromUtf8("buttonBox"));
         buttonBox->setOrientation(Qt::Horizontal);
@@ -205,7 +261,7 @@ public:
 
     void retranslateUi(QDialog *DialogSettings)
     {
-        DialogSettings->setWindowTitle(QApplication::translate("DialogSettings", "Dialog", nullptr));
+        DialogSettings->setWindowTitle(QApplication::translate("DialogSettings", "Settings", nullptr));
         groupBox->setTitle(QApplication::translate("DialogSettings", "PlugIn", nullptr));
         pushButtonInstallPlugin->setText(QApplication::translate("DialogSettings", "Install", nullptr));
         pushButtonVerifyPlugin->setText(QApplication::translate("DialogSettings", "Verify", nullptr));
@@ -217,6 +273,13 @@ public:
         pushButtonStoreWiFiConfig->setText(QApplication::translate("DialogSettings", "Store", nullptr));
         label_3->setText(QApplication::translate("DialogSettings", "IP Address:", nullptr));
         pushButtonPing->setText(QApplication::translate("DialogSettings", "Ping", nullptr));
+        label_4->setText(QApplication::translate("DialogSettings", "Firmware Version:", nullptr));
+        labelFirmwareVersion->setText(QString());
+        label_5->setText(QApplication::translate("DialogSettings", "Installed AddOn:", nullptr));
+        label_6->setText(QApplication::translate("DialogSettings", "Access Point IP:", nullptr));
+        labelAccessPointIP->setText(QString());
+        label_7->setText(QApplication::translate("DialogSettings", "Local WiFi IP:", nullptr));
+        labelLocalWiFiIP->setText(QString());
     } // retranslateUi
 
 };

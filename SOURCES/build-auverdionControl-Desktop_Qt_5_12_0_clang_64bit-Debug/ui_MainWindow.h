@@ -36,10 +36,10 @@ public:
     QAction *actionSettings;
     QWidget *centralWidget;
     QHBoxLayout *horizontalLayout_2;
-    QTabWidget *tabChannels;
-    QWidget *tab;
+    QTabWidget *tabPresets;
+    QWidget *tabPresetA;
     QSpacerItem *horizontalSpacer;
-    QVBoxLayout *verticalLayoutVolume;
+    QVBoxLayout *verticalLayout;
     QHBoxLayout *horizontalLayout;
     QVolumeSlider *volumeSliderMain;
     QLabel *label;
@@ -80,23 +80,22 @@ public:
         horizontalLayout_2->setSpacing(6);
         horizontalLayout_2->setContentsMargins(11, 11, 11, 11);
         horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
-        tabChannels = new QTabWidget(centralWidget);
-        tabChannels->setObjectName(QString::fromUtf8("tabChannels"));
-        tabChannels->setTabPosition(QTabWidget::West);
-        tabChannels->setUsesScrollButtons(true);
-        tab = new QWidget();
-        tab->setObjectName(QString::fromUtf8("tab"));
-        tabChannels->addTab(tab, QString());
+        tabPresets = new QTabWidget(centralWidget);
+        tabPresets->setObjectName(QString::fromUtf8("tabPresets"));
+        tabPresets->setTabPosition(QTabWidget::South);
+        tabPresetA = new QWidget();
+        tabPresetA->setObjectName(QString::fromUtf8("tabPresetA"));
+        tabPresets->addTab(tabPresetA, QString());
 
-        horizontalLayout_2->addWidget(tabChannels);
+        horizontalLayout_2->addWidget(tabPresets);
 
         horizontalSpacer = new QSpacerItem(10, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
 
         horizontalLayout_2->addItem(horizontalSpacer);
 
-        verticalLayoutVolume = new QVBoxLayout();
-        verticalLayoutVolume->setSpacing(6);
-        verticalLayoutVolume->setObjectName(QString::fromUtf8("verticalLayoutVolume"));
+        verticalLayout = new QVBoxLayout();
+        verticalLayout->setSpacing(6);
+        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setSpacing(6);
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
@@ -113,23 +112,23 @@ public:
         horizontalLayout->addWidget(volumeSliderMain);
 
 
-        verticalLayoutVolume->addLayout(horizontalLayout);
+        verticalLayout->addLayout(horizontalLayout);
 
         label = new QLabel(centralWidget);
         label->setObjectName(QString::fromUtf8("label"));
         label->setText(QString::fromUtf8("dBfs"));
         label->setAlignment(Qt::AlignCenter);
 
-        verticalLayoutVolume->addWidget(label);
+        verticalLayout->addWidget(label);
 
         label_2 = new QLabel(centralWidget);
         label_2->setObjectName(QString::fromUtf8("label_2"));
         label_2->setAlignment(Qt::AlignCenter);
 
-        verticalLayoutVolume->addWidget(label_2);
+        verticalLayout->addWidget(label_2);
 
 
-        horizontalLayout_2->addLayout(verticalLayoutVolume);
+        horizontalLayout_2->addLayout(verticalLayout);
 
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
@@ -155,6 +154,9 @@ public:
 
         retranslateUi(MainWindow);
 
+        tabPresets->setCurrentIndex(0);
+
+
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi
 
@@ -171,7 +173,7 @@ public:
 #endif // QT_NO_TOOLTIP
         actionAbout->setText(QApplication::translate("MainWindow", "About", nullptr));
         actionSettings->setText(QApplication::translate("MainWindow", "Settings", nullptr));
-        tabChannels->setTabText(tabChannels->indexOf(tab), QApplication::translate("MainWindow", "Tab 1", nullptr));
+        tabPresets->setTabText(tabPresets->indexOf(tabPresetA), QApplication::translate("MainWindow", "Preset A", nullptr));
         label_2->setText(QApplication::translate("MainWindow", "Volume", nullptr));
         menuHelp->setTitle(QApplication::translate("MainWindow", "Help", nullptr));
     } // retranslateUi

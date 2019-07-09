@@ -56,6 +56,8 @@ DialogSettings::DialogSettings( CFreeDspAurora* ptrdsp, QWidget* parent ) :
   ui->comboBoxAddOnId->blockSignals( false );
 
   ui->labelFirmwareVersion->setText( dsp->getFirmwareVersion() );
+  ui->labelAccessPointIP->setText( dsp->getIpAddressAP() );
+  ui->labelLocalWiFiIP->setText( dsp->getIpAddressLocalWifi() );
 }
 
 DialogSettings::~DialogSettings()
@@ -403,8 +405,8 @@ void DialogSettings::on_pushButtonStoreWiFiConfig_clicked()
   if( !ui->lineEditSSID->text().isEmpty() )
   {
     // --- Send WiFi configuration to DSP ---
-    if( !dsp->storeSettingsWifi( ui->lineEditSSID->text(), ui->lineEditPassword->text() ) )
-      QMessageBox::critical( this, tr("Error"), tr("Uups, something went wrong when sending WiFi configuration. Please double check everythind and try again."), QMessageBox::Ok );  
+    dsp->storeSettingsWifi( ui->lineEditSSID->text(), ui->lineEditPassword->text() ); 
+    ui->labelLocalWiFiIP->setText( dsp->getIpAddressLocalWifi() );
   }
   enableGui( true );
 }

@@ -1020,6 +1020,8 @@ void handleHttpRequest()
                   Serial.println( "WiFi Connection Failed! Trying again..." );
                   cntrConnect++;
                 }
+                Serial.println( WiFi.localIP() );
+
                 String httpResponse = "";
                 httpResponse += "HTTP/1.1 200 OK\r\n";
                 httpResponse += "Content-type:text/plain\r\n\r\n";
@@ -1027,9 +1029,11 @@ void handleHttpRequest()
                   httpResponse += "CONNECTED";
                 else
                   httpResponse += "FAILED";
+                httpResponse += "?";
+                httpResponse += WiFi.localIP().toString();
                 httpResponse += "\r\n";
                 client.println( httpResponse );
-
+                
                 client.stop();
                 waitForData = false;
                 Serial.println( "OK" );
