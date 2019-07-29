@@ -69,6 +69,16 @@ public:
     return *this;
   }
 
+  inline CLogFile& operator<<( unsigned long long val )
+  {
+    ts<<val<<"\n";
+    ts.flush();
+    #ifdef DEBUG
+    qDebug()<<val;
+    #endif
+    return *this;
+  }
+
   inline CLogFile& operator()( void )
   {
     return *this;
