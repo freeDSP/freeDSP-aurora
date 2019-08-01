@@ -4,6 +4,8 @@
 #include <QDebug>
 #include <QTextStream>
 #include <QFile>
+#include <QDir>
+#include <QStandardPaths>
 #include <QDateTime>
 
 class CLogFile
@@ -16,7 +18,23 @@ public:
       logfile->close();
       delete logfile;
     }
+
+    #if defined( __MACOSX__ )
     logfile = new QFile( "auverdionControl.log" );
+
+    #elif defined( __WIN__ )
+    QString path = QStandardPaths::writableLocation( QStandardPaths::AppLocalDataLocation );
+    if( !path.isEmpty() )
+    {
+      QDir d(path);
+      d.mkpath( d.absolutePath() );
+    }
+    logfile = new QFile( path + "/auverdion/auverdionControl/auverdionControl.log" );
+    qDebug()<<path + "/auverdionControl.log";
+    #else
+    #error StandardPath not defined.
+    #endif
+
     if( logfile->exists() )
       logfile->remove();
     if( logfile->open( QIODevice::ReadWrite ) )
@@ -28,6 +46,8 @@ public:
       qDebug()<<"--- auverdionControl Log "<<QDateTime::currentDateTime().toString()<<" ---\n";
       #endif
     }
+    else
+      qDebug()<<"[ERROR] Failed opening log file";
   }
 
   ~CLogFile()

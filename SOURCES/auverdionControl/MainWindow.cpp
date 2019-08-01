@@ -46,6 +46,8 @@ QColor colorPlot[kMaxPlotColors] = { QColor(  81, 158, 228 ),
 
 QVolumeSlider* sliderMainVolume;
 
+QString pathSettings;
+
 MainWindow::MainWindow( QWidget* parent ) :
   QMainWindow( parent ),
   ui( new Ui::MainWindow )
@@ -55,11 +57,40 @@ MainWindow::MainWindow( QWidget* parent ) :
   ui->menuBar->hide();
   #endif
   ui->actionWrite_to_DSP->setEnabled( false );
-
+  
   #if defined( __MACOSX__ )
-  QFile fileSettings( "./settings.json" );
+  /*pathSettings = QStandardPaths::writableLocation( QStandardPaths::AppLocalDataLocation );
+  if( !pathSettings.isEmpty() )
+    pathSettings += QString( "/settings.json" );
+  else
+    pathSettings += QString( "./settings.json" );
+  qDebug()<<pathSettings;
+
+  if( !QFile::exists( pathSettings ) )
+  {
+    QFile newFile( pathSettings );
+    if( !newFile.open( QIODevice::WriteOnly | QIODevice::Text ) )
+      std::cerr<<"[ERROR] Could not create settings.json"<<std::endl;
+    else
+    {
+      newFile.close();
+    }
+  }*/
+  pathSettings = QString( "./settings.json" );
+  QFile fileSettings( pathSettings );
   #elif defined( __WIN__ )
-  QFile fileSettings( "settings.json" );
+
+  pathSettings = QStandardPaths::writableLocation( QStandardPaths::AppLocalDataLocation );
+  if( !pathSettings.isEmpty() )
+  {
+    QDir d(pathSettings);
+    d.mkpath( d.absolutePath() );
+  }
+  pathSettings += QString( "/settings.json" );
+
+  QFile fileSettings( pathSettings );
+  #else
+  #error StandardPath not given.
   #endif
 
   if( fileSettings.open( QIODevice::ReadOnly ) )
@@ -773,11 +804,7 @@ void MainWindow::on_actionSettings_triggered()
   int result = dialog.exec();
   if( result == QDialog::Accepted )
   { 
-    #if defined( __MACOSX__ )
-    QFile fileSettings( "./settings.json" );
-    #elif defined( __WIN__ )
-    QFile fileSettings( "settings.json" );
-    #endif
+    QFile fileSettings( pathSettings );
 
     QJsonObject jsonObj;
     jsonObj[ "network" ] = dsp.getConnectionTypeWifi();

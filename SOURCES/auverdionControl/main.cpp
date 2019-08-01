@@ -9,7 +9,7 @@ CLogFile myLog;
 
 int main(int argc, char *argv[])
 {
-  QApplication::setOrganizationName("Raphael Knoop");
+  QApplication::setOrganizationName("auverdion");
   QApplication::setApplicationName( "auverdionControl" );
   #if defined( __IOS__ )
   QGuiApplication::setAttribute( Qt::AA_UseHighDpiPixmaps );
