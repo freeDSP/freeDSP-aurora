@@ -202,7 +202,7 @@ QByteArray QInputSelect::getDspParams( void )
   }
   else if( ui->comboBoxInput->currentText() == QString( "Analog 3" ) )
   {
-    content.append( dsp->makeParameterForWifi( addr[kChannelADC], 0x00000002 ) );
+    content.append( dsp->makeParameterForWifi( addr[kChannelADC], 0x00000001 ) );
     content.append( dsp->makeParameterForWifi( addr[kSelectPort], kPortAnalog ) );
   }
   else if( ui->comboBoxInput->currentText() == QString( "Analog 4" ) )
@@ -234,42 +234,42 @@ QByteArray QInputSelect::getDspParams( void )
   //--- USB Audio Inputs ---
   else if( ui->comboBoxInput->currentText() == QString( "USB 1" ) )
   {
-    content.append( dsp->makeParameterForWifi( addr[kChannelADC], 0x00000000 ) );
+    content.append( dsp->makeParameterForWifi( addr[kChannelUAC2], 0x00000000 ) );
     content.append( dsp->makeParameterForWifi( addr[kSelectPort], kPortUSB ) );
   }
   else if( ui->comboBoxInput->currentText() == QString( "USB 2" ) )
   {
-    content.append( dsp->makeParameterForWifi( addr[kChannelADC], 0x00000001 ) );
+    content.append( dsp->makeParameterForWifi( addr[kChannelUAC2], 0x00000001 ) );
     content.append( dsp->makeParameterForWifi( addr[kSelectPort], kPortUSB ) );
   }
   else if( ui->comboBoxInput->currentText() == QString( "USB 3" ) )
   {
-    content.append( dsp->makeParameterForWifi( addr[kChannelADC], 0x00000002 ) );
+    content.append( dsp->makeParameterForWifi( addr[kChannelUAC2], 0x00000002 ) );
     content.append( dsp->makeParameterForWifi( addr[kSelectPort], kPortUSB ) );
   }
   else if( ui->comboBoxInput->currentText() == QString( "USB 4" ) )
   {
-    content.append( dsp->makeParameterForWifi( addr[kChannelADC], 0x00000003 ) );
+    content.append( dsp->makeParameterForWifi( addr[kChannelUAC2], 0x00000003 ) );
     content.append( dsp->makeParameterForWifi( addr[kSelectPort], kPortUSB ) );
   }
   else if( ui->comboBoxInput->currentText() == QString( "USB 5" ) )
   {
-    content.append( dsp->makeParameterForWifi( addr[kChannelADC], 0x00000004 ) );
+    content.append( dsp->makeParameterForWifi( addr[kChannelUAC2], 0x00000004 ) );
     content.append( dsp->makeParameterForWifi( addr[kSelectPort], kPortUSB ) );
   }
   else if( ui->comboBoxInput->currentText() == QString( "USB 6" ) )
   {
-    content.append( dsp->makeParameterForWifi( addr[kChannelADC], 0x00000005 ) );
+    content.append( dsp->makeParameterForWifi( addr[kChannelUAC2], 0x00000005 ) );
     content.append( dsp->makeParameterForWifi( addr[kSelectPort], kPortUSB ) );
   }
   else if( ui->comboBoxInput->currentText() == QString( "USB 7" ) )
   {
-    content.append( dsp->makeParameterForWifi( addr[kChannelADC], 0x00000006 ) );
+    content.append( dsp->makeParameterForWifi( addr[kChannelUAC2], 0x00000006 ) );
     content.append( dsp->makeParameterForWifi( addr[kSelectPort], kPortUSB ) );
   }
   else if( ui->comboBoxInput->currentText() == QString( "USB 8" ) )
   {
-    content.append( dsp->makeParameterForWifi( addr[kChannelADC], 0x00000007 ) );
+    content.append( dsp->makeParameterForWifi( addr[kChannelUAC2], 0x00000007 ) );
     content.append( dsp->makeParameterForWifi( addr[kSelectPort], kPortUSB ) );
   }
 

@@ -79,6 +79,7 @@ uint32_t convertTo824( float val )
  */
 QByteArray CFreeDspAurora::makeParameterForWifi( uint16_t reg, float val )
 {
+  qDebug()<<"CFreeDspAurora::makeParameterForWifi( uint16_t reg, float val )";
   QByteArray content;
   content.append( static_cast<char>((reg >> 8) & 0x000000FF) );
   content.append( static_cast<char>(reg & 0x000000FF) );
@@ -99,6 +100,8 @@ QByteArray CFreeDspAurora::makeParameterForWifi( uint16_t reg, float val )
  */
 QByteArray CFreeDspAurora::makeParameterForWifi( uint16_t reg, int32_t val )
 {
+  qDebug()<<"CFreeDspAurora::makeParameterForWifi( uint16_t reg, int32_t val )";
+  
   QByteArray content;
   content.append( static_cast<char>((reg >> 8) & 0x000000FF) );
   content.append( static_cast<char>(reg & 0x000000FF) );

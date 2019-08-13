@@ -25,7 +25,7 @@
 
 extern CLogFile myLog;
 
-#define VERSION_STR "0.9.9"
+#define VERSION_STR "1.0.0"
 #define FS 48000.0
 
 using namespace Vektorraum;
