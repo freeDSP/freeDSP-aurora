@@ -402,12 +402,12 @@ void DialogSettings::on_pushButtonVerifyPlugin_clicked()
 void DialogSettings::on_pushButtonStoreWiFiConfig_clicked()
 {
   enableGui( false );
-  if( !ui->lineEditSSID->text().isEmpty() )
-  {
+  //if( !ui->lineEditSSID->text().isEmpty() )
+  //{
     // --- Send WiFi configuration to DSP ---
     dsp->storeSettingsWifi( ui->lineEditSSID->text(), ui->lineEditPassword->text() ); 
     ui->labelLocalWiFiIP->setText( dsp->getIpAddressLocalWifi() );
-  }
+  //}
   enableGui( true );
 }
 
