@@ -16,6 +16,7 @@
 
 #include "DialogSettings.hpp"
 #include "QDialogDemoSelector.hpp"
+#include "DialogReleaseNotes.h"
 
 #include "PlugIn8Channels.hpp"
 #include "PlugInHomeCinema71.hpp"
@@ -59,23 +60,6 @@ MainWindow::MainWindow( QWidget* parent ) :
   ui->actionWrite_to_DSP->setEnabled( false );
   
   #if defined( __MACOSX__ )
-  /*pathSettings = QStandardPaths::writableLocation( QStandardPaths::AppLocalDataLocation );
-  if( !pathSettings.isEmpty() )
-    pathSettings += QString( "/settings.json" );
-  else
-    pathSettings += QString( "./settings.json" );
-  qDebug()<<pathSettings;
-
-  if( !QFile::exists( pathSettings ) )
-  {
-    QFile newFile( pathSettings );
-    if( !newFile.open( QIODevice::WriteOnly | QIODevice::Text ) )
-      std::cerr<<"[ERROR] Could not create settings.json"<<std::endl;
-    else
-    {
-      newFile.close();
-    }
-  }*/
   pathSettings = QString( "./settings.json" );
   QFile fileSettings( pathSettings );
   #elif defined( __WIN__ )
@@ -97,10 +81,10 @@ MainWindow::MainWindow( QWidget* parent ) :
   {
     QByteArray settings = fileSettings.readAll();
     QJsonDocument jsonDoc( QJsonDocument::fromJson( settings ) );
-    QJsonObject jsonObj = jsonDoc.object();
-    dsp.setConnectionTypeWifi( jsonObj[ "network" ].toInt() );
-    dsp.setSsidWifi( jsonObj[ "ssid" ].toString() );
-    dsp.setIpAddressWifi( jsonObj[ "ip" ].toString() );
+    jsonObjSettings = jsonDoc.object();
+    dsp.setConnectionTypeWifi( jsonObjSettings[ "network" ].toInt() );
+    dsp.setSsidWifi( jsonObjSettings[ "ssid" ].toString() );
+    dsp.setIpAddressWifi( jsonObjSettings[ "ip" ].toString() );
     fileSettings.close();
   }
   
@@ -409,6 +393,18 @@ void MainWindow::on_actionRead_from_DSP_triggered()
   msgBox->open();
 
   //----------------------------------------------------------------------------
+  //--- Request the firmware version
+  //----------------------------------------------------------------------------
+  ui->statusBar->showMessage("Reading firmware version.......");
+  dsp.requestFirmwareVersionWifi();
+
+  //----------------------------------------------------------------------------
+  //--- Request the AddOn-Id
+  //----------------------------------------------------------------------------
+  ui->statusBar->showMessage("Reading AddOn-Id.......");
+  dsp.requestAddOnIdWifi();
+
+  //----------------------------------------------------------------------------
   //--- Request the DSP-plugin id
   //----------------------------------------------------------------------------
   ui->statusBar->showMessage("Reading PID.......");
@@ -503,7 +499,6 @@ void MainWindow::on_actionRead_from_DSP_triggered()
     break;
 
   case 0:
-    qDebug()<<"PID"<<pid;
     setEnabled( true );
     disconnect( &timerWait, SIGNAL(timeout()), this, SLOT(updateWaitingForConnect()) );
     msgBox->accept();
@@ -520,18 +515,6 @@ void MainWindow::on_actionRead_from_DSP_triggered()
     ui->statusBar->showMessage("Ready");
     return;
   }
-
-  //----------------------------------------------------------------------------
-  //--- Request the firmware version
-  //----------------------------------------------------------------------------
-  ui->statusBar->showMessage("Reading firmware version.......");
-  dsp.requestFirmwareVersionWifi();
-
-  //----------------------------------------------------------------------------
-  //--- Request the AddOn-Id
-  //----------------------------------------------------------------------------
-  ui->statusBar->showMessage("Reading AddOn-Id.......");
-  dsp.requestAddOnIdWifi();
 
   //----------------------------------------------------------------------------
   //--- Request user parameters
@@ -564,6 +547,25 @@ void MainWindow::on_actionRead_from_DSP_triggered()
   msgBox->accept();
   ui->statusBar->showMessage("Ready");
   ui->actionWrite_to_DSP->setEnabled( true );
+
+  if( !jsonObjSettings["msg0001"].toBool() )
+  {
+    if( dsp.getFirmwareVersion() == "1.0.0" )
+    {
+      DialogReleaseNotes dlg( this );
+      dlg.setWindowTitle( "Hotfix available" );
+      dlg.setReleaseNote( "There is a new hotfix available for your aurora!\nPlease download the latest firmware and install it.\nIn the user manual (UserManual.pdf) you will find instructions how to update the firmware." );
+      int result = dlg.exec();
+      if( result == QDialog::Accepted )
+      {
+        if( dlg.getDontShowAgain() )
+        {
+          jsonObjSettings["msg0001"] = true;
+          writeSettings();
+        }
+      }
+    }
+  }
 }
 
 //==============================================================================
@@ -804,22 +806,10 @@ void MainWindow::on_actionSettings_triggered()
   int result = dialog.exec();
   if( result == QDialog::Accepted )
   { 
-    QFile fileSettings( pathSettings );
-
-    QJsonObject jsonObj;
-    jsonObj[ "network" ] = dsp.getConnectionTypeWifi();
-    jsonObj[ "ssid" ] = dsp.getSsidWifi();
-    jsonObj[ "ip" ] = dsp.getIpAddressLocalWifi();
-
-    QJsonDocument jsonDoc( jsonObj );
-
-    if( !fileSettings.open( QIODevice::WriteOnly ) )
-    {
-      qWarning( "Couldn't open file for saving user settings" );
-      return;
-    }
-    fileSettings.write( jsonDoc.toJson() );
-    fileSettings.close();
+    jsonObjSettings[ "network" ] = dsp.getConnectionTypeWifi();
+    jsonObjSettings[ "ssid" ] = dsp.getSsidWifi();
+    jsonObjSettings[ "ip" ] = dsp.getIpAddressLocalWifi();
+    writeSettings();
   }
 }
 
@@ -943,4 +933,21 @@ void MainWindow::on_tabPresets_currentChanged( int index )
     msgBox->accept();
     ui->statusBar->showMessage("Ready");
   }
+}
+
+//==============================================================================
+/*!
+ */
+void MainWindow::writeSettings( void )
+{
+  QFile fileSettings( pathSettings );
+  QJsonDocument jsonDoc( jsonObjSettings );
+
+  if( !fileSettings.open( QIODevice::WriteOnly ) )
+  {
+    qWarning( "Couldn't open file for saving user settings" );
+    return;
+  }
+  fileSettings.write( jsonDoc.toJson() );
+  fileSettings.close();
 }

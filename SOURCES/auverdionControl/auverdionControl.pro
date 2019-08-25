@@ -53,6 +53,7 @@ INCLUDEPATH += src \
 SOURCES += \
         main.cpp \
         MainWindow.cpp \
+        src/DialogReleaseNotes.cpp \
         src/QPreset.cpp \
         src/figure/ccolormap.cpp \
         src/figure/QFigure.cpp \
@@ -80,6 +81,7 @@ SOURCES += \
 
 HEADERS += \
         MainWindow.hpp \
+        src/DialogReleaseNotes.h \
         src/QPreset.h \
         src/figure/ccolormap.h \
         src/figure/QDialogAxisProperties.h \
@@ -114,6 +116,7 @@ HEADERS += \
 
 FORMS += \
         MainWindow.ui \
+        src/DialogReleaseNotes.ui \
         src/QDspBlock.ui \
         src/QPeq.ui \
         src/QHighPass.ui \

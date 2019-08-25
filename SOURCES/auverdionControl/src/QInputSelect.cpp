@@ -63,7 +63,7 @@ QInputSelect::QInputSelect( uint32_t selection,
   dsp = ptrdsp;
 
   ui->setupUi(this);
-
+  
   ui->comboBoxInput->blockSignals( true );
   ui->comboBoxInput->addItem( "Analog 1",     0 );
   ui->comboBoxInput->addItem( "Analog 2",     1 );
@@ -94,6 +94,9 @@ QInputSelect::QInputSelect( uint32_t selection,
   ui->comboBoxInput->setCurrentIndex( selection );
   ui->comboBoxInput->blockSignals( false );
   //ui->comboBoxInput->setMaxVisibleItems( 16 );
+  
+  if( dsp->getFirmwareVersion() == "1.0.0" )
+    ui->comboBoxInput->setEnabled( false );
 
   type = INPUTSELECT;
 }

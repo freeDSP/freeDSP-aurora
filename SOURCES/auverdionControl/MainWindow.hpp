@@ -55,6 +55,11 @@ private:
    */
   void updatePresetGui( int p, QByteArray& userparams );
 
+  //============================================================================
+  /*!
+   */
+  void writeSettings( void );
+
 
 public slots:
   void showLicense( void );
@@ -97,6 +102,7 @@ private:
   QPreset* presets[NUMPRESETS];
   int currentPreset = 0;
   QByteArray presetUserParams[NUMPRESETS];
+  QJsonObject jsonObjSettings;
 };
 
 #endif // MAINWINDOW_HPP
