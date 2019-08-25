@@ -177,6 +177,10 @@ macx {
 
   OTHER_FILES += $${ENTITLEMENTS}
 
+  APP_DSPPLUGIN_JSON.files = $${PWD}/extras/dspplugins.json
+  APP_DSPPLUGIN_JSON.path = Contents/Resources
+  QMAKE_BUNDLE_DATA += APP_DSPPLUGIN_JSON
+
   APP_DSPPLUGIN_8CHANNELS.files = /Users/rkn/Documents/freeDSP/freeDSP-aurora/SOURCES/SIGMASTUDIO/8channels/TxBuffer_IC_1.dat /Users/rkn/Documents/freeDSP/freeDSP-aurora/SOURCES/SIGMASTUDIO/8channels/NumBytes_IC_1.dat
   APP_DSPPLUGIN_8CHANNELS.path = Contents/Resources/8channels
   QMAKE_BUNDLE_DATA += APP_DSPPLUGIN_8CHANNELS

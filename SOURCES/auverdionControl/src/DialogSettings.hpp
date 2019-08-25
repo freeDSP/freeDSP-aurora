@@ -2,6 +2,7 @@
 #define DIALOGSETTINGS_HPP
 
 #include <QDialog>
+#include <QVector>
 
 #include "freeDSP-Aurora.hpp"
 
@@ -44,8 +45,18 @@ private slots:
   void on_comboBoxAddOnId_currentIndexChanged(int index);
 
 private:
+  class CDspPluginMetaData
+  {
+  public:
+    QString name;
+    int pid;
+    QString path;
+  };
+
   Ui::DialogSettings* ui;
   CFreeDspAurora* dsp = nullptr;
+
+  QVector<CDspPluginMetaData> dspPluginMetaData;
 };
 
 #endif // DIALOGSETTINGS_HPP

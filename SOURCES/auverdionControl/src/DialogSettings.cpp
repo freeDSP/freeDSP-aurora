@@ -6,6 +6,8 @@
 #include <QProgressDialog>
 #include <QStandardPaths>
 #include <QtGui>
+#include <QJsonObject>
+#include <QJsonDocument>
 
 #if defined( __MACOSX__ )
 #include <CoreFoundation/CoreFoundation.h>
@@ -20,10 +22,40 @@ DialogSettings::DialogSettings( CFreeDspAurora* ptrdsp, QWidget* parent ) :
   ui(new Ui::DialogSettings)
 {
   ui->setupUi(this);
+  ui->pushButtonPing->setVisible( false );
   dsp = ptrdsp;
 
+  #if defined( __MACOSX__ )
+  QDir appPath = QDir( QCoreApplication::applicationDirPath() );
+  appPath.cdUp();
+  appPath.cd( "Resources" );
+  //qDebug()<<appPath.absolutePath() + "/dspplugins.json";
+  #else
+  #error Platform not supported.
+  #endif
+
   ui->comboBoxPlugIn->blockSignals( true );
-  ui->comboBoxPlugIn->addItem( "8 Channels", CFreeDspAurora::PLUGIN_8CHANNELS );
+  QFile fileDspPlugins( appPath.absolutePath() + "/dspplugins.json" );
+  if( fileDspPlugins.open( QIODevice::ReadOnly ) )
+  {
+    QJsonDocument jsonDoc( QJsonDocument::fromJson( fileDspPlugins.readAll() ) );
+    QJsonObject jsonObj = jsonDoc.object();
+    QJsonArray jsonDspPlugins = jsonObj["dspplugins"].toArray();
+    for( int ii = 0; ii < jsonDspPlugins.size(); ii++ )
+    {
+      QJsonObject plugin = jsonDspPlugins[ii].toObject();
+      ui->comboBoxPlugIn->addItem( plugin["name"].toString(), plugin["pid"].toInt() );
+
+      CDspPluginMetaData newMetaData;
+      newMetaData.name = plugin["name"].toString();
+      newMetaData.pid = plugin["pid"].toInt();
+      newMetaData.path = appPath.absolutePath() +  "/" + plugin["path"].toString();
+      dspPluginMetaData.append( newMetaData );
+
+      qDebug()<<plugin["name"].toString()<<plugin["pid"].toInt()<<plugin["path"].toString();
+    }
+    fileDspPlugins.close();
+  }
   ui->comboBoxPlugIn->blockSignals( false );
 
   ui->radioButtonAP->blockSignals( true );
@@ -82,7 +114,7 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
   QString pathAppBundle = QString( CFStringGetCStringPtr( macPath, CFStringGetSystemEncoding() ) );
   CFRelease(appUrlRef);
   CFRelease(macPath);
-  if( ui->comboBoxPlugIn->currentData().toInt() == CFreeDspAurora::PLUGIN_8CHANNELS )
+  /*if( ui->comboBoxPlugIn->currentData().toInt() == CFreeDspAurora::PLUGIN_8CHANNELS )
   {
     pathTxBuffer = pathAppBundle + QString( "/Contents/Resources/8channels/TxBuffer_IC_1.dat");
     pathNumBytes = pathAppBundle + QString( "/Contents/Resources/8channels/NumBytes_IC_1.dat");
@@ -90,9 +122,11 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
   else
   {
     qDebug()<<"[ERROR] Unknown plugin id"<<ui->comboBoxPlugIn->currentData().toInt();
-  }
+  }*/
+
   #elif defined( __WIN__ )
-  QString pathAppBundle = QCoreApplication::applicationDirPath();
+  #error Not tested.
+  /*QString pathAppBundle = QCoreApplication::applicationDirPath();
   if( ui->comboBoxPlugIn->currentData().toInt() == CFreeDspAurora::PLUGIN_8CHANNELS )
   {
     pathTxBuffer = pathAppBundle + QString( "/dspplugins/8channels/TxBuffer_IC_1.dat");
@@ -101,8 +135,22 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
   else
   {
     qDebug()<<"[ERROR] Unknown plugin id"<<ui->comboBoxPlugIn->currentData().toInt();
-  }
+  }*/
   #endif
+
+  for( int ii = 0; ii < dspPluginMetaData.size(); ii++ )
+  {
+    qDebug()<<dspPluginMetaData.at(ii).pid<<ui->comboBoxPlugIn->currentData().toInt();
+    if( dspPluginMetaData.at(ii).pid == ui->comboBoxPlugIn->currentData().toInt() )
+    {
+      pathTxBuffer = dspPluginMetaData.at(ii).path + "/TxBuffer_IC_1.dat";
+      pathNumBytes = dspPluginMetaData.at(ii).path + "/NumBytes_IC_1.dat";
+      break;
+    }
+  }
+  qDebug()<<"PATHES";
+  qDebug()<<pathTxBuffer;
+  qDebug()<<pathNumBytes;
   
   //----------------------------------------------------------------------------
   //--- Read and convert the TxBuffer_IC_1.dat file
@@ -257,7 +305,7 @@ void DialogSettings::on_pushButtonVerifyPlugin_clicked()
   QString pathAppBundle = QString( CFStringGetCStringPtr( macPath, CFStringGetSystemEncoding() ) );
   CFRelease(appUrlRef);
   CFRelease(macPath);
-  if( ui->comboBoxPlugIn->currentData().toInt() == CFreeDspAurora::PLUGIN_8CHANNELS )
+  /*if( ui->comboBoxPlugIn->currentData().toInt() == CFreeDspAurora::PLUGIN_8CHANNELS )
   {
     pathTxBuffer = pathAppBundle + QString( "/Contents/Resources/8channels/TxBuffer_IC_1.dat");
     pathNumBytes = pathAppBundle + QString( "/Contents/Resources/8channels/NumBytes_IC_1.dat");
@@ -265,9 +313,9 @@ void DialogSettings::on_pushButtonVerifyPlugin_clicked()
   else
   {
     qDebug()<<"[ERROR] Unknown plugin id"<<ui->comboBoxPlugIn->currentData().toInt();
-  }
+  }*/
   #elif defined( __WIN__ )
-  QString pathAppBundle = QCoreApplication::applicationDirPath();
+  /*QString pathAppBundle = QCoreApplication::applicationDirPath();
   if( ui->comboBoxPlugIn->currentData().toInt() == CFreeDspAurora::PLUGIN_8CHANNELS )
   {
     pathTxBuffer = pathAppBundle + QString( "/dspplugins/8channels/TxBuffer_IC_1.dat");
@@ -276,8 +324,19 @@ void DialogSettings::on_pushButtonVerifyPlugin_clicked()
   else
   {
     qDebug()<<"[ERROR] Unknown plugin id"<<ui->comboBoxPlugIn->currentData().toInt();
-  }
+  }*/
   #endif
+
+  for( int ii = 0; ii < dspPluginMetaData.size(); ii++ )
+  {
+    qDebug()<<dspPluginMetaData.at(ii).pid<<ui->comboBoxPlugIn->currentData().toInt();
+    if( dspPluginMetaData.at(ii).pid == ui->comboBoxPlugIn->currentData().toInt() )
+    {
+      pathTxBuffer = dspPluginMetaData.at(ii).path + "/TxBuffer_IC_1.dat";
+      pathNumBytes = dspPluginMetaData.at(ii).path + "/NumBytes_IC_1.dat";
+      break;
+    }
+  }
 
   //----------------------------------------------------------------------------
   //--- Read and convert the TxBuffer_IC_1.dat file

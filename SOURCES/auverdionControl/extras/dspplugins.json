@@ -1,0 +1,15 @@
+{
+  "dspplugins":
+  [
+    {
+      "name": "8channels",
+      "pid": 1,
+      "path": "8channels"
+    },
+    {
+      "name": "HomeCinema71",
+      "pid": 2,
+      "path": "homecinema71"
+    }
+  ]
+}
