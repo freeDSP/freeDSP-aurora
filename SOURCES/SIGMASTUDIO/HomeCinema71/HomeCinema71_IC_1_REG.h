@@ -1,8 +1,8 @@
 /*
- * File:           E:\Documents\freeDSP\freeDSP-aurora\SOURCES\SIGMASTUDIO\8channels\8channels_IC_1_REG.h
+ * File:           E:\Documents\freeDSP\freeDSP-aurora\SOURCES\SIGMASTUDIO\HomeCinema71\HomeCinema71_IC_1_REG.h
  *
- * Created:        Tuesday, August 27, 2019 3:37:37 PM
- * Description:    8channels:IC 1 control register definitions.
+ * Created:        Tuesday, August 27, 2019 3:27:35 PM
+ * Description:    HomeCinema71:IC 1 control register definitions.
  *
  * This software is distributed in the hope that it will be useful,
  * but is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
@@ -16,8 +16,8 @@
  *
  * Copyright ©2019 Analog Devices, Inc. All rights reserved.
  */
-#ifndef __8CHANNELS_IC_1_REG_H__
-#define __8CHANNELS_IC_1_REG_H__
+#ifndef __HOMECINEMA71_IC_1_REG_H__
+#define __HOMECINEMA71_IC_1_REG_H__
 
 
 /* PLL_CTRL0  - Registers (IC 1) */

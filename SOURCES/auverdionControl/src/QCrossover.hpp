@@ -43,39 +43,68 @@ private:
 
   enum
   {
-    kParamB2_1 = 0,
-    kParamB1_1,
-    kParamB0_1,
-    kParamA2_1,
-    kParamA1_1,
-    kParamB2_2,
-    kParamB1_2,
-    kParamB0_2,
-    kParamA2_2,
-    kParamA1_2,
-    kParamB2_3,
-    kParamB1_3,
-    kParamB0_3,
-    kParamA2_3,
-    kParamA1_3,
-    kParamB2_4,
-    kParamB1_4,
-    kParamB0_4,
-    kParamA2_4,
-    kParamA1_4,
+    kParamB2_1_HP = 0,
+    kParamB1_1_HP,
+    kParamB0_1_HP,
+    kParamA2_1_HP,
+    kParamA1_1_HP,
+    kParamB2_2_HP,
+    kParamB1_2_HP,
+    kParamB0_2_HP,
+    kParamA2_2_HP,
+    kParamA1_2_HP,
+    kParamB2_3_HP,
+    kParamB1_3_HP,
+    kParamB0_3_HP,
+    kParamA2_3_HP,
+    kParamA1_3_HP,
+    kParamB2_4_HP,
+    kParamB1_4_HP,
+    kParamB0_4_HP,
+    kParamA2_4_HP,
+    kParamA1_4_HP,
+    kParamB2_1_LP,
+    kParamB1_1_LP,
+    kParamB0_1_LP,
+    kParamA2_1_LP,
+    kParamA1_1_LP,
+    kParamB2_2_LP,
+    kParamB1_2_LP,
+    kParamB0_2_LP,
+    kParamA2_2_LP,
+    kParamA1_2_LP,
+    kParamB2_3_LP,
+    kParamB1_3_LP,
+    kParamB0_3_LP,
+    kParamA2_3_LP,
+    kParamA1_3_LP,
+    kParamB2_4_LP,
+    kParamB1_4_LP,
+    kParamB0_4_LP,
+    kParamA2_4_LP,
+    kParamA1_4_LP,
     kNumParams
   };
 
 public:
-  explicit QCrossover( tfilterdesign design, Vektorraum::tfloat fc,
-                       uint16_t addrB2_1, uint16_t addrB1_1, uint16_t addrB0_1,
-                       uint16_t addrA2_1, uint16_t addrA1_1,
-                       uint16_t addrB2_2, uint16_t addrB1_2, uint16_t addrB0_2,
-                       uint16_t addrA2_2, uint16_t addrA1_2,
-                       uint16_t addrB2_3, uint16_t addrB1_3, uint16_t addrB0_3,
-                       uint16_t addrA2_3, uint16_t addrA1_3,
-                       uint16_t addrB2_4, uint16_t addrB1_4, uint16_t addrB0_4,
-                       uint16_t addrA2_4, uint16_t addrA1_4,
+  explicit QCrossover( tfilterdesign designHp, Vektorraum::tfloat fchp,
+                       tfilterdesign designLp, Vektorraum::tfloat fclp,
+                       uint16_t addrB2_1_HP, uint16_t addrB1_1_HP, uint16_t addrB0_1_HP,
+                       uint16_t addrA2_1_HP, uint16_t addrA1_1_HP,
+                       uint16_t addrB2_2_HP, uint16_t addrB1_2_HP, uint16_t addrB0_2_HP,
+                       uint16_t addrA2_2_HP, uint16_t addrA1_2_HP,
+                       uint16_t addrB2_3_HP, uint16_t addrB1_3_HP, uint16_t addrB0_3_HP,
+                       uint16_t addrA2_3_HP, uint16_t addrA1_3_HP,
+                       uint16_t addrB2_4_HP, uint16_t addrB1_4_HP, uint16_t addrB0_4_HP,
+                       uint16_t addrA2_4_HP, uint16_t addrA1_4_HP,
+                       uint16_t addrB2_1_LP, uint16_t addrB1_1_LP, uint16_t addrB0_1_LP,
+                       uint16_t addrA2_1_LP, uint16_t addrA1_1_LP,
+                       uint16_t addrB2_2_LP, uint16_t addrB1_2_LP, uint16_t addrB0_2_LP,
+                       uint16_t addrA2_2_LP, uint16_t addrA1_2_LP,
+                       uint16_t addrB2_3_LP, uint16_t addrB1_3_LP, uint16_t addrB0_3_LP,
+                       uint16_t addrA2_3_LP, uint16_t addrA1_3_LP,
+                       uint16_t addrB2_4_LP, uint16_t addrB1_4_LP, uint16_t addrB0_4_LP,
+                       uint16_t addrA2_4_LP, uint16_t addrA1_4_LP,
                        Vektorraum::tfloat samplerate,
                        CFreeDspAurora* ptrdsp,
                        QWidget *parent = nullptr );
@@ -126,10 +155,14 @@ protected slots:
 private:
   Ui::QCrossover *ui;
 
-  tfilterdesign filterDesign;
-  Vektorraum::tfloat Q[4];
-  Vektorraum::tfloat fc[4];
-  Vektorraum::tfloat coeffs[4*5];
+  tfilterdesign filterDesignHp;
+  tfilterdesign filterDesignLp;
+  Vektorraum::tfloat Q_hp[4];
+  Vektorraum::tfloat fc_hp[4];
+  Vektorraum::tfloat Q_lp[4];
+  Vektorraum::tfloat fc_lp[4];
+  Vektorraum::tfloat coeffs_hp[4*5];
+  Vektorraum::tfloat coeffs_lp[4*5];
   uint16_t addr[kNumParams];
   CFreeDspAurora* dsp;
   Vektorraum::tuint stages;

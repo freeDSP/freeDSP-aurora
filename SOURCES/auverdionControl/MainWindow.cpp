@@ -444,8 +444,7 @@ void MainWindow::on_actionRead_from_DSP_triggered()
   switch( pid )
   {
   case CFreeDspAurora::PLUGIN_8CHANNELS:
-    
-    qDebug()<<"Loading 8channels";
+    myLog()<<"Loading 8channels";
 
     ui->tabPresets->blockSignals( true );
     for( int ii = 0; ii < 4; ii++ )
@@ -466,7 +465,6 @@ void MainWindow::on_actionRead_from_DSP_triggered()
       numChannels = dspPlugin[ii]->getNumChannels();
       for( unsigned int n = 0; n < numChannels; n++ )
       {
-        //tDspChannel dspChannel = plugin8Channels.getGuiForChannel( n, FS, &dsp, this );
         tDspChannel dspChannel = dspPlugin[ii]->getGuiForChannel( n, FS, &dsp, this );
 
         presets[ii]->tabChannels->addTab( dspChannel.channel, "" );
@@ -485,7 +483,58 @@ void MainWindow::on_actionRead_from_DSP_triggered()
 
         for( unsigned int chn = 0; chn < numChannels; chn++ )
         {
-          //QAction* action = new QAction( "Show " + plugin8Channels.getChannelName( chn ) );
+          QAction* action = new QAction( "Show " + dspPlugin[ii]->getChannelName( chn ) );
+          action->setCheckable( true );
+          dspChannel.channel->actionsContextMenu.append( action );
+          dspChannel.channel->contextMenu.addAction( action );
+        }
+        dspChannel.channel->actionsContextMenu.at(static_cast<int>(n))->setChecked( true );
+        connect( dspChannel.channel, SIGNAL(selectionChanged()), this, SLOT(updatePlots()) );
+      }
+    }
+    ui->tabPresets->blockSignals( false );
+    break;
+
+  case CFreeDspAurora::PLUGIN_HOMECINEMA71:
+    myLog()<<"Loading HomeCinema71";
+
+    ui->tabPresets->blockSignals( true );
+    for( int ii = 0; ii < 4; ii++ )
+    {
+      presets[ii] = new QPreset;
+      if( ii == 0 )
+        ui->tabPresets->addTab( presets[ii], "Preset A" );
+      else if( ii == 1 )
+        ui->tabPresets->addTab( presets[ii], "Preset B" );  
+      else if( ii == 2 )
+        ui->tabPresets->addTab( presets[ii], "Preset C" ); 
+      else if( ii == 3 )
+        ui->tabPresets->addTab( presets[ii], "Preset D" ); 
+
+      presets[ii]->tabChannels->removeTab( 0 );
+
+      dspPlugin[ii] = new CPlugInHomeCinema71( FS );
+      numChannels = dspPlugin[ii]->getNumChannels();
+      for( unsigned int n = 0; n < numChannels; n++ )
+      {
+        tDspChannel dspChannel = dspPlugin[ii]->getGuiForChannel( n, FS, &dsp, this );
+
+        presets[ii]->tabChannels->addTab( dspChannel.channel, "" );
+        QLabel* lbl1 = new QLabel( presets[ii]->tabChannels );
+        lbl1->setText( dspChannel.name );
+        lbl1->setStyleSheet( QString("background-color: transparent; border: 0px solid black; border-left: 2px solid ") + colorPlot[n%kMaxPlotColors].name() + QString("; color: white; ") );
+        lbl1->setFixedWidth( 100 );
+        presets[ii]->tabChannels->tabBar()->setTabButton( static_cast<int>(n), QTabBar::LeftSide, lbl1 );
+
+        dspChannel.layout->setSpacing( 0 );
+        dspChannel.layout->setMargin( 0 );
+        dspChannel.layout->setContentsMargins( 0, 0, 0, 0 );
+        dspChannel.layout->setAlignment( Qt::AlignLeft );
+
+        dspChannel.channel->widgetChannel->setLayout( dspChannel.layout );
+
+        for( unsigned int chn = 0; chn < numChannels; chn++ )
+        {
           QAction* action = new QAction( "Show " + dspPlugin[ii]->getChannelName( chn ) );
           action->setCheckable( true );
           dspChannel.channel->actionsContextMenu.append( action );

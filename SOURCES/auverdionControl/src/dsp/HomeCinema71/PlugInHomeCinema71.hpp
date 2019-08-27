@@ -10,8 +10,6 @@
 #include "freeDSP-Aurora.hpp"
 #include "DspPlugIn.hpp"
 
-#include "8channels_IC_1_PARAM.h"
-
 class CPlugInHomeCinema71 : public CDspPlugin
 {
 

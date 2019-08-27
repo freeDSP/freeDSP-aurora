@@ -16,6 +16,8 @@
 #include "QInputSelect.hpp"
 #include "QOutputSelect.hpp"
 
+#include "8channels_IC_1_PARAM.h"
+
 using namespace Vektorraum;
 
 //==============================================================================
@@ -1940,9 +1942,6 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
  */
 void CPlugIn8Channels::setMasterVolume( double val, bool doSend )
 {
-  qDebug()<<"CPlugIn8Channels::setMasterVolume";
-  qDebug()<<val;
-
   if( doSend )
   {
     QByteArray content;

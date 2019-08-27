@@ -48,7 +48,8 @@ INCLUDEPATH += src \
                src/dsp/8channels \
                src/dsp/4FIRs \
                src/dsp/HomeCinema71 \
-               ../SIGMASTUDIO/8channels
+               ../SIGMASTUDIO/8channels \
+               ../SIGMASTUDIO/HomeCinema71
 
 SOURCES += \
         main.cpp \
@@ -112,6 +113,9 @@ HEADERS += \
         ../SIGMASTUDIO/8channels/8channels_IC_1.h \
         ../SIGMASTUDIO/8channels/8channels_IC_1_REG.h \
         ../SIGMASTUDIO/8channels/8channels_IC_1_PARAM.h \
+        ../SIGMASTUDIO/HomeCinema71/HomeCinema71_IC_1.h \
+        ../SIGMASTUDIO/HomeCinema71/HomeCinema71_IC_1_REG.h \
+        ../SIGMASTUDIO/HomeCinema71/HomeCinema71_IC_1_PARAM.h \
         src/LogFile.h
 
 FORMS += \
@@ -180,13 +184,20 @@ macx {
 
   OTHER_FILES += $${ENTITLEMENTS}
 
+  # Copy dspplugins.json
   APP_DSPPLUGIN_JSON.files = $${PWD}/extras/dspplugins.json
   APP_DSPPLUGIN_JSON.path = Contents/Resources
   QMAKE_BUNDLE_DATA += APP_DSPPLUGIN_JSON
 
+  # Copy 8channels plugin
   APP_DSPPLUGIN_8CHANNELS.files = /Users/rkn/Documents/freeDSP/freeDSP-aurora/SOURCES/SIGMASTUDIO/8channels/TxBuffer_IC_1.dat /Users/rkn/Documents/freeDSP/freeDSP-aurora/SOURCES/SIGMASTUDIO/8channels/NumBytes_IC_1.dat
   APP_DSPPLUGIN_8CHANNELS.path = Contents/Resources/8channels
   QMAKE_BUNDLE_DATA += APP_DSPPLUGIN_8CHANNELS
+
+  # Copy HomeCinema71 plugin
+  APP_DSPPLUGIN_HOMECINEMA71.files = $${PWD}/../SIGMASTUDIO/HomeCinema71/TxBuffer_IC_1.dat $${PWD}/../SIGMASTUDIO/HomeCinema71/NumBytes_IC_1.dat
+  APP_DSPPLUGIN_HOMECINEMA71.path = Contents/Resources/homecinema71
+  QMAKE_BUNDLE_DATA += APP_DSPPLUGIN_HOMECINEMA71
 
   codesign.depends  += all
   codesign.commands += $$dirname(QMAKE_QMAKE)/macdeployqt $${TARGET}.app -appstore-compliant;
@@ -246,21 +257,53 @@ win32 {
 
   RC_ICONS = $${PWD}/rc/appicon.ico
 
-  TARGET_DIR = $${OUT_PWD}/release/dspplugins/8channels
+  
+
+  
   TARGET_SRC_TXBUFFER = E:/Documents/freeDSP/freeDSP-aurora/SOURCES/SIGMASTUDIO/8channels/TxBuffer_IC_1.dat
   TARGET_DEST_TXBUFFER = $$TARGET_DIR/TxBuffer_IC_1.dat
   TARGET_SRC_NUMBYTES = E:/Documents/freeDSP/freeDSP-aurora/SOURCES/SIGMASTUDIO/8channels/NumBytes_IC_1.dat
   TARGET_DEST_NUMBYTES = $$TARGET_DIR/NumBytes_IC_1.dat
 
-  TARGET_DIR ~= s,/,\\,g
+  
+
+  
+  TARGET_APP_DSPPLUGIN_JSON ~= s,/,\\,g
   TARGET_SRC_TXBUFFER ~= s,/,\\,g
   TARGET_DEST_TXBUFFER ~= s,/,\\,g
   TARGET_SRC_NUMBYTES ~= s,/,\\,g
   TARGET_DEST_NUMBYTES ~= s,/,\\,g
 
+  
+  # Copy dspplugins.json
+  SOURCE_APP_DSPPLUGIN_JSON = $${PWD}/extras/dspplugins.json
+  TARGET_APP_DSPPLUGIN_JSON = $${OUT_PWD}/release/dspplugins.json
+  SOURCE_APP_DSPPLUGIN_JSON ~= s,/,\\,g
+  TARGET_APP_DSPPLUGIN_JSON ~= s,/,\\,g
+  QMAKE_POST_LINK +=$$quote(cmd /c copy /y $${SOURCE_APP_DSPPLUGIN_JSON} $${TARGET_APP_DSPPLUGIN_JSON}$$escape_expand(\n\t))
+  
+  # Copy 8channels plugin
+  TARGET_DIR = $${OUT_PWD}/release/dspplugins/8channels
+  TARGET_DIR ~= s,/,\\,g
   QMAKE_POST_LINK +=$$quote(cmd /c if not exist "$${TARGET_DIR}" mkdir $${TARGET_DIR} $$escape_expand(\n\t))
   QMAKE_POST_LINK +=$$quote(cmd /c copy /y $${TARGET_SRC_TXBUFFER} $${TARGET_DEST_TXBUFFER}$$escape_expand(\n\t))
   QMAKE_POST_LINK +=$$quote(cmd /c copy /y $${TARGET_SRC_NUMBYTES} $${TARGET_DEST_NUMBYTES}$$escape_expand(\n\t))
+
+  # Copy HomeCinema71 plugin
+  TARGET_DIR_HOMECINEMA71 = $${OUT_PWD}/release/dspplugins/homecinema71
+  TARGET_DIR_HOMECINEMA71 ~= s,/,\\,g
+  SOURCE_APP_DSPPLUGIN_HOMECINEMA71_TXBUFFER = $${PWD}/../SIGMASTUDIO/HomeCinema71/TxBuffer_IC_1.dat
+  SOURCE_APP_DSPPLUGIN_HOMECINEMA71_NUMBYTES = $${PWD}/../SIGMASTUDIO/HomeCinema71/NumBytes_IC_1.dat
+  TARGET_APP_DSPPLUGIN_HOMECINEMA71_TXBUFFER = $${OUT_PWD}/release/dspplugins/homecinema71/TxBuffer_IC_1.dat
+  TARGET_APP_DSPPLUGIN_HOMECINEMA71_NUMBYTES = $${OUT_PWD}/release/dspplugins/homecinema71/NumBytes_IC_1.dat
+  SOURCE_APP_DSPPLUGIN_HOMECINEMA71_TXBUFFER ~= s,/,\\,g
+  SOURCE_APP_DSPPLUGIN_HOMECINEMA71_NUMBYTES ~= s,/,\\,g
+  TARGET_APP_DSPPLUGIN_HOMECINEMA71_TXBUFFER ~= s,/,\\,g
+  TARGET_APP_DSPPLUGIN_HOMECINEMA71_NUMBYTES ~= s,/,\\,g
+  QMAKE_POST_LINK +=$$quote(cmd /c if not exist "$${TARGET_DIR}" mkdir $${TARGET_DIR} $$escape_expand(\n\t))
+  QMAKE_POST_LINK +=$$quote(cmd /c copy /y $${SOURCE_APP_DSPPLUGIN_HOMECINEMA71_TXBUFFER} $${TARGET_APP_DSPPLUGIN_HOMECINEMA71_TXBUFFER}$$escape_expand(\n\t))
+  QMAKE_POST_LINK +=$$quote(cmd /c copy /y $${SOURCE_APP_DSPPLUGIN_HOMECINEMA71_NUMBYTES} $${TARGET_APP_DSPPLUGIN_HOMECINEMA71_NUMBYTES}$$escape_expand(\n\t))
+
 
   product.depends += all
 

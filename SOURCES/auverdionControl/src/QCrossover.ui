@@ -133,28 +133,6 @@
          </property>
         </spacer>
        </item>
-       <item>
-        <widget class="QDoubleSpinBox" name="doubleSpinBoxGainLp">
-         <property name="contextMenuPolicy">
-          <enum>Qt::NoContextMenu</enum>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-         <property name="buttonSymbols">
-          <enum>QAbstractSpinBox::NoButtons</enum>
-         </property>
-         <property name="suffix">
-          <string notr="true"> dB</string>
-         </property>
-         <property name="minimum">
-          <double>-60.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>0.000000000000000</double>
-         </property>
-        </widget>
-       </item>
       </layout>
      </item>
      <item>
@@ -242,28 +220,6 @@
           </size>
          </property>
         </spacer>
-       </item>
-       <item>
-        <widget class="QDoubleSpinBox" name="doubleSpinBox">
-         <property name="contextMenuPolicy">
-          <enum>Qt::NoContextMenu</enum>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-         <property name="buttonSymbols">
-          <enum>QAbstractSpinBox::NoButtons</enum>
-         </property>
-         <property name="suffix">
-          <string notr="true"> dB</string>
-         </property>
-         <property name="minimum">
-          <double>-60.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>0.000000000000000</double>
-         </property>
-        </widget>
        </item>
       </layout>
      </item>

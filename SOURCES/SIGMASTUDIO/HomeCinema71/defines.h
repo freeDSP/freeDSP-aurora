@@ -1,8 +1,8 @@
 /*
  * File:           defines.h
  *
- * Created:        Tuesday, August 27, 2019 3:37:37 PM
- * Description:    8channels IC default download data definitions.
+ * Created:        Tuesday, August 27, 2019 3:27:35 PM
+ * Description:    HomeCinema71 IC default download data definitions.
  *
  * This software is distributed in the hope that it will be useful,
  * but is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
@@ -19,7 +19,7 @@
 #ifndef __DEFINES_H__
 #define __DEFINES_H__
 
-#define BufferSize_IC_1     	92206
+#define BufferSize_IC_1     	91990
 #define NumTransactions_IC_1	57
 
 

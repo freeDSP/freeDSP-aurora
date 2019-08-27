@@ -279,54 +279,54 @@ QByteArray QInputSelect::getDspParams( void )
   //--- Expansion Inputs ---
   else if( ui->comboBoxInput->currentText() == QString( "Expansion 1" ) )
   {
-    content.append( dsp->makeParameterForWifi( addr[kChannelADC], 0x00000000 ) );
+    content.append( dsp->makeParameterForWifi( addr[kChannelEXP], 0x00000000 ) );
     content.append( dsp->makeParameterForWifi( addr[kSelectPort], kPortEXP ) );
   }
   else if( ui->comboBoxInput->currentText() == QString( "Expansion 2" ) )
   {
-    content.append( dsp->makeParameterForWifi( addr[kChannelADC], 0x00000001 ) );
+    content.append( dsp->makeParameterForWifi( addr[kChannelEXP], 0x00000001 ) );
     content.append( dsp->makeParameterForWifi( addr[kSelectPort], kPortEXP ) );
   }
   else if( ui->comboBoxInput->currentText() == QString( "Expansion 3" ) )
   {
-    content.append( dsp->makeParameterForWifi( addr[kChannelADC], 0x00000002 ) );
+    content.append( dsp->makeParameterForWifi( addr[kChannelEXP], 0x00000002 ) );
     content.append( dsp->makeParameterForWifi( addr[kSelectPort], kPortEXP ) );
   }
   else if( ui->comboBoxInput->currentText() == QString( "Expansion 4" ) )
   {
-    content.append( dsp->makeParameterForWifi( addr[kChannelADC], 0x00000003 ) );
+    content.append( dsp->makeParameterForWifi( addr[kChannelEXP], 0x00000003 ) );
     content.append( dsp->makeParameterForWifi( addr[kSelectPort], kPortEXP ) );
   }
   else if( ui->comboBoxInput->currentText() == QString( "Expansion 5" ) )
   {
-    content.append( dsp->makeParameterForWifi( addr[kChannelADC], 0x00000004 ) );
+    content.append( dsp->makeParameterForWifi( addr[kChannelEXP], 0x00000004 ) );
     content.append( dsp->makeParameterForWifi( addr[kSelectPort], kPortEXP ) );
   }
   else if( ui->comboBoxInput->currentText() == QString( "Expansion 6" ) )
   {
-    content.append( dsp->makeParameterForWifi( addr[kChannelADC], 0x00000005 ) );
+    content.append( dsp->makeParameterForWifi( addr[kChannelEXP], 0x00000005 ) );
     content.append( dsp->makeParameterForWifi( addr[kSelectPort], kPortEXP ) );
   }
   else if( ui->comboBoxInput->currentText() == QString( "Expansion 7" ) )
   {
-    content.append( dsp->makeParameterForWifi( addr[kChannelADC], 0x00000006 ) );
+    content.append( dsp->makeParameterForWifi( addr[kChannelEXP], 0x00000006 ) );
     content.append( dsp->makeParameterForWifi( addr[kSelectPort], kPortEXP ) );
   }
   else if( ui->comboBoxInput->currentText() == QString( "Expansion 8" ) )
   {
-    content.append( dsp->makeParameterForWifi( addr[kChannelADC], 0x00000007 ) );
+    content.append( dsp->makeParameterForWifi( addr[kChannelEXP], 0x00000007 ) );
     content.append( dsp->makeParameterForWifi( addr[kSelectPort], kPortEXP ) );
   }
 
   //--- SPDIF Inputs ---
   else if( ui->comboBoxInput->currentText() == QString( "SPDIF 1" ) )
   {
-    content.append( dsp->makeParameterForWifi( addr[kChannelADC], 0x00000000 ) );
+    content.append( dsp->makeParameterForWifi( addr[kChannelSPDIF], 0x00000000 ) );
     content.append( dsp->makeParameterForWifi( addr[kSelectPort], kChannelSPDIF ) );
   }
   else if( ui->comboBoxInput->currentText() == QString( "SPDIF 2" ) )
   {
-    content.append( dsp->makeParameterForWifi( addr[kChannelADC], 0x00000001 ) );
+    content.append( dsp->makeParameterForWifi( addr[kChannelSPDIF], 0x00000001 ) );
     content.append( dsp->makeParameterForWifi( addr[kSelectPort], kChannelSPDIF ) );
   }
 
