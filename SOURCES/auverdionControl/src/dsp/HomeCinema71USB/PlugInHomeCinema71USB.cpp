@@ -2,7 +2,7 @@
 
 #include <QObject>
 
-#include "PlugInHomeCinema71.hpp"
+#include "PlugInHomeCinema71USB.hpp"
 
 #include "QChannel.hpp"
 #include "QDspBlock.hpp"
@@ -17,7 +17,7 @@
 #include "QOutputSelect.hpp"
 #include "QCrossover.hpp"
 
-#include "HomeCinema71_IC_1_PARAM.h"
+#include "HomeCinema71USB_IC_1_PARAM.h"
 
 using namespace Vektorraum;
 
@@ -25,7 +25,7 @@ using namespace Vektorraum;
 /*! Constructor
  *
  */
-CPlugInHomeCinema71::CPlugInHomeCinema71( tfloat samplerate )
+CPlugInHomeCinema71USB::CPlugInHomeCinema71USB( tfloat samplerate )
 {
   fs = samplerate;
 
@@ -111,7 +111,7 @@ CPlugInHomeCinema71::CPlugInHomeCinema71( tfloat samplerate )
 /*! Destructor
  *
  */
-CPlugInHomeCinema71::~CPlugInHomeCinema71( void )
+CPlugInHomeCinema71USB::~CPlugInHomeCinema71USB( void )
 {
 
 }
@@ -120,7 +120,7 @@ CPlugInHomeCinema71::~CPlugInHomeCinema71( void )
 /*!
  *
  */
-tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, CFreeDspAurora* ptrdsp, QWidget* parent )
+tDspChannel CPlugInHomeCinema71USB::getGuiForChannel( unsigned int chn, tfloat fs, CFreeDspAurora* ptrdsp, QWidget* parent )
 {
   tDspChannel dspChannel;
 
@@ -155,7 +155,7 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     //--- Channel 1
     dspChannel.name = QString( "Front Left" );
 
-    input = new QInputSelect( 0, 
+    input = new QInputSelect( 8, 
                               MOD_INPUTSELECT_1_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS9INDEX_ADDR,
                               MOD_INPUTSELECT_1_NX1_1_UAC_ALG0_MONOMUXSIGMA300NS10INDEX_ADDR, 
                               MOD_INPUTSELECT_1_NX1_1_ESP32_ALG0_MONOMUXSIGMA300NS11INDEX_ADDR, 
@@ -357,7 +357,7 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     //--- Channel 2
     dspChannel.name = QString( "Front Right" );
 
-    input = new QInputSelect( 1, 
+    input = new QInputSelect( 9, 
                               MOD_INPUTSELECT_2_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS1INDEX_ADDR,
                               MOD_INPUTSELECT_2_NX1_1_UAC_ALG0_MONOMUXSIGMA300NS2INDEX_ADDR, 
                               MOD_INPUTSELECT_2_NX1_1_ESP32_ALG0_MONOMUXSIGMA300NS3INDEX_ADDR, 
@@ -559,7 +559,7 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     //--- Channel 3
     dspChannel.name = QString( "Front Center" );
 
-    input = new QInputSelect( 2, 
+    input = new QInputSelect( 10, 
                               MOD_INPUTSELECT_3_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS7INDEX_ADDR,
                               MOD_INPUTSELECT_3_NX1_1_UAC_ALG0_MONOMUXSIGMA300NS8INDEX_ADDR, 
                               MOD_INPUTSELECT_3_NX1_1_ESP32_ALG0_MONOMUXSIGMA300NS15INDEX_ADDR, 
@@ -761,7 +761,7 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     //--- Channel 4
     dspChannel.name = QString( "Rear Left" );
 
-    input = new QInputSelect( 3, 
+    input = new QInputSelect( 11, 
                               MOD_INPUTSELECT_4_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS19INDEX_ADDR,
                               MOD_INPUTSELECT_4_NX1_1_UAC_ALG0_MONOMUXSIGMA300NS20INDEX_ADDR, 
                               MOD_INPUTSELECT_4_NX1_1_ESP32_ALG0_MONOMUXSIGMA300NS21INDEX_ADDR, 
@@ -963,7 +963,7 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     //--- Channel 5
     dspChannel.name = QString( "Rear Right" );
 
-    input = new QInputSelect( 4, 
+    input = new QInputSelect( 12, 
                               MOD_INPUTSELECT_5_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS25INDEX_ADDR,
                               MOD_INPUTSELECT_5_NX1_1_UAC_ALG0_MONOMUXSIGMA300NS26INDEX_ADDR, 
                               MOD_INPUTSELECT_5_NX1_1_ESP32_ALG0_MONOMUXSIGMA300NS27INDEX_ADDR, 
@@ -1165,7 +1165,7 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     //--- Channel 6
     dspChannel.name = QString( "Side Left" );
 
-    input = new QInputSelect( 5, 
+    input = new QInputSelect( 13, 
                               MOD_INPUTSELECT_6_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS31INDEX_ADDR,
                               MOD_INPUTSELECT_6_NX1_1_UAC_ALG0_MONOMUXSIGMA300NS32INDEX_ADDR, 
                               MOD_INPUTSELECT_6_NX1_1_ESP32_ALG0_MONOMUXSIGMA300NS33INDEX_ADDR, 
@@ -1367,7 +1367,7 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     //--- Channel 7
     dspChannel.name = QString( "Side Right" );
 
-    input = new QInputSelect( 6, 
+    input = new QInputSelect( 14, 
                               MOD_INPUTSELECT_7_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS37INDEX_ADDR,
                               MOD_INPUTSELECT_7_NX1_1_UAC_ALG0_MONOMUXSIGMA300NS38INDEX_ADDR, 
                               MOD_INPUTSELECT_7_NX1_1_ESP32_ALG0_MONOMUXSIGMA300NS39INDEX_ADDR, 
@@ -1569,7 +1569,7 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     //--- Channel 8
     dspChannel.name = QString( "LFE" );
 
-    input = new QInputSelect( 7, 
+    input = new QInputSelect( 15, 
                               MOD_INPUTSELECT_8_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS43INDEX_ADDR,
                               MOD_INPUTSELECT_8_NX1_1_UAC_ALG0_MONOMUXSIGMA300NS44INDEX_ADDR, 
                               MOD_INPUTSELECT_8_NX1_1_ESP32_ALG0_MONOMUXSIGMA300NS45INDEX_ADDR, 
@@ -1772,7 +1772,7 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
 /*!
  *
  */
-void CPlugInHomeCinema71::setMasterVolume( double val, bool doSend )
+void CPlugInHomeCinema71USB::setMasterVolume( double val, bool doSend )
 {
   if( doSend )
   {
@@ -1786,7 +1786,7 @@ void CPlugInHomeCinema71::setMasterVolume( double val, bool doSend )
 /*!
  *
  */
-uint16_t CPlugInHomeCinema71::getAddressMasterVolume( void )
+uint16_t CPlugInHomeCinema71USB::getAddressMasterVolume( void )
 {
   return MOD_MASTERVOLUME_ALG0_TARGET_ADDR;
 }

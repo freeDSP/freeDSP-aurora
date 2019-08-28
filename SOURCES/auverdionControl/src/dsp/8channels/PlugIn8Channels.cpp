@@ -154,7 +154,6 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     //--- Channel 1
     dspChannel.name = QString( "Channel 1" );
 
-    //input = new QInputSelect( 0, MOD_INPUTSELECT_1_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS9INDEX_ADDR, ptrdsp, channel );
     input = new QInputSelect( 0, 
                               MOD_INPUTSELECT_1_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS9INDEX_ADDR,
                               MOD_INPUTSELECT_1_NX1_1_UAC_ALG0_MONOMUXSIGMA300NS10INDEX_ADDR, 
@@ -376,7 +375,6 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     //--- Channel 2
     dspChannel.name = QString( "Channel 2" );
 
-    //input = new QInputSelect( 1, MOD_INPUTSELECT_2_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS1INDEX_ADDR, ptrdsp, channel );
     input = new QInputSelect( 1, 
                               MOD_INPUTSELECT_2_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS1INDEX_ADDR,
                               MOD_INPUTSELECT_2_NX1_1_UAC_ALG0_MONOMUXSIGMA300NS2INDEX_ADDR, 
@@ -598,7 +596,6 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     //--- Channel 3
     dspChannel.name = QString( "Channel 3" );
 
-    //input = new QInputSelect( 2, MOD_INPUTSELECT_3_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS7INDEX_ADDR, ptrdsp, channel );
     input = new QInputSelect( 2, 
                               MOD_INPUTSELECT_3_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS7INDEX_ADDR,
                               MOD_INPUTSELECT_3_NX1_1_UAC_ALG0_MONOMUXSIGMA300NS8INDEX_ADDR, 
@@ -820,7 +817,6 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     //--- Channel 4
     dspChannel.name = QString( "Channel 4" );
 
-    //input = new QInputSelect( 3, MOD_INPUTSELECT_4_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS19INDEX_ADDR, ptrdsp, channel );
     input = new QInputSelect( 3, 
                               MOD_INPUTSELECT_4_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS19INDEX_ADDR,
                               MOD_INPUTSELECT_4_NX1_1_UAC_ALG0_MONOMUXSIGMA300NS20INDEX_ADDR, 
@@ -1042,7 +1038,6 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     //--- Channel 5
     dspChannel.name = QString( "Channel 5" );
 
-    //input = new QInputSelect( 4, MOD_INPUTSELECT_5_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS25INDEX_ADDR, ptrdsp, channel );
     input = new QInputSelect( 4, 
                               MOD_INPUTSELECT_5_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS25INDEX_ADDR,
                               MOD_INPUTSELECT_5_NX1_1_UAC_ALG0_MONOMUXSIGMA300NS26INDEX_ADDR, 
@@ -1264,7 +1259,6 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     //--- Channel 6
     dspChannel.name = QString( "Channel 6" );
 
-    //input = new QInputSelect( 5, MOD_INPUTSELECT_6_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS31INDEX_ADDR, ptrdsp, channel );
     input = new QInputSelect( 5, 
                               MOD_INPUTSELECT_6_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS31INDEX_ADDR,
                               MOD_INPUTSELECT_6_NX1_1_UAC_ALG0_MONOMUXSIGMA300NS32INDEX_ADDR, 
@@ -1486,7 +1480,6 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     //--- Channel 7
     dspChannel.name = QString( "Channel 7" );
 
-    //input = new QInputSelect( 6, MOD_INPUTSELECT_7_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS37INDEX_ADDR, ptrdsp, channel );
     input = new QInputSelect( 6, 
                               MOD_INPUTSELECT_7_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS37INDEX_ADDR,
                               MOD_INPUTSELECT_7_NX1_1_UAC_ALG0_MONOMUXSIGMA300NS38INDEX_ADDR, 
@@ -1708,7 +1701,6 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
     //--- Channel 8
     dspChannel.name = QString( "Channel 8" );
 
-    //input = new QInputSelect( 7, MOD_INPUTSELECT_8_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS43INDEX_ADDR, ptrdsp, channel );
     input = new QInputSelect( 7, 
                               MOD_INPUTSELECT_8_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS43INDEX_ADDR,
                               MOD_INPUTSELECT_8_NX1_1_UAC_ALG0_MONOMUXSIGMA300NS44INDEX_ADDR, 

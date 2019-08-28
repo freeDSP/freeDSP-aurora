@@ -140,7 +140,6 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
 
   for( int ii = 0; ii < dspPluginMetaData.size(); ii++ )
   {
-    qDebug()<<dspPluginMetaData.at(ii).pid<<ui->comboBoxPlugIn->currentData().toInt();
     if( dspPluginMetaData.at(ii).pid == ui->comboBoxPlugIn->currentData().toInt() )
     {
       pathTxBuffer = dspPluginMetaData.at(ii).path + "/TxBuffer_IC_1.dat";
