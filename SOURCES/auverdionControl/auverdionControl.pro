@@ -121,15 +121,15 @@ HEADERS += \
         ../SIGMASTUDIO/8channels/8channels_IC_1.h \
         ../SIGMASTUDIO/8channels/8channels_IC_1_REG.h \
         ../SIGMASTUDIO/8channels/8channels_IC_1_PARAM.h \
-        ../SIGMASTUDIO/8channels/8channelsUSB_IC_1.h \
-        ../SIGMASTUDIO/8channels/8channelsUSB_IC_1_REG.h \
-        ../SIGMASTUDIO/8channels/8channelsUSB_IC_1_PARAM.h \
+        ../SIGMASTUDIO/8channelsUSB/8channelsUSB_IC_1.h \
+        ../SIGMASTUDIO/8channelsUSB/8channelsUSB_IC_1_REG.h \
+        ../SIGMASTUDIO/8channelsUSB/8channelsUSB_IC_1_PARAM.h \
         ../SIGMASTUDIO/HomeCinema71/HomeCinema71_IC_1.h \
         ../SIGMASTUDIO/HomeCinema71/HomeCinema71_IC_1_REG.h \
         ../SIGMASTUDIO/HomeCinema71/HomeCinema71_IC_1_PARAM.h \
-        ../SIGMASTUDIO/HomeCinema71/HomeCinema71USB_IC_1.h \
-        ../SIGMASTUDIO/HomeCinema71/HomeCinema71USB_IC_1_REG.h \
-        ../SIGMASTUDIO/HomeCinema71/HomeCinema71USB_IC_1_PARAM.h \
+        ../SIGMASTUDIO/HomeCinema71USB/HomeCinema71USB_IC_1.h \
+        ../SIGMASTUDIO/HomeCinema71USB/HomeCinema71USB_IC_1_REG.h \
+        ../SIGMASTUDIO/HomeCinema71USB/HomeCinema71USB_IC_1_PARAM.h \
         src/LogFile.h
 
 FORMS += \
