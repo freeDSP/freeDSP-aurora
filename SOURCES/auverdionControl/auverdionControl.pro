@@ -281,24 +281,6 @@ win32 {
 
   RC_ICONS = $${PWD}/rc/appicon.ico
 
-  
-
-  
-  TARGET_SRC_TXBUFFER = E:/Documents/freeDSP/freeDSP-aurora/SOURCES/SIGMASTUDIO/8channels/TxBuffer_IC_1.dat
-  TARGET_DEST_TXBUFFER = $$TARGET_DIR/TxBuffer_IC_1.dat
-  TARGET_SRC_NUMBYTES = E:/Documents/freeDSP/freeDSP-aurora/SOURCES/SIGMASTUDIO/8channels/NumBytes_IC_1.dat
-  TARGET_DEST_NUMBYTES = $$TARGET_DIR/NumBytes_IC_1.dat
-
-  
-
-  
-  TARGET_APP_DSPPLUGIN_JSON ~= s,/,\\,g
-  TARGET_SRC_TXBUFFER ~= s,/,\\,g
-  TARGET_DEST_TXBUFFER ~= s,/,\\,g
-  TARGET_SRC_NUMBYTES ~= s,/,\\,g
-  TARGET_DEST_NUMBYTES ~= s,/,\\,g
-
-  
   # Copy dspplugins.json
   SOURCE_APP_DSPPLUGIN_JSON = $${PWD}/extras/dspplugins.json
   TARGET_APP_DSPPLUGIN_JSON = $${OUT_PWD}/release/dspplugins.json
@@ -307,11 +289,19 @@ win32 {
   QMAKE_POST_LINK +=$$quote(cmd /c copy /y $${SOURCE_APP_DSPPLUGIN_JSON} $${TARGET_APP_DSPPLUGIN_JSON}$$escape_expand(\n\t))
   
   # Copy 8channels plugin
-  TARGET_DIR = $${OUT_PWD}/release/dspplugins/8channels
-  TARGET_DIR ~= s,/,\\,g
-  QMAKE_POST_LINK +=$$quote(cmd /c if not exist "$${TARGET_DIR}" mkdir $${TARGET_DIR} $$escape_expand(\n\t))
-  QMAKE_POST_LINK +=$$quote(cmd /c copy /y $${TARGET_SRC_TXBUFFER} $${TARGET_DEST_TXBUFFER}$$escape_expand(\n\t))
-  QMAKE_POST_LINK +=$$quote(cmd /c copy /y $${TARGET_SRC_NUMBYTES} $${TARGET_DEST_NUMBYTES}$$escape_expand(\n\t))
+  TARGET_DIR_8CHANNELS = $${OUT_PWD}/release/dspplugins/8channels
+  TARGET_DIR_8CHANNELS ~= s,/,\\,g
+  SOURCE_APP_DSPPLUGIN_8CHANNELS_TXBUFFER = $${PWD}/../SIGMASTUDIO/8channels/TxBuffer_IC_1.dat
+  SOURCE_APP_DSPPLUGIN_8CHANNELS_NUMBYTES = $${PWD}/../SIGMASTUDIO/8channels/NumBytes_IC_1.dat
+  TARGET_APP_DSPPLUGIN_8CHANNELS_TXBUFFER = $${OUT_PWD}/release/dspplugins/8channels/TxBuffer_IC_1.dat
+  TARGET_APP_DSPPLUGIN_8CHANNELS_NUMBYTES = $${OUT_PWD}/release/dspplugins/8channels/NumBytes_IC_1.dat
+  SOURCE_APP_DSPPLUGIN_8CHANNELS_TXBUFFER ~= s,/,\\,g
+  SOURCE_APP_DSPPLUGIN_8CHANNELS_NUMBYTES ~= s,/,\\,g
+  TARGET_APP_DSPPLUGIN_8CHANNELS_TXBUFFER ~= s,/,\\,g
+  TARGET_APP_DSPPLUGIN_8CHANNELS_NUMBYTES ~= s,/,\\,g
+  QMAKE_POST_LINK +=$$quote(cmd /c if not exist "$${TARGET_DIR_8CHANNELS}" mkdir $${TARGET_DIR_8CHANNELS} $$escape_expand(\n\t))
+  QMAKE_POST_LINK +=$$quote(cmd /c copy /y $${SOURCE_APP_DSPPLUGIN_8CHANNELS_TXBUFFER} $${TARGET_APP_DSPPLUGIN_8CHANNELS_TXBUFFER}$$escape_expand(\n\t))
+  QMAKE_POST_LINK +=$$quote(cmd /c copy /y $${SOURCE_APP_DSPPLUGIN_8CHANNELS_NUMBYTES} $${TARGET_APP_DSPPLUGIN_8CHANNELS_NUMBYTES}$$escape_expand(\n\t))
 
   # Copy HomeCinema71 plugin
   TARGET_DIR_HOMECINEMA71 = $${OUT_PWD}/release/dspplugins/homecinema71
@@ -346,7 +336,7 @@ win32 {
   # Copy HomeCinema71 USB plugin
   TARGET_DIR_HOMECINEMA71_USB = $${OUT_PWD}/release/dspplugins/homecinema71usb
   TARGET_DIR_HOMECINEMA71_USB ~= s,/,\\,g
-  SOURCE_APP_DSPPLUGIN_HOMECINEMA71_USBTXBUFFER = $${PWD}/../SIGMASTUDIO/HomeCinema71USB/TxBuffer_IC_1.dat
+  SOURCE_APP_DSPPLUGIN_HOMECINEMA71_USB_TXBUFFER = $${PWD}/../SIGMASTUDIO/HomeCinema71USB/TxBuffer_IC_1.dat
   SOURCE_APP_DSPPLUGIN_HOMECINEMA71_USB_NUMBYTES = $${PWD}/../SIGMASTUDIO/HomeCinema71USB/NumBytes_IC_1.dat
   TARGET_APP_DSPPLUGIN_HOMECINEMA71_USB_TXBUFFER = $${OUT_PWD}/release/dspplugins/homecinema71usb/TxBuffer_IC_1.dat
   TARGET_APP_DSPPLUGIN_HOMECINEMA71_USB_NUMBYTES = $${OUT_PWD}/release/dspplugins/homecinema71usb/NumBytes_IC_1.dat
@@ -355,8 +345,8 @@ win32 {
   TARGET_APP_DSPPLUGIN_HOMECINEMA71_USB_TXBUFFER ~= s,/,\\,g
   TARGET_APP_DSPPLUGIN_HOMECINEMA71_USB_NUMBYTES ~= s,/,\\,g
   QMAKE_POST_LINK +=$$quote(cmd /c if not exist "$${TARGET_DIR_HOMECINEMA71_USB}" mkdir $${TARGET_DIR_HOMECINEMA71_USB} $$escape_expand(\n\t))
-  QMAKE_POST_LINK +=$$quote(cmd /c copy /y $${SOURCE_APP_DSPPLUGIN_HOMECINEMA71_USB_TXBUFFER} $${TARGET_APP_DSPPLUGIN_USB_HOMECINEMA71_TXBUFFER}$$escape_expand(\n\t))
-  QMAKE_POST_LINK +=$$quote(cmd /c copy /y $${SOURCE_APP_DSPPLUGIN_HOMECINEMA71_USB_NUMBYTES} $${TARGET_APP_DSPPLUGIN_USB_HOMECINEMA71_NUMBYTES}$$escape_expand(\n\t))
+  QMAKE_POST_LINK +=$$quote(cmd /c copy /y $${SOURCE_APP_DSPPLUGIN_HOMECINEMA71_USB_TXBUFFER} $${TARGET_APP_DSPPLUGIN_HOMECINEMA71_USB_TXBUFFER}$$escape_expand(\n\t))
+  QMAKE_POST_LINK +=$$quote(cmd /c copy /y $${SOURCE_APP_DSPPLUGIN_HOMECINEMA71_USB_NUMBYTES} $${TARGET_APP_DSPPLUGIN_HOMECINEMA71_USB_NUMBYTES}$$escape_expand(\n\t))
 
 
   product.depends += all

@@ -30,6 +30,10 @@ DialogSettings::DialogSettings( CFreeDspAurora* ptrdsp, QWidget* parent ) :
   appPath.cdUp();
   appPath.cd( "Resources" );
   //qDebug()<<appPath.absolutePath() + "/dspplugins.json";
+  #elif defined( __WIN__ )
+  QDir appPath = QDir( QCoreApplication::applicationDirPath() );
+  qDebug()<<appPath.absolutePath() + "/dspplugins.json";
+
   #else
   #error Platform not supported.
   #endif
@@ -49,7 +53,13 @@ DialogSettings::DialogSettings( CFreeDspAurora* ptrdsp, QWidget* parent ) :
       CDspPluginMetaData newMetaData;
       newMetaData.name = plugin["name"].toString();
       newMetaData.pid = plugin["pid"].toInt();
+      #if defined( __MACOSX__ )
       newMetaData.path = appPath.absolutePath() +  "/" + plugin["path"].toString();
+      #elif defined( __WIN__ )
+      newMetaData.path = appPath.absolutePath() +  "/dspplugins/" + plugin["path"].toString();
+      #else
+      #error Platform not supported.
+      #endif
       dspPluginMetaData.append( newMetaData );
 
       qDebug()<<plugin["name"].toString()<<plugin["pid"].toInt()<<plugin["path"].toString();
@@ -125,7 +135,6 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
   }*/
 
   #elif defined( __WIN__ )
-  #error Not tested.
   /*QString pathAppBundle = QCoreApplication::applicationDirPath();
   if( ui->comboBoxPlugIn->currentData().toInt() == CFreeDspAurora::PLUGIN_8CHANNELS )
   {
