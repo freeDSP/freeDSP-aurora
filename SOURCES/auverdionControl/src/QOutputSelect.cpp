@@ -10,13 +10,17 @@
 #include "QOutputSelect.hpp"
 #include "ui_QOutputSelect.h"
 
+#include "LogFile.h"
+
+extern CLogFile myLog;
+
 using namespace Vektorraum;
 
 //==============================================================================
 /*!
  *
  */
-QOutputSelect::QOutputSelect( uint32_t selection, uint16_t outputaddr, CFreeDspAurora* ptrdsp, QWidget *parent) :
+QOutputSelect::QOutputSelect( uint32_t, uint16_t outputaddr, CFreeDspAurora* ptrdsp, QWidget *parent) :
   QDspBlock(parent), ui(new Ui::QOutputSelect)
 {
   type = OUTPUTSELECT;
@@ -73,6 +77,7 @@ QOutputSelect::~QOutputSelect()
  */
 void QOutputSelect::update( tvector<tfloat> f )
 {
+  myLog()<<"QOutputSelect::update";
   H = tvector<tcomplex>( length(f) );
 
   if( fileName.isEmpty() )
@@ -85,10 +90,41 @@ void QOutputSelect::update( tvector<tfloat> f )
     tvector<tfloat> magt = abs( FR );
     tvector<tfloat> phit = angle( FR );
 
-    tvector<tfloat> mag = interp1( freq, magt, f, "spline" );
-    tvector<tfloat> phi = interp1( freq, phit, f, "spline" );
+    if( length(f) >= length(freq) )
+    {
+      myLog()<<"interpolate";
+      myLog()<<length(f)<<length(FR);
+      tvector<tfloat> mag = interp1( freq, magt, f, "spline" );
+      tvector<tfloat> phi = interp1( freq, phit, f, "spline" );
+      H = mag * exp( j*phi );
+    }
+    else
+    {
+      myLog()<<"decimate";
+      myLog()<<length(f)<<length(FR);
+      tvector<tcomplex> FR_dec = tvector<tcomplex>(length(f));
+      tvector<tfloat> freq_dec = tvector<tfloat>(length(f));
+      tuint q = static_cast<tuint>( ceil(static_cast<double>(length(freq)) / static_cast<double>(length(f))) );
+      myLog()<<"q ="<<q;
+      tuint idx = 0;
+      for( tuint ii = 0; ii < length(FR); ii = ii + q )
+      {
+        if( idx < length(f) )
+        {
+          FR_dec[idx] = FR[ii];
+          freq_dec[idx] = freq[ii];
+        }
+        idx++;
+      }
+      myLog()<<"idx = "<<idx;
 
-    H = mag * exp( j*phi );
+      tvector<tfloat> mag = interp1( freq_dec, abs( FR_dec ), f, "spline" );
+      tvector<tfloat> phi = interp1( freq_dec, angle( FR_dec ), f, "spline" );
+      H = mag * exp( j*phi );
+
+    }
+    
+    
   }
 }
 
@@ -153,13 +189,13 @@ bool QOutputSelect::eventFilter( QObject* object, QEvent* event )
             line = line.simplified();
             QStringList values = line.split( ' ' );
             bool flagNumber;
-            tfloat num = values.value(0).toDouble( &flagNumber );
+            values.value(0).toDouble( &flagNumber );
             if( flagNumber ) 
               idx++;
           }
           fileFRD.close();
         }
-
+        
         freq = tvector<tfloat>( idx );
         FR = tvector<tcomplex>( idx );
         idx = 0;
@@ -209,7 +245,7 @@ QByteArray QOutputSelect::getUserParams( void )
 //==============================================================================
 /*!
  */
-void QOutputSelect::setUserParams( QByteArray& userParams, int& idx )
+void QOutputSelect::setUserParams( QByteArray&, int& )
 {
 
 

@@ -6,6 +6,7 @@
 #include <QList>
 
 #include "vektorraum.h"
+#include "freeDSP-Aurora.hpp"
 
 #include "QChannel.hpp"
 #include "QGain.hpp"
@@ -50,7 +51,7 @@ public:
 
   virtual tDspChannel getGuiForChannel( unsigned int chn, Vektorraum::tfloat fs, CFreeDspAurora* ptrdsp, QWidget* parent ) = 0;
 
-  virtual void setMasterVolume( double val ) = 0;
+  virtual void setMasterVolume( double val, bool doSend ) = 0;
 
   //============================================================================
   /*!
@@ -78,6 +79,7 @@ protected:
   Vektorraum::tfloat fs;
   bool flagSummation;
   QList<QChannel*> listChannels;
+  CFreeDspAurora* dsp;
 };
 
 #endif

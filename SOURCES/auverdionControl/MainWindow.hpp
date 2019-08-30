@@ -6,6 +6,7 @@
 #include <QDataStream>
 #include <QTcpSocket>
 #include <QByteArray>
+#include <QMessageBox>
 
 #include "figure/QFigure.h"
 #include "QChannel.hpp"
@@ -21,10 +22,12 @@
 #include "QInputSelect.hpp"
 #include "QOutputSelect.hpp"
 #include "dialoglicense.hpp"
+#include "QPreset.h"
 
 #include "vektorraum.h"
 
 #include "freeDSP-Aurora.hpp"
+#include "DspPlugIn.hpp"
 
 class QTcpSocket;
 class QNetworkSession;
@@ -38,15 +41,24 @@ class MainWindow : public QMainWindow
   Q_OBJECT
 
 public:
-  enum twifistatus
-  {
-    STATUS_WIFI_IDLE,
-    STATUS_WIFI_RECEIVE_USERPARAM
-  };
-
-public:
   explicit MainWindow(QWidget *parent = nullptr);
   ~MainWindow();
+
+private:
+  //============================================================================
+  /*!
+   */
+  void rotateIconConnect( int rotation );
+
+  //============================================================================
+  /*!
+   */
+  void updatePresetGui( int p, QByteArray& userparams );
+
+  //============================================================================
+  /*!
+   */
+  void writeSettings( void );
 
 
 public slots:
@@ -63,7 +75,11 @@ private slots:
 
   void on_volumeSliderMain_valueChanged( double val );
 
-  void on_actionRead_from_DSP_triggered();
+  void on_actionRead_from_DSP_triggered( void );
+
+  void updateWaitingForConnect( void );
+
+  void on_tabPresets_currentChanged(int index);
 
 signals:
   void replyFinished( void );  
@@ -76,9 +92,17 @@ private:
   unsigned int numChannels;
 
   CFreeDspAurora dsp;
+  CDspPlugin* dspPlugin[NUMPRESETS];
 
   QString portName;
-  QList<QGain*> listOutputGains;
+
+  int currentWaitRotation = 0;
+  QMessageBox* msgBox;
+
+  QPreset* presets[NUMPRESETS];
+  int currentPreset = 0;
+  QByteArray presetUserParams[NUMPRESETS];
+  QJsonObject jsonObjSettings;
 };
 
 #endif // MAINWINDOW_HPP

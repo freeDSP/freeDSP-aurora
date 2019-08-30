@@ -2,15 +2,16 @@
 #include <cstdint>
 #include <cstring>
 
-#include <QDebug>
 #include <QFile>
 #include <QMessageBox>
 #include <QTimer>
 
+#include "LogFile.h"
 #include "freeDSP-Aurora.hpp"
 
-//extern QString wifiIpHost;
-//extern int wifiPortHost;
+extern CLogFile myLog;
+
+#define TIMEOUT_WIFI (60000)
 
 //==============================================================================
 /*! Constructor
@@ -25,7 +26,7 @@ CFreeDspAurora::CFreeDspAurora( QWidget* parent ) : QWidget( parent )
   connect( tcpSocket, SIGNAL( hostFound() ),                         this, SLOT( hostFoundWifi()                         ) );
   connect( tcpSocket, SIGNAL( readyRead() ),                         this, SLOT( readyReadWifi()                         ) );
   
-  connect( this, SIGNAL( haveReplyWifi() ), &loopWaitForResponseWiFi, SLOT( quit() ) );
+  //connect( this, SIGNAL( haveReplyWifi() ), &loopWaitForResponseWiFi, SLOT( quit() ) );
 
   ipAddressAP = "192.168.5.1";
   ipAddressLocal = "0.0.0.0";
@@ -65,8 +66,8 @@ uint32_t convertTo824( float val )
   intpart = floor( val );
   fractpart = val - intpart;
   
-  ret = (((static_cast<int8_t>(intpart))<<24) & 0xff000000)
-      + ((static_cast<uint32_t>(fractpart * 16777216.0)) & 0x00ffffff);
+  ret = ((( static_cast<uint32_t>(static_cast<int8_t>(intpart)) ) << 24) & 0xff000000)
+      + ((static_cast<uint32_t>(fractpart * 16777216.f)) & 0x00ffffff);
 
   return ret;
 }
@@ -78,21 +79,17 @@ uint32_t convertTo824( float val )
  */
 QByteArray CFreeDspAurora::makeParameterForWifi( uint16_t reg, float val )
 {
+  qDebug()<<"CFreeDspAurora::makeParameterForWifi( uint16_t reg, float val )";
   QByteArray content;
-  content.append( (reg >> 8) & 0xFF );
-  content.append( reg & 0xFF );
+  content.append( static_cast<char>((reg >> 8) & 0x000000FF) );
+  content.append( static_cast<char>(reg & 0x000000FF) );
 
   uint32_t data = convertTo824( val );
 
-  content.append( (data >> 24) & 0xFF );
-  content.append( (data >> 16) & 0xFF );
-  content.append( (data >> 8) & 0xFF );
-  content.append( data & 0xFF );
-
-  //qDebug()<<"CFreeDspAurora::makeParameterForWifi";
-  //qDebug()<<val;
-  //qDebug()<<QString::number( data, 16 );
-  //qDebug()<<content.toHex();
+  content.append( static_cast<char>((data >> 24) & 0x000000FF) );
+  content.append( static_cast<char>((data >> 16) & 0x000000FF) );
+  content.append( static_cast<char>((data >> 8) & 0x000000FF) );
+  content.append( static_cast<char>(data & 0x000000FF) );
   
   return content;
 }
@@ -103,21 +100,18 @@ QByteArray CFreeDspAurora::makeParameterForWifi( uint16_t reg, float val )
  */
 QByteArray CFreeDspAurora::makeParameterForWifi( uint16_t reg, int32_t val )
 {
+  qDebug()<<"CFreeDspAurora::makeParameterForWifi( uint16_t reg, int32_t val )";
+  
   QByteArray content;
-  content.append( (reg >> 8) & 0xFF );
-  content.append( reg & 0xFF );
+  content.append( static_cast<char>((reg >> 8) & 0x000000FF) );
+  content.append( static_cast<char>(reg & 0x000000FF) );
 
   uint32_t data = static_cast<uint32_t>(val);
 
-  content.append( (data >> 24) & 0xFF );
-  content.append( (data >> 16) & 0xFF );
-  content.append( (data >> 8) & 0xFF );
-  content.append( data & 0xFF );
-
-  //qDebug()<<"CFreeDspAurora::makeParameterForWifi";
-  //qDebug()<<val;
-  //qDebug()<<QString::number( data, 16 );
-  //qDebug()<<content.toHex();
+  content.append( static_cast<char>((data >> 24) & 0x000000FF) );
+  content.append( static_cast<char>((data >> 16) & 0x000000FF) );
+  content.append( static_cast<char>((data >> 8) & 0x000000FF) );
+  content.append( static_cast<char>(data & 0x000000FF) );
   
   return content;
 }
@@ -128,84 +122,86 @@ QByteArray CFreeDspAurora::makeParameterForWifi( uint16_t reg, int32_t val )
  */
 bool CFreeDspAurora::sendParameterWifi( QByteArray content )
 {
-  qDebug()<<"---------------------------------------------------------------";
-  qDebug()<<"sendParameterWifi()";
+  myLog()<<"---------------------------------------------------------------";
+  myLog()<<"sendParameterWifi()";
   
-  QString wifiIpHost = getIpAddressWifi();
-
-  QString requestString = QString("POST /parameter HTTP/1.1\r\n")
-                        + QString("Host: ") + wifiIpHost + QString("\r\n")
-                        + QString("Content-type:text/plain\r\n")
-                        + QString("Content-length: ") +  QString::number( content.size()*2 ) + QString("\r\n")
-                        + QString("\r\n");
-  QByteArray request;
-  request.append( requestString );  
-  request.append( content.toHex() );  
-  request.append( "\r\n" );
-
-  writeRequestWifi( request );
-/*
-  if( !waitForReplyWifi() )
-    return false;
-  else
+  if( isConnected )
   {
-    qDebug()<<QString( replyDSP );
-    QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
-    //! \TODO Test for ACK.
+    QString wifiIpHost = getIpAddressWifi();
+
+    QString requestString = QString("POST /parameter HTTP/1.1\r\n")
+                          + QString("Host: ") + wifiIpHost + QString("\r\n")
+                          + QString("Content-type:text/plain\r\n")
+                          + QString("Content-length: ") +  QString::number( content.size()*2 ) + QString("\r\n")
+                          + QString("\r\n");
+    QByteArray request;
+    request.append( requestString );  
+    request.append( content.toHex() );  
+    request.append( "\r\n" );
+
+    writeRequestWifi( request );
+  /*
+    if( !waitForReplyWifi() )
+      return false;
+    else
+    {
+      myLog<<QString( replyDSP );
+      QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+      //! \TODO Test for ACK.
+      return true;
+    }
+  */
     return true;
   }
-*/
-  return true;
+  else
+  {
+    myLog()<<"Not connected to DSP.";
+    return false;
+  }
+  
 }
 
 //==============================================================================
 /*! Starts the transfer of a new dsp firmware block.
  *
- * \param content First block of firmware.
+ * \param content Data block of firmware.
  */
 bool CFreeDspAurora::sendDspFirmwareWifi( QByteArray content )
 {
-  bool ret = false;
-
-  qDebug()<<"---------------------------------------------------------------";
-  qDebug()<<"sendDspFirmwareWifi()";
+  myLog()<<"---------------------------------------------------------------";
+  myLog()<<"sendDspFirmwareWifi()";
 
   QString wifiIpHost = getIpAddressWifi();
 
-  tcpSocket->abort();
-  tcpSocket->connectToHost( wifiIpHost, portHostWifi );
-
-  QEventLoop loopConnect;
-  connect( tcpSocket, SIGNAL(connected()), &loopConnect, SLOT(quit()) );
-  // \TODO Add timeout timer
-  #warning Add timeout timer
-  //connect(timeoutTimer, SIGNAL(timeout()), &loop, SLOT(quit()));
-  loopConnect.exec();
-
-  QString requestString = QString("PUT /dspfw HTTP/1.1\r\nHost: ")
-                        + wifiIpHost
-                        + QString("\r\nContent-type:application/octet-stream\r\nContent-length: ")
-                        + QString::number( content.size()*2 )
-                        + QString("\r\n\r\n");
+  QString requestString = QString( "PUT /dspfw HTTP/1.1\r\n" )
+                        + QString( "Host: " ) + wifiIpHost + QString( "\r\n" )
+                        + QString( "Content-type:application/octet-stream\r\n" )
+                        + QString( "Content-length: " ) + QString::number( content.size()*2 ) + QString( "\r\n" )
+                        + QString( "\r\n" );
   QByteArray request;
   request.append( requestString );
   request.append( content.toHex() );  
   request.append( "\r\n" );
-  
-  qDebug()<<QString( request );
-  tcpSocket->write( request );
 
-  //ret = waitForAckWifi();
-  //tcpSocket->abort();
+  if( writeRequestWifi( request ) )
+  {
+    if( !waitForReplyWifi() )
+    {
+      myLog()<<"Writing firmware to DSP failed";
+      QMessageBox::critical( this, tr("Error"), tr("Uups, writing firmware to DSP failed. Please double check everything, reset DSP and try again."), QMessageBox::Ok ); 
+      return false;
+    }
+    else
+      return true;
+  }
+  else
+  {
+    myLog()<<"Could not connect to DSP";
+    QMessageBox::critical( this, tr("Error"), tr("Uups, could not connect to DSP. Did you switch it on?"), QMessageBox::Ok );
+  }
 
-  QEventLoop loopDisconnect;
-  connect( tcpSocket, SIGNAL(disconnected()), &loopDisconnect, SLOT(quit()) );
-  // \TODO Add timeout timer
-  #warning Add timeout timer
-  //connect(timeoutTimer, SIGNAL(timeout()), &loop, SLOT(quit()));
-  loopDisconnect.exec();
+  return false;
 
-  return ret;
 }
 
 //==============================================================================
@@ -214,8 +210,9 @@ bool CFreeDspAurora::sendDspFirmwareWifi( QByteArray content )
  */
 bool CFreeDspAurora::finishDspFirmwareWifi( uint32_t totalTransmittedBytes )
 {
-  qDebug()<<"---------------------------------------------------------------";
-  qDebug()<<"finishDspFirmwareWifi";
+  myLog()<<"---------------------------------------------------------------";
+  myLog()<<"finishDspFirmwareWifi";
+
 
   QString wifiIpHost = getIpAddressWifi();
 
@@ -230,20 +227,22 @@ bool CFreeDspAurora::finishDspFirmwareWifi( uint32_t totalTransmittedBytes )
   if( !waitForReplyWifi() )
   {
     QMessageBox::critical( this, tr("Error"), tr("Uups, could not finish transfer of DSP firmware. Please double check everything, reset DSP and try again."), QMessageBox::Ok ); 
+    myLog()<<"CFreeDspAurora::finishDspFirmwareWifi: Did not receive reply.";
     return false;
   }
   else
   {
-    qDebug()<<QString( replyDSP );
+    myLog()<<QString( replyDSP );
     QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
     uint32_t totalReceivedBytes = listReply.at(4).toUInt();
-    qDebug()<<totalTransmittedBytes<<totalReceivedBytes;
+    myLog()<<totalTransmittedBytes<<totalReceivedBytes;
 
     if( totalTransmittedBytes == totalReceivedBytes )
       return true;
     else
       return false;
   }
+
 }
 
 //==============================================================================
@@ -253,30 +252,39 @@ bool CFreeDspAurora::finishDspFirmwareWifi( uint32_t totalTransmittedBytes )
  */
 bool CFreeDspAurora::sendDspParameterWifi( QByteArray content )
 {
-  qDebug()<<"---------------------------------------------------------------";
-  qDebug()<<"sendDspParameterWifi()";
+  myLog()<<"---------------------------------------------------------------";
+  myLog()<<"sendDspParameterWifi()";
 
-  QString wifiIpHost = getIpAddressWifi();
-
-  QString requestString = QString( "PUT /dspparam HTTP/1.1\r\n" )
-                        + QString( "Host: " ) + wifiIpHost + QString( "\r\n" )
-                        + QString( "Content-type:application/octet-stream\r\n" )
-                        + QString( "Content-length: " ) + QString::number( content.size()*2 ) + QString( "\r\n" )
-                        + QString( "\r\n" );
-  QByteArray request;
-  request.append( requestString );
-  request.append( content.toHex() );  
-  request.append( "\r\n" );
-  
-  writeRequestWifi( request );
-
-  if( !waitForReplyWifi() )
+  if( isConnected )
   {
-    QMessageBox::critical( this, tr("Error"), tr("Uups, writing parameters to DSP failed. Please double check everything, reset DSP and try again."), QMessageBox::Ok ); 
-    return false;
+    QString wifiIpHost = getIpAddressWifi();
+
+    QString requestString = QString( "PUT /dspparam HTTP/1.1\r\n" )
+                          + QString( "Host: " ) + wifiIpHost + QString( "\r\n" )
+                          + QString( "Content-type:application/octet-stream\r\n" )
+                          + QString( "Content-length: " ) + QString::number( content.size()*2 ) + QString( "\r\n" )
+                          + QString( "\r\n" );
+    QByteArray request;
+    request.append( requestString );
+    request.append( content.toHex() );  
+    request.append( "\r\n" );
+    
+    writeRequestWifi( request );
+
+    if( !waitForReplyWifi() )
+    {
+      myLog()<<"Writing parameters to DSP failed";
+      QMessageBox::critical( this, tr("Error"), tr("Uups, writing parameters to DSP failed. Please double check everything, reset DSP and try again."), QMessageBox::Ok ); 
+      return false;
+    }
+    else
+      return true;
   }
   else
-    return true;
+  {
+    myLog()<<"Not connected to DSP.";
+    return false;
+  }
 }
 
 //==============================================================================
@@ -285,38 +293,47 @@ bool CFreeDspAurora::sendDspParameterWifi( QByteArray content )
  */
 bool CFreeDspAurora::finishDspParameterWifi( uint32_t totalTransmittedBytes )
 {
-  qDebug()<<"---------------------------------------------------------------";
-  qDebug()<<"finishDspParameterWifi";
+  myLog()<<"---------------------------------------------------------------";
+  myLog()<<"finishDspParameterWifi";
 
-  QString wifiIpHost = getIpAddressWifi();
-
-  QString requestString = QString( "GET /finishdspparameter HTTP/1.1\r\n" )
-                        + QString( "Host: " ) + wifiIpHost + QString( "\r\n" )
-                        + QString( "\r\n" );
-  QByteArray request;
-  request.append( requestString );
-  
-  writeRequestWifi( request );
-
-  if( !waitForReplyWifi() )
+  if( isConnected )
   {
-    QMessageBox::critical( this, tr("Error"), tr("Uups, could not finish transfer of DSP parameter file. Please double check everything, reset DSP and try again."), QMessageBox::Ok ); 
-    return false;
+    QString wifiIpHost = getIpAddressWifi();
+
+    QString requestString = QString( "GET /finishdspparameter HTTP/1.1\r\n" )
+                          + QString( "Host: " ) + wifiIpHost + QString( "\r\n" )
+                          + QString( "\r\n" );
+    QByteArray request;
+    request.append( requestString );
+    
+    writeRequestWifi( request );
+
+    if( !waitForReplyWifi() )
+    {
+      myLog()<<"Could not finish transfer of DSP parameter file";
+      QMessageBox::critical( this, tr("Error"), tr("Uups, could not finish transfer of DSP parameter file. Please double check everything, reset DSP and try again."), QMessageBox::Ok ); 
+      return false;
+    }
+    else
+    {
+      myLog()<<QString( replyDSP );
+      QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+      uint32_t totalReceivedBytes = listReply.at(4).toUInt();
+      myLog()<<totalTransmittedBytes<<totalReceivedBytes;
+
+      if( totalTransmittedBytes == totalReceivedBytes )
+        return true;
+      else
+      {
+        myLog()<<"[ERROR] Transmitted "<<totalTransmittedBytes*2<<"but DSP received "<<totalReceivedBytes<<"bytes.";
+        return false;
+      }
+    }
   }
   else
   {
-    qDebug()<<QString( replyDSP );
-    QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
-    uint32_t totalReceivedBytes = listReply.at(4).toUInt();
-    qDebug()<<totalTransmittedBytes<<totalReceivedBytes;
-
-    if( totalTransmittedBytes == totalReceivedBytes )
-      return true;
-    else
-    {
-      qDebug()<<"[ERROR] Transmitted "<<totalTransmittedBytes*2<<"but DSP received "<<totalReceivedBytes<<"bytes.";
-      return false;
-    }
+    myLog()<<"Not connected to DSP.";
+    return false;
   }
 }
 
@@ -326,8 +343,10 @@ bool CFreeDspAurora::finishDspParameterWifi( uint32_t totalTransmittedBytes )
  */
 uint32_t CFreeDspAurora::requestPidWifi( void )
 {
-  qDebug()<<"---------------------------------------------------------------";
-  qDebug()<<"requestPidWifi";
+  myLog()<<"---------------------------------------------------------------";
+  myLog()<<"requestPidWifi";
+
+  isConnected = false;
 
   QString wifiIpHost = getIpAddressWifi();
 
@@ -337,19 +356,75 @@ uint32_t CFreeDspAurora::requestPidWifi( void )
   QByteArray request;
   request.append( requestString );
 
-  writeRequestWifi( request );
-  waitForResponseWifi();
-
-  //! \TODO Check for valid reply
-
-  QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
   uint32_t pid = 0;
-  if( listReply.size() > 4 )
-    pid = listReply.at(4).toUInt();
+  if( writeRequestWifi( request ) )
+  {
+    if( !waitForReplyWifi() )
+    {
+      myLog()<<"Did not receive PID.";
+      QMessageBox::critical( this, tr("Error"), tr("Uuups, could not receive PID. Please double check everything and try again."), QMessageBox::Ok ); 
+      return 0;
+    }
+    else
+    {
+      QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+      if( listReply.size() > 4 )
+        pid = listReply.at(4).toUInt();
+      myLog()<<"PID:"<<pid;  
+      if( pid > 0 )
+        isConnected = true;
+    }
+  }
+  else
+  {
+    myLog()<<"Could not connect to DSP";
+    QMessageBox::critical( this, tr("Error"), tr("Uups, could not connect to DSP. Did you switch it on?"), QMessageBox::Ok );
+  }
   
-  qDebug()<<pid;
-
   return pid;
+}
+
+//==============================================================================
+/*! Requests index of current selected preset
+ *
+ */
+int32_t CFreeDspAurora::requestCurrentPresetWifi( void )
+{
+  myLog()<<"---------------------------------------------------------------";
+  myLog()<<"requestCurrentPresetWifi";
+
+  QString wifiIpHost = getIpAddressWifi();
+
+  QString requestString = QString("GET /currentpreset HTTP/1.1\r\nHost: ")
+                        + wifiIpHost
+                        + QString("\r\n\r\n");
+  QByteArray request;
+  request.append( requestString );
+
+  int32_t preset = -1;
+  if( writeRequestWifi( request ) )
+  {
+    if( !waitForReplyWifi() )
+    {
+      myLog()<<"Did not receive index of current preset.";
+      QMessageBox::critical( this, tr("Error"), tr("Uuups, could not receive index of current preset. Please double check everything and try again."), QMessageBox::Ok ); 
+      return -1;
+    }
+    else
+    {
+      QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+      if( listReply.size() > 4 )
+        preset = listReply.at(4).toUInt();
+      myLog()<<"Current preset:"<<preset;  
+    }
+  }
+  else
+  {
+    myLog()<<"Could not connect to DSP";
+    QMessageBox::critical( this, tr("Error"), tr("Uups, could not connect to DSP. Did you switch it on?"), QMessageBox::Ok );
+  }
+  
+  return preset;
 }
 
 //==============================================================================
@@ -359,32 +434,40 @@ uint32_t CFreeDspAurora::requestPidWifi( void )
  */
 bool CFreeDspAurora::sendUserParameterWifi( QByteArray content )
 {
-  bool ret = false;
+  myLog()<<"---------------------------------------------------------------";
+  myLog()<<"sendUserParameterWifi()";
 
-  qDebug()<<"---------------------------------------------------------------";
-  qDebug()<<"sendUserParameterWifi()";
-
-  QString wifiIpHost = getIpAddressWifi();
-
-  QString requestString = QString( "PUT /userparam HTTP/1.1\r\n" )
-                        + QString( "Host: " ) + wifiIpHost + QString( "\r\n" )
-                        + QString( "Content-type:application/octet-stream\r\n" )
-                        + QString( "Content-length: " ) + QString::number( content.size()*2 ) + QString( "\r\n" )
-                        + QString( "\r\n" );
-  QByteArray request;
-  request.append( requestString );
-  request.append( content.toHex() );  
-  request.append( "\r\n" );
-
-  writeRequestWifi( request );
-
-  if( !waitForReplyWifi() )
+  if( isConnected )
   {
-    QMessageBox::critical( this, tr("Error"), tr("Uups, writing parameters to DSP failed. Please double check everything, reset DSP and try again."), QMessageBox::Ok ); 
-    return false;
+    QString wifiIpHost = getIpAddressWifi();
+
+    QString requestString = QString( "PUT /userparam HTTP/1.1\r\n" )
+                          + QString( "Host: " ) + wifiIpHost + QString( "\r\n" )
+                          + QString( "Content-type:application/octet-stream\r\n" )
+                          + QString( "Content-length: " ) + QString::number( content.size()*2 ) + QString( "\r\n" )
+                          + QString( "\r\n" );
+    QByteArray request;
+    request.append( requestString );
+    request.append( content.toHex() );  
+    request.append( "\r\n" );
+
+    writeRequestWifi( request );
+
+    if( !waitForReplyWifi() )
+    {
+      myLog()<<"Writng parameters to DSP failed";
+      QMessageBox::critical( this, tr("Error"), tr("Uups, writing parameters to DSP failed. Please double check everything, reset DSP and try again."), QMessageBox::Ok ); 
+      return false;
+    }
+    else
+      return true;
   }
   else
-    return true;
+  {
+    myLog()<<"Not connected to DSP.";
+    return false;
+  }
+  
 }
 
 //==============================================================================
@@ -393,37 +476,46 @@ bool CFreeDspAurora::sendUserParameterWifi( QByteArray content )
  */
 bool CFreeDspAurora::finishUserParameterWifi( uint32_t totalTransmittedBytes )
 {
-  qDebug()<<"---------------------------------------------------------------";
-  qDebug()<<"finishUserParameterWifi";
+  myLog()<<"---------------------------------------------------------------";
+  myLog()<<"finishUserParameterWifi";
 
-  QString wifiIpHost = getIpAddressWifi();
-
-  QString requestString = QString("GET /finishuserparam HTTP/1.1\r\nHost: ")
-                        + wifiIpHost
-                        + QString("\r\n\r\n");
-  QByteArray request;
-  request.append( requestString );
-  
-  writeRequestWifi( request );
-
-  if( !waitForResponseWifi() )
+  if( isConnected )
   {
-    QMessageBox::critical( this, tr("Error"), tr("Could not finish transfer of user parameter file. Please double check everything, reset DSP and try again."), QMessageBox::Ok ); 
-    return false;
+    QString wifiIpHost = getIpAddressWifi();
+
+    QString requestString = QString("GET /finishuserparam HTTP/1.1\r\nHost: ")
+                          + wifiIpHost
+                          + QString("\r\n\r\n");
+    QByteArray request;
+    request.append( requestString );
+    
+    writeRequestWifi( request );
+
+    if( !waitForReplyWifi() )
+    {
+      myLog()<<"Could not finish transfer of user parameter";
+      QMessageBox::critical( this, tr("Error"), tr("Could not finish transfer of user parameter file. Please double check everything, reset DSP and try again."), QMessageBox::Ok ); 
+      return false;
+    }
+    else
+    {
+      myLog()<<QString( replyDSP );
+      QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+      uint32_t totalReceivedBytes = listReply.at(4).toUInt();
+
+      if( totalTransmittedBytes == totalReceivedBytes )
+        return true;
+      else
+      {
+        myLog()<<"[ERROR] Transmitted "<<totalTransmittedBytes*2<<"but DSP received "<<totalReceivedBytes<<"bytes.";
+        return false;
+      }
+    }
   }
   else
   {
-    qDebug()<<QString( replyDSP );
-    QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
-    uint32_t totalReceivedBytes = listReply.at(4).toUInt();
-
-    if( totalTransmittedBytes == totalReceivedBytes )
-      return true;
-    else
-    {
-      qDebug()<<"[ERROR] Transmitted "<<totalTransmittedBytes*2<<"but DSP received "<<totalReceivedBytes<<"bytes.";
-      return false;
-    }
+    myLog()<<"Not connected to DSP.";
+    return false;
   }
 }
 
@@ -433,73 +525,83 @@ bool CFreeDspAurora::finishUserParameterWifi( uint32_t totalTransmittedBytes )
  */
 bool CFreeDspAurora::requestUserParameterWifi( QByteArray& userparams )
 {
-  qDebug()<<"---------------------------------------------------------------";
-  qDebug()<<"receiveUserParameterWifi";
+  myLog()<<"---------------------------------------------------------------";
+  myLog()<<"receiveUserParameterWifi";
 
-  QString wifiIpHost = getIpAddressWifi();
-
-  uint32_t totalBytes = 0;
-
-  QString requestString = QString("GET /sizeuserparam HTTP/1.1\r\nHost: ")
-                        + wifiIpHost
-                        + QString("\r\n\r\n");
-  QByteArray request;
-  request.append( requestString );
-
-  writeRequestWifi( request );
-  if( !waitForResponseWifi() )
+  if( isConnected )
   {
-    QMessageBox::critical( this, tr("Error"), tr("Could not receive the size of the user parameter file. Please double check everything and try again."), QMessageBox::Ok ); 
-    return false;
+    QString wifiIpHost = getIpAddressWifi();
+
+    uint32_t totalBytes = 0;
+
+    QString requestString = QString("GET /sizeuserparam HTTP/1.1\r\nHost: ")
+                          + wifiIpHost
+                          + QString("\r\n\r\n");
+    QByteArray request;
+    request.append( requestString );
+
+    writeRequestWifi( request );
+    if( !waitForReplyWifi() )
+    {
+      myLog()<<"Could not receive the size of the user parameter file";
+      QMessageBox::critical( this, tr("Error"), tr("Could not receive the size of the user parameter file. Please double check everything and try again."), QMessageBox::Ok ); 
+      return false;
+    }
+    else
+    {
+      myLog()<<QString( replyDSP );
+      QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+      totalBytes = listReply.at(4).toUInt();
+
+      if( totalBytes > 0 )
+      {
+        requestString = QString("GET /userparam HTTP/1.1\r\nHost: ")
+                      + wifiIpHost
+                      + QString("\r\n\r\n");
+        request.clear();
+        request.append( requestString );
+        writeRequestWifi( request );
+        if( !waitForReplyWifi() )
+        {
+          myLog()<<"Could not receive the user parameter file";
+          QMessageBox::critical( this, tr("Error"), tr("Could not receive the user parameter file. Please double check everything and try again."), QMessageBox::Ok ); 
+          return false;
+        }
+        else
+        {
+          listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+          myLog()<<"Received user parameter"<<listReply.at(4).size();
+          QString str = listReply.at(4);
+          int offset = 0;
+          
+          while( offset < str.length() )
+          {
+            bool ok;
+            uint8_t val = str.mid( offset, 2 ).toUInt( &ok, 16 );
+            userparams.append( val );
+            offset += 2;
+          }
+        }
+      }
+    }  
+  
+    myLog()<<"Done";
+    myLog()<<"Received: "<<userparams.size()<<"/"<<totalBytes;
+
+    if( static_cast<uint32_t>(userparams.size()) < totalBytes )
+    {
+      myLog()<<"Could not receive all bytes of the user parameter file";
+      QMessageBox::critical( this, tr("Error"), tr("Could not receive all bytes of the user parameter file. Please double check all connections and reset all devices and try again."), QMessageBox::Ok ); 
+      return false;
+    }
+
+    return true;
   }
   else
   {
-    qDebug()<<QString( replyDSP );
-    QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
-    totalBytes = listReply.at(4).toUInt();
-
-    if( totalBytes > 0 )
-    {
-      requestString = QString("GET /userparam HTTP/1.1\r\nHost: ")
-                    + wifiIpHost
-                    + QString("\r\n\r\n");
-      request.clear();
-      request.append( requestString );
-      writeRequestWifi( request );
-      if( !waitForResponseWifi() )
-      {
-        QMessageBox::critical( this, tr("Error"), tr("Could not receive the user parameter file. Please double check everything and try again."), QMessageBox::Ok ); 
-        return false;
-      }
-      else
-      {
-        listReply = QString( replyDSP ).split( QRegExp("\\s+") );
-        qDebug()<<"Received user parameter"<<listReply.at(4).size();
-        QString str = listReply.at(4);
-        int offset = 0;
-        
-        while( offset < str.length() )
-        {
-          bool ok;
-          uint8_t val = str.mid( offset, 2 ).toUInt( &ok, 16 );
-          userparams.append( val );
-          //qDebug()<<QString::number( val, 16 )<<str.mid( offset, 2 );
-          offset += 2;
-        }
-      }
-    }
-  }  
-
-  qDebug()<<"Done";
-  qDebug()<<"Received: "<<userparams.size()<<"/"<<totalBytes;
-
-  if( static_cast<uint32_t>(userparams.size()) < totalBytes )
-  {
-    QMessageBox::critical( this, tr("Error"), tr("Could not receive all bytes of the user parameter file. Please double check all connections and reset all devices and try again."), QMessageBox::Ok ); 
+    myLog()<<"Not connected to DSP.";
     return false;
   }
-
-  return true;
 }
 
 //==============================================================================
@@ -508,19 +610,14 @@ bool CFreeDspAurora::requestUserParameterWifi( QByteArray& userparams )
 void CFreeDspAurora::readyReadWifi( void )
 {
   replyWifi.append( tcpSocket->readAll() );
-  /*if( ptrProgressBar != nullptr )
-    qDebug()<<"readyReadWifi Progress"<<ptrProgressBar->value();
-  else
-    qDebug()<<"readyReadWifi";*/
   QString str = QString( replyWifi );
   QStringList listReply = str.split( QRegExp("\\s+") );
-  //qDebug()<<str.mid( str.length()-2, 2 );
   if( ptrProgressBar != nullptr )
     ptrProgressBar->setValue( replyWifi.size() );
   if( (listReply.size() > 4) && (str.mid( str.length()-2, 2 ) == QString("\r\n")) )
   {
-    qDebug()<<QString( replyWifi );
-    qDebug()<<"Reply complete";
+    myLog()<<QString( replyWifi );
+    myLog()<<"Reply complete";
     replyCompleteWifi = true;
     replyDSP = replyWifi;
     replyWifi.clear();
@@ -538,57 +635,51 @@ bool CFreeDspAurora::waitForReplyWifi( int msec )
   QTimer timerWait;
   timerWait.setSingleShot( true );
   replyCompleteWifi = false;
-  //connect( tcpSocket, SIGNAL(readyRead()), &loopWaitForReply, SLOT(quit()) );
   connect( this, SIGNAL(haveReplyWifi()), &loopWaitForReply, SLOT(quit()) );
   connect( &timerWait, SIGNAL(timeout()), &loopWaitForReply, SLOT(quit()) );
   timerWait.start( msec );
   loopWaitForReply.exec();
-  //disconnect( tcpSocket, SIGNAL(readyRead()), &loopWaitForReply, SLOT(quit()) );
   disconnect( this, SIGNAL(haveReplyWifi()), &loopWaitForReply, SLOT(quit()) );
   disconnect( &timerWait, SIGNAL(timeout()), &loopWaitForReply, SLOT(quit()) );
   return replyCompleteWifi;
 }
 
 //==============================================================================
-/*! 
- *
+/*! Sends a request to the current DSP.
+ *  \param request Contains the reques
  */
-bool CFreeDspAurora::waitForResponseWifi( void )
+bool CFreeDspAurora::writeRequestWifi( QByteArray& request )
 {
-  #warning Add timeout timer
-  loopWaitForResponseWiFi.exec();
-  //! \TODO Check for valid response
-  //! \TOOD Disconnect after transfer?
-  return true;
+  return writeRequestWifi( request, getIpAddressWifi() );
 }
 
 //==============================================================================
-/*!
+/*! Sends a request to a DSP identified by an ip address.
+ *  \param request Contains the request.
+ *  \param host Ip address of host.
  */
-void CFreeDspAurora::writeRequestWifi( QByteArray& request )
-{
-  QString wifiIpHost = getIpAddressWifi();
-  writeRequestWifi( request, wifiIpHost );
-}
-
-//==============================================================================
-/*!
- */
-void CFreeDspAurora::writeRequestWifi( QByteArray& request, QString host )
+bool CFreeDspAurora::writeRequestWifi( QByteArray& request, QString host )
 {
   tcpSocket->abort();
   tcpSocket->connectToHost( host, portHostWifi );
 
   QEventLoop loopConnect;
   connect( tcpSocket, SIGNAL(connected()), &loopConnect, SLOT(quit()) );
-  // \TODO Add timeout timer
-  #warning Add timeout timer
-  //connect(timeoutTimer, SIGNAL(timeout()), &loop, SLOT(quit()));
+  QTimer::singleShot( TIMEOUT_WIFI, &loopConnect, SLOT(quit()) );
   loopConnect.exec();
 
-  replyWifi.clear();
-  qDebug()<<QString( request );
-  tcpSocket->write( request );
+  if( tcpSocket->state() == QTcpSocket::ConnectedState )
+  {
+    replyWifi.clear();
+    myLog()<<QString( request );
+    tcpSocket->write( request );
+    return true;
+  }
+  else
+  {
+    myLog()<<"[ERROR] CFreeDspAurora::writeRequestWifi() could not connect to DSP.";
+    return false;
+  }
 }
 
 //==============================================================================
@@ -599,8 +690,8 @@ void CFreeDspAurora::writeRequestWifi( QByteArray& request, QString host )
  */
 bool CFreeDspAurora::requestDspFirmwareWifi( QByteArray& firmware, QProgressBar* progress )
 {
-  qDebug()<<"---------------------------------------------------------------";
-  qDebug()<<"requestDspFirmwareWifi";
+  myLog()<<"---------------------------------------------------------------";
+  myLog()<<"requestDspFirmwareWifi";
 
   QString wifiIpHost = getIpAddressWifi();
 
@@ -616,12 +707,13 @@ bool CFreeDspAurora::requestDspFirmwareWifi( QByteArray& firmware, QProgressBar*
 
   if( !waitForReplyWifi() )
   {
+    myLog()<<"Could not receive the size of the DSP firmware";
     QMessageBox::critical( this, tr("Error"), tr("Uuups, could not receive the size of DSP firmware. Please double check everything and try again."), QMessageBox::Ok ); 
     return false;
   }
   else
   {
-    qDebug()<<QString( replyDSP );
+    myLog()<<QString( replyDSP );
     QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
     totalBytes = listReply.at(4).toUInt();
     
@@ -634,8 +726,9 @@ bool CFreeDspAurora::requestDspFirmwareWifi( QByteArray& firmware, QProgressBar*
       request.append( requestString );
       ptrProgressBar = progress;
       writeRequestWifi( request );
-      if( !waitForReplyWifi(600000) )
+      if( !waitForReplyWifi(TIMEOUT_WIFI) )
       {
+        myLog()<<"Could not receive the DSP firmware";
         QMessageBox::critical( this, tr("Error"), tr("Uuups, could not receive the DSP firmware. Please double check everything and try again."), QMessageBox::Ok ); 
         ptrProgressBar = nullptr;
         return false;
@@ -643,7 +736,7 @@ bool CFreeDspAurora::requestDspFirmwareWifi( QByteArray& firmware, QProgressBar*
       else
       {
         listReply = QString( replyDSP ).split( QRegExp("\\s+") );
-        qDebug()<<"Received dspfw"; //<<listReply.at(4).size();
+        myLog()<<"Received dspfw";
         QString str = listReply.at(4);
         int offset = 0;
         ptrProgressBar = nullptr;
@@ -651,30 +744,32 @@ bool CFreeDspAurora::requestDspFirmwareWifi( QByteArray& firmware, QProgressBar*
         while( offset < str.length() )
         {
           bool ok;
-          uint8_t val = str.mid( offset, 2 ).toUInt( &ok, 16 );
+          int8_t val = str.mid( offset, 2 ).toUInt( &ok, 16 );
           firmware.append( val );
-          //qDebug()<<QString::number( val, 16 )<<str.mid( offset, 2 );
           offset += 2;
         }
       }
     }
     else
     {
+      myLog()<<"DSP says: There is no plugin installed";
       QMessageBox::information( this, tr("Information"), tr("DSP says: There is no plugin installed."), QMessageBox::Ok ); 
       return false;
     }
   }
 
-  qDebug()<<"Done";
-  qDebug()<<"Received: "<<firmware.size()<<"/"<<totalBytes;
+  myLog()<<"Done";
+  myLog()<<"Received: "<<firmware.size()<<"/"<<totalBytes;
 
   if( static_cast<uint32_t>(firmware.size()) < totalBytes )
   {
+    myLog()<<"Could not receive all bytes of the firmware";
     QMessageBox::critical( this, tr("Error"), tr("Uuups, could not receive all bytes of the firmware. Please double check all connections and reset all devices and try again."), QMessageBox::Ok ); 
     return false;
   }
 
   return true;
+
 }
 
 //==============================================================================
@@ -685,8 +780,8 @@ bool CFreeDspAurora::requestDspFirmwareWifi( QByteArray& firmware, QProgressBar*
  */
 bool CFreeDspAurora::storeSettingsWifi( QString ssid, QString password )
 {
-  qDebug()<<"---------------------------------------------------------------";
-  qDebug()<<"storeSsidWifi";
+  myLog()<<"---------------------------------------------------------------";
+  myLog()<<"storeSsidWifi";
 
   QString wifiIpHost = getIpAddressWifi();
   ssidWifi = ssid;
@@ -707,19 +802,30 @@ bool CFreeDspAurora::storeSettingsWifi( QString ssid, QString password )
   writeRequestWifi( request );
 
   if( !waitForReplyWifi() )
+  {
+    myLog()<<"Did not get a reply by DSP";
+    QMessageBox::critical( this, tr("Error"), tr("Uups, something went wrong when connecting to DSP. Please double check everythind and try again."), QMessageBox::Ok );
     return false;
+  }
   else
   {
-    qDebug()<<QString( replyDSP );
+    myLog()<<QString( replyDSP );
     QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
-    if( listReply.at(4) == "CONNECTED" )
+    QStringList listResult = listReply.at(4).split( "?" );
+    QString strResult = listResult.at(0);
+    QString strIP = listResult.at(1);
+    qDebug()<<strResult<<strIP;
+    if( strResult == "CONNECTED" )
     {
-      QMessageBox::information( this, tr("Information"), tr("Your DSP is now connected to the local WiFi network."), QMessageBox::Ok ); 
+      ipAddressLocal = strIP;
+      myLog()<<"DSP is now connected to local WiFi network";
+      QMessageBox::information( this, tr("Information"), tr("Your DSP is now connected to local WiFi network."), QMessageBox::Ok ); 
       return true;
     }
     else
     {
-      QMessageBox::critical( this, tr("Error"), tr("Your DSP cannot connect to the local WiFi network. Please double-check SSID and password."), QMessageBox::Ok ); 
+      myLog()<<"DSP cannot connect to local WiFi network";
+      QMessageBox::critical( this, tr("Error"), tr("Your DSP cannot connect to local WiFi network. Please double-check SSID and password."), QMessageBox::Ok ); 
       return false;
     }
   }
@@ -732,8 +838,8 @@ bool CFreeDspAurora::storeSettingsWifi( QString ssid, QString password )
  */
 bool CFreeDspAurora::storePidWifi( uint8_t pid )
 {
-  qDebug()<<"---------------------------------------------------------------";
-  qDebug()<<"storePidWifi";
+  myLog()<<"---------------------------------------------------------------";
+  myLog()<<"storePidWifi";
 
   QString wifiIpHost = getIpAddressWifi();
 
@@ -756,7 +862,7 @@ bool CFreeDspAurora::storePidWifi( uint8_t pid )
     return false;
   else
   {
-    qDebug()<<QString( replyDSP );
+    myLog()<<QString( replyDSP );
     QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
     if( listReply.at(4) == "ACK" )
     {
@@ -764,6 +870,7 @@ bool CFreeDspAurora::storePidWifi( uint8_t pid )
     }
     else
     {
+      myLog()<<"Could not store the plugin id";
       QMessageBox::critical( this, tr("Error"), tr("Could not store the plugin id. Please double-check everything and try again."), QMessageBox::Ok ); 
       return false;
     }
@@ -776,8 +883,8 @@ bool CFreeDspAurora::storePidWifi( uint8_t pid )
  */
 bool CFreeDspAurora::pingWifi( void )
 {
-  qDebug()<<"---------------------------------------------------------------";
-  qDebug()<<"pingWifi";
+  myLog()<<"---------------------------------------------------------------";
+  myLog()<<"pingWifi";
 
   QString wifiIpHost = getIpAddressWifi();
 
@@ -790,12 +897,13 @@ bool CFreeDspAurora::pingWifi( void )
 
   if( !waitForReplyWifi() )
   {
+    myLog()<<"Could not ping the DSP";
     QMessageBox::critical( this, tr("Error"), tr("Could not ping the DSP. Please double check everything and try again."), QMessageBox::Ok ); 
     return false;
   }
   else
   {
-    qDebug()<<QString( replyDSP );
+    myLog()<<QString( replyDSP );
     QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
     ipAddressLocal = listReply.at(4);
   }
@@ -808,7 +916,7 @@ bool CFreeDspAurora::pingWifi( void )
  */
 void CFreeDspAurora::disconnectedWifi( void )
 {
-  qDebug()<<"Disconnected from server";
+  myLog()<<"Disconnected from server";
 }
 
 //==============================================================================
@@ -817,7 +925,7 @@ void CFreeDspAurora::disconnectedWifi( void )
 void CFreeDspAurora::bytesWrittenWifi( qint64  )
 {
   //QString outString = QString::number(bytes) + " bytes writen.";
-  //qDebug()<<outString;
+  //myLog()<<outString;
 }
 
 //==============================================================================
@@ -826,7 +934,7 @@ void CFreeDspAurora::bytesWrittenWifi( qint64  )
 void CFreeDspAurora::errorWifi( QAbstractSocket::SocketError )
 {
   QString errorStr = tcpSocket->errorString();
-  qDebug()<<"An error occured :"<<errorStr;
+  myLog()<<"An error occured :"<<errorStr;
 }
 
 //==============================================================================
@@ -834,5 +942,240 @@ void CFreeDspAurora::errorWifi( QAbstractSocket::SocketError )
  */
 void CFreeDspAurora::hostFoundWifi( void )
 {
-  qDebug()<<"Host found";
+  myLog()<<"CFreeDspAurora::hostFoundWifi()";
+}
+
+//==============================================================================
+/*! Select preset on DSP
+ *
+ * \param presetid New preset id.
+ */
+bool CFreeDspAurora::selectPresetWifi( int presetid )
+{
+  myLog()<<"---------------------------------------------------------------";
+  myLog()<<"selectPresetWifi";
+
+  if( isConnected )
+  {
+    QString wifiIpHost = getIpAddressWifi();
+
+    QByteArray content;
+    content.append( static_cast<char>(presetid) );
+
+    QString requestString = QString("POST /preset HTTP/1.1\r\n")
+                          + QString("Host: ") + wifiIpHost + QString("\r\n")
+                          + QString("Content-type:text/plain\r\n")
+                          + QString("Content-length: ") +  QString::number( content.size()*2 ) + QString("\r\n")
+                          + QString("\r\n")
+                          + content.toHex()
+                          + QString("\r\n");
+    QByteArray request;
+    request.append( requestString );  
+    
+    writeRequestWifi( request );
+
+    if( !waitForReplyWifi() )
+      return false;
+    else
+    {
+      myLog()<<QString( replyDSP );
+      QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+      if( listReply.at(4) == "ACK" )
+      {
+        return true;
+      }
+      else
+      {
+        myLog()<<"Could not select the preset";
+        QMessageBox::critical( this, tr("Error"), tr("Could not select the preset. Please double-check everything and try again."), QMessageBox::Ok ); 
+        return false;
+      }
+    }
+  }
+  else
+  {
+    myLog()<<"Not connected to DSP.";
+    return false;
+  }
+}
+
+//==============================================================================
+/*! Stores the current selected preset as default.
+ *
+ */
+bool CFreeDspAurora::storePresetSelection( void )
+{
+  myLog()<<"---------------------------------------------------------------";
+  myLog()<<"storePresetSelection";
+
+  QString wifiIpHost = getIpAddressWifi();
+
+  QString requestString = QString("POST /savepreset HTTP/1.1\r\n")
+                        + QString("Host: ") + wifiIpHost + QString("\r\n")
+                        + QString("Content-type:text/plain\r\n")
+                        + QString("Content-length: 0\r\n")
+                        + QString("\r\n")
+                        + QString("\r\n");
+  QByteArray request;
+  request.append( requestString );  
+  
+  writeRequestWifi( request );
+
+  if( !waitForReplyWifi() )
+    return false;
+  else
+  {
+    myLog()<<QString( replyDSP );
+    QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+    if( listReply.at(4) == "ACK" )
+    {
+      return true;
+    }
+    else
+    {
+      myLog()<<"Could not save the preset selection";
+      QMessageBox::critical( this, tr("Error"), tr("Could not save the preset selection. Please double-check everything and try again."), QMessageBox::Ok ); 
+      return false;
+    }
+  }
+}
+
+//==============================================================================
+/*! Returns the firmware version of the board.
+ *
+ */
+bool CFreeDspAurora::requestFirmwareVersionWifi( void )
+{
+  qDebug()<<"---------------------------------------------------------------";
+  qDebug()<<"requestFirmwareVersionWifi";
+
+  versionstr = "0.0.0";
+
+  //if( isConnected )
+  //{
+    QString wifiIpHost = getIpAddressWifi();
+
+    QString requestString = QString( "GET /version HTTP/1.1\r\n" )
+                          + QString( "Host: " ) + wifiIpHost + QString( "\r\n" )
+                          + QString( "\r\n" );
+    QByteArray request;
+    request.append( requestString );
+
+    if( writeRequestWifi( request ) )
+    {
+      if( !waitForReplyWifi() )
+      {
+        QMessageBox::critical( this, tr("Error"), tr("Uuups, could not receive firmware version. Please double check everything and try again."), QMessageBox::Ok ); 
+        return false;
+      }
+      else
+      {
+        QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+        if( listReply.size() > 4 )
+          versionstr = listReply.at(4);
+        qDebug()<<"Firmware version:"<<versionstr;  
+        return true;
+      }
+    }
+    else
+    {
+      QMessageBox::critical( this, tr("Error"), tr("Uups, could not connect to DSP. Did you switch it on?"), QMessageBox::Ok );
+      return false;
+    }
+  //}
+
+  return false;
+}
+
+//==============================================================================
+/*! Requests the AddOn-Id of the board (if there is one installed).
+ *
+ */
+bool CFreeDspAurora::requestAddOnIdWifi( void )
+{
+  qDebug()<<"---------------------------------------------------------------";
+  qDebug()<<"requestAddOnIdWifi";
+
+  addon = 0;
+
+  //if( isConnected )
+  //{
+    QString wifiIpHost = getIpAddressWifi();
+
+    QString requestString = QString( "GET /aid HTTP/1.1\r\n" )
+                          + QString( "Host: " ) + wifiIpHost + QString( "\r\n" )
+                          + QString( "\r\n" );
+    QByteArray request;
+    request.append( requestString );
+
+    if( writeRequestWifi( request ) )
+    {
+      if( !waitForReplyWifi() )
+      {
+        QMessageBox::critical( this, tr("Error"), tr("Uuups, could not receive AddOn-Id. Please double check everything and try again."), QMessageBox::Ok ); 
+        return false;
+      }
+      else
+      {
+        QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+        if( listReply.size() > 4 )
+          addon = listReply.at(4).toUInt();
+        qDebug()<<"Installed AddOn: "<<addon;  
+        return true;
+      }
+    }
+    else
+    {
+      QMessageBox::critical( this, tr("Error"), tr("Uups, could not connect to DSP. Did you switch it on?"), QMessageBox::Ok );
+      return false;
+    }
+  //}
+
+  return false;
+}
+
+//==============================================================================
+/*! Sends the AddOn-Id to DSP and stores it nonvolatile.
+ *
+ * \param aid New AddOn-Id
+ */
+bool CFreeDspAurora::storeAddOnIdWifi( quint32 aid )
+{
+  qDebug()<<"---------------------------------------------------------------";
+  qDebug()<<"storeAddOnIdWifi";
+
+  QString wifiIpHost = getIpAddressWifi();
+
+  QByteArray content;
+  content.append( aid );
+
+  QString requestString = QString("POST /aid HTTP/1.1\r\n")
+                        + QString("Host: ") + wifiIpHost + QString("\r\n")
+                        + QString("Content-type:text/plain\r\n")
+                        + QString("Content-length: ") +  QString::number( content.size()*2 ) + QString("\r\n")
+                        + QString("\r\n")
+                        + content.toHex()
+                        + QString("\r\n");
+  QByteArray request;
+  request.append( requestString );  
+  
+  writeRequestWifi( request );
+
+  if( !waitForReplyWifi() )
+    return false;
+  else
+  {
+    qDebug()<<QString( replyDSP );
+    QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+    if( listReply.at(4) == "ACK" )
+    {
+      addon = aid;
+      return true;
+    }
+    else
+    {
+      QMessageBox::critical( this, tr("Error"), tr("Could not store the AddOn-Id. Please double-check everything and try again."), QMessageBox::Ok ); 
+      return false;
+    }
+  }
 }

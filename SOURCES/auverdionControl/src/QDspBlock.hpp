@@ -3,10 +3,14 @@
 
 #include <QWidget>
 #include <QString>
+#include <QTimer>
+
 #include <cstdint>
 
 #include "typedefs.h"
 #include "tvector.h"
+
+#define DSPUPDATELATENCY (200)
 
 namespace Ui {
 class QDspBlock;
@@ -57,6 +61,9 @@ public:
 protected:
   void paintEvent(QPaintEvent *);
 
+protected slots:
+  virtual void updateDsp( void ) = 0;
+
 signals:
   void valueChanged( void );
 
@@ -66,6 +73,7 @@ protected:
   bool bypass = false;
   QString name;
   tdspblocktype type;
+  QTimer timerDspUpdate;
 
 private:
   Ui::QDspBlock *ui;

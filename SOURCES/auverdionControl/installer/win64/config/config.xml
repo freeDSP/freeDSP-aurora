@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Installer>
+    <Name>auverdionControl</Name>
+    <Version>1.0.0</Version>
+    <Title>auverdionControl Installer</Title>
+    <Publisher>auverdion - Raphael Knoop</Publisher>
+    <StartMenuDir>auverdion</StartMenuDir>
+    <TargetDir>@ApplicationsDirX64@/auverdion/auverdionControl</TargetDir>
+</Installer>

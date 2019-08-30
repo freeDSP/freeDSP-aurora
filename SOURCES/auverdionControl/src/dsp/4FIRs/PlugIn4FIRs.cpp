@@ -670,7 +670,7 @@ tDspChannel CPlugIn4FIRs::getGuiForChannel( unsigned int chn, tfloat fs, CFreeDs
 /*!
  *
  */
-void CPlugIn4FIRs::setMasterVolume( double val )
+void CPlugIn4FIRs::setMasterVolume( double val, bool doSend )
 {
   qDebug()<<"CPlugInHomeCinema71::setMasterVolume not implemented";
 }

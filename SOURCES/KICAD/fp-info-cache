@@ -1,4 +1,4 @@
-15881302401321703
+15882862759640703
 Battery
 BatteryHolder_Bulgin_BX0036_1xC
 Bulgin Battery Holder, BX0036, Battery Type C (https://www.bulgin.com/products/pub/media/bulgin/data/Battery_holders.pdf)
@@ -65122,6 +65122,13 @@ RJ45-Stacked
 20
 rklib
 RK09K113
+
+
+0
+5
+5
+rklib
+RK09K1110-20
 
 
 0

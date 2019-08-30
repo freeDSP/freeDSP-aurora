@@ -24,6 +24,8 @@ QHighPass::QHighPass( tfilterdesign design, tfloat fc,
                       QWidget *parent ) :
   QDspBlock(parent), ui(new Ui::QHighPass)
 {
+  type = HIGHPASS;
+
   addr[kParamB2_1] = addrB2_1;
   addr[kParamB1_1] = addrB1_1;
   addr[kParamB0_1] = addrB0_1;
@@ -61,7 +63,9 @@ QHighPass::QHighPass( tfilterdesign design, tfloat fc,
   ui->comboBoxType->addItem( "LR 24dB",  kLinkwitzRiley24 );
   ui->comboBoxType->addItem( "LR 36dB",  kLinkwitzRiley36 );
   ui->comboBoxType->addItem( "LR 48dB",  kLinkwitzRiley48 );
-  ui->comboBoxType->setCurrentIndex( design );
+  int index = ui->comboBoxType->findData( design );
+  if ( index != -1 )
+    ui->comboBoxType->setCurrentIndex(index);
   ui->comboBoxType->blockSignals( false );
   ui->doubleSpinBoxFc->blockSignals( true );
   ui->doubleSpinBoxFc->setAttribute( Qt::WA_MacShowFocusRect, 0 );
@@ -70,7 +74,7 @@ QHighPass::QHighPass( tfilterdesign design, tfloat fc,
 
   //ui->pushButtonBypass->setChecked( bypass );
 
-  type = HIGHPASS;
+  updateCoeffs();
 }
 
 //==============================================================================
@@ -845,8 +849,10 @@ void QHighPass::updateCoeffs( void )
 void QHighPass::on_doubleSpinBoxFc_valueChanged( double  )
 {
   updateCoeffs();
-  sendDspParameter();
+  //sendDspParameter();
   emit valueChanged();
+  timerDspUpdate.stop();
+  timerDspUpdate.start( DSPUPDATELATENCY );
 }
 
 //==============================================================================
@@ -876,43 +882,7 @@ void QHighPass::on_pushButtonBypass_clicked()
 void QHighPass::sendDspParameter( void )
 {
   QByteArray content;
-/*
-  content.append( dsp->makeParameterForWifi( addr[kParamB2_1], static_cast<float>(0.0) ) );
-  content.append( dsp->makeParameterForWifi( addr[kParamB1_1], static_cast<float>(0.0) ) );
-  content.append( dsp->makeParameterForWifi( addr[kParamB0_1], static_cast<float>(1.0) ) );
-  content.append( dsp->makeParameterForWifi( addr[kParamA2_1], static_cast<float>(0.0) ) );
-  content.append( dsp->makeParameterForWifi( addr[kParamA1_1], static_cast<float>(0.0) ) );
 
-  content.append( dsp->makeParameterForWifi( addr[kParamB2_2], static_cast<float>(0.0) ) );
-  content.append( dsp->makeParameterForWifi( addr[kParamB1_2], static_cast<float>(0.0) ) );
-  content.append( dsp->makeParameterForWifi( addr[kParamB0_2], static_cast<float>(1.0) ) );
-  content.append( dsp->makeParameterForWifi( addr[kParamA2_2], static_cast<float>(0.0) ) );
-  content.append( dsp->makeParameterForWifi( addr[kParamA1_2], static_cast<float>(0.0) ) );
-
-  content.append( dsp->makeParameterForWifi( addr[kParamB2_3], static_cast<float>(0.0) ) );
-  content.append( dsp->makeParameterForWifi( addr[kParamB1_3], static_cast<float>(0.0) ) );
-  content.append( dsp->makeParameterForWifi( addr[kParamB0_3], static_cast<float>(1.0) ) );
-  content.append( dsp->makeParameterForWifi( addr[kParamA2_3], static_cast<float>(0.0) ) );
-  content.append( dsp->makeParameterForWifi( addr[kParamA1_3], static_cast<float>(0.0) ) );
-
-  content.append( dsp->makeParameterForWifi( addr[kParamB2_4], static_cast<float>(0.0) ) );
-  content.append( dsp->makeParameterForWifi( addr[kParamB1_4], static_cast<float>(0.0) ) );
-  content.append( dsp->makeParameterForWifi( addr[kParamB0_4], static_cast<float>(1.0) ) );
-  content.append( dsp->makeParameterForWifi( addr[kParamA2_4], static_cast<float>(0.0) ) );
-  content.append( dsp->makeParameterForWifi( addr[kParamA1_4], static_cast<float>(0.0) ) );
-  
-  dsp->sendParameterWifi( content );
-
-  QEventLoop loopWait;
-  QTimer timerWait;
-  timerWait.setSingleShot( true );
-  connect( &timerWait, SIGNAL(timeout()), &loopWait, SLOT(quit()) );
-  timerWait.start( 100 );
-  loopWait.exec();
-  disconnect( &timerWait, SIGNAL(timeout()), &loopWait, SLOT(quit()) );
-
-  content.clear();
-*/
   content.append( dsp->makeParameterForWifi( addr[kParamB2_1], static_cast<float>(coeffs[kB2]) ) );
   content.append( dsp->makeParameterForWifi( addr[kParamB1_1], static_cast<float>(coeffs[kB1]) ) );
   content.append( dsp->makeParameterForWifi( addr[kParamB0_1], static_cast<float>(coeffs[kB0]) ) );
@@ -965,7 +935,7 @@ void QHighPass::setName( QString newname )
 QByteArray QHighPass::getUserParams( void )
 {
   QByteArray content;
-  content.append( static_cast<uint8_t>(filterDesign) );
+  content.append( static_cast<char>(filterDesign) );
   float fc = static_cast<float>(ui->doubleSpinBoxFc->value());
   content.append( reinterpret_cast<const char*>(&fc), sizeof(fc) );
   content.append( reinterpret_cast<const char*>(&bypass), sizeof(bypass) );
@@ -1000,7 +970,7 @@ void QHighPass::setUserParams( QByteArray& userParams, int& idx )
     ui->comboBoxType->blockSignals( true );
     int index = ui->comboBoxType->findData( filterDesign );
     if ( index != -1 )
-      ui->comboBoxType->setCurrentIndex(index);
+      ui->comboBoxType->setCurrentIndex( index );
     ui->comboBoxType->blockSignals( false );
     ui->doubleSpinBoxFc->blockSignals( true );
     ui->doubleSpinBoxFc->setValue( static_cast<double>(fc) );
@@ -1050,4 +1020,15 @@ QByteArray QHighPass::getDspParams( void )
   content.append( dsp->makeParameterForWifi( addr[kParamA1_4], static_cast<float>(coeffs[3*5+kA1]) ) );
 
   return content;
+}
+
+
+//==============================================================================
+/*! 
+ *
+ */
+void QHighPass::setBypassed( bool bypss )
+{
+  bypass = bypss;
+  ui->pushButtonBypass->setChecked( bypss );
 }

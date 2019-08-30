@@ -51,7 +51,7 @@ public:
   /*!
    *
    */
-  virtual void setMasterVolume( double val );
+  virtual void setMasterVolume( double val, bool doSend );
 
   //============================================================================
   /*!

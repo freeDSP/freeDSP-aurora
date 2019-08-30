@@ -131,8 +131,10 @@ void QPeq::updateCoeffs( void )
 void QPeq::on_doubleSpinBoxGain_valueChanged( double  )
 {
   updateCoeffs();
-  sendDspParameter();
+  //sendDspParameter();
   emit valueChanged();
+  timerDspUpdate.stop();
+  timerDspUpdate.start( DSPUPDATELATENCY );
 }
 
 //==============================================================================
@@ -142,8 +144,10 @@ void QPeq::on_doubleSpinBoxGain_valueChanged( double  )
 void QPeq::on_doubleSpinBoxFc_valueChanged( double  )
 {
   updateCoeffs();
-  sendDspParameter();
+  //sendDspParameter();
   emit valueChanged();
+  timerDspUpdate.stop();
+  timerDspUpdate.start( DSPUPDATELATENCY );
 }
 
 //==============================================================================
@@ -153,8 +157,10 @@ void QPeq::on_doubleSpinBoxFc_valueChanged( double  )
 void QPeq::on_doubleSpinBoxQ_valueChanged( double  )
 {
   updateCoeffs();
-  sendDspParameter();
+  //sendDspParameter();
   emit valueChanged();
+  timerDspUpdate.stop();
+  timerDspUpdate.start( DSPUPDATELATENCY );
 }
 
 //==============================================================================

@@ -77,6 +77,17 @@ private slots:
 
   void on_checkBoxInvert_stateChanged(int arg1);
 
+protected slots:
+  //============================================================================
+  /*! 
+   *
+   */
+  virtual void updateDsp( void )
+  {
+    updateCoeffs();
+    sendDspParameter();
+  }
+
 private:
   Ui::QPhase *ui;
 

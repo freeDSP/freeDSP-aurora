@@ -6,9 +6,13 @@
 #include <QProgressDialog>
 #include <QStandardPaths>
 #include <QtGui>
+#include <QJsonObject>
+#include <QJsonDocument>
 
+#if defined( __MACOSX__ )
 #include <CoreFoundation/CoreFoundation.h>
 #include <CoreFoundation/CFBundle.h>
+#endif
 
 #include "DialogSettings.hpp"
 #include "ui_DialogSettings.h"
@@ -18,10 +22,50 @@ DialogSettings::DialogSettings( CFreeDspAurora* ptrdsp, QWidget* parent ) :
   ui(new Ui::DialogSettings)
 {
   ui->setupUi(this);
+  ui->pushButtonPing->setVisible( false );
   dsp = ptrdsp;
 
+  #if defined( __MACOSX__ )
+  QDir appPath = QDir( QCoreApplication::applicationDirPath() );
+  appPath.cdUp();
+  appPath.cd( "Resources" );
+  //qDebug()<<appPath.absolutePath() + "/dspplugins.json";
+  #elif defined( __WIN__ )
+  QDir appPath = QDir( QCoreApplication::applicationDirPath() );
+  qDebug()<<appPath.absolutePath() + "/dspplugins.json";
+
+  #else
+  #error Platform not supported.
+  #endif
+
   ui->comboBoxPlugIn->blockSignals( true );
-  ui->comboBoxPlugIn->addItem( "8 Channels", CFreeDspAurora::PLUGIN_8CHANNELS );
+  QFile fileDspPlugins( appPath.absolutePath() + "/dspplugins.json" );
+  if( fileDspPlugins.open( QIODevice::ReadOnly ) )
+  {
+    QJsonDocument jsonDoc( QJsonDocument::fromJson( fileDspPlugins.readAll() ) );
+    QJsonObject jsonObj = jsonDoc.object();
+    QJsonArray jsonDspPlugins = jsonObj["dspplugins"].toArray();
+    for( int ii = 0; ii < jsonDspPlugins.size(); ii++ )
+    {
+      QJsonObject plugin = jsonDspPlugins[ii].toObject();
+      ui->comboBoxPlugIn->addItem( plugin["name"].toString(), plugin["pid"].toInt() );
+
+      CDspPluginMetaData newMetaData;
+      newMetaData.name = plugin["name"].toString();
+      newMetaData.pid = plugin["pid"].toInt();
+      #if defined( __MACOSX__ )
+      newMetaData.path = appPath.absolutePath() +  "/" + plugin["path"].toString();
+      #elif defined( __WIN__ )
+      newMetaData.path = appPath.absolutePath() +  "/dspplugins/" + plugin["path"].toString();
+      #else
+      #error Platform not supported.
+      #endif
+      dspPluginMetaData.append( newMetaData );
+
+      qDebug()<<plugin["name"].toString()<<plugin["pid"].toInt()<<plugin["path"].toString();
+    }
+    fileDspPlugins.close();
+  }
   ui->comboBoxPlugIn->blockSignals( false );
 
   ui->radioButtonAP->blockSignals( true );
@@ -42,6 +86,20 @@ DialogSettings::DialogSettings( CFreeDspAurora* ptrdsp, QWidget* parent ) :
   ui->radioButtonLocalWifi->blockSignals( false );
 
   ui->lineEditIpAddress->setText( dsp->getIpAddressWifi() );
+
+  ui->comboBoxAddOnId->blockSignals( true );
+  ui->comboBoxAddOnId->addItem( "None or Custom", 0x00 );
+  ui->comboBoxAddOnId->addItem( "A Woodworker's friend", 0x01 );
+  ui->comboBoxAddOnId->addItem( "B Down with developers", 0x02 );
+  ui->comboBoxAddOnId->addItem( "C Control over the crowd", 0x04 );
+  int index = ui->comboBoxAddOnId->findData( dsp->getAddOnId() );
+  if( index != -1 )
+    ui->comboBoxAddOnId->setCurrentIndex( index );
+  ui->comboBoxAddOnId->blockSignals( false );
+
+  ui->labelFirmwareVersion->setText( dsp->getFirmwareVersion() );
+  ui->labelAccessPointIP->setText( dsp->getIpAddressAP() );
+  ui->labelLocalWiFiIP->setText( dsp->getIpAddressLocalWifi() );
 }
 
 DialogSettings::~DialogSettings()
@@ -66,7 +124,7 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
   QString pathAppBundle = QString( CFStringGetCStringPtr( macPath, CFStringGetSystemEncoding() ) );
   CFRelease(appUrlRef);
   CFRelease(macPath);
-  if( ui->comboBoxPlugIn->currentData().toInt() == CFreeDspAurora::PLUGIN_8CHANNELS )
+  /*if( ui->comboBoxPlugIn->currentData().toInt() == CFreeDspAurora::PLUGIN_8CHANNELS )
   {
     pathTxBuffer = pathAppBundle + QString( "/Contents/Resources/8channels/TxBuffer_IC_1.dat");
     pathNumBytes = pathAppBundle + QString( "/Contents/Resources/8channels/NumBytes_IC_1.dat");
@@ -74,17 +132,43 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
   else
   {
     qDebug()<<"[ERROR] Unknown plugin id"<<ui->comboBoxPlugIn->currentData().toInt();
+  }*/
+
+  #elif defined( __WIN__ )
+  /*QString pathAppBundle = QCoreApplication::applicationDirPath();
+  if( ui->comboBoxPlugIn->currentData().toInt() == CFreeDspAurora::PLUGIN_8CHANNELS )
+  {
+    pathTxBuffer = pathAppBundle + QString( "/dspplugins/8channels/TxBuffer_IC_1.dat");
+    pathNumBytes = pathAppBundle + QString( "/dspplugins/8channels/NumBytes_IC_1.dat");
   }
+  else
+  {
+    qDebug()<<"[ERROR] Unknown plugin id"<<ui->comboBoxPlugIn->currentData().toInt();
+  }*/
   #endif
+
+  for( int ii = 0; ii < dspPluginMetaData.size(); ii++ )
+  {
+    if( dspPluginMetaData.at(ii).pid == ui->comboBoxPlugIn->currentData().toInt() )
+    {
+      pathTxBuffer = dspPluginMetaData.at(ii).path + "/TxBuffer_IC_1.dat";
+      pathNumBytes = dspPluginMetaData.at(ii).path + "/NumBytes_IC_1.dat";
+      break;
+    }
+  }
+  qDebug()<<"PATHES";
+  qDebug()<<pathTxBuffer;
+  qDebug()<<pathNumBytes;
   
   //----------------------------------------------------------------------------
   //--- Read and convert the TxBuffer_IC_1.dat file
   //----------------------------------------------------------------------------
-  //QFile fileTxBuffer( "/Users/rkn/Documents/freeDSP/freeDSP-aurora/SOURCES/SIGMASTUDIO/testproject2/TxBuffer_IC_1.dat" );
+  qDebug()<<pathTxBuffer;
   QFile fileTxBuffer( pathTxBuffer );
   if( !fileTxBuffer.open( QIODevice::ReadOnly ) )
   {
     qDebug()<<__FILE__<<__LINE__<<"Could not open selected file";
+    QMessageBox::critical( this, tr("Error"), tr("Uups, could not open ") + pathTxBuffer + tr(". Was the file deleted?"), QMessageBox::Ok );
     enableGui( true );
     return;
   }
@@ -109,11 +193,12 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
   //----------------------------------------------------------------------------
   //--- Read and convert the NumBytes_IC_1.dat file
   //----------------------------------------------------------------------------
-  //QFile fileNumBytes( "/Users/rkn/Documents/freeDSP/freeDSP-aurora/SOURCES/SIGMASTUDIO/testproject2/NumBytes_IC_1.dat" );
+  qDebug()<<pathNumBytes;
   QFile fileNumBytes( pathNumBytes );
   if( !fileNumBytes.open( QIODevice::ReadOnly ) )
   {
     qDebug()<<__FILE__<<__LINE__<<"Could not open corresponding dat file";
+    QMessageBox::critical( this, tr("Error"), tr("Uups, could not open ") + pathNumBytes + tr(". Was the file deleted?"), QMessageBox::Ok );
     enableGui( true );
     return;
   }
@@ -228,7 +313,7 @@ void DialogSettings::on_pushButtonVerifyPlugin_clicked()
   QString pathAppBundle = QString( CFStringGetCStringPtr( macPath, CFStringGetSystemEncoding() ) );
   CFRelease(appUrlRef);
   CFRelease(macPath);
-  if( ui->comboBoxPlugIn->currentData().toInt() == CFreeDspAurora::PLUGIN_8CHANNELS )
+  /*if( ui->comboBoxPlugIn->currentData().toInt() == CFreeDspAurora::PLUGIN_8CHANNELS )
   {
     pathTxBuffer = pathAppBundle + QString( "/Contents/Resources/8channels/TxBuffer_IC_1.dat");
     pathNumBytes = pathAppBundle + QString( "/Contents/Resources/8channels/NumBytes_IC_1.dat");
@@ -236,17 +321,39 @@ void DialogSettings::on_pushButtonVerifyPlugin_clicked()
   else
   {
     qDebug()<<"[ERROR] Unknown plugin id"<<ui->comboBoxPlugIn->currentData().toInt();
+  }*/
+  #elif defined( __WIN__ )
+  /*QString pathAppBundle = QCoreApplication::applicationDirPath();
+  if( ui->comboBoxPlugIn->currentData().toInt() == CFreeDspAurora::PLUGIN_8CHANNELS )
+  {
+    pathTxBuffer = pathAppBundle + QString( "/dspplugins/8channels/TxBuffer_IC_1.dat");
+    pathNumBytes = pathAppBundle + QString( "/dspplugins/8channels/NumBytes_IC_1.dat");
   }
+  else
+  {
+    qDebug()<<"[ERROR] Unknown plugin id"<<ui->comboBoxPlugIn->currentData().toInt();
+  }*/
   #endif
+
+  for( int ii = 0; ii < dspPluginMetaData.size(); ii++ )
+  {
+    qDebug()<<dspPluginMetaData.at(ii).pid<<ui->comboBoxPlugIn->currentData().toInt();
+    if( dspPluginMetaData.at(ii).pid == ui->comboBoxPlugIn->currentData().toInt() )
+    {
+      pathTxBuffer = dspPluginMetaData.at(ii).path + "/TxBuffer_IC_1.dat";
+      pathNumBytes = dspPluginMetaData.at(ii).path + "/NumBytes_IC_1.dat";
+      break;
+    }
+  }
 
   //----------------------------------------------------------------------------
   //--- Read and convert the TxBuffer_IC_1.dat file
   //----------------------------------------------------------------------------
-  //QFile fileTxBuffer( "/Users/rkn/Documents/freeDSP/freeDSP-aurora/SOURCES/SIGMASTUDIO/testproject2/TxBuffer_IC_1.dat" );
   QFile fileTxBuffer( pathTxBuffer );
   if( !fileTxBuffer.open( QIODevice::ReadOnly ) )
   {
     qDebug()<<__FILE__<<__LINE__<<"Could not open selected file";
+    QMessageBox::critical( this, tr("Error"), tr("Uups, could not open ") + pathTxBuffer + tr(". Was the file deleted?"), QMessageBox::Ok );
     enableGui( true );
     return;
   }
@@ -270,11 +377,11 @@ void DialogSettings::on_pushButtonVerifyPlugin_clicked()
   //----------------------------------------------------------------------------
   //--- Read and convert the NumBytes_IC_1.dat file
   //----------------------------------------------------------------------------
-  //QFile fileNumBytes( "/Users/rkn/Documents/freeDSP/freeDSP-aurora/SOURCES/SIGMASTUDIO/testproject2/NumBytes_IC_1.dat" );
   QFile fileNumBytes( pathNumBytes );
   if( !fileNumBytes.open( QIODevice::ReadOnly ) )
   {
     qDebug()<<__FILE__<<__LINE__<<"Could not open corresponding dat file";
+    QMessageBox::critical( this, tr("Error"), tr("Uups, could not open ") + pathNumBytes + tr(". Was the file deleted?"), QMessageBox::Ok );
     enableGui( true );
     return;
   }
@@ -362,12 +469,12 @@ void DialogSettings::on_pushButtonVerifyPlugin_clicked()
 void DialogSettings::on_pushButtonStoreWiFiConfig_clicked()
 {
   enableGui( false );
-  if( !ui->lineEditSSID->text().isEmpty() )
-  {
+  //if( !ui->lineEditSSID->text().isEmpty() )
+  //{
     // --- Send WiFi configuration to DSP ---
-    if( !dsp->storeSettingsWifi( ui->lineEditSSID->text(), ui->lineEditPassword->text() ) )
-      QMessageBox::critical( this, tr("Error"), tr("Uups, something went wrong when sending WiFi configuration. Please double check everythind and try again."), QMessageBox::Ok );  
-  }
+    dsp->storeSettingsWifi( ui->lineEditSSID->text(), ui->lineEditPassword->text() ); 
+    ui->labelLocalWiFiIP->setText( dsp->getIpAddressLocalWifi() );
+  //}
   enableGui( true );
 }
 
@@ -461,4 +568,13 @@ void DialogSettings::on_lineEditIpAddress_editingFinished()
   if( ui->radioButtonLocalWifi->isChecked() )
     dsp->setIpAddressWifi( ui->lineEditIpAddress->text() );
 
+}
+
+//==============================================================================
+/*!
+ *
+ */
+void DialogSettings::on_comboBoxAddOnId_currentIndexChanged( int index )
+{
+  dsp->storeAddOnIdWifi( ui->comboBoxAddOnId->itemData( index ).toUInt() );
 }

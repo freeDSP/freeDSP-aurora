@@ -53,6 +53,16 @@ private slots:
   void on_doubleSpinBoxDelay_valueChanged( double arg1 );
   void on_pushButtonBypass_clicked();
 
+protected slots:
+  //============================================================================
+  /*! 
+   *
+   */
+  virtual void updateDsp( void )
+  {
+    sendDspParameter();
+  }
+
 private:
   Ui::QDelay *ui;
 

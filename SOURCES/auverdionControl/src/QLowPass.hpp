@@ -106,6 +106,8 @@ public:
 
   virtual QByteArray getDspParams( void );
 
+  void setBypassed( bool bypss );
+
 private:
   void updateCoeffs( void );
 
@@ -115,6 +117,17 @@ private slots:
   void on_comboBoxType_currentIndexChanged( int  );
 
   void on_pushButtonBypass_clicked();
+
+protected slots:
+  //============================================================================
+  /*! 
+   *
+   */
+  virtual void updateDsp( void )
+  {
+    updateCoeffs();
+    sendDspParameter();
+  }
 
 private:
   Ui::QLowPass *ui;

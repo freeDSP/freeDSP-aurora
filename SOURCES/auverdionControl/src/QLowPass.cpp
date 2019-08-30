@@ -757,8 +757,10 @@ void QLowPass::updateCoeffs( void )
 void QLowPass::on_doubleSpinBoxFc_valueChanged( double  )
 {
   updateCoeffs();
-  sendDspParameter();
+  //sendDspParameter();
   emit valueChanged();
+  timerDspUpdate.stop();
+  timerDspUpdate.start( DSPUPDATELATENCY );
 }
 
 //==============================================================================
@@ -923,4 +925,14 @@ QByteArray QLowPass::getDspParams( void )
   content.append( dsp->makeParameterForWifi( addr[kParamA1_4], static_cast<float>(coeffs[3*5+kA1]) ) );
 
   return content;
+}
+
+//==============================================================================
+/*! 
+ *
+ */
+void QLowPass::setBypassed( bool bypss )
+{
+  bypass = bypss;
+  ui->pushButtonBypass->setChecked( bypss );
 }
