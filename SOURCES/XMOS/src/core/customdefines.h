@@ -107,6 +107,7 @@
 #define MAX_FREQ           (192000)
 #endif
 
+#define UAC_FORCE_FEEDBACK_EP (1)
 //:
 /***** Defines relating to USB descriptors etc *****/
 //:usb_defs

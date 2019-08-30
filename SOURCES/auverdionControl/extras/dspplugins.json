@@ -1,0 +1,25 @@
+{
+  "dspplugins":
+  [
+    {
+      "name": "8channels",
+      "pid": 1,
+      "path": "8channels"
+    },
+    {
+      "name": "HomeCinema71",
+      "pid": 2,
+      "path": "homecinema71"
+    },
+    {
+      "name": "8channels USB",
+      "pid": 4,
+      "path": "8channelsusb"
+    },
+    {
+      "name": "HomeCinema71 USB",
+      "pid": 5,
+      "path": "homecinema71usb"
+    }
+  ]
+}

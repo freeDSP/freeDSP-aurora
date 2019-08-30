@@ -17,6 +17,8 @@
 #include "QOutputSelect.hpp"
 #include "QCrossover.hpp"
 
+#include "HomeCinema71_IC_1_PARAM.h"
+
 using namespace Vektorraum;
 
 //==============================================================================
@@ -123,7 +125,6 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
   tDspChannel dspChannel;
 
   QInputSelect* input;
-  QHighPass* hp;
   QLowShelv* lshelv;
   QPeq* peq01;
   QPeq* peq02;
@@ -143,6 +144,8 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
   QOutputSelect* output;
   QCrossover* xo;
 
+  dsp = ptrdsp;
+
   QHBoxLayout* layout = new QHBoxLayout;
   QChannel* channel = new QChannel;
 
@@ -152,7 +155,14 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     //--- Channel 1
     dspChannel.name = QString( "Front Left" );
 
-    input = new QInputSelect( 0, MOD_INPUTSELECT_8_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS43INDEX_ADDR, ptrdsp, channel );
+    input = new QInputSelect( 0, 
+                              MOD_INPUTSELECT_1_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS9INDEX_ADDR,
+                              MOD_INPUTSELECT_1_NX1_1_UAC_ALG0_MONOMUXSIGMA300NS10INDEX_ADDR, 
+                              MOD_INPUTSELECT_1_NX1_1_ESP32_ALG0_MONOMUXSIGMA300NS11INDEX_ADDR, 
+                              MOD_INPUTSELECT_1_NX1_1_EXP_ALG0_MONOMUXSIGMA300NS12INDEX_ADDR, 
+                              MOD_INPUTSELECT_1_NX1_1_SPDIF_ALG0_MONOMUXSIGMA300NS13INDEX_ADDR,
+                              MOD_INPUTSELECT_1_NX1_1_ALG0_MONOMUXSIGMA300NS14INDEX_ADDR, 
+                              ptrdsp, channel );
     layout->addWidget( input );
     channel->addDspBlock( input );
     channel->setName( dspChannel.name );
@@ -266,17 +276,26 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     channel->addDspBlock( hshelv );
 
     xo = new QCrossover( QCrossover::kButterworth12, 100.0,
-                      MOD_HP1_1_ALG0_STAGE0_B2_ADDR, MOD_HP1_1_ALG0_STAGE0_B1_ADDR, MOD_HP1_1_ALG0_STAGE0_B0_ADDR,
-                      MOD_HP1_1_ALG0_STAGE0_A2_ADDR, MOD_HP1_1_ALG0_STAGE0_A1_ADDR,
-                      MOD_HP1_2_ALG0_STAGE0_B2_ADDR, MOD_HP1_2_ALG0_STAGE0_B1_ADDR, MOD_HP1_2_ALG0_STAGE0_B0_ADDR,
-                      MOD_HP1_2_ALG0_STAGE0_A2_ADDR, MOD_HP1_2_ALG0_STAGE0_A1_ADDR,
-                      MOD_HP1_3_ALG0_STAGE0_B2_ADDR, MOD_HP1_3_ALG0_STAGE0_B1_ADDR, MOD_HP1_3_ALG0_STAGE0_B0_ADDR,
-                      MOD_HP1_3_ALG0_STAGE0_A2_ADDR, MOD_HP1_3_ALG0_STAGE0_A1_ADDR,
-                      MOD_HP1_4_ALG0_STAGE0_B2_ADDR, MOD_HP1_4_ALG0_STAGE0_B1_ADDR, MOD_HP1_4_ALG0_STAGE0_B0_ADDR,
-                      MOD_HP1_4_ALG0_STAGE0_A2_ADDR, MOD_HP1_4_ALG0_STAGE0_A1_ADDR,
-                      fs,
-                      ptrdsp,
-                      channel );
+                         QCrossover::kButterworth12, 100.0,
+                         MOD_HP1_1_ALG0_STAGE0_B2_ADDR, MOD_HP1_1_ALG0_STAGE0_B1_ADDR, MOD_HP1_1_ALG0_STAGE0_B0_ADDR,
+                         MOD_HP1_1_ALG0_STAGE0_A2_ADDR, MOD_HP1_1_ALG0_STAGE0_A1_ADDR,
+                         MOD_HP1_2_ALG0_STAGE0_B2_ADDR, MOD_HP1_2_ALG0_STAGE0_B1_ADDR, MOD_HP1_2_ALG0_STAGE0_B0_ADDR,
+                         MOD_HP1_2_ALG0_STAGE0_A2_ADDR, MOD_HP1_2_ALG0_STAGE0_A1_ADDR,
+                         MOD_HP1_3_ALG0_STAGE0_B2_ADDR, MOD_HP1_3_ALG0_STAGE0_B1_ADDR, MOD_HP1_3_ALG0_STAGE0_B0_ADDR,
+                         MOD_HP1_3_ALG0_STAGE0_A2_ADDR, MOD_HP1_3_ALG0_STAGE0_A1_ADDR,
+                         MOD_HP1_4_ALG0_STAGE0_B2_ADDR, MOD_HP1_4_ALG0_STAGE0_B1_ADDR, MOD_HP1_4_ALG0_STAGE0_B0_ADDR,
+                         MOD_HP1_4_ALG0_STAGE0_A2_ADDR, MOD_HP1_4_ALG0_STAGE0_A1_ADDR,
+                         MOD_LP1_1_ALG0_STAGE0_B2_ADDR, MOD_LP1_1_ALG0_STAGE0_B1_ADDR, MOD_LP1_1_ALG0_STAGE0_B0_ADDR,
+                         MOD_LP1_1_ALG0_STAGE0_A2_ADDR, MOD_LP1_1_ALG0_STAGE0_A1_ADDR,
+                         MOD_LP1_2_ALG0_STAGE0_B2_ADDR, MOD_LP1_2_ALG0_STAGE0_B1_ADDR, MOD_LP1_2_ALG0_STAGE0_B0_ADDR,
+                         MOD_LP1_2_ALG0_STAGE0_A2_ADDR, MOD_LP1_2_ALG0_STAGE0_A1_ADDR,
+                         MOD_LP1_3_ALG0_STAGE0_B2_ADDR, MOD_LP1_3_ALG0_STAGE0_B1_ADDR, MOD_LP1_3_ALG0_STAGE0_B0_ADDR,
+                         MOD_LP1_3_ALG0_STAGE0_A2_ADDR, MOD_LP1_3_ALG0_STAGE0_A1_ADDR,
+                         MOD_LP1_4_ALG0_STAGE0_B2_ADDR, MOD_LP1_4_ALG0_STAGE0_B1_ADDR, MOD_LP1_4_ALG0_STAGE0_B0_ADDR,
+                         MOD_LP1_4_ALG0_STAGE0_A2_ADDR, MOD_LP1_4_ALG0_STAGE0_A1_ADDR,
+                         fs,
+                         ptrdsp,
+                         channel );
     layout->addWidget( xo );
     channel->addDspBlock( xo );
 
@@ -338,7 +357,14 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     //--- Channel 2
     dspChannel.name = QString( "Front Right" );
 
-    input = new QInputSelect( 1, MOD_INPUTSELECT_8_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS43INDEX_ADDR, ptrdsp, channel );
+    input = new QInputSelect( 1, 
+                              MOD_INPUTSELECT_2_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS1INDEX_ADDR,
+                              MOD_INPUTSELECT_2_NX1_1_UAC_ALG0_MONOMUXSIGMA300NS2INDEX_ADDR, 
+                              MOD_INPUTSELECT_2_NX1_1_ESP32_ALG0_MONOMUXSIGMA300NS3INDEX_ADDR, 
+                              MOD_INPUTSELECT_2_NX1_1_EXP_ALG0_MONOMUXSIGMA300NS4INDEX_ADDR, 
+                              MOD_INPUTSELECT_2_NX1_1_SPDIF_ALG0_MONOMUXSIGMA300NS5INDEX_ADDR,
+                              MOD_INPUTSELECT_2_NX1_1_ALG0_MONOMUXSIGMA300NS6INDEX_ADDR, 
+                              ptrdsp, channel );
     layout->addWidget( input );
     channel->addDspBlock( input );
     channel->setName( dspChannel.name );
@@ -452,17 +478,26 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     channel->addDspBlock( hshelv );
 
     xo = new QCrossover( QCrossover::kButterworth12, 100.0,
-                      MOD_HP2_1_ALG0_STAGE0_B2_ADDR, MOD_HP2_1_ALG0_STAGE0_B1_ADDR, MOD_HP2_1_ALG0_STAGE0_B0_ADDR,
-                      MOD_HP2_1_ALG0_STAGE0_A2_ADDR, MOD_HP2_1_ALG0_STAGE0_A1_ADDR,
-                      MOD_HP2_2_ALG0_STAGE0_B2_ADDR, MOD_HP2_2_ALG0_STAGE0_B1_ADDR, MOD_HP2_2_ALG0_STAGE0_B0_ADDR,
-                      MOD_HP2_2_ALG0_STAGE0_A2_ADDR, MOD_HP2_2_ALG0_STAGE0_A1_ADDR,
-                      MOD_HP2_3_ALG0_STAGE0_B2_ADDR, MOD_HP2_3_ALG0_STAGE0_B1_ADDR, MOD_HP2_3_ALG0_STAGE0_B0_ADDR,
-                      MOD_HP2_3_ALG0_STAGE0_A2_ADDR, MOD_HP2_3_ALG0_STAGE0_A1_ADDR,
-                      MOD_HP2_4_ALG0_STAGE0_B2_ADDR, MOD_HP2_4_ALG0_STAGE0_B1_ADDR, MOD_HP2_4_ALG0_STAGE0_B0_ADDR,
-                      MOD_HP2_4_ALG0_STAGE0_A2_ADDR, MOD_HP2_4_ALG0_STAGE0_A1_ADDR,
-                      fs,
-                      ptrdsp,
-                      channel );
+                         QCrossover::kButterworth12, 100.0,
+                         MOD_HP2_1_ALG0_STAGE0_B2_ADDR, MOD_HP2_1_ALG0_STAGE0_B1_ADDR, MOD_HP2_1_ALG0_STAGE0_B0_ADDR,
+                         MOD_HP2_1_ALG0_STAGE0_A2_ADDR, MOD_HP2_1_ALG0_STAGE0_A1_ADDR,
+                         MOD_HP2_2_ALG0_STAGE0_B2_ADDR, MOD_HP2_2_ALG0_STAGE0_B1_ADDR, MOD_HP2_2_ALG0_STAGE0_B0_ADDR,
+                         MOD_HP2_2_ALG0_STAGE0_A2_ADDR, MOD_HP2_2_ALG0_STAGE0_A1_ADDR,
+                         MOD_HP2_3_ALG0_STAGE0_B2_ADDR, MOD_HP2_3_ALG0_STAGE0_B1_ADDR, MOD_HP2_3_ALG0_STAGE0_B0_ADDR,
+                         MOD_HP2_3_ALG0_STAGE0_A2_ADDR, MOD_HP2_3_ALG0_STAGE0_A1_ADDR,
+                         MOD_HP2_4_ALG0_STAGE0_B2_ADDR, MOD_HP2_4_ALG0_STAGE0_B1_ADDR, MOD_HP2_4_ALG0_STAGE0_B0_ADDR,
+                         MOD_HP2_4_ALG0_STAGE0_A2_ADDR, MOD_HP2_4_ALG0_STAGE0_A1_ADDR,
+                         MOD_LP2_1_ALG0_STAGE0_B2_ADDR, MOD_LP2_1_ALG0_STAGE0_B1_ADDR, MOD_LP2_1_ALG0_STAGE0_B0_ADDR,
+                         MOD_LP2_1_ALG0_STAGE0_A2_ADDR, MOD_LP2_1_ALG0_STAGE0_A1_ADDR,
+                         MOD_LP2_2_ALG0_STAGE0_B2_ADDR, MOD_LP2_2_ALG0_STAGE0_B1_ADDR, MOD_LP2_2_ALG0_STAGE0_B0_ADDR,
+                         MOD_LP2_2_ALG0_STAGE0_A2_ADDR, MOD_LP2_2_ALG0_STAGE0_A1_ADDR,
+                         MOD_LP2_3_ALG0_STAGE0_B2_ADDR, MOD_LP2_3_ALG0_STAGE0_B1_ADDR, MOD_LP2_3_ALG0_STAGE0_B0_ADDR,
+                         MOD_LP2_3_ALG0_STAGE0_A2_ADDR, MOD_LP2_3_ALG0_STAGE0_A1_ADDR,
+                         MOD_LP2_4_ALG0_STAGE0_B2_ADDR, MOD_LP2_4_ALG0_STAGE0_B1_ADDR, MOD_LP2_4_ALG0_STAGE0_B0_ADDR,
+                         MOD_LP2_4_ALG0_STAGE0_A2_ADDR, MOD_LP2_4_ALG0_STAGE0_A1_ADDR,
+                         fs,
+                         ptrdsp,
+                         channel );
     layout->addWidget( xo );
     channel->addDspBlock( xo );
 
@@ -524,7 +559,14 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     //--- Channel 3
     dspChannel.name = QString( "Front Center" );
 
-    input = new QInputSelect( 2, MOD_INPUTSELECT_8_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS43INDEX_ADDR, ptrdsp, channel );
+    input = new QInputSelect( 2, 
+                              MOD_INPUTSELECT_3_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS7INDEX_ADDR,
+                              MOD_INPUTSELECT_3_NX1_1_UAC_ALG0_MONOMUXSIGMA300NS8INDEX_ADDR, 
+                              MOD_INPUTSELECT_3_NX1_1_ESP32_ALG0_MONOMUXSIGMA300NS15INDEX_ADDR, 
+                              MOD_INPUTSELECT_3_NX1_1_EXP_ALG0_MONOMUXSIGMA300NS16INDEX_ADDR, 
+                              MOD_INPUTSELECT_3_NX1_1_SPDIF_ALG0_MONOMUXSIGMA300NS17INDEX_ADDR,
+                              MOD_INPUTSELECT_3_NX1_1_ALG0_MONOMUXSIGMA300NS18INDEX_ADDR, 
+                              ptrdsp, channel );
     layout->addWidget( input );
     channel->addDspBlock( input );
     channel->setName( dspChannel.name );
@@ -638,17 +680,26 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     channel->addDspBlock( hshelv );
 
     xo = new QCrossover( QCrossover::kButterworth12, 100.0,
-                        MOD_HP3_1_ALG0_STAGE0_B2_ADDR, MOD_HP3_1_ALG0_STAGE0_B1_ADDR, MOD_HP3_1_ALG0_STAGE0_B0_ADDR,
-                        MOD_HP3_1_ALG0_STAGE0_A2_ADDR, MOD_HP3_1_ALG0_STAGE0_A1_ADDR,
-                        MOD_HP3_2_ALG0_STAGE0_B2_ADDR, MOD_HP3_2_ALG0_STAGE0_B1_ADDR, MOD_HP3_2_ALG0_STAGE0_B0_ADDR,
-                        MOD_HP3_2_ALG0_STAGE0_A2_ADDR, MOD_HP3_2_ALG0_STAGE0_A1_ADDR,
-                        MOD_HP3_3_ALG0_STAGE0_B2_ADDR, MOD_HP3_3_ALG0_STAGE0_B1_ADDR, MOD_HP3_3_ALG0_STAGE0_B0_ADDR,
-                        MOD_HP3_3_ALG0_STAGE0_A2_ADDR, MOD_HP3_3_ALG0_STAGE0_A1_ADDR,
-                        MOD_HP3_4_ALG0_STAGE0_B2_ADDR, MOD_HP3_4_ALG0_STAGE0_B1_ADDR, MOD_HP3_4_ALG0_STAGE0_B0_ADDR,
-                        MOD_HP3_4_ALG0_STAGE0_A2_ADDR, MOD_HP3_4_ALG0_STAGE0_A1_ADDR,
-                        fs,
-                        ptrdsp,
-                        channel );
+                         QCrossover::kButterworth12, 100.0,
+                         MOD_HP3_1_ALG0_STAGE0_B2_ADDR, MOD_HP3_1_ALG0_STAGE0_B1_ADDR, MOD_HP3_1_ALG0_STAGE0_B0_ADDR,
+                         MOD_HP3_1_ALG0_STAGE0_A2_ADDR, MOD_HP3_1_ALG0_STAGE0_A1_ADDR,
+                         MOD_HP3_2_ALG0_STAGE0_B2_ADDR, MOD_HP3_2_ALG0_STAGE0_B1_ADDR, MOD_HP3_2_ALG0_STAGE0_B0_ADDR,
+                         MOD_HP3_2_ALG0_STAGE0_A2_ADDR, MOD_HP3_2_ALG0_STAGE0_A1_ADDR,
+                         MOD_HP3_3_ALG0_STAGE0_B2_ADDR, MOD_HP3_3_ALG0_STAGE0_B1_ADDR, MOD_HP3_3_ALG0_STAGE0_B0_ADDR,
+                         MOD_HP3_3_ALG0_STAGE0_A2_ADDR, MOD_HP3_3_ALG0_STAGE0_A1_ADDR,
+                         MOD_HP3_4_ALG0_STAGE0_B2_ADDR, MOD_HP3_4_ALG0_STAGE0_B1_ADDR, MOD_HP3_4_ALG0_STAGE0_B0_ADDR,
+                         MOD_HP3_4_ALG0_STAGE0_A2_ADDR, MOD_HP3_4_ALG0_STAGE0_A1_ADDR,
+                         MOD_LP3_1_ALG0_STAGE0_B2_ADDR, MOD_LP3_1_ALG0_STAGE0_B1_ADDR, MOD_LP3_1_ALG0_STAGE0_B0_ADDR,
+                         MOD_LP3_1_ALG0_STAGE0_A2_ADDR, MOD_LP3_1_ALG0_STAGE0_A1_ADDR,
+                         MOD_LP3_2_ALG0_STAGE0_B2_ADDR, MOD_LP3_2_ALG0_STAGE0_B1_ADDR, MOD_LP3_2_ALG0_STAGE0_B0_ADDR,
+                         MOD_LP3_2_ALG0_STAGE0_A2_ADDR, MOD_LP3_2_ALG0_STAGE0_A1_ADDR,
+                         MOD_LP3_3_ALG0_STAGE0_B2_ADDR, MOD_LP3_3_ALG0_STAGE0_B1_ADDR, MOD_LP3_3_ALG0_STAGE0_B0_ADDR,
+                         MOD_LP3_3_ALG0_STAGE0_A2_ADDR, MOD_LP3_3_ALG0_STAGE0_A1_ADDR,
+                         MOD_LP3_4_ALG0_STAGE0_B2_ADDR, MOD_LP3_4_ALG0_STAGE0_B1_ADDR, MOD_LP3_4_ALG0_STAGE0_B0_ADDR,
+                         MOD_LP3_4_ALG0_STAGE0_A2_ADDR, MOD_LP3_4_ALG0_STAGE0_A1_ADDR,
+                         fs,
+                         ptrdsp,
+                         channel );
     layout->addWidget( xo );
     channel->addDspBlock( xo );
 
@@ -710,7 +761,14 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     //--- Channel 4
     dspChannel.name = QString( "Rear Left" );
 
-    input = new QInputSelect( 3, MOD_INPUTSELECT_8_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS43INDEX_ADDR, ptrdsp, channel );
+    input = new QInputSelect( 3, 
+                              MOD_INPUTSELECT_4_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS19INDEX_ADDR,
+                              MOD_INPUTSELECT_4_NX1_1_UAC_ALG0_MONOMUXSIGMA300NS20INDEX_ADDR, 
+                              MOD_INPUTSELECT_4_NX1_1_ESP32_ALG0_MONOMUXSIGMA300NS21INDEX_ADDR, 
+                              MOD_INPUTSELECT_4_NX1_1_EXP_ALG0_MONOMUXSIGMA300NS22INDEX_ADDR, 
+                              MOD_INPUTSELECT_4_NX1_1_SPDIF_ALG0_MONOMUXSIGMA300NS23INDEX_ADDR,
+                              MOD_INPUTSELECT_4_NX1_1_ALG0_MONOMUXSIGMA300NS24INDEX_ADDR, 
+                              ptrdsp, channel );
     layout->addWidget( input );
     channel->addDspBlock( input );
     channel->setName( dspChannel.name );
@@ -824,17 +882,26 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     channel->addDspBlock( hshelv );
 
     xo = new QCrossover( QCrossover::kButterworth12, 100.0,
-                        MOD_HP4_1_ALG0_STAGE0_B2_ADDR, MOD_HP4_1_ALG0_STAGE0_B1_ADDR, MOD_HP4_1_ALG0_STAGE0_B0_ADDR,
-                        MOD_HP4_1_ALG0_STAGE0_A2_ADDR, MOD_HP4_1_ALG0_STAGE0_A1_ADDR,
-                        MOD_HP4_2_ALG0_STAGE0_B2_ADDR, MOD_HP4_2_ALG0_STAGE0_B1_ADDR, MOD_HP4_2_ALG0_STAGE0_B0_ADDR,
-                        MOD_HP4_2_ALG0_STAGE0_A2_ADDR, MOD_HP4_2_ALG0_STAGE0_A1_ADDR,
-                        MOD_HP4_3_ALG0_STAGE0_B2_ADDR, MOD_HP4_3_ALG0_STAGE0_B1_ADDR, MOD_HP4_3_ALG0_STAGE0_B0_ADDR,
-                        MOD_HP4_3_ALG0_STAGE0_A2_ADDR, MOD_HP4_3_ALG0_STAGE0_A1_ADDR,
-                        MOD_HP4_4_ALG0_STAGE0_B2_ADDR, MOD_HP4_4_ALG0_STAGE0_B1_ADDR, MOD_HP4_4_ALG0_STAGE0_B0_ADDR,
-                        MOD_HP4_4_ALG0_STAGE0_A2_ADDR, MOD_HP4_4_ALG0_STAGE0_A1_ADDR,
-                        fs,
-                        ptrdsp,
-                        channel );
+                         QCrossover::kButterworth12, 100.0,
+                         MOD_HP4_1_ALG0_STAGE0_B2_ADDR, MOD_HP4_1_ALG0_STAGE0_B1_ADDR, MOD_HP4_1_ALG0_STAGE0_B0_ADDR,
+                         MOD_HP4_1_ALG0_STAGE0_A2_ADDR, MOD_HP4_1_ALG0_STAGE0_A1_ADDR,
+                         MOD_HP4_2_ALG0_STAGE0_B2_ADDR, MOD_HP4_2_ALG0_STAGE0_B1_ADDR, MOD_HP4_2_ALG0_STAGE0_B0_ADDR,
+                         MOD_HP4_2_ALG0_STAGE0_A2_ADDR, MOD_HP4_2_ALG0_STAGE0_A1_ADDR,
+                         MOD_HP4_3_ALG0_STAGE0_B2_ADDR, MOD_HP4_3_ALG0_STAGE0_B1_ADDR, MOD_HP4_3_ALG0_STAGE0_B0_ADDR,
+                         MOD_HP4_3_ALG0_STAGE0_A2_ADDR, MOD_HP4_3_ALG0_STAGE0_A1_ADDR,
+                         MOD_HP4_4_ALG0_STAGE0_B2_ADDR, MOD_HP4_4_ALG0_STAGE0_B1_ADDR, MOD_HP4_4_ALG0_STAGE0_B0_ADDR,
+                         MOD_HP4_4_ALG0_STAGE0_A2_ADDR, MOD_HP4_4_ALG0_STAGE0_A1_ADDR,
+                         MOD_LP4_1_ALG0_STAGE0_B2_ADDR, MOD_LP4_1_ALG0_STAGE0_B1_ADDR, MOD_LP4_1_ALG0_STAGE0_B0_ADDR,
+                         MOD_LP4_1_ALG0_STAGE0_A2_ADDR, MOD_LP4_1_ALG0_STAGE0_A1_ADDR,
+                         MOD_LP4_2_ALG0_STAGE0_B2_ADDR, MOD_LP4_2_ALG0_STAGE0_B1_ADDR, MOD_LP4_2_ALG0_STAGE0_B0_ADDR,
+                         MOD_LP4_2_ALG0_STAGE0_A2_ADDR, MOD_LP4_2_ALG0_STAGE0_A1_ADDR,
+                         MOD_LP4_3_ALG0_STAGE0_B2_ADDR, MOD_LP4_3_ALG0_STAGE0_B1_ADDR, MOD_LP4_3_ALG0_STAGE0_B0_ADDR,
+                         MOD_LP4_3_ALG0_STAGE0_A2_ADDR, MOD_LP4_3_ALG0_STAGE0_A1_ADDR,
+                         MOD_LP4_4_ALG0_STAGE0_B2_ADDR, MOD_LP4_4_ALG0_STAGE0_B1_ADDR, MOD_LP4_4_ALG0_STAGE0_B0_ADDR,
+                         MOD_LP4_4_ALG0_STAGE0_A2_ADDR, MOD_LP4_4_ALG0_STAGE0_A1_ADDR,
+                         fs,
+                         ptrdsp,
+                         channel );
     layout->addWidget( xo );
     channel->addDspBlock( xo );
 
@@ -896,7 +963,14 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     //--- Channel 5
     dspChannel.name = QString( "Rear Right" );
 
-    input = new QInputSelect( 4, MOD_INPUTSELECT_8_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS43INDEX_ADDR, ptrdsp, channel );
+    input = new QInputSelect( 4, 
+                              MOD_INPUTSELECT_5_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS25INDEX_ADDR,
+                              MOD_INPUTSELECT_5_NX1_1_UAC_ALG0_MONOMUXSIGMA300NS26INDEX_ADDR, 
+                              MOD_INPUTSELECT_5_NX1_1_ESP32_ALG0_MONOMUXSIGMA300NS27INDEX_ADDR, 
+                              MOD_INPUTSELECT_5_NX1_1_EXP_ALG0_MONOMUXSIGMA300NS28INDEX_ADDR, 
+                              MOD_INPUTSELECT_5_NX1_1_SPDIF_ALG0_MONOMUXSIGMA300NS29INDEX_ADDR,
+                              MOD_INPUTSELECT_5_NX1_1_ALG0_MONOMUXSIGMA300NS30INDEX_ADDR, 
+                              ptrdsp, channel );
     layout->addWidget( input );
     channel->addDspBlock( input );
     channel->setName( dspChannel.name );
@@ -1010,17 +1084,26 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     channel->addDspBlock( hshelv );
 
     xo = new QCrossover( QCrossover::kButterworth12, 100.0,
-                        MOD_HP5_1_ALG0_STAGE0_B2_ADDR, MOD_HP5_1_ALG0_STAGE0_B1_ADDR, MOD_HP5_1_ALG0_STAGE0_B0_ADDR,
-                        MOD_HP5_1_ALG0_STAGE0_A2_ADDR, MOD_HP5_1_ALG0_STAGE0_A1_ADDR,
-                        MOD_HP5_2_ALG0_STAGE0_B2_ADDR, MOD_HP5_2_ALG0_STAGE0_B1_ADDR, MOD_HP5_2_ALG0_STAGE0_B0_ADDR,
-                        MOD_HP5_2_ALG0_STAGE0_A2_ADDR, MOD_HP5_2_ALG0_STAGE0_A1_ADDR,
-                        MOD_HP5_3_ALG0_STAGE0_B2_ADDR, MOD_HP5_3_ALG0_STAGE0_B1_ADDR, MOD_HP5_3_ALG0_STAGE0_B0_ADDR,
-                        MOD_HP5_3_ALG0_STAGE0_A2_ADDR, MOD_HP5_3_ALG0_STAGE0_A1_ADDR,
-                        MOD_HP5_4_ALG0_STAGE0_B2_ADDR, MOD_HP5_4_ALG0_STAGE0_B1_ADDR, MOD_HP5_4_ALG0_STAGE0_B0_ADDR,
-                        MOD_HP5_4_ALG0_STAGE0_A2_ADDR, MOD_HP5_4_ALG0_STAGE0_A1_ADDR,
-                        fs,
-                        ptrdsp,
-                        channel );
+                         QCrossover::kButterworth12, 100.0,
+                         MOD_HP5_1_ALG0_STAGE0_B2_ADDR, MOD_HP5_1_ALG0_STAGE0_B1_ADDR, MOD_HP5_1_ALG0_STAGE0_B0_ADDR,
+                         MOD_HP5_1_ALG0_STAGE0_A2_ADDR, MOD_HP5_1_ALG0_STAGE0_A1_ADDR,
+                         MOD_HP5_2_ALG0_STAGE0_B2_ADDR, MOD_HP5_2_ALG0_STAGE0_B1_ADDR, MOD_HP5_2_ALG0_STAGE0_B0_ADDR,
+                         MOD_HP5_2_ALG0_STAGE0_A2_ADDR, MOD_HP5_2_ALG0_STAGE0_A1_ADDR,
+                         MOD_HP5_3_ALG0_STAGE0_B2_ADDR, MOD_HP5_3_ALG0_STAGE0_B1_ADDR, MOD_HP5_3_ALG0_STAGE0_B0_ADDR,
+                         MOD_HP5_3_ALG0_STAGE0_A2_ADDR, MOD_HP5_3_ALG0_STAGE0_A1_ADDR,
+                         MOD_HP5_4_ALG0_STAGE0_B2_ADDR, MOD_HP5_4_ALG0_STAGE0_B1_ADDR, MOD_HP5_4_ALG0_STAGE0_B0_ADDR,
+                         MOD_HP5_4_ALG0_STAGE0_A2_ADDR, MOD_HP5_4_ALG0_STAGE0_A1_ADDR,
+                         MOD_LP5_1_ALG0_STAGE0_B2_ADDR, MOD_LP5_1_ALG0_STAGE0_B1_ADDR, MOD_LP5_1_ALG0_STAGE0_B0_ADDR,
+                         MOD_LP5_1_ALG0_STAGE0_A2_ADDR, MOD_LP5_1_ALG0_STAGE0_A1_ADDR,
+                         MOD_LP5_2_ALG0_STAGE0_B2_ADDR, MOD_LP5_2_ALG0_STAGE0_B1_ADDR, MOD_LP5_2_ALG0_STAGE0_B0_ADDR,
+                         MOD_LP5_2_ALG0_STAGE0_A2_ADDR, MOD_LP5_2_ALG0_STAGE0_A1_ADDR,
+                         MOD_LP5_3_ALG0_STAGE0_B2_ADDR, MOD_LP5_3_ALG0_STAGE0_B1_ADDR, MOD_LP5_3_ALG0_STAGE0_B0_ADDR,
+                         MOD_LP5_3_ALG0_STAGE0_A2_ADDR, MOD_LP5_3_ALG0_STAGE0_A1_ADDR,
+                         MOD_LP5_4_ALG0_STAGE0_B2_ADDR, MOD_LP5_4_ALG0_STAGE0_B1_ADDR, MOD_LP5_4_ALG0_STAGE0_B0_ADDR,
+                         MOD_LP5_4_ALG0_STAGE0_A2_ADDR, MOD_LP5_4_ALG0_STAGE0_A1_ADDR,
+                         fs,
+                         ptrdsp,
+                         channel );
     layout->addWidget( xo );
     channel->addDspBlock( xo );
 
@@ -1082,7 +1165,14 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     //--- Channel 6
     dspChannel.name = QString( "Side Left" );
 
-    input = new QInputSelect( 5, MOD_INPUTSELECT_8_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS43INDEX_ADDR, ptrdsp, channel );
+    input = new QInputSelect( 5, 
+                              MOD_INPUTSELECT_6_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS31INDEX_ADDR,
+                              MOD_INPUTSELECT_6_NX1_1_UAC_ALG0_MONOMUXSIGMA300NS32INDEX_ADDR, 
+                              MOD_INPUTSELECT_6_NX1_1_ESP32_ALG0_MONOMUXSIGMA300NS33INDEX_ADDR, 
+                              MOD_INPUTSELECT_6_NX1_1_EXP_ALG0_MONOMUXSIGMA300NS34INDEX_ADDR, 
+                              MOD_INPUTSELECT_6_NX1_1_SPDIF_ALG0_MONOMUXSIGMA300NS35INDEX_ADDR,
+                              MOD_INPUTSELECT_6_NX1_1_ALG0_MONOMUXSIGMA300NS36INDEX_ADDR, 
+                              ptrdsp, channel );
     layout->addWidget( input );
     channel->addDspBlock( input );
     channel->setName( dspChannel.name );
@@ -1196,17 +1286,26 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     channel->addDspBlock( hshelv );
 
     xo = new QCrossover( QCrossover::kButterworth12, 100.0,
-                        MOD_HP6_1_ALG0_STAGE0_B2_ADDR, MOD_HP6_1_ALG0_STAGE0_B1_ADDR, MOD_HP6_1_ALG0_STAGE0_B0_ADDR,
-                        MOD_HP6_1_ALG0_STAGE0_A2_ADDR, MOD_HP6_1_ALG0_STAGE0_A1_ADDR,
-                        MOD_HP6_2_ALG0_STAGE0_B2_ADDR, MOD_HP6_2_ALG0_STAGE0_B1_ADDR, MOD_HP6_2_ALG0_STAGE0_B0_ADDR,
-                        MOD_HP6_2_ALG0_STAGE0_A2_ADDR, MOD_HP6_2_ALG0_STAGE0_A1_ADDR,
-                        MOD_HP6_3_ALG0_STAGE0_B2_ADDR, MOD_HP6_3_ALG0_STAGE0_B1_ADDR, MOD_HP6_3_ALG0_STAGE0_B0_ADDR,
-                        MOD_HP6_3_ALG0_STAGE0_A2_ADDR, MOD_HP6_3_ALG0_STAGE0_A1_ADDR,
-                        MOD_HP6_4_ALG0_STAGE0_B2_ADDR, MOD_HP6_4_ALG0_STAGE0_B1_ADDR, MOD_HP6_4_ALG0_STAGE0_B0_ADDR,
-                        MOD_HP6_4_ALG0_STAGE0_A2_ADDR, MOD_HP6_4_ALG0_STAGE0_A1_ADDR,
-                        fs,
-                        ptrdsp,
-                        channel );
+                         QCrossover::kButterworth12, 100.0,
+                         MOD_HP6_1_ALG0_STAGE0_B2_ADDR, MOD_HP6_1_ALG0_STAGE0_B1_ADDR, MOD_HP6_1_ALG0_STAGE0_B0_ADDR,
+                         MOD_HP6_1_ALG0_STAGE0_A2_ADDR, MOD_HP6_1_ALG0_STAGE0_A1_ADDR,
+                         MOD_HP6_2_ALG0_STAGE0_B2_ADDR, MOD_HP6_2_ALG0_STAGE0_B1_ADDR, MOD_HP6_2_ALG0_STAGE0_B0_ADDR,
+                         MOD_HP6_2_ALG0_STAGE0_A2_ADDR, MOD_HP6_2_ALG0_STAGE0_A1_ADDR,
+                         MOD_HP6_3_ALG0_STAGE0_B2_ADDR, MOD_HP6_3_ALG0_STAGE0_B1_ADDR, MOD_HP6_3_ALG0_STAGE0_B0_ADDR,
+                         MOD_HP6_3_ALG0_STAGE0_A2_ADDR, MOD_HP6_3_ALG0_STAGE0_A1_ADDR,
+                         MOD_HP6_4_ALG0_STAGE0_B2_ADDR, MOD_HP6_4_ALG0_STAGE0_B1_ADDR, MOD_HP6_4_ALG0_STAGE0_B0_ADDR,
+                         MOD_HP6_4_ALG0_STAGE0_A2_ADDR, MOD_HP6_4_ALG0_STAGE0_A1_ADDR,
+                         MOD_LP6_1_ALG0_STAGE0_B2_ADDR, MOD_LP6_1_ALG0_STAGE0_B1_ADDR, MOD_LP6_1_ALG0_STAGE0_B0_ADDR,
+                         MOD_LP6_1_ALG0_STAGE0_A2_ADDR, MOD_LP6_1_ALG0_STAGE0_A1_ADDR,
+                         MOD_LP6_2_ALG0_STAGE0_B2_ADDR, MOD_LP6_2_ALG0_STAGE0_B1_ADDR, MOD_LP6_2_ALG0_STAGE0_B0_ADDR,
+                         MOD_LP6_2_ALG0_STAGE0_A2_ADDR, MOD_LP6_2_ALG0_STAGE0_A1_ADDR,
+                         MOD_LP6_3_ALG0_STAGE0_B2_ADDR, MOD_LP6_3_ALG0_STAGE0_B1_ADDR, MOD_LP6_3_ALG0_STAGE0_B0_ADDR,
+                         MOD_LP6_3_ALG0_STAGE0_A2_ADDR, MOD_LP6_3_ALG0_STAGE0_A1_ADDR,
+                         MOD_LP6_4_ALG0_STAGE0_B2_ADDR, MOD_LP6_4_ALG0_STAGE0_B1_ADDR, MOD_LP6_4_ALG0_STAGE0_B0_ADDR,
+                         MOD_LP6_4_ALG0_STAGE0_A2_ADDR, MOD_LP6_4_ALG0_STAGE0_A1_ADDR,
+                         fs,
+                         ptrdsp,
+                         channel );
     layout->addWidget( xo );
     channel->addDspBlock( xo );
 
@@ -1268,7 +1367,14 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     //--- Channel 7
     dspChannel.name = QString( "Side Right" );
 
-    input = new QInputSelect( 6, MOD_INPUTSELECT_8_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS43INDEX_ADDR, ptrdsp, channel );
+    input = new QInputSelect( 6, 
+                              MOD_INPUTSELECT_7_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS37INDEX_ADDR,
+                              MOD_INPUTSELECT_7_NX1_1_UAC_ALG0_MONOMUXSIGMA300NS38INDEX_ADDR, 
+                              MOD_INPUTSELECT_7_NX1_1_ESP32_ALG0_MONOMUXSIGMA300NS39INDEX_ADDR, 
+                              MOD_INPUTSELECT_7_NX1_1_EXP_ALG0_MONOMUXSIGMA300NS40INDEX_ADDR, 
+                              MOD_INPUTSELECT_7_NX1_1_SPDIF_ALG0_MONOMUXSIGMA300NS41INDEX_ADDR,
+                              MOD_INPUTSELECT_7_NX1_1_ALG0_MONOMUXSIGMA300NS42INDEX_ADDR, 
+                              ptrdsp, channel );
     layout->addWidget( input );
     channel->addDspBlock( input );
     channel->setName( dspChannel.name );
@@ -1382,17 +1488,26 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     channel->addDspBlock( hshelv );
 
     xo = new QCrossover( QCrossover::kButterworth12, 100.0,
-                        MOD_HP7_1_ALG0_STAGE0_B2_ADDR, MOD_HP7_1_ALG0_STAGE0_B1_ADDR, MOD_HP7_1_ALG0_STAGE0_B0_ADDR,
-                        MOD_HP7_1_ALG0_STAGE0_A2_ADDR, MOD_HP7_1_ALG0_STAGE0_A1_ADDR,
-                        MOD_HP7_2_ALG0_STAGE0_B2_ADDR, MOD_HP7_2_ALG0_STAGE0_B1_ADDR, MOD_HP7_2_ALG0_STAGE0_B0_ADDR,
-                        MOD_HP7_2_ALG0_STAGE0_A2_ADDR, MOD_HP7_2_ALG0_STAGE0_A1_ADDR,
-                        MOD_HP7_3_ALG0_STAGE0_B2_ADDR, MOD_HP7_3_ALG0_STAGE0_B1_ADDR, MOD_HP7_3_ALG0_STAGE0_B0_ADDR,
-                        MOD_HP7_3_ALG0_STAGE0_A2_ADDR, MOD_HP7_3_ALG0_STAGE0_A1_ADDR,
-                        MOD_HP7_4_ALG0_STAGE0_B2_ADDR, MOD_HP7_4_ALG0_STAGE0_B1_ADDR, MOD_HP7_4_ALG0_STAGE0_B0_ADDR,
-                        MOD_HP7_4_ALG0_STAGE0_A2_ADDR, MOD_HP7_4_ALG0_STAGE0_A1_ADDR,
-                        fs,
-                        ptrdsp,
-                        channel );
+                         QCrossover::kButterworth12, 100.0,
+                         MOD_HP7_1_ALG0_STAGE0_B2_ADDR, MOD_HP7_1_ALG0_STAGE0_B1_ADDR, MOD_HP7_1_ALG0_STAGE0_B0_ADDR,
+                         MOD_HP7_1_ALG0_STAGE0_A2_ADDR, MOD_HP7_1_ALG0_STAGE0_A1_ADDR,
+                         MOD_HP7_2_ALG0_STAGE0_B2_ADDR, MOD_HP7_2_ALG0_STAGE0_B1_ADDR, MOD_HP7_2_ALG0_STAGE0_B0_ADDR,
+                         MOD_HP7_2_ALG0_STAGE0_A2_ADDR, MOD_HP7_2_ALG0_STAGE0_A1_ADDR,
+                         MOD_HP7_3_ALG0_STAGE0_B2_ADDR, MOD_HP7_3_ALG0_STAGE0_B1_ADDR, MOD_HP7_3_ALG0_STAGE0_B0_ADDR,
+                         MOD_HP7_3_ALG0_STAGE0_A2_ADDR, MOD_HP7_3_ALG0_STAGE0_A1_ADDR,
+                         MOD_HP7_4_ALG0_STAGE0_B2_ADDR, MOD_HP7_4_ALG0_STAGE0_B1_ADDR, MOD_HP7_4_ALG0_STAGE0_B0_ADDR,
+                         MOD_HP7_4_ALG0_STAGE0_A2_ADDR, MOD_HP7_4_ALG0_STAGE0_A1_ADDR,
+                         MOD_LP7_1_ALG0_STAGE0_B2_ADDR, MOD_LP7_1_ALG0_STAGE0_B1_ADDR, MOD_LP7_1_ALG0_STAGE0_B0_ADDR,
+                         MOD_LP7_1_ALG0_STAGE0_A2_ADDR, MOD_LP7_1_ALG0_STAGE0_A1_ADDR,
+                         MOD_LP7_2_ALG0_STAGE0_B2_ADDR, MOD_LP7_2_ALG0_STAGE0_B1_ADDR, MOD_LP7_2_ALG0_STAGE0_B0_ADDR,
+                         MOD_LP7_2_ALG0_STAGE0_A2_ADDR, MOD_LP7_2_ALG0_STAGE0_A1_ADDR,
+                         MOD_LP7_3_ALG0_STAGE0_B2_ADDR, MOD_LP7_3_ALG0_STAGE0_B1_ADDR, MOD_LP7_3_ALG0_STAGE0_B0_ADDR,
+                         MOD_LP7_3_ALG0_STAGE0_A2_ADDR, MOD_LP7_3_ALG0_STAGE0_A1_ADDR,
+                         MOD_LP7_4_ALG0_STAGE0_B2_ADDR, MOD_LP7_4_ALG0_STAGE0_B1_ADDR, MOD_LP7_4_ALG0_STAGE0_B0_ADDR,
+                         MOD_LP7_4_ALG0_STAGE0_A2_ADDR, MOD_LP7_4_ALG0_STAGE0_A1_ADDR,
+                         fs,
+                         ptrdsp,
+                         channel );
     layout->addWidget( xo );
     channel->addDspBlock( xo );
 
@@ -1454,25 +1569,17 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     //--- Channel 8
     dspChannel.name = QString( "LFE" );
 
-    input = new QInputSelect( 7, MOD_INPUTSELECT_8_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS43INDEX_ADDR, ptrdsp, channel );
+    input = new QInputSelect( 7, 
+                              MOD_INPUTSELECT_8_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS43INDEX_ADDR,
+                              MOD_INPUTSELECT_8_NX1_1_UAC_ALG0_MONOMUXSIGMA300NS44INDEX_ADDR, 
+                              MOD_INPUTSELECT_8_NX1_1_ESP32_ALG0_MONOMUXSIGMA300NS45INDEX_ADDR, 
+                              MOD_INPUTSELECT_8_NX1_1_EXP_ALG0_MONOMUXSIGMA300NS46INDEX_ADDR, 
+                              MOD_INPUTSELECT_8_NX1_1_SPDIF_ALG0_MONOMUXSIGMA300NS47INDEX_ADDR,
+                              MOD_INPUTSELECT_8_NX1_1_ALG0_MONOMUXSIGMA300NS48INDEX_ADDR, 
+                              ptrdsp, channel );
     layout->addWidget( input );
     channel->addDspBlock( input );
     channel->setName( dspChannel.name );
-
-    lp = new QLowPass( QLowPass::kLinkwitzRiley24, 120.0,
-                      MOD_LP8_1_ALG0_STAGE0_B2_ADDR, MOD_LP8_1_ALG0_STAGE0_B1_ADDR, MOD_LP8_1_ALG0_STAGE0_B0_ADDR,
-                      MOD_LP8_1_ALG0_STAGE0_A2_ADDR, MOD_LP8_1_ALG0_STAGE0_A1_ADDR,
-                      MOD_LP8_2_ALG0_STAGE0_B2_ADDR, MOD_LP8_2_ALG0_STAGE0_B1_ADDR, MOD_LP8_2_ALG0_STAGE0_B0_ADDR,
-                      MOD_LP8_2_ALG0_STAGE0_A2_ADDR, MOD_LP8_2_ALG0_STAGE0_A1_ADDR,
-                      MOD_LP8_3_ALG0_STAGE0_B2_ADDR, MOD_LP8_3_ALG0_STAGE0_B1_ADDR, MOD_LP8_3_ALG0_STAGE0_B0_ADDR,
-                      MOD_LP8_3_ALG0_STAGE0_A2_ADDR, MOD_LP8_3_ALG0_STAGE0_A1_ADDR,
-                      MOD_LP8_4_ALG0_STAGE0_B2_ADDR, MOD_LP8_4_ALG0_STAGE0_B1_ADDR, MOD_LP8_4_ALG0_STAGE0_B0_ADDR,
-                      MOD_LP8_4_ALG0_STAGE0_A2_ADDR, MOD_LP8_4_ALG0_STAGE0_A1_ADDR,
-                      fs,
-                      ptrdsp,
-                      channel );
-    layout->addWidget( lp );
-    channel->addDspBlock( lp );
 
     lshelv = new QLowShelv( 0.0, 100.0, 1.0,
                             MOD_LOWSHELV8_ALG0_STAGE0_B2_ADDR, MOD_LOWSHELV8_ALG0_STAGE0_B1_ADDR, MOD_LOWSHELV8_ALG0_STAGE0_B0_ADDR,
@@ -1582,21 +1689,21 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     layout->addWidget( hshelv );
     channel->addDspBlock( hshelv );
 
-    hp = new QHighPass( QHighPass::kLinkwitzRiley24, 10.0,
-                        MOD_HP8_1_ALG0_STAGE0_B2_ADDR, MOD_HP8_1_ALG0_STAGE0_B1_ADDR, MOD_HP8_1_ALG0_STAGE0_B0_ADDR,
-                        MOD_HP8_1_ALG0_STAGE0_A2_ADDR, MOD_HP8_1_ALG0_STAGE0_A1_ADDR,
-                        MOD_HP8_2_ALG0_STAGE0_B2_ADDR, MOD_HP8_2_ALG0_STAGE0_B1_ADDR, MOD_HP8_2_ALG0_STAGE0_B0_ADDR,
-                        MOD_HP8_2_ALG0_STAGE0_A2_ADDR, MOD_HP8_2_ALG0_STAGE0_A1_ADDR,
-                        MOD_HP8_3_ALG0_STAGE0_B2_ADDR, MOD_HP8_3_ALG0_STAGE0_B1_ADDR, MOD_HP8_3_ALG0_STAGE0_B0_ADDR,
-                        MOD_HP8_3_ALG0_STAGE0_A2_ADDR, MOD_HP8_3_ALG0_STAGE0_A1_ADDR,
-                        MOD_HP8_4_ALG0_STAGE0_B2_ADDR, MOD_HP8_4_ALG0_STAGE0_B1_ADDR, MOD_HP8_4_ALG0_STAGE0_B0_ADDR,
-                        MOD_HP8_4_ALG0_STAGE0_A2_ADDR, MOD_HP8_4_ALG0_STAGE0_A1_ADDR,
-                        fs,
-                        ptrdsp,
-                        channel );
-    hp->setName( "Subsonic" );
-    layout->addWidget( hp );
-    channel->addDspBlock( hp );
+    lp = new QLowPass( QLowPass::kLinkwitzRiley12, 10000.0,
+                       MOD_LP8_1_ALG0_STAGE0_B2_ADDR, MOD_LP8_1_ALG0_STAGE0_B1_ADDR, MOD_LP8_1_ALG0_STAGE0_B0_ADDR,
+                       MOD_LP8_1_ALG0_STAGE0_A2_ADDR, MOD_LP8_1_ALG0_STAGE0_A1_ADDR,
+                       MOD_LP8_2_ALG0_STAGE0_B2_ADDR, MOD_LP8_2_ALG0_STAGE0_B1_ADDR, MOD_LP8_2_ALG0_STAGE0_B0_ADDR,
+                       MOD_LP8_2_ALG0_STAGE0_A2_ADDR, MOD_LP8_2_ALG0_STAGE0_A1_ADDR,
+                       MOD_LP8_3_ALG0_STAGE0_B2_ADDR, MOD_LP8_3_ALG0_STAGE0_B1_ADDR, MOD_LP8_3_ALG0_STAGE0_B0_ADDR,
+                       MOD_LP8_3_ALG0_STAGE0_A2_ADDR, MOD_LP8_3_ALG0_STAGE0_A1_ADDR,
+                       MOD_LP8_4_ALG0_STAGE0_B2_ADDR, MOD_LP8_4_ALG0_STAGE0_B1_ADDR, MOD_LP8_4_ALG0_STAGE0_B0_ADDR,
+                       MOD_LP8_4_ALG0_STAGE0_A2_ADDR, MOD_LP8_4_ALG0_STAGE0_A1_ADDR,
+                       fs,
+                       ptrdsp,
+                       channel );
+    layout->addWidget( lp );
+    channel->addDspBlock( lp );
+    lp->setBypassed( true );
 
     phase = new QPhase( 1000.0, 1.0,
                       MOD_PHASE8_ALG0_STAGE0_B2_ADDR, MOD_PHASE8_ALG0_STAGE0_B1_ADDR, MOD_PHASE8_ALG0_STAGE0_B0_ADDR,
@@ -1619,7 +1726,6 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
     layout->addWidget( output );
     channel->addDspBlock( output );
 
-    QObject::connect( hp,     SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( lshelv, SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( peq01,  SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
     QObject::connect( peq02,  SIGNAL(valueChanged()), parent, SLOT(updatePlots()) );
@@ -1668,7 +1774,12 @@ tDspChannel CPlugInHomeCinema71::getGuiForChannel( unsigned int chn, tfloat fs, 
  */
 void CPlugInHomeCinema71::setMasterVolume( double val, bool doSend )
 {
-  qDebug()<<"CPlugInHomeCinema71::setMasterVolume not implemented";
+  if( doSend )
+  {
+    QByteArray content;
+    content.append( dsp->makeParameterForWifi( MOD_MASTERVOLUME_ALG0_TARGET_ADDR, static_cast<float>(pow( 10.0, val/20.0 )) ) );
+    dsp->sendParameterWifi( content );
+  }
 }
 
 //==============================================================================

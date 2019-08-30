@@ -6,6 +6,7 @@
 #include <QList>
 
 #include "vektorraum.h"
+#include "freeDSP-Aurora.hpp"
 
 #include "QChannel.hpp"
 #include "QGain.hpp"
@@ -78,6 +79,7 @@ protected:
   Vektorraum::tfloat fs;
   bool flagSummation;
   QList<QChannel*> listChannels;
+  CFreeDspAurora* dsp;
 };
 
 #endif

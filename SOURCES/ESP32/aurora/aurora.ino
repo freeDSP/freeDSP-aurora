@@ -18,7 +18,7 @@
 #define I2C_SDA_PIN 17
 #define I2C_SCL_PIN 16
 
-#define VERSION_STR "1.0.0"
+#define VERSION_STR "1.0.1"
 
 #define FORMAT_SPIFFS_IF_FAILED true
 
@@ -300,7 +300,8 @@ void uploadDspFirmware( void )
           else
           {
             ADAU1452_WRITE_REGISTER( regaddr, byteReadMSB, byteReadLSB );
-            Serial.print( "." );
+            if( cntr % 4096 == 0 )
+              Serial.print( "." );
           }
         }
         else if( numBytesToRead > 4 )
@@ -316,7 +317,8 @@ void uploadDspFirmware( void )
             fileDspProgram.read( &(val[3]), 1 );
             cntr += 4;
             ADAU1452_WRITE_BLOCK( addr, val, 4 );
-            Serial.print( "." );
+            if( cntr % 4096 == 0 )
+              Serial.print( "." );
             //Serial.println(ii);
             addr++;
           }
@@ -812,7 +814,7 @@ void handleHttpRequest()
                   val[0] = (data >> 24 ) & 0xFF;
                   val[1] = (data >> 16 ) & 0xFF;
                   val[2] = (data >> 8 ) & 0xFF;
-                  val[4] = data & 0xFF;
+                  val[3] = data & 0xFF;
                   ADAU1452_WRITE_BLOCK( reg, val, 4 );         
                   
                   //Wire.beginTransmission( DSP_ADDR );

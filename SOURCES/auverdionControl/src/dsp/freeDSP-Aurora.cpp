@@ -79,6 +79,7 @@ uint32_t convertTo824( float val )
  */
 QByteArray CFreeDspAurora::makeParameterForWifi( uint16_t reg, float val )
 {
+  qDebug()<<"CFreeDspAurora::makeParameterForWifi( uint16_t reg, float val )";
   QByteArray content;
   content.append( static_cast<char>((reg >> 8) & 0x000000FF) );
   content.append( static_cast<char>(reg & 0x000000FF) );
@@ -99,6 +100,8 @@ QByteArray CFreeDspAurora::makeParameterForWifi( uint16_t reg, float val )
  */
 QByteArray CFreeDspAurora::makeParameterForWifi( uint16_t reg, int32_t val )
 {
+  qDebug()<<"CFreeDspAurora::makeParameterForWifi( uint16_t reg, int32_t val )";
+  
   QByteArray content;
   content.append( static_cast<char>((reg >> 8) & 0x000000FF) );
   content.append( static_cast<char>(reg & 0x000000FF) );
@@ -1048,8 +1051,8 @@ bool CFreeDspAurora::requestFirmwareVersionWifi( void )
 
   versionstr = "0.0.0";
 
-  if( isConnected )
-  {
+  //if( isConnected )
+  //{
     QString wifiIpHost = getIpAddressWifi();
 
     QString requestString = QString( "GET /version HTTP/1.1\r\n" )
@@ -1079,7 +1082,7 @@ bool CFreeDspAurora::requestFirmwareVersionWifi( void )
       QMessageBox::critical( this, tr("Error"), tr("Uups, could not connect to DSP. Did you switch it on?"), QMessageBox::Ok );
       return false;
     }
-  }
+  //}
 
   return false;
 }
@@ -1095,8 +1098,8 @@ bool CFreeDspAurora::requestAddOnIdWifi( void )
 
   addon = 0;
 
-  if( isConnected )
-  {
+  //if( isConnected )
+  //{
     QString wifiIpHost = getIpAddressWifi();
 
     QString requestString = QString( "GET /aid HTTP/1.1\r\n" )
@@ -1126,7 +1129,7 @@ bool CFreeDspAurora::requestAddOnIdWifi( void )
       QMessageBox::critical( this, tr("Error"), tr("Uups, could not connect to DSP. Did you switch it on?"), QMessageBox::Ok );
       return false;
     }
-  }
+  //}
 
   return false;
 }

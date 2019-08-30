@@ -1,36 +1,36 @@
 Cell Name         = InputSelect_8.Nx1-1_Analog
 Parameter Name    = monomuxSigma300ns43index
 Parameter Address = 20413
-Parameter Value   = 0
+Parameter Value   = 7
 Parameter Data :
-0x00, 0x00, 0x00, 0x00, 
+0x00, 0x00, 0x00, 0x07, 
 
 
 
 Cell Name         = InputSelect_8.Nx1-1_UAC
 Parameter Name    = monomuxSigma300ns44index
 Parameter Address = 20410
-Parameter Value   = 0
+Parameter Value   = 7
 Parameter Data :
-0x00, 0x00, 0x00, 0x00, 
+0x00, 0x00, 0x00, 0x07, 
 
 
 
 Cell Name         = InputSelect_8.Nx1-1_ESP32
 Parameter Name    = monomuxSigma300ns45index
 Parameter Address = 20411
-Parameter Value   = 0
+Parameter Value   = 7
 Parameter Data :
-0x00, 0x00, 0x00, 0x00, 
+0x00, 0x00, 0x00, 0x07, 
 
 
 
 Cell Name         = InputSelect_8.Nx1-1_Exp
 Parameter Name    = monomuxSigma300ns46index
 Parameter Address = 20412
-Parameter Value   = 0
+Parameter Value   = 7
 Parameter Data :
-0x00, 0x00, 0x00, 0x00, 
+0x00, 0x00, 0x00, 0x07, 
 
 
 
@@ -55,36 +55,36 @@ Parameter Data :
 Cell Name         = InputSelect_7.Nx1-1_Analog
 Parameter Name    = monomuxSigma300ns37index
 Parameter Address = 20417
-Parameter Value   = 0
+Parameter Value   = 6
 Parameter Data :
-0x00, 0x00, 0x00, 0x00, 
+0x00, 0x00, 0x00, 0x06, 
 
 
 
 Cell Name         = InputSelect_7.Nx1-1_UAC
 Parameter Name    = monomuxSigma300ns38index
 Parameter Address = 20416
-Parameter Value   = 0
+Parameter Value   = 6
 Parameter Data :
-0x00, 0x00, 0x00, 0x00, 
+0x00, 0x00, 0x00, 0x06, 
 
 
 
 Cell Name         = InputSelect_7.Nx1-1_ESP32
 Parameter Name    = monomuxSigma300ns39index
 Parameter Address = 20415
-Parameter Value   = 0
+Parameter Value   = 6
 Parameter Data :
-0x00, 0x00, 0x00, 0x00, 
+0x00, 0x00, 0x00, 0x06, 
 
 
 
 Cell Name         = InputSelect_7.Nx1-1_Exp
 Parameter Name    = monomuxSigma300ns40index
 Parameter Address = 20418
-Parameter Value   = 0
+Parameter Value   = 6
 Parameter Data :
-0x00, 0x00, 0x00, 0x00, 
+0x00, 0x00, 0x00, 0x06, 
 
 
 
@@ -109,36 +109,36 @@ Parameter Data :
 Cell Name         = InputSelect_6.Nx1-1_Analog
 Parameter Name    = monomuxSigma300ns31index
 Parameter Address = 20422
-Parameter Value   = 0
+Parameter Value   = 5
 Parameter Data :
-0x00, 0x00, 0x00, 0x00, 
+0x00, 0x00, 0x00, 0x05, 
 
 
 
 Cell Name         = InputSelect_6.Nx1-1_UAC
 Parameter Name    = monomuxSigma300ns32index
 Parameter Address = 20421
-Parameter Value   = 0
+Parameter Value   = 5
 Parameter Data :
-0x00, 0x00, 0x00, 0x00, 
+0x00, 0x00, 0x00, 0x05, 
 
 
 
 Cell Name         = InputSelect_6.Nx1-1_ESP32
 Parameter Name    = monomuxSigma300ns33index
 Parameter Address = 20424
-Parameter Value   = 0
+Parameter Value   = 5
 Parameter Data :
-0x00, 0x00, 0x00, 0x00, 
+0x00, 0x00, 0x00, 0x05, 
 
 
 
 Cell Name         = InputSelect_6.Nx1-1_Exp
 Parameter Name    = monomuxSigma300ns34index
 Parameter Address = 20420
-Parameter Value   = 0
+Parameter Value   = 5
 Parameter Data :
-0x00, 0x00, 0x00, 0x00, 
+0x00, 0x00, 0x00, 0x05, 
 
 
 
@@ -163,36 +163,36 @@ Parameter Data :
 Cell Name         = InputSelect_5.Nx1-1_Analog
 Parameter Name    = monomuxSigma300ns25index
 Parameter Address = 20429
-Parameter Value   = 0
+Parameter Value   = 4
 Parameter Data :
-0x00, 0x00, 0x00, 0x00, 
+0x00, 0x00, 0x00, 0x04, 
 
 
 
 Cell Name         = InputSelect_5.Nx1-1_UAC
 Parameter Name    = monomuxSigma300ns26index
 Parameter Address = 20426
-Parameter Value   = 0
+Parameter Value   = 4
 Parameter Data :
-0x00, 0x00, 0x00, 0x00, 
+0x00, 0x00, 0x00, 0x04, 
 
 
 
 Cell Name         = InputSelect_5.Nx1-1_ESP32
 Parameter Name    = monomuxSigma300ns27index
 Parameter Address = 20427
-Parameter Value   = 0
+Parameter Value   = 4
 Parameter Data :
-0x00, 0x00, 0x00, 0x00, 
+0x00, 0x00, 0x00, 0x04, 
 
 
 
 Cell Name         = InputSelect_5.Nx1-1_Exp
 Parameter Name    = monomuxSigma300ns28index
 Parameter Address = 20425
-Parameter Value   = 0
+Parameter Value   = 4
 Parameter Data :
-0x00, 0x00, 0x00, 0x00, 
+0x00, 0x00, 0x00, 0x04, 
 
 
 
@@ -217,36 +217,36 @@ Parameter Data :
 Cell Name         = InputSelect_4.Nx1-1_Analog
 Parameter Name    = monomuxSigma300ns19index
 Parameter Address = 20432
-Parameter Value   = 0
+Parameter Value   = 3
 Parameter Data :
-0x00, 0x00, 0x00, 0x00, 
+0x00, 0x00, 0x00, 0x03, 
 
 
 
 Cell Name         = InputSelect_4.Nx1-1_UAC
 Parameter Name    = monomuxSigma300ns20index
 Parameter Address = 20434
-Parameter Value   = 0
+Parameter Value   = 3
 Parameter Data :
-0x00, 0x00, 0x00, 0x00, 
+0x00, 0x00, 0x00, 0x03, 
 
 
 
 Cell Name         = InputSelect_4.Nx1-1_ESP32
 Parameter Name    = monomuxSigma300ns21index
 Parameter Address = 20431
-Parameter Value   = 0
+Parameter Value   = 3
 Parameter Data :
-0x00, 0x00, 0x00, 0x00, 
+0x00, 0x00, 0x00, 0x03, 
 
 
 
 Cell Name         = InputSelect_4.Nx1-1_Exp
 Parameter Name    = monomuxSigma300ns22index
 Parameter Address = 20430
-Parameter Value   = 0
+Parameter Value   = 3
 Parameter Data :
-0x00, 0x00, 0x00, 0x00, 
+0x00, 0x00, 0x00, 0x03, 
 
 
 
@@ -271,36 +271,36 @@ Parameter Data :
 Cell Name         = InputSelect_3.Nx1-1_Analog
 Parameter Name    = monomuxSigma300ns7index
 Parameter Address = 20436
-Parameter Value   = 0
+Parameter Value   = 2
 Parameter Data :
-0x00, 0x00, 0x00, 0x00, 
+0x00, 0x00, 0x00, 0x02, 
 
 
 
 Cell Name         = InputSelect_3.Nx1-1_UAC
 Parameter Name    = monomuxSigma300ns8index
 Parameter Address = 20439
-Parameter Value   = 0
+Parameter Value   = 2
 Parameter Data :
-0x00, 0x00, 0x00, 0x00, 
+0x00, 0x00, 0x00, 0x02, 
 
 
 
 Cell Name         = InputSelect_3.Nx1-1_ESP32
 Parameter Name    = monomuxSigma300ns15index
 Parameter Address = 20435
-Parameter Value   = 0
+Parameter Value   = 2
 Parameter Data :
-0x00, 0x00, 0x00, 0x00, 
+0x00, 0x00, 0x00, 0x02, 
 
 
 
 Cell Name         = InputSelect_3.Nx1-1_Exp
 Parameter Name    = monomuxSigma300ns16index
 Parameter Address = 20438
-Parameter Value   = 0
+Parameter Value   = 2
 Parameter Data :
-0x00, 0x00, 0x00, 0x00, 
+0x00, 0x00, 0x00, 0x02, 
 
 
 
@@ -325,36 +325,36 @@ Parameter Data :
 Cell Name         = InputSelect_2.Nx1-1_Analog
 Parameter Name    = monomuxSigma300ns1index
 Parameter Address = 20443
-Parameter Value   = 0
+Parameter Value   = 1
 Parameter Data :
-0x00, 0x00, 0x00, 0x00, 
+0x00, 0x00, 0x00, 0x01, 
 
 
 
 Cell Name         = InputSelect_2.Nx1-1_UAC
 Parameter Name    = monomuxSigma300ns2index
 Parameter Address = 20442
-Parameter Value   = 0
+Parameter Value   = 1
 Parameter Data :
-0x00, 0x00, 0x00, 0x00, 
+0x00, 0x00, 0x00, 0x01, 
 
 
 
 Cell Name         = InputSelect_2.Nx1-1_ESP32
 Parameter Name    = monomuxSigma300ns3index
 Parameter Address = 20440
-Parameter Value   = 0
+Parameter Value   = 1
 Parameter Data :
-0x00, 0x00, 0x00, 0x00, 
+0x00, 0x00, 0x00, 0x01, 
 
 
 
 Cell Name         = InputSelect_2.Nx1-1_Exp
 Parameter Name    = monomuxSigma300ns4index
 Parameter Address = 20444
-Parameter Value   = 0
+Parameter Value   = 1
 Parameter Data :
-0x00, 0x00, 0x00, 0x00, 
+0x00, 0x00, 0x00, 0x01, 
 
 
 

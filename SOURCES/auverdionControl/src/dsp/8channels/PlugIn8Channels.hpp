@@ -7,10 +7,7 @@
 
 #include "vektorraum.h"
 
-#include "freeDSP-Aurora.hpp"
 #include "DspPlugIn.hpp"
-
-#include "8channels_IC_1_PARAM.h"
 
 class CPlugIn8Channels : public CDspPlugin
 {
@@ -75,7 +72,7 @@ public:
   //
   //============================================================================
 private:
-  CFreeDspAurora* dsp;
+  
 
 };
 

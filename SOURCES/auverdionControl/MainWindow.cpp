@@ -16,16 +16,19 @@
 
 #include "DialogSettings.hpp"
 #include "QDialogDemoSelector.hpp"
+#include "DialogReleaseNotes.h"
 
 #include "PlugIn8Channels.hpp"
 #include "PlugInHomeCinema71.hpp"
 #include "PlugIn4FIRs.hpp"
+#include "PlugIn8ChannelsUSB.hpp"
+#include "PlugInHomeCinema71USB.hpp"
 
 #include "LogFile.h"
 
 extern CLogFile myLog;
 
-#define VERSION_STR "0.9.9"
+#define VERSION_STR "1.0.0"
 #define FS 48000.0
 
 using namespace Vektorraum;
@@ -59,23 +62,6 @@ MainWindow::MainWindow( QWidget* parent ) :
   ui->actionWrite_to_DSP->setEnabled( false );
   
   #if defined( __MACOSX__ )
-  /*pathSettings = QStandardPaths::writableLocation( QStandardPaths::AppLocalDataLocation );
-  if( !pathSettings.isEmpty() )
-    pathSettings += QString( "/settings.json" );
-  else
-    pathSettings += QString( "./settings.json" );
-  qDebug()<<pathSettings;
-
-  if( !QFile::exists( pathSettings ) )
-  {
-    QFile newFile( pathSettings );
-    if( !newFile.open( QIODevice::WriteOnly | QIODevice::Text ) )
-      std::cerr<<"[ERROR] Could not create settings.json"<<std::endl;
-    else
-    {
-      newFile.close();
-    }
-  }*/
   pathSettings = QString( "./settings.json" );
   QFile fileSettings( pathSettings );
   #elif defined( __WIN__ )
@@ -97,10 +83,10 @@ MainWindow::MainWindow( QWidget* parent ) :
   {
     QByteArray settings = fileSettings.readAll();
     QJsonDocument jsonDoc( QJsonDocument::fromJson( settings ) );
-    QJsonObject jsonObj = jsonDoc.object();
-    dsp.setConnectionTypeWifi( jsonObj[ "network" ].toInt() );
-    dsp.setSsidWifi( jsonObj[ "ssid" ].toString() );
-    dsp.setIpAddressWifi( jsonObj[ "ip" ].toString() );
+    jsonObjSettings = jsonDoc.object();
+    dsp.setConnectionTypeWifi( jsonObjSettings[ "network" ].toInt() );
+    dsp.setSsidWifi( jsonObjSettings[ "ssid" ].toString() );
+    dsp.setIpAddressWifi( jsonObjSettings[ "ip" ].toString() );
     fileSettings.close();
   }
   
@@ -409,6 +395,18 @@ void MainWindow::on_actionRead_from_DSP_triggered()
   msgBox->open();
 
   //----------------------------------------------------------------------------
+  //--- Request the firmware version
+  //----------------------------------------------------------------------------
+  ui->statusBar->showMessage("Reading firmware version.......");
+  dsp.requestFirmwareVersionWifi();
+
+  //----------------------------------------------------------------------------
+  //--- Request the AddOn-Id
+  //----------------------------------------------------------------------------
+  ui->statusBar->showMessage("Reading AddOn-Id.......");
+  dsp.requestAddOnIdWifi();
+
+  //----------------------------------------------------------------------------
   //--- Request the DSP-plugin id
   //----------------------------------------------------------------------------
   ui->statusBar->showMessage("Reading PID.......");
@@ -448,8 +446,7 @@ void MainWindow::on_actionRead_from_DSP_triggered()
   switch( pid )
   {
   case CFreeDspAurora::PLUGIN_8CHANNELS:
-    
-    qDebug()<<"Loading 8channels";
+    myLog()<<"Loading 8channels";
 
     ui->tabPresets->blockSignals( true );
     for( int ii = 0; ii < 4; ii++ )
@@ -470,7 +467,6 @@ void MainWindow::on_actionRead_from_DSP_triggered()
       numChannels = dspPlugin[ii]->getNumChannels();
       for( unsigned int n = 0; n < numChannels; n++ )
       {
-        //tDspChannel dspChannel = plugin8Channels.getGuiForChannel( n, FS, &dsp, this );
         tDspChannel dspChannel = dspPlugin[ii]->getGuiForChannel( n, FS, &dsp, this );
 
         presets[ii]->tabChannels->addTab( dspChannel.channel, "" );
@@ -489,7 +485,162 @@ void MainWindow::on_actionRead_from_DSP_triggered()
 
         for( unsigned int chn = 0; chn < numChannels; chn++ )
         {
-          //QAction* action = new QAction( "Show " + plugin8Channels.getChannelName( chn ) );
+          QAction* action = new QAction( "Show " + dspPlugin[ii]->getChannelName( chn ) );
+          action->setCheckable( true );
+          dspChannel.channel->actionsContextMenu.append( action );
+          dspChannel.channel->contextMenu.addAction( action );
+        }
+        dspChannel.channel->actionsContextMenu.at(static_cast<int>(n))->setChecked( true );
+        connect( dspChannel.channel, SIGNAL(selectionChanged()), this, SLOT(updatePlots()) );
+      }
+    }
+    ui->tabPresets->blockSignals( false );
+    break;
+
+  case CFreeDspAurora::PLUGIN_HOMECINEMA71:
+    myLog()<<"Loading HomeCinema71";
+
+    ui->tabPresets->blockSignals( true );
+    for( int ii = 0; ii < 4; ii++ )
+    {
+      presets[ii] = new QPreset;
+      if( ii == 0 )
+        ui->tabPresets->addTab( presets[ii], "Preset A" );
+      else if( ii == 1 )
+        ui->tabPresets->addTab( presets[ii], "Preset B" );  
+      else if( ii == 2 )
+        ui->tabPresets->addTab( presets[ii], "Preset C" ); 
+      else if( ii == 3 )
+        ui->tabPresets->addTab( presets[ii], "Preset D" ); 
+
+      presets[ii]->tabChannels->removeTab( 0 );
+
+      dspPlugin[ii] = new CPlugInHomeCinema71( FS );
+      numChannels = dspPlugin[ii]->getNumChannels();
+      for( unsigned int n = 0; n < numChannels; n++ )
+      {
+        tDspChannel dspChannel = dspPlugin[ii]->getGuiForChannel( n, FS, &dsp, this );
+
+        presets[ii]->tabChannels->addTab( dspChannel.channel, "" );
+        QLabel* lbl1 = new QLabel( presets[ii]->tabChannels );
+        lbl1->setText( dspChannel.name );
+        lbl1->setStyleSheet( QString("background-color: transparent; border: 0px solid black; border-left: 2px solid ") + colorPlot[n%kMaxPlotColors].name() + QString("; color: white; ") );
+        lbl1->setFixedWidth( 100 );
+        presets[ii]->tabChannels->tabBar()->setTabButton( static_cast<int>(n), QTabBar::LeftSide, lbl1 );
+
+        dspChannel.layout->setSpacing( 0 );
+        dspChannel.layout->setMargin( 0 );
+        dspChannel.layout->setContentsMargins( 0, 0, 0, 0 );
+        dspChannel.layout->setAlignment( Qt::AlignLeft );
+
+        dspChannel.channel->widgetChannel->setLayout( dspChannel.layout );
+
+        for( unsigned int chn = 0; chn < numChannels; chn++ )
+        {
+          QAction* action = new QAction( "Show " + dspPlugin[ii]->getChannelName( chn ) );
+          action->setCheckable( true );
+          dspChannel.channel->actionsContextMenu.append( action );
+          dspChannel.channel->contextMenu.addAction( action );
+        }
+        dspChannel.channel->actionsContextMenu.at(static_cast<int>(n))->setChecked( true );
+        connect( dspChannel.channel, SIGNAL(selectionChanged()), this, SLOT(updatePlots()) );
+      }
+    }
+    ui->tabPresets->blockSignals( false );
+    break;
+
+  case CFreeDspAurora::PLUGIN_8CHANNELS_USB:
+    myLog()<<"Loading 8channelsUSB";
+
+    ui->tabPresets->blockSignals( true );
+    for( int ii = 0; ii < 4; ii++ )
+    {
+      presets[ii] = new QPreset;
+      if( ii == 0 )
+        ui->tabPresets->addTab( presets[ii], "Preset A" );
+      else if( ii == 1 )
+        ui->tabPresets->addTab( presets[ii], "Preset B" );  
+      else if( ii == 2 )
+        ui->tabPresets->addTab( presets[ii], "Preset C" ); 
+      else if( ii == 3 )
+        ui->tabPresets->addTab( presets[ii], "Preset D" ); 
+
+      presets[ii]->tabChannels->removeTab( 0 );
+
+      dspPlugin[ii] = new CPlugIn8ChannelsUSB( FS );
+      numChannels = dspPlugin[ii]->getNumChannels();
+      for( unsigned int n = 0; n < numChannels; n++ )
+      {
+        tDspChannel dspChannel = dspPlugin[ii]->getGuiForChannel( n, FS, &dsp, this );
+
+        presets[ii]->tabChannels->addTab( dspChannel.channel, "" );
+        QLabel* lbl1 = new QLabel( presets[ii]->tabChannels );
+        lbl1->setText( dspChannel.name );
+        lbl1->setStyleSheet( QString("background-color: transparent; border: 0px solid black; border-left: 2px solid ") + colorPlot[n%kMaxPlotColors].name() + QString("; color: white; ") );
+        lbl1->setFixedWidth( 100 );
+        presets[ii]->tabChannels->tabBar()->setTabButton( static_cast<int>(n), QTabBar::LeftSide, lbl1 );
+
+        dspChannel.layout->setSpacing( 0 );
+        dspChannel.layout->setMargin( 0 );
+        dspChannel.layout->setContentsMargins( 0, 0, 0, 0 );
+        dspChannel.layout->setAlignment( Qt::AlignLeft );
+
+        dspChannel.channel->widgetChannel->setLayout( dspChannel.layout );
+
+        for( unsigned int chn = 0; chn < numChannels; chn++ )
+        {
+          QAction* action = new QAction( "Show " + dspPlugin[ii]->getChannelName( chn ) );
+          action->setCheckable( true );
+          dspChannel.channel->actionsContextMenu.append( action );
+          dspChannel.channel->contextMenu.addAction( action );
+        }
+        dspChannel.channel->actionsContextMenu.at(static_cast<int>(n))->setChecked( true );
+        connect( dspChannel.channel, SIGNAL(selectionChanged()), this, SLOT(updatePlots()) );
+      }
+    }
+    ui->tabPresets->blockSignals( false );
+    break;
+
+  case CFreeDspAurora::PLUGIN_HOMECINEMA71_USB:
+    myLog()<<"Loading HomeCinema71 USB";
+
+    ui->tabPresets->blockSignals( true );
+    for( int ii = 0; ii < 4; ii++ )
+    {
+      presets[ii] = new QPreset;
+      if( ii == 0 )
+        ui->tabPresets->addTab( presets[ii], "Preset A" );
+      else if( ii == 1 )
+        ui->tabPresets->addTab( presets[ii], "Preset B" );  
+      else if( ii == 2 )
+        ui->tabPresets->addTab( presets[ii], "Preset C" ); 
+      else if( ii == 3 )
+        ui->tabPresets->addTab( presets[ii], "Preset D" ); 
+
+      presets[ii]->tabChannels->removeTab( 0 );
+
+      dspPlugin[ii] = new CPlugInHomeCinema71USB( FS );
+      numChannels = dspPlugin[ii]->getNumChannels();
+      for( unsigned int n = 0; n < numChannels; n++ )
+      {
+        tDspChannel dspChannel = dspPlugin[ii]->getGuiForChannel( n, FS, &dsp, this );
+
+        presets[ii]->tabChannels->addTab( dspChannel.channel, "" );
+        QLabel* lbl1 = new QLabel( presets[ii]->tabChannels );
+        lbl1->setText( dspChannel.name );
+        lbl1->setStyleSheet( QString("background-color: transparent; border: 0px solid black; border-left: 2px solid ") + colorPlot[n%kMaxPlotColors].name() + QString("; color: white; ") );
+        lbl1->setFixedWidth( 100 );
+        presets[ii]->tabChannels->tabBar()->setTabButton( static_cast<int>(n), QTabBar::LeftSide, lbl1 );
+
+        dspChannel.layout->setSpacing( 0 );
+        dspChannel.layout->setMargin( 0 );
+        dspChannel.layout->setContentsMargins( 0, 0, 0, 0 );
+        dspChannel.layout->setAlignment( Qt::AlignLeft );
+
+        dspChannel.channel->widgetChannel->setLayout( dspChannel.layout );
+
+        for( unsigned int chn = 0; chn < numChannels; chn++ )
+        {
           QAction* action = new QAction( "Show " + dspPlugin[ii]->getChannelName( chn ) );
           action->setCheckable( true );
           dspChannel.channel->actionsContextMenu.append( action );
@@ -503,7 +654,6 @@ void MainWindow::on_actionRead_from_DSP_triggered()
     break;
 
   case 0:
-    qDebug()<<"PID"<<pid;
     setEnabled( true );
     disconnect( &timerWait, SIGNAL(timeout()), this, SLOT(updateWaitingForConnect()) );
     msgBox->accept();
@@ -520,18 +670,6 @@ void MainWindow::on_actionRead_from_DSP_triggered()
     ui->statusBar->showMessage("Ready");
     return;
   }
-
-  //----------------------------------------------------------------------------
-  //--- Request the firmware version
-  //----------------------------------------------------------------------------
-  ui->statusBar->showMessage("Reading firmware version.......");
-  dsp.requestFirmwareVersionWifi();
-
-  //----------------------------------------------------------------------------
-  //--- Request the AddOn-Id
-  //----------------------------------------------------------------------------
-  ui->statusBar->showMessage("Reading AddOn-Id.......");
-  dsp.requestAddOnIdWifi();
 
   //----------------------------------------------------------------------------
   //--- Request user parameters
@@ -564,6 +702,25 @@ void MainWindow::on_actionRead_from_DSP_triggered()
   msgBox->accept();
   ui->statusBar->showMessage("Ready");
   ui->actionWrite_to_DSP->setEnabled( true );
+
+  if( !jsonObjSettings["msg0001"].toBool() )
+  {
+    if( dsp.getFirmwareVersion() == "1.0.0" )
+    {
+      DialogReleaseNotes dlg( this );
+      dlg.setWindowTitle( "Hotfix available" );
+      dlg.setReleaseNote( "There is a new hotfix available for your aurora!\nPlease download the latest firmware and install it.\nIn the user manual (UserManual.pdf) you will find instructions how to update the firmware." );
+      int result = dlg.exec();
+      if( result == QDialog::Accepted )
+      {
+        if( dlg.getDontShowAgain() )
+        {
+          jsonObjSettings["msg0001"] = true;
+          writeSettings();
+        }
+      }
+    }
+  }
 }
 
 //==============================================================================
@@ -804,22 +961,10 @@ void MainWindow::on_actionSettings_triggered()
   int result = dialog.exec();
   if( result == QDialog::Accepted )
   { 
-    QFile fileSettings( pathSettings );
-
-    QJsonObject jsonObj;
-    jsonObj[ "network" ] = dsp.getConnectionTypeWifi();
-    jsonObj[ "ssid" ] = dsp.getSsidWifi();
-    jsonObj[ "ip" ] = dsp.getIpAddressLocalWifi();
-
-    QJsonDocument jsonDoc( jsonObj );
-
-    if( !fileSettings.open( QIODevice::WriteOnly ) )
-    {
-      qWarning( "Couldn't open file for saving user settings" );
-      return;
-    }
-    fileSettings.write( jsonDoc.toJson() );
-    fileSettings.close();
+    jsonObjSettings[ "network" ] = dsp.getConnectionTypeWifi();
+    jsonObjSettings[ "ssid" ] = dsp.getSsidWifi();
+    jsonObjSettings[ "ip" ] = dsp.getIpAddressLocalWifi();
+    writeSettings();
   }
 }
 
@@ -943,4 +1088,21 @@ void MainWindow::on_tabPresets_currentChanged( int index )
     msgBox->accept();
     ui->statusBar->showMessage("Ready");
   }
+}
+
+//==============================================================================
+/*!
+ */
+void MainWindow::writeSettings( void )
+{
+  QFile fileSettings( pathSettings );
+  QJsonDocument jsonDoc( jsonObjSettings );
+
+  if( !fileSettings.open( QIODevice::WriteOnly ) )
+  {
+    qWarning( "Couldn't open file for saving user settings" );
+    return;
+  }
+  fileSettings.write( jsonDoc.toJson() );
+  fileSettings.close();
 }
