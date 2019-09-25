@@ -129,7 +129,10 @@ void QInputSelect::sendDspParameter( void )
 {
   if( dsp->getFirmwareVersion() != "1.0.0" )
   {
-    QByteArray content = getDspParams();
+    QByteArray content;
+    content.append( dsp->muteSequence() );
+    content.append( getDspParams() );
+    content.append( dsp->unmuteSequence() );
     dsp->sendParameterWifi( content );
   }
 }

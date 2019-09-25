@@ -14,6 +14,8 @@
 #include "MainWindow.hpp"
 #include "ui_MainWindow.h"
 
+#include "QSleeper.hpp"
+
 #include "DialogSettings.hpp"
 #include "QDialogDemoSelector.hpp"
 #include "DialogReleaseNotes.h"
@@ -28,7 +30,7 @@
 
 extern CLogFile myLog;
 
-#define VERSION_STR "1.0.0"
+#define VERSION_STR "1.0.1"
 #define FS 48000.0
 
 using namespace Vektorraum;
@@ -49,7 +51,7 @@ QColor colorPlot[kMaxPlotColors] = { QColor(  81, 158, 228 ),
 
 QVolumeSlider* sliderMainVolume;
 
-QString pathSettings;
+QString pathSettings;   
 
 MainWindow::MainWindow( QWidget* parent ) :
   QMainWindow( parent ),
@@ -678,6 +680,15 @@ void MainWindow::on_actionRead_from_DSP_triggered()
 
   for( unsigned int p = 0; p < NUMPRESETS; p++ )
   {
+    dsp.mute();
+
+    QEventLoop loopWaitForReply;
+    QTimer timerWaitMute;
+    timerWaitMute.setSingleShot( true );
+    connect( &timerWaitMute, SIGNAL(timeout()), &loopWaitForReply, SLOT(quit()) );
+    timerWaitMute.start( 500 );
+    loopWaitForReply.exec();
+
     dsp.selectPresetWifi( p );
     QByteArray userparams;
     if( dsp.requestUserParameterWifi( userparams ) )
@@ -688,6 +699,16 @@ void MainWindow::on_actionRead_from_DSP_triggered()
   }
 
   currentPreset = preset;
+
+  dsp.mute();
+  
+  QEventLoop loopWaitForReply;
+  QTimer timerWaitMute;
+  timerWaitMute.setSingleShot( true );
+  connect( &timerWaitMute, SIGNAL(timeout()), &loopWaitForReply, SLOT(quit()) );
+  timerWaitMute.start( 500 );
+  loopWaitForReply.exec();
+
   dsp.selectPresetWifi( preset );
   ui->tabPresets->blockSignals( true );
   ui->tabPresets->setCurrentIndex( currentPreset );
@@ -817,6 +838,15 @@ void MainWindow::on_actionWrite_to_DSP_triggered()
 
   for( int p = 0; p < NUMPRESETS; p++ )
   {
+    dsp.mute();
+  
+    QEventLoop loopWaitForReply;
+    QTimer timerWaitMute;
+    timerWaitMute.setSingleShot( true );
+    connect( &timerWaitMute, SIGNAL(timeout()), &loopWaitForReply, SLOT(quit()) );
+    timerWaitMute.start( 500 );
+    loopWaitForReply.exec();
+
     dsp.selectPresetWifi( p );
 
     //----------------------------------------------------------------------------
@@ -1072,7 +1102,7 @@ void MainWindow::rotateIconConnect( int rotation )
  */
 void MainWindow::on_tabPresets_currentChanged( int index )
 {
-  if( (index >= 0) && (index < 4) )
+  if( (index >= 0) && (index < NUMPRESETS) )
   {
     ui->statusBar->showMessage("Switching preset.......");
 
@@ -1080,9 +1110,19 @@ void MainWindow::on_tabPresets_currentChanged( int index )
     msgBox->setStandardButtons( nullptr );
     msgBox->open();
 
+    dspPlugin[currentPreset]->setMasterVolume( -120, true );
+
+    QEventLoop loopWaitForReply;
+    QTimer timerWait;
+    timerWait.setSingleShot( true );
+    connect( &timerWait, SIGNAL(timeout()), &loopWaitForReply, SLOT(quit()) );
+    timerWait.start( 500 );
+    loopWaitForReply.exec();
+
     updatePresetGui( currentPreset, presetUserParams[currentPreset] );
     currentPreset = index;
     updatePlots();
+
     dsp.selectPresetWifi( index );
 
     msgBox->accept();

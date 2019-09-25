@@ -657,6 +657,8 @@ tDspChannel CPlugIn4FIRs::getGuiForChannel( unsigned int chn, tfloat fs, CFreeDs
     listChannels.append( channel );
   }
 
+  //dsp->setMuteAddr( MOD_MASTERVOLUME_ALG0_TARGET_ADDR );
+  
   dspChannel.layout = layout;
   dspChannel.channel = channel;
   dspChannel.gain = gain;

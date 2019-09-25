@@ -21,6 +21,7 @@ public:
 
 private:
   Ui::QPreset *ui;
+
 };
 
 #endif // QPRESET_H

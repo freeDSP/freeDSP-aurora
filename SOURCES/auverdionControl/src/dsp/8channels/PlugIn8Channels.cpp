@@ -1918,6 +1918,7 @@ tDspChannel CPlugIn8Channels::getGuiForChannel( unsigned int chn, tfloat fs, CFr
 
   }
 
+  dsp->setMuteAddr( MOD_MASTERVOLUME_ALG0_TARGET_ADDR );
 
   dspChannel.layout = layout;
   dspChannel.channel = channel;
@@ -1936,10 +1937,13 @@ void CPlugIn8Channels::setMasterVolume( double val, bool doSend )
 {
   if( doSend )
   {
+    qDebug()<<"CPlugIn8Channels::setMasterVolume "<<val<<doSend;
     QByteArray content;
     content.append( dsp->makeParameterForWifi( MOD_MASTERVOLUME_ALG0_TARGET_ADDR, static_cast<float>(pow( 10.0, val/20.0 )) ) );
     dsp->sendParameterWifi( content );
+    dsp->setMasterVolume( val );
   }
+  masterVolume = val;
 }
 
 //==============================================================================

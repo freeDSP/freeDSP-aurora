@@ -1522,6 +1522,8 @@ void QCrossover::sendDspParameter( void )
 {
   QByteArray content;
 
+  content.append( dsp->muteSequence() );
+
   content.append( dsp->makeParameterForWifi( addr[kParamB2_1_HP], static_cast<float>(coeffs_hp[kB2]) ) );
   content.append( dsp->makeParameterForWifi( addr[kParamB1_1_HP], static_cast<float>(coeffs_hp[kB1]) ) );
   content.append( dsp->makeParameterForWifi( addr[kParamB0_1_HP], static_cast<float>(coeffs_hp[kB0]) ) );
@@ -1583,6 +1585,9 @@ void QCrossover::sendDspParameter( void )
   content.append( dsp->makeParameterForWifi( addr[kParamB0_4_LP], static_cast<float>(coeffs_lp[3*5+kB0]) ) );
   content.append( dsp->makeParameterForWifi( addr[kParamA2_4_LP], static_cast<float>(coeffs_lp[3*5+kA2]) ) );
   content.append( dsp->makeParameterForWifi( addr[kParamA1_4_LP], static_cast<float>(coeffs_lp[3*5+kA1]) ) );
+    
+  content.append( dsp->unmuteSequence() );
+
   dsp->sendParameterWifi( content );
 }
 

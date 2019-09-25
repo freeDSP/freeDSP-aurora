@@ -94,7 +94,7 @@ void QGain::sendDspParameter( void )
   float val = static_cast<float>(pow( 10.0, gain/20.0 ));
   //dsp->sendParameter( addr[kTargetGain], val );
 
-  qDebug()<<"Gain"<<gain<<val;
+  //qDebug()<<"Gain"<<gain<<val;
 
   QByteArray content;
   content.append( dsp->makeParameterForWifi( addr[kTargetGain], val ) );

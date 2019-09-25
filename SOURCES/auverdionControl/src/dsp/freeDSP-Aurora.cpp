@@ -1050,6 +1050,7 @@ bool CFreeDspAurora::requestFirmwareVersionWifi( void )
   qDebug()<<"requestFirmwareVersionWifi";
 
   versionstr = "0.0.0";
+  fwVersion = 0;
 
   //if( isConnected )
   //{
@@ -1072,8 +1073,17 @@ bool CFreeDspAurora::requestFirmwareVersionWifi( void )
       {
         QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
         if( listReply.size() > 4 )
+        {
           versionstr = listReply.at(4);
-        qDebug()<<"Firmware version:"<<versionstr;  
+          QStringList listVersion = versionstr.split( "." );
+          bool status;
+          if( listVersion.size() > 2 )
+            fwVersion = (listVersion.at(0).toUInt( &status, 16 ) << 16)
+                      + (listVersion.at(1).toUInt( &status, 16 ) << 8)
+                      + listVersion.at(2).toUInt( &status, 16 );
+                    
+        }
+        qDebug()<<"Firmware version:"<<versionstr<<QString::number( fwVersion, 16 );;  
         return true;
       }
     }

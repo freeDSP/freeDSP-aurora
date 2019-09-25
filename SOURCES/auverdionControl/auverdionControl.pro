@@ -130,7 +130,8 @@ HEADERS += \
         ../SIGMASTUDIO/HomeCinema71USB/HomeCinema71USB_IC_1.h \
         ../SIGMASTUDIO/HomeCinema71USB/HomeCinema71USB_IC_1_REG.h \
         ../SIGMASTUDIO/HomeCinema71USB/HomeCinema71USB_IC_1_PARAM.h \
-        src/LogFile.h
+        src/LogFile.h \
+        src/QSleeper.hpp
 
 FORMS += \
         MainWindow.ui \

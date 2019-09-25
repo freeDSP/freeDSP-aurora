@@ -52,10 +52,12 @@ public:
   //============================================================================
   /*!
    */
-  void setValue( qreal val )
+  void setValue( qreal val, bool doNotification = false )
   { 
     sliderPos = val;
     update();
+    if( doNotification )
+      emit valueChanged( sliderPos );
   }
 
   //============================================================================

@@ -2,6 +2,7 @@
 #define SIGMADSP_HPP
 
 #include <cstdint>
+#include <cmath>
 
 #include <QWidget>
 #include <QEventLoop>
@@ -271,7 +272,78 @@ public:
    * \param presetid New preset id.
    */
   bool selectPresetWifi( int presetid );
-  
+
+  //============================================================================
+  /*! Sets the mute address for the DSP
+   *
+   * \param addr Mute address.
+   */
+  void setMuteAddr( uint16_t addr )
+  {
+    addrMute = addr;
+  }
+
+  //============================================================================
+  /*! Sets the master volume for the DSP in dB.
+   *
+   * \param vol Master volume.
+   */
+  void setMasterVolume( float vol )
+  {
+    masterVolume = vol;
+  }
+
+  //============================================================================
+  /*! Makes the mute sequence
+   */
+  QByteArray muteSequence( void )
+  {
+    QByteArray content;
+    content.append( makeParameterForWifi( addrMute, 0.f ) ); 
+    content.append( makeParameterForWifi( 0x0000, 0 ) );
+    content.append( makeParameterForWifi( 0x0000, 0 ) );
+    content.append( makeParameterForWifi( 0x0000, 0 ) );
+    content.append( makeParameterForWifi( 0x0000, 0 ) );
+
+    return content;
+  }
+
+
+  //============================================================================
+  /*! Makes the unmute sequence
+   */
+  QByteArray unmuteSequence( void )
+  {
+    QByteArray content;
+    content.append( makeParameterForWifi( 0x0000, 0 ) );
+    content.append( makeParameterForWifi( 0x0000, 0 ) );
+    content.append( makeParameterForWifi( 0x0000, 0 ) );
+    content.append( makeParameterForWifi( 0x0000, 0 ) );
+    content.append( makeParameterForWifi( addrMute, static_cast<float>(pow( 10.f, masterVolume/20.f )) ) );
+    return content;
+  }
+
+
+  //============================================================================
+  /*! Mutes the DSP outputs
+   */
+  void mute( void )
+  {
+    QByteArray content;
+    content.append( muteSequence() );
+    sendParameterWifi( content );
+  }
+
+  //============================================================================
+  /*! Unmutes the DSP outputs
+   */
+  void unmute( void )
+  {
+    QByteArray content;
+    content.append( unmuteSequence() );
+    sendParameterWifi( content );
+  }
+
 private:
   //============================================================================
   /*!
@@ -316,7 +388,10 @@ private:
   QString ssidWifi;
   bool isConnected = false;
   QString versionstr = "0.0.0";
+  uint32_t fwVersion = 0;
   quint32 addon;
+  uint16_t addrMute;
+  float masterVolume;
 
 };
 

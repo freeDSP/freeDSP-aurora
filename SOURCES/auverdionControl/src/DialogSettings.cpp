@@ -8,6 +8,7 @@
 #include <QtGui>
 #include <QJsonObject>
 #include <QJsonDocument>
+#include <QMessageBox>
 
 #if defined( __MACOSX__ )
 #include <CoreFoundation/CoreFoundation.h>
@@ -113,6 +114,8 @@ DialogSettings::~DialogSettings()
  */
 void DialogSettings::on_pushButtonInstallPlugin_clicked()
 {
+  QMessageBox::warning( this, tr("Warning"), tr("Please mute your amplifiers before you continue."), QMessageBox::Ok ); 
+
   enableGui( false );
 
   QString pathTxBuffer;
