@@ -1758,7 +1758,8 @@ tDspChannel CPlugInHomeCinema71USB::getGuiForChannel( unsigned int chn, tfloat f
     listChannels.append( channel );
   }
 
-
+  dsp->setMuteAddr( MOD_MASTERVOLUME_ALG0_TARGET_ADDR );
+  
   dspChannel.layout = layout;
   dspChannel.channel = channel;
   dspChannel.gain = gain;
@@ -1779,7 +1780,9 @@ void CPlugInHomeCinema71USB::setMasterVolume( double val, bool doSend )
     QByteArray content;
     content.append( dsp->makeParameterForWifi( MOD_MASTERVOLUME_ALG0_TARGET_ADDR, static_cast<float>(pow( 10.0, val/20.0 )) ) );
     dsp->sendParameterWifi( content );
+    dsp->setMasterVolume( val );
   }
+  masterVolume = val;
 }
 
 //==============================================================================

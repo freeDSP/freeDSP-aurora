@@ -53,6 +53,8 @@ public:
 
   virtual void setMasterVolume( double val, bool doSend ) = 0;
 
+  virtual double getMasterVolume( void ) = 0;
+
   //============================================================================
   /*!
    *
@@ -80,6 +82,7 @@ protected:
   bool flagSummation;
   QList<QChannel*> listChannels;
   CFreeDspAurora* dsp;
+  double masterVolume;
 };
 
 #endif
