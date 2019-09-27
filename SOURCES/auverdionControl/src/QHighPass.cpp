@@ -8,6 +8,8 @@
 
 using namespace Vektorraum;
 
+extern void enableGui( bool enable );
+
 //==============================================================================
 /*!
  */
@@ -861,22 +863,8 @@ void QHighPass::on_doubleSpinBoxFc_valueChanged( double  )
  */
 void QHighPass::on_comboBoxType_currentIndexChanged( int  )
 {
-//  QByteArray content;
-//  qDebug()<<"Mute";
- // content.append( dsp->makeParameterForWifi( MOD_MASTERVOLUME_ALG0_TARGET_ADDR, 0.f ) );
- // dsp->sendParameterWifi( content );
- // Sleeper::msleep( 5000 );
-  
-  //qDebug()<<"Update";
   updateCoeffs();
   sendDspParameter();
-  //Sleeper::msleep( 5000 );
-  
-  //qDebug()<<"Unmute";
-  //content.clear();
-  //content.append( dsp->makeParameterForWifi( MOD_MASTERVOLUME_ALG0_TARGET_ADDR, static_cast<float>(pow( 10.0, 0.0/20.0 )) ) );
-  //dsp->sendParameterWifi( content );
-
   emit valueChanged();
 }
 
@@ -897,6 +885,8 @@ void QHighPass::on_pushButtonBypass_clicked()
 void QHighPass::sendDspParameter( void )
 {
   QByteArray content;
+
+  enableGui( false );
 
   content.append( dsp->muteSequence() );
 
@@ -928,7 +918,7 @@ void QHighPass::sendDspParameter( void )
 
   dsp->sendParameterWifi( content );
 
-
+  enableGui( true );
 }
 
 //==============================================================================
