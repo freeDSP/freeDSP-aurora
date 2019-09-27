@@ -294,6 +294,16 @@ public:
   }
 
   //============================================================================
+  /*! Returns the master volume for the DSP in dB.
+   *
+   * \return Master volume.
+   */
+  float getMasterVolume( void )
+  {
+    return masterVolume;
+  }
+
+  //============================================================================
   /*! Makes the mute sequence
    */
   QByteArray muteSequence( void )
@@ -314,6 +324,7 @@ public:
    */
   QByteArray unmuteSequence( void )
   {
+    qDebug()<<"Unmute"<<masterVolume;
     QByteArray content;
     content.append( makeParameterForWifi( 0x0000, 0 ) );
     content.append( makeParameterForWifi( 0x0000, 0 ) );

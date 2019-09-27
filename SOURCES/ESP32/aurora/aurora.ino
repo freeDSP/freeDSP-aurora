@@ -18,7 +18,7 @@
 #define I2C_SDA_PIN 17
 #define I2C_SCL_PIN 16
 
-#define VERSION_STR "1.0.1"
+#define VERSION_STR "1.0.2"
 
 #define FORMAT_SPIFFS_IF_FAILED true
 
@@ -661,7 +661,7 @@ void setup()
   int cntrConnect = 0;
   if( Settings.ssid.length() > 0 )
   {
-    while( WiFi.waitForConnectResult() != WL_CONNECTED && cntrConnect < 3 )
+    while( (WiFi.waitForConnectResult() != WL_CONNECTED) && (cntrConnect < 3) )
     {
       Serial.println("WiFi Connection Failed! Trying again..");
       delay(100);
@@ -816,33 +816,33 @@ void handleHttpRequest()
                   val[2] = (data >> 8 ) & 0xFF;
                   val[3] = data & 0xFF;
                   ADAU1452_WRITE_BLOCK( reg, val, 4 );         
-                  
-                  //Wire.beginTransmission( DSP_ADDR );
+                  /*
                   Serial.print( "I2C " );
                   byte byteTx = (reg>>8) & 0xff;
                   Serial.print( byte2string2(byteTx) );
-                  //Wire.write( byteTx );
                   byteTx = reg & 0xff;
                   Serial.print( byte2string2(byteTx) );
-                  //Wire.write( byteTx );
                   Serial.print( " " ); 
                   
                   byteTx = (data>>24) & 0xff;
                   Serial.print( byte2string2(byteTx) );
-                  //Wire.write( byteTx );
                   byteTx = (data>>16) & 0xff;
                   Serial.print( byte2string2(byteTx) );
-                  //Wire.write( byteTx );
                   byteTx = (data>>8) & 0xff;
                   Serial.print( byte2string2(byteTx) );
-                  //Wire.write( byteTx );
                   byteTx = data & 0xff;
                   Serial.println( byte2string2(byteTx) );
-                  //Wire.write( byteTx );               
-                  //Wire.endTransmission( true );
+                  */
                   sentBytes += 12;
                 } 
-                //}
+
+                String httpResponse = "";
+                httpResponse += "HTTP/1.1 200 OK\r\n";
+                httpResponse += "Content-type:text/plain\r\n\r\n";
+                httpResponse += "ACK";
+                httpResponse += "\r\n";
+                client.println( httpResponse );
+          
                 waitForData = false;
                 wifiStatus = STATE_WIFI_IDLE;
                 client.stop();

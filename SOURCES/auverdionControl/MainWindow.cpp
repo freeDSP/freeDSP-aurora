@@ -10,6 +10,7 @@
 #include <QProgressDialog>
 #include <QJsonObject>
 #include <QJsonDocument>
+#include <QStatusBar>
 
 #include "MainWindow.hpp"
 #include "ui_MainWindow.h"
@@ -30,7 +31,7 @@
 
 extern CLogFile myLog;
 
-#define VERSION_STR "1.0.1"
+#define VERSION_STR "1.0.2"
 #define FS 48000.0
 
 using namespace Vektorraum;
@@ -50,18 +51,33 @@ QColor colorPlot[kMaxPlotColors] = { QColor(  81, 158, 228 ),
 
 
 QVolumeSlider* sliderMainVolume;
-
 QString pathSettings;   
+MainWindow* ptrMainWindow;
+QStatusBar* ptrMainStatusBar;
+
+void setStatusBarMessage( QString str )
+{
+  ptrMainStatusBar->showMessage( str );
+}
+
+void enableGui( bool enable )
+{
+  ptrMainWindow->setEnabled( enable );
+}
 
 MainWindow::MainWindow( QWidget* parent ) :
   QMainWindow( parent ),
   ui( new Ui::MainWindow )
 {
+  ptrMainWindow = this;
+
   ui->setupUi(this);
   #if defined( __IOS__ ) || defined( __WIN__ ) || defined( __LINUX__ )
   ui->menuBar->hide();
   #endif
   ui->actionWrite_to_DSP->setEnabled( false );
+
+  ptrMainStatusBar = ui->statusBar;
   
   #if defined( __MACOSX__ )
   pathSettings = QString( "./settings.json" );
@@ -696,6 +712,8 @@ void MainWindow::on_actionRead_from_DSP_triggered()
       updatePresetGui( p, userparams );
       presetUserParams[p] = userparams;
     }
+    dspPlugin[p]->setMasterVolume( ui->volumeSliderMain->value(), false );
+    qDebug()<<"Preset Master Volume:"<<dspPlugin[p]->getMasterVolume();
   }
 
   currentPreset = preset;
@@ -710,6 +728,8 @@ void MainWindow::on_actionRead_from_DSP_triggered()
   loopWaitForReply.exec();
 
   dsp.selectPresetWifi( preset );
+  dsp.setMasterVolume( dspPlugin[currentPreset]->getMasterVolume() );
+
   ui->tabPresets->blockSignals( true );
   ui->tabPresets->setCurrentIndex( currentPreset );
   ui->tabPresets->blockSignals( false );  
@@ -1110,7 +1130,9 @@ void MainWindow::on_tabPresets_currentChanged( int index )
     msgBox->setStandardButtons( nullptr );
     msgBox->open();
 
-    dspPlugin[currentPreset]->setMasterVolume( -120, true );
+    //dspPlugin[currentPreset]->setMasterVolume( -120, true );
+
+    dsp.mute();
 
     QEventLoop loopWaitForReply;
     QTimer timerWait;
@@ -1123,7 +1145,12 @@ void MainWindow::on_tabPresets_currentChanged( int index )
     currentPreset = index;
     updatePlots();
 
+    qDebug()<<"Master Volume"<<dspPlugin[currentPreset]->getMasterVolume();
+
+    //dspPlugin[currentPreset]->setMasterVolume( ui->volumeSliderMain->value(), false );
+
     dsp.selectPresetWifi( index );
+    dsp.setMasterVolume( dspPlugin[currentPreset]->getMasterVolume() );
 
     msgBox->accept();
     ui->statusBar->showMessage("Ready");

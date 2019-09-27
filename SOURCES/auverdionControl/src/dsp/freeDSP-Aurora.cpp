@@ -5,11 +5,13 @@
 #include <QFile>
 #include <QMessageBox>
 #include <QTimer>
+#include <QString>
 
 #include "LogFile.h"
 #include "freeDSP-Aurora.hpp"
 
 extern CLogFile myLog;
+extern void setStatusBarMessage( QString str );
 
 #define TIMEOUT_WIFI (60000)
 
@@ -79,7 +81,7 @@ uint32_t convertTo824( float val )
  */
 QByteArray CFreeDspAurora::makeParameterForWifi( uint16_t reg, float val )
 {
-  qDebug()<<"CFreeDspAurora::makeParameterForWifi( uint16_t reg, float val )";
+  //qDebug()<<"CFreeDspAurora::makeParameterForWifi( uint16_t reg, float val )";
   QByteArray content;
   content.append( static_cast<char>((reg >> 8) & 0x000000FF) );
   content.append( static_cast<char>(reg & 0x000000FF) );
@@ -100,7 +102,7 @@ QByteArray CFreeDspAurora::makeParameterForWifi( uint16_t reg, float val )
  */
 QByteArray CFreeDspAurora::makeParameterForWifi( uint16_t reg, int32_t val )
 {
-  qDebug()<<"CFreeDspAurora::makeParameterForWifi( uint16_t reg, int32_t val )";
+  //qDebug()<<"CFreeDspAurora::makeParameterForWifi( uint16_t reg, int32_t val )";
   
   QByteArray content;
   content.append( static_cast<char>((reg >> 8) & 0x000000FF) );
@@ -124,6 +126,7 @@ bool CFreeDspAurora::sendParameterWifi( QByteArray content )
 {
   myLog()<<"---------------------------------------------------------------";
   myLog()<<"sendParameterWifi()";
+  setStatusBarMessage( "Sending parameter to DSP..." );
   
   if( isConnected )
   {
@@ -139,23 +142,45 @@ bool CFreeDspAurora::sendParameterWifi( QByteArray content )
     request.append( content.toHex() );  
     request.append( "\r\n" );
 
-    writeRequestWifi( request );
-  /*
-    if( !waitForReplyWifi() )
-      return false;
+
+    if( fwVersion > 0x010001 )
+    {
+      if( writeRequestWifi( request ) )
+      {
+        if( !waitForReplyWifi() )
+        {
+          myLog()<<"Writing firmware to DSP failed";
+          QMessageBox::critical( this, tr("Error"), tr("Uups, sending parameter to DSP failed. Please double check everything, reset DSP and try again."), QMessageBox::Ok ); 
+          setStatusBarMessage( "Failed" );
+          return false;
+        }
+        else
+        {
+          setStatusBarMessage( "Ready" );
+          return true;
+        }
+      }
+      else
+      {
+        myLog()<<"Could not connect to DSP";
+        QMessageBox::critical( this, tr("Error"), tr("Uups, could not connect to DSP. Did you switch it on?"), QMessageBox::Ok );
+        setStatusBarMessage( "Not connected" );
+        return false;
+      }
+    }
     else
     {
-      myLog<<QString( replyDSP );
-      QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
-      //! \TODO Test for ACK.
+      writeRequestWifi( request );
+      setStatusBarMessage( "Ready" );
       return true;
     }
-  */
-    return true;
+
+    
   }
   else
   {
     myLog()<<"Not connected to DSP.";
+    setStatusBarMessage( "Failed" );
     return false;
   }
   
