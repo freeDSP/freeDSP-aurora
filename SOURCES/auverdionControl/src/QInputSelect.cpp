@@ -7,6 +7,8 @@
 
 using namespace Vektorraum;
 
+extern void enableGui( bool enable );
+
 //==============================================================================
 /*!
  *
@@ -36,7 +38,7 @@ QInputSelect::QInputSelect( uint32_t selection, uint16_t inputaddr, CFreeDspAuro
   ui->comboBoxInput->addItem( "USB 6", 13 );
   ui->comboBoxInput->addItem( "USB 7", 14 );
   ui->comboBoxInput->addItem( "USB 8", 15 );
-  ui->comboBoxInput->setCurrentIndex( selection );
+  ui->comboBoxInput->setCurrentIndex( static_cast<int32_t>(selection) );
   ui->comboBoxInput->blockSignals( false );
   //ui->comboBoxInput->setMaxVisibleItems( 16 );
 
@@ -91,7 +93,7 @@ QInputSelect::QInputSelect( uint32_t selection,
   ui->comboBoxInput->addItem( "Expansion 8", 23 );
   ui->comboBoxInput->addItem( "SPDIF 1",     24 );
   ui->comboBoxInput->addItem( "SPDIF 2",     25 );
-  ui->comboBoxInput->setCurrentIndex( selection );
+  ui->comboBoxInput->setCurrentIndex( static_cast<int32_t>(selection) );
   ui->comboBoxInput->blockSignals( false );
   //ui->comboBoxInput->setMaxVisibleItems( 16 );
   
@@ -127,6 +129,8 @@ void QInputSelect::update( tvector<tfloat> f )
  */
 void QInputSelect::sendDspParameter( void )
 {
+  enableGui( false );
+
   if( dsp->getFirmwareVersion() != "1.0.0" )
   {
     QByteArray content;
@@ -135,6 +139,8 @@ void QInputSelect::sendDspParameter( void )
     content.append( dsp->unmuteSequence() );
     dsp->sendParameterWifi( content );
   }
+
+  enableGui( true );
 }
 
 //==============================================================================
@@ -163,7 +169,7 @@ QByteArray QInputSelect::getUserParams( void )
 {
   QByteArray content;
   if( dsp->getFirmwareVersion() != "1.0.0" )
-    content.append( static_cast<uint8_t>(ui->comboBoxInput->currentIndex()) );
+    content.append( static_cast<char>(ui->comboBoxInput->currentIndex()) );
   return content;
 }
 
@@ -217,7 +223,7 @@ QByteArray QInputSelect::getDspParams( void )
     }
     else if( ui->comboBoxInput->currentText() == QString( "Analog 3" ) )
     {
-      content.append( dsp->makeParameterForWifi( addr[kChannelADC], 0x00000001 ) );
+      content.append( dsp->makeParameterForWifi( addr[kChannelADC], 0x00000002 ) );
       content.append( dsp->makeParameterForWifi( addr[kSelectPort], kPortAnalog ) );
     }
     else if( ui->comboBoxInput->currentText() == QString( "Analog 4" ) )
