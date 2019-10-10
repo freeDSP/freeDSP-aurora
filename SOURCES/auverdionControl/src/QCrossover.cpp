@@ -7,6 +7,8 @@
 
 using namespace Vektorraum;
 
+extern void enableGui( bool enable );
+
 QCrossover::QCrossover( tfilterdesign designHp, tfloat fchp,
                         tfilterdesign designLp, tfloat fclp,
                         uint16_t addrB2_1_HP, uint16_t addrB1_1_HP, uint16_t addrB0_1_HP,
@@ -1522,6 +1524,8 @@ void QCrossover::sendDspParameter( void )
 {
   QByteArray content;
 
+  enableGui( false );
+
   content.append( dsp->muteSequence() );
 
   content.append( dsp->makeParameterForWifi( addr[kParamB2_1_HP], static_cast<float>(coeffs_hp[kB2]) ) );
@@ -1589,6 +1593,8 @@ void QCrossover::sendDspParameter( void )
   content.append( dsp->unmuteSequence() );
 
   dsp->sendParameterWifi( content );
+
+  enableGui( true );
 }
 
 //------------------------------------------------------------------------------

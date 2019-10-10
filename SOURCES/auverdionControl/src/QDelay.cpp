@@ -6,6 +6,8 @@
 
 using namespace Vektorraum;
 
+extern void enableGui( bool enable );
+
 //==============================================================================
 /*!
  *
@@ -87,6 +89,8 @@ void QDelay::on_pushButtonBypass_clicked()
  */
 void QDelay::sendDspParameter( void )
 {
+  enableGui( false );
+
   int32_t val = static_cast<int32_t>(ui->doubleSpinBoxDelay->value()/1000.0 * fs + 0.5);
   if( bypass )
     val = 0;
@@ -96,6 +100,8 @@ void QDelay::sendDspParameter( void )
   content.append( dsp->makeParameterForWifi( addr[kDelay], val ) );
   content.append( dsp->unmuteSequence() );
   dsp->sendParameterWifi( content );
+
+  enableGui( true );
 }
 
 //==============================================================================
