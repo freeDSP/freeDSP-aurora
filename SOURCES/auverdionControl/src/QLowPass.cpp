@@ -3,6 +3,8 @@
 
 using namespace Vektorraum;
 
+extern void enableGui( bool enable );
+
 //==============================================================================
 /*!
  *
@@ -794,6 +796,8 @@ void QLowPass::sendDspParameter( void )
 { 
   QByteArray content;
 
+  enableGui( false );
+
   content.append( dsp->muteSequence() );
 
   content.append( dsp->makeParameterForWifi( addr[kParamB2_1], static_cast<float>(coeffs[kB2]) ) );
@@ -823,6 +827,8 @@ void QLowPass::sendDspParameter( void )
   content.append( dsp->unmuteSequence() );
 
   dsp->sendParameterWifi( content );
+
+  enableGui( true );
 
 }
 

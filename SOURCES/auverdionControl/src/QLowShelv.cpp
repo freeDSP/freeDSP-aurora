@@ -5,6 +5,8 @@
 
 using namespace Vektorraum;
 
+extern void enableGui( bool enable );
+
 //==============================================================================
 /*!
  *
@@ -173,6 +175,8 @@ void QLowShelv::sendDspParameter( void )
 {
   QByteArray content;
 
+  enableGui( false );
+
   content.append( dsp->muteSequence() );
 
   content.append( dsp->makeParameterForWifi( addr[kParamB2], static_cast<float>(coeffs[kB2]) ) );
@@ -184,6 +188,8 @@ void QLowShelv::sendDspParameter( void )
   content.append( dsp->unmuteSequence() );
 
   dsp->sendParameterWifi( content );
+
+  enableGui( true );
 }
 
 //==============================================================================
