@@ -1,5 +1,6 @@
-#ifndef SIGMADSP_HPP
-#define SIGMADSP_HPP
+//#ifndef SIGMADSP_HPP
+//#define SIGMADSP_HPP
+#pragma once
 
 #include <cstdint>
 #include <cmath>
@@ -80,12 +81,6 @@ public:
    *
    */
   bool requestUserParameterWifi( QByteArray& userparams );
-
-  
-
-
-
-
 
   //============================================================================
   /*!
@@ -355,6 +350,26 @@ public:
     sendParameterWifi( content );
   }
 
+  //============================================================================
+  /*! Sends a pure i2c message to write to a slave on the i2c bus.
+   *
+   *  \param addr Address of i2c slave.
+   *  \param reg Regsiter of i2c slave.
+   *  \param data Data written to i2c slave.
+   *  \return true if successful, else false.
+   */
+  bool writeI2C( const uint8_t addr, const uint8_t reg, const uint8_t data );
+
+  //============================================================================
+  /*! Reads from a slave on the i2c bus.
+   *
+   *  \param addr Address of i2c slave.
+   *  \param reg Regsiter of i2c slave.
+   *  \param data Data from i2c slave.
+   *  \return true if successful, else false.
+   */
+  bool readI2C( const uint8_t addr, const uint8_t reg, uint8_t& data );
+
 private:
   //============================================================================
   /*!
@@ -406,4 +421,4 @@ private:
 
 };
 
-#endif // SIGMADSP_HPP
+//#endif // SIGMADSP_HPP

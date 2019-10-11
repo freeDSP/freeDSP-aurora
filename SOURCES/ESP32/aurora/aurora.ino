@@ -18,7 +18,7 @@
 #define I2C_SDA_PIN 17
 #define I2C_SCL_PIN 16
 
-#define VERSION_STR "1.0.2"
+#define VERSION_STR "1.1.0"
 
 #define FORMAT_SPIFFS_IF_FAILED true
 
@@ -28,8 +28,13 @@
 #define AK5558_I2C_ADDR    (0x22>>1)
 // DAC address on I2C bus
 #define AK4458_I2C_ADDR    (0x20>>1)
+// S/P-DIF-Mux on AddOnB
+#define ADDONB_SPDIFMUX_ADDR (0x82>>1)
 
 #define NUMPRESETS (4)
+
+#define POST_WRITEI2C     "POST /writei2c"
+#define POST_READI2C      "POST /readi2c"
 
 enum twifistatus
 {
@@ -41,7 +46,9 @@ enum twifistatus
   STATE_WIFI_RECEIVE_PID,
   STATE_WIFI_RECEIVE_DSPPARAM,
   STATE_WIFI_RECEIVE_AID,
-  STATE_WIFI_RECEIVE_PRESETID
+  STATE_WIFI_RECEIVE_PRESETID,
+  STATE_WIFI_RECEIVE_WRITEI2C,
+  STATE_WIFI_RECEIVE_READI2C
 };
 
 enum taddonid
@@ -84,27 +91,16 @@ String receivedPostRequest;
 String presetUsrparamFile[4] = { "/usrparam.001", "/usrparam.002", "/usrparam.003", "/usrparam.004" };
 String presetDspparamFile[4] = { "/dspparam.001", "/dspparam.002", "/dspparam.003", "/dspparam.004" };
 
-//TwoWire WireDSP(1);
-
 //==============================================================================
 /*! 
  */
 void ADAU1452_WRITE_REGISTER( uint16_t reg, byte msb, byte lsb ) 
 {
   Wire.beginTransmission( DSP_ADDR );
-
   Wire.write( (byte)( (reg >> 8) & 0xFF ) );
   Wire.write( (byte)(  reg       & 0xFF ) );
-  //Serial.print( reg, HEX );
-  //Serial.print( " " );
-
   Wire.write( msb );
-  //Serial.print( msb, HEX );
-  //Serial.print( ", " );
-
-  Wire.write( lsb );
-  //Serial.println( lsb, HEX );
-  
+  Wire.write( lsb ); 
   Wire.endTransmission( true );
 }
 
@@ -118,24 +114,10 @@ void ADAU1452_WRITE_BLOCK( uint16_t regaddr, byte val[], uint16_t len )
     Wire.beginTransmission( DSP_ADDR );
     Wire.write( (byte)( (regaddr >> 8) & 0xFF ) );
     Wire.write( (byte)(  regaddr       & 0xFF ) );
-    //Serial.print( regaddr, HEX );
-    //Serial.print( " " );
-
     Wire.write( (byte)( val[ii] & 0xFF ) );
-    //Serial.print( val[ii], HEX );
-    //Serial.print( ", " );
-
     Wire.write( (byte)( val[ii+1] & 0xFF ) );
-    //Serial.print( val[ii+1], HEX );
-    //Serial.print( ", " );
-
     Wire.write( (byte)( val[ii+2] & 0xFF ) );
-    //Serial.print( val[ii+2], HEX );
-    //Serial.print( ", " );
-
     Wire.write( (byte)( val[ii+3] & 0xFF ) );
-    //Serial.println( val[ii+3], HEX );   
-
     Wire.endTransmission( true );
   }
 }
@@ -581,6 +563,7 @@ void setup()
 
   Serial.begin(115200);
   Serial.println( "aurora Debug" );
+  Serial.println( VERSION_STR );
 
   if( !SPIFFS.begin( FORMAT_SPIFFS_IF_FAILED ) )
   {
@@ -676,17 +659,10 @@ void setup()
   Serial.println( WiFi.localIP() );
   Serial.println( WiFi.getHostname() );
 
-  server.begin();
-
-  // Add service to MDNS-SD
-  //MDNS.addService( "http", "tcp", 8088 );
-  
+  server.begin();  
 
   Wire.begin( I2C_SDA_PIN, I2C_SCL_PIN );
   Wire.setClock( 100000 );
-
-  //WireDSP.begin( I2C_SDA_PIN, I2C_SCL_DSP_PIN );
-  //WireDSP.setClock( 100000 );
 
   //----------------------------------------------------------------------------
   //--- Download program to DSP
@@ -1138,6 +1114,58 @@ void handleHttpRequest()
               }
             }
 
+            //-----------------------------------------------------------------
+            //--- Receiving I2C write sequence
+            //-----------------------------------------------------------------
+            else if( wifiStatus == STATE_WIFI_RECEIVE_WRITEI2C )
+            {
+              receivedPostRequest += currentLine;
+
+              if( receivedPostRequest.length() > contentLength )
+              {
+                receivedPostRequest = receivedPostRequest.substring( 0, receivedPostRequest.length()-1 );
+
+                if( receivedPostRequest.length() >= 6 )
+                {
+                  int offset = 0;
+                  String str = receivedPostRequest.substring( offset, offset + 2 );
+                  uint8_t addr = (uint8_t)strtoul( str.c_str(), NULL, 16 );
+                  offset += 2;
+                  str = receivedPostRequest.substring( offset, offset + 2 );
+                  byte regaddr = (byte)strtoul( str.c_str(), NULL, 16 );
+                  offset += 2;
+                  str = receivedPostRequest.substring( offset, offset + 2 );
+                  byte data = (byte)strtoul( str.c_str(), NULL, 16 );
+                  offset += 2;
+
+                  Wire.beginTransmission( addr>>1 );
+                  Wire.write( regaddr );
+                  Wire.write( data );
+                  Wire.endTransmission( true );
+
+                  Serial.print( "I2C: " );
+                  Serial.print( addr, HEX );
+                  Serial.print( " " );
+                  Serial.print( regaddr, HEX );
+                  Serial.print( " " );
+                  Serial.println( data, HEX );
+                  Serial.print( " " );
+
+                  String httpResponse = "";
+                  httpResponse += "HTTP/1.1 200 OK\r\n";
+                  httpResponse += "Content-type:text/plain\r\n\r\n";
+                  httpResponse += "ACK";
+                  httpResponse += "\r\n";
+                  client.println( httpResponse );
+
+                  client.stop();
+                  waitForData = false;
+                  wifiStatus = STATE_WIFI_IDLE;
+                }
+
+              }
+            }
+
             currentLine = "";
             //Serial.println( cntrPackets );
             
@@ -1418,7 +1446,7 @@ void handleHttpRequest()
             //-----------------------------------------------------------------
             else if( currentLine.startsWith("POST /aid") )
             {
-              Serial.println( "POST /pid" );
+              Serial.println( "POST /aid" );
               receivedPostRequest = "";
               wifiStatus = STATE_WIFI_RECEIVE_AID;
               currentLine = "";
@@ -1640,6 +1668,30 @@ void handleHttpRequest()
               //cntrPackets++;
             }
 
+            //-----------------------------------------------------------------
+            //--- Receiving a new i2c write sequence
+            //-----------------------------------------------------------------
+            else if( currentLine.startsWith( POST_WRITEI2C ) )
+            {
+              Serial.println( POST_WRITEI2C );
+              receivedPostRequest = "";
+              wifiStatus = STATE_WIFI_RECEIVE_WRITEI2C;
+              currentLine = "";
+              //cntrPackets++;
+            }
+
+            //-----------------------------------------------------------------
+            //--- Receiving a new i2c write sequence
+            //-----------------------------------------------------------------
+            else if( currentLine.startsWith( POST_READI2C ) )
+            {
+              Serial.println( POST_READI2C );
+              receivedPostRequest = "";
+              wifiStatus = STATE_WIFI_RECEIVE_READI2C;
+              currentLine = "";
+              //cntrPackets++;
+            }
+
             else if( currentLine.startsWith("Host:") )
             {
               //Serial.println( currentLine );
@@ -1655,7 +1707,7 @@ void handleHttpRequest()
             //--- Content-length
             else if( currentLine.startsWith( "Content-length" ) )
             {
-              Serial.println( currentLine );
+              //Serial.println( currentLine );
               String str = currentLine.substring( currentLine.indexOf(':') + 1, currentLine.length() );
               contentLength = (uint32_t)strtoul( str.c_str(), NULL, 10 );
               receivedBytes = 0;
