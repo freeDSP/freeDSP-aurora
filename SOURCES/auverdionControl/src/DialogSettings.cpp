@@ -636,3 +636,12 @@ void DialogSettings::on_comboBoxSpdifInput_currentIndexChanged(int index)
       dsp->writeI2C( 0x82, 0x01, 0x03 );
   }
 }
+
+//==============================================================================
+/*!
+ */
+unsigned int DialogSettings::getSpdifInput( void )
+{
+  return ui->comboBoxSpdifInput->itemData( ui->comboBoxSpdifInput->currentIndex() ).toUInt();
+}
+

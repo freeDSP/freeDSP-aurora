@@ -370,6 +370,34 @@ public:
    */
   bool readI2C( const uint8_t addr, const uint8_t reg, uint8_t& data );
 
+  //============================================================================
+  /*! Sends the addon configuration to DSP.
+   *
+   *  \param str Configuration string.
+   *  \return true if successful, else false.
+   */
+  bool sendAddOnConfig( QString str );
+
+  //============================================================================
+  /*! Sets the connection status of DSP
+   *
+   *  \param state Connection status.
+   */
+  bool setIsConnected( bool state )
+  {
+    isConnected = state;
+  }
+
+  //============================================================================
+  /*! Sets the expert mode
+   *
+   *  \param state Expert mode.
+   */
+  bool setExpertMode( bool state )
+  {
+    expertMode = state;
+  }
+
 private:
   //============================================================================
   /*!
@@ -418,6 +446,7 @@ private:
   quint32 addon;
   uint16_t addrMute;
   float masterVolume;
+  bool expertMode = false;
 
 };
 

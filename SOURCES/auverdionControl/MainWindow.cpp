@@ -1015,6 +1015,27 @@ void MainWindow::on_actionSettings_triggered()
     jsonObjSettings[ "ssid" ] = dsp.getSsidWifi();
     jsonObjSettings[ "ip" ] = dsp.getIpAddressLocalWifi();
     writeSettings();
+
+    if( dsp.getAddOnId() == DialogSettings::ADDONB )
+    {
+      if( dialog.getSpdifInput() == 0x00 )
+        dsp.sendAddOnConfig( "820104" );
+      else if( dialog.getSpdifInput() == 0x01 )
+        dsp.sendAddOnConfig( "820105" );
+      else if( dialog.getSpdifInput() == 0x02 )
+        dsp.sendAddOnConfig( "820106" );
+      else if( dialog.getSpdifInput() == 0x03 )
+        dsp.sendAddOnConfig( "820107" );
+      else if( dialog.getSpdifInput() == 0x04 )
+        dsp.sendAddOnConfig( "820100" );
+      else if( dialog.getSpdifInput() == 0x05 )
+        dsp.sendAddOnConfig( "820101" );
+      else if( dialog.getSpdifInput() == 0x06 )
+        dsp.sendAddOnConfig( "820102" );
+      else if( dialog.getSpdifInput() == 0x07 )
+        dsp.sendAddOnConfig( "820103" );
+    }
+
   }
 }
 

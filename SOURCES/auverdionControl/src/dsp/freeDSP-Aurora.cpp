@@ -371,7 +371,8 @@ uint32_t CFreeDspAurora::requestPidWifi( void )
   myLog()<<"---------------------------------------------------------------";
   myLog()<<"requestPidWifi";
 
-  isConnected = false;
+  if( !expertMode )
+    isConnected = false;
 
   QString wifiIpHost = getIpAddressWifi();
 
@@ -1337,5 +1338,54 @@ bool CFreeDspAurora::readI2C( const uint8_t addr, const uint8_t reg, uint8_t& da
   {
     QMessageBox::critical( this, tr("Error"), tr("Uups, could not connect to DSP. Did you switch it on?"), QMessageBox::Ok );
     return false;
+  }
+}
+
+//==============================================================================
+/*! Sends the addon configuration to DSP.
+ *
+ *  \param str Configuration string.
+ *  \return true if successful, else false.
+ */
+bool CFreeDspAurora::sendAddOnConfig( QString str )
+{
+  myLog()<<"---------------------------------------------------------------";
+  myLog()<<"sendAddOnConfig";
+
+  QString wifiIpHost = getIpAddressWifi();
+
+  //QByteArray content;
+  //content.append( str );
+
+  QString requestString = QString("POST /aconfig HTTP/1.1\r\n")
+                        + QString("Host: ") + wifiIpHost + QString("\r\n")
+                        + QString("Content-type:text/plain\r\n")
+                        + QString("Content-length: ") +  QString::number( str.size() ) + QString("\r\n")
+                        + QString("\r\n")
+                        + str
+                        + QString("\r\n");
+  QByteArray request;
+  request.append( requestString );  
+  
+  writeRequestWifi( request );
+
+  if( !waitForReplyWifi() )
+  {
+    QMessageBox::critical( this, tr("Error"), tr("Did not receive ACK from DSP. Please double-check everything and try again."), QMessageBox::Ok ); 
+    return false;
+  }
+  else
+  {
+    qDebug()<<QString( replyDSP );
+    QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+    if( listReply.at(4) == "ACK" )
+    {
+      return true;
+    }
+    else
+    {
+      QMessageBox::critical( this, tr("Error"), tr("Could not write addon configuration to DSP. Please double-check everything and try again."), QMessageBox::Ok ); 
+      return false;
+    }
   }
 }

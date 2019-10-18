@@ -26,6 +26,11 @@ public:
   explicit DialogSettings( CFreeDspAurora* ptrdsp, QWidget* parent = nullptr );
   ~DialogSettings();
 
+  //============================================================================
+  /*!
+   */
+  unsigned int getSpdifInput( void );
+
 private:
   //============================================================================
   /*!
