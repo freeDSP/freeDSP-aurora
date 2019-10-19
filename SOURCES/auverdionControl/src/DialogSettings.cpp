@@ -104,7 +104,38 @@ DialogSettings::DialogSettings( CFreeDspAurora* ptrdsp, QWidget* parent ) :
 
   if( dsp->getAddOnId() == ADDONB )
   {
-    //! \TODO Read current Mux setting from DSP
+    ui->comboBoxSpdifInput->clear();
+
+    ui->comboBoxSpdifInput->blockSignals( true );
+    ui->comboBoxSpdifInput->addItem( "Coax 1", 0x00 );
+    ui->comboBoxSpdifInput->addItem( "Coax 2", 0x01 );
+    ui->comboBoxSpdifInput->addItem( "Coax 3", 0x02 );
+    ui->comboBoxSpdifInput->addItem( "Coax 4", 0x03 );
+    ui->comboBoxSpdifInput->addItem( "Optical 1", 0x04 );
+    ui->comboBoxSpdifInput->addItem( "Optical 2", 0x05 );
+    ui->comboBoxSpdifInput->addItem( "Optical 3", 0x06 );
+    ui->comboBoxSpdifInput->addItem( "Optical 4", 0x07 );
+    
+    QString cfg = dsp->requestAddOnConfig();
+    
+    if( cfg == "820104" )
+      ui->comboBoxSpdifInput->setCurrentIndex( ui->comboBoxSpdifInput->findData( 0x00 ) );
+    else if( cfg == "820105" )
+      ui->comboBoxSpdifInput->setCurrentIndex( ui->comboBoxSpdifInput->findData( 0x01 ) );
+    else if( cfg == "820106" )
+      ui->comboBoxSpdifInput->setCurrentIndex( ui->comboBoxSpdifInput->findData( 0x02 ) );
+    else if( cfg == "820107" )
+      ui->comboBoxSpdifInput->setCurrentIndex( ui->comboBoxSpdifInput->findData( 0x03 ) );
+    else if( cfg == "820100" )
+      ui->comboBoxSpdifInput->setCurrentIndex( ui->comboBoxSpdifInput->findData( 0x04 ) );
+    else if( cfg == "820101" )
+      ui->comboBoxSpdifInput->setCurrentIndex( ui->comboBoxSpdifInput->findData( 0x05 ) );
+    else if( cfg == "820102" )
+      ui->comboBoxSpdifInput->setCurrentIndex( ui->comboBoxSpdifInput->findData( 0x06 ) );
+    else if( cfg == "820103" )
+      ui->comboBoxSpdifInput->setCurrentIndex( ui->comboBoxSpdifInput->findData( 0x07 ) );
+
+    ui->comboBoxSpdifInput->blockSignals( false );
   }
   else
     ui->tabWidgetSettings->removeTab( 1 );

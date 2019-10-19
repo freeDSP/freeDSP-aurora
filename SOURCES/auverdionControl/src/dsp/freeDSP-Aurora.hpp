@@ -358,7 +358,7 @@ public:
    *  \param data Data written to i2c slave.
    *  \return true if successful, else false.
    */
-  bool writeI2C( const uint8_t addr, const uint8_t reg, const uint8_t data );
+  bool writeI2C( const int8_t addr, const int8_t reg, const int8_t data );
 
   //============================================================================
   /*! Reads from a slave on the i2c bus.
@@ -368,7 +368,7 @@ public:
    *  \param data Data from i2c slave.
    *  \return true if successful, else false.
    */
-  bool readI2C( const uint8_t addr, const uint8_t reg, uint8_t& data );
+  bool readI2C( const int8_t addr, const int8_t reg, int8_t& data );
 
   //============================================================================
   /*! Sends the addon configuration to DSP.
@@ -379,23 +379,40 @@ public:
   bool sendAddOnConfig( QString str );
 
   //============================================================================
+  /*! Requests the addon configuration from DSP.
+   *
+   *  \return Configuration string.
+   */
+  QString requestAddOnConfig( void );
+
+  //============================================================================
   /*! Sets the connection status of DSP
    *
    *  \param state Connection status.
    */
-  bool setIsConnected( bool state )
+  void setIsConnected( bool state )
   {
     isConnected = state;
   }
 
   //============================================================================
-  /*! Sets the expert mode
+  /*! Returns the connection status of DSP
    *
-   *  \param state Expert mode.
+   *  \return Connection status.
    */
-  bool setExpertMode( bool state )
+  bool setIsConnected( void )
   {
-    expertMode = state;
+    return isConnected;
+  }
+
+  //============================================================================
+  /*! Sets the debug mode
+   *
+   *  \param state Debug mode.
+   */
+  void setDebugMode( bool state )
+  {
+    debugMode = state;
   }
 
 private:
@@ -446,7 +463,8 @@ private:
   quint32 addon;
   uint16_t addrMute;
   float masterVolume;
-  bool expertMode = false;
+  bool debugMode = false;
+  QString configAddOn;
 
 };
 
