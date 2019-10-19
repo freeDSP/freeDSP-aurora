@@ -8,6 +8,7 @@
 
 #include "AK4458.h"
 #include "AK5558.h"
+#include "WebOTA.h"
 
 // Configuration for hardware rev. 0.9.x
 //#define I2C_SDA_PIN 16
@@ -118,24 +119,10 @@ void ADAU1452_WRITE_BLOCK( uint16_t regaddr, byte val[], uint16_t len )
     Wire.beginTransmission( DSP_ADDR );
     Wire.write( (byte)( (regaddr >> 8) & 0xFF ) );
     Wire.write( (byte)(  regaddr       & 0xFF ) );
-    //Serial.print( regaddr, HEX );
-    //Serial.print( " " );
-
     Wire.write( (byte)( val[ii] & 0xFF ) );
-    //Serial.print( val[ii], HEX );
-    //Serial.print( ", " );
-
     Wire.write( (byte)( val[ii+1] & 0xFF ) );
-    //Serial.print( val[ii+1], HEX );
-    //Serial.print( ", " );
-
     Wire.write( (byte)( val[ii+2] & 0xFF ) );
-    //Serial.print( val[ii+2], HEX );
-    //Serial.print( ", " );
-
     Wire.write( (byte)( val[ii+3] & 0xFF ) );
-    //Serial.println( val[ii+3], HEX );   
-
     Wire.endTransmission( true );
   }
 }
@@ -576,9 +563,6 @@ void configDAC( void )
  */
 void setup()
 {
-  //Wire.begin( I2C_SDA_PIN, I2C_SCL_PIN );
-  //Wire.setClock( 100000 );
-
   Serial.begin(115200);
   Serial.println( "aurora Debug" );
 
@@ -717,7 +701,7 @@ void setup()
   //----------------------------------------------------------------------------
   // Port defaults to 3232
   // ArduinoOTA.setPort(3232);
-
+#if 0
   // Hostname
   ArduinoOTA.setHostname( "OTA-freeDSP-aurora" );
   ArduinoOTA.setPassword( "admin" );
@@ -754,6 +738,9 @@ void setup()
     });
 
   ArduinoOTA.begin();
+#endif
+
+  webota.init( 9999, "/webota" );
 
   wifiStatus = STATE_WIFI_IDLE;
 
@@ -816,23 +803,7 @@ void handleHttpRequest()
                   val[2] = (data >> 8 ) & 0xFF;
                   val[3] = data & 0xFF;
                   ADAU1452_WRITE_BLOCK( reg, val, 4 );         
-                  /*
-                  Serial.print( "I2C " );
-                  byte byteTx = (reg>>8) & 0xff;
-                  Serial.print( byte2string2(byteTx) );
-                  byteTx = reg & 0xff;
-                  Serial.print( byte2string2(byteTx) );
-                  Serial.print( " " ); 
-                  
-                  byteTx = (data>>24) & 0xff;
-                  Serial.print( byte2string2(byteTx) );
-                  byteTx = (data>>16) & 0xff;
-                  Serial.print( byte2string2(byteTx) );
-                  byteTx = (data>>8) & 0xff;
-                  Serial.print( byte2string2(byteTx) );
-                  byteTx = data & 0xff;
-                  Serial.println( byte2string2(byteTx) );
-                  */
+
                   sentBytes += 12;
                 } 
 
@@ -1690,8 +1661,10 @@ void loop()
 
   handleHttpRequest();
 
-  ArduinoOTA.handle();
+  //delay( 50 );
 
-  delay( 50 );
+  webota.handle();
+  webota.delay( 50 );
+	
 
 }
