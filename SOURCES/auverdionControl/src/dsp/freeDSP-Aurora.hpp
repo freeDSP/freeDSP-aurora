@@ -381,9 +381,9 @@ public:
   //============================================================================
   /*! Requests the addon configuration from DSP.
    *
-   *  \return Configuration string.
+   *  \return true if successful, else false.
    */
-  QString requestAddOnConfig( void );
+  bool requestAddOnConfig( void );
 
   //============================================================================
   /*! Sets the connection status of DSP
@@ -413,6 +413,16 @@ public:
   void setDebugMode( bool state )
   {
     debugMode = state;
+  }
+
+  //============================================================================
+  /*! Returns the addon configuration
+   *
+   *  \return Addon Configuration.
+   */
+  QString getAddOnConfig( void )
+  {
+    return configAddOn;
   }
 
 private:

@@ -116,23 +116,25 @@ DialogSettings::DialogSettings( CFreeDspAurora* ptrdsp, QWidget* parent ) :
     ui->comboBoxSpdifInput->addItem( "Optical 3", 0x06 );
     ui->comboBoxSpdifInput->addItem( "Optical 4", 0x07 );
     
-    QString cfg = dsp->requestAddOnConfig();
+    dsp->requestAddOnConfig();
+    QString cfg = dsp->getAddOnConfig();
+    qDebug()<<"cfg "<<cfg;
     
-    if( cfg == "820104" )
+    if( cfg == "03820104" )
       ui->comboBoxSpdifInput->setCurrentIndex( ui->comboBoxSpdifInput->findData( 0x00 ) );
-    else if( cfg == "820105" )
+    else if( cfg == "03820105" )
       ui->comboBoxSpdifInput->setCurrentIndex( ui->comboBoxSpdifInput->findData( 0x01 ) );
-    else if( cfg == "820106" )
+    else if( cfg == "03820106" )
       ui->comboBoxSpdifInput->setCurrentIndex( ui->comboBoxSpdifInput->findData( 0x02 ) );
-    else if( cfg == "820107" )
+    else if( cfg == "03820107" )
       ui->comboBoxSpdifInput->setCurrentIndex( ui->comboBoxSpdifInput->findData( 0x03 ) );
-    else if( cfg == "820100" )
+    else if( cfg == "03820100" )
       ui->comboBoxSpdifInput->setCurrentIndex( ui->comboBoxSpdifInput->findData( 0x04 ) );
-    else if( cfg == "820101" )
+    else if( cfg == "03820101" )
       ui->comboBoxSpdifInput->setCurrentIndex( ui->comboBoxSpdifInput->findData( 0x05 ) );
-    else if( cfg == "820102" )
+    else if( cfg == "03820102" )
       ui->comboBoxSpdifInput->setCurrentIndex( ui->comboBoxSpdifInput->findData( 0x06 ) );
-    else if( cfg == "820103" )
+    else if( cfg == "03820103" )
       ui->comboBoxSpdifInput->setCurrentIndex( ui->comboBoxSpdifInput->findData( 0x07 ) );
 
     ui->comboBoxSpdifInput->blockSignals( false );
@@ -276,10 +278,10 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
   {
     uint32_t numbytes = listNumBytes[ii].toUInt( nullptr, 10 );
 
-    content.append( (numbytes >> 24) & 0xFF );
-    content.append( (numbytes >> 16) & 0xFF );
-    content.append( (numbytes >>  8) & 0xFF );
-    content.append(         numbytes & 0xFF );
+    content.append( static_cast<char>((numbytes >> 24) & 0xFF) );
+    content.append( static_cast<char>((numbytes >> 16) & 0xFF) );
+    content.append( static_cast<char>((numbytes >>  8) & 0xFF) );
+    content.append( static_cast<char>(        numbytes & 0xFF) );
 
     for( uint32_t n = 0; n < numbytes; n++ )
     {

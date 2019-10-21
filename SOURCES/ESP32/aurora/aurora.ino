@@ -588,7 +588,7 @@ void sendAddOnConfiguration( void )
   }
 
   httpResponse += "\r\n";
-  client.println( httpResponse );              
+  client.println( httpResponse );            
 }
 
 //==============================================================================
@@ -613,12 +613,12 @@ void setupAddOn( void )
         Wire.write( readBytes[3] ); // data
         Wire.endTransmission( true );  
 
-        Serial.print( readBytes[1], HEX );
+        /*Serial.print( readBytes[1], HEX );
         Serial.print( " " );
         Serial.print( readBytes[2], HEX );
         Serial.print( " " );
         Serial.println( readBytes[3], HEX );
-        Serial.print( " " );
+        Serial.print( " " );*/
       }
       fileAddOnConfig.close();
     }
@@ -1334,12 +1334,10 @@ void handleHttpRequest()
             //-----------------------------------------------------------------
             //--- Request of addon configuration
             //-----------------------------------------------------------------
-            else if( wifiStatus == STATE_WIFI_POST_ADDONCONFIG )
+            else if( wifiStatus == STATE_WIFI_GET_ADDONCONFIG )
             {
               receivedPostRequest += currentLine;
-              
               sendAddOnConfiguration();
-
               client.stop();
               waitForData = false;
               wifiStatus = STATE_WIFI_IDLE;

@@ -75,7 +75,7 @@ MainWindow::MainWindow( QWidget* parent ) :
   #if defined( __IOS__ ) || defined( __WIN__ ) || defined( __LINUX__ )
   ui->menuBar->hide();
   #endif
-  ui->actionWrite_to_DSP->setEnabled( false );
+  //ui->actionWrite_to_DSP->setEnabled( false );
 
   ptrMainStatusBar = ui->statusBar;
   
@@ -1011,6 +1011,7 @@ void MainWindow::on_actionSettings_triggered()
   int result = dialog.exec();
   if( result == QDialog::Accepted )
   { 
+    enableGui( false );
     jsonObjSettings[ "network" ] = dsp.getConnectionTypeWifi();
     jsonObjSettings[ "ssid" ] = dsp.getSsidWifi();
     jsonObjSettings[ "ip" ] = dsp.getIpAddressLocalWifi();
@@ -1035,7 +1036,7 @@ void MainWindow::on_actionSettings_triggered()
       else if( dialog.getSpdifInput() == 0x07 )
         dsp.sendAddOnConfig( "820103" );
     }
-
+    enableGui( true );
   }
 }
 

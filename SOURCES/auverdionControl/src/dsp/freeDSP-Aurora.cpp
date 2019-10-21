@@ -1134,40 +1134,35 @@ bool CFreeDspAurora::requestAddOnIdWifi( void )
 
   addon = 0;
 
-  if( isConnected )
+  QString wifiIpHost = getIpAddressWifi();
+
+  QString requestString = QString( "GET /aid HTTP/1.1\r\n" )
+                        + QString( "Host: " ) + wifiIpHost + QString( "\r\n" )
+                        + QString( "\r\n" );
+  QByteArray request;
+  request.append( requestString );
+
+  if( writeRequestWifi( request ) )
   {
-    QString wifiIpHost = getIpAddressWifi();
-
-    QString requestString = QString( "GET /aid HTTP/1.1\r\n" )
-                          + QString( "Host: " ) + wifiIpHost + QString( "\r\n" )
-                          + QString( "\r\n" );
-    QByteArray request;
-    request.append( requestString );
-
-    if( writeRequestWifi( request ) )
+    if( !waitForReplyWifi() )
     {
-      if( !waitForReplyWifi() )
-      {
-        QMessageBox::critical( this, tr("Error"), tr("Uuups, could not receive AddOn-Id. Please double check everything and try again."), QMessageBox::Ok ); 
-        return false;
-      }
-      else
-      {
-        QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
-        if( listReply.size() > 4 )
-          addon = listReply.at(4).toUInt();
-        myLog()<<"Installed AddOn: "<<addon;  
-        return true;
-      }
+      QMessageBox::critical( this, tr("Error"), tr("Uuups, could not receive AddOn-Id. Please double check everything and try again."), QMessageBox::Ok ); 
+      return false;
     }
     else
     {
-      QMessageBox::critical( this, tr("Error"), tr("Uups, could not connect to DSP. Did you switch it on?"), QMessageBox::Ok );
-      return false;
+      QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+      if( listReply.size() > 4 )
+        addon = listReply.at(4).toUInt();
+      myLog()<<"Installed AddOn: "<<addon;  
+      return true;
     }
   }
-
-  return false;
+  else
+  {
+    QMessageBox::critical( this, tr("Error"), tr("Uups, could not connect to DSP. Did you switch it on?"), QMessageBox::Ok );
+    return false;
+  }
 }
 
 //==============================================================================
@@ -1412,18 +1407,46 @@ bool CFreeDspAurora::sendAddOnConfig( QString str )
 //==============================================================================
 /*! Requests the addon configuration from DSP.
  *
- *  \return Configuration string.
+ *  \return true if successful, else false.
  */
-QString CFreeDspAurora::requestAddOnConfig( void )
+bool CFreeDspAurora::requestAddOnConfig( void )
 {
   myLog()<<"---------------------------------------------------------------";
   myLog()<<"requestAddOnConfig";
 
   if( isConnected )
   {
-    qDebug()<<"requestAddOnConfig NOT IMPLEMENTED";
-    return configAddOn;
+    QString wifiIpHost = getIpAddressWifi();
+
+    QString requestString = QString( "GET /aconfig HTTP/1.1\r\n" )
+                          + QString( "Host: " ) + wifiIpHost + QString( "\r\n" )
+                          + QString( "\r\n" )
+                          + QString( "\r\n" );
+    QByteArray request;
+    request.append( requestString );
+
+    if( writeRequestWifi( request ) )
+    {
+      if( !waitForReplyWifi() )
+      {
+        QMessageBox::critical( this, tr("Error"), tr("Uuups, could not receive AddOn configuration. Please double check everything and try again."), QMessageBox::Ok ); 
+        return false;
+      }
+      else
+      {
+        QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+        if( listReply.size() > 4 )
+          configAddOn = listReply.at(4);
+        myLog()<<"AddOn Configuration: "<<configAddOn;  
+        return true;
+      }
+    }
+    else
+    {
+      QMessageBox::critical( this, tr("Error"), tr("Uups, could not connect to DSP. Did you switch it on?"), QMessageBox::Ok );
+      return false;
+    }
   }
   else
-    return configAddOn;
+    return false;
 }
