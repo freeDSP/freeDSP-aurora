@@ -8,6 +8,7 @@
 
 #include "AK4458.h"
 #include "AK5558.h"
+#include "WebOTA.h"
 
 // Configuration for hardware rev. 0.9.x
 //#define I2C_SDA_PIN 16
@@ -631,9 +632,6 @@ void setupAddOn( void )
  */
 void setup()
 {
-  //Wire.begin( I2C_SDA_PIN, I2C_SCL_PIN );
-  //Wire.setClock( 100000 );
-
   Serial.begin(115200);
   Serial.println( "aurora Debug" );
   Serial.println( VERSION_STR );
@@ -779,7 +777,6 @@ void setup()
   //----------------------------------------------------------------------------
   // Port defaults to 3232
   // ArduinoOTA.setPort(3232);
-
 #if 0
   // Hostname
   ArduinoOTA.setHostname( "OTA-freeDSP-aurora" );
@@ -818,6 +815,8 @@ void setup()
 
   ArduinoOTA.begin();
 #endif
+
+  webota.init( 9999, "/webota" );
 
   wifiStatus = STATE_WIFI_IDLE;
 
@@ -1946,8 +1945,10 @@ void loop()
 
   handleHttpRequest();
 
-  //ArduinoOTA.handle();
+  //delay( 50 );
 
-  delay( 5 );
+  webota.handle();
+  webota.delay( 5 );
+	
 
 }
