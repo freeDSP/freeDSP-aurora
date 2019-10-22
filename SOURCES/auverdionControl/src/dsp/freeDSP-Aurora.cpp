@@ -371,7 +371,8 @@ uint32_t CFreeDspAurora::requestPidWifi( void )
   myLog()<<"---------------------------------------------------------------";
   myLog()<<"requestPidWifi";
 
-  isConnected = false;
+  if( !debugMode )
+    isConnected = false;
 
   QString wifiIpHost = getIpAddressWifi();
 
@@ -1071,8 +1072,8 @@ bool CFreeDspAurora::storePresetSelection( void )
  */
 bool CFreeDspAurora::requestFirmwareVersionWifi( void )
 {
-  qDebug()<<"---------------------------------------------------------------";
-  qDebug()<<"requestFirmwareVersionWifi";
+  myLog()<<"---------------------------------------------------------------";
+  myLog()<<"requestFirmwareVersionWifi";
 
   versionstr = "0.0.0";
   fwVersion = 0;
@@ -1108,7 +1109,7 @@ bool CFreeDspAurora::requestFirmwareVersionWifi( void )
                       + listVersion.at(2).toUInt( &status, 16 );
                     
         }
-        qDebug()<<"Firmware version:"<<versionstr<<QString::number( fwVersion, 16 );;  
+        myLog()<<"Firmware version:"<<versionstr<<QString::number( fwVersion, 16 );;  
         return true;
       }
     }
@@ -1128,45 +1129,40 @@ bool CFreeDspAurora::requestFirmwareVersionWifi( void )
  */
 bool CFreeDspAurora::requestAddOnIdWifi( void )
 {
-  qDebug()<<"---------------------------------------------------------------";
-  qDebug()<<"requestAddOnIdWifi";
+  myLog()<<"---------------------------------------------------------------";
+  myLog()<<"requestAddOnIdWifi";
 
   addon = 0;
 
-  //if( isConnected )
-  //{
-    QString wifiIpHost = getIpAddressWifi();
+  QString wifiIpHost = getIpAddressWifi();
 
-    QString requestString = QString( "GET /aid HTTP/1.1\r\n" )
-                          + QString( "Host: " ) + wifiIpHost + QString( "\r\n" )
-                          + QString( "\r\n" );
-    QByteArray request;
-    request.append( requestString );
+  QString requestString = QString( "GET /aid HTTP/1.1\r\n" )
+                        + QString( "Host: " ) + wifiIpHost + QString( "\r\n" )
+                        + QString( "\r\n" );
+  QByteArray request;
+  request.append( requestString );
 
-    if( writeRequestWifi( request ) )
+  if( writeRequestWifi( request ) )
+  {
+    if( !waitForReplyWifi() )
     {
-      if( !waitForReplyWifi() )
-      {
-        QMessageBox::critical( this, tr("Error"), tr("Uuups, could not receive AddOn-Id. Please double check everything and try again."), QMessageBox::Ok ); 
-        return false;
-      }
-      else
-      {
-        QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
-        if( listReply.size() > 4 )
-          addon = listReply.at(4).toUInt();
-        qDebug()<<"Installed AddOn: "<<addon;  
-        return true;
-      }
+      QMessageBox::critical( this, tr("Error"), tr("Uuups, could not receive AddOn-Id. Please double check everything and try again."), QMessageBox::Ok ); 
+      return false;
     }
     else
     {
-      QMessageBox::critical( this, tr("Error"), tr("Uups, could not connect to DSP. Did you switch it on?"), QMessageBox::Ok );
-      return false;
+      QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+      if( listReply.size() > 4 )
+        addon = listReply.at(4).toUInt();
+      myLog()<<"Installed AddOn: "<<addon;  
+      return true;
     }
-  //}
-
-  return false;
+  }
+  else
+  {
+    QMessageBox::critical( this, tr("Error"), tr("Uups, could not connect to DSP. Did you switch it on?"), QMessageBox::Ok );
+    return false;
+  }
 }
 
 //==============================================================================
@@ -1176,41 +1172,281 @@ bool CFreeDspAurora::requestAddOnIdWifi( void )
  */
 bool CFreeDspAurora::storeAddOnIdWifi( quint32 aid )
 {
-  qDebug()<<"---------------------------------------------------------------";
-  qDebug()<<"storeAddOnIdWifi";
+  myLog()<<"---------------------------------------------------------------";
+  myLog()<<"storeAddOnIdWifi";
 
-  QString wifiIpHost = getIpAddressWifi();
+  addon = aid;
 
-  QByteArray content;
-  content.append( aid );
-
-  QString requestString = QString("POST /aid HTTP/1.1\r\n")
-                        + QString("Host: ") + wifiIpHost + QString("\r\n")
-                        + QString("Content-type:text/plain\r\n")
-                        + QString("Content-length: ") +  QString::number( content.size()*2 ) + QString("\r\n")
-                        + QString("\r\n")
-                        + content.toHex()
-                        + QString("\r\n");
-  QByteArray request;
-  request.append( requestString );  
-  
-  writeRequestWifi( request );
-
-  if( !waitForReplyWifi() )
-    return false;
-  else
+  if( isConnected )
   {
-    qDebug()<<QString( replyDSP );
-    QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
-    if( listReply.at(4) == "ACK" )
+    QString wifiIpHost = getIpAddressWifi();
+
+    QByteArray content;
+    content.append( aid );
+
+    QString requestString = QString("POST /aid HTTP/1.1\r\n")
+                          + QString("Host: ") + wifiIpHost + QString("\r\n")
+                          + QString("Content-type:text/plain\r\n")
+                          + QString("Content-length: ") +  QString::number( content.size()*2 ) + QString("\r\n")
+                          + QString("\r\n")
+                          + content.toHex()
+                          + QString("\r\n");
+    QByteArray request;
+    request.append( requestString );  
+    
+    writeRequestWifi( request );
+
+    if( !waitForReplyWifi() )
     {
-      addon = aid;
-      return true;
+      QMessageBox::critical( this, tr("Error"), tr("Did not receive ACK from DSP. Please double-check everything and try again."), QMessageBox::Ok ); 
+      return false;
     }
     else
     {
-      QMessageBox::critical( this, tr("Error"), tr("Could not store the AddOn-Id. Please double-check everything and try again."), QMessageBox::Ok ); 
+      myLog()<<QString( replyDSP );
+      QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+      if( listReply.at(4) == "ACK" )
+      {
+        return true;
+      }
+      else
+      {
+        QMessageBox::critical( this, tr("Error"), tr("Could not store the AddOn-Id. Please double-check everything and try again."), QMessageBox::Ok ); 
+        return false;
+      }
+    }
+  }
+  return false;
+}
+
+//==============================================================================
+/*! Sends a pure i2c message to write to a slave on the i2c bus.
+ *
+ *  \param addr Address of i2c slave.
+ *  \param reg Regsiter of i2c slave.
+ *  \param data Data written to i2c slave.
+ *  \return true if successful, else false.
+ */
+bool CFreeDspAurora::writeI2C( const int8_t addr, const int8_t reg, const int8_t data )
+{
+  myLog()<<"---------------------------------------------------------------";
+  myLog()<<"writeI2C";
+
+  if( isConnected )
+  {
+    QString wifiIpHost = getIpAddressWifi();
+
+    QByteArray content;
+    content.append( addr );
+    content.append( reg );
+    content.append( data );
+
+    QString requestString = QString("POST /writei2c HTTP/1.1\r\n")
+                          + QString("Host: ") + wifiIpHost + QString("\r\n")
+                          + QString("Content-type:text/plain\r\n")
+                          + QString("Content-length: ") +  QString::number( content.size()*2 ) + QString("\r\n")
+                          + QString("\r\n")
+                          + content.toHex()
+                          + QString("\r\n");
+    QByteArray request;
+    request.append( requestString );  
+    
+    writeRequestWifi( request );
+
+    if( !waitForReplyWifi() )
+    {
+      QMessageBox::critical( this, tr("Error"), tr("Did not receive ACK from DSP. Please double-check everything and try again."), QMessageBox::Ok ); 
+      return false;
+    }
+    else
+    {
+      qDebug()<<QString( replyDSP );
+      QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+      if( listReply.at(4) == "ACK" )
+      {
+        return true;
+      }
+      else
+      {
+        QMessageBox::critical( this, tr("Error"), tr("Could not write i2c message to DSP. Please double-check everything and try again."), QMessageBox::Ok ); 
+        return false;
+      }
+    }
+  }
+  return false;
+}
+
+//==============================================================================
+/*! Reads from a slave on the i2c bus.
+ *
+ *  \param addr Address of i2c slave.
+ *  \param reg Regsiter of i2c slave.
+ *  \param data Data from i2c slave.
+ *  \return true if successful, else false.
+ */
+bool CFreeDspAurora::readI2C( const int8_t addr, const int8_t reg, int8_t& data )
+{
+  myLog()<<"---------------------------------------------------------------";
+  myLog()<<"readI2C";
+
+  if( isConnected )
+  {
+    QString wifiIpHost = getIpAddressWifi();
+
+    QByteArray content;
+    content.append( addr );
+    content.append( reg );
+
+    QString requestString = QString("POST /readi2c HTTP/1.1\r\n")
+                          + QString("Host: ") + wifiIpHost + QString("\r\n")
+                          + QString("Content-type:text/plain\r\n")
+                          + QString("Content-length: ") +  QString::number( content.size()*2 ) + QString("\r\n")
+                          + QString("\r\n")
+                          + content.toHex()
+                          + QString("\r\n");
+    QByteArray request;
+    request.append( requestString );  
+    
+    if( writeRequestWifi( request ) )
+    {
+      if( !waitForReplyWifi() )
+      {
+        QMessageBox::critical( this, tr("Error"), tr("Uuups, could not read i2c slave register. Please double check everything and try again."), QMessageBox::Ok ); 
+        return false;
+      }
+      else
+      {
+        QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+        qDebug()<<replyDSP;
+        if( listReply.size() > 4 )
+        {   
+          QString str = listReply.at(4);
+          if( str.length() >= 2 )
+          {
+            bool ok;
+            uint8_t data = str.mid( 0, 2 ).toUInt( &ok, 16 );
+            return true;
+          }
+          else
+          {
+            QMessageBox::critical( this, tr("Error"), tr("Uuups, i2c response not complete. Please double check everything and try again."), QMessageBox::Ok ); 
+            return false;
+          }
+        }
+        else
+        {
+          QMessageBox::critical( this, tr("Error"), tr("Uuups, did not receive full DSP response. Please double check everything and try again."), QMessageBox::Ok ); 
+          return false;
+        }
+      }
+    }
+    else
+    {
+      QMessageBox::critical( this, tr("Error"), tr("Uups, could not connect to DSP. Did you switch it on?"), QMessageBox::Ok );
       return false;
     }
   }
+  return false;
+}
+
+//==============================================================================
+/*! Sends the addon configuration to DSP.
+ *
+ *  \param str Configuration string.
+ *  \return true if successful, else false.
+ */
+bool CFreeDspAurora::sendAddOnConfig( QString str )
+{
+  myLog()<<"---------------------------------------------------------------";
+  myLog()<<"sendAddOnConfig";
+
+  configAddOn = str;
+
+  if( isConnected )
+  {
+    QString wifiIpHost = getIpAddressWifi();
+
+    //QByteArray content;
+    //content.append( str );
+
+    QString requestString = QString("POST /aconfig HTTP/1.1\r\n")
+                          + QString("Host: ") + wifiIpHost + QString("\r\n")
+                          + QString("Content-type:text/plain\r\n")
+                          + QString("Content-length: ") +  QString::number( str.size() ) + QString("\r\n")
+                          + QString("\r\n")
+                          + str
+                          + QString("\r\n");
+    QByteArray request;
+    request.append( requestString );  
+    
+    writeRequestWifi( request );
+
+    if( !waitForReplyWifi() )
+    {
+      QMessageBox::critical( this, tr("Error"), tr("Did not receive ACK from DSP. Please double-check everything and try again."), QMessageBox::Ok ); 
+      return false;
+    }
+    else
+    {
+      qDebug()<<QString( replyDSP );
+      QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+      if( listReply.at(4) == "ACK" )
+      {
+        return true;
+      }
+      else
+      {
+        QMessageBox::critical( this, tr("Error"), tr("Could not write addon configuration to DSP. Please double-check everything and try again."), QMessageBox::Ok ); 
+        return false;
+      }
+    }
+  }
+  return false;
+}
+
+//==============================================================================
+/*! Requests the addon configuration from DSP.
+ *
+ *  \return true if successful, else false.
+ */
+bool CFreeDspAurora::requestAddOnConfig( void )
+{
+  myLog()<<"---------------------------------------------------------------";
+  myLog()<<"requestAddOnConfig";
+
+  if( isConnected )
+  {
+    QString wifiIpHost = getIpAddressWifi();
+
+    QString requestString = QString( "GET /aconfig HTTP/1.1\r\n" )
+                          + QString( "Host: " ) + wifiIpHost + QString( "\r\n" )
+                          + QString( "\r\n" )
+                          + QString( "\r\n" );
+    QByteArray request;
+    request.append( requestString );
+
+    if( writeRequestWifi( request ) )
+    {
+      if( !waitForReplyWifi() )
+      {
+        QMessageBox::critical( this, tr("Error"), tr("Uuups, could not receive AddOn configuration. Please double check everything and try again."), QMessageBox::Ok ); 
+        return false;
+      }
+      else
+      {
+        QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+        if( listReply.size() > 4 )
+          configAddOn = listReply.at(4);
+        myLog()<<"AddOn Configuration: "<<configAddOn;  
+        return true;
+      }
+    }
+    else
+    {
+      QMessageBox::critical( this, tr("Error"), tr("Uups, could not connect to DSP. Did you switch it on?"), QMessageBox::Ok );
+      return false;
+    }
+  }
+  else
+    return false;
 }

@@ -101,6 +101,47 @@ DialogSettings::DialogSettings( CFreeDspAurora* ptrdsp, QWidget* parent ) :
   ui->labelFirmwareVersion->setText( dsp->getFirmwareVersion() );
   ui->labelAccessPointIP->setText( dsp->getIpAddressAP() );
   ui->labelLocalWiFiIP->setText( dsp->getIpAddressLocalWifi() );
+
+  if( dsp->getAddOnId() == ADDONB )
+  {
+    ui->comboBoxSpdifInput->clear();
+
+    ui->comboBoxSpdifInput->blockSignals( true );
+    ui->comboBoxSpdifInput->addItem( "Coax 1", 0x00 );
+    ui->comboBoxSpdifInput->addItem( "Coax 2", 0x01 );
+    ui->comboBoxSpdifInput->addItem( "Coax 3", 0x02 );
+    ui->comboBoxSpdifInput->addItem( "Coax 4", 0x03 );
+    ui->comboBoxSpdifInput->addItem( "Optical 1", 0x04 );
+    ui->comboBoxSpdifInput->addItem( "Optical 2", 0x05 );
+    ui->comboBoxSpdifInput->addItem( "Optical 3", 0x06 );
+    ui->comboBoxSpdifInput->addItem( "Optical 4", 0x07 );
+    
+    dsp->requestAddOnConfig();
+    QString cfg = dsp->getAddOnConfig();
+    qDebug()<<"cfg "<<cfg;
+    
+    if( cfg == "03820104" )
+      ui->comboBoxSpdifInput->setCurrentIndex( ui->comboBoxSpdifInput->findData( 0x00 ) );
+    else if( cfg == "03820105" )
+      ui->comboBoxSpdifInput->setCurrentIndex( ui->comboBoxSpdifInput->findData( 0x01 ) );
+    else if( cfg == "03820106" )
+      ui->comboBoxSpdifInput->setCurrentIndex( ui->comboBoxSpdifInput->findData( 0x02 ) );
+    else if( cfg == "03820107" )
+      ui->comboBoxSpdifInput->setCurrentIndex( ui->comboBoxSpdifInput->findData( 0x03 ) );
+    else if( cfg == "03820100" )
+      ui->comboBoxSpdifInput->setCurrentIndex( ui->comboBoxSpdifInput->findData( 0x04 ) );
+    else if( cfg == "03820101" )
+      ui->comboBoxSpdifInput->setCurrentIndex( ui->comboBoxSpdifInput->findData( 0x05 ) );
+    else if( cfg == "03820102" )
+      ui->comboBoxSpdifInput->setCurrentIndex( ui->comboBoxSpdifInput->findData( 0x06 ) );
+    else if( cfg == "03820103" )
+      ui->comboBoxSpdifInput->setCurrentIndex( ui->comboBoxSpdifInput->findData( 0x07 ) );
+
+    ui->comboBoxSpdifInput->blockSignals( false );
+  }
+  else
+    ui->tabWidgetSettings->removeTab( 1 );
+
 }
 
 DialogSettings::~DialogSettings()
@@ -237,10 +278,10 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
   {
     uint32_t numbytes = listNumBytes[ii].toUInt( nullptr, 10 );
 
-    content.append( (numbytes >> 24) & 0xFF );
-    content.append( (numbytes >> 16) & 0xFF );
-    content.append( (numbytes >>  8) & 0xFF );
-    content.append(         numbytes & 0xFF );
+    content.append( static_cast<char>((numbytes >> 24) & 0xFF) );
+    content.append( static_cast<char>((numbytes >> 16) & 0xFF) );
+    content.append( static_cast<char>((numbytes >>  8) & 0xFF) );
+    content.append( static_cast<char>(        numbytes & 0xFF) );
 
     for( uint32_t n = 0; n < numbytes; n++ )
     {
@@ -411,10 +452,10 @@ void DialogSettings::on_pushButtonVerifyPlugin_clicked()
   {
     uint32_t numbytes = listNumBytes[ii].toUInt( nullptr, 10 );
 
-    content.append( (numbytes >> 24) & 0xFF );
-    content.append( (numbytes >> 16) & 0xFF );
-    content.append( (numbytes >>  8) & 0xFF );
-    content.append(         numbytes & 0xFF );
+    content.append( static_cast<char>((numbytes >> 24) & 0xFF) );
+    content.append( static_cast<char>((numbytes >> 16) & 0xFF) );
+    content.append( static_cast<char>((numbytes >>  8) & 0xFF) );
+    content.append( static_cast<char>(        numbytes & 0xFF) );
 
     for( uint32_t n = 0; n < numbytes; n++ )
     {
@@ -580,4 +621,60 @@ void DialogSettings::on_lineEditIpAddress_editingFinished()
 void DialogSettings::on_comboBoxAddOnId_currentIndexChanged( int index )
 {
   dsp->storeAddOnIdWifi( ui->comboBoxAddOnId->itemData( index ).toUInt() );
+
+  if( ui->comboBoxAddOnId->itemData( index ).toUInt() == ADDONB )
+  {
+    ui->comboBoxSpdifInput->clear();
+
+    ui->comboBoxSpdifInput->blockSignals( true );
+    ui->comboBoxSpdifInput->addItem( "Coax 1", 0x00 );
+    ui->comboBoxSpdifInput->addItem( "Coax 2", 0x01 );
+    ui->comboBoxSpdifInput->addItem( "Coax 3", 0x02 );
+    ui->comboBoxSpdifInput->addItem( "Coax 4", 0x03 );
+    ui->comboBoxSpdifInput->addItem( "Optical 1", 0x04 );
+    ui->comboBoxSpdifInput->addItem( "Optical 2", 0x05 );
+    ui->comboBoxSpdifInput->addItem( "Optical 3", 0x06 );
+    ui->comboBoxSpdifInput->addItem( "Optical 4", 0x07 );
+    ui->comboBoxSpdifInput->blockSignals( false );
+
+    ui->tabWidgetSettings->insertTab( 1, ui->tabAddOn, "AddOn" );
+  }
+  else if( ui->tabWidgetSettings->tabText( 1 ) == QString("AddOn") )
+    ui->tabWidgetSettings->removeTab( 1 );
+  
 }
+
+//==============================================================================
+/*!
+ */
+void DialogSettings::on_comboBoxSpdifInput_currentIndexChanged(int index)
+{
+  if( dsp->getAddOnId() == ADDONB )
+  {
+    if( ui->comboBoxSpdifInput->itemData( index ).toUInt() == 0x00 )
+      dsp->writeI2C( 0x82, 0x01, 0x04 );
+    else if( ui->comboBoxSpdifInput->itemData( index ).toUInt() == 0x01 )
+      dsp->writeI2C( 0x82, 0x01, 0x05 );
+    else if( ui->comboBoxSpdifInput->itemData( index ).toUInt() == 0x02 )
+      dsp->writeI2C( 0x82, 0x01, 0x06 );
+    else if( ui->comboBoxSpdifInput->itemData( index ).toUInt() == 0x03 )
+      dsp->writeI2C( 0x82, 0x01, 0x07 );
+    else if( ui->comboBoxSpdifInput->itemData( index ).toUInt() == 0x04 )
+      dsp->writeI2C( 0x82, 0x01, 0x00 );
+    else if( ui->comboBoxSpdifInput->itemData( index ).toUInt() == 0x05 )
+      dsp->writeI2C( 0x82, 0x01, 0x01 );
+    else if( ui->comboBoxSpdifInput->itemData( index ).toUInt() == 0x06 )
+      dsp->writeI2C( 0x82, 0x01, 0x02 );
+    else if( ui->comboBoxSpdifInput->itemData( index ).toUInt() == 0x07 )
+      dsp->writeI2C( 0x82, 0x01, 0x03 );
+  }
+}
+
+//==============================================================================
+/*!
+ */
+unsigned int DialogSettings::getSpdifInput( void )
+{
+  return ui->comboBoxSpdifInput->itemData( ui->comboBoxSpdifInput->currentIndex() ).toUInt();
+}
+

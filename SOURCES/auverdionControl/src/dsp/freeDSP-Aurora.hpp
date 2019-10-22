@@ -1,5 +1,6 @@
-#ifndef SIGMADSP_HPP
-#define SIGMADSP_HPP
+//#ifndef SIGMADSP_HPP
+//#define SIGMADSP_HPP
+#pragma once
 
 #include <cstdint>
 #include <cmath>
@@ -80,12 +81,6 @@ public:
    *
    */
   bool requestUserParameterWifi( QByteArray& userparams );
-
-  
-
-
-
-
 
   //============================================================================
   /*!
@@ -355,6 +350,81 @@ public:
     sendParameterWifi( content );
   }
 
+  //============================================================================
+  /*! Sends a pure i2c message to write to a slave on the i2c bus.
+   *
+   *  \param addr Address of i2c slave.
+   *  \param reg Regsiter of i2c slave.
+   *  \param data Data written to i2c slave.
+   *  \return true if successful, else false.
+   */
+  bool writeI2C( const int8_t addr, const int8_t reg, const int8_t data );
+
+  //============================================================================
+  /*! Reads from a slave on the i2c bus.
+   *
+   *  \param addr Address of i2c slave.
+   *  \param reg Regsiter of i2c slave.
+   *  \param data Data from i2c slave.
+   *  \return true if successful, else false.
+   */
+  bool readI2C( const int8_t addr, const int8_t reg, int8_t& data );
+
+  //============================================================================
+  /*! Sends the addon configuration to DSP.
+   *
+   *  \param str Configuration string.
+   *  \return true if successful, else false.
+   */
+  bool sendAddOnConfig( QString str );
+
+  //============================================================================
+  /*! Requests the addon configuration from DSP.
+   *
+   *  \return true if successful, else false.
+   */
+  bool requestAddOnConfig( void );
+
+  //============================================================================
+  /*! Sets the connection status of DSP
+   *
+   *  \param state Connection status.
+   */
+  void setIsConnected( bool state )
+  {
+    isConnected = state;
+  }
+
+  //============================================================================
+  /*! Returns the connection status of DSP
+   *
+   *  \return Connection status.
+   */
+  bool setIsConnected( void )
+  {
+    return isConnected;
+  }
+
+  //============================================================================
+  /*! Sets the debug mode
+   *
+   *  \param state Debug mode.
+   */
+  void setDebugMode( bool state )
+  {
+    debugMode = state;
+  }
+
+  //============================================================================
+  /*! Returns the addon configuration
+   *
+   *  \return Addon Configuration.
+   */
+  QString getAddOnConfig( void )
+  {
+    return configAddOn;
+  }
+
 private:
   //============================================================================
   /*!
@@ -403,7 +473,9 @@ private:
   quint32 addon;
   uint16_t addrMute;
   float masterVolume;
+  bool debugMode = false;
+  QString configAddOn;
 
 };
 
-#endif // SIGMADSP_HPP
+//#endif // SIGMADSP_HPP

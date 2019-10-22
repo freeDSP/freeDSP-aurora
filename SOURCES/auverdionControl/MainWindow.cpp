@@ -31,7 +31,7 @@
 
 extern CLogFile myLog;
 
-#define VERSION_STR "1.0.3"
+#define VERSION_STR "1.1.0"
 #define FS 48000.0
 
 using namespace Vektorraum;
@@ -75,7 +75,7 @@ MainWindow::MainWindow( QWidget* parent ) :
   #if defined( __IOS__ ) || defined( __WIN__ ) || defined( __LINUX__ )
   ui->menuBar->hide();
   #endif
-  ui->actionWrite_to_DSP->setEnabled( false );
+  //ui->actionWrite_to_DSP->setEnabled( false );
 
   ptrMainStatusBar = ui->statusBar;
   
@@ -1011,10 +1011,32 @@ void MainWindow::on_actionSettings_triggered()
   int result = dialog.exec();
   if( result == QDialog::Accepted )
   { 
+    enableGui( false );
     jsonObjSettings[ "network" ] = dsp.getConnectionTypeWifi();
     jsonObjSettings[ "ssid" ] = dsp.getSsidWifi();
     jsonObjSettings[ "ip" ] = dsp.getIpAddressLocalWifi();
     writeSettings();
+
+    if( dsp.getAddOnId() == DialogSettings::ADDONB )
+    {
+      if( dialog.getSpdifInput() == 0x00 )
+        dsp.sendAddOnConfig( "820104" );
+      else if( dialog.getSpdifInput() == 0x01 )
+        dsp.sendAddOnConfig( "820105" );
+      else if( dialog.getSpdifInput() == 0x02 )
+        dsp.sendAddOnConfig( "820106" );
+      else if( dialog.getSpdifInput() == 0x03 )
+        dsp.sendAddOnConfig( "820107" );
+      else if( dialog.getSpdifInput() == 0x04 )
+        dsp.sendAddOnConfig( "820100" );
+      else if( dialog.getSpdifInput() == 0x05 )
+        dsp.sendAddOnConfig( "820101" );
+      else if( dialog.getSpdifInput() == 0x06 )
+        dsp.sendAddOnConfig( "820102" );
+      else if( dialog.getSpdifInput() == 0x07 )
+        dsp.sendAddOnConfig( "820103" );
+    }
+    enableGui( true );
   }
 }
 
