@@ -60,6 +60,11 @@ private:
    */
   void writeSettings( void );
 
+  //==============================================================================
+  /*!
+   */
+  void switchPluginGui( uint32_t pid );
+
 
 public slots:
   void showLicense( void );

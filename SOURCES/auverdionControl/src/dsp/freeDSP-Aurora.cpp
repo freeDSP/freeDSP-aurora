@@ -13,7 +13,8 @@
 extern CLogFile myLog;
 extern void setStatusBarMessage( QString str );
 
-#define TIMEOUT_WIFI (60000)
+#warning Change to 60000
+#define TIMEOUT_WIFI (10000)
 
 //==============================================================================
 /*! Constructor
@@ -1070,7 +1071,7 @@ bool CFreeDspAurora::storePresetSelection( void )
 /*! Returns the firmware version of the board.
  *
  */
-bool CFreeDspAurora::requestFirmwareVersionWifi( void )
+bool CFreeDspAurora::requestFirmwareVersionWifi( bool showmessage )
 {
   myLog()<<"---------------------------------------------------------------";
   myLog()<<"requestFirmwareVersionWifi";
@@ -1115,7 +1116,8 @@ bool CFreeDspAurora::requestFirmwareVersionWifi( void )
     }
     else
     {
-      QMessageBox::critical( this, tr("Error"), tr("Uups, could not connect to DSP. Did you switch it on?"), QMessageBox::Ok );
+      if( showmessage )
+        QMessageBox::critical( this, tr("Error"), tr("Uups, could not connect to DSP. Did you switch it on?"), QMessageBox::Ok );
       return false;
     }
   //}
@@ -1216,7 +1218,11 @@ bool CFreeDspAurora::storeAddOnIdWifi( quint32 aid )
       }
     }
   }
-  return false;
+  else
+  {
+    myLog()<<"Not connected to DSP.";
+    return false;
+  }
 }
 
 //==============================================================================
@@ -1273,7 +1279,11 @@ bool CFreeDspAurora::writeI2C( const int8_t addr, const int8_t reg, const int8_t
       }
     }
   }
-  return false;
+  else
+  {
+    myLog()<<"Not connected to DSP.";
+    return false;
+  }
 }
 
 //==============================================================================
@@ -1401,7 +1411,11 @@ bool CFreeDspAurora::sendAddOnConfig( QString str )
       }
     }
   }
-  return false;
+  else
+  {
+    myLog()<<"Not connected to DSP.";
+    return false;
+  }
 }
 
 //==============================================================================
@@ -1448,5 +1462,8 @@ bool CFreeDspAurora::requestAddOnConfig( void )
     }
   }
   else
+  {
+    myLog()<<"Not connected to DSP.";
     return false;
+  }
 }

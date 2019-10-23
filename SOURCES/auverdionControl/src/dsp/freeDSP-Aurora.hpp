@@ -68,7 +68,7 @@ public:
   //============================================================================
   /*! Requests the firmware version of the board.
    */
-  bool requestFirmwareVersionWifi( void );
+  bool requestFirmwareVersionWifi( bool showmessage = true );
 
   //============================================================================
   /*! Requests the PID of current installed DSP-Plugin
@@ -400,7 +400,7 @@ public:
    *
    *  \return Connection status.
    */
-  bool setIsConnected( void )
+  bool getIsConnected( void )
   {
     return isConnected;
   }
