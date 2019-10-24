@@ -13,8 +13,7 @@
 extern CLogFile myLog;
 extern void setStatusBarMessage( QString str );
 
-#warning Change to 60000
-#define TIMEOUT_WIFI (10000)
+#define TIMEOUT_WIFI (60000)
 
 //==============================================================================
 /*! Constructor

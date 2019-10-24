@@ -528,7 +528,31 @@ void MainWindow::on_actionRead_from_DSP_triggered()
     ui->statusBar->showMessage("Ready");
     ui->actionWrite_to_DSP->setEnabled( true );
 
-    if( !jsonObjSettings["msg0001"].toBool() )
+    myLog()<<"Fw Version: "<<dsp.getFwVersion();
+    if( dsp.getFwVersion() < 0x010100 )
+    {
+      if( !jsonObjSettings["msg0002"].toBool() )
+      {
+        DialogReleaseNotes dlg( this );
+        dlg.setWindowTitle( "Release Note" );
+        dlg.setReleaseNote( QString( "There is a new firmware available for your Aurora DSP!\n" )
+                          + QString( "New features and changes are:\n" )
+                          + QString( "- Full support of AddOnB (S/P-DIF multiplexer)\n" )
+                          + QString( "- DAC mute function\n" )
+                          + QString( "- New WbeOTA interface for future firmware updates\n" )
+                          + QString( "Please download the latest firmware and install it.\nIn the user manual (UserManual.pdf) you will find instructions how to update the firmware." ) );
+        int result = dlg.exec();
+        if( result == QDialog::Accepted )
+        {
+          if( dlg.getDontShowAgain() )
+          {
+            jsonObjSettings["msg0002"] = true;
+            writeSettings();
+          }
+        }
+      }
+    }
+    else if( !jsonObjSettings["msg0001"].toBool() )
     {
       if( dsp.getFirmwareVersion() == "1.0.0" )
       {
@@ -546,14 +570,11 @@ void MainWindow::on_actionRead_from_DSP_triggered()
         }
       }
     }
+    
   }
   else
   {
     msgBox->accept();
-    //int ret = QMessageBox::question( this, 
-    //                                 tr("Connecting to DSP"),
-    //                                 tr("There is no DSP responding. Do you want to run auverdionControl in offline mode?") );
-
     QMessageBox msgQuestion;
     msgQuestion.setText( tr("There is no DSP responding. Do you want to run auverdionControl in offline mode?") );
     //msgQuestion.setInformativeText("Do you want to save your changes?");

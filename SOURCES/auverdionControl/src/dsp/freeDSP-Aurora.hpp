@@ -181,6 +181,13 @@ public:
   {
     return versionstr;
   }
+
+  uint32_t getFwVersion( void )
+  {
+    return fwVersion;
+  }
+
+  //============================================================================
   /*! Stores the current selected preset as default.
    *
    */
