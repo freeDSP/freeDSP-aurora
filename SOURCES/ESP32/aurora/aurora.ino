@@ -8,6 +8,7 @@
 
 #include "AK4458.h"
 #include "AK5558.h"
+#include "WebOTA.h"
 
 // Configuration for hardware rev. 0.9.x
 //#define I2C_SDA_PIN 16
@@ -18,7 +19,7 @@
 #define I2C_SDA_PIN 17
 #define I2C_SCL_PIN 16
 
-#define VERSION_STR "1.0.2"
+#define VERSION_STR "1.1.0"
 
 #define FORMAT_SPIFFS_IF_FAILED true
 
@@ -28,8 +29,15 @@
 #define AK5558_I2C_ADDR    (0x22>>1)
 // DAC address on I2C bus
 #define AK4458_I2C_ADDR    (0x20>>1)
+// S/P-DIF-Mux on AddOnB
+#define ADDONB_SPDIFMUX_ADDR (0x82>>1)
 
 #define NUMPRESETS (4)
+
+#define POST_WRITEI2C     "POST /writei2c"
+#define POST_READI2C      "POST /readi2c"
+#define POST_ADDONCONFIG  "POST /aconfig"
+#define GET_ADDONCONFIG   "GET /aconfig"
 
 enum twifistatus
 {
@@ -41,7 +49,11 @@ enum twifistatus
   STATE_WIFI_RECEIVE_PID,
   STATE_WIFI_RECEIVE_DSPPARAM,
   STATE_WIFI_RECEIVE_AID,
-  STATE_WIFI_RECEIVE_PRESETID
+  STATE_WIFI_RECEIVE_PRESETID,
+  STATE_WIFI_RECEIVE_WRITEI2C,
+  STATE_WIFI_RECEIVE_READI2C,
+  STATE_WIFI_POST_ADDONCONFIG,
+  STATE_WIFI_GET_ADDONCONFIG
 };
 
 enum taddonid
@@ -72,6 +84,7 @@ float dspValue;
 File fileDspProgram;
 File fileDspParams;
 File fileUserParams;
+File fileAddOnConfig;
 
 WiFiClient client;
 WiFiServer server( 80 );
@@ -83,8 +96,7 @@ String receivedPostRequest;
 
 String presetUsrparamFile[4] = { "/usrparam.001", "/usrparam.002", "/usrparam.003", "/usrparam.004" };
 String presetDspparamFile[4] = { "/dspparam.001", "/dspparam.002", "/dspparam.003", "/dspparam.004" };
-
-//TwoWire WireDSP(1);
+String presetAddonCfgFile[4] = { "/addoncfg.001", "/addoncfg.002", "/addoncfg.003", "/addoncfg.004" };
 
 //==============================================================================
 /*! 
@@ -92,19 +104,10 @@ String presetDspparamFile[4] = { "/dspparam.001", "/dspparam.002", "/dspparam.00
 void ADAU1452_WRITE_REGISTER( uint16_t reg, byte msb, byte lsb ) 
 {
   Wire.beginTransmission( DSP_ADDR );
-
   Wire.write( (byte)( (reg >> 8) & 0xFF ) );
   Wire.write( (byte)(  reg       & 0xFF ) );
-  //Serial.print( reg, HEX );
-  //Serial.print( " " );
-
   Wire.write( msb );
-  //Serial.print( msb, HEX );
-  //Serial.print( ", " );
-
-  Wire.write( lsb );
-  //Serial.println( lsb, HEX );
-  
+  Wire.write( lsb ); 
   Wire.endTransmission( true );
 }
 
@@ -118,24 +121,10 @@ void ADAU1452_WRITE_BLOCK( uint16_t regaddr, byte val[], uint16_t len )
     Wire.beginTransmission( DSP_ADDR );
     Wire.write( (byte)( (regaddr >> 8) & 0xFF ) );
     Wire.write( (byte)(  regaddr       & 0xFF ) );
-    //Serial.print( regaddr, HEX );
-    //Serial.print( " " );
-
     Wire.write( (byte)( val[ii] & 0xFF ) );
-    //Serial.print( val[ii], HEX );
-    //Serial.print( ", " );
-
     Wire.write( (byte)( val[ii+1] & 0xFF ) );
-    //Serial.print( val[ii+1], HEX );
-    //Serial.print( ", " );
-
     Wire.write( (byte)( val[ii+2] & 0xFF ) );
-    //Serial.print( val[ii+2], HEX );
-    //Serial.print( ", " );
-
     Wire.write( (byte)( val[ii+3] & 0xFF ) );
-    //Serial.println( val[ii+3], HEX );   
-
     Wire.endTransmission( true );
   }
 }
@@ -224,6 +213,7 @@ void saveSettings( void )
   jsonSettings["pid"] = Settings.pid;
   jsonSettings["ssid"] = Settings.ssid; // max 32 charachters
   jsonSettings["pwd"] = Settings.password;  // max 64 charachters
+  jsonSettings["aid"] = Settings.addonid;
   jsonSettings["preset"] = Settings.currentPreset;
   // Serialize JSON to file
   if( serializeJson( jsonSettings, fileSettings ) == 0 )
@@ -572,15 +562,79 @@ void configDAC( void )
 }
 
 //==============================================================================
+/*! Sends the current addon configuration. 
+ */
+void sendAddOnConfiguration( void )
+{
+  String httpResponse = "";
+  httpResponse += "HTTP/1.1 200 OK\r\n";
+  httpResponse += "Content-type:text/plain\r\n\r\n";
+
+  if( SPIFFS.exists( presetAddonCfgFile[Settings.currentPreset] ) )
+  {
+    fileAddOnConfig = SPIFFS.open( presetAddonCfgFile[Settings.currentPreset], "r" );
+    if( fileAddOnConfig )
+    {
+      size_t len = fileAddOnConfig.size();
+      int cntr = 0;
+      while( cntr < len )
+      {
+        byte byteRead;
+        fileAddOnConfig.read( &byteRead, 1 );
+        httpResponse += byte2string2( byteRead );
+        cntr++;
+      }
+      fileAddOnConfig.close();
+    }
+  }
+
+  httpResponse += "\r\n";
+  client.println( httpResponse );            
+}
+
+//==============================================================================
+/*! Set up the addon. 
+ *
+ */
+void setupAddOn( void )
+{
+  if( SPIFFS.exists( presetAddonCfgFile[Settings.currentPreset] ) )
+  {
+    fileAddOnConfig = SPIFFS.open( presetAddonCfgFile[Settings.currentPreset], "r" );
+    if( fileAddOnConfig )
+    {
+      size_t len = fileAddOnConfig.size();
+      
+      if( len > 3 )
+      {
+        byte readBytes[4];
+        fileAddOnConfig.read( readBytes, 4 );
+        Wire.beginTransmission( readBytes[1]>>1 ); //ADDONB_SPDIFMUX_ADDR
+        Wire.write( readBytes[2] ); // regaddr
+        Wire.write( readBytes[3] ); // data
+        Wire.endTransmission( true );  
+
+        /*Serial.print( readBytes[1], HEX );
+        Serial.print( " " );
+        Serial.print( readBytes[2], HEX );
+        Serial.print( " " );
+        Serial.println( readBytes[3], HEX );
+        Serial.print( " " );*/
+      }
+      fileAddOnConfig.close();
+    }
+  }            
+}
+
+//==============================================================================
 /*! Arduino Setup
+ *
  */
 void setup()
 {
-  //Wire.begin( I2C_SDA_PIN, I2C_SCL_PIN );
-  //Wire.setClock( 100000 );
-
   Serial.begin(115200);
   Serial.println( "aurora Debug" );
+  Serial.println( VERSION_STR );
 
   if( !SPIFFS.begin( FORMAT_SPIFFS_IF_FAILED ) )
   {
@@ -676,17 +730,10 @@ void setup()
   Serial.println( WiFi.localIP() );
   Serial.println( WiFi.getHostname() );
 
-  server.begin();
-
-  // Add service to MDNS-SD
-  //MDNS.addService( "http", "tcp", 8088 );
-  
+  server.begin();  
 
   Wire.begin( I2C_SDA_PIN, I2C_SCL_PIN );
   Wire.setClock( 100000 );
-
-  //WireDSP.begin( I2C_SDA_PIN, I2C_SCL_DSP_PIN );
-  //WireDSP.setClock( 100000 );
 
   //----------------------------------------------------------------------------
   //--- Download program to DSP
@@ -710,14 +757,27 @@ void setup()
   Serial.println( "Config DAC" );
   configDAC();
 
-  
+  //----------------------------------------------------------------------------
+  //--- Configure MUX on AddOnB
+  //----------------------------------------------------------------------------
+  if( Settings.addonid == ADDON_B )
+  {
+    Serial.println( "Config MUX" );
+ 
+    Wire.beginTransmission( ADDONB_SPDIFMUX_ADDR );
+    Wire.write( 0x03 );
+    Wire.write( 0x00 );
+    Wire.endTransmission( true );
 
+    setupAddOn();
+  }
+  
   //----------------------------------------------------------------------------
   //--- Start OTA
   //----------------------------------------------------------------------------
   // Port defaults to 3232
   // ArduinoOTA.setPort(3232);
-
+#if 0
   // Hostname
   ArduinoOTA.setHostname( "OTA-freeDSP-aurora" );
   ArduinoOTA.setPassword( "admin" );
@@ -754,6 +814,9 @@ void setup()
     });
 
   ArduinoOTA.begin();
+#endif
+
+  webota.init( 9999, "/webota" );
 
   wifiStatus = STATE_WIFI_IDLE;
 
@@ -775,13 +838,13 @@ void handleHttpRequest()
   
   if( client )                              // if you get a client,
   {
-    String currentLine = "";                 // make a String to hold incoming data from the client
+    String currentLine = "";                // make a string to hold incoming data from the client
     
-    while( client.connected() )            // loop while the client's connected
+    while( client.connected() )             // loop while the client's connected
     {  
-      if( client.available() )            // if there's bytes to read from the client,
+      if( client.available() )              // if there's bytes to read from the client,
       {  
-        char c = client.read();            // read a byte, then
+        char c = client.read();             // read a byte, then
 
         if(c != '\r')   // if you got anything else but a carriage return character,
           currentLine += c;      // add it to the end of the currentLine
@@ -816,23 +879,7 @@ void handleHttpRequest()
                   val[2] = (data >> 8 ) & 0xFF;
                   val[3] = data & 0xFF;
                   ADAU1452_WRITE_BLOCK( reg, val, 4 );         
-                  /*
-                  Serial.print( "I2C " );
-                  byte byteTx = (reg>>8) & 0xff;
-                  Serial.print( byte2string2(byteTx) );
-                  byteTx = reg & 0xff;
-                  Serial.print( byte2string2(byteTx) );
-                  Serial.print( " " ); 
-                  
-                  byteTx = (data>>24) & 0xff;
-                  Serial.print( byte2string2(byteTx) );
-                  byteTx = (data>>16) & 0xff;
-                  Serial.print( byte2string2(byteTx) );
-                  byteTx = (data>>8) & 0xff;
-                  Serial.print( byte2string2(byteTx) );
-                  byteTx = data & 0xff;
-                  Serial.println( byte2string2(byteTx) );
-                  */
+
                   sentBytes += 12;
                 } 
 
@@ -1120,10 +1167,8 @@ void handleHttpRequest()
                 if( Settings.currentPreset > 3 )
                   Settings.currentPreset = 3;
 
-                Serial.print( "Preset: " );
-                Serial.println( Settings.currentPreset, HEX );
-
                 uploadDspParameter();
+                setupAddOn();
 
                 String httpResponse = "";
                 httpResponse += "HTTP/1.1 200 OK\r\n";
@@ -1131,12 +1176,172 @@ void handleHttpRequest()
                 httpResponse += "ACK";
                 httpResponse += "\r\n";
                 client.println( httpResponse );
+                Serial.print( "[OK]" );
 
                 client.stop();
                 waitForData = false;
                 wifiStatus = STATE_WIFI_IDLE;
               }
             }
+
+            //-----------------------------------------------------------------
+            //--- Receiving I2C write sequence
+            //-----------------------------------------------------------------
+            else if( wifiStatus == STATE_WIFI_RECEIVE_WRITEI2C )
+            {
+              receivedPostRequest += currentLine;
+
+              if( receivedPostRequest.length() > contentLength )
+              {
+                receivedPostRequest = receivedPostRequest.substring( 0, receivedPostRequest.length()-1 );
+
+                if( receivedPostRequest.length() >= 6 )
+                {
+                  int offset = 0;
+                  String str = receivedPostRequest.substring( offset, offset + 2 );
+                  uint8_t addr = (uint8_t)strtoul( str.c_str(), NULL, 16 );
+                  offset += 2;
+                  str = receivedPostRequest.substring( offset, offset + 2 );
+                  byte regaddr = (byte)strtoul( str.c_str(), NULL, 16 );
+                  offset += 2;
+                  str = receivedPostRequest.substring( offset, offset + 2 );
+                  byte data = (byte)strtoul( str.c_str(), NULL, 16 );
+                  offset += 2;
+
+                  Wire.beginTransmission( addr>>1 );
+                  Wire.write( regaddr );
+                  Wire.write( data );
+                  Wire.endTransmission( true );
+
+                  Serial.print( "I2C: " );
+                  Serial.print( addr, HEX );
+                  Serial.print( " " );
+                  Serial.print( regaddr, HEX );
+                  Serial.print( " " );
+                  Serial.println( data, HEX );
+                  Serial.print( " " );
+
+                  String httpResponse = "";
+                  httpResponse += "HTTP/1.1 200 OK\r\n";
+                  httpResponse += "Content-type:text/plain\r\n\r\n";
+                  httpResponse += "ACK";
+                  httpResponse += "\r\n";
+                  client.println( httpResponse );
+                  Serial.println( "[OK]" );
+
+                  client.stop();
+                  waitForData = false;
+                  wifiStatus = STATE_WIFI_IDLE;
+                }
+
+              }
+            }
+
+            //-----------------------------------------------------------------
+            //--- Receiving a new addon configuration
+            //-----------------------------------------------------------------
+            else if( wifiStatus == STATE_WIFI_POST_ADDONCONFIG )
+            {
+              receivedPostRequest += currentLine;
+
+              if( receivedPostRequest.length() > contentLength )
+              {
+                receivedPostRequest = receivedPostRequest.substring( 0, receivedPostRequest.length()-1 );
+
+                if( receivedPostRequest.length() >= 6 )
+                {
+                  int offset = 0;
+                  String str = receivedPostRequest.substring( offset, offset + 2 );
+                  uint8_t addr = (uint8_t)strtoul( str.c_str(), NULL, 16 );
+                  offset += 2;
+                  str = receivedPostRequest.substring( offset, offset + 2 );
+                  byte regaddr = (byte)strtoul( str.c_str(), NULL, 16 );
+                  offset += 2;
+                  str = receivedPostRequest.substring( offset, offset + 2 );
+                  byte data = (byte)strtoul( str.c_str(), NULL, 16 );
+                  offset += 2;
+
+                  bool haveError = false;
+                  if( SPIFFS.exists( presetAddonCfgFile[Settings.currentPreset] ) )
+                  {
+                    if( !SPIFFS.remove( presetAddonCfgFile[Settings.currentPreset] ) )
+                    {
+                      Serial.println( "<ERR> Delete file" ); 
+                      haveError = true;
+                    } 
+                  }
+
+                  fileAddOnConfig = SPIFFS.open( presetAddonCfgFile[Settings.currentPreset], "w" );
+                  if( !fileAddOnConfig )
+                  {
+                    Serial.println( "<ERR> Open file" ); 
+                    haveError = true;
+                  } 
+                  else
+                  {
+                    byte writeBytes[4];
+                    writeBytes[0] = 3;
+                    writeBytes[1] = addr;
+                    writeBytes[2] = regaddr;
+                    writeBytes[3] = data;
+                    /*
+                    Serial.print( "I2C: " );
+                    Serial.print( addr, HEX );
+                    Serial.print( " " );
+                    Serial.print( regaddr, HEX );
+                    Serial.print( " " );
+                    Serial.println( data, HEX );
+                    Serial.print( " " );
+                    */
+                    size_t len = fileAddOnConfig.write( writeBytes, 4 );
+                    if( len != 4 )
+                    {
+                      Serial.println( "<ERR> Write file" ); 
+                      haveError = true;
+                    }
+
+                    fileAddOnConfig.flush();
+                    fileAddOnConfig.close();
+                  }
+
+                  if( !haveError )
+                  {
+                    String httpResponse = "";
+                    httpResponse += "HTTP/1.1 200 OK\r\n";
+                    httpResponse += "Content-type:text/plain\r\n\r\n";
+                    httpResponse += "ACK";
+                    httpResponse += "\r\n";
+                    client.println( httpResponse );
+                    Serial.println( "[OK]" );
+                  }
+                  else
+                  {
+                    String httpResponse = "";
+                    httpResponse += "HTTP/1.1 200 OK\r\n";
+                    httpResponse += "Content-type:text/plain\r\n\r\n";
+                    httpResponse += "ERR";
+                    httpResponse += "\r\n";
+                    client.println( httpResponse );
+                  }
+                  client.stop();
+                  waitForData = false;
+                  wifiStatus = STATE_WIFI_IDLE;
+                }
+              }
+            }
+
+            //-----------------------------------------------------------------
+            //--- Request of addon configuration
+            //-----------------------------------------------------------------
+            else if( wifiStatus == STATE_WIFI_GET_ADDONCONFIG )
+            {
+              receivedPostRequest += currentLine;
+              sendAddOnConfiguration();
+              client.stop();
+              waitForData = false;
+              wifiStatus = STATE_WIFI_IDLE;
+            }
+            
 
             currentLine = "";
             //Serial.println( cntrPackets );
@@ -1418,7 +1623,7 @@ void handleHttpRequest()
             //-----------------------------------------------------------------
             else if( currentLine.startsWith("POST /aid") )
             {
-              Serial.println( "POST /pid" );
+              Serial.println( "POST /aid" );
               receivedPostRequest = "";
               wifiStatus = STATE_WIFI_RECEIVE_AID;
               currentLine = "";
@@ -1640,6 +1845,56 @@ void handleHttpRequest()
               //cntrPackets++;
             }
 
+            //-----------------------------------------------------------------
+            //--- Receiving a new i2c write sequence
+            //-----------------------------------------------------------------
+            else if( currentLine.startsWith( POST_WRITEI2C ) )
+            {
+              Serial.println( POST_WRITEI2C );
+              receivedPostRequest = "";
+              wifiStatus = STATE_WIFI_RECEIVE_WRITEI2C;
+              currentLine = "";
+              //cntrPackets++;
+            }
+
+            //-----------------------------------------------------------------
+            //--- Receiving a new i2c read sequence
+            //-----------------------------------------------------------------
+            else if( currentLine.startsWith( POST_READI2C ) )
+            {
+              // NOT FINISHED YET
+              Serial.println( POST_READI2C );
+              receivedPostRequest = "";
+              wifiStatus = STATE_WIFI_RECEIVE_READI2C;
+              currentLine = "";
+              //cntrPackets++;
+            }
+
+            //-----------------------------------------------------------------
+            //--- Receiving a new addon configuration
+            //-----------------------------------------------------------------
+            else if( currentLine.startsWith( POST_ADDONCONFIG ) )
+            {
+              Serial.println( POST_ADDONCONFIG );
+              receivedPostRequest = "";
+              wifiStatus = STATE_WIFI_POST_ADDONCONFIG;
+              currentLine = "";
+              //cntrPackets++;
+            }
+
+            //-----------------------------------------------------------------
+            //--- Request of addon configuration
+            //-----------------------------------------------------------------
+            else if( currentLine.startsWith( GET_ADDONCONFIG ) )
+            {
+              Serial.println( GET_ADDONCONFIG );
+              receivedPostRequest = "";
+              wifiStatus = STATE_WIFI_GET_ADDONCONFIG;
+              currentLine = "";
+              //cntrPackets++;
+            }
+
+
             else if( currentLine.startsWith("Host:") )
             {
               //Serial.println( currentLine );
@@ -1655,7 +1910,7 @@ void handleHttpRequest()
             //--- Content-length
             else if( currentLine.startsWith( "Content-length" ) )
             {
-              Serial.println( currentLine );
+              //Serial.println( currentLine );
               String str = currentLine.substring( currentLine.indexOf(':') + 1, currentLine.length() );
               contentLength = (uint32_t)strtoul( str.c_str(), NULL, 10 );
               receivedBytes = 0;
@@ -1690,8 +1945,10 @@ void loop()
 
   handleHttpRequest();
 
-  ArduinoOTA.handle();
+  //delay( 50 );
 
-  delay( 50 );
+  webota.handle();
+  webota.delay( 5 );
+	
 
 }

@@ -1,4 +1,4 @@
-### Module positions - created on 2019 May 15, Wednesday 16:47:16 ###
+### Module positions - created on 2019 October 26, Saturday 23:05:40 ###
 ### Printed by Pcbnew version kicad (5.1.0-0)
 ## Unit = mm, Angle = deg.
 ## Side : top
@@ -435,6 +435,7 @@ R417      RES_2K00_1%_0.125W_Thick_0805   C0805-RES                             
 R418      RES_100K_1%_0.125W_Thick_0805   C0805-RES                                      176.1000  -146.8000    0.0000  top
 R419      RES_80K6_1%_0.125W_Thick_0805   C0805-RES                                      186.4000  -144.9000   90.0000  top
 R420      RES_120K_1%_0.125W_Thick_0805   C0805-RES                                      188.4000  -141.3000   90.0000  top
+R421      RES_10K0_1%_0.125W_Thick_0805   C0805-RES                                      161.0000  -134.3000    0.0000  top
 R501      RES_10K0_1%_0.125W_Thick_0805   C0805-RES                                      184.8000   -91.5000  270.0000  top
 SW501     SW_Push                         SW_SPST_B3U-1000P                              195.9000   -99.3000  180.0000  top
 ## End
