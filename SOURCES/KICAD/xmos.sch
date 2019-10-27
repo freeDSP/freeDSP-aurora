@@ -611,7 +611,7 @@ Text HLabel 4050 6100 3    39   Output ~ 0
 SCL
 Text HLabel 4150 6100 3    39   Output ~ 0
 SDA
-Text HLabel 9700 1650 0    39   Input ~ 0
+Text HLabel 9650 1650 0    39   Input ~ 0
 ~RST
 $Comp
 L freeDSP-aurora-rescue:VDD #PWR0246
@@ -734,7 +734,7 @@ F 3 "" H 11300 1550 50  0000 C CNN
 	1    11300 1550
 	1    0    0    -1  
 $EndComp
-Text Label 9550 1850 0    39   ~ 0
+Text Label 9500 1850 0    39   ~ 0
 XSYS_RST_N
 Text Label 11150 1650 2    39   ~ 0
 RST_N
@@ -1353,7 +1353,7 @@ Wire Wire Line
 Wire Wire Line
 	4150 1500 4150 1700
 Wire Wire Line
-	9700 1650 10050 1650
+	9650 1650 10050 1650
 Connection ~ 4100 1500
 Wire Wire Line
 	3950 1050 3950 1700
@@ -1474,7 +1474,7 @@ Wire Wire Line
 Wire Wire Line
 	10050 1750 10100 1750
 Wire Wire Line
-	9550 1850 10100 1850
+	9500 1850 9900 1850
 Wire Wire Line
 	10700 1650 10800 1650
 Wire Wire Line
@@ -3117,4 +3117,36 @@ F 3 "" H 4350 6000 50  0000 C CNN
 	1    4350 6000
 	1    0    0    -1  
 $EndComp
+$Comp
+L freeDSP-aurora-rescue:VDD #PWR0401
+U 1 1 5DB93C2B
+P 9900 1300
+F 0 "#PWR0401" H 9900 1150 50  0001 C CNN
+F 1 "VDD" H 9900 1450 39  0000 C CNN
+F 2 "" H 9900 1300 50  0000 C CNN
+F 3 "" H 9900 1300 50  0000 C CNN
+	1    9900 1300
+	1    0    0    -1  
+$EndComp
+$Comp
+L freeDSP-aurora-rescue:RES_10K0_1%_0.25W_Thin_0805 R421
+U 1 1 5DB93C36
+P 9900 1450
+F 0 "R421" H 9900 1450 39  0000 C CNN
+F 1 "RES_10K0_1%_0.125W_Thick_0805" H 9900 1275 39  0001 C CNN
+F 2 "rklib:C0805-RES" H 9900 1225 39  0001 C CNN
+F 3 "" H 9900 1450 50  0000 C CNN
+F 4 "10K0" H 9900 1375 39  0000 C CNN "Value1"
+F 5 "1% 0.125W Thick" H 9900 1325 39  0001 C CNN "Value2"
+F 6 "311-10.0KCRCT-ND" H 9900 1150 39  0001 C CNN "digikey"
+F 7 "Yageo" H 1200 100 50  0001 C CNN "Manufacturer"
+F 8 "RC0805FR-0710KL" H 1200 100 50  0001 C CNN "pn"
+	1    9900 1450
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	9900 1600 9900 1850
+Connection ~ 9900 1850
+Wire Wire Line
+	9900 1850 10100 1850
 $EndSCHEMATC
