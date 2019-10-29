@@ -12,7 +12,18 @@
 #include <QProcess>
 #include <QProgressBar>
 
+#include "../../../ESP32/aurora/ak4458.h"
+
 #define NUMPRESETS (4)
+
+// DSP address on I2C bus
+#define DSP_ADDR           (0x70)
+// ADC address on I2C bus
+#define AK5558_I2C_ADDR    (0x22)
+// DAC address on I2C bus
+#define AK4458_I2C_ADDR    (0x20)
+// S/P-DIF-Mux on AddOnB
+#define ADDONB_SPDIFMUX_ADDR (0x82)
 
 class CFreeDspAurora : public QWidget
 {
@@ -430,6 +441,22 @@ public:
   QString getAddOnConfig( void )
   {
     return configAddOn;
+  }
+
+  //============================================================================
+  /*! Mutes the DAC outputs
+   */
+  bool muteDAC( void )
+  {
+    return writeI2C( AK4458_I2C_ADDR, AK4458_CONTROL2, 0b00100011 );
+  }
+
+  //============================================================================
+  /*! Unmutes the DAC outputs
+   */
+  bool unmuteDAC( void )
+  {
+    return writeI2C( AK4458_I2C_ADDR, AK4458_CONTROL2, 0b00100010 );
   }
 
 private:

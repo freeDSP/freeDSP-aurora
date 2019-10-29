@@ -475,7 +475,10 @@ void MainWindow::on_actionRead_from_DSP_triggered()
   
     //--------------------------------------------------------------------------
     //--- Request user parameters
-    //--------------------------------------------------------------------------
+    //-------------------------------------------------------------------------- 
+    dsp.muteDAC();
+    QThread::msleep( 200 );
+   
     ui->statusBar->showMessage("Reading user parameter.......");
 
     for( unsigned int p = 0; p < NUMPRESETS; p++ )
@@ -519,6 +522,8 @@ void MainWindow::on_actionRead_from_DSP_triggered()
     ui->tabPresets->blockSignals( false );  
 
     updatePlots();
+
+    dsp.unmuteDAC();
 
     setEnabled( true );
     disconnect( &timerWait, SIGNAL(timeout()), this, SLOT(updateWaitingForConnect()) );
@@ -728,6 +733,9 @@ void MainWindow::on_actionWrite_to_DSP_triggered()
   progress.setWindowModality(Qt::WindowModal);
   int progressValue = 0;
 
+  dsp.muteDAC();
+  QThread::msleep( 200 );
+
   for( int p = 0; p < NUMPRESETS; p++ )
   {
     dsp.mute();
@@ -811,10 +819,12 @@ void MainWindow::on_actionWrite_to_DSP_triggered()
   dsp.storePresetSelection();
 
   myLog()<<"Success";
-  qDebug()<<"File size dspparam.hex:"<<dspparams[0].size() / 1024<<"KiB";
-  qDebug()<<"File size usrparam.hex:"<<usrparams[0].size() / 1024<<"KiB";
+  //qDebug()<<"File size dspparam.hex:"<<dspparams[0].size() / 1024<<"KiB";
+  //qDebug()<<"File size usrparam.hex:"<<usrparams[0].size() / 1024<<"KiB";
 
   QMessageBox::information( this, tr("Success"), tr("You have successfully stored your settings!"), QMessageBox::Ok );
+
+  dsp.unmuteDAC();
 
 }
 
@@ -1020,6 +1030,9 @@ void MainWindow::on_tabPresets_currentChanged( int index )
   {
     ui->statusBar->showMessage("Switching preset.......");
 
+    dsp.muteDAC();
+    QThread::msleep( 200 );
+
     msgBox = new QMessageBox( QMessageBox::Information, tr("Waiting"), tr("Switching preset..."), QMessageBox::Cancel, this );
     msgBox->setStandardButtons( nullptr );
     msgBox->open();
@@ -1047,6 +1060,9 @@ void MainWindow::on_tabPresets_currentChanged( int index )
     dsp.setMasterVolume( dspPlugin[currentPreset]->getMasterVolume() );
 
     msgBox->accept();
+
+    dsp.unmuteDAC();
+    
     ui->statusBar->showMessage("Ready");
   }
 }
