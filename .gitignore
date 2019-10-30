@@ -27,3 +27,5 @@ SOURCES/build-auverdionControl-Desktop_Qt_5_13_1_clang_64bit-Debug
 SOURCES/build-auverdionControl-Desktop_Qt_5_12_5_MSVC2017_64bit-Debug
 SOURCES/build-auverdionControl-Desktop_Qt_5_12_5_clang_64bit-Debug
 .DS_Store
+SOURCES/build-auverdionControl-Desktop_Qt_5_12_5_MSVC2017_64bit-Release
+SOURCES/build-auverdionControl-Desktop_Qt_5_12_5_clang_64bit-Release
