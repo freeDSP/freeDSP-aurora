@@ -481,7 +481,7 @@ void MainWindow::on_actionRead_from_DSP_triggered()
    
     ui->statusBar->showMessage("Reading user parameter.......");
 
-    for( unsigned int p = 0; p < NUMPRESETS; p++ )
+    for( int p = 0; p < NUMPRESETS; p++ )
     {
       dsp.mute();
 
@@ -515,7 +515,7 @@ void MainWindow::on_actionRead_from_DSP_triggered()
     loopWaitForReply.exec();
 
     dsp.selectPresetWifi( preset );
-    dsp.setMasterVolume( dspPlugin[currentPreset]->getMasterVolume() );
+    dsp.setMasterVolume( static_cast<float>(dspPlugin[currentPreset]->getMasterVolume()) );
 
     ui->tabPresets->blockSignals( true );
     ui->tabPresets->setCurrentIndex( currentPreset );
@@ -611,7 +611,7 @@ void MainWindow::on_actionRead_from_DSP_triggered()
         else if( dialog.comboBox()->currentText() == QString("Home Cinema 7.1") )
           switchPluginGui( CFreeDspAurora::PLUGIN_HOMECINEMA71 );
 
-        for( unsigned int p = 0; p < NUMPRESETS; p++ )
+        for( int p = 0; p < NUMPRESETS; p++ )
         {
           dsp.selectPresetWifi( p );
           QByteArray userparams;
@@ -1029,6 +1029,7 @@ void MainWindow::on_tabPresets_currentChanged( int index )
   if( (index >= 0) && (index < NUMPRESETS) )
   {
     ui->statusBar->showMessage("Switching preset.......");
+    enableGui( false );
 
     dsp.muteDAC();
     QThread::msleep( 200 );
@@ -1039,7 +1040,7 @@ void MainWindow::on_tabPresets_currentChanged( int index )
 
     //dspPlugin[currentPreset]->setMasterVolume( -120, true );
 
-    dsp.mute();
+    //dsp.mute();
 
     QEventLoop loopWaitForReply;
     QTimer timerWait;
@@ -1057,12 +1058,13 @@ void MainWindow::on_tabPresets_currentChanged( int index )
     //dspPlugin[currentPreset]->setMasterVolume( ui->volumeSliderMain->value(), false );
 
     dsp.selectPresetWifi( index );
-    dsp.setMasterVolume( dspPlugin[currentPreset]->getMasterVolume() );
+    dsp.setMasterVolume( static_cast<float>(dspPlugin[currentPreset]->getMasterVolume()) );
 
     msgBox->accept();
 
-    dsp.unmuteDAC();
+    //dsp.unmuteDAC();
     
+    enableGui( true );
     ui->statusBar->showMessage("Ready");
   }
 }
