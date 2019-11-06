@@ -167,8 +167,6 @@ F 5 "SN74HC251DR" H -3450 450 50  0001 C CNN "pn"
 	1    4800 5000
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	3950 4450 4250 4450
 $Comp
 L rkdev:PLR135_T10 X110
 U 1 1 5C910C18
@@ -248,11 +246,9 @@ Connection ~ 1600 4750
 Wire Wire Line
 	1200 4650 1750 4650
 Wire Wire Line
-	4250 4550 3950 4550
+	4250 4650 3900 4650
 Wire Wire Line
-	4250 4650 3950 4650
-Wire Wire Line
-	4250 4750 3950 4750
+	4250 4750 3900 4750
 $Comp
 L power:GND #PWR0126
 U 1 1 5C9BD6F3
@@ -1750,13 +1746,9 @@ Wire Wire Line
 Wire Wire Line
 	2300 3800 2050 3800
 Connection ~ 2300 3800
-Text Label 3950 4450 0    39   ~ 0
-DIG_LEFT
-Text Label 3950 4550 0    39   ~ 0
-DIG_RIGHT
-Text Label 3950 4650 0    39   ~ 0
+Text Label 3900 4650 0    39   ~ 0
 DIGSEL:1
-Text Label 3950 4750 0    39   ~ 0
+Text Label 3900 4750 0    39   ~ 0
 DIGSEL:0
 $Comp
 L power:GND #PWR04
@@ -1774,33 +1766,15 @@ Wire Wire Line
 Wire Wire Line
 	4200 4900 4250 4900
 Wire Wire Line
-	3750 4650 3750 5400
-Wire Wire Line
-	3750 5400 4250 5400
+	3750 4650 3750 5100
 Wire Wire Line
 	2100 4650 3750 4650
-Wire Wire Line
-	3700 5500 4250 5500
 Wire Wire Line
 	4250 5600 4200 5600
 Connection ~ 4200 5600
 Wire Wire Line
-	4200 5600 4200 5300
-Wire Wire Line
-	4250 5300 4200 5300
-Connection ~ 4200 5300
-Wire Wire Line
-	4200 5300 4200 5200
-Wire Wire Line
 	4250 5200 4200 5200
 Connection ~ 4200 5200
-Wire Wire Line
-	4200 5200 4200 5100
-Wire Wire Line
-	4250 5100 4200 5100
-Connection ~ 4200 5100
-Wire Wire Line
-	4200 5100 4200 5000
 Wire Wire Line
 	4250 5000 4200 5000
 Connection ~ 4200 5000
@@ -1961,35 +1935,18 @@ F 6 "ED2983-ND" H 9150 4700 39  0001 C CNN "digikey"
 	1    9150 5350
 	1    0    0    -1  
 $EndComp
-$Comp
-L Connector:USB_A X9
-U 1 1 5D5D7FB2
-P 9950 5350
-F 0 "X9" H 10000 5775 39  0000 R CNN
-F 1 "USB_A" H 10050 5700 39  0000 R CNN
-F 2 "Connector_USB:USB_A_CNCTech_1001-011-01101_Horizontal" H 10100 5300 50  0001 C CNN
-F 3 " ~" H 10100 5300 50  0001 C CNN
-	1    9950 5350
-	-1   0    0    -1  
-$EndComp
-Wire Wire Line
-	9450 5150 9650 5150
-Wire Wire Line
-	9450 5350 9650 5350
-Wire Wire Line
-	9450 5450 9650 5450
 Wire Wire Line
 	9150 5750 9150 5800
 Wire Wire Line
-	9150 5800 9950 5800
+	9150 5800 9800 5800
 Wire Wire Line
-	9950 5800 9950 5750
+	9800 5800 9800 5450
 Wire Wire Line
 	9050 5750 9050 5850
 Wire Wire Line
-	9050 5850 10050 5850
+	9050 5850 9850 5850
 Wire Wire Line
-	10050 5850 10050 5750
+	9850 5850 9850 5550
 $Comp
 L Connector:TestPoint B2
 U 1 1 5D13828C
@@ -2040,4 +1997,55 @@ Wire Wire Line
 Connection ~ 7200 1200
 Wire Wire Line
 	7200 1200 7200 1400
+Text Label 9500 5350 0    39   ~ 0
+D+
+Text Label 9500 5450 0    39   ~ 0
+D-
+$Comp
+L Connector_Generic:Conn_01x05 X9
+U 1 1 5DBC0107
+P 10100 5350
+F 0 "X9" H 10180 5384 39  0000 L CNN
+F 1 "HDR_01x05" H 10180 5309 39  0000 L CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical" H 10100 5350 50  0001 C CNN
+F 3 "~" H 10100 5350 50  0001 C CNN
+	1    10100 5350
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9450 5150 9900 5150
+Wire Wire Line
+	9850 5550 9900 5550
+Wire Wire Line
+	9900 5450 9800 5450
+Wire Wire Line
+	9450 5350 9900 5350
+Wire Wire Line
+	9750 5450 9750 5250
+Wire Wire Line
+	9750 5250 9900 5250
+Wire Wire Line
+	9450 5450 9750 5450
+Wire Wire Line
+	4200 4900 4200 4550
+Wire Wire Line
+	4200 4450 4250 4450
+Connection ~ 4200 4900
+Wire Wire Line
+	4250 4550 4200 4550
+Connection ~ 4200 4550
+Wire Wire Line
+	4200 4550 4200 4450
+Wire Wire Line
+	4200 5000 4200 5200
+Wire Wire Line
+	4250 5100 3750 5100
+Wire Wire Line
+	4200 5200 4200 5600
+Wire Wire Line
+	4250 5300 3750 5300
+Wire Wire Line
+	3750 5300 3750 5500
+Wire Wire Line
+	3750 5500 3700 5500
 $EndSCHEMATC
