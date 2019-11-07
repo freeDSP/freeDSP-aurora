@@ -131,6 +131,8 @@ void QInputSelect::sendDspParameter( void )
 {
   enableGui( false );
 
+  qDebug()<<"QInputSelect::sendDspParameter";
+
   if( dsp->getFirmwareVersion() != "1.0.0" )
   {
     QByteArray content;
@@ -158,6 +160,7 @@ uint32_t QInputSelect::getNumBytes( void )
  */
 void QInputSelect::on_comboBoxInput_currentIndexChanged( int  )
 {
+  qDebug()<<"***on_comboBoxInput_currentIndexChanged";
   sendDspParameter();
   emit valueChanged();
 }
@@ -206,10 +209,12 @@ void QInputSelect::setUserParams( QByteArray& userParams, int& idx )
  */
 QByteArray QInputSelect::getDspParams( void )
 {
+  qDebug()<<"QInputSelect::getDspParam";
+
   QByteArray content;
 
-  if( dsp->getFirmwareVersion() != "1.0.0" )
-  {
+  //if( dsp->getFirmwareVersion() != "1.0.0" )
+  //{
     //--- Analog Inputs ---
     if( ui->comboBoxInput->currentText() == QString( "Analog 1" ) )
     {
@@ -341,12 +346,14 @@ QByteArray QInputSelect::getDspParams( void )
     {
       content.append( dsp->makeParameterForWifi( addr[kChannelSPDIF], 0x00000000 ) );
       content.append( dsp->makeParameterForWifi( addr[kSelectPort], kChannelSPDIF ) );
+      qDebug()<<"addr[kChannelSPDIF]"<<addr[kChannelSPDIF];
     }
     else if( ui->comboBoxInput->currentText() == QString( "SPDIF 2" ) )
     {
       content.append( dsp->makeParameterForWifi( addr[kChannelSPDIF], 0x00000001 ) );
       content.append( dsp->makeParameterForWifi( addr[kSelectPort], kChannelSPDIF ) );
+      qDebug()<<"addr[kChannelSPDIF]"<<addr[kChannelSPDIF];
     }
-  }
+  //}
   return content;
 }
