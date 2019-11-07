@@ -475,10 +475,13 @@ void MainWindow::on_actionRead_from_DSP_triggered()
   
     //--------------------------------------------------------------------------
     //--- Request user parameters
-    //--------------------------------------------------------------------------
+    //-------------------------------------------------------------------------- 
+    dsp.muteDAC();
+    QThread::msleep( 200 );
+   
     ui->statusBar->showMessage("Reading user parameter.......");
 
-    for( unsigned int p = 0; p < NUMPRESETS; p++ )
+    for( int p = 0; p < NUMPRESETS; p++ )
     {
       dsp.mute();
 
@@ -512,13 +515,15 @@ void MainWindow::on_actionRead_from_DSP_triggered()
     loopWaitForReply.exec();
 
     dsp.selectPresetWifi( preset );
-    dsp.setMasterVolume( dspPlugin[currentPreset]->getMasterVolume() );
+    dsp.setMasterVolume( static_cast<float>(dspPlugin[currentPreset]->getMasterVolume()) );
 
     ui->tabPresets->blockSignals( true );
     ui->tabPresets->setCurrentIndex( currentPreset );
     ui->tabPresets->blockSignals( false );  
 
     updatePlots();
+
+    dsp.unmuteDAC();
 
     setEnabled( true );
     disconnect( &timerWait, SIGNAL(timeout()), this, SLOT(updateWaitingForConnect()) );
@@ -606,7 +611,7 @@ void MainWindow::on_actionRead_from_DSP_triggered()
         else if( dialog.comboBox()->currentText() == QString("Home Cinema 7.1") )
           switchPluginGui( CFreeDspAurora::PLUGIN_HOMECINEMA71 );
 
-        for( unsigned int p = 0; p < NUMPRESETS; p++ )
+        for( int p = 0; p < NUMPRESETS; p++ )
         {
           dsp.selectPresetWifi( p );
           QByteArray userparams;
@@ -728,6 +733,9 @@ void MainWindow::on_actionWrite_to_DSP_triggered()
   progress.setWindowModality(Qt::WindowModal);
   int progressValue = 0;
 
+  dsp.muteDAC();
+  QThread::msleep( 200 );
+
   for( int p = 0; p < NUMPRESETS; p++ )
   {
     dsp.mute();
@@ -811,10 +819,12 @@ void MainWindow::on_actionWrite_to_DSP_triggered()
   dsp.storePresetSelection();
 
   myLog()<<"Success";
-  qDebug()<<"File size dspparam.hex:"<<dspparams[0].size() / 1024<<"KiB";
-  qDebug()<<"File size usrparam.hex:"<<usrparams[0].size() / 1024<<"KiB";
+  //qDebug()<<"File size dspparam.hex:"<<dspparams[0].size() / 1024<<"KiB";
+  //qDebug()<<"File size usrparam.hex:"<<usrparams[0].size() / 1024<<"KiB";
 
   QMessageBox::information( this, tr("Success"), tr("You have successfully stored your settings!"), QMessageBox::Ok );
+
+  dsp.unmuteDAC();
 
 }
 
@@ -1019,6 +1029,10 @@ void MainWindow::on_tabPresets_currentChanged( int index )
   if( (index >= 0) && (index < NUMPRESETS) )
   {
     ui->statusBar->showMessage("Switching preset.......");
+    enableGui( false );
+
+    dsp.muteDAC();
+    QThread::msleep( 200 );
 
     msgBox = new QMessageBox( QMessageBox::Information, tr("Waiting"), tr("Switching preset..."), QMessageBox::Cancel, this );
     msgBox->setStandardButtons( nullptr );
@@ -1026,7 +1040,7 @@ void MainWindow::on_tabPresets_currentChanged( int index )
 
     //dspPlugin[currentPreset]->setMasterVolume( -120, true );
 
-    dsp.mute();
+    //dsp.mute();
 
     QEventLoop loopWaitForReply;
     QTimer timerWait;
@@ -1044,9 +1058,13 @@ void MainWindow::on_tabPresets_currentChanged( int index )
     //dspPlugin[currentPreset]->setMasterVolume( ui->volumeSliderMain->value(), false );
 
     dsp.selectPresetWifi( index );
-    dsp.setMasterVolume( dspPlugin[currentPreset]->getMasterVolume() );
+    dsp.setMasterVolume( static_cast<float>(dspPlugin[currentPreset]->getMasterVolume()) );
 
     msgBox->accept();
+
+    //dsp.unmuteDAC();
+    
+    enableGui( true );
     ui->statusBar->showMessage("Ready");
   }
 }

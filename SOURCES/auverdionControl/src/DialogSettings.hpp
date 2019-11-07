@@ -19,7 +19,8 @@ public:
   {
     ADDONA = 0x01,
     ADDONB = 0x02,
-    ADDONC = 0x04
+    ADDONC = 0x03,
+    ADDOND = 0x04
   };
 
 public:
