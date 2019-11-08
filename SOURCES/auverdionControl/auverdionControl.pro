@@ -58,6 +58,7 @@ INCLUDEPATH += src \
 SOURCES += \
         main.cpp \
         MainWindow.cpp \
+        src/DialogConnect.cpp \
         src/DialogReleaseNotes.cpp \
         src/QPreset.cpp \
         src/figure/ccolormap.cpp \
@@ -88,6 +89,7 @@ SOURCES += \
 
 HEADERS += \
         MainWindow.hpp \
+        src/DialogConnect.h \
         src/DialogReleaseNotes.h \
         src/QPreset.h \
         src/figure/ccolormap.h \
@@ -135,6 +137,7 @@ HEADERS += \
 
 FORMS += \
         MainWindow.ui \
+        src/DialogConnect.ui \
         src/DialogReleaseNotes.ui \
         src/QDspBlock.ui \
         src/QPeq.ui \

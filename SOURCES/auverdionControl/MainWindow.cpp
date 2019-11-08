@@ -20,6 +20,7 @@
 #include "DialogSettings.hpp"
 #include "QDialogDemoSelector.hpp"
 #include "DialogReleaseNotes.h"
+#include "DialogConnect.h"
 
 #include "PlugIn8Channels.hpp"
 #include "PlugInHomeCinema71.hpp"
@@ -407,6 +408,11 @@ void MainWindow::updatePlots( void )
  */
 void MainWindow::on_actionRead_from_DSP_triggered()
 {
+  DialogConnect dialogConnect( this );
+  int result = dialogConnect.exec();
+  if( result != QDialog::Accepted )
+    return;
+
   setEnabled( false );
   dsp.setIsConnected( false );
 
