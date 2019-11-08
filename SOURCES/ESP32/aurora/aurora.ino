@@ -665,13 +665,34 @@ void setup()
     // Deserialize the JSON document
     DeserializationError error = deserializeJson( jsonSettings, fileSettings );
     if( error )
+    {
       Serial.println( "Failed to read settings.ini" );
-    Settings.pid = jsonSettings["pid"];
-    Settings.ssid = jsonSettings["ssid"].as<String>();
-    Settings.password = jsonSettings["pwd"].as<String>();
-    Settings.addonid = jsonSettings["aid"];
-    Settings.currentPreset = jsonSettings["preset"];
-    fileSettings.close();
+      fileSettings.close();
+      Serial.println( "Rewriting settings.ini" );
+      File fileSettings = SPIFFS.open( "/settings.ini", "w" );
+      // Allocate a temporary JsonDocument
+      // Don't forget to change the capacity to match your requirements.
+      // Use arduinojson.org/assistant to compute the capacity.
+      StaticJsonDocument<256> jsonSettings;
+      jsonSettings["pid"] = 0x00;
+      jsonSettings["ssid"] = "";
+      jsonSettings["pwd"] = "";
+      jsonSettings["aid"] = ADDON_CUSTOM;
+      jsonSettings["preset"] = 0x00;
+      // Serialize JSON to file
+      if( serializeJson( jsonSettings, fileSettings ) == 0 )
+        Serial.println( "Failed to write to file" );
+      fileSettings.close();
+    }  
+    else
+    {
+      Settings.pid = jsonSettings["pid"];
+      Settings.ssid = jsonSettings["ssid"].as<String>();
+      Settings.password = jsonSettings["pwd"].as<String>();
+      Settings.addonid = jsonSettings["aid"];
+      Settings.currentPreset = jsonSettings["preset"];
+      fileSettings.close();
+    }
   }
   else
   {
