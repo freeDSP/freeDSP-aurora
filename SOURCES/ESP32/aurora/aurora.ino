@@ -19,7 +19,7 @@
 #define I2C_SDA_PIN 17
 #define I2C_SCL_PIN 16
 
-#define VERSION_STR "1.1.0"
+#define VERSION_STR "1.1.1"
 
 #define FORMAT_SPIFFS_IF_FAILED true
 
@@ -72,6 +72,7 @@ struct tSettings
   String password;
   uint32_t addonid;
   byte currentPreset;
+  String version;
 };
 
 tSettings Settings;
@@ -216,6 +217,7 @@ void saveSettings( void )
   jsonSettings["pwd"] = Settings.password;  // max 64 charachters
   jsonSettings["aid"] = Settings.addonid;
   jsonSettings["preset"] = Settings.currentPreset;
+  jsonSettings["version"] = Settings.version;
   // Serialize JSON to file
   if( serializeJson( jsonSettings, fileSettings ) == 0 )
     Serial.println( "Failed to write to file" );
@@ -594,6 +596,35 @@ void sendAddOnConfiguration( void )
 }
 
 //==============================================================================
+/*! Write default values to settings.ini
+ *
+ */
+void writeDefaultSettings( void )
+{
+  File fileSettings = SPIFFS.open( "/settings.ini", "w" );
+  // Allocate a temporary JsonDocument
+  // Don't forget to change the capacity to match your requirements.
+  // Use arduinojson.org/assistant to compute the capacity.
+  StaticJsonDocument<256> jsonSettings;
+  jsonSettings["pid"] = 0x01;
+  jsonSettings["ssid"] = "";
+  jsonSettings["pwd"] = "";
+  jsonSettings["aid"] = ADDON_CUSTOM;
+  jsonSettings["preset"] = 0x00;
+  jsonSettings["version"] = VERSION_STR;
+  // Serialize JSON to file
+  if( serializeJson( jsonSettings, fileSettings ) == 0 )
+    Serial.println( "Failed to write to file" );
+  fileSettings.close();
+  Settings.pid = jsonSettings["pid"];
+  Settings.ssid = jsonSettings["ssid"].as<String>();
+  Settings.password = jsonSettings["pwd"].as<String>();
+  Settings.addonid = jsonSettings["aid"];
+  Settings.currentPreset = jsonSettings["preset"];
+  Settings.version = jsonSettings["version"].as<String>();
+}
+
+//==============================================================================
 /*! Set up the addon. 
  *
  */
@@ -631,7 +662,7 @@ void setupAddOn( void )
 /*! Arduino Setup
  *
  */
-void setup()
+void setup( void )
 {
   Serial.begin(115200);
   Serial.println( "aurora Debug" );
@@ -666,23 +697,16 @@ void setup()
     DeserializationError error = deserializeJson( jsonSettings, fileSettings );
     if( error )
     {
-      Serial.println( "Failed to read settings.ini" );
+      Serial.println( "Settings.ini corrupted" );
       fileSettings.close();
-      Serial.println( "Rewriting settings.ini" );
-      File fileSettings = SPIFFS.open( "/settings.ini", "w" );
-      // Allocate a temporary JsonDocument
-      // Don't forget to change the capacity to match your requirements.
-      // Use arduinojson.org/assistant to compute the capacity.
-      StaticJsonDocument<256> jsonSettings;
-      jsonSettings["pid"] = 0x00;
-      jsonSettings["ssid"] = "";
-      jsonSettings["pwd"] = "";
-      jsonSettings["aid"] = ADDON_CUSTOM;
-      jsonSettings["preset"] = 0x00;
-      // Serialize JSON to file
-      if( serializeJson( jsonSettings, fileSettings ) == 0 )
-        Serial.println( "Failed to write to file" );
-      fileSettings.close();
+      bool formatted = SPIFFS.format();
+      if( formatted )
+      {
+        Serial.println( "Rewriting settings.ini" );
+        writeDefaultSettings();
+      }
+      else
+        Serial.println( "Error formatting" );
     }  
     else
     {
@@ -691,26 +715,26 @@ void setup()
       Settings.password = jsonSettings["pwd"].as<String>();
       Settings.addonid = jsonSettings["aid"];
       Settings.currentPreset = jsonSettings["preset"];
+      Settings.version = jsonSettings["version"].as<String>();
       fileSettings.close();
+      if( Settings.version != VERSION_STR )
+      {
+        Serial.println( "New firmware, reformatting fs" );
+        bool formatted = SPIFFS.format();
+        if( formatted )
+        {
+          Serial.println( "Rewriting settings.ini" );
+          writeDefaultSettings();
+        }
+        else
+          Serial.println( "Error formatting" );
+      }
     }
   }
   else
   {
     Serial.println( "Settings.ini not found, rewriting" );
-    File fileSettings = SPIFFS.open( "/settings.ini", "w" );
-    // Allocate a temporary JsonDocument
-    // Don't forget to change the capacity to match your requirements.
-    // Use arduinojson.org/assistant to compute the capacity.
-    StaticJsonDocument<256> jsonSettings;
-    jsonSettings["pid"] = 0x00;
-    jsonSettings["ssid"] = "";
-    jsonSettings["pwd"] = "";
-    jsonSettings["aid"] = ADDON_CUSTOM;
-    jsonSettings["preset"] = 0x00;
-    // Serialize JSON to file
-    if( serializeJson( jsonSettings, fileSettings ) == 0 )
-      Serial.println( "Failed to write to file" );
-    fileSettings.close();
+    writeDefaultSettings();
   }
 
   //----------------------------------------------------------------------------
