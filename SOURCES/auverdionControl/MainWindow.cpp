@@ -32,7 +32,7 @@
 
 extern CLogFile myLog;
 
-#define VERSION_STR "1.1.0"
+#define VERSION_STR "1.1.1"
 #define FS 48000.0
 
 using namespace Vektorraum;
@@ -540,7 +540,26 @@ void MainWindow::on_actionRead_from_DSP_triggered()
     ui->actionWrite_to_DSP->setEnabled( true );
 
     myLog()<<"Fw Version: "<<dsp.getFwVersion();
-    if( dsp.getFwVersion() < 0x010100 )
+    if( dsp.getFwVersion() < 0x010101 )
+    {
+      if( !jsonObjSettings["msg0003"].toBool() )
+      {
+        DialogReleaseNotes dlg( this );
+        dlg.setWindowTitle( "Release Note" );
+        dlg.setReleaseNote( QString( "There is a new firmware available for your Aurora DSP!\n" )
+                          + QString( "This fixes an issue with corrupted files on your board after a firmware update.\n" ) );
+        int result = dlg.exec();
+        if( result == QDialog::Accepted )
+        {
+          if( dlg.getDontShowAgain() )
+          {
+            jsonObjSettings["msg0003"] = true;
+            writeSettings();
+          }
+        }
+      }
+    }
+    else if( dsp.getFwVersion() < 0x010100 )
     {
       if( !jsonObjSettings["msg0002"].toBool() )
       {
@@ -550,7 +569,7 @@ void MainWindow::on_actionRead_from_DSP_triggered()
                           + QString( "New features and changes are:\n" )
                           + QString( "- Full support of AddOnB (S/P-DIF multiplexer)\n" )
                           + QString( "- DAC mute function\n" )
-                          + QString( "- New WbeOTA interface for future firmware updates\n" )
+                          + QString( "- New webOTA interface for future firmware updates\n" )
                           + QString( "Please download the latest firmware and install it.\nIn the user manual (UserManual.pdf) you will find instructions how to update the firmware." ) );
         int result = dlg.exec();
         if( result == QDialog::Accepted )
@@ -1068,7 +1087,7 @@ void MainWindow::on_tabPresets_currentChanged( int index )
 
     msgBox->accept();
 
-    //dsp.unmuteDAC();
+    dsp.unmuteDAC();
     
     enableGui( true );
     ui->statusBar->showMessage("Ready");
