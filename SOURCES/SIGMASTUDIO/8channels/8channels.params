@@ -424,9 +424,9 @@ Parameter Data :
 Cell Name         = InputSelect_1.Nx1-1
 Parameter Name    = monomuxSigma300ns14index
 Parameter Address = 20457
-Parameter Value   = 0
+Parameter Value   = 4
 Parameter Data :
-0x00, 0x00, 0x00, 0x00, 
+0x00, 0x00, 0x00, 0x04, 
 
 
 

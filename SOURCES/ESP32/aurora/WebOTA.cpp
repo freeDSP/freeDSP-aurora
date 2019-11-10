@@ -110,7 +110,7 @@ R"!^!(
 </form>
 
 <div id="prg_wrap" style="border: 0px solid; width: 100%;">
-   <div id="prg" style="text-shadow: 2px 2px 3px black; padding: 5px 0; display: none; border: 1px solid #008aff; background: #89C611; text-align: center; color: white;"></div>
+   <div id="prg" style="text-shadow: 2px 2px 3px black; padding: 5px 0; display: none; border: 1px solid #89C611; background: #89C611; text-align: center; color: white;"></div>
 </div>
 
 <script>

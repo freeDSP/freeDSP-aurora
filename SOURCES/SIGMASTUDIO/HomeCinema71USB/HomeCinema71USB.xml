@@ -317,6 +317,12 @@
             <Size>2</Size>
             <Data>0x26, 0x0A, </Data>
         </Register>
+        <Register>
+            <Name>IC 1.SPDIF_RESTART</Name>
+            <Address>62980</Address>
+            <Size>2</Size>
+            <Data>0x00, 0x01, </Data>
+        </Register>
         <Program>
             <Name>Program Data</Name>
             <Address>49152</Address>

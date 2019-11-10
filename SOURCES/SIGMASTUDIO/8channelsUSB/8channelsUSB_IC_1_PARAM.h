@@ -1,7 +1,7 @@
 /*
- * File:           E:\Documents\freeDSP\freeDSP-aurora\SOURCES\SIGMASTUDIO\8channels USB\8channelsUSB_IC_1_PARAM.h
+ * File:           Z:\Documents\freeDSP\freeDSP-aurora\SOURCES\SIGMASTUDIO\8channelsUSB\8channelsUSB_IC_1_PARAM.h
  *
- * Created:        Wednesday, August 28, 2019 11:45:52 AM
+ * Created:        Saturday, November 09, 2019 7:37:32 PM
  * Description:    8channelsUSB:IC 1 parameter RAM definitions.
  *
  * This software is distributed in the hope that it will be useful,
