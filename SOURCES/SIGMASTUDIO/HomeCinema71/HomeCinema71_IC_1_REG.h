@@ -1,7 +1,7 @@
 /*
- * File:           E:\Documents\freeDSP\freeDSP-aurora\SOURCES\SIGMASTUDIO\HomeCinema71\HomeCinema71_IC_1_REG.h
+ * File:           Z:\Documents\freeDSP\freeDSP-aurora\SOURCES\SIGMASTUDIO\HomeCinema71\HomeCinema71_IC_1_REG.h
  *
- * Created:        Tuesday, August 27, 2019 3:27:35 PM
+ * Created:        Saturday, November 09, 2019 7:50:41 PM
  * Description:    HomeCinema71:IC 1 control register definitions.
  *
  * This software is distributed in the hope that it will be useful,
@@ -1543,7 +1543,7 @@
 /* SPDIF_RESTART  - Registers (IC 1) */
 #define REG_SPDIF_RESTART_IC_1_ADDR               0xF604
 #define REG_SPDIF_RESTART_IC_1_BYTE               2
-#define REG_SPDIF_RESTART_IC_1_VALUE              0x0
+#define REG_SPDIF_RESTART_IC_1_VALUE              0x1
 
 /* SPDIF_LOSS_OF_LOCK  - Registers (IC 1) */
 #define REG_SPDIF_LOSS_OF_LOCK_IC_1_ADDR          0xF605
@@ -6456,7 +6456,7 @@
 #define R303_SPDIF_RX_COMPRMODE_COMPR_MODE_IC_1_SHIFT 0
 
 /* SPDIF_RESTART (IC 1) */
-#define R304_SPDIF_RESTART_RESTART_AUDIO_IC_1     0x0    /* 0b	[0] */
+#define R304_SPDIF_RESTART_RESTART_AUDIO_IC_1     0x1    /* 1b	[0] */
 #define R304_SPDIF_RESTART_RESTART_AUDIO_IC_1_MASK 0x1
 #define R304_SPDIF_RESTART_RESTART_AUDIO_IC_1_SHIFT 0
 

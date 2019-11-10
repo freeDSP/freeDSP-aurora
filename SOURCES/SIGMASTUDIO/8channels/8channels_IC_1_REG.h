@@ -1,7 +1,7 @@
 /*
  * File:           Z:\Documents\freeDSP\freeDSP-aurora\SOURCES\SIGMASTUDIO\8channels\8channels_IC_1_REG.h
  *
- * Created:        Monday, November 04, 2019 2:40:44 PM
+ * Created:        Saturday, November 09, 2019 7:54:16 PM
  * Description:    8channels:IC 1 control register definitions.
  *
  * This software is distributed in the hope that it will be useful,
@@ -1058,7 +1058,7 @@
 /* CORE_STATUS  - Registers (IC 1) */
 #define REG_CORE_STATUS_IC_1_ADDR                 0xF405
 #define REG_CORE_STATUS_IC_1_BYTE                 0
-#define REG_CORE_STATUS_IC_1_VALUE                0x0
+#define REG_CORE_STATUS_IC_1_VALUE                0x3
 
 /* DEBUG_MODE  - Registers (IC 1) */
 #define REG_DEBUG_MODE_IC_1_ADDR                  0xF420
@@ -1103,27 +1103,27 @@
 /* PANIC_CODE  - Registers (IC 1) */
 #define REG_PANIC_CODE_IC_1_ADDR                  0xF428
 #define REG_PANIC_CODE_IC_1_BYTE                  0
-#define REG_PANIC_CODE_IC_1_VALUE                 0x8
+#define REG_PANIC_CODE_IC_1_VALUE                 0x20
 
 /* DECODE_OP0  - Registers (IC 1) */
 #define REG_DECODE_OP0_IC_1_ADDR                  0xF429
 #define REG_DECODE_OP0_IC_1_BYTE                  0
-#define REG_DECODE_OP0_IC_1_VALUE                 0x3000
+#define REG_DECODE_OP0_IC_1_VALUE                 0x0
 
 /* DECODE_OP1  - Registers (IC 1) */
 #define REG_DECODE_OP1_IC_1_ADDR                  0xF42A
 #define REG_DECODE_OP1_IC_1_BYTE                  0
-#define REG_DECODE_OP1_IC_1_VALUE                 0xC000
+#define REG_DECODE_OP1_IC_1_VALUE                 0x0
 
 /* DECODE_OP2  - Registers (IC 1) */
 #define REG_DECODE_OP2_IC_1_ADDR                  0xF42B
 #define REG_DECODE_OP2_IC_1_BYTE                  0
-#define REG_DECODE_OP2_IC_1_VALUE                 0xC414
+#define REG_DECODE_OP2_IC_1_VALUE                 0xFFA8
 
 /* DECODE_OP3  - Registers (IC 1) */
 #define REG_DECODE_OP3_IC_1_ADDR                  0xF42C
 #define REG_DECODE_OP3_IC_1_BYTE                  0
-#define REG_DECODE_OP3_IC_1_VALUE                 0x6762
+#define REG_DECODE_OP3_IC_1_VALUE                 0xA40
 
 /* EXECUTE_OP0  - Registers (IC 1) */
 #define REG_EXECUTE_OP0_IC_1_ADDR                 0xF42D
@@ -1148,7 +1148,7 @@
 /* DECODE_COUNT  - Registers (IC 1) */
 #define REG_DECODE_COUNT_IC_1_ADDR                0xF431
 #define REG_DECODE_COUNT_IC_1_BYTE                0
-#define REG_DECODE_COUNT_IC_1_VALUE               0x21
+#define REG_DECODE_COUNT_IC_1_VALUE               0xC0FF
 
 /* EXECUTE_COUNT  - Registers (IC 1) */
 #define REG_EXECUTE_COUNT_IC_1_ADDR               0xF432
@@ -1193,7 +1193,7 @@
 /* PROG_CNTR1  - Registers (IC 1) */
 #define REG_PROG_CNTR1_IC_1_ADDR                  0xF461
 #define REG_PROG_CNTR1_IC_1_BYTE                  0
-#define REG_PROG_CNTR1_IC_1_VALUE                 0xC8A
+#define REG_PROG_CNTR1_IC_1_VALUE                 0x2FA
 
 /* PROG_CNTR_CLEAR  - Registers (IC 1) */
 #define REG_PROG_CNTR_CLEAR_IC_1_ADDR             0xF462
@@ -1208,7 +1208,7 @@
 /* PROG_CNTR_LENGTH1  - Registers (IC 1) */
 #define REG_PROG_CNTR_LENGTH1_IC_1_ADDR           0xF464
 #define REG_PROG_CNTR_LENGTH1_IC_1_BYTE           0
-#define REG_PROG_CNTR_LENGTH1_IC_1_VALUE          0x43E
+#define REG_PROG_CNTR_LENGTH1_IC_1_VALUE          0x640
 
 /* PROG_CNTR_MAXLENGTH0  - Registers (IC 1) */
 #define REG_PROG_CNTR_MAXLENGTH0_IC_1_ADDR        0xF465
@@ -1218,7 +1218,7 @@
 /* PROG_CNTR_MAXLENGTH1  - Registers (IC 1) */
 #define REG_PROG_CNTR_MAXLENGTH1_IC_1_ADDR        0xF466
 #define REG_PROG_CNTR_MAXLENGTH1_IC_1_BYTE        0
-#define REG_PROG_CNTR_MAXLENGTH1_IC_1_VALUE       0x43E
+#define REG_PROG_CNTR_MAXLENGTH1_IC_1_VALUE       0xFA9
 
 /* MP0_MODE  - Registers (IC 1) */
 #define REG_MP0_MODE_IC_1_ADDR                    0xF510
@@ -1363,7 +1363,7 @@
 /* MP0_READ  - Registers (IC 1) */
 #define REG_MP0_READ_IC_1_ADDR                    0xF530
 #define REG_MP0_READ_IC_1_BYTE                    0
-#define REG_MP0_READ_IC_1_VALUE                   0x0
+#define REG_MP0_READ_IC_1_VALUE                   0x1
 
 /* MP1_READ  - Registers (IC 1) */
 #define REG_MP1_READ_IC_1_ADDR                    0xF531
@@ -1528,7 +1528,7 @@
 /* SPDIF_RX_CTRL  - Registers (IC 1) */
 #define REG_SPDIF_RX_CTRL_IC_1_ADDR               0xF601
 #define REG_SPDIF_RX_CTRL_IC_1_BYTE               2
-#define REG_SPDIF_RX_CTRL_IC_1_VALUE              0x0
+#define REG_SPDIF_RX_CTRL_IC_1_VALUE              0x3
 
 /* SPDIF_RX_DECODE  - Registers (IC 1) */
 #define REG_SPDIF_RX_DECODE_IC_1_ADDR             0xF602
@@ -5665,7 +5665,7 @@
 #define R206_START_ADDRESS_START_ADDRESS_IC_1_SHIFT 0
 
 /* CORE_STATUS (IC 1) */
-#define R207_CORE_STATUS_CORE_STATUS_IC_1         0x0    /* 000b	[2:0] */
+#define R207_CORE_STATUS_CORE_STATUS_IC_1         0x3    /* 011b	[2:0] */
 #define R207_CORE_STATUS_CORE_STATUS_IC_1_MASK    0x7
 #define R207_CORE_STATUS_CORE_STATUS_IC_1_SHIFT   0
 
@@ -5746,9 +5746,9 @@
 #define R216_PANIC_CODE_ERR_ASRC0_IC_1            0x0    /* 0b	[0] */
 #define R216_PANIC_CODE_ERR_ASRC1_IC_1            0x0    /* 0b	[1] */
 #define R216_PANIC_CODE_ERR_PM0_IC_1              0x0    /* 0b	[2] */
-#define R216_PANIC_CODE_ERR_PM1_IC_1              0x1    /* 1b	[3] */
+#define R216_PANIC_CODE_ERR_PM1_IC_1              0x0    /* 0b	[3] */
 #define R216_PANIC_CODE_ERR_DM0B0_IC_1            0x0    /* 0b	[4] */
-#define R216_PANIC_CODE_ERR_DM0B1_IC_1            0x0    /* 0b	[5] */
+#define R216_PANIC_CODE_ERR_DM0B1_IC_1            0x1    /* 1b	[5] */
 #define R216_PANIC_CODE_ERR_DM0B2_IC_1            0x0    /* 0b	[6] */
 #define R216_PANIC_CODE_ERR_DM0B3_IC_1            0x0    /* 0b	[7] */
 #define R216_PANIC_CODE_ERR_DM1B0_IC_1            0x0    /* 0b	[8] */
@@ -5793,22 +5793,22 @@
 #define R216_PANIC_CODE_ERR_SOFT_IC_1_SHIFT       15
 
 /* DECODE_OP0 (IC 1) */
-#define R217_DECODE_OP0_DECODE_OP0_IC_1           0x3000 /* 0011000000000000b	[15:0] */
+#define R217_DECODE_OP0_DECODE_OP0_IC_1           0x0000 /* 0000000000000000b	[15:0] */
 #define R217_DECODE_OP0_DECODE_OP0_IC_1_MASK      0xFFFF
 #define R217_DECODE_OP0_DECODE_OP0_IC_1_SHIFT     0
 
 /* DECODE_OP1 (IC 1) */
-#define R218_DECODE_OP1_DECODE_OP1_IC_1           0xC000 /* 1100000000000000b	[15:0] */
+#define R218_DECODE_OP1_DECODE_OP1_IC_1           0x0000 /* 0000000000000000b	[15:0] */
 #define R218_DECODE_OP1_DECODE_OP1_IC_1_MASK      0xFFFF
 #define R218_DECODE_OP1_DECODE_OP1_IC_1_SHIFT     0
 
 /* DECODE_OP2 (IC 1) */
-#define R219_DECODE_OP2_DECODE_OP2_IC_1           0xC414 /* 1100010000010100b	[15:0] */
+#define R219_DECODE_OP2_DECODE_OP2_IC_1           0xFFA8 /* 1111111110101000b	[15:0] */
 #define R219_DECODE_OP2_DECODE_OP2_IC_1_MASK      0xFFFF
 #define R219_DECODE_OP2_DECODE_OP2_IC_1_SHIFT     0
 
 /* DECODE_OP3 (IC 1) */
-#define R220_DECODE_OP3_DECODE_OP3_IC_1           0x6762 /* 0110011101100010b	[15:0] */
+#define R220_DECODE_OP3_DECODE_OP3_IC_1           0x0A40 /* 0000101001000000b	[15:0] */
 #define R220_DECODE_OP3_DECODE_OP3_IC_1_MASK      0xFFFF
 #define R220_DECODE_OP3_DECODE_OP3_IC_1_SHIFT     0
 
@@ -5833,7 +5833,7 @@
 #define R224_EXECUTE_OP3_DECODE_EX3_IC_1_SHIFT    0
 
 /* DECODE_COUNT (IC 1) */
-#define R225_DECODE_COUNT_DECODE_COUNT_IC_1       0x0021 /* 0000000000100001b	[15:0] */
+#define R225_DECODE_COUNT_DECODE_COUNT_IC_1       0xC0FF /* 1100000011111111b	[15:0] */
 #define R225_DECODE_COUNT_DECODE_COUNT_IC_1_MASK  0xFFFF
 #define R225_DECODE_COUNT_DECODE_COUNT_IC_1_SHIFT 0
 
@@ -5878,7 +5878,7 @@
 #define R233_PROG_CNTR0_PROG_CNTR_MSB_IC_1_SHIFT  0
 
 /* PROG_CNTR1 (IC 1) */
-#define R234_PROG_CNTR1_PROG_CNTR_LSB_IC_1        0x0C8A /* 0000110010001010b	[15:0] */
+#define R234_PROG_CNTR1_PROG_CNTR_LSB_IC_1        0x02FA /* 0000001011111010b	[15:0] */
 #define R234_PROG_CNTR1_PROG_CNTR_LSB_IC_1_MASK   0xFFFF
 #define R234_PROG_CNTR1_PROG_CNTR_LSB_IC_1_SHIFT  0
 
@@ -5893,7 +5893,7 @@
 #define R236_PROG_CNTR_LENGTH0_PROG_LENGTH_MSB_IC_1_SHIFT 0
 
 /* PROG_CNTR_LENGTH1 (IC 1) */
-#define R237_PROG_CNTR_LENGTH1_PROG_LENGTH_LSB_IC_1 0x043E /* 0000010000111110b	[15:0] */
+#define R237_PROG_CNTR_LENGTH1_PROG_LENGTH_LSB_IC_1 0x0640 /* 0000011001000000b	[15:0] */
 #define R237_PROG_CNTR_LENGTH1_PROG_LENGTH_LSB_IC_1_MASK 0xFFFF
 #define R237_PROG_CNTR_LENGTH1_PROG_LENGTH_LSB_IC_1_SHIFT 0
 
@@ -5903,7 +5903,7 @@
 #define R238_PROG_CNTR_MAXLENGTH0_PROG_MAXLENGTH_MSB_IC_1_SHIFT 0
 
 /* PROG_CNTR_MAXLENGTH1 (IC 1) */
-#define R239_PROG_CNTR_MAXLENGTH1_PROG_MAXLENGTH_LSB_IC_1 0x043E /* 0000010000111110b	[15:0] */
+#define R239_PROG_CNTR_MAXLENGTH1_PROG_MAXLENGTH_LSB_IC_1 0x0FA9 /* 0000111110101001b	[15:0] */
 #define R239_PROG_CNTR_MAXLENGTH1_PROG_MAXLENGTH_LSB_IC_1_MASK 0xFFFF
 #define R239_PROG_CNTR_MAXLENGTH1_PROG_MAXLENGTH_LSB_IC_1_SHIFT 0
 
@@ -6174,7 +6174,7 @@
 #define R267_MP13_WRITE_MP_REG_WRITE_IC_1_SHIFT   0
 
 /* MP0_READ (IC 1) */
-#define R268_MP0_READ_MP_REG_READ_IC_1            0x0    /* 0b	[0] */
+#define R268_MP0_READ_MP_REG_READ_IC_1            0x1    /* 1b	[0] */
 #define R268_MP0_READ_MP_REG_READ_IC_1_MASK       0x1
 #define R268_MP0_READ_MP_REG_READ_IC_1_SHIFT      0
 
@@ -6426,7 +6426,7 @@
 #define R300_SPDIF_LOCK_DET_LOCK_IC_1_SHIFT       0
 
 /* SPDIF_RX_CTRL (IC 1) */
-#define R301_SPDIF_RX_CTRL_RX_LENGTHCTRL_IC_1     0x0    /* 00b	[1:0] */
+#define R301_SPDIF_RX_CTRL_RX_LENGTHCTRL_IC_1     0x3    /* 11b	[1:0] */
 #define R301_SPDIF_RX_CTRL_FSOUTSTRENGTH_IC_1     0x0    /* 0b	[2] */
 #define R301_SPDIF_RX_CTRL_FASTLOCK_IC_1          0x0    /* 0b	[3] */
 #define R301_SPDIF_RX_CTRL_RX_LENGTHCTRL_IC_1_MASK 0x3
