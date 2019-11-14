@@ -32,79 +32,10 @@ CPlugInHomeCinema71USB::CPlugInHomeCinema71USB( tfloat samplerate )
   //----------------------------------------------------------------------------
   //--- Init frequency vector
   //----------------------------------------------------------------------------
-  tuint n = 0;
-  tfloat pointsperdecade = 100.0;
   tfloat fstart = 1.0;
   tfloat fstop = 20000.0;
+  freq = pow( 10.0, linspace( log10(fstart), log10(fstop), 2048 ) );
 
-  for( tfloat k = 1.0; k < 10.0; k = k + 10.0/pointsperdecade )
-  {
-    if( (k >= fstart) && (k <= fstop) )
-      n++;
-  }
-  for( tfloat k = 10.0; k < 100.0; k = k + 100.0/pointsperdecade )
-  {
-    if( (k >= fstart) && (k <= fstop) )
-      n++;
-  }
-  for( tfloat k = 100.0; k < 1000.0; k = k + 1000.0/pointsperdecade )
-  {
-    if( (k >= fstart) && (k <= fstop) )
-      n++;
-  }
-  for( tfloat k = 1000.0; k < 10000.0; k = k + 10000.0/pointsperdecade )
-  {
-    if( (k >= fstart) && (k <= fstop) )
-      n++;
-  }
-  for( tfloat k = 10000.0; k < 20001.0; k = k + 100000.0/pointsperdecade )
-  {
-    if( (k >= fstart) && (k <= fstop) )
-      n++;
-  }
-
-  tvector<tfloat> f( n );
-  n = 0;
-  for( tfloat k = 1.0; k < 10.0; k = k + 10.0/pointsperdecade )
-  {
-    if( (k >= fstart) && (k <= fstop) )
-    {
-      f[n] = k;
-      n++;
-    }
-  }
-  for( tfloat k = 10.0; k < 100.0; k = k + 100.0/pointsperdecade )
-  {
-    if( (k >= fstart) && (k <= fstop) )
-    {
-      f[n] = k;
-      n++;
-    }
-  }
-  for( tfloat k = 100.0; k < 1000.0; k = k + 1000.0/pointsperdecade )
-  {
-    if( (k >= fstart) && (k <= fstop) ) {
-      f[n] = k;
-      n++;
-    }
-  }
-  for( tfloat k = 1000.0; k < 10000.0; k = k + 10000.0/pointsperdecade )
-  {
-    if( (k >= fstart) && (k <= fstop) )
-    {
-      f[n] = k;
-      n++;
-    }
-  }
-  for( tfloat k = 10000.0; k < 20001.0; k = k + 100000.0/pointsperdecade )
-  {
-    if( (k >= fstart) && (k <= fstop) )
-    {
-      f[n] = k;
-      n++;
-    }
-  }
-  freq = f;
 }
 
 //==============================================================================
