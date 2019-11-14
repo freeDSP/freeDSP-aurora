@@ -827,7 +827,7 @@ bool CFreeDspAurora::storeSettingsWifi( QString ssid, QString password )
   
   writeRequestWifi( request );
 
-  if( !waitForReplyWifi() )
+  if( !waitForReplyWifi(60000) )
   {
     myLog()<<"Did not get a reply by DSP";
     QMessageBox::critical( this, tr("Error"), tr("Uups, something went wrong when connecting to DSP. Please double check everythind and try again."), QMessageBox::Ok );
@@ -845,13 +845,13 @@ bool CFreeDspAurora::storeSettingsWifi( QString ssid, QString password )
     {
       ipAddressLocal = strIP;
       myLog()<<"DSP is now connected to local WiFi network";
-      QMessageBox::information( this, tr("Information"), tr("Your DSP is now connected to local WiFi network."), QMessageBox::Ok ); 
+      //QMessageBox::information( this, tr("Information"), tr("Your DSP is now connected to local WiFi network."), QMessageBox::Ok ); 
       return true;
     }
     else
     {
       myLog()<<"DSP cannot connect to local WiFi network";
-      QMessageBox::critical( this, tr("Error"), tr("Your DSP cannot connect to local WiFi network. Please double-check SSID and password."), QMessageBox::Ok ); 
+      //QMessageBox::critical( this, tr("Error"), tr("Your DSP cannot connect to local WiFi network. Please double-check SSID and password."), QMessageBox::Ok ); 
       return false;
     }
   }

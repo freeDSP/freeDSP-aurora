@@ -18,6 +18,8 @@ int main(int argc, char *argv[])
 
   QApplication app(argc, argv);
 
+  
+
   QFile fileStyleSheet( QStringLiteral(":/freedsp.qss") );
   if( fileStyleSheet.open(QIODevice::ReadOnly | QIODevice::Text) )
   {
@@ -25,6 +27,10 @@ int main(int argc, char *argv[])
     app.setStyleSheet( stylesheet );
     fileStyleSheet.close();
   }
+
+  QPalette p(app.palette());
+  p.setColor(QPalette::Mid, p.color(QPalette::Base));
+  app.setPalette(p);
 
   MainWindow w;
   w.show();

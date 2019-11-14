@@ -15,6 +15,8 @@
 #include <CoreFoundation/CFBundle.h>
 #endif
 
+#include "WizardConnect.hpp"
+
 #include "DialogSettings.hpp"
 #include "ui_DialogSettings.h"
 
@@ -23,7 +25,7 @@ DialogSettings::DialogSettings( CFreeDspAurora* ptrdsp, QWidget* parent ) :
   ui(new Ui::DialogSettings)
 {
   ui->setupUi(this);
-  ui->pushButtonPing->setVisible( false );
+  //ui->pushButtonPing->setVisible( false );
   dsp = ptrdsp;
 
   #if defined( __MACOSX__ )
@@ -69,6 +71,7 @@ DialogSettings::DialogSettings( CFreeDspAurora* ptrdsp, QWidget* parent ) :
   }
   ui->comboBoxPlugIn->blockSignals( false );
 
+#if 0
   ui->radioButtonAP->blockSignals( true );
   ui->radioButtonLocalWifi->blockSignals( true );
   if( dsp->getConnectionTypeWifi() == CFreeDspAurora::ACCESS_POINT )
@@ -87,6 +90,14 @@ DialogSettings::DialogSettings( CFreeDspAurora* ptrdsp, QWidget* parent ) :
   ui->radioButtonLocalWifi->blockSignals( false );
 
   ui->lineEditIpAddress->setText( dsp->getIpAddressWifi() );
+#endif
+
+  ui->comboBoxConnection->addItem( "Access Point", CFreeDspAurora::ACCESS_POINT );
+  ui->comboBoxConnection->addItem( "Local WiFi Network", CFreeDspAurora::LOCAL_WIFI );
+  ui->comboBoxConnection->addItem( "Offline Mode", CFreeDspAurora::OFFLINE );
+  int index = ui->comboBoxConnection->findData( dsp->getConnectionTypeWifi() );
+  if( index != -1 )
+    ui->comboBoxConnection->setCurrentIndex( index );
 
   ui->comboBoxAddOnId->blockSignals( true );
   ui->comboBoxAddOnId->addItem( "None or Custom", 0x00 );
@@ -94,7 +105,7 @@ DialogSettings::DialogSettings( CFreeDspAurora* ptrdsp, QWidget* parent ) :
   ui->comboBoxAddOnId->addItem( "B Down with developers", ADDONB );
   ui->comboBoxAddOnId->addItem( "C Control over the crowd", ADDONC );
   ui->comboBoxAddOnId->addItem( "D Balanced life", ADDOND );
-  int index = ui->comboBoxAddOnId->findData( dsp->getAddOnId() );
+  index = ui->comboBoxAddOnId->findData( dsp->getAddOnId() );
   if( index != -1 )
     ui->comboBoxAddOnId->setCurrentIndex( index );
   ui->comboBoxAddOnId->blockSignals( false );
@@ -274,7 +285,7 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
   //--- Send data to ESP32 via WiFi
   //----------------------------------------------------------------------------
   QByteArray content;
-  uint32_t offset = 0;
+  int32_t offset = 0;
   for( int ii = 0; ii < listNumBytes.size(); ii++ )
   {
     uint32_t numbytes = listNumBytes[ii].toUInt( nullptr, 10 );
@@ -286,7 +297,7 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
 
     for( uint32_t n = 0; n < numbytes; n++ )
     {
-      if( offset >= static_cast<uint32_t>(listTxBuffer.size()) )
+      if( offset >= listTxBuffer.size() )
       {
         qDebug()<<"TxBuffer too small";
         enableGui( true );
@@ -305,13 +316,13 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
   offset = 0;
   int npckt = 0;
   uint32_t totalTransmittedBytes = 0;
-  while( offset < static_cast<uint32_t>(content.size()) )
+  while( offset < content.size() )
   {
     QByteArray packet;
     for( int ii = 0; ii < 64; ii++ )
     {
-      if( offset < static_cast<uint32_t>(content.size()) )
-        packet.append( content.at(offset) );
+      if( offset < content.size() )
+        packet.append( content.at(static_cast<int>(offset)) );
       else
         packet.append( static_cast<char>(0) );
       offset++;
@@ -322,7 +333,7 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
     //  QMessageBox::critical( this, tr("Error"), tr("Did not receive an ACK. Please check your WiFi"), QMessageBox::Ok );
     totalTransmittedBytes += static_cast<uint32_t>(packet.size());
 
-    if( offset < static_cast<uint32_t>(content.size()) )
+    if( offset < content.size() )
       ui->progressBar->setValue( offset );
     else
       ui->progressBar->setValue( content.size() );  
@@ -448,7 +459,7 @@ void DialogSettings::on_pushButtonVerifyPlugin_clicked()
   fileNumBytes.close();
 
   QByteArray content;
-  uint32_t offset = 0;
+  int32_t offset = 0;
   for( int ii = 0; ii < listNumBytes.size(); ii++ )
   {
     uint32_t numbytes = listNumBytes[ii].toUInt( nullptr, 10 );
@@ -460,7 +471,7 @@ void DialogSettings::on_pushButtonVerifyPlugin_clicked()
 
     for( uint32_t n = 0; n < numbytes; n++ )
     {
-      if( offset >= static_cast<uint32_t>(listTxBuffer.size()) )
+      if( offset >= listTxBuffer.size() )
       {
         qDebug()<<"TxBuffer too small";
         enableGui( true );
@@ -517,7 +528,7 @@ void DialogSettings::on_pushButtonStoreWiFiConfig_clicked()
   //if( !ui->lineEditSSID->text().isEmpty() )
   //{
     // --- Send WiFi configuration to DSP ---
-    dsp->storeSettingsWifi( ui->lineEditSSID->text(), ui->lineEditPassword->text() ); 
+    //dsp->storeSettingsWifi( ui->lineEditSSID->text(), ui->lineEditPassword->text() );
     ui->labelLocalWiFiIP->setText( dsp->getIpAddressLocalWifi() );
   //}
   enableGui( true );
@@ -527,6 +538,7 @@ void DialogSettings::on_pushButtonStoreWiFiConfig_clicked()
 /*!
  *
  */
+#if 0
 void DialogSettings::on_pushButtonPing_clicked()
 {
   enableGui( false );
@@ -534,7 +546,9 @@ void DialogSettings::on_pushButtonPing_clicked()
   ui->lineEditIpAddress->setText( dsp->getIpAddressWifi() );
   enableGui( true );
 }
+#endif
 
+#if 0
 //==============================================================================
 /*!
  *
@@ -549,7 +563,9 @@ void DialogSettings::on_radioButtonAP_toggled(bool checked)
     ui->lineEditIpAddress->setEnabled( false );
   }
 }
+#endif
 
+#if 0
 //==============================================================================
 /*!
  *
@@ -564,6 +580,7 @@ void DialogSettings::on_radioButtonLocalWifi_toggled(bool checked)
     ui->lineEditIpAddress->setEnabled( true );
   }
 }
+#endif
 
 //==============================================================================
 /*!
@@ -575,34 +592,35 @@ void DialogSettings::enableGui( bool state )
   {
     ui->pushButtonInstallPlugin->setEnabled( true );
     ui->pushButtonVerifyPlugin->setEnabled( true );
-    ui->radioButtonAP->setEnabled( true );
-    ui->radioButtonLocalWifi->setEnabled( true );
-    ui->lineEditSSID->setEnabled( true );
-    ui->lineEditPassword->setEnabled( true );
-    ui->pushButtonStoreWiFiConfig->setEnabled( true );
-    ui->lineEditIpAddress->setEnabled( true );
-    if( ui->radioButtonLocalWifi->isChecked() )
-      ui->pushButtonPing->setEnabled( true );
-    else
-      ui->pushButtonPing->setEnabled( false );
+    //ui->radioButtonAP->setEnabled( true );
+    //ui->radioButtonLocalWifi->setEnabled( true );
+    //ui->lineEditSSID->setEnabled( true );
+    //ui->lineEditPassword->setEnabled( true );
+    //ui->pushButtonStoreWiFiConfig->setEnabled( true );
+    //ui->lineEditIpAddress->setEnabled( true );
+    //if( ui->radioButtonLocalWifi->isChecked() )
+    //  ui->pushButtonPing->setEnabled( true );
+    //else
+    //  ui->pushButtonPing->setEnabled( false );
     ui->buttonBox->setEnabled( true );
   }
   else
   {
     ui->pushButtonInstallPlugin->setEnabled( false );
     ui->pushButtonVerifyPlugin->setEnabled( false );
-    ui->radioButtonAP->setEnabled( false );
-    ui->radioButtonLocalWifi->setEnabled( false );
-    ui->lineEditSSID->setEnabled( false );
-    ui->lineEditPassword->setEnabled( false );
-    ui->pushButtonStoreWiFiConfig->setEnabled( false );
-    ui->lineEditIpAddress->setEnabled( false );
-    ui->pushButtonPing->setEnabled( false );
+    //ui->radioButtonAP->setEnabled( false );
+    //ui->radioButtonLocalWifi->setEnabled( false );
+    //ui->lineEditSSID->setEnabled( false );
+    //ui->lineEditPassword->setEnabled( false );
+    //ui->pushButtonStoreWiFiConfig->setEnabled( false );
+    //ui->lineEditIpAddress->setEnabled( false );
+    //ui->pushButtonPing->setEnabled( false );
     ui->buttonBox->setEnabled( false );
   }
 
 }
 
+#if 0
 //==============================================================================
 /*!
  *
@@ -610,10 +628,11 @@ void DialogSettings::enableGui( bool state )
 void DialogSettings::on_lineEditIpAddress_editingFinished()
 {
   qDebug()<<"DialogSettings::on_lineEditIpAddress_editingFinished";
-  if( ui->radioButtonLocalWifi->isChecked() )
-    dsp->setIpAddressWifi( ui->lineEditIpAddress->text() );
+  //if( ui->radioButtonLocalWifi->isChecked() )
+  //  dsp->setIpAddressWifi( ui->lineEditIpAddress->text() );
 
 }
+#endif
 
 //==============================================================================
 /*!
@@ -653,21 +672,21 @@ void DialogSettings::on_comboBoxSpdifInput_currentIndexChanged(int index)
   if( dsp->getAddOnId() == ADDONB )
   {
     if( ui->comboBoxSpdifInput->itemData( index ).toUInt() == 0x00 )
-      dsp->writeI2C( 0x82, 0x01, 0x04 );
+      dsp->writeI2C( int8_t(0x82), 0x01, 0x04 );
     else if( ui->comboBoxSpdifInput->itemData( index ).toUInt() == 0x01 )
-      dsp->writeI2C( 0x82, 0x01, 0x05 );
+      dsp->writeI2C( int8_t(0x82), 0x01, 0x05 );
     else if( ui->comboBoxSpdifInput->itemData( index ).toUInt() == 0x02 )
-      dsp->writeI2C( 0x82, 0x01, 0x06 );
+      dsp->writeI2C( int8_t(0x82), 0x01, 0x06 );
     else if( ui->comboBoxSpdifInput->itemData( index ).toUInt() == 0x03 )
-      dsp->writeI2C( 0x82, 0x01, 0x07 );
+      dsp->writeI2C( int8_t(0x82), 0x01, 0x07 );
     else if( ui->comboBoxSpdifInput->itemData( index ).toUInt() == 0x04 )
-      dsp->writeI2C( 0x82, 0x01, 0x00 );
+      dsp->writeI2C( int8_t(0x82), 0x01, 0x00 );
     else if( ui->comboBoxSpdifInput->itemData( index ).toUInt() == 0x05 )
-      dsp->writeI2C( 0x82, 0x01, 0x01 );
+      dsp->writeI2C( int8_t(0x82), 0x01, 0x01 );
     else if( ui->comboBoxSpdifInput->itemData( index ).toUInt() == 0x06 )
-      dsp->writeI2C( 0x82, 0x01, 0x02 );
+      dsp->writeI2C( int8_t(0x82), 0x01, 0x02 );
     else if( ui->comboBoxSpdifInput->itemData( index ).toUInt() == 0x07 )
-      dsp->writeI2C( 0x82, 0x01, 0x03 );
+      dsp->writeI2C( int8_t(0x82), 0x01, 0x03 );
   }
 }
 
@@ -677,5 +696,31 @@ void DialogSettings::on_comboBoxSpdifInput_currentIndexChanged(int index)
 unsigned int DialogSettings::getSpdifInput( void )
 {
   return ui->comboBoxSpdifInput->itemData( ui->comboBoxSpdifInput->currentIndex() ).toUInt();
+}
+
+//==============================================================================
+/*!
+ */
+void DialogSettings::on_pushButtonConfigureWiFi_clicked()
+{
+  WizardConnect wizardConnect( dsp );
+  int result = wizardConnect.exec();
+  if( result != QDialog::Accepted )
+    return;
+  
+  int index = ui->comboBoxConnection->findData( wizardConnect.field( "connection" ) );
+  if( index != -1 )
+    ui->comboBoxConnection->setCurrentIndex( index );
+
+  ui->labelLocalWiFiIP->setText( dsp->getIpAddressLocalWifi() );
+
+}
+
+//==============================================================================
+/*!
+ */
+unsigned int DialogSettings::getConnection( void )
+{
+  return ui->comboBoxConnection->itemData( ui->comboBoxConnection->currentIndex() ).toUInt();
 }
 
