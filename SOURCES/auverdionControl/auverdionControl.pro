@@ -58,6 +58,7 @@ INCLUDEPATH += src \
 SOURCES += \
         main.cpp \
         MainWindow.cpp \
+        src/DialogConnect.cpp \
         src/DialogReleaseNotes.cpp \
         src/QPreset.cpp \
         src/figure/ccolormap.cpp \
@@ -84,10 +85,12 @@ SOURCES += \
         src/dsp/8channelsUSB/PlugIn8ChannelsUSB.cpp \
         src/dsp/4FIRs/PlugIn4FIRs.cpp \
         src/dsp/HomeCinema71/PlugInHomeCinema71.cpp \
-        src/dsp/HomeCinema71USB/PlugInHomeCinema71USB.cpp 
+        src/dsp/HomeCinema71USB/PlugInHomeCinema71USB.cpp \
+        src/WizardConnect.cpp
 
 HEADERS += \
         MainWindow.hpp \
+        src/DialogConnect.h \
         src/DialogReleaseNotes.h \
         src/QPreset.h \
         src/figure/ccolormap.h \
@@ -131,10 +134,12 @@ HEADERS += \
         ../SIGMASTUDIO/HomeCinema71USB/HomeCinema71USB_IC_1_REG.h \
         ../SIGMASTUDIO/HomeCinema71USB/HomeCinema71USB_IC_1_PARAM.h \
         src/LogFile.h \
-        src/QSleeper.hpp
+        src/QSleeper.hpp \
+        src/WizardConnect.hpp
 
 FORMS += \
         MainWindow.ui \
+        src/DialogConnect.ui \
         src/DialogReleaseNotes.ui \
         src/QDspBlock.ui \
         src/QPeq.ui \

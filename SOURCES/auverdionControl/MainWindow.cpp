@@ -20,6 +20,7 @@
 #include "DialogSettings.hpp"
 #include "QDialogDemoSelector.hpp"
 #include "DialogReleaseNotes.h"
+#include "DialogConnect.h"
 
 #include "PlugIn8Channels.hpp"
 #include "PlugInHomeCinema71.hpp"
@@ -31,7 +32,7 @@
 
 extern CLogFile myLog;
 
-#define VERSION_STR "1.1.1"
+#define VERSION_STR "1.2.0"
 #define FS 48000.0
 
 using namespace Vektorraum;
@@ -410,81 +411,105 @@ void MainWindow::on_actionRead_from_DSP_triggered()
   setEnabled( false );
   dsp.setIsConnected( false );
 
-  QTimer timerWait;
-  connect( &timerWait, SIGNAL(timeout()), this, SLOT(updateWaitingForConnect()) );
-  timerWait.start( 100 );
-  currentWaitRotation = 0;
-
-  msgBox = new QMessageBox( QMessageBox::Information, tr("Waiting"), tr("Connecting to DSP..."), QMessageBox::Cancel, this );
-  QImage srcImg = QImage(":/reload_128x128.png").scaled(64,64);
-  srcImg = srcImg.copy( 0, 0, 70, 70 );
-  msgBox->setIconPixmap( QPixmap::fromImage( srcImg ) );
-  msgBox->setStandardButtons( nullptr );
-  msgBox->open();
-
-  //----------------------------------------------------------------------------
-  //--- Request the firmware version
-  //----------------------------------------------------------------------------
-  ui->statusBar->showMessage("Reading firmware version.......");
-  if( dsp.requestFirmwareVersionWifi( false ) )
+  if( dsp.getConnectionTypeWifi() != CFreeDspAurora::OFFLINE )
   {
-    //--------------------------------------------------------------------------
-    //--- Request the AddOn-Id
-    //--------------------------------------------------------------------------
-    ui->statusBar->showMessage("Reading AddOn-Id.......");
-    dsp.requestAddOnIdWifi();
+    QTimer timerWait;
+    connect( &timerWait, SIGNAL(timeout()), this, SLOT(updateWaitingForConnect()) );
+    timerWait.start( 100 );
+    currentWaitRotation = 0;
 
-    //--------------------------------------------------------------------------
-    //--- Request the DSP-plugin id
-    //--------------------------------------------------------------------------
-    ui->statusBar->showMessage("Reading PID.......");
-    uint32_t pid = dsp.requestPidWifi();
-    if( pid == 0 )
-    {
-      msgBox->accept();
-      return;
-    }
+    msgBox = new QMessageBox( QMessageBox::Information, tr("Waiting"), tr("Connecting to DSP..."), QMessageBox::Cancel, this );
+    QImage srcImg = QImage(":/reload_128x128.png").scaled(64,64);
+    srcImg = srcImg.copy( 0, 0, 70, 70 );
+    msgBox->setIconPixmap( QPixmap::fromImage( srcImg ) );
+    msgBox->setStandardButtons( nullptr );
+    msgBox->open();
 
-    int preset = dsp.requestCurrentPresetWifi();
-    if( preset > -1 )
+    //----------------------------------------------------------------------------
+    //--- Request the firmware version
+    //----------------------------------------------------------------------------
+    ui->statusBar->showMessage("Reading firmware version.......");
+    if( dsp.requestFirmwareVersionWifi( false ) )
     {
-      currentPreset = preset;
+      //--------------------------------------------------------------------------
+      //--- Request the AddOn-Id
+      //--------------------------------------------------------------------------
+      ui->statusBar->showMessage("Reading AddOn-Id.......");
+      dsp.requestAddOnIdWifi();
+
+      //--------------------------------------------------------------------------
+      //--- Request the DSP-plugin id
+      //--------------------------------------------------------------------------
+      ui->statusBar->showMessage("Reading PID.......");
+      uint32_t pid = dsp.requestPidWifi();
+      if( pid == 0 )
+      {
+        msgBox->accept();
+        return;
+      }
+
+      int preset = dsp.requestCurrentPresetWifi();
+      if( preset > -1 )
+      {
+        currentPreset = preset;
+        ui->tabPresets->blockSignals( true );
+        ui->tabPresets->setCurrentIndex( preset );
+        ui->tabPresets->blockSignals( false );
+      }
+
+      //--------------------------------------------------------------------------
+      //--- Delete old preset GUI
+      //--------------------------------------------------------------------------
+      for( int ii = 0; ii < NUMPRESETS; ii++ )
+      {
+        while( presets[ii]->tabChannels->count() )
+          delete presets[ii]->tabChannels->widget( presets[ii]->tabChannels->currentIndex() );
+      }
+
       ui->tabPresets->blockSignals( true );
-      ui->tabPresets->setCurrentIndex( preset );
+      while( ui->tabPresets->count() )
+        delete ui->tabPresets->widget( ui->tabPresets->currentIndex() );
       ui->tabPresets->blockSignals( false );
-    }
 
-    //--------------------------------------------------------------------------
-    //--- Delete old preset GUI
-    //--------------------------------------------------------------------------
-    for( int ii = 0; ii < NUMPRESETS; ii++ )
-    {
-      while( presets[ii]->tabChannels->count() )
-        delete presets[ii]->tabChannels->widget( presets[ii]->tabChannels->currentIndex() );
-    }
+      // \TODO Fix the crash when calling delete.
+      //delete dspPlugin;
 
-    ui->tabPresets->blockSignals( true );
-    while( ui->tabPresets->count() )
-      delete ui->tabPresets->widget( ui->tabPresets->currentIndex() );
-    ui->tabPresets->blockSignals( false );
+      switchPluginGui( pid );
+    
+      //--------------------------------------------------------------------------
+      //--- Request user parameters
+      //-------------------------------------------------------------------------- 
+      dsp.muteDAC();
+      QThread::msleep( 200 );
+    
+      ui->statusBar->showMessage("Reading user parameter.......");
 
-    // \TODO Fix the crash when calling delete.
-    //delete dspPlugin;
+      for( int p = 0; p < NUMPRESETS; p++ )
+      {
+        dsp.mute();
 
-    switchPluginGui( pid );
-  
-    //--------------------------------------------------------------------------
-    //--- Request user parameters
-    //-------------------------------------------------------------------------- 
-    dsp.muteDAC();
-    QThread::msleep( 200 );
-   
-    ui->statusBar->showMessage("Reading user parameter.......");
+        QEventLoop loopWaitForReply;
+        QTimer timerWaitMute;
+        timerWaitMute.setSingleShot( true );
+        connect( &timerWaitMute, SIGNAL(timeout()), &loopWaitForReply, SLOT(quit()) );
+        timerWaitMute.start( 500 );
+        loopWaitForReply.exec();
 
-    for( int p = 0; p < NUMPRESETS; p++ )
-    {
+        dsp.selectPresetWifi( p );
+        QByteArray userparams;
+        if( dsp.requestUserParameterWifi( userparams ) )
+        {
+          updatePresetGui( p, userparams );
+          presetUserParams[p] = userparams;
+        }
+        dspPlugin[p]->setMasterVolume( ui->volumeSliderMain->value(), false );
+        qDebug()<<"Preset Master Volume:"<<dspPlugin[p]->getMasterVolume();
+      }
+
+      currentPreset = preset;
+
       dsp.mute();
-
+    
       QEventLoop loopWaitForReply;
       QTimer timerWaitMute;
       timerWaitMute.setSingleShot( true );
@@ -492,172 +517,192 @@ void MainWindow::on_actionRead_from_DSP_triggered()
       timerWaitMute.start( 500 );
       loopWaitForReply.exec();
 
-      dsp.selectPresetWifi( p );
-      QByteArray userparams;
-      if( dsp.requestUserParameterWifi( userparams ) )
+      dsp.selectPresetWifi( preset );
+      dsp.setMasterVolume( static_cast<float>(dspPlugin[currentPreset]->getMasterVolume()) );
+
+      ui->tabPresets->blockSignals( true );
+      ui->tabPresets->setCurrentIndex( currentPreset );
+      ui->tabPresets->blockSignals( false );  
+
+      updatePlots();
+
+      dsp.unmuteDAC();
+
+      setEnabled( true );
+      disconnect( &timerWait, SIGNAL(timeout()), this, SLOT(updateWaitingForConnect()) );
+      currentWaitRotation = 0;
+      //rotateIconConnect( currentWaitRotation );
+      msgBox->accept();
+      ui->statusBar->showMessage("Ready");
+      ui->actionWrite_to_DSP->setEnabled( true );
+
+      myLog()<<"Fw Version: "<<dsp.getFwVersion();
+      if( dsp.getFwVersion() < 0x010101 )
       {
-        updatePresetGui( p, userparams );
-        presetUserParams[p] = userparams;
+        if( !jsonObjSettings["msg0003"].toBool() )
+        {
+          DialogReleaseNotes dlg( this );
+          dlg.setWindowTitle( "Release Note" );
+          dlg.setReleaseNote( QString( "There is a new firmware available for your Aurora DSP!\n" )
+                            + QString( "This fixes an issue with corrupted files on your board after a firmware update.\n" ) );
+          int result = dlg.exec();
+          if( result == QDialog::Accepted )
+          {
+            if( dlg.getDontShowAgain() )
+            {
+              jsonObjSettings["msg0003"] = true;
+              writeSettings();
+            }
+          }
+        }
       }
-      dspPlugin[p]->setMasterVolume( ui->volumeSliderMain->value(), false );
-      qDebug()<<"Preset Master Volume:"<<dspPlugin[p]->getMasterVolume();
+      else if( dsp.getFwVersion() < 0x010100 )
+      {
+        if( !jsonObjSettings["msg0002"].toBool() )
+        {
+          DialogReleaseNotes dlg( this );
+          dlg.setWindowTitle( "Release Note" );
+          dlg.setReleaseNote( QString( "There is a new firmware available for your Aurora DSP!\n" )
+                            + QString( "New features and changes are:\n" )
+                            + QString( "- Full support of AddOnB (S/P-DIF multiplexer)\n" )
+                            + QString( "- DAC mute function\n" )
+                            + QString( "- New webOTA interface for future firmware updates\n" )
+                            + QString( "Please download the latest firmware and install it.\nIn the user manual (UserManual.pdf) you will find instructions how to update the firmware." ) );
+          int result = dlg.exec();
+          if( result == QDialog::Accepted )
+          {
+            if( dlg.getDontShowAgain() )
+            {
+              jsonObjSettings["msg0002"] = true;
+              writeSettings();
+            }
+          }
+        }
+      }
+      else if( !jsonObjSettings["msg0001"].toBool() )
+      {
+        if( dsp.getFirmwareVersion() == "1.0.0" )
+        {
+          DialogReleaseNotes dlg( this );
+          dlg.setWindowTitle( "Hotfix available" );
+          dlg.setReleaseNote( "There is a new hotfix available for your aurora!\nPlease download the latest firmware and install it.\nIn the user manual (UserManual.pdf) you will find instructions how to update the firmware." );
+          int result = dlg.exec();
+          if( result == QDialog::Accepted )
+          {
+            if( dlg.getDontShowAgain() )
+            {
+              jsonObjSettings["msg0001"] = true;
+              writeSettings();
+            }
+          }
+        }
+      }
+      
     }
+    else
+    {
+      msgBox->accept();
+      QMessageBox msgQuestion;
+      msgQuestion.setText( tr("There is no DSP responding. Do you want to run auverdionControl in offline mode?") );
+      //msgQuestion.setInformativeText("Do you want to save your changes?");
+      msgQuestion.setStandardButtons( QMessageBox::Yes | QMessageBox::No );
+      msgQuestion.setDefaultButton( QMessageBox::Yes );
+      int ret = msgQuestion.exec();
 
-    currentPreset = preset;
+      QStringList itemList( {"8channels", "Home Cinema 7.1"} );
+      QDialogDemoSelector dialog( "Please select the plugin for offline mode: ", itemList );
+      switch (ret)
+      {
+      case QMessageBox::Yes:
+        myLog()<<"Demo mode selected";
+        if( dialog.exec() == QDialog::Accepted )
+        {
+          for( int ii = 0; ii < NUMPRESETS; ii++ )
+          {
+            while( presets[ii]->tabChannels->count() )
+              delete presets[ii]->tabChannels->widget( presets[ii]->tabChannels->currentIndex() );
+          }
 
-    dsp.mute();
-  
-    QEventLoop loopWaitForReply;
-    QTimer timerWaitMute;
-    timerWaitMute.setSingleShot( true );
-    connect( &timerWaitMute, SIGNAL(timeout()), &loopWaitForReply, SLOT(quit()) );
-    timerWaitMute.start( 500 );
-    loopWaitForReply.exec();
+          ui->tabPresets->blockSignals( true );
+          while( ui->tabPresets->count() )
+            delete ui->tabPresets->widget( ui->tabPresets->currentIndex() );
+          ui->tabPresets->blockSignals( false );
 
-    dsp.selectPresetWifi( preset );
-    dsp.setMasterVolume( static_cast<float>(dspPlugin[currentPreset]->getMasterVolume()) );
+          if( dialog.comboBox()->currentText() == QString("8channels") )
+            switchPluginGui( CFreeDspAurora::PLUGIN_8CHANNELS );
+          else if( dialog.comboBox()->currentText() == QString("Home Cinema 7.1") )
+            switchPluginGui( CFreeDspAurora::PLUGIN_HOMECINEMA71 );
 
-    ui->tabPresets->blockSignals( true );
-    ui->tabPresets->setCurrentIndex( currentPreset );
-    ui->tabPresets->blockSignals( false );  
+          for( int p = 0; p < NUMPRESETS; p++ )
+          {
+            dsp.selectPresetWifi( p );
+            QByteArray userparams;
+            if( dsp.requestUserParameterWifi( userparams ) )
+            {
+              updatePresetGui( p, userparams );
+              presetUserParams[p] = userparams;
+            }
+            dspPlugin[p]->setMasterVolume( ui->volumeSliderMain->value(), false );
+            qDebug()<<"Preset Master Volume:"<<dspPlugin[p]->getMasterVolume();
+          }
 
-    updatePlots();
-
-    dsp.unmuteDAC();
-
-    setEnabled( true );
+          updatePlots();
+        }
+        ui->statusBar->showMessage("Ready");
+        ui->actionWrite_to_DSP->setEnabled( false );
+        break;
+      case QMessageBox::No:
+        myLog()<<"Abort";
+        ui->statusBar->showMessage("Ready");
+        break;
+      default:
+        break;
+      }
+    }
     disconnect( &timerWait, SIGNAL(timeout()), this, SLOT(updateWaitingForConnect()) );
-    currentWaitRotation = 0;
-    //rotateIconConnect( currentWaitRotation );
-    msgBox->accept();
-    ui->statusBar->showMessage("Ready");
-    ui->actionWrite_to_DSP->setEnabled( true );
-
-    myLog()<<"Fw Version: "<<dsp.getFwVersion();
-    if( dsp.getFwVersion() < 0x010101 )
-    {
-      if( !jsonObjSettings["msg0003"].toBool() )
-      {
-        DialogReleaseNotes dlg( this );
-        dlg.setWindowTitle( "Release Note" );
-        dlg.setReleaseNote( QString( "There is a new firmware available for your Aurora DSP!\n" )
-                          + QString( "This fixes an issue with corrupted files on your board after a firmware update.\n" ) );
-        int result = dlg.exec();
-        if( result == QDialog::Accepted )
-        {
-          if( dlg.getDontShowAgain() )
-          {
-            jsonObjSettings["msg0003"] = true;
-            writeSettings();
-          }
-        }
-      }
-    }
-    else if( dsp.getFwVersion() < 0x010100 )
-    {
-      if( !jsonObjSettings["msg0002"].toBool() )
-      {
-        DialogReleaseNotes dlg( this );
-        dlg.setWindowTitle( "Release Note" );
-        dlg.setReleaseNote( QString( "There is a new firmware available for your Aurora DSP!\n" )
-                          + QString( "New features and changes are:\n" )
-                          + QString( "- Full support of AddOnB (S/P-DIF multiplexer)\n" )
-                          + QString( "- DAC mute function\n" )
-                          + QString( "- New webOTA interface for future firmware updates\n" )
-                          + QString( "Please download the latest firmware and install it.\nIn the user manual (UserManual.pdf) you will find instructions how to update the firmware." ) );
-        int result = dlg.exec();
-        if( result == QDialog::Accepted )
-        {
-          if( dlg.getDontShowAgain() )
-          {
-            jsonObjSettings["msg0002"] = true;
-            writeSettings();
-          }
-        }
-      }
-    }
-    else if( !jsonObjSettings["msg0001"].toBool() )
-    {
-      if( dsp.getFirmwareVersion() == "1.0.0" )
-      {
-        DialogReleaseNotes dlg( this );
-        dlg.setWindowTitle( "Hotfix available" );
-        dlg.setReleaseNote( "There is a new hotfix available for your aurora!\nPlease download the latest firmware and install it.\nIn the user manual (UserManual.pdf) you will find instructions how to update the firmware." );
-        int result = dlg.exec();
-        if( result == QDialog::Accepted )
-        {
-          if( dlg.getDontShowAgain() )
-          {
-            jsonObjSettings["msg0001"] = true;
-            writeSettings();
-          }
-        }
-      }
-    }
-    
   }
   else
   {
-    msgBox->accept();
-    QMessageBox msgQuestion;
-    msgQuestion.setText( tr("There is no DSP responding. Do you want to run auverdionControl in offline mode?") );
-    //msgQuestion.setInformativeText("Do you want to save your changes?");
-    msgQuestion.setStandardButtons( QMessageBox::Yes | QMessageBox::No );
-    msgQuestion.setDefaultButton( QMessageBox::Yes );
-    int ret = msgQuestion.exec();
-
     QStringList itemList( {"8channels", "Home Cinema 7.1"} );
     QDialogDemoSelector dialog( "Please select the plugin for offline mode: ", itemList );
-    switch (ret)
+    if( dialog.exec() == QDialog::Accepted )
     {
-    case QMessageBox::Yes:
-      myLog()<<"Demo mode selected";
-      if( dialog.exec() == QDialog::Accepted )
+      for( int ii = 0; ii < NUMPRESETS; ii++ )
       {
-        for( int ii = 0; ii < NUMPRESETS; ii++ )
-        {
-          while( presets[ii]->tabChannels->count() )
-            delete presets[ii]->tabChannels->widget( presets[ii]->tabChannels->currentIndex() );
-        }
-
-        ui->tabPresets->blockSignals( true );
-        while( ui->tabPresets->count() )
-          delete ui->tabPresets->widget( ui->tabPresets->currentIndex() );
-        ui->tabPresets->blockSignals( false );
-
-        if( dialog.comboBox()->currentText() == QString("8channels") )
-          switchPluginGui( CFreeDspAurora::PLUGIN_8CHANNELS );
-        else if( dialog.comboBox()->currentText() == QString("Home Cinema 7.1") )
-          switchPluginGui( CFreeDspAurora::PLUGIN_HOMECINEMA71 );
-
-        for( int p = 0; p < NUMPRESETS; p++ )
-        {
-          dsp.selectPresetWifi( p );
-          QByteArray userparams;
-          if( dsp.requestUserParameterWifi( userparams ) )
-          {
-            updatePresetGui( p, userparams );
-            presetUserParams[p] = userparams;
-          }
-          dspPlugin[p]->setMasterVolume( ui->volumeSliderMain->value(), false );
-          qDebug()<<"Preset Master Volume:"<<dspPlugin[p]->getMasterVolume();
-        }
-
-        updatePlots();
+        while( presets[ii]->tabChannels->count() )
+          delete presets[ii]->tabChannels->widget( presets[ii]->tabChannels->currentIndex() );
       }
-      ui->statusBar->showMessage("Ready");
-      ui->actionWrite_to_DSP->setEnabled( true );
-      break;
-    case QMessageBox::No:
-      myLog()<<"Abort";
-      ui->statusBar->showMessage("Ready");
-      break;
-    default:
-      break;
+
+      ui->tabPresets->blockSignals( true );
+      while( ui->tabPresets->count() )
+        delete ui->tabPresets->widget( ui->tabPresets->currentIndex() );
+      ui->tabPresets->blockSignals( false );
+
+      if( dialog.comboBox()->currentText() == QString("8channels") )
+        switchPluginGui( CFreeDspAurora::PLUGIN_8CHANNELS );
+      else if( dialog.comboBox()->currentText() == QString("Home Cinema 7.1") )
+        switchPluginGui( CFreeDspAurora::PLUGIN_HOMECINEMA71 );
+
+      for( int p = 0; p < NUMPRESETS; p++ )
+      {
+        dsp.selectPresetWifi( p );
+        QByteArray userparams;
+        if( dsp.requestUserParameterWifi( userparams ) )
+        {
+          updatePresetGui( p, userparams );
+          presetUserParams[p] = userparams;
+        }
+        dspPlugin[p]->setMasterVolume( ui->volumeSliderMain->value(), false );
+        qDebug()<<"Preset Master Volume:"<<dspPlugin[p]->getMasterVolume();
+      }
+
+      updatePlots();
     }
+    ui->statusBar->showMessage("Ready");
+    ui->actionWrite_to_DSP->setEnabled( false );
+
   }
   setEnabled( true );
-  disconnect( &timerWait, SIGNAL(timeout()), this, SLOT(updateWaitingForConnect()) );
 }
 
 //==============================================================================
@@ -913,6 +958,9 @@ void MainWindow::on_actionSettings_triggered()
   if( result == QDialog::Accepted )
   { 
     enableGui( false );
+
+    dsp.setConnectionTypeWifi( dialog.getConnection() );
+
     jsonObjSettings[ "network" ] = dsp.getConnectionTypeWifi();
     jsonObjSettings[ "ssid" ] = dsp.getSsidWifi();
     jsonObjSettings[ "ip" ] = dsp.getIpAddressLocalWifi();

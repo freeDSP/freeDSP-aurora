@@ -33,7 +33,8 @@ public:
   enum
   {
     ACCESS_POINT,
-    LOCAL_WIFI
+    LOCAL_WIFI,
+    OFFLINE
   };
 
   enum tdspluginid

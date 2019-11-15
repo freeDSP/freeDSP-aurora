@@ -32,6 +32,11 @@ public:
    */
   unsigned int getSpdifInput( void );
 
+  //============================================================================
+  /*!
+   */
+  unsigned int getConnection( void );
+
 private:
   //============================================================================
   /*!
@@ -44,21 +49,13 @@ private slots:
 
   void on_pushButtonVerifyPlugin_clicked();
 
-  //void on_pushButtonDetect_clicked();
-
   void on_pushButtonStoreWiFiConfig_clicked();
-
-  void on_pushButtonPing_clicked();
-
-  void on_radioButtonAP_toggled(bool checked);
-
-  void on_radioButtonLocalWifi_toggled(bool checked);
-
-  void on_lineEditIpAddress_editingFinished();
 
   void on_comboBoxAddOnId_currentIndexChanged(int index);
 
   void on_comboBoxSpdifInput_currentIndexChanged(int index);
+
+  void on_pushButtonConfigureWiFi_clicked();
 
 private:
   class CDspPluginMetaData
