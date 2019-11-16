@@ -28,6 +28,8 @@ QDelay::QDelay( tfloat dly, tfloat samplerate, uint16_t delayaddr, CFreeDspAuror
   ui->doubleSpinBoxDelay->setAttribute( Qt::WA_MacShowFocusRect, 0 );
   ui->doubleSpinBoxDelay->blockSignals( false );
 
+  connect( ui->doubleSpinBoxDelay, SIGNAL(wheelMoved()), this, SLOT(delayDspUpdate()) );
+
 }
 
 //==============================================================================
@@ -89,8 +91,6 @@ void QDelay::on_pushButtonBypass_clicked()
  */
 void QDelay::sendDspParameter( void )
 {
-  enableGui( false );
-
   int32_t val = static_cast<int32_t>(ui->doubleSpinBoxDelay->value()/1000.0 * fs + 0.5);
   if( bypass )
     val = 0;
@@ -100,8 +100,6 @@ void QDelay::sendDspParameter( void )
   content.append( dsp->makeParameterForWifi( addr[kDelay], val ) );
   content.append( dsp->unmuteSequence() );
   dsp->sendParameterWifi( content );
-
-  enableGui( true );
 }
 
 //==============================================================================

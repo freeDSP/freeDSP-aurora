@@ -42,6 +42,9 @@ QPhase::QPhase( tfloat freq, tfloat qfactor,
   ui->doubleSpinBoxQ->setValue( qfactor );
   ui->doubleSpinBoxQ->blockSignals( false );
 
+  connect( ui->doubleSpinBoxFc, SIGNAL(wheelMoved()), this, SLOT(delayDspUpdate()) );
+  connect( ui->doubleSpinBoxQ, SIGNAL(wheelMoved()), this, SLOT(delayDspUpdate()) );
+
 }
 
 //==============================================================================
@@ -179,8 +182,6 @@ void QPhase::sendDspParameter( void )
 {
   QByteArray content;
 
-  enableGui( false );
-
   content.append( dsp->muteSequence() );
 
   content.append( dsp->makeParameterForWifi( addr[kParamB2], static_cast<float>(coeffs[kB2]) ) );
@@ -192,8 +193,6 @@ void QPhase::sendDspParameter( void )
   content.append( dsp->unmuteSequence() );
 
   dsp->sendParameterWifi( content );
-
-  enableGui( true );
 }
 
 //==============================================================================

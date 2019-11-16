@@ -84,6 +84,8 @@ QDoubleSpinBox
   background-color: transparent;
   color: white;
   border: 0px solid black;
+  selection-background-color: transparent;
+  selection-color: white;
 }
 
 /* -------------------------------------------------------------------------- */

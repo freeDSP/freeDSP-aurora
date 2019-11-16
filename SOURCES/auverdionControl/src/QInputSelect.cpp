@@ -129,10 +129,6 @@ void QInputSelect::update( tvector<tfloat> f )
  */
 void QInputSelect::sendDspParameter( void )
 {
-  enableGui( false );
-
-  qDebug()<<"QInputSelect::sendDspParameter";
-
   if( dsp->getFirmwareVersion() != "1.0.0" )
   {
     QByteArray content;
@@ -141,8 +137,6 @@ void QInputSelect::sendDspParameter( void )
     content.append( dsp->unmuteSequence() );
     dsp->sendParameterWifi( content );
   }
-
-  enableGui( true );
 }
 
 //==============================================================================

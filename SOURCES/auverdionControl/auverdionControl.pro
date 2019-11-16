@@ -135,7 +135,8 @@ HEADERS += \
         ../SIGMASTUDIO/HomeCinema71USB/HomeCinema71USB_IC_1_PARAM.h \
         src/LogFile.h \
         src/QSleeper.hpp \
-        src/WizardConnect.hpp
+        src/WizardConnect.hpp \
+        src/QMyDoubleSpinBox.hpp
 
 FORMS += \
         MainWindow.ui \

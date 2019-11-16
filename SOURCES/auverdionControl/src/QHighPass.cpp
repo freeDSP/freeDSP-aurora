@@ -75,6 +75,8 @@ QHighPass::QHighPass( tfilterdesign design, tfloat fc,
   ui->doubleSpinBoxFc->setValue( fc );
   ui->doubleSpinBoxFc->blockSignals( false );
 
+  connect( ui->doubleSpinBoxFc, SIGNAL(wheelMoved()), this, SLOT(delayDspUpdate()) );
+
   //ui->pushButtonBypass->setChecked( bypass );
 
   updateCoeffs();
@@ -886,8 +888,6 @@ void QHighPass::sendDspParameter( void )
 {
   QByteArray content;
 
-  enableGui( false );
-
   content.append( dsp->muteSequence() );
 
   content.append( dsp->makeParameterForWifi( addr[kParamB2_1], static_cast<float>(coeffs[kB2]) ) );
@@ -917,8 +917,6 @@ void QHighPass::sendDspParameter( void )
   content.append( dsp->unmuteSequence() );
 
   dsp->sendParameterWifi( content );
-
-  enableGui( true );
 }
 
 //==============================================================================

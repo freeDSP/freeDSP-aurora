@@ -40,6 +40,10 @@ QHighShelv::QHighShelv( double gain, double freq, double slope,
   ui->doubleSpinBoxS->setValue( slope );
   ui->doubleSpinBoxS->blockSignals( false);
 
+  connect( ui->doubleSpinBoxGain, SIGNAL(wheelMoved()), this, SLOT(delayDspUpdate()) );
+  connect( ui->doubleSpinBoxFc, SIGNAL(wheelMoved()), this, SLOT(delayDspUpdate()) );
+  connect( ui->doubleSpinBoxS, SIGNAL(wheelMoved()), this, SLOT(delayDspUpdate()) );
+
   type = HIGHSHELV;
 }
 
@@ -172,8 +176,6 @@ void QHighShelv::sendDspParameter( void )
 {
   QByteArray content;
 
-  enableGui( false );
-
   content.append( dsp->muteSequence() );
 
   content.append( dsp->makeParameterForWifi( addr[kParamB2], static_cast<float>(coeffs[kB2]) ) );
@@ -185,8 +187,6 @@ void QHighShelv::sendDspParameter( void )
   content.append( dsp->unmuteSequence() );
 
   dsp->sendParameterWifi( content );
-
-  enableGui( true );
 }
 
 //==============================================================================

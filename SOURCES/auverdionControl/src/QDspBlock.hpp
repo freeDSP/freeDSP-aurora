@@ -61,8 +61,11 @@ public:
 protected:
   void paintEvent(QPaintEvent *);
 
+  virtual void updateCoeffs( void ) = 0;
+
 protected slots:
   virtual void updateDsp( void ) = 0;
+  void delayDspUpdate( void );
 
 signals:
   void valueChanged( void );

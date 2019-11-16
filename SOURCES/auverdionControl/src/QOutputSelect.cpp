@@ -77,7 +77,7 @@ QOutputSelect::~QOutputSelect()
  */
 void QOutputSelect::update( tvector<tfloat> f )
 {
-  myLog()<<"QOutputSelect::update";
+  //myLog()<<"QOutputSelect::update";
   H = tvector<tcomplex>( length(f) );
 
   if( fileName.isEmpty() )
@@ -134,8 +134,6 @@ void QOutputSelect::update( tvector<tfloat> f )
  */
 void QOutputSelect::sendDspParameter( void )
 {
-  //uint32_t val = static_cast<uint32_t>(ui->comboBoxInput->currentIndex());
-  //dsp->sendParameter( addr[kInput], val );
 }
 
 //==============================================================================

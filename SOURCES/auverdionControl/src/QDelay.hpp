@@ -49,6 +49,9 @@ public:
 
   virtual QByteArray getDspParams( void );
 
+protected:
+  void updateCoeffs( void ) { }
+
 private slots:
   void on_doubleSpinBoxDelay_valueChanged( double arg1 );
   void on_pushButtonBypass_clicked();

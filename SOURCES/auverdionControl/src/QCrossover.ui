@@ -99,7 +99,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QDoubleSpinBox" name="doubleSpinBoxFcLp">
+        <widget class="QMyDoubleSpinBox" name="doubleSpinBoxFcLp">
          <property name="contextMenuPolicy">
           <enum>Qt::NoContextMenu</enum>
          </property>
@@ -187,7 +187,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QDoubleSpinBox" name="doubleSpinBoxFcHp">
+        <widget class="QMyDoubleSpinBox" name="doubleSpinBoxFcHp">
          <property name="contextMenuPolicy">
           <enum>Qt::NoContextMenu</enum>
          </property>
@@ -289,6 +289,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QMyDoubleSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>QMyDoubleSpinBox.hpp</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

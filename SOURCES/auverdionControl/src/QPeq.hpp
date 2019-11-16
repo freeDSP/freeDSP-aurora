@@ -87,7 +87,7 @@ signals:
   void importRewPeqs( QWidget* );
 
 private slots:
-  void on_doubleSpinBoxGain_valueChanged( double  );
+  void on_doubleSpinBoxGain_valueChanged( double );
   void on_doubleSpinBoxFc_valueChanged( double  );
   void on_doubleSpinBoxQ_valueChanged( double  );
   void on_pushButtonBypass_clicked();
@@ -101,7 +101,7 @@ protected slots:
    */
   virtual void updateDsp( void )
   {
-    updateCoeffs();
+    //updateCoeffs();
     sendDspParameter();
   }
 

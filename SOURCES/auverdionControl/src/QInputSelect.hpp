@@ -66,6 +66,9 @@ public:
 
   virtual QByteArray getDspParams( void );
 
+protected:
+  void updateCoeffs( void ) { }
+
 private slots:
   void on_comboBoxInput_currentIndexChanged( int  );
 

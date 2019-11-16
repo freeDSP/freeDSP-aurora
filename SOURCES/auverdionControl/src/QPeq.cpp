@@ -51,6 +51,10 @@ QPeq::QPeq( double gain, double freq, double qfactor,
 
   connect( action, &QAction::triggered, this, &QPeq::on_importRewPeqs );
 
+  connect( ui->doubleSpinBoxGain, SIGNAL(wheelMoved()), this, SLOT(delayDspUpdate()) );
+  connect( ui->doubleSpinBoxFc, SIGNAL(wheelMoved()), this, SLOT(delayDspUpdate()) );
+  connect( ui->doubleSpinBoxQ, SIGNAL(wheelMoved()), this, SLOT(delayDspUpdate()) );
+
   type = PEQ;
 
 }
@@ -185,8 +189,6 @@ void QPeq::sendDspParameter( void )
 {
   QByteArray content;
 
-  enableGui( false );
-
   content.append( dsp->muteSequence() );
 
   content.append( dsp->makeParameterForWifi( addr[kParamB2], static_cast<float>(coeffs[kB2]) ) );
@@ -198,8 +200,6 @@ void QPeq::sendDspParameter( void )
   content.append( dsp->unmuteSequence() );
 
   dsp->sendParameterWifi( content );
-
-  enableGui( true );
 }
 
 //==============================================================================

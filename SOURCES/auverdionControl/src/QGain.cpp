@@ -29,6 +29,8 @@ QGain::QGain( tfloat V0, uint16_t gainaddr, CFreeDspAurora* ptrdsp, QWidget *par
   ui->doubleSpinBoxGain->setValue( V0 );
   ui->doubleSpinBoxGain->setAttribute( Qt::WA_MacShowFocusRect, 0 );
   ui->doubleSpinBoxGain->blockSignals( false );
+
+  connect( ui->doubleSpinBoxGain, SIGNAL(wheelMoved()), this, SLOT(delayDspUpdate()) );
 }
 
 //==============================================================================
@@ -88,8 +90,6 @@ void QGain::on_pushButtonBypass_clicked()
  */
 void QGain::sendDspParameter( void )
 {
-  enableGui( false );
-
   double gain = 0.0; //static_cast<double>(sliderMainVolume->value());
   if( !bypass )
     gain += ui->doubleSpinBoxGain->value();
@@ -99,8 +99,6 @@ void QGain::sendDspParameter( void )
   QByteArray content;
   content.append( dsp->makeParameterForWifi( addr[kTargetGain], val ) );
   dsp->sendParameterWifi( content );
-
-  enableGui( true );
 }
 
 //==============================================================================
