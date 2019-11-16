@@ -26,6 +26,7 @@ QDelay::QDelay( tfloat dly, tfloat samplerate, uint16_t delayaddr, CFreeDspAuror
   ui->doubleSpinBoxDelay->blockSignals( true );
   ui->doubleSpinBoxDelay->setValue( delay );
   ui->doubleSpinBoxDelay->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+  ui->doubleSpinBoxDelay->setSingleStep( 1.0/fs * 1000.0 );
   ui->doubleSpinBoxDelay->blockSignals( false );
 
   connect( ui->doubleSpinBoxDelay, SIGNAL(wheelMoved()), this, SLOT(delayDspUpdate()) );
