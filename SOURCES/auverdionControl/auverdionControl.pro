@@ -87,7 +87,8 @@ SOURCES += \
         src/dsp/HomeCinema71/PlugInHomeCinema71.cpp \
         src/dsp/HomeCinema71USB/PlugInHomeCinema71USB.cpp \
         src/WizardConnect.cpp \
-        src/WizardImportRewFrq.cpp
+        src/WizardImportRewFrq.cpp \
+        src/WizardImportRewPeq.cpp
 
 HEADERS += \
         MainWindow.hpp \
@@ -138,7 +139,8 @@ HEADERS += \
         src/QSleeper.hpp \
         src/WizardConnect.hpp \
         src/QMyDoubleSpinBox.hpp \
-        src/WizardImportRewFrq.hpp
+        src/WizardImportRewFrq.hpp \
+        src/WizardImportRewPeq.hpp
         
 
 FORMS += \

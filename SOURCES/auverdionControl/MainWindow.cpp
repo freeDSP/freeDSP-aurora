@@ -21,6 +21,7 @@
 #include "QDialogDemoSelector.hpp"
 #include "DialogReleaseNotes.h"
 #include "DialogConnect.h"
+#include "WizardImportRewPeq.hpp"
 
 #include "PlugIn8Channels.hpp"
 #include "PlugInHomeCinema71.hpp"
@@ -1013,9 +1014,17 @@ void MainWindow::importRewPeqs( QWidget* sender )
   QChannel* chn = peq->getChannel();
   qDebug()<<"Channel Name"<<chn->getName();
 
-  QString fileName = QFileDialog::getOpenFileName( this, tr("Open REW export file"), 
-                                                     QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory),
-                                                     tr("REW Files (*.txt)") );
+  WizardImportRewPeq wizardImport;
+  int result = wizardImport.exec();
+  if( result != QDialog::Accepted )
+    return;
+
+  QString fileName = wizardImport.field( "file" ).toString();
+
+  //QString fileName = QFileDialog::getOpenFileName( this, tr("Open REW export file"), 
+  //                                                   QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory),
+  //                                                   tr("REW Files (*.txt)") );
+  
   QFile rewFile( fileName );
   if( rewFile.open(QIODevice::ReadOnly) )
   {
