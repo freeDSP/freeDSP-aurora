@@ -227,7 +227,6 @@ void QPeq::on_showContextMenu( const QPoint &pos )
  */
 void QPeq::on_importRewPeqs( void )
 {
-  qDebug()<<"QPeq::on_importRewPeqs"<<channel->getName();
   emit importRewPeqs( this );
 }
 

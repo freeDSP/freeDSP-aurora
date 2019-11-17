@@ -1037,16 +1037,16 @@ void MainWindow::importRewPeqs( QWidget* sender )
         {
           qDebug()<<values.value(0)<<values.value(1)<<values.value(2)<<values.value(3);
           QString str = values.value(5);
-          str.replace( ".", "" );
-          str.replace( ",", "." );
+          //str.replace( ".", "" );
+          //str.replace( ",", "." );
           tfloat fc = str.toDouble();
           str = values.value(8);
-          str.replace( ".", "" );
-          str.replace( ",", "." );
+          //str.replace( ".", "" );
+          //str.replace( ",", "." );
           tfloat V0 = str.toDouble();
           str = values.value(11);
-          str.replace( ".", "" );
-          str.replace( ",", "." );
+          //str.replace( ".", "" );
+          //str.replace( ",", "." );
           tfloat Q = str.toDouble();
           peqs.at(idx)->setParameters( fc, V0, Q );
           idx++;
