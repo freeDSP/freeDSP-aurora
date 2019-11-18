@@ -233,6 +233,14 @@ public:
   }
 
   //============================================================================
+  /*! Sets the ip address in local wifi network.
+   */
+  void setIpAddressLocalWifi( QString ip )
+  {
+    ipAddressLocal = ip;
+  }
+
+  //============================================================================
   /*! Sets the currently used ip address for communication with DSP.
    */
   void setIpAddressWifi( QString ip )

@@ -57,6 +57,8 @@ private slots:
 
   void on_pushButtonConfigureWiFi_clicked();
 
+  void on_comboBoxConnection_currentIndexChanged(const QString &arg1);
+
 private:
   class CDspPluginMetaData
   {
