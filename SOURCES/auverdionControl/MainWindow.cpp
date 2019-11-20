@@ -21,6 +21,7 @@
 #include "QDialogDemoSelector.hpp"
 #include "DialogReleaseNotes.h"
 #include "DialogConnect.h"
+#include "WizardImportRewPeq.hpp"
 
 #include "PlugIn8Channels.hpp"
 #include "PlugInHomeCinema71.hpp"
@@ -1013,9 +1014,17 @@ void MainWindow::importRewPeqs( QWidget* sender )
   QChannel* chn = peq->getChannel();
   qDebug()<<"Channel Name"<<chn->getName();
 
-  QString fileName = QFileDialog::getOpenFileName( this, tr("Open REW export file"), 
-                                                     QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory),
-                                                     tr("REW Files (*.txt)") );
+  WizardImportRewPeq wizardImport;
+  int result = wizardImport.exec();
+  if( result != QDialog::Accepted )
+    return;
+
+  QString fileName = wizardImport.field( "file" ).toString();
+
+  //QString fileName = QFileDialog::getOpenFileName( this, tr("Open REW export file"), 
+  //                                                   QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory),
+  //                                                   tr("REW Files (*.txt)") );
+  
   QFile rewFile( fileName );
   if( rewFile.open(QIODevice::ReadOnly) )
   {
@@ -1037,16 +1046,16 @@ void MainWindow::importRewPeqs( QWidget* sender )
         {
           qDebug()<<values.value(0)<<values.value(1)<<values.value(2)<<values.value(3);
           QString str = values.value(5);
-          str.replace( ".", "" );
-          str.replace( ",", "." );
+          //str.replace( ".", "" );
+          //str.replace( ",", "." );
           tfloat fc = str.toDouble();
           str = values.value(8);
-          str.replace( ".", "" );
-          str.replace( ",", "." );
+          //str.replace( ".", "" );
+          //str.replace( ",", "." );
           tfloat V0 = str.toDouble();
           str = values.value(11);
-          str.replace( ".", "" );
-          str.replace( ",", "." );
+          //str.replace( ".", "" );
+          //str.replace( ",", "." );
           tfloat Q = str.toDouble();
           peqs.at(idx)->setParameters( fc, V0, Q );
           idx++;

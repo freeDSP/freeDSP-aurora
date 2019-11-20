@@ -71,33 +71,14 @@ DialogSettings::DialogSettings( CFreeDspAurora* ptrdsp, QWidget* parent ) :
   }
   ui->comboBoxPlugIn->blockSignals( false );
 
-#if 0
-  ui->radioButtonAP->blockSignals( true );
-  ui->radioButtonLocalWifi->blockSignals( true );
-  if( dsp->getConnectionTypeWifi() == CFreeDspAurora::ACCESS_POINT )
-  {
-    ui->radioButtonAP->setChecked( true );
-    ui->pushButtonPing->setEnabled( false );
-    ui->lineEditIpAddress->setEnabled( false );
-  }
-  else
-  {
-    ui->radioButtonLocalWifi->setChecked( true );
-    ui->pushButtonPing->setEnabled( true );
-    ui->lineEditIpAddress->setEnabled( true );
-  }
-  ui->radioButtonAP->blockSignals( false );
-  ui->radioButtonLocalWifi->blockSignals( false );
-
-  ui->lineEditIpAddress->setText( dsp->getIpAddressWifi() );
-#endif
-
+  ui->comboBoxConnection->blockSignals( true );
   ui->comboBoxConnection->addItem( "Access Point", CFreeDspAurora::ACCESS_POINT );
   ui->comboBoxConnection->addItem( "Local WiFi Network", CFreeDspAurora::LOCAL_WIFI );
   ui->comboBoxConnection->addItem( "Offline Mode", CFreeDspAurora::OFFLINE );
   int index = ui->comboBoxConnection->findData( dsp->getConnectionTypeWifi() );
   if( index != -1 )
     ui->comboBoxConnection->setCurrentIndex( index );
+  ui->comboBoxConnection->blockSignals( false );
 
   ui->comboBoxAddOnId->blockSignals( true );
   ui->comboBoxAddOnId->addItem( "None or Custom", 0x00 );
@@ -724,3 +705,21 @@ unsigned int DialogSettings::getConnection( void )
   return ui->comboBoxConnection->itemData( ui->comboBoxConnection->currentIndex() ).toUInt();
 }
 
+//==============================================================================
+/*!
+ */
+void DialogSettings::on_comboBoxConnection_currentIndexChanged(const QString &arg1)
+{
+  if( arg1 == QString( "Local WiFi Network" ) )
+  {
+    bool ok;
+    QString text = QInputDialog::getText( this, tr("Set IP address"),
+                                          tr("What is the IP of your Aurora in your local network?:"), QLineEdit::Normal,
+                                          dsp->getIpAddressLocalWifi(), &ok );
+    if( ok && !text.isEmpty() )
+    {
+      dsp->setIpAddressLocalWifi( text );
+      ui->labelLocalWiFiIP->setText( text );
+    }
+  }
+}
