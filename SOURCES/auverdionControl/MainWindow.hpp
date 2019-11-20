@@ -108,6 +108,9 @@ private:
   int currentPreset = 0;
   QByteArray presetUserParams[NUMPRESETS];
   QJsonObject jsonObjSettings;
+
+  QLabel* labelConnected;
+  QLabel* labelPlugIn;
 };
 
 #endif // MAINWINDOW_HPP

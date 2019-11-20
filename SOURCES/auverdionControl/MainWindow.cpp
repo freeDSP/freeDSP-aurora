@@ -336,6 +336,15 @@ MainWindow::MainWindow( QWidget* parent ) :
   logo->move( 6, 6 );
   logo->show();
 
+  labelPlugIn = new QLabel( "Unkonw PlugIn" );
+  labelConnected = new QLabel( "Not connected" );
+  QHBoxLayout* layout = new QHBoxLayout;
+  layout->addWidget( labelPlugIn );
+  layout->addWidget( labelConnected );
+  QWidget* widget = new QWidget( ui->statusBar );
+  widget->setLayout( layout );
+  ui->statusBar->addPermanentWidget( widget );
+
 }
 
 //==============================================================================
@@ -597,6 +606,32 @@ void MainWindow::on_actionRead_from_DSP_triggered()
             }
           }
         }
+      }
+      switch( pid )
+      {
+      case CFreeDspAurora::PLUGIN_8CHANNELS:
+        labelPlugIn->setText( "8channels" );
+        labelConnected->setText( "Connected" );
+        break;
+      case CFreeDspAurora::PLUGIN_HOMECINEMA71:
+        labelPlugIn->setText( "HomeCinema71" );
+        labelConnected->setText( "Connected" );
+        break;
+      case CFreeDspAurora::PLUGIN_4FIRS:
+        labelPlugIn->setText( "4firs" );
+        labelConnected->setText( "Connected" );
+        break;
+      case CFreeDspAurora::PLUGIN_8CHANNELS_USB:
+        labelPlugIn->setText( "8channels USB" );
+        labelConnected->setText( "Connected" );
+        break;
+      case CFreeDspAurora::PLUGIN_HOMECINEMA71_USB:
+        labelPlugIn->setText( "HomeCinema71 USB" );
+        labelConnected->setText( "Connected" );
+        break;
+      default:
+        labelPlugIn->setText( "Unkown Plugin" );
+        labelConnected->setText( "Connected" );
       }
       
     }
