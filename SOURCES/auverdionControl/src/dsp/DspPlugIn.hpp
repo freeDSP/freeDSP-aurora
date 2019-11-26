@@ -55,6 +55,8 @@ public:
 
   virtual double getMasterVolume( void ) = 0;
 
+  virtual uint32_t getPid( void ) = 0;
+
   //============================================================================
   /*!
    *

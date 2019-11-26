@@ -203,26 +203,6 @@ uint32_t QLowShelv::getNumBytes( void )
 
 //==============================================================================
 /*!
- *
- */
-/*
-void QLowShelv::writeDspParameter( void )
-{
-  dsp->storeRegAddr( addr[kParamB2] );
-  dsp->storeValue( static_cast<float>(coeffs[kB2]) );
-  dsp->storeRegAddr( addr[kParamB1] );
-  dsp->storeValue( static_cast<float>(coeffs[kB1]) );
-  dsp->storeRegAddr( addr[kParamB0] );
-  dsp->storeValue( static_cast<float>(coeffs[kB0]) );
-  dsp->storeRegAddr( addr[kParamA2] );
-  dsp->storeValue( static_cast<float>(coeffs[kA2]) );
-  dsp->storeRegAddr( addr[kParamA1] );
-  dsp->storeValue( static_cast<float>(coeffs[kA1]) );
-
-}*/
-
-//==============================================================================
-/*!
  */
 QByteArray QLowShelv::getUserParams( void )
 {

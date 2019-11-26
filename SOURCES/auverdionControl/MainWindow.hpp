@@ -86,6 +86,10 @@ private slots:
 
   void on_tabPresets_currentChanged(int index);
 
+  void on_actionSaveParameters_triggered();
+
+  void on_actionLoadParameters_triggered();
+
 signals:
   void replyFinished( void );  
 

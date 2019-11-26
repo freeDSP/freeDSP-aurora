@@ -39,7 +39,7 @@ class PageWelcomeRewPeq : public QWizardPage
   Q_OBJECT
 
 public:
-  PageWelcomeRewPeq( QWidget* parent = nullptr )
+  PageWelcomeRewPeq( QWidget* = nullptr )
   {
     setTitle( tr("Export the PEQs in REW.") );
     //setStyleSheet("background-color:#111111");
@@ -53,8 +53,6 @@ public:
     
     setLayout( layout );
   }
-
-  ~PageWelcomeRewPeq( void ) {}
 
   int nextId( void ) const override
   {
@@ -73,7 +71,7 @@ class PageSelectFileRewPeq : public QWizardPage
   Q_OBJECT
 
 public:
-  PageSelectFileRewPeq( QWidget* parent = nullptr )
+  PageSelectFileRewPeq( QWidget* = nullptr )
   {
     setTitle( tr("Select the file with frequency response values that REW has exported.") );
     //setStyleSheet("background-color:#111111");

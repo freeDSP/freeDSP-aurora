@@ -665,9 +665,15 @@ void MainWindow::on_actionRead_from_DSP_triggered()
           ui->tabPresets->blockSignals( false );
 
           if( dialog.comboBox()->currentText() == QString("8channels") )
+          {
             switchPluginGui( CFreeDspAurora::PLUGIN_8CHANNELS );
+            labelPlugIn->setText( "8channels" );
+          }
           else if( dialog.comboBox()->currentText() == QString("Home Cinema 7.1") )
+          {
             switchPluginGui( CFreeDspAurora::PLUGIN_HOMECINEMA71 );
+            labelPlugIn->setText( "HomeCinema71" );
+          }
 
           for( int p = 0; p < NUMPRESETS; p++ )
           {
@@ -715,9 +721,15 @@ void MainWindow::on_actionRead_from_DSP_triggered()
       ui->tabPresets->blockSignals( false );
 
       if( dialog.comboBox()->currentText() == QString("8channels") )
+      {
         switchPluginGui( CFreeDspAurora::PLUGIN_8CHANNELS );
+        labelPlugIn->setText( "8channels" );
+      }
       else if( dialog.comboBox()->currentText() == QString("Home Cinema 7.1") )
+      {
         switchPluginGui( CFreeDspAurora::PLUGIN_HOMECINEMA71 );
+        labelPlugIn->setText( "HomeCinema71" );
+      }
 
       for( int p = 0; p < NUMPRESETS; p++ )
       {
@@ -995,7 +1007,7 @@ void MainWindow::on_actionSettings_triggered()
   { 
     enableGui( false );
 
-    dsp.setConnectionTypeWifi( dialog.getConnection() );
+    dsp.setConnectionTypeWifi( static_cast<int>(dialog.getConnection()) );
 
     jsonObjSettings[ "network" ] = dsp.getConnectionTypeWifi();
     jsonObjSettings[ "ssid" ] = dsp.getSsidWifi();
@@ -1426,5 +1438,134 @@ switch( pid )
     QMessageBox::critical( this, tr("Error"), tr("Your DSP reports an unkown PID. Please reinstall a valid plugin on your board."), QMessageBox::Ok ); 
     ui->statusBar->showMessage("Ready");
     return;
+  }
+}
+
+//==============================================================================
+/*!
+ */
+void MainWindow::on_actionSaveParameters_triggered()
+{
+  QString fileName = QFileDialog::getSaveFileName( this, tr("Save parameters to file"), 
+                                                   QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory),
+                                                   tr("Parameters Files (*.dspPrj)") );
+  if( fileName.isEmpty() )
+    return;
+
+  //----------------------------------------------------------------------------
+  //--- Build usrparam.hex file
+  //----------------------------------------------------------------------------
+  QByteArray fileparams;
+
+  for( uint32_t p = 0; p < NUMPRESETS; p++ )
+  {
+    fileparams.append( static_cast<char>((dspPlugin[p]->getPid()) & 0x000000FF) );
+    fileparams.append( static_cast<char>((dspPlugin[p]->getPid() >> 8) & 0x000000FF) );
+    fileparams.append( static_cast<char>((dspPlugin[p]->getPid() >> 16) & 0x000000FF) );
+    fileparams.append( static_cast<char>((dspPlugin[p]->getPid() >> 24) & 0x000000FF) );
+
+    QByteArray usrparams;
+    for( unsigned int ii = 0; ii < dspPlugin[p]->getNumChannels(); ii++ )
+    {
+      QChannel* channel = dspPlugin[p]->getChannel( ii );
+      for( unsigned int n = 0; n < channel->getNumDspBlocks(); n++ )
+      {
+        QDspBlock* dspBlock = channel->getDspBlock(n);
+        QByteArray params = dspBlock->getUserParams();
+        if( params.size() )
+          usrparams.append( params );
+      }
+    }
+    usrparams.append( ui->volumeSliderMain->getUserParams() );
+
+    uint32_t size = static_cast<uint32_t>(usrparams.size());
+    fileparams.append( static_cast<char>((size) & 0x000000FF) );
+    fileparams.append( static_cast<char>((size >> 8) & 0x000000FF) );
+    fileparams.append( static_cast<char>((size >> 16) & 0x000000FF) );
+    fileparams.append( static_cast<char>((size >> 24) & 0x000000FF) );
+    fileparams.append( usrparams );
+  }
+
+  QFile file( fileName );
+  if( !file.open( QIODevice::WriteOnly ) )
+  {
+    myLog()<<"Could not open file "<<fileName;
+    return;
+  }
+
+  if( file.write( fileparams ) == -1 )
+  {
+    myLog()<<"Could not write to file "<<fileName;
+    return;
+  }
+
+  file.close();
+}
+
+//==============================================================================
+/*!
+ */
+void MainWindow::on_actionLoadParameters_triggered()
+{
+  QString fileName = QFileDialog::getOpenFileName( this, tr("Load parameters from file"), 
+                                                   QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory),
+                                                   tr("Parameters Files (*.dspPrj)") );
+  if( fileName.isEmpty() )
+    return;
+
+  QFile file( fileName );
+  if( !file.open( QIODevice::ReadOnly ) )
+  {
+    myLog()<<"Could not open file "<<fileName;
+    return;
+  }
+
+  QByteArray fileparams = file.readAll();
+
+  file.close();
+
+  if( fileparams.size() > 0 )
+  {
+    int idx = 0;
+    for( int p = 0; p < NUMPRESETS; p++ )
+    {
+      QByteArray param;
+      param.append( fileparams.at(idx) );
+      idx++;
+      param.append( fileparams.at(idx) );
+      idx++;
+      param.append( fileparams.at(idx) );
+      idx++;
+      param.append( fileparams.at(idx) );
+      idx++;
+      uint32_t pid = *reinterpret_cast<const uint32_t*>(param.data());
+      int32_t size = 0;
+      if( pid == dspPlugin[p]->getPid() )
+      {
+        param.clear();
+        param.append( fileparams.at(idx) );
+        idx++;
+        param.append( fileparams.at(idx) );
+        idx++;
+        param.append( fileparams.at(idx) );
+        idx++;
+        param.append( fileparams.at(idx) );
+        idx++;
+        size = static_cast<int32_t>(*reinterpret_cast<const uint32_t*>(param.data()));
+
+        QByteArray userparams = fileparams.mid( idx, size );
+        updatePresetGui( p, userparams );
+        presetUserParams[p] = userparams;
+        dspPlugin[p]->setMasterVolume( ui->volumeSliderMain->value(), false );
+      }
+      else
+      {
+        myLog()<<"Plugin does not match the file.";
+        QMessageBox::critical( this, tr("Error"), tr("Sorry, Plugin does not match the file."), QMessageBox::Ok );
+        return;
+      }
+      idx += size;
+    }
+    updatePlots();
   }
 }

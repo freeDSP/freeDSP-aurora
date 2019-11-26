@@ -77,6 +77,15 @@ public:
   virtual uint16_t getAddressMasterVolume( void );
 
   //============================================================================
+  /*!
+   *
+   */
+  virtual uint32_t getPid( void )
+  {
+    return CFreeDspAurora::PLUGIN_HOMECINEMA71;
+  }
+
+  //============================================================================
   //
   // Member Variables
   //

@@ -175,8 +175,6 @@ QByteArray QInputSelect::getUserParams( void )
  */
 void QInputSelect::setUserParams( QByteArray& userParams, int& idx )
 {
-  QByteArray param;
-
   if( dsp->getFirmwareVersion() != "1.0.0" )
   {
     if( userParams.size() >= idx + 1 )
