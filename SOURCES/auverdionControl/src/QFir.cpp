@@ -134,14 +134,17 @@ bool QFir::eventFilter( QObject* object, QEvent* event )
  */
 QByteArray QFir::getUserParams( void )
 {
-  QByteArray ret;
+  QByteArray content;
 
-  #if !defined( __WIN__ )
-  #warning QFir::getUserParams not implemented
-  #endif
-  qDebug()<<"QFir::getUserParams not implemented";
+  qDebug()<<"QFir::getUserParams";
 
-  return ret;
+  for( uint32_t kk = 0; kk < nfft; kk++ )
+  {
+    float tap = static_cast<float>(ir[kk]);
+    content.append( reinterpret_cast<const char*>(&tap), sizeof(float) );
+  }
+
+  return content;
 }
 
 //==============================================================================
@@ -149,10 +152,25 @@ QByteArray QFir::getUserParams( void )
  */
 void QFir::setUserParams( QByteArray& userParams, int& idx )
 {
-  #if !defined( __WIN__ )
-  #warning QFir::setUserParams not implemented
-  #endif
-  qDebug()<<"QFir::setUserParams not implemented";
+  //#if !defined( __WIN__ )
+  //#warning QFir::setUserParams not implemented
+  //#endif
+  qDebug()<<"QFir::setUserParams";
+
+  for( uint32_t kk = 0; kk < nfft; kk++ )
+  {
+    QByteArray param;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    param.append( userParams.at(idx) );
+    idx++;
+    ir[kk] = static_cast<Vektorraum::tfloat>(*reinterpret_cast<const float*>(param.data()));
+  }
+    
 }
 
 //==============================================================================

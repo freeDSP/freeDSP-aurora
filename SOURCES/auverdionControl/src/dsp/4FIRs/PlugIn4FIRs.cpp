@@ -86,7 +86,7 @@ tDspChannel CPlugIn4FIRs::getGuiForChannel( unsigned int chn, tfloat fs, CFreeDs
     layout->addWidget( input );
     channel->addDspBlock( input );
     channel->setName( dspChannel.name );
-
+ 
     fir = new QFir( MOD_FIR1_ALG0_FIRSIGMA300ALG1FIRCOEFF0_ADDR, NFFT, ptrdsp, channel );
     layout->addWidget( fir );
     channel->addDspBlock( fir );

@@ -645,12 +645,12 @@ void MainWindow::on_actionRead_from_DSP_triggered()
       msgQuestion.setDefaultButton( QMessageBox::Yes );
       int ret = msgQuestion.exec();
 
-      QStringList itemList( {"8channels", "Home Cinema 7.1"} );
+      QStringList itemList( {"8channels", "Home Cinema 7.1", "4FIRs"} );
       QDialogDemoSelector dialog( "Please select the plugin for offline mode: ", itemList );
       switch (ret)
       {
       case QMessageBox::Yes:
-        myLog()<<"Demo mode selected";
+        myLog()<<"Offline mode selected";
         if( dialog.exec() == QDialog::Accepted )
         {
           for( int ii = 0; ii < NUMPRESETS; ii++ )
@@ -673,6 +673,11 @@ void MainWindow::on_actionRead_from_DSP_triggered()
           {
             switchPluginGui( CFreeDspAurora::PLUGIN_HOMECINEMA71 );
             labelPlugIn->setText( "HomeCinema71" );
+          }
+          else if( dialog.comboBox()->currentText() == QString("4FIRs") )
+          {
+            switchPluginGui( CFreeDspAurora::PLUGIN_4FIRS );
+            labelPlugIn->setText( "4FIRs" );
           }
 
           for( int p = 0; p < NUMPRESETS; p++ )
@@ -705,7 +710,7 @@ void MainWindow::on_actionRead_from_DSP_triggered()
   }
   else
   {
-    QStringList itemList( {"8channels", "Home Cinema 7.1"} );
+    QStringList itemList( {"8channels", "Home Cinema 7.1", "4FIRs"} );
     QDialogDemoSelector dialog( "Please select the plugin for offline mode: ", itemList );
     if( dialog.exec() == QDialog::Accepted )
     {
@@ -730,6 +735,11 @@ void MainWindow::on_actionRead_from_DSP_triggered()
         switchPluginGui( CFreeDspAurora::PLUGIN_HOMECINEMA71 );
         labelPlugIn->setText( "HomeCinema71" );
       }
+      else if( dialog.comboBox()->currentText() == QString("4FIRs") )
+          {
+            switchPluginGui( CFreeDspAurora::PLUGIN_4FIRS );
+            labelPlugIn->setText( "4FIRs" );
+          }
 
       for( int p = 0; p < NUMPRESETS; p++ )
       {
