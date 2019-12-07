@@ -549,7 +549,7 @@ bool CFreeDspAurora::finishUserParameterWifi( uint32_t totalTransmittedBytes )
 /*! Request the user parameter file.
  *
  */
-bool CFreeDspAurora::requestUserParameterWifi( QByteArray& userparams )
+bool CFreeDspAurora::requestUserParameterWifi( QByteArray& userparams, int msec )
 {
   myLog()<<"---------------------------------------------------------------";
   myLog()<<"receiveUserParameterWifi";
@@ -575,7 +575,7 @@ bool CFreeDspAurora::requestUserParameterWifi( QByteArray& userparams )
     }
     else
     {
-      myLog()<<QString( replyDSP );
+      //myLog()<<QString( replyDSP );
       QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
       totalBytes = listReply.at(4).toUInt();
 
@@ -587,7 +587,7 @@ bool CFreeDspAurora::requestUserParameterWifi( QByteArray& userparams )
         request.clear();
         request.append( requestString );
         writeRequestWifi( request );
-        if( !waitForReplyWifi() )
+        if( !waitForReplyWifi( msec ) )
         {
           myLog()<<"Could not receive the user parameter file";
           QMessageBox::critical( this, tr("Error"), tr("Could not receive the user parameter file. Please double check everything and try again."), QMessageBox::Ok ); 
@@ -611,12 +611,13 @@ bool CFreeDspAurora::requestUserParameterWifi( QByteArray& userparams )
       }
     }  
   
-    myLog()<<"Done";
-    myLog()<<"Received: "<<userparams.size()<<"/"<<totalBytes;
+    //myLog()<<"Done";
+    //myLog()<<"Received: "<<userparams.size()<<"/"<<totalBytes;
 
     if( static_cast<uint32_t>(userparams.size()) < totalBytes )
     {
-      myLog()<<"Could not receive all bytes of the user parameter file";
+      myLog()<<"[ERROR] Could not receive all bytes of the user parameter file";
+      myLog()<<"Received "<<userparams.size()<<" of "<<totalBytes;
       QMessageBox::critical( this, tr("Error"), tr("Could not receive all bytes of the user parameter file. Please double check all connections and reset all devices and try again."), QMessageBox::Ok ); 
       return false;
     }
@@ -642,7 +643,7 @@ void CFreeDspAurora::readyReadWifi( void )
     ptrProgressBar->setValue( replyWifi.size() );
   if( (listReply.size() > 4) && (str.mid( str.length()-2, 2 ) == QString("\r\n")) )
   {
-    myLog()<<QString( replyWifi );
+    //myLog()<<QString( replyWifi );
     myLog()<<"Reply complete";
     replyCompleteWifi = true;
     replyDSP = replyWifi;

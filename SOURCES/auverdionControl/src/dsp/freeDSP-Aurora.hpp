@@ -92,7 +92,7 @@ public:
   /*! Request the user parameter file.
    *
    */
-  bool requestUserParameterWifi( QByteArray& userparams );
+  bool requestUserParameterWifi( QByteArray& userparams, int msec = 5000 );
 
   //============================================================================
   /*!

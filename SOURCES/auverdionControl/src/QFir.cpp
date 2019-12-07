@@ -8,13 +8,17 @@
 #include "QFir.hpp"
 #include "ui_QFir.h"
 
+#include "LogFile.h"
+
+extern CLogFile myLog;
+
 using namespace Vektorraum;
 
 //==============================================================================
 /*! Constructor
  *
  */
-QFir::QFir( uint16_t firaddr, tuint filterlength, CFreeDspAurora* ptrdsp, QWidget *parent) :
+QFir::QFir( uint16_t firaddr, tuint filterlength, tfloat samplerate, CFreeDspAurora* ptrdsp, QWidget *parent) :
   QDspBlock(parent), ui(new Ui::QFir)
 {
   type = FIR;
@@ -28,11 +32,16 @@ QFir::QFir( uint16_t firaddr, tuint filterlength, CFreeDspAurora* ptrdsp, QWidge
 
   nfft = filterlength;
   taps = 0;
+  fs = samplerate;
 
   ir = tvector<tfloat>(nfft);
   for( tuint k = 0; k < length(ir); k++ )
     ir[k] = 0.0;
   ir[0] = 1.0;
+
+  freq = tvector<tfloat>(nfft/2 + 1);
+  for( uint n = 0; n < length(freq); n++ )
+    freq[n] = static_cast<tfloat>(n) / static_cast<tfloat>(nfft) * fs;
 
   updateCoeffs();
 }
@@ -48,7 +57,41 @@ QFir::~QFir()
  */
 void QFir::update( tvector<tfloat> f )
 {
+  tvector<tcomplex> X = fft( ir, nfft );
+  tvector<tfloat> magt = abs( X( 0, nfft/2 ) );
+  tvector<tfloat> phit = angle( X( 0, nfft/2 ) );
 
+  if( length(f) >= length(freq) )
+  {
+    tvector<tfloat> mag = interp1( freq, magt, f, "spline" );
+    tvector<tfloat> phi = interp1( freq, phit, f, "spline" );
+    H = mag * exp( j*phi );
+  }
+  else
+  {
+    tvector<tcomplex> FR_dec = tvector<tcomplex>(length(f));
+    tvector<tfloat> freq_dec = tvector<tfloat>(length(f));
+    tfloat q = static_cast<tfloat>(length(freq)) / static_cast<tfloat>(length(f));
+    tuint idx = 0;
+    for( tfloat ii = 0; ii < static_cast<tfloat>(length(X)); ii = ii + q )
+    {
+      if( idx < length(f) )
+      {
+        FR_dec[idx] = X[static_cast<tuint>(ii)];
+        freq_dec[idx] = freq[static_cast<tuint>(ii)];
+      }
+      idx++;
+    }
+    if( idx < length(f) )
+    {
+      FR_dec[length(f)-1] = X[length(freq)-1];
+      freq_dec[length(f)-1] = freq[length(freq)-1];
+    }
+    
+    tvector<tfloat> mag = interp1( freq_dec, abs( FR_dec ), f, "spline" );
+    tvector<tfloat> phi = interp1( freq_dec, angle( FR_dec ), f, "spline" );
+    H = mag * exp( j*phi );
+  }
 }
 
 //==============================================================================
@@ -57,7 +100,7 @@ void QFir::update( tvector<tfloat> f )
 void QFir::updateCoeffs( void )
 {
   tvector<tcomplex> X = fft( ir, nfft );
-  H = X( 0, nfft/2 );
+  //H = X( 0, nfft/2 );
 }
 
 //==============================================================================
@@ -157,18 +200,21 @@ void QFir::setUserParams( QByteArray& userParams, int& idx )
   //#endif
   qDebug()<<"QFir::setUserParams";
 
-  for( uint32_t kk = 0; kk < nfft; kk++ )
+  if( userParams.size() >= idx + 4096 * sizeof(float) )
   {
-    QByteArray param;
-    param.append( userParams.at(idx) );
-    idx++;
-    param.append( userParams.at(idx) );
-    idx++;
-    param.append( userParams.at(idx) );
-    idx++;
-    param.append( userParams.at(idx) );
-    idx++;
-    ir[kk] = static_cast<Vektorraum::tfloat>(*reinterpret_cast<const float*>(param.data()));
+    for( uint32_t kk = 0; kk < nfft; kk++ )
+    {
+      QByteArray param;
+      param.append( userParams.at(idx) );
+      idx++;
+      param.append( userParams.at(idx) );
+      idx++;
+      param.append( userParams.at(idx) );
+      idx++;
+      param.append( userParams.at(idx) );
+      idx++;
+      ir[kk] = static_cast<Vektorraum::tfloat>(*reinterpret_cast<const float*>(param.data()));
+    }
   }
     
 }

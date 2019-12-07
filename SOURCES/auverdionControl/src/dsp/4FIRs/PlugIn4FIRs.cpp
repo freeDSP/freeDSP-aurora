@@ -87,7 +87,7 @@ tDspChannel CPlugIn4FIRs::getGuiForChannel( unsigned int chn, tfloat fs, CFreeDs
     channel->addDspBlock( input );
     channel->setName( dspChannel.name );
  
-    fir = new QFir( MOD_FIR1_ALG0_FIRSIGMA300ALG1FIRCOEFF0_ADDR, NFFT, ptrdsp, channel );
+    fir = new QFir( MOD_FIR1_ALG0_FIRSIGMA300ALG1FIRCOEFF0_ADDR, NFFT, fs, ptrdsp, channel );
     layout->addWidget( fir );
     channel->addDspBlock( fir );
 
@@ -232,7 +232,7 @@ tDspChannel CPlugIn4FIRs::getGuiForChannel( unsigned int chn, tfloat fs, CFreeDs
     channel->addDspBlock( input );
     channel->setName( dspChannel.name );
 
-    fir = new QFir( MOD_FIR2_ALG0_FIRSIGMA300ALG2FIRCOEFF0_ADDR, NFFT, ptrdsp, channel );
+    fir = new QFir( MOD_FIR2_ALG0_FIRSIGMA300ALG2FIRCOEFF0_ADDR, NFFT, fs, ptrdsp, channel );
     layout->addWidget( fir );
     channel->addDspBlock( fir );
 
@@ -377,7 +377,7 @@ tDspChannel CPlugIn4FIRs::getGuiForChannel( unsigned int chn, tfloat fs, CFreeDs
     channel->addDspBlock( input );
     channel->setName( dspChannel.name );
 
-    fir = new QFir( MOD_FIR3_ALG0_FIRSIGMA300ALG3FIRCOEFF0_ADDR, NFFT, ptrdsp, channel );
+    fir = new QFir( MOD_FIR3_ALG0_FIRSIGMA300ALG3FIRCOEFF0_ADDR, NFFT, fs, ptrdsp, channel );
     layout->addWidget( fir );
     channel->addDspBlock( fir );
 
@@ -522,7 +522,7 @@ tDspChannel CPlugIn4FIRs::getGuiForChannel( unsigned int chn, tfloat fs, CFreeDs
     channel->addDspBlock( input );
     channel->setName( dspChannel.name );
 
-    fir = new QFir( MOD_FIR4_ALG0_FIRSIGMA300ALG4FIRCOEFF0_ADDR, NFFT, ptrdsp, channel );
+    fir = new QFir( MOD_FIR4_ALG0_FIRSIGMA300ALG4FIRCOEFF0_ADDR, NFFT, fs, ptrdsp, channel );
     layout->addWidget( fir );
     channel->addDspBlock( fir );
 
@@ -674,7 +674,8 @@ tDspChannel CPlugIn4FIRs::getGuiForChannel( unsigned int chn, tfloat fs, CFreeDs
  */
 void CPlugIn4FIRs::setMasterVolume( double val, bool doSend )
 {
-  qDebug()<<"CPlugInHomeCinema71::setMasterVolume not implemented";
+  #warning CPlugIn4FIRs::setMasterVolume not implemented
+  qDebug()<<"CPlugIn4FIRs::setMasterVolume not implemented";
 }
 
 //==============================================================================
@@ -683,6 +684,7 @@ void CPlugIn4FIRs::setMasterVolume( double val, bool doSend )
  */
 uint16_t CPlugIn4FIRs::getAddressMasterVolume( void )
 {
+  #warning CPlugIn4FIRs::getAddressMasterVolume not implementeds
   qDebug()<<"CPlugIn4FIRs::getAddressMasterVolume not implemented";
   return 0;
 }

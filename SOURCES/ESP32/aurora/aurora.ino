@@ -1715,25 +1715,39 @@ void handleHttpRequest()
                 fileUserParams = SPIFFS.open( presetUsrparamFile[Settings.currentPreset], "r" );
                 if( fileUserParams )
                 {
+                  int cntr = 0;
+                  int offset = 0;
                   size_t len = fileUserParams.size();
                   Serial.println( len );
-                  //len = 100;
-                  int cntr = 0;
 
-                  while( cntr < len )
+                  while( offset < len )
                   {
                     byte byteRead;
                     fileUserParams.read( &byteRead, 1 );
                     //Serial.println( byte2string2( byteRead ) );
                     httpResponse += byte2string2( byteRead );
                     cntr++;
+                    offset++;
+                    if( cntr == 1024 )
+                    {
+                      client.print( httpResponse );
+                      httpResponse = "";
+                      cntr = 0;
+                      Serial.print( "." );
+                    }
+                  }
+
+                  if( cntr > 0 )
+                  {
+                    client.print( httpResponse );
+                    httpResponse = "";
                   }
                 }
                 fileUserParams.close();
               }
               httpResponse += "\r\n";
               client.println( httpResponse );
-              client.stop();
+              //client.stop();
               wifiStatus = STATE_WIFI_IDLE;
               currentLine = "";
               //cntrPackets++;
@@ -1782,7 +1796,7 @@ void handleHttpRequest()
                 if( fileDspProgram )
                 {
                   size_t len = fileDspProgram.size();
-                  Serial.println( len );
+                  //Serial.println( len );
                   int cntr = 0;
 
                   while( cntr < len )

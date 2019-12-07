@@ -25,7 +25,7 @@ class QFir : public QDspBlock
   };
 
 public:
-  explicit QFir( uint16_t firaddr, Vektorraum::tuint filterlength, CFreeDspAurora* ptrdsp, QWidget *parent = nullptr );
+  explicit QFir( uint16_t firaddr, Vektorraum::tuint filterlength, Vektorraum::tfloat samplerate, CFreeDspAurora* ptrdsp, QWidget *parent = nullptr );
   ~QFir();
 
   virtual Vektorraum::tvector<Vektorraum::tcomplex> getTransferFunction( void )
@@ -69,6 +69,7 @@ private:
   CFreeDspAurora* dsp;
 
   Vektorraum::tvector<Vektorraum::tfloat> ir;
+  Vektorraum::tvector<Vektorraum::tfloat> freq;
   Vektorraum::tuint taps;
   Vektorraum::tuint nfft;
 };

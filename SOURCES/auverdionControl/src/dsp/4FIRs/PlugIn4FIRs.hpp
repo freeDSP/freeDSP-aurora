@@ -57,6 +57,15 @@ public:
   /*!
    *
    */
+  virtual double getMasterVolume( void )
+  {
+    return masterVolume;
+  }
+
+  //============================================================================
+  /*!
+   *
+   */
   virtual uint16_t getAddressMasterVolume( void );
 
   //============================================================================

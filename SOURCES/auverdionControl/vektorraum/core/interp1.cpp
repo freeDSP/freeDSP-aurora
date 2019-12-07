@@ -115,7 +115,6 @@ tvector<double> interp1( tvector<double> X, tvector<double> Y, tvector<double> X
     return YI;
   }
 
-  std::cout<<length(X)<<std::endl;
   for( tuint k = 0; k < length(X)-1; k++ )
   {
     if( X[k] >= X[k+1] )
