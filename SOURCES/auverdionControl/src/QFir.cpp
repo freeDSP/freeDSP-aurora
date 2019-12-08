@@ -44,6 +44,8 @@ QFir::QFir( uint16_t firaddr, tuint filterlength, tfloat samplerate, CFreeDspAur
     freq[n] = static_cast<tfloat>(n) / static_cast<tfloat>(nfft) * fs;
 
   updateCoeffs();
+
+  ui->pushButtonBypass->hide();
 }
 
 QFir::~QFir()
@@ -109,9 +111,27 @@ void QFir::updateCoeffs( void )
  */
 void QFir::sendDspParameter( void )
 {
-  qDebug()<<"QFir::sendDspParameter not implemented";
-  //uint32_t val = static_cast<uint32_t>(ui->comboBoxInput->currentIndex());
-  //dsp->sendParameter( addr[kInput], val );
+  qDebug()<<"QFir::sendDspParameter";
+
+  QMessageBox* msg = new QMessageBox( QMessageBox::Information, tr("Upload"), tr("Uploading FIR to Aurora, please wait..."), QMessageBox::NoButton, this );
+  msg->setStandardButtons( nullptr );
+  msg->open();
+
+  dsp->muteDAC();
+
+  QByteArray content;
+
+  for( uint16_t kk = 0; kk < nfft; kk++ )
+    content.append( dsp->makeParameterForWifi( addr[kImpulseResponse] + kk, 
+                                               static_cast<float>(ir[kk]) ) );
+
+  dsp->sendParameterWifi( content, 60000 );
+
+  dsp->unmuteDAC();
+
+  msg->accept();
+
+  delete msg;
 }
 
 //==============================================================================
@@ -179,8 +199,6 @@ QByteArray QFir::getUserParams( void )
 {
   QByteArray content;
 
-  qDebug()<<"QFir::getUserParams";
-
   for( uint32_t kk = 0; kk < nfft; kk++ )
   {
     float tap = static_cast<float>(ir[kk]);
@@ -195,12 +213,7 @@ QByteArray QFir::getUserParams( void )
  */
 void QFir::setUserParams( QByteArray& userParams, int& idx )
 {
-  //#if !defined( __WIN__ )
-  //#warning QFir::setUserParams not implemented
-  //#endif
-  qDebug()<<"QFir::setUserParams";
-
-  if( userParams.size() >= idx + 4096 * sizeof(float) )
+  if( userParams.size() >= idx + static_cast<int>(4096 * sizeof(float)) )
   {
     for( uint32_t kk = 0; kk < nfft; kk++ )
     {
@@ -227,12 +240,12 @@ void QFir::setUserParams( QByteArray& userParams, int& idx )
  */
 QByteArray QFir::getDspParams( void )
 {
-  QByteArray ret;
+  QByteArray content;
 
-  #if !defined( __WIN__ )
-  #warning QFir::getDspParam not implemented
-  #endif
-  qDebug()<<"QFir::getDspParam not implemented";
+  qDebug()<<"QFir::getDspParam";
 
-  return ret;
+  for( uint16_t kk = 0; kk < nfft; kk++ )
+    content.append( dsp->makeParameterForWifi( addr[kImpulseResponse] + kk, 
+                                               static_cast<float>(ir[kk]) ) );
+  return content;
 }

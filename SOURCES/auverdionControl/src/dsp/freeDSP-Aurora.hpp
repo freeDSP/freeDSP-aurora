@@ -97,7 +97,7 @@ public:
   //============================================================================
   /*!
    */
-  bool sendParameterWifi( QByteArray content );
+  bool sendParameterWifi( QByteArray content, int timeout = 5000 );
 
   //============================================================================
   /*!
@@ -256,7 +256,12 @@ public:
   //============================================================================
   /*!
    */
-  void setConnectionTypeWifi( int type ) { connectionType = type; }
+  void setConnectionTypeWifi( int type )
+  { 
+    connectionType = type; 
+    if( connectionType == OFFLINE )
+      isConnected = false;
+  }
 
   //============================================================================
   /*! Returns the ssid of local wifi network.

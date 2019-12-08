@@ -336,7 +336,7 @@ MainWindow::MainWindow( QWidget* parent ) :
   logo->move( 6, 6 );
   logo->show();
 
-  labelPlugIn = new QLabel( "Unkonw PlugIn" );
+  labelPlugIn = new QLabel( "Unknown PlugIn" );
   labelConnected = new QLabel( "Not connected" );
   QHBoxLayout* layout = new QHBoxLayout;
   layout->addWidget( labelPlugIn );
@@ -630,7 +630,7 @@ void MainWindow::on_actionRead_from_DSP_triggered()
         labelConnected->setText( "Connected" );
         break;
       default:
-        labelPlugIn->setText( "Unkown Plugin" );
+        labelPlugIn->setText( "Unknown Plugin" );
         labelConnected->setText( "Connected" );
       }
       
@@ -1043,6 +1043,10 @@ void MainWindow::on_actionSettings_triggered()
       else if( dialog.getSpdifInput() == 0x07 )
         dsp.sendAddOnConfig( "820103" );
     }
+
+    if( dsp.getConnectionTypeWifi() == CFreeDspAurora::OFFLINE )
+      labelConnected->setText( "Not connected" );
+
     enableGui( true );
   }
 }
@@ -1494,10 +1498,10 @@ switch( pid )
     return;
 
   default:
-    qDebug()<<"Unkown plugin"<<pid;
+    qDebug()<<"Unknown plugin"<<pid;
     setEnabled( true );
     msgBox->accept();
-    QMessageBox::critical( this, tr("Error"), tr("Your DSP reports an unkown PID. Please reinstall a valid plugin on your board."), QMessageBox::Ok ); 
+    QMessageBox::critical( this, tr("Error"), tr("Your DSP reports an unknown PID. Please reinstall a valid plugin on your board."), QMessageBox::Ok ); 
     ui->statusBar->showMessage("Ready");
     return;
   }

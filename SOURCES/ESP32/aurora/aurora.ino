@@ -19,7 +19,7 @@
 #define I2C_SDA_PIN 17
 #define I2C_SCL_PIN 16
 
-#define VERSION_STR "1.1.1"
+#define VERSION_STR "1.2.0"
 
 #define FORMAT_SPIFFS_IF_FAILED true
 
@@ -914,8 +914,8 @@ void handleHttpRequest()
                 {
                   String strReg = currentLine.substring( sentBytes + 0, sentBytes + 4 );
                   String strData = currentLine.substring( sentBytes + 4, sentBytes + 12 );
-                  Serial.println( strReg );
-                  Serial.println( strData );
+                  //Serial.println( strReg );
+                  //Serial.println( strData );
                   uint16_t reg = (uint16_t)strtoul( strReg.c_str(), NULL, 16 );
                   uint32_t data = (uint32_t)strtoul( strData.c_str(), NULL, 16 );
 
@@ -996,7 +996,7 @@ void handleHttpRequest()
                 totalBytesReceived += receivedPostRequest.length();
 
                 int offset = 0;
-                Serial.print( "Writing to file..." );
+                //Serial.print( "Writing to file..." );
                 while( offset < receivedPostRequest.length() )
                 {
                   String str = receivedPostRequest.substring( offset, offset + 2 );
@@ -1006,11 +1006,10 @@ void handleHttpRequest()
                     Serial.println( "[ERROR] Writing to " + presetDspparamFile[Settings.currentPreset] );
                   offset += 2;
                 }
-                Serial.println("OK");
                 fileDspParams.flush();
 
-                Serial.print( "Received bytes:" );
-                Serial.println( receivedPostRequest.length() );
+                //Serial.print( "Received bytes:" );
+                //Serial.println( receivedPostRequest.length() );
                 receivedPostRequest = "";
 
                 String httpResponse = "";
@@ -1019,6 +1018,8 @@ void handleHttpRequest()
                 httpResponse += "ACK";
                 httpResponse += "\r\n";
                 client.println( httpResponse );
+
+                Serial.println("<ACK>");
 
                 client.stop();
                 waitForData = false;

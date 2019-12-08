@@ -122,7 +122,7 @@ QByteArray CFreeDspAurora::makeParameterForWifi( uint16_t reg, int32_t val )
 /*!
  *
  */
-bool CFreeDspAurora::sendParameterWifi( QByteArray content )
+bool CFreeDspAurora::sendParameterWifi( QByteArray content, int timeout )
 {
   myLog()<<"---------------------------------------------------------------";
   myLog()<<"sendParameterWifi()";
@@ -147,9 +147,9 @@ bool CFreeDspAurora::sendParameterWifi( QByteArray content )
     {
       if( writeRequestWifi( request ) )
       {
-        if( !waitForReplyWifi() )
+        if( !waitForReplyWifi( timeout ) )
         {
-          myLog()<<"Writing firmware to DSP failed";
+          myLog()<<"Writing parameter to DSP failed";
           QMessageBox::critical( this, tr("Error"), tr("Uups, sending parameter to DSP failed. Please double check everything, reset DSP and try again."), QMessageBox::Ok ); 
           setStatusBarMessage( "Failed" );
           return false;
@@ -174,8 +174,7 @@ bool CFreeDspAurora::sendParameterWifi( QByteArray content )
       setStatusBarMessage( "Ready" );
       return true;
     }
-
-    
+   
   }
   else
   {
@@ -440,7 +439,7 @@ int32_t CFreeDspAurora::requestCurrentPresetWifi( void )
     {
       QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
       if( listReply.size() > 4 )
-        preset = listReply.at(4).toUInt();
+        preset = listReply.at(4).toInt();
       myLog()<<"Current preset:"<<preset;  
     }
   }
@@ -603,8 +602,8 @@ bool CFreeDspAurora::requestUserParameterWifi( QByteArray& userparams, int msec 
           while( offset < str.length() )
           {
             bool ok;
-            uint8_t val = str.mid( offset, 2 ).toUInt( &ok, 16 );
-            userparams.append( val );
+            uint8_t val = static_cast<uint8_t>(str.mid( offset, 2 ).toUInt( &ok, 16 ));
+            userparams.append( static_cast<char>(val) );
             offset += 2;
           }
         }
@@ -616,7 +615,7 @@ bool CFreeDspAurora::requestUserParameterWifi( QByteArray& userparams, int msec 
 
     if( static_cast<uint32_t>(userparams.size()) < totalBytes )
     {
-      myLog()<<"[ERROR] Could not receive all bytes of the user parameter file";
+      myLog()<<"[ERROR] Could not receive all bytes of the user parameter file";
       myLog()<<"Received "<<userparams.size()<<" of "<<totalBytes;
       QMessageBox::critical( this, tr("Error"), tr("Could not receive all bytes of the user parameter file. Please double check all connections and reset all devices and try again."), QMessageBox::Ok ); 
       return false;
@@ -771,8 +770,8 @@ bool CFreeDspAurora::requestDspFirmwareWifi( QByteArray& firmware, QProgressBar*
         while( offset < str.length() )
         {
           bool ok;
-          int8_t val = str.mid( offset, 2 ).toUInt( &ok, 16 );
-          firmware.append( val );
+          uint8_t val = static_cast<uint8_t>(str.mid( offset, 2 ).toUInt( &ok, 16 ));
+          firmware.append( static_cast<char>(val) );
           offset += 2;
         }
       }
@@ -1110,7 +1109,7 @@ bool CFreeDspAurora::requestFirmwareVersionWifi( bool showmessage )
                       + listVersion.at(2).toUInt( &status, 16 );
                     
         }
-        myLog()<<"Firmware version:"<<versionstr<<QString::number( fwVersion, 16 );;  
+        myLog()<<"Firmware version:"<<versionstr<<QString::number( fwVersion, 16 );
         return true;
       }
     }
@@ -1122,7 +1121,7 @@ bool CFreeDspAurora::requestFirmwareVersionWifi( bool showmessage )
     }
   //}
 
-  return false;
+  //return false;
 }
 
 //==============================================================================
@@ -1184,7 +1183,7 @@ bool CFreeDspAurora::storeAddOnIdWifi( quint32 aid )
     QString wifiIpHost = getIpAddressWifi();
 
     QByteArray content;
-    content.append( aid );
+    content.append( static_cast<char>(aid) );
 
     QString requestString = QString("POST /aid HTTP/1.1\r\n")
                           + QString("Host: ") + wifiIpHost + QString("\r\n")
@@ -1294,7 +1293,7 @@ bool CFreeDspAurora::writeI2C( const int8_t addr, const int8_t reg, const int8_t
  *  \param data Data from i2c slave.
  *  \return true if successful, else false.
  */
-bool CFreeDspAurora::readI2C( const int8_t addr, const int8_t reg, int8_t& data )
+bool CFreeDspAurora::readI2C( const int8_t addr, const int8_t reg, int8_t& )
 {
   myLog()<<"---------------------------------------------------------------";
   myLog()<<"readI2C";
@@ -1333,8 +1332,8 @@ bool CFreeDspAurora::readI2C( const int8_t addr, const int8_t reg, int8_t& data 
           QString str = listReply.at(4);
           if( str.length() >= 2 )
           {
-            bool ok;
-            uint8_t data = str.mid( 0, 2 ).toUInt( &ok, 16 );
+            //bool ok;
+            //uint8_t data = str.mid( 0, 2 ).toUInt( &ok, 16 );
             return true;
           }
           else
