@@ -661,6 +661,8 @@ unsigned int DialogSettings::getConnection( void )
  */
 void DialogSettings::on_comboBoxConnection_currentIndexChanged(const QString &arg1)
 {
+  dsp->setConnectionTypeWifi( static_cast<int>(getConnection()) );
+  
   if( arg1 == QString( "Local WiFi Network" ) )
   {
     bool ok;

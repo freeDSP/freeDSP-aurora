@@ -682,10 +682,12 @@ void MainWindow::on_actionRead_from_DSP_triggered()
       case CFreeDspAurora::PLUGIN_CUSTOM:
         labelPlugIn->setText( "Custom" );
         labelConnected->setText( "Connected" );
+        ui->tabPresets->blockSignals( true );
         ui->tabPresets->setTabEnabled( 0, false );
         ui->tabPresets->setTabEnabled( 1, false );
         ui->tabPresets->setTabEnabled( 2, false );
         ui->tabPresets->setTabEnabled( 3, false );
+        ui->tabPresets->blockSignals( false );
         break;
       default:
         labelPlugIn->setText( "Unknown Plugin" );
