@@ -49,7 +49,7 @@ private slots:
 
   void on_pushButtonVerifyPlugin_clicked();
 
-  void on_pushButtonStoreWiFiConfig_clicked();
+  //void on_pushButtonStoreWiFiConfig_clicked();
 
   void on_comboBoxAddOnId_currentIndexChanged(int index);
 

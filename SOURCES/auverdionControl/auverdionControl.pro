@@ -54,7 +54,8 @@ INCLUDEPATH += src \
                ../SIGMASTUDIO/8channelsUSB \
                ../SIGMASTUDIO/HomeCinema71 \
                ../SIGMASTUDIO/HomeCinema71USB \
-               ../SIGMASTUDIO/4FIRs
+               ../SIGMASTUDIO/4FIRs \
+               src/dsp/custom
 
 SOURCES += \
         main.cpp \
@@ -89,7 +90,8 @@ SOURCES += \
         src/dsp/HomeCinema71USB/PlugInHomeCinema71USB.cpp \
         src/WizardConnect.cpp \
         src/WizardImportRewFrq.cpp \
-        src/WizardImportRewPeq.cpp
+        src/WizardImportRewPeq.cpp \
+        src/dsp/custom/PlugInCustom.cpp
 
 HEADERS += \
         MainWindow.hpp \
@@ -144,7 +146,8 @@ HEADERS += \
         src/WizardConnect.hpp \
         src/QMyDoubleSpinBox.hpp \
         src/WizardImportRewFrq.hpp \
-        src/WizardImportRewPeq.hpp
+        src/WizardImportRewPeq.hpp \
+        src/dsp/custom/PlugInCustom.hpp
         
 
 FORMS += \

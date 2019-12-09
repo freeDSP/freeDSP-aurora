@@ -69,6 +69,7 @@ DialogSettings::DialogSettings( CFreeDspAurora* ptrdsp, QWidget* parent ) :
     }
     fileDspPlugins.close();
   }
+  ui->comboBoxPlugIn->addItem( "Custom", CFreeDspAurora::PLUGIN_CUSTOM );
   ui->comboBoxPlugIn->blockSignals( false );
 
   ui->comboBoxConnection->blockSignals( true );
@@ -184,23 +185,51 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
   }*/
   #endif
 
-  for( int ii = 0; ii < dspPluginMetaData.size(); ii++ )
+  if( ui->comboBoxPlugIn->currentData().toInt() == CFreeDspAurora::PLUGIN_CUSTOM )
   {
-    if( dspPluginMetaData.at(ii).pid == ui->comboBoxPlugIn->currentData().toInt() )
+    QString fileName = QFileDialog::getOpenFileName( this, tr("Select SigmaStudio project"), 
+                                                     QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory),
+                                                     tr("IR Files (*.dspproj)") );
+    if( fileName.isEmpty() )
     {
-      pathTxBuffer = dspPluginMetaData.at(ii).path + "/TxBuffer_IC_1.dat";
-      pathNumBytes = dspPluginMetaData.at(ii).path + "/NumBytes_IC_1.dat";
-      break;
+      enableGui( true );
+      return;
+    }
+
+    QFile fileDspProj( fileName );
+    QFileInfo fileInfoDspProj( fileDspProj );
+    QDir dir = fileInfoDspProj.absoluteDir();
+    pathTxBuffer = dir.absolutePath() + QString( "/TxBuffer_IC_1.dat" );
+    pathNumBytes = dir.absolutePath() + QString( "/NumBytes_IC_1.dat" );
+    if( !QFile( pathTxBuffer ).exists() )
+    {
+      QMessageBox::critical( this, tr("Error"), pathTxBuffer + tr("does not exist."), QMessageBox::Ok );
+      enableGui( true );
+      return;
+    }
+    if( !QFile( pathNumBytes ).exists() )
+    {
+      QMessageBox::critical( this, tr("Error"), pathNumBytes + tr("does not exist."), QMessageBox::Ok );
+      enableGui( true );
+      return;
     }
   }
-  qDebug()<<"PATHES";
-  qDebug()<<pathTxBuffer;
-  qDebug()<<pathNumBytes;
+  else
+  {
+    for( int ii = 0; ii < dspPluginMetaData.size(); ii++ )
+    {
+      if( dspPluginMetaData.at(ii).pid == ui->comboBoxPlugIn->currentData().toInt() )
+      {
+        pathTxBuffer = dspPluginMetaData.at(ii).path + "/TxBuffer_IC_1.dat";
+        pathNumBytes = dspPluginMetaData.at(ii).path + "/NumBytes_IC_1.dat";
+        break;
+      }
+    }
+  }
   
   //----------------------------------------------------------------------------
   //--- Read and convert the TxBuffer_IC_1.dat file
   //----------------------------------------------------------------------------
-  qDebug()<<pathTxBuffer;
   QFile fileTxBuffer( pathTxBuffer );
   if( !fileTxBuffer.open( QIODevice::ReadOnly ) )
   {
@@ -230,7 +259,6 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
   //----------------------------------------------------------------------------
   //--- Read and convert the NumBytes_IC_1.dat file
   //----------------------------------------------------------------------------
-  qDebug()<<pathNumBytes;
   QFile fileNumBytes( pathNumBytes );
   if( !fileNumBytes.open( QIODevice::ReadOnly ) )
   {
@@ -503,6 +531,7 @@ void DialogSettings::on_pushButtonVerifyPlugin_clicked()
 /*!
  *
  */
+/*
 void DialogSettings::on_pushButtonStoreWiFiConfig_clicked()
 {
   enableGui( false );
@@ -514,54 +543,7 @@ void DialogSettings::on_pushButtonStoreWiFiConfig_clicked()
   //}
   enableGui( true );
 }
-
-//==============================================================================
-/*!
- *
- */
-#if 0
-void DialogSettings::on_pushButtonPing_clicked()
-{
-  enableGui( false );
-  dsp->pingWifi();
-  ui->lineEditIpAddress->setText( dsp->getIpAddressWifi() );
-  enableGui( true );
-}
-#endif
-
-#if 0
-//==============================================================================
-/*!
- *
- */
-void DialogSettings::on_radioButtonAP_toggled(bool checked)
-{
-  if( checked )
-  {
-    dsp->setConnectionTypeWifi( CFreeDspAurora::ACCESS_POINT );
-    ui->lineEditIpAddress->setText( dsp->getIpAddressWifi() );
-    ui->pushButtonPing->setEnabled( false );
-    ui->lineEditIpAddress->setEnabled( false );
-  }
-}
-#endif
-
-#if 0
-//==============================================================================
-/*!
- *
- */
-void DialogSettings::on_radioButtonLocalWifi_toggled(bool checked)
-{
-  if( checked )
-  {
-    dsp->setConnectionTypeWifi( CFreeDspAurora::LOCAL_WIFI );
-    ui->lineEditIpAddress->setText( dsp->getIpAddressWifi() );
-    ui->pushButtonPing->setEnabled( true );
-    ui->lineEditIpAddress->setEnabled( true );
-  }
-}
-#endif
+*/
 
 //==============================================================================
 /*!
@@ -573,47 +555,16 @@ void DialogSettings::enableGui( bool state )
   {
     ui->pushButtonInstallPlugin->setEnabled( true );
     ui->pushButtonVerifyPlugin->setEnabled( true );
-    //ui->radioButtonAP->setEnabled( true );
-    //ui->radioButtonLocalWifi->setEnabled( true );
-    //ui->lineEditSSID->setEnabled( true );
-    //ui->lineEditPassword->setEnabled( true );
-    //ui->pushButtonStoreWiFiConfig->setEnabled( true );
-    //ui->lineEditIpAddress->setEnabled( true );
-    //if( ui->radioButtonLocalWifi->isChecked() )
-    //  ui->pushButtonPing->setEnabled( true );
-    //else
-    //  ui->pushButtonPing->setEnabled( false );
     ui->buttonBox->setEnabled( true );
   }
   else
   {
     ui->pushButtonInstallPlugin->setEnabled( false );
     ui->pushButtonVerifyPlugin->setEnabled( false );
-    //ui->radioButtonAP->setEnabled( false );
-    //ui->radioButtonLocalWifi->setEnabled( false );
-    //ui->lineEditSSID->setEnabled( false );
-    //ui->lineEditPassword->setEnabled( false );
-    //ui->pushButtonStoreWiFiConfig->setEnabled( false );
-    //ui->lineEditIpAddress->setEnabled( false );
-    //ui->pushButtonPing->setEnabled( false );
     ui->buttonBox->setEnabled( false );
   }
 
 }
-
-#if 0
-//==============================================================================
-/*!
- *
- */
-void DialogSettings::on_lineEditIpAddress_editingFinished()
-{
-  qDebug()<<"DialogSettings::on_lineEditIpAddress_editingFinished";
-  //if( ui->radioButtonLocalWifi->isChecked() )
-  //  dsp->setIpAddressWifi( ui->lineEditIpAddress->text() );
-
-}
-#endif
 
 //==============================================================================
 /*!

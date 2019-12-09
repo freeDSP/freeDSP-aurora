@@ -28,6 +28,7 @@
 #include "PlugIn4FIRs.hpp"
 #include "PlugIn8ChannelsUSB.hpp"
 #include "PlugInHomeCinema71USB.hpp"
+#include "PlugInCustom.hpp"
 
 #include "LogFile.h"
 
@@ -547,7 +548,26 @@ void MainWindow::on_actionRead_from_DSP_triggered()
       ui->actionWrite_to_DSP->setEnabled( true );
 
       myLog()<<"Fw Version: "<<dsp.getFwVersion();
-      if( dsp.getFwVersion() < 0x010101 )
+      if( dsp.getFwVersion() < 0x010200 )
+      {
+        if( !jsonObjSettings["msg0004"].toBool() )
+        {
+          DialogReleaseNotes dlg( this );
+          dlg.setWindowTitle( "Release Note" );
+          dlg.setReleaseNote( QString( "There is a new firmware available for your Aurora DSP!\n" )
+                            + QString( "This firmware update adds FIR filters to your Aurora DSP.\n" ) );
+          int result = dlg.exec();
+          if( result == QDialog::Accepted )
+          {
+            if( dlg.getDontShowAgain() )
+            {
+              jsonObjSettings["msg0004"] = true;
+              writeSettings();
+            }
+          }
+        }
+      }
+      else if( dsp.getFwVersion() < 0x010101 )
       {
         if( !jsonObjSettings["msg0003"].toBool() )
         {
@@ -612,22 +632,60 @@ void MainWindow::on_actionRead_from_DSP_triggered()
       case CFreeDspAurora::PLUGIN_8CHANNELS:
         labelPlugIn->setText( "8channels" );
         labelConnected->setText( "Connected" );
+        ui->tabPresets->blockSignals( true );
+        ui->tabPresets->setTabEnabled( 0, true );
+        ui->tabPresets->setTabEnabled( 1, true );
+        ui->tabPresets->setTabEnabled( 2, true );
+        ui->tabPresets->setTabEnabled( 3, true );
+        ui->tabPresets->blockSignals( false );
         break;
       case CFreeDspAurora::PLUGIN_HOMECINEMA71:
         labelPlugIn->setText( "HomeCinema71" );
         labelConnected->setText( "Connected" );
+        ui->tabPresets->blockSignals( true );
+        ui->tabPresets->setTabEnabled( 0, true );
+        ui->tabPresets->setTabEnabled( 1, true );
+        ui->tabPresets->setTabEnabled( 2, true );
+        ui->tabPresets->setTabEnabled( 3, true );
+        ui->tabPresets->blockSignals( false );
         break;
       case CFreeDspAurora::PLUGIN_4FIRS:
         labelPlugIn->setText( "4FIRs" );
         labelConnected->setText( "Connected" );
+        ui->tabPresets->blockSignals( true );
+        ui->tabPresets->setTabEnabled( 0, true );
+        ui->tabPresets->setTabEnabled( 1, true );
+        ui->tabPresets->setTabEnabled( 2, true );
+        ui->tabPresets->setTabEnabled( 3, true );
+        ui->tabPresets->blockSignals( false );
         break;
       case CFreeDspAurora::PLUGIN_8CHANNELS_USB:
         labelPlugIn->setText( "8channels USB" );
         labelConnected->setText( "Connected" );
+        ui->tabPresets->blockSignals( true );
+        ui->tabPresets->setTabEnabled( 0, true );
+        ui->tabPresets->setTabEnabled( 1, true );
+        ui->tabPresets->setTabEnabled( 2, true );
+        ui->tabPresets->setTabEnabled( 3, true );
+        ui->tabPresets->blockSignals( false );
         break;
       case CFreeDspAurora::PLUGIN_HOMECINEMA71_USB:
         labelPlugIn->setText( "HomeCinema71 USB" );
         labelConnected->setText( "Connected" );
+        ui->tabPresets->blockSignals( true );
+        ui->tabPresets->setTabEnabled( 0, true );
+        ui->tabPresets->setTabEnabled( 1, true );
+        ui->tabPresets->setTabEnabled( 2, true );
+        ui->tabPresets->setTabEnabled( 3, true );
+        ui->tabPresets->blockSignals( false );
+        break;
+      case CFreeDspAurora::PLUGIN_CUSTOM:
+        labelPlugIn->setText( "Custom" );
+        labelConnected->setText( "Connected" );
+        ui->tabPresets->setTabEnabled( 0, false );
+        ui->tabPresets->setTabEnabled( 1, false );
+        ui->tabPresets->setTabEnabled( 2, false );
+        ui->tabPresets->setTabEnabled( 3, false );
         break;
       default:
         labelPlugIn->setText( "Unknown Plugin" );
@@ -668,16 +726,34 @@ void MainWindow::on_actionRead_from_DSP_triggered()
           {
             switchPluginGui( CFreeDspAurora::PLUGIN_8CHANNELS );
             labelPlugIn->setText( "8channels" );
+            ui->tabPresets->blockSignals( true );
+            ui->tabPresets->setTabEnabled( 0, true );
+            ui->tabPresets->setTabEnabled( 1, true );
+            ui->tabPresets->setTabEnabled( 2, true );
+            ui->tabPresets->setTabEnabled( 3, true );
+            ui->tabPresets->blockSignals( false );
           }
           else if( dialog.comboBox()->currentText() == QString("Home Cinema 7.1") )
           {
             switchPluginGui( CFreeDspAurora::PLUGIN_HOMECINEMA71 );
             labelPlugIn->setText( "HomeCinema71" );
+            ui->tabPresets->blockSignals( true );
+            ui->tabPresets->setTabEnabled( 0, true );
+            ui->tabPresets->setTabEnabled( 1, true );
+            ui->tabPresets->setTabEnabled( 2, true );
+            ui->tabPresets->setTabEnabled( 3, true );
+            ui->tabPresets->blockSignals( false );
           }
           else if( dialog.comboBox()->currentText() == QString("4FIRs") )
           {
             switchPluginGui( CFreeDspAurora::PLUGIN_4FIRS );
             labelPlugIn->setText( "4FIRs" );
+            ui->tabPresets->blockSignals( true );
+            ui->tabPresets->setTabEnabled( 0, true );
+            ui->tabPresets->setTabEnabled( 1, true );
+            ui->tabPresets->setTabEnabled( 2, true );
+            ui->tabPresets->setTabEnabled( 3, true );
+            ui->tabPresets->blockSignals( false );
           }
 
           for( int p = 0; p < NUMPRESETS; p++ )
@@ -729,17 +805,46 @@ void MainWindow::on_actionRead_from_DSP_triggered()
       {
         switchPluginGui( CFreeDspAurora::PLUGIN_8CHANNELS );
         labelPlugIn->setText( "8channels" );
+        ui->tabPresets->blockSignals( true );
+        ui->tabPresets->setTabEnabled( 0, true );
+        ui->tabPresets->setTabEnabled( 1, true );
+        ui->tabPresets->setTabEnabled( 2, true );
+        ui->tabPresets->setTabEnabled( 3, true );
+        ui->tabPresets->blockSignals( false );
       }
       else if( dialog.comboBox()->currentText() == QString("Home Cinema 7.1") )
       {
         switchPluginGui( CFreeDspAurora::PLUGIN_HOMECINEMA71 );
         labelPlugIn->setText( "HomeCinema71" );
+        ui->tabPresets->blockSignals( true );
+        ui->tabPresets->setTabEnabled( 0, true );
+        ui->tabPresets->setTabEnabled( 1, true );
+        ui->tabPresets->setTabEnabled( 2, true );
+        ui->tabPresets->setTabEnabled( 3, true );
+        ui->tabPresets->blockSignals( false );
       }
       else if( dialog.comboBox()->currentText() == QString("4FIRs") )
-          {
-            switchPluginGui( CFreeDspAurora::PLUGIN_4FIRS );
-            labelPlugIn->setText( "4FIRs" );
-          }
+      {
+        switchPluginGui( CFreeDspAurora::PLUGIN_4FIRS );
+        labelPlugIn->setText( "4FIRs" );
+        ui->tabPresets->blockSignals( true );
+        ui->tabPresets->setTabEnabled( 0, true );
+        ui->tabPresets->setTabEnabled( 1, true );
+        ui->tabPresets->setTabEnabled( 2, true );
+        ui->tabPresets->setTabEnabled( 3, true );
+        ui->tabPresets->blockSignals( false );
+      }
+      else if( dialog.comboBox()->currentText() == QString("Custom") )
+      {
+        switchPluginGui( CFreeDspAurora::PLUGIN_CUSTOM );
+        labelPlugIn->setText( "Custom" );
+        ui->tabPresets->blockSignals( true );
+        ui->tabPresets->setTabEnabled( 0, false );
+        ui->tabPresets->setTabEnabled( 1, false );
+        ui->tabPresets->setTabEnabled( 2, false );
+        ui->tabPresets->setTabEnabled( 3, false );
+        ui->tabPresets->blockSignals( false );
+      }
 
       for( int p = 0; p < NUMPRESETS; p++ )
       {
@@ -1457,6 +1562,58 @@ switch( pid )
       presets[ii]->tabChannels->removeTab( 0 );
 
       dspPlugin[ii] = new CPlugIn4FIRs( FS );
+      numChannels = dspPlugin[ii]->getNumChannels();
+      for( unsigned int n = 0; n < numChannels; n++ )
+      {
+        tDspChannel dspChannel = dspPlugin[ii]->getGuiForChannel( n, FS, &dsp, this );
+
+        presets[ii]->tabChannels->addTab( dspChannel.channel, "" );
+        QLabel* lbl1 = new QLabel( presets[ii]->tabChannels );
+        lbl1->setText( dspChannel.name );
+        lbl1->setStyleSheet( QString("background-color: transparent; border: 0px solid black; border-left: 2px solid ") + colorPlot[n%kMaxPlotColors].name() + QString("; color: white; ") );
+        lbl1->setFixedWidth( 100 );
+        presets[ii]->tabChannels->tabBar()->setTabButton( static_cast<int>(n), QTabBar::LeftSide, lbl1 );
+
+        dspChannel.layout->setSpacing( 0 );
+        dspChannel.layout->setMargin( 0 );
+        dspChannel.layout->setContentsMargins( 0, 0, 0, 0 );
+        dspChannel.layout->setAlignment( Qt::AlignLeft );
+
+        dspChannel.channel->widgetChannel->setLayout( dspChannel.layout );
+
+        for( unsigned int chn = 0; chn < numChannels; chn++ )
+        {
+          QAction* action = new QAction( "    Show " + dspPlugin[ii]->getChannelName( chn ) );
+          action->setCheckable( true );
+          dspChannel.channel->actionsContextMenu.append( action );
+          dspChannel.channel->contextMenu.addAction( action );
+        }
+        dspChannel.channel->actionsContextMenu.at(static_cast<int>(n))->setChecked( true );
+        connect( dspChannel.channel, SIGNAL(selectionChanged()), this, SLOT(updatePlots()) );
+      }
+    }
+    ui->tabPresets->blockSignals( false );
+    break;
+
+  case CFreeDspAurora::PLUGIN_CUSTOM:
+    myLog()<<"Loading custom";
+
+    ui->tabPresets->blockSignals( true );
+    for( int ii = 0; ii < 4; ii++ )
+    {
+      presets[ii] = new QPreset;
+      if( ii == 0 )
+        ui->tabPresets->addTab( presets[ii], "Preset A" );
+      else if( ii == 1 )
+        ui->tabPresets->addTab( presets[ii], "Preset B" );  
+      else if( ii == 2 )
+        ui->tabPresets->addTab( presets[ii], "Preset C" ); 
+      else if( ii == 3 )
+        ui->tabPresets->addTab( presets[ii], "Preset D" ); 
+
+      presets[ii]->tabChannels->removeTab( 0 );
+
+      dspPlugin[ii] = new CPlugInCustom( FS );
       numChannels = dspPlugin[ii]->getNumChannels();
       for( unsigned int n = 0; n < numChannels; n++ )
       {

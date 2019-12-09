@@ -1,5 +1,5 @@
-#ifndef LICENSEWIZARD_H
-#define LICENSEWIZARD_H
+#ifndef WIZARDCONNECT_H
+#define WIZARDCONNECT_H
 
 #include <QWizard>
 #include <QtWidgets>

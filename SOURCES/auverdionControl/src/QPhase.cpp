@@ -113,14 +113,16 @@ void QPhase::updateCoeffs( void )
     coeffs[kB2] = b2;
     coeffs[kA1] = (-1.0)*a1;
     coeffs[kA2] = (-1.0)*a2;
+
+    if( ui->checkBoxInvert->isChecked() )
+    {
+      coeffs[kB0] *= -1.0;
+      coeffs[kB1] *= -1.0;
+      coeffs[kB2] *= -1.0;
+    }
   }
 
-  if( ui->checkBoxInvert->isChecked() )
-  {
-    coeffs[kB0] *= -1.0;
-    coeffs[kB1] *= -1.0;
-    coeffs[kB2] *= -1.0;
-  }
+  
 }
 
 //==============================================================================

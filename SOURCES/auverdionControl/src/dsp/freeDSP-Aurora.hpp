@@ -43,7 +43,8 @@ public:
     PLUGIN_HOMECINEMA71     = 0x02,
     PLUGIN_4FIRS            = 0x03,
     PLUGIN_8CHANNELS_USB    = 0x04,
-    PLUGIN_HOMECINEMA71_USB = 0x05
+    PLUGIN_HOMECINEMA71_USB = 0x05,
+    PLUGIN_CUSTOM           = 0x06
   };
 
 private:
