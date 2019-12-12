@@ -71,7 +71,7 @@
                 <Link pin="I_C468_A0_P1_in" dir="in" link="Link147" />
                 <Link pin="O_C468_A0_P2_out" dir="out" link="Link149" />
             </Algorithm>
-            <Algorithm name="monomuxSigma300ns49" friendlyname="Mono" cell="Nx1-2 ">
+            <Algorithm name="monomuxSigma300ns49" friendlyname="Mono" cell="BypassVolPoti ">
                 <Link pin="I_C479_A0_P2_in" dir="in" link="Link149" />
                 <Link pin="I_C479_A0_P3_in" dir="in" link="Link134" />
                 <Link pin="O_C479_A0_P1_out" dir="out" link="Link141" />

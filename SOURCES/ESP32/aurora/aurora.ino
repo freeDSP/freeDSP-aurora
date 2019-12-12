@@ -1240,14 +1240,6 @@ void handleHttpRequest()
                   Wire.write( data );
                   Wire.endTransmission( true );
 
-                  Serial.print( "I2C: " );
-                  Serial.print( addr, HEX );
-                  Serial.print( " " );
-                  Serial.print( regaddr, HEX );
-                  Serial.print( " " );
-                  Serial.println( data, HEX );
-                  Serial.print( " " );
-
                   String httpResponse = "";
                   httpResponse += "HTTP/1.1 200 OK\r\n";
                   httpResponse += "Content-type:text/plain\r\n\r\n";
@@ -1260,7 +1252,6 @@ void handleHttpRequest()
                   waitForData = false;
                   wifiStatus = STATE_WIFI_IDLE;
                 }
-
               }
             }
 

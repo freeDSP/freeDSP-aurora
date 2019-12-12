@@ -385,7 +385,7 @@ Parameter Data :
 
 
 
-Cell Name         = Nx1-2
+Cell Name         = BypassVolPoti
 Parameter Name    = monomuxSigma300ns49index
 Parameter Address = 20392
 Parameter Value   = 1

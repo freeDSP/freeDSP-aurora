@@ -24,7 +24,7 @@ public:
   };
 
 public:
-  explicit DialogSettings( CFreeDspAurora* ptrdsp, QWidget* parent = nullptr );
+  explicit DialogSettings( CFreeDspAurora* ptrdsp, bool bypassVolumePoti, QWidget* parent = nullptr );
   ~DialogSettings();
 
   //============================================================================
@@ -36,6 +36,11 @@ public:
   /*!
    */
   unsigned int getConnection( void );
+
+  //============================================================================
+  /*!
+   */
+  bool getEnableVolumePoti( void );
 
 private:
   //============================================================================

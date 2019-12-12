@@ -1,7 +1,7 @@
 /*
  * File:           Z:\Documents\freeDSP\freeDSP-aurora\SOURCES\SIGMASTUDIO\4FIRs\4FIRs_IC_1_PARAM.h
  *
- * Created:        Wednesday, December 11, 2019 4:28:13 PM
+ * Created:        Thursday, December 12, 2019 9:05:58 AM
  * Description:    4FIRs:IC 1 parameter RAM definitions.
  *
  * This software is distributed in the hope that it will be useful,
@@ -49938,13 +49938,13 @@
 #define MOD_DC1_DCINPALG145X1VALUE_VALUE               SIGMASTUDIOTYPE_8_24_CONVERT(1)
 #define MOD_DC1_DCINPALG145X1VALUE_TYPE                SIGMASTUDIOTYPE_8_24
 
-/* Module Nx1-2 - Mono Switch Nx1*/
-#define MOD_NX1_2_COUNT                                1
-#define MOD_NX1_2_DEVICE                               "IC1"
-#define MOD_NX1_2_MONOMUXSIGMA300NS49INDEX_ADDR        20392
-#define MOD_NX1_2_MONOMUXSIGMA300NS49INDEX_FIXPT       0x00000001
-#define MOD_NX1_2_MONOMUXSIGMA300NS49INDEX_VALUE       SIGMASTUDIOTYPE_INTEGER_CONVERT(1)
-#define MOD_NX1_2_MONOMUXSIGMA300NS49INDEX_TYPE        SIGMASTUDIOTYPE_INTEGER
+/* Module BypassVolPoti - Mono Switch Nx1*/
+#define MOD_BYPASSVOLPOTI_COUNT                        1
+#define MOD_BYPASSVOLPOTI_DEVICE                       "IC1"
+#define MOD_BYPASSVOLPOTI_MONOMUXSIGMA300NS49INDEX_ADDR 20392
+#define MOD_BYPASSVOLPOTI_MONOMUXSIGMA300NS49INDEX_FIXPT 0x00000001
+#define MOD_BYPASSVOLPOTI_MONOMUXSIGMA300NS49INDEX_VALUE SIGMASTUDIOTYPE_INTEGER_CONVERT(1)
+#define MOD_BYPASSVOLPOTI_MONOMUXSIGMA300NS49INDEX_TYPE SIGMASTUDIOTYPE_INTEGER
 
 /* Module Nx1-1_Exp - Mono Switch Nx1*/
 #define MOD_INPUTSELECT_4_NX1_1_EXP_COUNT              4

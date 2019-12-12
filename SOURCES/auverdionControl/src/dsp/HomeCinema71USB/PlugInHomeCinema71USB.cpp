@@ -1724,3 +1724,24 @@ uint16_t CPlugInHomeCinema71USB::getAddressMasterVolume( void )
 {
   return MOD_MASTERVOLUME_ALG0_TARGET_ADDR;
 }
+
+//==============================================================================
+/*!
+ *
+ */
+void CPlugInHomeCinema71USB::setEnableVolumePoti( bool val, bool )
+{
+  enableVolumePoti = val;
+}
+
+//==============================================================================
+/*! Get the parameters in DSP format. The parameters are returned with register 
+ *  address followed by value dword ready to be sent via i2c to DSP.
+ *
+ * \return Byte array with parameters for DSP. 
+ */
+QByteArray CPlugInHomeCinema71USB::getDspParams( void )
+{
+  QByteArray content;
+  return content;
+}

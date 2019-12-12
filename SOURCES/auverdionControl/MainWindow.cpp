@@ -514,7 +514,6 @@ void MainWindow::on_actionRead_from_DSP_triggered()
           presetUserParams[p] = userparams;
         }
         dspPlugin[p]->setMasterVolume( ui->volumeSliderMain->value(), false );
-        qDebug()<<"Preset Master Volume:"<<dspPlugin[p]->getMasterVolume();
       }
 
       currentPreset = preset;
@@ -905,7 +904,21 @@ void MainWindow::updatePresetGui( int p, QByteArray& userparams )
     ui->volumeSliderMain->blockSignals( false );
   }
   else
-    qDebug()<<"Set volume slider: Not enough data";
+    myLog()<<"Set volume slider: Not enough data";
+
+  if( userparams.size() >= idx + 1 )
+  {
+    QByteArray param;
+    param.append( userparams.at(idx) );
+    idx++;
+
+    bool enableVolPoti = *reinterpret_cast<const bool*>(param.data());
+
+    dspPlugin[p]->setEnableVolumePoti( enableVolPoti, false );
+  }
+  else
+    myLog()<<"Set enable volume potie: Not enough data";
+
 }
 
 //==============================================================================
@@ -933,6 +946,7 @@ void MainWindow::on_actionWrite_to_DSP_triggered()
       }
     }
     dspparams[p].append( dsp.makeParameterForWifi( dspPlugin[p]->getAddressMasterVolume(), static_cast<float>(pow( 10.0, ui->volumeSliderMain->value()/20.0 ) ) ) );
+    dspparams[p].append( dspPlugin[p]->getDspParams() );
   }
 
   //----------------------------------------------------------------------------
@@ -955,6 +969,7 @@ void MainWindow::on_actionWrite_to_DSP_triggered()
       }
     }
     usrparams[p].append( ui->volumeSliderMain->getUserParams() );
+    usrparams[p].append( dspPlugin[p]->getUserParams() );
     presetUserParams[p] = usrparams[p];
   }
   
@@ -1118,7 +1133,7 @@ void MainWindow::on_actionAbout_triggered()
  */
 void MainWindow::on_actionSettings_triggered()
 {
-  DialogSettings dialog( &dsp, this );
+  DialogSettings dialog( &dsp, dspPlugin[0]->getEnableVolumePoti(), this );
   int result = dialog.exec();
   if( result == QDialog::Accepted )
   { 
@@ -1153,6 +1168,10 @@ void MainWindow::on_actionSettings_triggered()
 
     if( dsp.getConnectionTypeWifi() == CFreeDspAurora::OFFLINE )
       labelConnected->setText( "Not connected" );
+
+    for( uint32_t p = 0; p < NUMPRESETS; p++ )
+      dspPlugin[p]->setEnableVolumePoti( dialog.getEnableVolumePoti(), false );
+    dspPlugin[0]->setEnableVolumePoti( dialog.getEnableVolumePoti(), true );
 
     enableGui( true );
   }
@@ -1702,6 +1721,7 @@ void MainWindow::on_actionSaveParameters_triggered()
       }
     }
     usrparams.append( ui->volumeSliderMain->getUserParams() );
+    usrparams.append( dspPlugin[p]->getUserParams() );
 
     uint32_t size = static_cast<uint32_t>(usrparams.size());
     fileparams.append( static_cast<char>((size) & 0x000000FF) );

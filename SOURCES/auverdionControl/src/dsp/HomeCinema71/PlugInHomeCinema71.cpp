@@ -1724,3 +1724,37 @@ uint16_t CPlugInHomeCinema71::getAddressMasterVolume( void )
 {
   return MOD_MASTERVOLUME_ALG0_TARGET_ADDR;
 }
+
+//==============================================================================
+/*!
+ *
+ */
+void CPlugInHomeCinema71::setEnableVolumePoti( bool val, bool doSend )
+{
+  if( doSend )
+  {
+    QByteArray content;
+    if( val )
+      content.append( dsp->makeParameterForWifi( MOD_BYPASSVOLPOTI_MONOMUXSIGMA300NS49INDEX_ADDR, 0x00000000 ) );
+    else
+      content.append( dsp->makeParameterForWifi( MOD_BYPASSVOLPOTI_MONOMUXSIGMA300NS49INDEX_ADDR, 0x00000001 ) );
+    dsp->sendParameterWifi( content );
+  }
+  enableVolumePoti = val;
+}
+
+//==============================================================================
+/*! Get the parameters in DSP format. The parameters are returned with register 
+ *  address followed by value dword ready to be sent via i2c to DSP.
+ *
+ * \return Byte array with parameters for DSP. 
+ */
+QByteArray CPlugInHomeCinema71::getDspParams( void )
+{
+  QByteArray content;
+  if( enableVolumePoti )
+    content.append( dsp->makeParameterForWifi( MOD_BYPASSVOLPOTI_MONOMUXSIGMA300NS49INDEX_ADDR, 0x00000000 ) );
+  else
+    content.append( dsp->makeParameterForWifi( MOD_BYPASSVOLPOTI_MONOMUXSIGMA300NS49INDEX_ADDR, 0x00000001 ) );
+  return content;
+}

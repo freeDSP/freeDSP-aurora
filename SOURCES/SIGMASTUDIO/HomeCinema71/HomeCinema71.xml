@@ -8863,7 +8863,7 @@
             </Algorithm>
         </Module>
         <Module>
-            <CellName>Nx1-2</CellName>
+            <CellName>BypassVolPoti</CellName>
             <Algorithm>
                 <AlgoName>ALG0</AlgoName>
                 <Description>Mono( 2 ) : OnOff[ False ];OnOff[ True ];</Description>

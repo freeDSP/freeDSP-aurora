@@ -20,7 +20,7 @@
 #include "DialogSettings.hpp"
 #include "ui_DialogSettings.h"
 
-DialogSettings::DialogSettings( CFreeDspAurora* ptrdsp, QWidget* parent ) :
+DialogSettings::DialogSettings( CFreeDspAurora* ptrdsp, bool bypassVolumePoti, QWidget* parent ) :
   QDialog(parent),
   ui(new Ui::DialogSettings)
 {
@@ -35,7 +35,7 @@ DialogSettings::DialogSettings( CFreeDspAurora* ptrdsp, QWidget* parent ) :
   //qDebug()<<appPath.absolutePath() + "/dspplugins.json";
   #elif defined( __WIN__ )
   QDir appPath = QDir( QCoreApplication::applicationDirPath() );
-  qDebug()<<appPath.absolutePath() + "/dspplugins.json";
+  //qDebug()<<appPath.absolutePath() + "/dspplugins.json";
 
   #else
   #error Platform not supported.
@@ -65,12 +65,14 @@ DialogSettings::DialogSettings( CFreeDspAurora* ptrdsp, QWidget* parent ) :
       #endif
       dspPluginMetaData.append( newMetaData );
 
-      qDebug()<<plugin["name"].toString()<<plugin["pid"].toInt()<<plugin["path"].toString();
+      //qDebug()<<plugin["name"].toString()<<plugin["pid"].toInt()<<plugin["path"].toString();
     }
     fileDspPlugins.close();
   }
   ui->comboBoxPlugIn->addItem( "Custom", CFreeDspAurora::PLUGIN_CUSTOM );
   ui->comboBoxPlugIn->blockSignals( false );
+
+  ui->checkBoxEnableVolumePoti->setChecked( bypassVolumePoti );
 
   ui->comboBoxConnection->blockSignals( true );
   ui->comboBoxConnection->addItem( "Access Point", CFreeDspAurora::ACCESS_POINT );
@@ -675,4 +677,12 @@ void DialogSettings::on_comboBoxConnection_currentIndexChanged(const QString &ar
       ui->labelLocalWiFiIP->setText( text );
     }
   }
+}
+
+//==============================================================================
+/*!
+ */
+bool DialogSettings::getEnableVolumePoti( void )
+{
+  return ui->checkBoxEnableVolumePoti->isChecked();
 }

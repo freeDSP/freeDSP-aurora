@@ -201,8 +201,6 @@ void QInputSelect::setUserParams( QByteArray& userParams, int& idx )
  */
 QByteArray QInputSelect::getDspParams( void )
 {
-  qDebug()<<"QInputSelect::getDspParam";
-
   QByteArray content;
 
   //if( dsp->getFirmwareVersion() != "1.0.0" )

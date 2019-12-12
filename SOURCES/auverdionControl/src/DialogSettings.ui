@@ -77,6 +77,13 @@
             </item>
            </layout>
           </item>
+          <item>
+           <widget class="QCheckBox" name="checkBoxEnableVolumePoti">
+            <property name="text">
+             <string>Enable Volume Potentiometer</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>

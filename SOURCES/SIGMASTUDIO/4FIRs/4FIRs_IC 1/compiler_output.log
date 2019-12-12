@@ -1,11 +1,11 @@
 ADAU145X Assembler, Analog Devices Inc.
 Version: 3.16.4,1747  (built 12/21/2017)
 
-##### Compile Started: Wednesday, December 11, 2019 4:25:56 PM #####
+##### Compile Started: Thursday, December 12, 2019 9:04:42 AM #####
 ADAU145X Assembler, Analog Devices Inc.
 Version: 3.16.4,1747  (built 12/21/2017)
 
-##### Compile Started: Wednesday, December 11, 2019 4:25:56 PM #####
+##### Compile Started: Thursday, December 12, 2019 9:04:42 AM #####
 ##### Compile succeeded:  0 errors, 0 warnings #####
 
 ##### Summary #####
@@ -49,7 +49,7 @@ Delay 3                       8         11        1802    1       0
 Delay1                        8         11        1802    1       0
 Delay 4                       7         9         1       1802    0
 Delay 2                       7         9         1       1802    0
-Nx1-2                         5         6         1       1       0
+BypassVolPoti                 5         6         1       1       0
 Shift1                        4         4         1       1       0
 ADC In1                       4         4         0       1       0
 AsrcIn1                       3         3         0       2       0

@@ -81,8 +81,22 @@ public:
    */
   virtual uint32_t getPid( void )
   {
-    return CFreeDspAurora::PLUGIN_8CHANNELS;
+    return CFreeDspAurora::PLUGIN_CUSTOM;
   }
+
+  //============================================================================
+  /*!
+   *
+   */
+  virtual void setEnableVolumePoti( bool val, bool doSend );
+
+  //============================================================================
+  /*! Get the parameters in DSP format. The parameters are returned with register 
+   *  address followed by value dword ready to be sent via i2c to DSP.
+   *
+   * \return Byte array with parameters for DSP. 
+   */
+  QByteArray getDspParams( void );
 
   //============================================================================
   //
