@@ -684,6 +684,9 @@ void setup( void )
   Serial.println( "aurora Debug" );
   Serial.println( VERSION_STR );
 
+  Wire.begin( I2C_SDA_PIN, I2C_SCL_PIN );
+  Wire.setClock( 100000 );
+
   //----------------------------------------------------------------------------
   //--- Configure ADC
   //----------------------------------------------------------------------------
@@ -808,9 +811,6 @@ void setup( void )
   Serial.println( WiFi.getHostname() );
 
   server.begin();  
-
-  Wire.begin( I2C_SDA_PIN, I2C_SCL_PIN );
-  Wire.setClock( 100000 );
 
   //----------------------------------------------------------------------------
   //--- Download program to DSP
