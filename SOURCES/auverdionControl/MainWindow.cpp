@@ -493,22 +493,23 @@ void MainWindow::on_actionRead_from_DSP_triggered()
       dsp.muteDAC();
       QThread::msleep( 200 );
     
-      ui->statusBar->showMessage("Reading user parameter.......");
-
       for( int p = 0; p < NUMPRESETS; p++ )
       {
-        dsp.mute();
+        //dsp.mute();
 
-        QEventLoop loopWaitForReply;
+        /*QEventLoop loopWaitForReply;
         QTimer timerWaitMute;
         timerWaitMute.setSingleShot( true );
         connect( &timerWaitMute, SIGNAL(timeout()), &loopWaitForReply, SLOT(quit()) );
         timerWaitMute.start( 500 );
-        loopWaitForReply.exec();
+        loopWaitForReply.exec();*/
 
-        dsp.selectPresetWifi( p );
+        ui->statusBar->showMessage( "Selecting preset......." );
+        dsp.selectPresetWifi( p, 100000 );
+
+        ui->statusBar->showMessage( "Reading user parameter......." );
         QByteArray userparams;
-        if( dsp.requestUserParameterWifi( userparams, 30000 ) )
+        if( dsp.requestUserParameterWifi( userparams, 60000 ) )
         {
           updatePresetGui( p, userparams );
           presetUserParams[p] = userparams;
@@ -518,16 +519,16 @@ void MainWindow::on_actionRead_from_DSP_triggered()
 
       currentPreset = preset;
 
-      dsp.mute();
+      //dsp.mute();
     
-      QEventLoop loopWaitForReply;
+      /*QEventLoop loopWaitForReply;
       QTimer timerWaitMute;
       timerWaitMute.setSingleShot( true );
       connect( &timerWaitMute, SIGNAL(timeout()), &loopWaitForReply, SLOT(quit()) );
       timerWaitMute.start( 500 );
-      loopWaitForReply.exec();
+      loopWaitForReply.exec();*/
 
-      dsp.selectPresetWifi( preset );
+      dsp.selectPresetWifi( preset, 100000 );
       dsp.setMasterVolume( static_cast<float>(dspPlugin[currentPreset]->getMasterVolume()) );
 
       ui->tabPresets->blockSignals( true );
@@ -535,6 +536,8 @@ void MainWindow::on_actionRead_from_DSP_triggered()
       ui->tabPresets->blockSignals( false );  
 
       updatePlots();
+
+      QThread::msleep( 3000 );
 
       dsp.unmuteDAC();
 
@@ -982,16 +985,16 @@ void MainWindow::on_actionWrite_to_DSP_triggered()
 
   for( int p = 0; p < NUMPRESETS; p++ )
   {
-    dsp.mute();
+    /*dsp.mute();
   
     QEventLoop loopWaitForReply;
     QTimer timerWaitMute;
     timerWaitMute.setSingleShot( true );
     connect( &timerWaitMute, SIGNAL(timeout()), &loopWaitForReply, SLOT(quit()) );
     timerWaitMute.start( 500 );
-    loopWaitForReply.exec();
+    loopWaitForReply.exec();*/
 
-    dsp.selectPresetWifi( p );
+    dsp.selectPresetWifi( p, 60000 );
 
     //----------------------------------------------------------------------------
     //--- Send dspparam file
@@ -1316,12 +1319,11 @@ void MainWindow::on_tabPresets_currentChanged( int index )
     currentPreset = index;
     updatePlots();
 
-    qDebug()<<"Master Volume"<<dspPlugin[currentPreset]->getMasterVolume();
+    //qDebug()<<"Master Volume"<<dspPlugin[currentPreset]->getMasterVolume();
 
-    //dspPlugin[currentPreset]->setMasterVolume( ui->volumeSliderMain->value(), false );
-
-    dsp.selectPresetWifi( index );
+    dsp.selectPresetWifi( index, 60000 );
     dsp.setMasterVolume( static_cast<float>(dspPlugin[currentPreset]->getMasterVolume()) );
+    dspPlugin[currentPreset]->setMasterVolume( ui->volumeSliderMain->value(), false );
 
     msgBox->accept();
 

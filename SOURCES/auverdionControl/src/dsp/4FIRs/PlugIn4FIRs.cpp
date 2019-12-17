@@ -73,6 +73,8 @@ tDspChannel CPlugIn4FIRs::getGuiForChannel( unsigned int chn, tfloat fs, CFreeDs
   QGain* gain = nullptr;
   QOutputSelect* output;
 
+  dsp = ptrdsp;
+
   QHBoxLayout* layout = new QHBoxLayout;
   QChannel* channel = new QChannel;
 

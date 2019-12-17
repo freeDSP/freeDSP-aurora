@@ -105,6 +105,8 @@ void QFir::updateCoeffs( void )
   //H = X( 0, nfft/2 );
 }
 
+extern uint32_t convertTo824( float val );
+
 //==============================================================================
 /*!
  *
@@ -242,10 +244,18 @@ QByteArray QFir::getDspParams( void )
 {
   QByteArray content;
 
+  qDebug()<<"*******************";
+  qDebug()<<"*******************";
+  qDebug()<<"*******************";
   qDebug()<<"QFir::getDspParam";
 
   for( uint16_t kk = 0; kk < nfft; kk++ )
+  {
     content.append( dsp->makeParameterForWifi( addr[kImpulseResponse] + kk, 
                                                static_cast<float>(ir[kk]) ) );
+    if( kk < 10 )
+      qDebug()<<ir[kk]<<dsp->makeParameterForWifi( addr[kImpulseResponse] + kk, static_cast<float>(ir[kk]) ).toHex();
+  }
+                          
   return content;
 }

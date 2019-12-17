@@ -16,6 +16,36 @@ extern void setStatusBarMessage( QString str );
 #define TIMEOUT_WIFI (60000)
 
 //==============================================================================
+/*!
+ *
+ */
+uint32_t convertTo824( double val )
+{
+  double fractpart, intpart;
+  uint32_t ret;
+  /*fractpart = modf( val, &intpart );
+  if( intpart > 127.0f )
+    intpart = 127.0f;
+  if( intpart < -128.0f )
+    intpart = -128.0f;
+
+  if( fractpart < 0.0f )
+    fractpart *= -1.0f;
+  */
+
+  if( val < 0.0 )
+    val += 256.0;
+
+  intpart = floor( val );
+  fractpart = val - intpart;
+  
+  ret = ((( static_cast<uint32_t>(static_cast<int8_t>(intpart)) ) << 24) & 0xff000000)
+      + ((static_cast<uint32_t>(fractpart * 16777216.0)) & 0x00ffffff);
+
+  return ret;
+}
+
+//==============================================================================
 /*! Constructor
  *
  */
@@ -36,6 +66,27 @@ CFreeDspAurora::CFreeDspAurora( QWidget* parent ) : QWidget( parent )
   portHostWifi = 80;
   
   ptrProgressBar = nullptr;
+
+  /*
+  qDebug()<<"CFreeDspAurora";
+  qDebug()<<QString::number( convertTo824(-128.0), 16 );
+  qDebug()<<QString::number( convertTo824(-32.0), 16 );
+  qDebug()<<QString::number( convertTo824(-8.0), 16 );
+  qDebug()<<QString::number( convertTo824(-2.0), 16 );
+  qDebug()<<QString::number( convertTo824(-1.0), 16 );
+  qDebug()<<QString::number( convertTo824(-0.5), 16 );
+  qDebug()<<QString::number( convertTo824(-0.1), 16 );
+  qDebug()<<QString::number( convertTo824(-0.00000005), 16 );
+  qDebug()<<QString::number( convertTo824(0.0), 16 );
+  qDebug()<<QString::number( convertTo824(0.00000005), 16 );
+  qDebug()<<QString::number( convertTo824(0.1), 16 );
+  qDebug()<<QString::number( convertTo824(0.25), 16 );
+  qDebug()<<QString::number( convertTo824(0.5), 16 );
+  qDebug()<<QString::number( convertTo824(1.0), 16 );
+  qDebug()<<QString::number( convertTo824(2.0), 16 );
+  qDebug()<<QString::number( convertTo824(127.99999994), 16 );
+  */
+
 }
 
 //==============================================================================
@@ -47,33 +98,6 @@ CFreeDspAurora::~CFreeDspAurora( void )
   if( tcpSocket != nullptr )
     delete tcpSocket;
 }
-
-//==============================================================================
-/*!
- *
- */
-uint32_t convertTo824( float val )
-{
-  float fractpart, intpart;
-  uint32_t ret;
-  fractpart = modf( val, &intpart );
-  if( intpart > 127.0f )
-    intpart = 127.0f;
-  if( intpart < -128.0f )
-    intpart = -128.0f;
-
-  if( fractpart < 0.0f )
-    fractpart *= -1.0f;
-  
-  intpart = floor( val );
-  fractpart = val - intpart;
-  
-  ret = ((( static_cast<uint32_t>(static_cast<int8_t>(intpart)) ) << 24) & 0xff000000)
-      + ((static_cast<uint32_t>(fractpart * 16777216.f)) & 0x00ffffff);
-
-  return ret;
-}
-
 
 //==============================================================================
 /*! Prepares a content packet for a parameter
@@ -566,7 +590,7 @@ bool CFreeDspAurora::requestUserParameterWifi( QByteArray& userparams, int msec 
     request.append( requestString );
 
     writeRequestWifi( request );
-    if( !waitForReplyWifi() )
+    if( !waitForReplyWifi( msec ) )
     {
       myLog()<<"Could not receive the size of the user parameter file";
       QMessageBox::critical( this, tr("Error"), tr("Could not receive the size of the user parameter file. Please double check everything and try again."), QMessageBox::Ok ); 
@@ -976,7 +1000,7 @@ void CFreeDspAurora::hostFoundWifi( void )
  *
  * \param presetid New preset id.
  */
-bool CFreeDspAurora::selectPresetWifi( int presetid )
+bool CFreeDspAurora::selectPresetWifi( int presetid, int msec )
 {
   myLog()<<"---------------------------------------------------------------";
   myLog()<<"selectPresetWifi";
@@ -1000,7 +1024,7 @@ bool CFreeDspAurora::selectPresetWifi( int presetid )
     
     writeRequestWifi( request );
 
-    if( !waitForReplyWifi() )
+    if( !waitForReplyWifi( msec ) )
       return false;
     else
     {
@@ -1260,7 +1284,7 @@ bool CFreeDspAurora::writeI2C( const int8_t addr, const int8_t reg, const int8_t
 
     if( !waitForReplyWifi() )
     {
-      QMessageBox::critical( this, tr("Error"), tr("Did not receive ACK from DSP. Please double-check everything and try again."), QMessageBox::Ok ); 
+      QMessageBox::critical( this, tr("Error"), tr("Did not receive ACK from DSP. Please double-check everything and try again. [writeI2C]"), QMessageBox::Ok ); 
       return false;
     }
     else

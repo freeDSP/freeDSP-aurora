@@ -299,7 +299,7 @@ public:
    *
    * \param presetid New preset id.
    */
-  bool selectPresetWifi( int presetid );
+  bool selectPresetWifi( int presetid, int msec = 5000 );
 
   //============================================================================
   /*! Sets the mute address for the DSP

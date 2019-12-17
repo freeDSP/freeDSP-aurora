@@ -20,6 +20,10 @@
 #include "DialogSettings.hpp"
 #include "ui_DialogSettings.h"
 
+#include "LogFile.h"
+
+extern CLogFile myLog;
+
 DialogSettings::DialogSettings( CFreeDspAurora* ptrdsp, bool bypassVolumePoti, QWidget* parent ) :
   QDialog(parent),
   ui(new Ui::DialogSettings)
@@ -352,13 +356,16 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
   }
 
   if( dsp->finishDspFirmwareWifi( totalTransmittedBytes * 2 ) )
+  {
     QMessageBox::information( this, tr("Success"), tr("You have successfully installed the new DSP-Plugin!"), QMessageBox::Ok );
+    myLog()<<"Success";
+    QMessageBox::information( this, tr("Success"), tr("Please reboot your Aurora DSP."), QMessageBox::Ok );
+  }
   else
+  {
     QMessageBox::critical( this, tr("Error"), tr("Uups, something went wrong. Please double check everythind and try again."), QMessageBox::Ok );  
-
-  qDebug()<<"Success";
-  qDebug()<<"File size:"<<content.size() * 8 / 1024<<"kBit";
-  qDebug()<<"PID: "<<ui->comboBoxPlugIn->currentData().toInt();
+    myLog()<<"Failed";
+  }
 
   enableGui( true );
 }
