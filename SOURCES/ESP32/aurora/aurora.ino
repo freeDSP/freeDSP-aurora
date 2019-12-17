@@ -9,6 +9,7 @@
 #include "AK4458.h"
 #include "AK5558.h"
 #include "WebOTA.h"
+#include "PlugIn8Channels.h"
 
 // Configuration for hardware rev. 0.9.x
 //#define I2C_SDA_PIN 16
@@ -29,15 +30,23 @@
 #define AK5558_I2C_ADDR    (0x22>>1)
 // DAC address on I2C bus
 #define AK4458_I2C_ADDR    (0x20>>1)
+// S/P-DIF-Mux on AddOnA
+#define ADDONA_SPDIFMUX_ADDR (0x82>>1)
 // S/P-DIF-Mux on AddOnB
 #define ADDONB_SPDIFMUX_ADDR (0x82>>1)
 
 #define NUMPRESETS (4)
 
-#define POST_WRITEI2C     "POST /writei2c"
-#define POST_READI2C      "POST /readi2c"
-#define POST_ADDONCONFIG  "POST /aconfig"
 #define GET_ADDONCONFIG   "GET /aconfig"
+#define GET_CURRENTPRESET "GET /currentpreset"
+#define GET_DSPFW         "GET /dspfw"
+#define GET_PING          "GET /ping"
+#define POST_ADDONCONFIG  "POST /aconfig"
+#define POST_PRESET       "POST /preset"
+#define POST_READI2C      "POST /readi2c"
+#define POST_SAVEPRESET   "POST /savepreset"
+#define POST_WIFICONFIG   "POST /wificonfig"
+#define POST_WRITEI2C     "POST /writei2c"
 
 enum twifistatus
 {
@@ -376,16 +385,7 @@ void uploadDspParameter( void )
       fileDspParams.read( &(val[3]), 1 );
       ADAU1452_WRITE_BLOCK( regaddr, val, 4 );  
 
-      //Serial.print( "0x" );
-      //Serial.print( byte2string2(val[0]) );
-      //Serial.print( byte2string2(val[1]) );
-      //Serial.print( byte2string2(val[2]) );
-      //Serial.println( byte2string2(val[3]) );
-
     }
-
-    //Serial.print( cntr );
-    //Serial.println( "Bytes" );
 
     fileDspParams.close();
 
@@ -823,12 +823,57 @@ void setup( void )
   uploadDspParameter();
 
   //----------------------------------------------------------------------------
-  //--- Configure MUX on AddOnB
+  //--- Configure AddOns
   //----------------------------------------------------------------------------
-  if( Settings.addonid == ADDON_B )
+  if( Settings.addonid == ADDON_A )
   {
-    Serial.println( "Config MUX" );
- 
+    Serial.println( "ADDON_A" );
+
+    Wire.beginTransmission( ADDONA_SPDIFMUX_ADDR );
+    Wire.write( 0x03 );
+    Wire.write( 0xFF );
+    Wire.endTransmission( true );
+
+    //Wire.beginTransmission( ADDONA_SPDIFMUX_ADDR );
+    //Wire.write( 0x00 );
+    //Wire.endTransmission();
+    Wire.requestFrom( ADDONA_SPDIFMUX_ADDR, 1 );
+    if( Wire.available() == 1 )
+    {
+      byte value = Wire.read();
+      Serial.print( "IO: " );
+      Serial.println( byte2string(value) );
+
+      // Analog Input Selected
+      if( value & 0b00001001 == 0b00001001 )
+      {
+        if( value & 0b00000110 == 0b00000010 )
+        {
+          Serial.println( "XLR" );
+          PlugIn8Channels::selectAnalogXLR();
+        }
+        else
+        {
+          Serial.println( "RCA" );
+          PlugIn8Channels::selectAnalogRCA();
+        }
+      }
+      // Left Digital Channel Selected
+      else if( value & 0b00001001 == 0b00001000 )
+      {
+        Serial.println( "left channel" );
+        PlugIn8Channels::selectSpdifLeftChannel();
+      }
+      // Right Digital Channel Selected
+      else if( value & 0b00001001 == 0b00000001 )
+      {
+        Serial.println( "right channel" );
+        PlugIn8Channels::selectSpdifRightChannel();
+      }
+    }
+  }
+  else if( Settings.addonid == ADDON_B )
+  { 
     Wire.beginTransmission( ADDONB_SPDIFMUX_ADDR );
     Wire.write( 0x03 );
     Wire.write( 0x00 );
@@ -1756,8 +1801,52 @@ void handleHttpRequest()
             //-----------------------------------------------------------------
             //--- Request of DSP firmware
             //-----------------------------------------------------------------
-            else if( currentLine.startsWith("GET /dspfw") )
+            else if( currentLine.startsWith( GET_DSPFW ) )
             {
+              Serial.println( "GET /dspfw" );
+              String httpResponse = "";
+              httpResponse += "HTTP/1.1 200 OK\r\n";
+              httpResponse += "Content-type:text/plain\r\n\r\n";
+              if( SPIFFS.exists( "/dspfw.hex" ) )
+              {
+                fileDspProgram = SPIFFS.open( "/dspfw.hex", "r" );
+                if( fileDspProgram )
+                {
+                  int cntr = 0;
+                  int offset = 0;
+                  size_t len = fileDspProgram.size();
+
+                  while( offset < len )
+                  {
+                    byte byteRead;
+                    fileDspProgram.read( &byteRead, 1 );
+                    //Serial.println( byte2string2( byteRead ) );
+                    httpResponse += byte2string2( byteRead );
+                    cntr++;
+                    offset++;
+                    if( cntr == 1024 )
+                    {
+                      client.print( httpResponse );
+                      httpResponse = "";
+                      cntr = 0;
+                    }
+                  }
+
+                  if( cntr > 0 )
+                  {
+                    client.print( httpResponse );
+                    httpResponse = "";
+                  }
+                }
+                fileDspProgram.close();
+              }
+              httpResponse += "\r\n";
+              client.println( httpResponse );
+              //client.stop();
+              wifiStatus = STATE_WIFI_IDLE;
+              currentLine = "";
+
+              #if 0
               Serial.println( "GET /dspfw" );
               String httpResponse = "";
               httpResponse += "HTTP/1.1 200 OK\r\n";
@@ -1797,12 +1886,13 @@ void handleHttpRequest()
               wifiStatus = STATE_WIFI_IDLE;
               currentLine = "";
               //cntrPackets++;
+              #endif
             }
 
             //-----------------------------------------------------------------
             //--- Receiving new Wifi Configuration
             //-----------------------------------------------------------------
-            else if( currentLine.startsWith("POST /wificonfig") )
+            else if( currentLine.startsWith( POST_WIFICONFIG ) )
             {
               Serial.println( "POST /wificonfig" );
               receivedPostRequest = "";
@@ -1814,7 +1904,7 @@ void handleHttpRequest()
             //-----------------------------------------------------------------
             //--- Received a ping
             //-----------------------------------------------------------------
-            else if( currentLine.startsWith("GET /ping") )
+            else if( currentLine.startsWith( GET_PING ) )
             {
               Serial.println( "GET /ping" );
               String httpResponse = "";
@@ -1832,7 +1922,7 @@ void handleHttpRequest()
             //-----------------------------------------------------------------
             //--- Preset select
             //-----------------------------------------------------------------
-            else if( currentLine.startsWith("POST /preset") )
+            else if( currentLine.startsWith( POST_PRESET ) )
             {
               Serial.println( "POST /preset" );
               receivedPostRequest = "";
@@ -1844,7 +1934,7 @@ void handleHttpRequest()
             //-----------------------------------------------------------------
             //--- Save preset selection
             //-----------------------------------------------------------------
-            else if( currentLine.startsWith("POST /savepreset") )
+            else if( currentLine.startsWith( POST_SAVEPRESET ) )
             {
               Serial.println( "POST /savepreset" );
               saveSettings();
@@ -1863,7 +1953,7 @@ void handleHttpRequest()
             //-----------------------------------------------------------------
             //--- Request of current preset
             //-----------------------------------------------------------------
-            else if( currentLine.startsWith("GET /currentpreset") )
+            else if( currentLine.startsWith( GET_CURRENTPRESET ) )
             {
               Serial.println( "GET /currentpreset" );
               String httpResponse = "";
