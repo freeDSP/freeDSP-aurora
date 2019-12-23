@@ -815,12 +815,12 @@ void setup( void )
   //----------------------------------------------------------------------------
   //--- Download program to DSP
   //----------------------------------------------------------------------------
-  uploadDspFirmware();
+  //uploadDspFirmware();
 
   //----------------------------------------------------------------------------
   //--- Download user parameter to DSP
   //----------------------------------------------------------------------------
-  uploadDspParameter();
+  //uploadDspParameter();
 
   //----------------------------------------------------------------------------
   //--- Configure AddOns
@@ -834,9 +834,9 @@ void setup( void )
     Wire.write( 0xFF );
     Wire.endTransmission( true );
 
-    //Wire.beginTransmission( ADDONA_SPDIFMUX_ADDR );
-    //Wire.write( 0x00 );
-    //Wire.endTransmission();
+    Wire.beginTransmission( ADDONA_SPDIFMUX_ADDR );
+    Wire.write( 0x00 );
+    Wire.endTransmission();
     Wire.requestFrom( ADDONA_SPDIFMUX_ADDR, 1 );
     if( Wire.available() == 1 )
     {
@@ -844,6 +844,41 @@ void setup( void )
       Serial.print( "IO: " );
       Serial.println( byte2string(value) );
 
+      // Analog RCA selected
+      if( (value == 0xfe) || (value == 0xff) )
+      {
+        Serial.println( "RCA" );
+        PlugIn8Channels::selectAnalogRCA();
+      }
+      else if( value == 0xf7 )
+      {
+        Serial.println( "XLR" );
+        PlugIn8Channels::selectAnalogXLR();
+      }
+      else if( (value == 0xfa) || (value == 0xfb) )
+      {
+        Serial.println( "Toslink left" );
+        PlugIn8Channels::selectSpdifLeftChannel();
+      }
+      else if( value == 0xf3 )
+      {
+        Serial.println( "Toslink right" );
+        PlugIn8Channels::selectSpdifRightChannel();
+      }
+      else if( (value == 0xfc) || (value == 0xfd) )
+      {
+        Serial.println( "Dig RCA left" );
+        PlugIn8Channels::selectSpdifLeftChannel();
+      }
+      else if( value == 0xf5 )
+      {
+        Serial.println( "Dig RCA right" );
+        PlugIn8Channels::selectSpdifRightChannel();
+      }
+      else
+        Serial.println( "Unknown" );
+
+/*
       // Analog Input Selected
       if( value & 0b00001001 == 0b00001001 )
       {
@@ -870,6 +905,7 @@ void setup( void )
         Serial.println( "right channel" );
         PlugIn8Channels::selectSpdifRightChannel();
       }
+      */
     }
   }
   else if( Settings.addonid == ADDON_B )
