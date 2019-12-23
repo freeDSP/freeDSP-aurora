@@ -335,14 +335,12 @@ QByteArray QInputSelect::getDspParams( void )
     else if( ui->comboBoxInput->currentText() == QString( "SPDIF 1" ) )
     {
       content.append( dsp->makeParameterForWifi( addr[kChannelSPDIF], 0x00000000 ) );
-      content.append( dsp->makeParameterForWifi( addr[kSelectPort], kChannelSPDIF ) );
-      qDebug()<<"addr[kChannelSPDIF]"<<addr[kChannelSPDIF];
+      content.append( dsp->makeParameterForWifi( addr[kSelectPort], kPortSPDIF ) );
     }
     else if( ui->comboBoxInput->currentText() == QString( "SPDIF 2" ) )
     {
       content.append( dsp->makeParameterForWifi( addr[kChannelSPDIF], 0x00000001 ) );
-      content.append( dsp->makeParameterForWifi( addr[kSelectPort], kChannelSPDIF ) );
-      qDebug()<<"addr[kChannelSPDIF]"<<addr[kChannelSPDIF];
+      content.append( dsp->makeParameterForWifi( addr[kSelectPort], kPortSPDIF ) );
     }
   //}
   return content;
