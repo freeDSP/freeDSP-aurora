@@ -5,5 +5,5 @@
     <Title>auverdionControl Installer</Title>
     <Publisher>auverdion - Raphael Knoop</Publisher>
     <StartMenuDir>auverdion</StartMenuDir>
-    <TargetDir>@ApplicationsDirX64@/auverdion/auverdionControl</TargetDir>
+    <TargetDir>@ApplicationsDirX64@/auverdion/auverdionControl.1.2.0</TargetDir>
 </Installer>
