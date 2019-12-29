@@ -15,15 +15,6 @@ class DialogSettings : public QDialog
   Q_OBJECT
 
 public:
-  enum AddOnId
-  {
-    ADDONA = 0x01,
-    ADDONB = 0x02,
-    ADDONC = 0x03,
-    ADDOND = 0x04
-  };
-
-public:
   explicit DialogSettings( CFreeDspAurora* ptrdsp, bool bypassVolumePoti, QWidget* parent = nullptr );
   ~DialogSettings();
 

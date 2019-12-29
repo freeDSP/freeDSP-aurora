@@ -100,6 +100,14 @@ QInputSelect::QInputSelect( uint32_t selection,
   if( dsp->getFirmwareVersion() == "1.0.0" )
     ui->comboBoxInput->setEnabled( false );
 
+  if( dsp->getAddOnId() == CFreeDspAurora::ADDONA )
+  {
+    ui->comboBoxInput->hide();
+    ui->labelLocked->show();
+  }
+  else
+    ui->labelLocked->hide();
+
   type = INPUTSELECT;
 }
 
@@ -154,7 +162,6 @@ uint32_t QInputSelect::getNumBytes( void )
  */
 void QInputSelect::on_comboBoxInput_currentIndexChanged( int  )
 {
-  qDebug()<<"***on_comboBoxInput_currentIndexChanged";
   sendDspParameter();
   emit valueChanged();
 }

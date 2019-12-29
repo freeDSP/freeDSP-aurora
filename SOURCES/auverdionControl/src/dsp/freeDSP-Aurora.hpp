@@ -47,6 +47,14 @@ public:
     PLUGIN_CUSTOM           = 0x06
   };
 
+  enum tAddOnId
+  {
+    ADDONA = 0x01,
+    ADDONB = 0x02,
+    ADDONC = 0x03,
+    ADDOND = 0x04
+  };
+
 private:
   typedef uint8_t byte;
 

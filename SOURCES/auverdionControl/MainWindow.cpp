@@ -35,6 +35,7 @@
 extern CLogFile myLog;
 
 #define VERSION_STR "1.2.0"
+#define VERSION_HEX 0x00010200
 #define FS 48000.0
 
 using namespace Vektorraum;
@@ -442,6 +443,16 @@ void MainWindow::on_actionRead_from_DSP_triggered()
     ui->statusBar->showMessage("Reading firmware version.......");
     if( dsp.requestFirmwareVersionWifi( false ) )
     {
+
+      if( dsp.getFwVersion() != VERSION_HEX )
+      {
+        QMessageBox::critical( this, tr("Error: Version mismatch"), tr("I am really sorry. The firmware version is not compatible with your version of auverdionControl. Please install firmware ") + VERSION_STR + tr(" on your Aurora first."), QMessageBox::Ok ); 
+        msgBox->accept();
+        ui->statusBar->showMessage("Ready");
+        setEnabled( true );
+        return;
+      }
+
       //--------------------------------------------------------------------------
       //--- Request the AddOn-Id
       //--------------------------------------------------------------------------
@@ -1149,7 +1160,7 @@ void MainWindow::on_actionSettings_triggered()
     jsonObjSettings[ "ip" ] = dsp.getIpAddressLocalWifi();
     writeSettings();
 
-    if( dsp.getAddOnId() == DialogSettings::ADDONB )
+    if( dsp.getAddOnId() == CFreeDspAurora::ADDONB )
     {
       if( dialog.getSpdifInput() == 0x00 )
         dsp.sendAddOnConfig( "820104" );

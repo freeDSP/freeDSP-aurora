@@ -89,10 +89,10 @@ DialogSettings::DialogSettings( CFreeDspAurora* ptrdsp, bool bypassVolumePoti, Q
 
   ui->comboBoxAddOnId->blockSignals( true );
   ui->comboBoxAddOnId->addItem( "None or Custom", 0x00 );
-  ui->comboBoxAddOnId->addItem( "A Woodworker's friend", ADDONA );
-  ui->comboBoxAddOnId->addItem( "B Down with developers", ADDONB );
-  ui->comboBoxAddOnId->addItem( "C Control over the crowd", ADDONC );
-  ui->comboBoxAddOnId->addItem( "D Balanced life", ADDOND );
+  ui->comboBoxAddOnId->addItem( "A Woodworker's friend", CFreeDspAurora::ADDONA );
+  ui->comboBoxAddOnId->addItem( "B Down with developers", CFreeDspAurora::ADDONB );
+  ui->comboBoxAddOnId->addItem( "C Control over the crowd", CFreeDspAurora::ADDONC );
+  ui->comboBoxAddOnId->addItem( "D Balanced life", CFreeDspAurora::ADDOND );
   index = ui->comboBoxAddOnId->findData( dsp->getAddOnId() );
   if( index != -1 )
     ui->comboBoxAddOnId->setCurrentIndex( index );
@@ -102,7 +102,7 @@ DialogSettings::DialogSettings( CFreeDspAurora* ptrdsp, bool bypassVolumePoti, Q
   ui->labelAccessPointIP->setText( dsp->getIpAddressAP() );
   ui->labelLocalWiFiIP->setText( dsp->getIpAddressLocalWifi() );
 
-  if( dsp->getAddOnId() == ADDONB )
+  if( dsp->getAddOnId() == CFreeDspAurora::ADDONB )
   {
     ui->comboBoxSpdifInput->clear();
 
@@ -583,7 +583,7 @@ void DialogSettings::on_comboBoxAddOnId_currentIndexChanged( int index )
 {
   dsp->storeAddOnIdWifi( ui->comboBoxAddOnId->itemData( index ).toUInt() );
 
-  if( ui->comboBoxAddOnId->itemData( index ).toUInt() == ADDONB )
+  if( ui->comboBoxAddOnId->itemData( index ).toUInt() == CFreeDspAurora::ADDONB )
   {
     ui->comboBoxSpdifInput->clear();
 
@@ -610,7 +610,7 @@ void DialogSettings::on_comboBoxAddOnId_currentIndexChanged( int index )
  */
 void DialogSettings::on_comboBoxSpdifInput_currentIndexChanged(int index)
 {
-  if( dsp->getAddOnId() == ADDONB )
+  if( dsp->getAddOnId() == CFreeDspAurora::ADDONB )
   {
     if( ui->comboBoxSpdifInput->itemData( index ).toUInt() == 0x00 )
       dsp->writeI2C( int8_t(0x82), 0x01, 0x04 );

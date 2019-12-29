@@ -10,6 +10,8 @@
 #include "AK5558.h"
 #include "WebOTA.h"
 #include "PlugIn8Channels.h"
+#include "PlugInHomeCinema71.h"
+#include "PlugIn4FIRs.h"
 
 // Configuration for hardware rev. 0.9.x
 //#define I2C_SDA_PIN 16
@@ -38,10 +40,16 @@
 #define NUMPRESETS (4)
 
 #define GET_ADDONCONFIG   "GET /aconfig"
+#define GET_AID           "GET /aid"
 #define GET_CURRENTPRESET "GET /currentpreset"
 #define GET_DSPFW         "GET /dspfw"
 #define GET_PING          "GET /ping"
+#define GET_SIZEDSPFW     "GET /sizedspfw"
+#define GET_SIZEUSERPARAM "GET /sizeuserparam"
+#define GET_USERPARAM     "GET /userparam"
+#define GET_VERSION       "GET /version"
 #define POST_ADDONCONFIG  "POST /aconfig"
+#define POST_AID          "POST /aid"
 #define POST_PRESET       "POST /preset"
 #define POST_READI2C      "POST /readi2c"
 #define POST_SAVEPRESET   "POST /savepreset"
@@ -72,6 +80,16 @@ enum taddonid
   ADDON_B = 0x02,
   ADDON_C = 0x03,
   ADDON_D = 0x04
+};
+
+enum tdspluginid
+{
+  PLUGIN_8CHANNELS        = 0x01,
+  PLUGIN_HOMECINEMA71     = 0x02,
+  PLUGIN_4FIRS            = 0x03,
+  PLUGIN_8CHANNELS_USB    = 0x04,
+  PLUGIN_HOMECINEMA71_USB = 0x05,
+  PLUGIN_CUSTOM           = 0x06
 };
 
 struct tSettings
@@ -250,9 +268,6 @@ void uploadDspFirmware( void )
 
   if( fileDspProgram )
   {
-    Serial.print( "File size:");
-    Serial.println( fileDspProgram.size() );
-
     size_t len = fileDspProgram.size();
     int cntr = 0;
     while( cntr < len )
@@ -815,20 +830,18 @@ void setup( void )
   //----------------------------------------------------------------------------
   //--- Download program to DSP
   //----------------------------------------------------------------------------
-  //uploadDspFirmware();
+  uploadDspFirmware();
 
   //----------------------------------------------------------------------------
   //--- Download user parameter to DSP
   //----------------------------------------------------------------------------
-  //uploadDspParameter();
+  uploadDspParameter();
 
   //----------------------------------------------------------------------------
   //--- Configure AddOns
   //----------------------------------------------------------------------------
   if( Settings.addonid == ADDON_A )
   {
-    Serial.println( "ADDON_A" );
-
     Wire.beginTransmission( ADDONA_SPDIFMUX_ADDR );
     Wire.write( 0x03 );
     Wire.write( 0xFF );
@@ -841,71 +854,68 @@ void setup( void )
     if( Wire.available() == 1 )
     {
       byte value = Wire.read();
-      Serial.print( "IO: " );
-      Serial.println( byte2string(value) );
 
-      // Analog RCA selected
+      // Analog RCA
       if( (value == 0xfe) || (value == 0xff) )
       {
-        Serial.println( "RCA" );
-        PlugIn8Channels::selectAnalogRCA();
+        if( (Settings.pid == PLUGIN_8CHANNELS) || (Settings.pid == PLUGIN_8CHANNELS_USB) )
+          PlugIn8Channels::selectAnalogRCA();
+        else if( (Settings.pid == PLUGIN_HOMECINEMA71) || (Settings.pid == PLUGIN_HOMECINEMA71_USB) )
+          PlugInHomeCinema71::selectAnalogRCA();
+        else if( Settings.pid == PLUGIN_4FIRS )
+          PlugIn4FIRs::selectAnalogRCA();
       }
+      // Analog XLR
       else if( value == 0xf7 )
       {
-        Serial.println( "XLR" );
-        PlugIn8Channels::selectAnalogXLR();
+        if( (Settings.pid == PLUGIN_8CHANNELS) || (Settings.pid == PLUGIN_8CHANNELS_USB) )
+          PlugIn8Channels::selectAnalogXLR();
+        else if( (Settings.pid == PLUGIN_HOMECINEMA71) || (Settings.pid == PLUGIN_HOMECINEMA71_USB) )
+          PlugInHomeCinema71::selectAnalogXLR();
+        else if( Settings.pid == PLUGIN_4FIRS )
+          PlugIn4FIRs::selectAnalogXLR();
       }
+      // Toslink left channel
       else if( (value == 0xfa) || (value == 0xfb) )
       {
-        Serial.println( "Toslink left" );
-        PlugIn8Channels::selectSpdifLeftChannel();
+        if( (Settings.pid == PLUGIN_8CHANNELS) || (Settings.pid == PLUGIN_8CHANNELS_USB) )
+          PlugIn8Channels::selectSpdifLeftChannel();
+        else if( (Settings.pid == PLUGIN_HOMECINEMA71) || (Settings.pid == PLUGIN_HOMECINEMA71_USB) )
+          PlugInHomeCinema71::selectSpdifLeftChannel();
+        else if( Settings.pid == PLUGIN_4FIRS )
+          PlugIn4FIRs::selectSpdifLeftChannel();
       }
+      // Toslink right channel
       else if( value == 0xf3 )
       {
-        Serial.println( "Toslink right" );
-        PlugIn8Channels::selectSpdifRightChannel();
+        if( (Settings.pid == PLUGIN_8CHANNELS) || (Settings.pid == PLUGIN_8CHANNELS_USB) )
+          PlugIn8Channels::selectSpdifRightChannel();
+        else if( (Settings.pid == PLUGIN_HOMECINEMA71) || (Settings.pid == PLUGIN_HOMECINEMA71_USB) )
+          PlugInHomeCinema71::selectSpdifRightChannel();
+        else if( Settings.pid == PLUGIN_4FIRS )
+          PlugIn4FIRs::selectSpdifRightChannel();
       }
+      // Digital RCA left
       else if( (value == 0xfc) || (value == 0xfd) )
       {
-        Serial.println( "Dig RCA left" );
-        PlugIn8Channels::selectSpdifLeftChannel();
+        if( (Settings.pid == PLUGIN_8CHANNELS) || (Settings.pid == PLUGIN_8CHANNELS_USB) )
+          PlugIn8Channels::selectSpdifLeftChannel();
+        else if( (Settings.pid == PLUGIN_HOMECINEMA71) || (Settings.pid == PLUGIN_HOMECINEMA71_USB) )
+          PlugInHomeCinema71::selectSpdifLeftChannel();
+        else if( Settings.pid == PLUGIN_4FIRS )
+          PlugIn4FIRs::selectSpdifLeftChannel();
       }
+      // Digital RCA right
       else if( value == 0xf5 )
       {
-        Serial.println( "Dig RCA right" );
-        PlugIn8Channels::selectSpdifRightChannel();
+        if( (Settings.pid == PLUGIN_8CHANNELS) || (Settings.pid == PLUGIN_8CHANNELS_USB) )
+          PlugIn8Channels::selectSpdifRightChannel();
+        else if( (Settings.pid == PLUGIN_HOMECINEMA71) || (Settings.pid == PLUGIN_HOMECINEMA71_USB) )
+          PlugInHomeCinema71::selectSpdifRightChannel();
+        else if( Settings.pid == PLUGIN_4FIRS )
+          PlugIn4FIRs::selectSpdifRightChannel();
       }
-      else
-        Serial.println( "Unknown" );
 
-/*
-      // Analog Input Selected
-      if( value & 0b00001001 == 0b00001001 )
-      {
-        if( value & 0b00000110 == 0b00000010 )
-        {
-          Serial.println( "XLR" );
-          PlugIn8Channels::selectAnalogXLR();
-        }
-        else
-        {
-          Serial.println( "RCA" );
-          PlugIn8Channels::selectAnalogRCA();
-        }
-      }
-      // Left Digital Channel Selected
-      else if( value & 0b00001001 == 0b00001000 )
-      {
-        Serial.println( "left channel" );
-        PlugIn8Channels::selectSpdifLeftChannel();
-      }
-      // Right Digital Channel Selected
-      else if( value & 0b00001001 == 0b00000001 )
-      {
-        Serial.println( "right channel" );
-        PlugIn8Channels::selectSpdifRightChannel();
-      }
-      */
     }
   }
   else if( Settings.addonid == ADDON_B )
@@ -1015,7 +1025,6 @@ void handleHttpRequest()
                 totalBytesReceived += receivedPostRequest.length();
 
                 int offset = 0;
-                Serial.print( "Writing to file..." );
                 while( offset < receivedPostRequest.length() )
                 {
                   String str = receivedPostRequest.substring( offset, offset + 2 );
@@ -1025,7 +1034,7 @@ void handleHttpRequest()
                     Serial.println( "[ERROR] Writing to dspfw.hex" );
                   offset += 2;
                 }
-                Serial.println("OK");
+                Serial.print(".");
                 fileDspProgram.flush();
 
                 Serial.print( "Received bytes:" );
@@ -1686,7 +1695,7 @@ void handleHttpRequest()
             //-----------------------------------------------------------------
             //--- Request of AddOn-ID
             //-----------------------------------------------------------------
-            else if( currentLine.startsWith("GET /aid") )
+            else if( currentLine.startsWith( GET_AID ) )
             {
               Serial.println( "GET /aid" );
               String httpResponse = "";
@@ -1703,7 +1712,7 @@ void handleHttpRequest()
             //-----------------------------------------------------------------
             //--- Request of firmware version
             //-----------------------------------------------------------------
-            else if( currentLine.startsWith("GET /version") )
+            else if( currentLine.startsWith( GET_VERSION ) )
             {
               Serial.println( "GET /version" );
               String httpResponse = "";
@@ -1720,7 +1729,7 @@ void handleHttpRequest()
             //-----------------------------------------------------------------
             //--- New AID
             //-----------------------------------------------------------------
-            else if( currentLine.startsWith("POST /aid") )
+            else if( currentLine.startsWith( POST_AID ) )
             {
               Serial.println( "POST /aid" );
               receivedPostRequest = "";
@@ -1732,7 +1741,7 @@ void handleHttpRequest()
             //-----------------------------------------------------------------
             //--- Request of user parameter file size
             //-----------------------------------------------------------------
-            else if( currentLine.startsWith("GET /sizeuserparam") )
+            else if( currentLine.startsWith( GET_SIZEUSERPARAM ) )
             {
               Serial.println( "GET /sizeuserparam" );
               String httpResponse = "";
@@ -1757,7 +1766,7 @@ void handleHttpRequest()
             //-----------------------------------------------------------------
             //--- Request of user parameter file
             //-----------------------------------------------------------------
-            else if( currentLine.startsWith("GET /userparam") )
+            else if( currentLine.startsWith( GET_USERPARAM ) )
             {
               Serial.println( "GET /userparam" );
               String httpResponse = "";
@@ -1809,7 +1818,7 @@ void handleHttpRequest()
             //-----------------------------------------------------------------
             //--- Request of DSP firmware size
             //-----------------------------------------------------------------
-            else if( currentLine.startsWith("GET /sizedspfw") )
+            else if( currentLine.startsWith( GET_SIZEDSPFW ) )
             {
               Serial.println( "GET /sizedspfw" );
               String httpResponse = "";
