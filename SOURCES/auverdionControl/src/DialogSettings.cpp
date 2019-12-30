@@ -337,7 +337,7 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
   {
     QMessageBox::information( this, tr("Success"), tr("You have successfully installed the new DSP-Plugin!"), QMessageBox::Ok );
     myLog()<<"Success";
-    QMessageBox::information( this, tr("Success"), tr("Please reboot your Aurora DSP and reconnect auverdionControl with it."), QMessageBox::Ok );
+    QMessageBox::information( this, tr("Success"), tr("Please reboot your Aurora DSP and reconnect auverdionControl to it and rewrite your parameters settings."), QMessageBox::Ok );
   }
   else
   {

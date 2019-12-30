@@ -1583,13 +1583,13 @@ void handleHttpRequest()
               fileDspProgram.flush();
               fileDspProgram.close();
 
-              if( SPIFFS.exists( presetDspparamFile[Settings.currentPreset] ) )
+              /*if( SPIFFS.exists( presetDspparamFile[Settings.currentPreset] ) )
               {
                 if( SPIFFS.remove( presetDspparamFile[Settings.currentPreset] ) )
                   Serial.println( presetDspparamFile[Settings.currentPreset] + " deleted" );
                 else
                   Serial.println( "[ERROR] Deleting " + presetDspparamFile[Settings.currentPreset] + " failed." );
-              }
+              }*/
 
               for( int p = 0; p < NUMPRESETS; p++ )
               {

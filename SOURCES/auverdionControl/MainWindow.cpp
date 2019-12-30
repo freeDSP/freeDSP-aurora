@@ -525,15 +525,6 @@ void MainWindow::on_actionRead_from_DSP_triggered()
     
       for( int p = 0; p < NUMPRESETS; p++ )
       {
-        //dsp.mute();
-
-        /*QEventLoop loopWaitForReply;
-        QTimer timerWaitMute;
-        timerWaitMute.setSingleShot( true );
-        connect( &timerWaitMute, SIGNAL(timeout()), &loopWaitForReply, SLOT(quit()) );
-        timerWaitMute.start( 500 );
-        loopWaitForReply.exec();*/
-
         ui->statusBar->showMessage( "Selecting preset......." );
         dsp.selectPresetWifi( p, 100000 );
 
@@ -542,21 +533,14 @@ void MainWindow::on_actionRead_from_DSP_triggered()
         if( dsp.requestUserParameterWifi( userparams, 60000 ) )
         {
           updatePresetGui( p, userparams );
+          currentPreset = p;
+          updatePlots();
           presetUserParams[p] = userparams;
         }
         dspPlugin[p]->setMasterVolume( ui->volumeSliderMain->value(), false );
       }
 
       currentPreset = preset;
-
-      //dsp.mute();
-    
-      /*QEventLoop loopWaitForReply;
-      QTimer timerWaitMute;
-      timerWaitMute.setSingleShot( true );
-      connect( &timerWaitMute, SIGNAL(timeout()), &loopWaitForReply, SLOT(quit()) );
-      timerWaitMute.start( 500 );
-      loopWaitForReply.exec();*/
 
       dsp.selectPresetWifi( preset, 100000 );
       dsp.setMasterVolume( static_cast<float>(dspPlugin[currentPreset]->getMasterVolume()) );
@@ -817,6 +801,7 @@ void MainWindow::on_actionRead_from_DSP_triggered()
       }
     }
     disconnect( &timerWait, SIGNAL(timeout()), this, SLOT(updateWaitingForConnect()) );
+
   }
   else
   {
@@ -974,7 +959,7 @@ void MainWindow::on_actionWrite_to_DSP_triggered()
       {
         QDspBlock* dspBlock = channel->getDspBlock(n);
         QByteArray params = dspBlock->getDspParams();
-        if( params.size() )
+        if( params.size() > 0 )
           dspparams[p].append( params );
       }
     }
@@ -997,7 +982,7 @@ void MainWindow::on_actionWrite_to_DSP_triggered()
       {
         QDspBlock* dspBlock = channel->getDspBlock(n);
         QByteArray params = dspBlock->getUserParams();
-        if( params.size() )
+        if( params.size() > 0 )
           usrparams[p].append( params );
       }
     }
@@ -1006,7 +991,7 @@ void MainWindow::on_actionWrite_to_DSP_triggered()
     presetUserParams[p] = usrparams[p];
   }
   
-  QProgressDialog progress( tr("Storing your DSP settings..."), tr("Abort"), 0, (dspparams[0].size() + usrparams[0].size()) * NUMPRESETS, this );
+  QProgressDialog progress( tr("Storing your DSP settings..."), tr("Abort"), 0, (dspparams[0].size() + usrparams[0].size()) * NUMPRESETS + 1, this );
   progress.setWindowModality(Qt::WindowModal);
   int progressValue = 0;
 
@@ -1090,10 +1075,11 @@ void MainWindow::on_actionWrite_to_DSP_triggered()
       return;
     }
   }
-  progress.setValue( dspparams[0].size() * NUMPRESETS + usrparams[0].size() * NUMPRESETS );
 
   dsp.selectPresetWifi( ui->tabPresets->currentIndex() );
   dsp.storePresetSelection();
+
+  progress.setValue( dspparams[0].size() * NUMPRESETS + usrparams[0].size() * NUMPRESETS + 1 );
 
   myLog()<<"Success";
   //qDebug()<<"File size dspparam.hex:"<<dspparams[0].size() / 1024<<"KiB";

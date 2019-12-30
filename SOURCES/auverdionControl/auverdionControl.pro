@@ -148,7 +148,7 @@ HEADERS += \
         src/WizardImportRewFrq.hpp \
         src/WizardImportRewPeq.hpp \
         src/dsp/custom/PlugInCustom.hpp \
-        customdefines.hpp
+        src/customdefines.hpp
         
 
 FORMS += \

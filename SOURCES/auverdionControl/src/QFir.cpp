@@ -231,6 +231,12 @@ void QFir::setUserParams( QByteArray& userParams, int& idx )
       ir[kk] = static_cast<Vektorraum::tfloat>(*reinterpret_cast<const float*>(param.data()));
     }
   }
+  else
+  {
+    for( uint32_t kk = 0; kk < nfft; kk++ )
+      ir[kk] = 0.0;
+    ir[0] = 1.0;
+  }
     
 }
 
@@ -244,17 +250,10 @@ QByteArray QFir::getDspParams( void )
 {
   QByteArray content;
 
-  qDebug()<<"*******************";
-  qDebug()<<"*******************";
-  qDebug()<<"*******************";
-  qDebug()<<"QFir::getDspParam";
-
   for( uint16_t kk = 0; kk < nfft; kk++ )
   {
     content.append( dsp->makeParameterForWifi( addr[kImpulseResponse] + kk, 
                                                static_cast<float>(ir[kk]) ) );
-    if( kk < 10 )
-      qDebug()<<ir[kk]<<dsp->makeParameterForWifi( addr[kImpulseResponse] + kk, static_cast<float>(ir[kk]) ).toHex();
   }
                           
   return content;
