@@ -147,7 +147,8 @@ HEADERS += \
         src/QMyDoubleSpinBox.hpp \
         src/WizardImportRewFrq.hpp \
         src/WizardImportRewPeq.hpp \
-        src/dsp/custom/PlugInCustom.hpp
+        src/dsp/custom/PlugInCustom.hpp \
+        customdefines.hpp
         
 
 FORMS += \

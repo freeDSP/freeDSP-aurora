@@ -32,10 +32,10 @@
 
 #include "LogFile.h"
 
+#include "customdefines.hpp"
+
 extern CLogFile myLog;
 
-#define VERSION_STR "1.2.0"
-#define VERSION_HEX 0x00010200
 #define FS 48000.0
 
 using namespace Vektorraum;
@@ -470,6 +470,25 @@ void MainWindow::on_actionRead_from_DSP_triggered()
         return;
       }
 
+      //--------------------------------------------------------------------------
+      //--- Request the DSP-plugin version
+      //--------------------------------------------------------------------------
+      ui->statusBar->showMessage("Requesting plugin version.......");
+      dsp.requestPluginVersionWifi();
+      QString pversion = dsp.getPluginVersion();
+      if( pversion != VERSION_STR )
+      {
+        QMessageBox::critical( this, tr("Error: Plugin version mismatch"), tr("I am really sorry. The plugin version is not compatible with your version of auverdionControl. Please (re)install the plugin on your Aurora first."), QMessageBox::Ok ); 
+        msgBox->accept();
+        ui->statusBar->showMessage("Ready");
+        setEnabled( true );
+        return;
+      }
+
+      //--------------------------------------------------------------------------
+      //--- Request current preset selection
+      //--------------------------------------------------------------------------
+      ui->statusBar->showMessage("Requesting current preset selection.......");
       int preset = dsp.requestCurrentPresetWifi();
       if( preset > -1 )
       {
@@ -1714,6 +1733,11 @@ void MainWindow::on_actionSaveParameters_triggered()
   //----------------------------------------------------------------------------
   QByteArray fileparams;
 
+  fileparams.append( static_cast<char>((VERSION_HEX)       & 0x000000FF) );
+  fileparams.append( static_cast<char>((VERSION_HEX >>  8) & 0x000000FF) );
+  fileparams.append( static_cast<char>((VERSION_HEX >> 16) & 0x000000FF) );
+  fileparams.append( static_cast<char>((VERSION_HEX >> 24) & 0x000000FF) );
+
   for( uint32_t p = 0; p < NUMPRESETS; p++ )
   {
     fileparams.append( static_cast<char>((dspPlugin[p]->getPid()) & 0x000000FF) );
@@ -1747,12 +1771,14 @@ void MainWindow::on_actionSaveParameters_triggered()
   QFile file( fileName );
   if( !file.open( QIODevice::WriteOnly ) )
   {
+    QMessageBox::critical( this, tr("Error"), tr("Could not open the file."), QMessageBox::Ok ); 
     myLog()<<"Could not open file "<<fileName;
     return;
   }
 
   if( file.write( fileparams ) == -1 )
   {
+    QMessageBox::critical( this, tr("Error"), tr("Could not write to file."), QMessageBox::Ok ); 
     myLog()<<"Could not write to file "<<fileName;
     return;
   }
@@ -1774,6 +1800,7 @@ void MainWindow::on_actionLoadParameters_triggered()
   QFile file( fileName );
   if( !file.open( QIODevice::ReadOnly ) )
   {
+    QMessageBox::critical( this, tr("Error"), tr("Coudl not open the file."), QMessageBox::Ok ); 
     myLog()<<"Could not open file "<<fileName;
     return;
   }
@@ -1785,6 +1812,24 @@ void MainWindow::on_actionLoadParameters_triggered()
   if( fileparams.size() > 0 )
   {
     int idx = 0;
+
+    QByteArray fileversion;
+    fileversion.append( fileparams.at(idx) );
+    idx++;
+    fileversion.append( fileparams.at(idx) );
+    idx++;
+    fileversion.append( fileparams.at(idx) );
+    idx++;
+    fileversion.append( fileparams.at(idx) );
+    idx++;
+    uint32_t pver = *reinterpret_cast<const uint32_t*>(fileversion.data());
+    if( pver != VERSION_HEX )
+    {
+      QMessageBox::critical( this, tr("Error"), tr("File version incompatible with current version of auverdionControl."), QMessageBox::Ok ); 
+      myLog()<<"File version incompatible with current version of auverdionControl.";
+      return;
+    }
+      
     for( int p = 0; p < NUMPRESETS; p++ )
     {
       QByteArray param;

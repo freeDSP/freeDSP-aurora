@@ -92,6 +92,11 @@ public:
   bool requestFirmwareVersionWifi( bool showmessage = true );
 
   //============================================================================
+  /*! Requests the version of the plugin installed on the board.
+   */
+  bool requestPluginVersionWifi( void );
+
+  //============================================================================
   /*! Requests the PID of current installed DSP-Plugin
    *
    */
@@ -206,6 +211,14 @@ public:
   uint32_t getFwVersion( void )
   {
     return fwVersion;
+  }
+
+  //============================================================================
+  /*! Returns the plugin version of the connected board.
+   */
+  QString getPluginVersion( void )
+  {
+    return pluginVersion;
   }
 
   //============================================================================
@@ -482,6 +495,13 @@ public:
     return writeI2C( AK4458_I2C_ADDR, AK4458_CONTROL2, 0b00100010 );
   }
 
+  //============================================================================
+  /*! Sends the plugin version to DSP and stores it nonvolatile.
+   *
+   * \param pver New plugin version
+   */
+  bool storePluginVersionWifi( QString pver );
+
 private:
   //============================================================================
   /*!
@@ -532,6 +552,7 @@ private:
   float masterVolume;
   bool debugMode = false;
   QString configAddOn;
+  QString pluginVersion = "0.0.0";
 
 };
 

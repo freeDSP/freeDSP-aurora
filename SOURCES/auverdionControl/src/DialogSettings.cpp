@@ -22,6 +22,8 @@
 
 #include "LogFile.h"
 
+#include "customdefines.hpp"
+
 extern CLogFile myLog;
 
 DialogSettings::DialogSettings( CFreeDspAurora* ptrdsp, bool bypassVolumePoti, QWidget* parent ) :
@@ -162,35 +164,6 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
   QString pathTxBuffer;
   QString pathNumBytes;
 
-  #if defined( __MACOSX__ )
-  CFURLRef appUrlRef = CFBundleCopyBundleURL( CFBundleGetMainBundle() );
-  CFStringRef macPath = CFURLCopyFileSystemPath( appUrlRef, kCFURLPOSIXPathStyle );
-  QString pathAppBundle = QString( CFStringGetCStringPtr( macPath, CFStringGetSystemEncoding() ) );
-  CFRelease(appUrlRef);
-  CFRelease(macPath);
-  /*if( ui->comboBoxPlugIn->currentData().toInt() == CFreeDspAurora::PLUGIN_8CHANNELS )
-  {
-    pathTxBuffer = pathAppBundle + QString( "/Contents/Resources/8channels/TxBuffer_IC_1.dat");
-    pathNumBytes = pathAppBundle + QString( "/Contents/Resources/8channels/NumBytes_IC_1.dat");
-  }
-  else
-  {
-    qDebug()<<"[ERROR] Unknown plugin id"<<ui->comboBoxPlugIn->currentData().toInt();
-  }*/
-
-  #elif defined( __WIN__ )
-  /*QString pathAppBundle = QCoreApplication::applicationDirPath();
-  if( ui->comboBoxPlugIn->currentData().toInt() == CFreeDspAurora::PLUGIN_8CHANNELS )
-  {
-    pathTxBuffer = pathAppBundle + QString( "/dspplugins/8channels/TxBuffer_IC_1.dat");
-    pathNumBytes = pathAppBundle + QString( "/dspplugins/8channels/NumBytes_IC_1.dat");
-  }
-  else
-  {
-    qDebug()<<"[ERROR] Unknown plugin id"<<ui->comboBoxPlugIn->currentData().toInt();
-  }*/
-  #endif
-
   if( ui->comboBoxPlugIn->currentData().toInt() == CFreeDspAurora::PLUGIN_CUSTOM )
   {
     QString fileName = QFileDialog::getOpenFileName( this, tr("Select SigmaStudio project"), 
@@ -297,6 +270,11 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
   dsp->storePidWifi( static_cast<uint8_t>(ui->comboBoxPlugIn->currentData().toInt()) );
 
   //----------------------------------------------------------------------------
+  //--- Send plugin version via WiFi
+  //----------------------------------------------------------------------------
+  dsp->storePluginVersionWifi( VERSION_STR );
+
+  //----------------------------------------------------------------------------
   //--- Send data to ESP32 via WiFi
   //----------------------------------------------------------------------------
   QByteArray content;
@@ -359,7 +337,7 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
   {
     QMessageBox::information( this, tr("Success"), tr("You have successfully installed the new DSP-Plugin!"), QMessageBox::Ok );
     myLog()<<"Success";
-    QMessageBox::information( this, tr("Success"), tr("Please reboot your Aurora DSP."), QMessageBox::Ok );
+    QMessageBox::information( this, tr("Success"), tr("Please reboot your Aurora DSP and reconnect auverdionControl with it."), QMessageBox::Ok );
   }
   else
   {

@@ -10,6 +10,8 @@
 #include "LogFile.h"
 #include "freeDSP-Aurora.hpp"
 
+#include "customdefines.hpp"
+
 extern CLogFile myLog;
 extern void setStatusBarMessage( QString str );
 
@@ -1488,5 +1490,98 @@ bool CFreeDspAurora::requestAddOnConfig( void )
   {
     myLog()<<"Not connected to DSP.";
     return false;
+  }
+}
+
+//==============================================================================
+/*! Requests the version of the plugin installed on the board.
+ */
+bool CFreeDspAurora::requestPluginVersionWifi( void )
+{
+  myLog()<<"---------------------------------------------------------------";
+  myLog()<<"requestPluginVersionWifi";
+
+  if( isConnected )
+  {
+    QString wifiIpHost = getIpAddressWifi();
+
+    QString requestString = QString( "GET /pver HTTP/1.1\r\n" )
+                          + QString( "Host: " ) + wifiIpHost + QString( "\r\n" )
+                          + QString( "\r\n" )
+                          + QString( "\r\n" );
+    QByteArray request;
+    request.append( requestString );
+
+    if( writeRequestWifi( request ) )
+    {
+      if( !waitForReplyWifi() )
+      {
+        QMessageBox::critical( this, tr("Error"), tr("Uuups, could not receive plugin version. Please double check everything and try again."), QMessageBox::Ok ); 
+        return false;
+      }
+      else
+      {
+        QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+        if( listReply.size() > 4 )
+          pluginVersion = listReply.at(4);
+        myLog()<<"Plugin version: "<<pluginVersion;
+        return true;
+      }
+    }
+    else
+    {
+      QMessageBox::critical( this, tr("Error"), tr("Uups, could not connect to DSP. Did you switch it on?"), QMessageBox::Ok );
+      return false;
+    }
+  }
+  else
+  {
+    myLog()<<"Not connected to DSP.";
+    return false;
+  }
+}
+
+//==============================================================================
+/*! Sends the plugin version to DSP and stores it nonvolatile.
+ *
+ * \param pver New plugin version
+ */
+bool CFreeDspAurora::storePluginVersionWifi( QString pver )
+{
+  myLog()<<"---------------------------------------------------------------";
+  myLog()<<"storePluginVersionWifi";
+
+  QString wifiIpHost = getIpAddressWifi();
+
+  QString requestString = QString("POST /pver HTTP/1.1\r\n")
+                        + QString("Host: ") + wifiIpHost + QString("\r\n")
+                        + QString("Content-type:text/plain\r\n")
+                        + QString("Content-length: ") +  QString::number( pver.size() ) + QString("\r\n")
+                        + QString("\r\n")
+                        + pver
+                        + QString("\r\n");
+  QByteArray request;
+  request.append( requestString );  
+  
+  writeRequestWifi( request );
+
+  if( !waitForReplyWifi() )
+  {
+    QMessageBox::critical( this, tr("Error"), tr("Did not receive ACK from DSP. Please double-check everything and try again."), QMessageBox::Ok ); 
+    return false;
+  }
+  else
+  {
+    myLog()<<QString( replyDSP );
+    QStringList listReply = QString( replyDSP ).split( QRegExp("\\s+") );
+    if( listReply.at(4) == "ACK" )
+    {
+      return true;
+    }
+    else
+    {
+      QMessageBox::critical( this, tr("Error"), tr("Could not store the plugin version. Please double-check everything and try again."), QMessageBox::Ok ); 
+      return false;
+    }
   }
 }

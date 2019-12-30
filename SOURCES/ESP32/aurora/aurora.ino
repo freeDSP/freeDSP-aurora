@@ -39,22 +39,39 @@
 
 #define NUMPRESETS (4)
 
-#define GET_ADDONCONFIG   "GET /aconfig"
-#define GET_AID           "GET /aid"
-#define GET_CURRENTPRESET "GET /currentpreset"
-#define GET_DSPFW         "GET /dspfw"
-#define GET_PING          "GET /ping"
-#define GET_SIZEDSPFW     "GET /sizedspfw"
-#define GET_SIZEUSERPARAM "GET /sizeuserparam"
-#define GET_USERPARAM     "GET /userparam"
-#define GET_VERSION       "GET /version"
-#define POST_ADDONCONFIG  "POST /aconfig"
-#define POST_AID          "POST /aid"
-#define POST_PRESET       "POST /preset"
-#define POST_READI2C      "POST /readi2c"
-#define POST_SAVEPRESET   "POST /savepreset"
-#define POST_WIFICONFIG   "POST /wificonfig"
-#define POST_WRITEI2C     "POST /writei2c"
+//==============================================================================
+//
+// HTTP Requests
+//
+//==============================================================================
+#define GET_ADDONCONFIG        "GET /aconfig"
+#define GET_AID                "GET /aid"
+#define GET_CURRENTPRESET      "GET /currentpreset"
+#define GET_DSPFW              "GET /dspfw"
+#define GET_FINISHDSPFW        "GET /finishdspfw"
+#define GET_FINISHDSPPARAMETER "GET /finishdspparameter"
+#define GET_FINISHUSERPARAM    "GET /finishuserparam"
+#define GET_PID                "GET /pid"
+#define GET_PING               "GET /ping"
+#define GET_PVER               "GET /pver"
+#define GET_SIZEDSPFW          "GET /sizedspfw"
+#define GET_SIZEUSERPARAM      "GET /sizeuserparam"
+#define GET_USERPARAM          "GET /userparam"
+#define GET_VERSION            "GET /version"
+#define POST_ADDONCONFIG       "POST /aconfig"
+#define POST_AID               "POST /aid"
+#define POST_PARAMETER         "POST /parameter"
+#define POST_PID               "POST /pid"
+#define POST_PRESET            "POST /preset"
+#define POST_PVER              "POST /pver"
+#define POST_READI2C           "POST /readi2c"
+#define POST_SAVEPRESET        "POST /savepreset"
+#define POST_WIFICONFIG        "POST /wificonfig"
+#define POST_WRITEI2C          "POST /writei2c"
+#define PUT_DSPFW              "PUT /dspfw"
+#define PUT_DSPPARAM           "PUT /dspparam"
+#define PUT_USERPARAM          "PUT /userparam"
+
 
 enum twifistatus
 {
@@ -70,7 +87,8 @@ enum twifistatus
   STATE_WIFI_RECEIVE_WRITEI2C,
   STATE_WIFI_RECEIVE_READI2C,
   STATE_WIFI_POST_ADDONCONFIG,
-  STATE_WIFI_GET_ADDONCONFIG
+  STATE_WIFI_GET_ADDONCONFIG,
+  STATE_WIFI_RECEIVE_PVER
 };
 
 enum taddonid
@@ -100,6 +118,7 @@ struct tSettings
   uint32_t addonid;
   byte currentPreset;
   String version;
+  String pversion;
 };
 
 tSettings Settings;
@@ -245,6 +264,7 @@ void saveSettings( void )
   jsonSettings["aid"] = Settings.addonid;
   jsonSettings["preset"] = Settings.currentPreset;
   jsonSettings["version"] = Settings.version;
+  jsonSettings["pver"] = Settings.pversion;
   // Serialize JSON to file
   if( serializeJson( jsonSettings, fileSettings ) == 0 )
     Serial.println( "Failed to write to file" );
@@ -354,11 +374,11 @@ void uploadDspFirmware( void )
     }
 
     fileDspProgram.close();
-
+    Serial.println( "[ok]" );
   }
   else
     Serial.println( "\n[ERROR] Failed to open file dspfw.hex" );
-  Serial.print( "[ok]\n" );
+  
 }
 
 
@@ -373,24 +393,17 @@ void uploadDspParameter( void )
 
   if( fileDspParams )
   {
-    Serial.print( "File size:");
-    Serial.println( fileDspParams.size() );
-
+    
     int file_size = fileDspParams.size();
 
     int cntr = 0;
 
     while( fileDspParams.available() )
     {
-      //Serial.print( "I2C " );
       byte byteRead; 
       fileDspParams.read( &byteRead, 1 );
-      //Serial.print( "0x" );
-      //Serial.print( byte2string2(byteRead) );
       uint16_t regaddr = ((uint16_t)byteRead) << 8;
       fileDspParams.read( &byteRead, 1 );
-      //Serial.print( byte2string2(byteRead) );
-      //Serial.print( " " ); 
       regaddr += byteRead;
 
       byte val[4];
@@ -399,15 +412,16 @@ void uploadDspParameter( void )
       fileDspParams.read( &(val[2]), 1 );
       fileDspParams.read( &(val[3]), 1 );
       ADAU1452_WRITE_BLOCK( regaddr, val, 4 );  
-
     }
 
     fileDspParams.close();
+    Serial.println( "[ok]" );
 
+    Serial.print( "File size:");
+    Serial.println( file_size );
   }
   else
     Serial.println( "\n[ERROR] Failed to open file " + presetDspparamFile[Settings.currentPreset] );
-  Serial.print( "[ok]\n" );
 }
 
 //==============================================================================
@@ -643,6 +657,7 @@ void writeDefaultSettings( void )
   jsonSettings["aid"] = ADDON_CUSTOM;
   jsonSettings["preset"] = 0x00;
   jsonSettings["version"] = VERSION_STR;
+  jsonSettings["pver"] = "0.0.0";
   // Serialize JSON to file
   if( serializeJson( jsonSettings, fileSettings ) == 0 )
     Serial.println( "Failed to write to file" );
@@ -653,6 +668,7 @@ void writeDefaultSettings( void )
   Settings.addonid = jsonSettings["aid"];
   Settings.currentPreset = jsonSettings["preset"];
   Settings.version = jsonSettings["version"].as<String>();
+  Settings.pversion = jsonSettings["pver"].as<String>();
 }
 
 //==============================================================================
@@ -676,13 +692,6 @@ void setupAddOn( void )
         Wire.write( readBytes[2] ); // regaddr
         Wire.write( readBytes[3] ); // data
         Wire.endTransmission( true );  
-
-        /*Serial.print( readBytes[1], HEX );
-        Serial.print( " " );
-        Serial.print( readBytes[2], HEX );
-        Serial.print( " " );
-        Serial.println( readBytes[3], HEX );
-        Serial.print( " " );*/
       }
       fileAddOnConfig.close();
     }
@@ -730,6 +739,9 @@ void setup( void )
   Settings.ssid = "";
   Settings.password = "";
   Settings.addonid = ADDON_CUSTOM;
+  Settings.currentPreset = 0;
+  Settings.version = VERSION_STR;
+  Settings.pversion = "0.0.0";
 
   //----------------------------------------------------------------------------
   //--- Load system settings
@@ -765,6 +777,7 @@ void setup( void )
       Settings.addonid = jsonSettings["aid"];
       Settings.currentPreset = jsonSettings["preset"];
       Settings.version = jsonSettings["version"].as<String>();
+      Settings.pversion = jsonSettings["pver"].as<String>();
       fileSettings.close();
       if( Settings.version != VERSION_STR )
       {
@@ -1037,8 +1050,8 @@ void handleHttpRequest()
                 Serial.print(".");
                 fileDspProgram.flush();
 
-                Serial.print( "Received bytes:" );
-                Serial.println( receivedPostRequest.length() );
+                //Serial.print( "Received bytes:" );
+                //Serial.println( receivedPostRequest.length() );
                 receivedPostRequest = "";
 
                 String httpResponse = "";
@@ -1449,11 +1462,42 @@ void handleHttpRequest()
               waitForData = false;
               wifiStatus = STATE_WIFI_IDLE;
             }
+
+            //-----------------------------------------------------------------
+            //--- Receiving new Plugin version
+            //-----------------------------------------------------------------
+            else if( wifiStatus == STATE_WIFI_RECEIVE_PVER )
+            {
+              receivedPostRequest += currentLine;
+
+              if( receivedPostRequest.length() > contentLength )
+              {
+                receivedPostRequest = receivedPostRequest.substring( 0, receivedPostRequest.length()-1 );
+
+                Settings.pversion = receivedPostRequest;
+
+                Serial.print( "PVER: " );
+                Serial.println( Settings.pversion );
+
+                saveSettings();
+
+                String httpResponse = "";
+                httpResponse += "HTTP/1.1 200 OK\r\n";
+                httpResponse += "Content-type:text/plain\r\n\r\n";
+                httpResponse += "ACK";
+                httpResponse += "\r\n";
+                client.println( httpResponse );
+
+                client.stop();
+                waitForData = false;
+                wifiStatus = STATE_WIFI_IDLE;
+              }
+            }
             
 
             currentLine = "";
             //Serial.println( cntrPackets );
-            
+
           }
 
           else
@@ -1461,7 +1505,7 @@ void handleHttpRequest()
             //-----------------------------------------------------------------
             //--- New single dsp parameter sent
             //-----------------------------------------------------------------
-            if( currentLine.startsWith("POST /parameter") )
+            if( currentLine.startsWith( POST_PARAMETER ) )
             {
               Serial.println( "POST /parameter" );
               receivedPostRequest = "";
@@ -1473,7 +1517,7 @@ void handleHttpRequest()
             //-----------------------------------------------------------------
             //--- Request of PID
             //-----------------------------------------------------------------
-            else if( currentLine.startsWith("GET /pid") )
+            else if( currentLine.startsWith( GET_PID ) )
             {
               Serial.println( "GET /pid" );
               String httpResponse = "";
@@ -1490,7 +1534,7 @@ void handleHttpRequest()
             //-----------------------------------------------------------------
             //--- New PID
             //-----------------------------------------------------------------
-            else if( currentLine.startsWith("POST /pid") )
+            else if( currentLine.startsWith( POST_PID ) )
             {
               Serial.println( "POST /pid" );
               receivedPostRequest = "";
@@ -1502,12 +1546,12 @@ void handleHttpRequest()
             //-----------------------------------------------------------------
             //--- New dsp firmware data block
             //-----------------------------------------------------------------
-            else if( currentLine.startsWith("PUT /dspfw") )
+            else if( currentLine.startsWith( PUT_DSPFW ) )
             {
-              Serial.println( "PUT /dspfw" );
               receivedPostRequest = "";
               if( wifiStatus != STATE_WIFI_DSPFW )                              // start a new transfer
               {
+                Serial.println( "PUT /dspfw" );
                 if( SPIFFS.exists( "/dspfw.hex" ) )
                 {
                   if( SPIFFS.remove( "/dspfw.hex" ) )
@@ -1533,9 +1577,9 @@ void handleHttpRequest()
             //-----------------------------------------------------------------
             //--- Finish dsp firmware file transfer
             //-----------------------------------------------------------------
-            else if( currentLine.startsWith("GET /finishdspfw") )
+            else if( currentLine.startsWith( GET_FINISHDSPFW ) )
             {
-              Serial.println( "GET /finishdspfw" );
+              Serial.println( "\nGET /finishdspfw" );
               fileDspProgram.flush();
               fileDspProgram.close();
 
@@ -1583,7 +1627,7 @@ void handleHttpRequest()
             //-----------------------------------------------------------------
             //--- New dsp parameter data block
             //-----------------------------------------------------------------
-            else if( currentLine.startsWith("PUT /dspparam") )
+            else if( currentLine.startsWith( PUT_DSPPARAM ) )
             {
               Serial.println( "PUT /dspparam" );
               receivedPostRequest = "";
@@ -1619,7 +1663,7 @@ void handleHttpRequest()
             //-----------------------------------------------------------------
             //--- Finish dsp parameter file transfer
             //-----------------------------------------------------------------
-            else if( currentLine.startsWith("GET /finishdspparameter") )
+            else if( currentLine.startsWith( GET_FINISHDSPPARAMETER ) )
             {
               Serial.println( "GET /finishdspparameter" );
               fileDspParams.flush();
@@ -1641,7 +1685,7 @@ void handleHttpRequest()
             //-----------------------------------------------------------------
             //--- New user parameter block
             //-----------------------------------------------------------------
-            else if( currentLine.startsWith("PUT /userparam") )
+            else if( currentLine.startsWith( PUT_USERPARAM ) )
             {
               Serial.println( "PUT /userparam" );
               receivedPostRequest = "";
@@ -1674,7 +1718,7 @@ void handleHttpRequest()
             //-----------------------------------------------------------------
             //--- Finish user parameters transfer
             //-----------------------------------------------------------------
-            else if( currentLine.startsWith("GET /finishuserparam") )
+            else if( currentLine.startsWith( GET_FINISHUSERPARAM ) )
             {
               Serial.println( "GET /finishuserparam" );
               fileUserParams.flush();
@@ -1722,6 +1766,35 @@ void handleHttpRequest()
               httpResponse += "\r\n";
               client.println( httpResponse );
               client.stop();
+              currentLine = "";
+              //cntrPackets++;
+            }
+
+            //-----------------------------------------------------------------
+            //--- Request of Plugin version
+            //-----------------------------------------------------------------
+            else if( currentLine.startsWith( GET_PVER ) )
+            {
+              Serial.println( "GET /pver" );
+              String httpResponse = "";
+              httpResponse += "HTTP/1.1 200 OK\r\n";
+              httpResponse += "Content-type:text/plain\r\n\r\n";
+              httpResponse += Settings.pversion;
+              httpResponse += "\r\n";
+              client.println( httpResponse );
+              client.stop();
+              currentLine = "";
+              //cntrPackets++;
+            }
+
+            //-----------------------------------------------------------------
+            //--- Receiving new Plugin version
+            //-----------------------------------------------------------------
+            else if( currentLine.startsWith( POST_PVER ) )
+            {
+              Serial.println( "POST /pver" );
+              receivedPostRequest = "";
+              wifiStatus = STATE_WIFI_RECEIVE_PVER;
               currentLine = "";
               //cntrPackets++;
             }
@@ -1890,48 +1963,6 @@ void handleHttpRequest()
               //client.stop();
               wifiStatus = STATE_WIFI_IDLE;
               currentLine = "";
-
-              #if 0
-              Serial.println( "GET /dspfw" );
-              String httpResponse = "";
-              httpResponse += "HTTP/1.1 200 OK\r\n";
-              httpResponse += "Content-type:text/plain\r\n\r\n";
-              if( SPIFFS.exists( "/dspfw.hex" ) )
-              {
-                fileDspProgram = SPIFFS.open( "/dspfw.hex", "r" );
-                if( fileDspProgram )
-                {
-                  size_t len = fileDspProgram.size();
-                  //Serial.println( len );
-                  int cntr = 0;
-
-                  while( cntr < len )
-                  {
-                    byte byteRead;
-                    fileDspProgram.read( &byteRead, 1 );
-                    Serial.print( cntr );
-                    Serial.print( ": " );
-                    Serial.println( byte2string2( byteRead ) );
-                    httpResponse += byte2string2( byteRead );
-                    cntr++;
-                    if( cntr % 1024 == 0 )
-                    {
-                      client.print( httpResponse );
-                      httpResponse = "";
-                    }
-                  }
-                  httpResponse += "\r\n";
-                  client.println( httpResponse );
-                }
-                fileDspProgram.close();
-              }
-              //httpResponse += "\r\n";
-              //client.println( httpResponse );
-              client.stop();
-              wifiStatus = STATE_WIFI_IDLE;
-              currentLine = "";
-              //cntrPackets++;
-              #endif
             }
 
             //-----------------------------------------------------------------
