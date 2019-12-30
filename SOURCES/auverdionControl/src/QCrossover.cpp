@@ -1,4 +1,5 @@
 #include <QDebug>
+#include <QThread>
 
 #include "QCrossover.hpp"
 #include "ui_QCrossover.h"
@@ -1535,7 +1536,8 @@ void QCrossover::sendDspParameter( void )
 {
   QByteArray content;
 
-  content.append( dsp->muteSequence() );
+  dsp->muteDAC();
+  QThread::msleep( 200 );
 
   content.append( dsp->makeParameterForWifi( addr[kParamB2_1_HP], static_cast<float>(coeffs_hp[kB2]) ) );
   content.append( dsp->makeParameterForWifi( addr[kParamB1_1_HP], static_cast<float>(coeffs_hp[kB1]) ) );
@@ -1599,9 +1601,9 @@ void QCrossover::sendDspParameter( void )
   content.append( dsp->makeParameterForWifi( addr[kParamA2_4_LP], static_cast<float>(coeffs_lp[3*5+kA2]) ) );
   content.append( dsp->makeParameterForWifi( addr[kParamA1_4_LP], static_cast<float>(coeffs_lp[3*5+kA1]) ) );
     
-  content.append( dsp->unmuteSequence() );
-
   dsp->sendParameterWifi( content );
+
+  dsp->unmuteDAC();
 }
 
 //==============================================================================

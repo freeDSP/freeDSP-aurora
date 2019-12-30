@@ -1,4 +1,5 @@
 #include <QDebug>
+#include <QThread>
 
 #include "QPhase.hpp"
 #include "ui_QPhase.h"
@@ -184,7 +185,8 @@ void QPhase::sendDspParameter( void )
 {
   QByteArray content;
 
-  content.append( dsp->muteSequence() );
+  dsp->muteDAC();
+  QThread::msleep( 200 );
 
   content.append( dsp->makeParameterForWifi( addr[kParamB2], static_cast<float>(coeffs[kB2]) ) );
   content.append( dsp->makeParameterForWifi( addr[kParamB1], static_cast<float>(coeffs[kB1]) ) );
@@ -192,9 +194,9 @@ void QPhase::sendDspParameter( void )
   content.append( dsp->makeParameterForWifi( addr[kParamA2], static_cast<float>(coeffs[kA2]) ) );
   content.append( dsp->makeParameterForWifi( addr[kParamA1], static_cast<float>(coeffs[kA1]) ) );
 
-  content.append( dsp->unmuteSequence() );
-
   dsp->sendParameterWifi( content );
+
+  dsp->unmuteDAC();
 }
 
 //==============================================================================

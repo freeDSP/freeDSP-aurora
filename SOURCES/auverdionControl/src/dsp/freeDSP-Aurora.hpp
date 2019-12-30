@@ -352,6 +352,7 @@ public:
     return masterVolume;
   }
 
+  #if 0
   //============================================================================
   /*! Makes the mute sequence
    */
@@ -403,6 +404,7 @@ public:
     content.append( unmuteSequence() );
     sendParameterWifi( content );
   }
+  #endif
 
   //============================================================================
   /*! Sends a pure i2c message to write to a slave on the i2c bus.

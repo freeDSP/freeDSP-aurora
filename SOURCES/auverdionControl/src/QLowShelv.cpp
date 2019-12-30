@@ -1,4 +1,5 @@
 #include <QDebug>
+#include <QThread>
 
 #include "QLowShelv.hpp"
 #include "ui_QLowShelv.h"
@@ -179,17 +180,18 @@ void QLowShelv::sendDspParameter( void )
 {
   QByteArray content;
 
-  content.append( dsp->muteSequence() );
+  dsp->muteDAC();
+  QThread::msleep( 200 );
 
   content.append( dsp->makeParameterForWifi( addr[kParamB2], static_cast<float>(coeffs[kB2]) ) );
   content.append( dsp->makeParameterForWifi( addr[kParamB1], static_cast<float>(coeffs[kB1]) ) );
   content.append( dsp->makeParameterForWifi( addr[kParamB0], static_cast<float>(coeffs[kB0]) ) );
   content.append( dsp->makeParameterForWifi( addr[kParamA2], static_cast<float>(coeffs[kA2]) ) );
   content.append( dsp->makeParameterForWifi( addr[kParamA1], static_cast<float>(coeffs[kA1]) ) );
-  
-  content.append( dsp->unmuteSequence() );
 
   dsp->sendParameterWifi( content );
+
+  dsp->unmuteDAC();
 }
 
 //==============================================================================

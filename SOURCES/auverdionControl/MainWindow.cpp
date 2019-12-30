@@ -1011,7 +1011,7 @@ void MainWindow::on_actionWrite_to_DSP_triggered()
   int progressValue = 0;
 
   dsp.muteDAC();
-  QThread::msleep( 200 );
+  QThread::msleep( 400 );
 
   for( int p = 0; p < NUMPRESETS; p++ )
   {

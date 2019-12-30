@@ -1,5 +1,6 @@
 #include <QDebug>
 #include <cstdint>
+#include <QThread>
 
 #include "QDelay.hpp"
 #include "ui_QDelay.h"
@@ -97,10 +98,15 @@ void QDelay::sendDspParameter( void )
     val = 0;
 
   QByteArray content;
-  content.append( dsp->muteSequence() );
+
+  dsp->muteDAC();
+  QThread::msleep( 200 );
+
   content.append( dsp->makeParameterForWifi( addr[kDelay], val ) );
-  content.append( dsp->unmuteSequence() );
+
   dsp->sendParameterWifi( content );
+
+  dsp->unmuteDAC();
 }
 
 //==============================================================================

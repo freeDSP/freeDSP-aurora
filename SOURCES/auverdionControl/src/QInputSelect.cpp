@@ -1,6 +1,7 @@
 #include <QAbstractItemView>
 #include <QDebug>
 #include <QStandardItemModel>
+#include <QThread>
 
 #include "QInputSelect.hpp"
 #include "ui_QInputSelect.h"
@@ -140,10 +141,15 @@ void QInputSelect::sendDspParameter( void )
   if( dsp->getFirmwareVersion() != "1.0.0" )
   {
     QByteArray content;
-    content.append( dsp->muteSequence() );
+
+    dsp->muteDAC();
+    QThread::msleep( 200 );
+
     content.append( getDspParams() );
-    content.append( dsp->unmuteSequence() );
+
     dsp->sendParameterWifi( content );
+
+    dsp->unmuteDAC();
   }
 }
 

@@ -588,6 +588,9 @@ void DialogSettings::on_comboBoxAddOnId_currentIndexChanged( int index )
  */
 void DialogSettings::on_comboBoxSpdifInput_currentIndexChanged(int index)
 {
+  dsp->muteDAC();
+  QThread::msleep( 400 );
+
   if( dsp->getAddOnId() == CFreeDspAurora::ADDONB )
   {
     if( ui->comboBoxSpdifInput->itemData( index ).toUInt() == 0x00 )
@@ -607,6 +610,8 @@ void DialogSettings::on_comboBoxSpdifInput_currentIndexChanged(int index)
     else if( ui->comboBoxSpdifInput->itemData( index ).toUInt() == 0x07 )
       dsp->writeI2C( int8_t(0x82), 0x01, 0x03 );
   }
+
+  dsp->unmuteDAC();
 }
 
 //==============================================================================
