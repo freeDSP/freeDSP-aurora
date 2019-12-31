@@ -12,14 +12,9 @@
       "path": "homecinema71"
     },
     {
-      "name": "8channels USB",
-      "pid": 4,
-      "path": "8channelsusb"
-    },
-    {
-      "name": "HomeCinema71 USB",
-      "pid": 5,
-      "path": "homecinema71usb"
+      "name": "4FIRs",
+      "pid": 3,
+      "path": "4firs"
     }
   ]
 }

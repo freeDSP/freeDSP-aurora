@@ -1,4 +1,5 @@
 #include <QDebug>
+#include <QThread>
 
 #include "QHighShelv.hpp"
 #include "ui_QHighShelv.h"
@@ -39,6 +40,10 @@ QHighShelv::QHighShelv( double gain, double freq, double slope,
   ui->doubleSpinBoxS->setAttribute( Qt::WA_MacShowFocusRect, 0 );
   ui->doubleSpinBoxS->setValue( slope );
   ui->doubleSpinBoxS->blockSignals( false);
+
+  connect( ui->doubleSpinBoxGain, SIGNAL(wheelMoved()), this, SLOT(delayDspUpdate()) );
+  connect( ui->doubleSpinBoxFc, SIGNAL(wheelMoved()), this, SLOT(delayDspUpdate()) );
+  connect( ui->doubleSpinBoxS, SIGNAL(wheelMoved()), this, SLOT(delayDspUpdate()) );
 
   type = HIGHSHELV;
 }
@@ -172,9 +177,8 @@ void QHighShelv::sendDspParameter( void )
 {
   QByteArray content;
 
-  enableGui( false );
-
-  content.append( dsp->muteSequence() );
+  dsp->muteDAC();
+  QThread::msleep( 200 );
 
   content.append( dsp->makeParameterForWifi( addr[kParamB2], static_cast<float>(coeffs[kB2]) ) );
   content.append( dsp->makeParameterForWifi( addr[kParamB1], static_cast<float>(coeffs[kB1]) ) );
@@ -182,11 +186,9 @@ void QHighShelv::sendDspParameter( void )
   content.append( dsp->makeParameterForWifi( addr[kParamA2], static_cast<float>(coeffs[kA2]) ) );
   content.append( dsp->makeParameterForWifi( addr[kParamA1], static_cast<float>(coeffs[kA1]) ) );
 
-  content.append( dsp->unmuteSequence() );
-
   dsp->sendParameterWifi( content );
 
-  enableGui( true );
+  dsp->unmuteDAC();
 }
 
 //==============================================================================
@@ -263,15 +265,15 @@ void QHighShelv::setUserParams( QByteArray& userParams, int& idx )
     idx++;
 
     ui->doubleSpinBoxGain->blockSignals( true );
-    ui->doubleSpinBoxGain->setValue( V0t );
+    ui->doubleSpinBoxGain->setValue( static_cast<double>(V0t) );
     ui->doubleSpinBoxGain->blockSignals( false );
 
     ui->doubleSpinBoxFc->blockSignals( true );
-    ui->doubleSpinBoxFc->setValue( fct );
+    ui->doubleSpinBoxFc->setValue( static_cast<double>(fct) );
     ui->doubleSpinBoxFc->blockSignals( false );
 
     ui->doubleSpinBoxS->blockSignals( true );
-    ui->doubleSpinBoxS->setValue( St );
+    ui->doubleSpinBoxS->setValue( static_cast<double>(St) );
     ui->doubleSpinBoxS->blockSignals( false );
 
     ui->pushButtonBypass->blockSignals( true );

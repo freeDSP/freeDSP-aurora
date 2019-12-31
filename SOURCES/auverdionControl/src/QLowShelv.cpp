@@ -1,4 +1,5 @@
 #include <QDebug>
+#include <QThread>
 
 #include "QLowShelv.hpp"
 #include "ui_QLowShelv.h"
@@ -40,6 +41,10 @@ QLowShelv::QLowShelv( double gain, double freq, double slope,
   ui->doubleSpinBoxS->setAttribute( Qt::WA_MacShowFocusRect, 0 );
   ui->doubleSpinBoxS->setValue( slope );
   ui->doubleSpinBoxS->blockSignals( false );
+
+  connect( ui->doubleSpinBoxGain, SIGNAL(wheelMoved()), this, SLOT(delayDspUpdate()) );
+  connect( ui->doubleSpinBoxFc, SIGNAL(wheelMoved()), this, SLOT(delayDspUpdate()) );
+  connect( ui->doubleSpinBoxS, SIGNAL(wheelMoved()), this, SLOT(delayDspUpdate()) );
 
   type = LOWSHELV;
 }
@@ -175,21 +180,18 @@ void QLowShelv::sendDspParameter( void )
 {
   QByteArray content;
 
-  enableGui( false );
-
-  content.append( dsp->muteSequence() );
+  dsp->muteDAC();
+  QThread::msleep( 200 );
 
   content.append( dsp->makeParameterForWifi( addr[kParamB2], static_cast<float>(coeffs[kB2]) ) );
   content.append( dsp->makeParameterForWifi( addr[kParamB1], static_cast<float>(coeffs[kB1]) ) );
   content.append( dsp->makeParameterForWifi( addr[kParamB0], static_cast<float>(coeffs[kB0]) ) );
   content.append( dsp->makeParameterForWifi( addr[kParamA2], static_cast<float>(coeffs[kA2]) ) );
   content.append( dsp->makeParameterForWifi( addr[kParamA1], static_cast<float>(coeffs[kA1]) ) );
-  
-  content.append( dsp->unmuteSequence() );
 
   dsp->sendParameterWifi( content );
 
-  enableGui( true );
+  dsp->unmuteDAC();
 }
 
 //==============================================================================
@@ -200,26 +202,6 @@ uint32_t QLowShelv::getNumBytes( void )
 {
   return 2*5 + 4*5;
 }
-
-//==============================================================================
-/*!
- *
- */
-/*
-void QLowShelv::writeDspParameter( void )
-{
-  dsp->storeRegAddr( addr[kParamB2] );
-  dsp->storeValue( static_cast<float>(coeffs[kB2]) );
-  dsp->storeRegAddr( addr[kParamB1] );
-  dsp->storeValue( static_cast<float>(coeffs[kB1]) );
-  dsp->storeRegAddr( addr[kParamB0] );
-  dsp->storeValue( static_cast<float>(coeffs[kB0]) );
-  dsp->storeRegAddr( addr[kParamA2] );
-  dsp->storeValue( static_cast<float>(coeffs[kA2]) );
-  dsp->storeRegAddr( addr[kParamA1] );
-  dsp->storeValue( static_cast<float>(coeffs[kA1]) );
-
-}*/
 
 //==============================================================================
 /*!

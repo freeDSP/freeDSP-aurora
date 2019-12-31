@@ -9,6 +9,7 @@
 
 #include "QOutputSelect.hpp"
 #include "ui_QOutputSelect.h"
+#include "WizardImportRewFrq.hpp"
 
 #include "LogFile.h"
 
@@ -77,7 +78,7 @@ QOutputSelect::~QOutputSelect()
  */
 void QOutputSelect::update( tvector<tfloat> f )
 {
-  myLog()<<"QOutputSelect::update";
+  //myLog()<<"QOutputSelect::update";
   H = tvector<tcomplex>( length(f) );
 
   if( fileName.isEmpty() )
@@ -104,27 +105,27 @@ void QOutputSelect::update( tvector<tfloat> f )
       myLog()<<length(f)<<length(FR);
       tvector<tcomplex> FR_dec = tvector<tcomplex>(length(f));
       tvector<tfloat> freq_dec = tvector<tfloat>(length(f));
-      tuint q = static_cast<tuint>( ceil(static_cast<double>(length(freq)) / static_cast<double>(length(f))) );
-      myLog()<<"q ="<<q;
+      tfloat q = static_cast<tfloat>(length(freq)) / static_cast<tfloat>(length(f));
       tuint idx = 0;
-      for( tuint ii = 0; ii < length(FR); ii = ii + q )
+      for( tfloat ii = 0; ii < static_cast<tfloat>(length(FR)); ii = ii + q )
       {
         if( idx < length(f) )
         {
-          FR_dec[idx] = FR[ii];
-          freq_dec[idx] = freq[ii];
+          FR_dec[idx] = FR[static_cast<tuint>(ii)];
+          freq_dec[idx] = freq[static_cast<tuint>(ii)];
         }
         idx++;
       }
-      myLog()<<"idx = "<<idx;
-
+      if( idx < length(f) )
+      {
+        FR_dec[length(f)-1] = FR[length(freq)-1];
+        freq_dec[length(f)-1] = freq[length(freq)-1];
+      }
+      
       tvector<tfloat> mag = interp1( freq_dec, abs( FR_dec ), f, "spline" );
       tvector<tfloat> phi = interp1( freq_dec, angle( FR_dec ), f, "spline" );
       H = mag * exp( j*phi );
-
     }
-    
-    
   }
 }
 
@@ -134,8 +135,6 @@ void QOutputSelect::update( tvector<tfloat> f )
  */
 void QOutputSelect::sendDspParameter( void )
 {
-  //uint32_t val = static_cast<uint32_t>(ui->comboBoxInput->currentIndex());
-  //dsp->sendParameter( addr[kInput], val );
 }
 
 //==============================================================================
@@ -155,9 +154,12 @@ bool QOutputSelect::eventFilter( QObject* object, QEvent* event )
 {
   if( object == ui->lineEditResponseFile && event->type() == QEvent::MouseButtonDblClick )
   {
-    fileName = QFileDialog::getOpenFileName( this, tr("Open Frequency Response"), 
-                                             QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory),
-                                             tr("FRD Files (*.frd, *.txt)") );
+    WizardImportRewFrq wizardImport( dsp );
+    int result = wizardImport.exec();
+    if( result != QDialog::Accepted )
+      return true;
+  
+    fileName = wizardImport.field( "file" ).toString();
 
     if( !fileName.isEmpty() )
     {
@@ -173,12 +175,8 @@ bool QOutputSelect::eventFilter( QObject* object, QEvent* event )
       }
       else 
       {
-        bool ok;
-        double ref = QInputDialog::getDouble( this, tr("Import measurement"),
-                                              tr("SPL Reference:"), refSpl, 1.0, 120.0, 1, &ok );
-        if( ok )
-          refSpl = ref;
-
+        refSpl = wizardImport.pageReferenceLevel->targetLevel;
+        
         unsigned int idx = 0;
         if( fileFRD.open( QIODevice::ReadOnly ) ) 
         {
@@ -226,6 +224,7 @@ bool QOutputSelect::eventFilter( QObject* object, QEvent* event )
         ui->lineEditResponseFile->blockSignals( false );
       }      
     }
+    
     emit valueChanged();
     return true;
   }

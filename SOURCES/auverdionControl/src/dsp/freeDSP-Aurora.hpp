@@ -33,7 +33,8 @@ public:
   enum
   {
     ACCESS_POINT,
-    LOCAL_WIFI
+    LOCAL_WIFI,
+    OFFLINE
   };
 
   enum tdspluginid
@@ -42,7 +43,16 @@ public:
     PLUGIN_HOMECINEMA71     = 0x02,
     PLUGIN_4FIRS            = 0x03,
     PLUGIN_8CHANNELS_USB    = 0x04,
-    PLUGIN_HOMECINEMA71_USB = 0x05
+    PLUGIN_HOMECINEMA71_USB = 0x05,
+    PLUGIN_CUSTOM           = 0x06
+  };
+
+  enum tAddOnId
+  {
+    ADDONA = 0x01,
+    ADDONB = 0x02,
+    ADDONC = 0x03,
+    ADDOND = 0x04
   };
 
 private:
@@ -82,6 +92,11 @@ public:
   bool requestFirmwareVersionWifi( bool showmessage = true );
 
   //============================================================================
+  /*! Requests the version of the plugin installed on the board.
+   */
+  bool requestPluginVersionWifi( void );
+
+  //============================================================================
   /*! Requests the PID of current installed DSP-Plugin
    *
    */
@@ -91,12 +106,12 @@ public:
   /*! Request the user parameter file.
    *
    */
-  bool requestUserParameterWifi( QByteArray& userparams );
+  bool requestUserParameterWifi( QByteArray& userparams, int msec = 5000 );
 
   //============================================================================
   /*!
    */
-  bool sendParameterWifi( QByteArray content );
+  bool sendParameterWifi( QByteArray content, int timeout = 5000 );
 
   //============================================================================
   /*!
@@ -199,6 +214,14 @@ public:
   }
 
   //============================================================================
+  /*! Returns the plugin version of the connected board.
+   */
+  QString getPluginVersion( void )
+  {
+    return pluginVersion;
+  }
+
+  //============================================================================
   /*! Stores the current selected preset as default.
    *
    */
@@ -232,6 +255,14 @@ public:
   }
 
   //============================================================================
+  /*! Sets the ip address in local wifi network.
+   */
+  void setIpAddressLocalWifi( QString ip )
+  {
+    ipAddressLocal = ip;
+  }
+
+  //============================================================================
   /*! Sets the currently used ip address for communication with DSP.
    */
   void setIpAddressWifi( QString ip )
@@ -247,7 +278,12 @@ public:
   //============================================================================
   /*!
    */
-  void setConnectionTypeWifi( int type ) { connectionType = type; }
+  void setConnectionTypeWifi( int type )
+  { 
+    connectionType = type; 
+    if( connectionType == OFFLINE )
+      isConnected = false;
+  }
 
   //============================================================================
   /*! Returns the ssid of local wifi network.
@@ -284,7 +320,7 @@ public:
    *
    * \param presetid New preset id.
    */
-  bool selectPresetWifi( int presetid );
+  bool selectPresetWifi( int presetid, int msec = 5000 );
 
   //============================================================================
   /*! Sets the mute address for the DSP
@@ -316,6 +352,7 @@ public:
     return masterVolume;
   }
 
+  #if 0
   //============================================================================
   /*! Makes the mute sequence
    */
@@ -367,6 +404,7 @@ public:
     content.append( unmuteSequence() );
     sendParameterWifi( content );
   }
+  #endif
 
   //============================================================================
   /*! Sends a pure i2c message to write to a slave on the i2c bus.
@@ -459,6 +497,13 @@ public:
     return writeI2C( AK4458_I2C_ADDR, AK4458_CONTROL2, 0b00100010 );
   }
 
+  //============================================================================
+  /*! Sends the plugin version to DSP and stores it nonvolatile.
+   *
+   * \param pver New plugin version
+   */
+  bool storePluginVersionWifi( QString pver );
+
 private:
   //============================================================================
   /*!
@@ -509,6 +554,7 @@ private:
   float masterVolume;
   bool debugMode = false;
   QString configAddOn;
+  QString pluginVersion = "0.0.0";
 
 };
 

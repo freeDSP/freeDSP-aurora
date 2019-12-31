@@ -8,13 +8,17 @@
 #include "QFir.hpp"
 #include "ui_QFir.h"
 
+#include "LogFile.h"
+
+extern CLogFile myLog;
+
 using namespace Vektorraum;
 
 //==============================================================================
 /*! Constructor
  *
  */
-QFir::QFir( uint16_t firaddr, tuint filterlength, CFreeDspAurora* ptrdsp, QWidget *parent) :
+QFir::QFir( uint16_t firaddr, tuint filterlength, tfloat samplerate, CFreeDspAurora* ptrdsp, QWidget *parent) :
   QDspBlock(parent), ui(new Ui::QFir)
 {
   type = FIR;
@@ -28,13 +32,20 @@ QFir::QFir( uint16_t firaddr, tuint filterlength, CFreeDspAurora* ptrdsp, QWidge
 
   nfft = filterlength;
   taps = 0;
+  fs = samplerate;
 
   ir = tvector<tfloat>(nfft);
   for( tuint k = 0; k < length(ir); k++ )
     ir[k] = 0.0;
   ir[0] = 1.0;
 
+  freq = tvector<tfloat>(nfft/2 + 1);
+  for( uint n = 0; n < length(freq); n++ )
+    freq[n] = static_cast<tfloat>(n) / static_cast<tfloat>(nfft) * fs;
+
   updateCoeffs();
+
+  ui->pushButtonBypass->hide();
 }
 
 QFir::~QFir()
@@ -48,7 +59,41 @@ QFir::~QFir()
  */
 void QFir::update( tvector<tfloat> f )
 {
+  tvector<tcomplex> X = fft( ir, nfft );
+  tvector<tfloat> magt = abs( X( 0, nfft/2 ) );
+  tvector<tfloat> phit = angle( X( 0, nfft/2 ) );
 
+  if( length(f) >= length(freq) )
+  {
+    tvector<tfloat> mag = interp1( freq, magt, f, "spline" );
+    tvector<tfloat> phi = interp1( freq, phit, f, "spline" );
+    H = mag * exp( j*phi );
+  }
+  else
+  {
+    tvector<tcomplex> FR_dec = tvector<tcomplex>(length(f));
+    tvector<tfloat> freq_dec = tvector<tfloat>(length(f));
+    tfloat q = static_cast<tfloat>(length(freq)) / static_cast<tfloat>(length(f));
+    tuint idx = 0;
+    for( tfloat ii = 0; ii < static_cast<tfloat>(length(X)); ii = ii + q )
+    {
+      if( idx < length(f) )
+      {
+        FR_dec[idx] = X[static_cast<tuint>(ii)];
+        freq_dec[idx] = freq[static_cast<tuint>(ii)];
+      }
+      idx++;
+    }
+    if( idx < length(f) )
+    {
+      FR_dec[length(f)-1] = X[length(freq)-1];
+      freq_dec[length(f)-1] = freq[length(freq)-1];
+    }
+    
+    tvector<tfloat> mag = interp1( freq_dec, abs( FR_dec ), f, "spline" );
+    tvector<tfloat> phi = interp1( freq_dec, angle( FR_dec ), f, "spline" );
+    H = mag * exp( j*phi );
+  }
 }
 
 //==============================================================================
@@ -57,8 +102,10 @@ void QFir::update( tvector<tfloat> f )
 void QFir::updateCoeffs( void )
 {
   tvector<tcomplex> X = fft( ir, nfft );
-  H = X( 0, nfft/2 );
+  //H = X( 0, nfft/2 );
 }
+
+extern uint32_t convertTo824( float val );
 
 //==============================================================================
 /*!
@@ -66,9 +113,27 @@ void QFir::updateCoeffs( void )
  */
 void QFir::sendDspParameter( void )
 {
-  qDebug()<<"QFir::sendDspParameter not implemented";
-  //uint32_t val = static_cast<uint32_t>(ui->comboBoxInput->currentIndex());
-  //dsp->sendParameter( addr[kInput], val );
+  qDebug()<<"QFir::sendDspParameter";
+
+  QMessageBox* msg = new QMessageBox( QMessageBox::Information, tr("Upload"), tr("Uploading FIR to Aurora, please wait..."), QMessageBox::NoButton, this );
+  msg->setStandardButtons( nullptr );
+  msg->open();
+
+  dsp->muteDAC();
+
+  QByteArray content;
+
+  for( uint16_t kk = 0; kk < nfft; kk++ )
+    content.append( dsp->makeParameterForWifi( addr[kImpulseResponse] + kk, 
+                                               static_cast<float>(ir[kk]) ) );
+
+  dsp->sendParameterWifi( content, 60000 );
+
+  dsp->unmuteDAC();
+
+  msg->accept();
+
+  delete msg;
 }
 
 //==============================================================================
@@ -134,14 +199,15 @@ bool QFir::eventFilter( QObject* object, QEvent* event )
  */
 QByteArray QFir::getUserParams( void )
 {
-  QByteArray ret;
+  QByteArray content;
 
-  #if !defined( __WIN__ )
-  #warning QFir::getUserParams not implemented
-  #endif
-  qDebug()<<"QFir::getUserParams not implemented";
+  for( uint32_t kk = 0; kk < nfft; kk++ )
+  {
+    float tap = static_cast<float>(ir[kk]);
+    content.append( reinterpret_cast<const char*>(&tap), sizeof(float) );
+  }
 
-  return ret;
+  return content;
 }
 
 //==============================================================================
@@ -149,10 +215,29 @@ QByteArray QFir::getUserParams( void )
  */
 void QFir::setUserParams( QByteArray& userParams, int& idx )
 {
-  #if !defined( __WIN__ )
-  #warning QFir::setUserParams not implemented
-  #endif
-  qDebug()<<"QFir::setUserParams not implemented";
+  if( userParams.size() >= idx + static_cast<int>(4096 * sizeof(float)) )
+  {
+    for( uint32_t kk = 0; kk < nfft; kk++ )
+    {
+      QByteArray param;
+      param.append( userParams.at(idx) );
+      idx++;
+      param.append( userParams.at(idx) );
+      idx++;
+      param.append( userParams.at(idx) );
+      idx++;
+      param.append( userParams.at(idx) );
+      idx++;
+      ir[kk] = static_cast<Vektorraum::tfloat>(*reinterpret_cast<const float*>(param.data()));
+    }
+  }
+  else
+  {
+    for( uint32_t kk = 0; kk < nfft; kk++ )
+      ir[kk] = 0.0;
+    ir[0] = 1.0;
+  }
+    
 }
 
 //==============================================================================
@@ -163,12 +248,13 @@ void QFir::setUserParams( QByteArray& userParams, int& idx )
  */
 QByteArray QFir::getDspParams( void )
 {
-  QByteArray ret;
+  QByteArray content;
 
-  #if !defined( __WIN__ )
-  #warning QFir::getDspParam not implemented
-  #endif
-  qDebug()<<"QFir::getDspParam not implemented";
-
-  return ret;
+  for( uint16_t kk = 0; kk < nfft; kk++ )
+  {
+    content.append( dsp->makeParameterForWifi( addr[kImpulseResponse] + kk, 
+                                               static_cast<float>(ir[kk]) ) );
+  }
+                          
+  return content;
 }

@@ -12,5 +12,7 @@
         <file alias="upload_128x128.png">rc/upload_128x128.png</file>
         <file alias="info_128x128.png">rc/info_128x128.png</file>
         <file alias="freeDSP_LOGO_white.png">rc/freeDSP_LOGO_white.png</file>
+        <file alias="fileopen.png">rc/fileopen.png</file>
+        <file alias="filesaveas.png">rc/filesaveas.png</file>
     </qresource>
 </RCC>

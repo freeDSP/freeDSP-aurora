@@ -1,6 +1,7 @@
 #include <QAbstractItemView>
 #include <QDebug>
 #include <QStandardItemModel>
+#include <QThread>
 
 #include "QInputSelect.hpp"
 #include "ui_QInputSelect.h"
@@ -100,6 +101,14 @@ QInputSelect::QInputSelect( uint32_t selection,
   if( dsp->getFirmwareVersion() == "1.0.0" )
     ui->comboBoxInput->setEnabled( false );
 
+  if( dsp->getAddOnId() == CFreeDspAurora::ADDONA )
+  {
+    ui->comboBoxInput->hide();
+    ui->labelLocked->show();
+  }
+  else
+    ui->labelLocked->hide();
+
   type = INPUTSELECT;
 }
 
@@ -129,20 +138,19 @@ void QInputSelect::update( tvector<tfloat> f )
  */
 void QInputSelect::sendDspParameter( void )
 {
-  enableGui( false );
-
-  qDebug()<<"QInputSelect::sendDspParameter";
-
   if( dsp->getFirmwareVersion() != "1.0.0" )
   {
     QByteArray content;
-    content.append( dsp->muteSequence() );
-    content.append( getDspParams() );
-    content.append( dsp->unmuteSequence() );
-    dsp->sendParameterWifi( content );
-  }
 
-  enableGui( true );
+    dsp->muteDAC();
+    QThread::msleep( 200 );
+
+    content.append( getDspParams() );
+
+    dsp->sendParameterWifi( content );
+
+    dsp->unmuteDAC();
+  }
 }
 
 //==============================================================================
@@ -160,7 +168,6 @@ uint32_t QInputSelect::getNumBytes( void )
  */
 void QInputSelect::on_comboBoxInput_currentIndexChanged( int  )
 {
-  qDebug()<<"***on_comboBoxInput_currentIndexChanged";
   sendDspParameter();
   emit valueChanged();
 }
@@ -181,8 +188,6 @@ QByteArray QInputSelect::getUserParams( void )
  */
 void QInputSelect::setUserParams( QByteArray& userParams, int& idx )
 {
-  QByteArray param;
-
   if( dsp->getFirmwareVersion() != "1.0.0" )
   {
     if( userParams.size() >= idx + 1 )
@@ -209,8 +214,6 @@ void QInputSelect::setUserParams( QByteArray& userParams, int& idx )
  */
 QByteArray QInputSelect::getDspParams( void )
 {
-  qDebug()<<"QInputSelect::getDspParam";
-
   QByteArray content;
 
   //if( dsp->getFirmwareVersion() != "1.0.0" )
@@ -345,14 +348,12 @@ QByteArray QInputSelect::getDspParams( void )
     else if( ui->comboBoxInput->currentText() == QString( "SPDIF 1" ) )
     {
       content.append( dsp->makeParameterForWifi( addr[kChannelSPDIF], 0x00000000 ) );
-      content.append( dsp->makeParameterForWifi( addr[kSelectPort], kChannelSPDIF ) );
-      qDebug()<<"addr[kChannelSPDIF]"<<addr[kChannelSPDIF];
+      content.append( dsp->makeParameterForWifi( addr[kSelectPort], kPortSPDIF ) );
     }
     else if( ui->comboBoxInput->currentText() == QString( "SPDIF 2" ) )
     {
       content.append( dsp->makeParameterForWifi( addr[kChannelSPDIF], 0x00000001 ) );
-      content.append( dsp->makeParameterForWifi( addr[kSelectPort], kChannelSPDIF ) );
-      qDebug()<<"addr[kChannelSPDIF]"<<addr[kChannelSPDIF];
+      content.append( dsp->makeParameterForWifi( addr[kSelectPort], kPortSPDIF ) );
     }
   //}
   return content;

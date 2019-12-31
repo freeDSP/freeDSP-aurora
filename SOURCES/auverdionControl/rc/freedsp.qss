@@ -84,6 +84,8 @@ QDoubleSpinBox
   background-color: transparent;
   color: white;
   border: 0px solid black;
+  selection-background-color: transparent;
+  selection-color: white;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -392,6 +394,26 @@ QPushButton#pushButtonBypass:on
 QPushButton#pushButtonBypass:off
 {
   background-color: #111111;
+}
+
+/* -------------------------------------------------------------------------- */
+/* QWizard                                                                    */
+/* -------------------------------------------------------------------------- */
+QWizard
+{
+  background-color: #111111;
+  color: white;
+  border: 0px solid black;
+}
+
+/* -------------------------------------------------------------------------- */
+/* QWizardPage                                                                */
+/* -------------------------------------------------------------------------- */
+QWizardPage
+{
+  background-color: #111111;
+  color: white;
+  border: 0px solid black;
 }
 
 /* -------------------------------------------------------------------------- */

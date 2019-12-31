@@ -69,6 +69,19 @@
     </widget>
    </item>
    <item>
+    <widget class="QLabel" name="labelLocked">
+     <property name="text">
+      <string>Locked by AddOn</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>

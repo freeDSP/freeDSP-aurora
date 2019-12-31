@@ -117,8 +117,9 @@ tvector<double> interp1( tvector<double> X, tvector<double> Y, tvector<double> X
 
   for( tuint k = 0; k < length(X)-1; k++ )
   {
-    if( X[k] >= X[k+1] ) {
-      std::cout<<"[ERROR] "<<__FILE__<<":"<<__LINE__<<" X nicht aufsteigend sortiert "<<X[k]<<std::endl;
+    if( X[k] >= X[k+1] )
+    {
+      std::cout<<"[ERROR] "<<__FILE__<<":"<<__LINE__<<" X nicht aufsteigend sortiert "<<k<<": "<<X[k]<<" "<<k+1<<": "<<X[k+1]<<std::endl;
       return YI;
     }
   }

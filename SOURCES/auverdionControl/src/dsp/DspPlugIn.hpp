@@ -55,11 +55,29 @@ public:
 
   virtual double getMasterVolume( void ) = 0;
 
+  virtual uint32_t getPid( void ) = 0;
+
   //============================================================================
   /*!
    *
    */
   virtual uint16_t getAddressMasterVolume( void ) = 0;
+
+  //============================================================================
+  /*!
+   *
+   */
+  virtual void setEnableVolumePoti( bool bypass, bool doSend ) = 0;
+
+  //============================================================================
+  /*!
+   *
+   */
+  bool getEnableVolumePoti( void )
+  {
+    return enableVolumePoti;
+  }
+
   
   //============================================================================
   /*! Returns a channel of the DSP-Plugin.
@@ -70,6 +88,21 @@ public:
   {
     return listChannels.at(chn);
   }
+
+  //==============================================================================
+  /*!
+   */
+  QByteArray getUserParams( void )
+  {
+    QByteArray content;
+    content.append( static_cast<char>(enableVolumePoti) );
+    return content;
+  }
+
+  //==============================================================================
+  /*!
+   */
+  virtual QByteArray getDspParams( void ) = 0;
 
   //============================================================================
   //
@@ -83,6 +116,7 @@ protected:
   QList<QChannel*> listChannels;
   CFreeDspAurora* dsp;
   double masterVolume;
+  bool enableVolumePoti = false;
 };
 
 #endif

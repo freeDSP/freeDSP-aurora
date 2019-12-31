@@ -1,5 +1,6 @@
 #include <QDebug>
 #include <cstdint>
+#include <QThread>
 
 #include "QDelay.hpp"
 #include "ui_QDelay.h"
@@ -26,7 +27,10 @@ QDelay::QDelay( tfloat dly, tfloat samplerate, uint16_t delayaddr, CFreeDspAuror
   ui->doubleSpinBoxDelay->blockSignals( true );
   ui->doubleSpinBoxDelay->setValue( delay );
   ui->doubleSpinBoxDelay->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+  ui->doubleSpinBoxDelay->setSingleStep( 1.0/fs * 1000.0 );
   ui->doubleSpinBoxDelay->blockSignals( false );
+
+  connect( ui->doubleSpinBoxDelay, SIGNAL(wheelMoved()), this, SLOT(delayDspUpdate()) );
 
 }
 
@@ -89,19 +93,20 @@ void QDelay::on_pushButtonBypass_clicked()
  */
 void QDelay::sendDspParameter( void )
 {
-  enableGui( false );
-
   int32_t val = static_cast<int32_t>(ui->doubleSpinBoxDelay->value()/1000.0 * fs + 0.5);
   if( bypass )
     val = 0;
 
   QByteArray content;
-  content.append( dsp->muteSequence() );
+
+  dsp->muteDAC();
+  QThread::msleep( 200 );
+
   content.append( dsp->makeParameterForWifi( addr[kDelay], val ) );
-  content.append( dsp->unmuteSequence() );
+
   dsp->sendParameterWifi( content );
 
-  enableGui( true );
+  dsp->unmuteDAC();
 }
 
 //==============================================================================

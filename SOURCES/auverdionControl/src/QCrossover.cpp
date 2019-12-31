@@ -1,4 +1,5 @@
 #include <QDebug>
+#include <QThread>
 
 #include "QCrossover.hpp"
 #include "ui_QCrossover.h"
@@ -9,6 +10,10 @@ using namespace Vektorraum;
 
 extern void enableGui( bool enable );
 
+//==============================================================================
+/*!
+ *
+ */
 QCrossover::QCrossover( tfilterdesign designHp, tfloat fchp,
                         tfilterdesign designLp, tfloat fclp,
                         uint16_t addrB2_1_HP, uint16_t addrB1_1_HP, uint16_t addrB0_1_HP,
@@ -126,16 +131,23 @@ QCrossover::QCrossover( tfilterdesign designHp, tfloat fchp,
   ui->doubleSpinBoxFcLp->setValue( fclp );
   ui->doubleSpinBoxFcLp->blockSignals( false );
 
+  connect( ui->doubleSpinBoxFcHp, SIGNAL(wheelMoved()), this, SLOT(delayDspUpdate()) );
+  connect( ui->doubleSpinBoxFcLp, SIGNAL(wheelMoved()), this, SLOT(delayDspUpdate()) );
+
   //bypass = isbypassed;
   //ui->pushButtonBypass->setChecked( bypass );
 }
 
+//==============================================================================
+/*!
+ *
+ */
 QCrossover::~QCrossover()
 {
   delete ui;
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*! \brief Updates the filter.
  *
  */
@@ -165,7 +177,7 @@ void QCrossover::update( tvector<tfloat> f )
   }
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -1480,7 +1492,7 @@ void QCrossover::updateCoeffs( void )
   }
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -1493,7 +1505,7 @@ void QCrossover::on_doubleSpinBoxFcHp_valueChanged( double  )
   timerDspUpdate.start( DSPUPDATELATENCY );
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -1504,7 +1516,7 @@ void QCrossover::on_comboBoxTypeHp_currentIndexChanged( int  )
   emit valueChanged();
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -1516,7 +1528,7 @@ void QCrossover::on_pushButtonBypass_clicked()
   emit valueChanged();
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
@@ -1524,9 +1536,8 @@ void QCrossover::sendDspParameter( void )
 {
   QByteArray content;
 
-  enableGui( false );
-
-  content.append( dsp->muteSequence() );
+  dsp->muteDAC();
+  QThread::msleep( 200 );
 
   content.append( dsp->makeParameterForWifi( addr[kParamB2_1_HP], static_cast<float>(coeffs_hp[kB2]) ) );
   content.append( dsp->makeParameterForWifi( addr[kParamB1_1_HP], static_cast<float>(coeffs_hp[kB1]) ) );
@@ -1590,14 +1601,12 @@ void QCrossover::sendDspParameter( void )
   content.append( dsp->makeParameterForWifi( addr[kParamA2_4_LP], static_cast<float>(coeffs_lp[3*5+kA2]) ) );
   content.append( dsp->makeParameterForWifi( addr[kParamA1_4_LP], static_cast<float>(coeffs_lp[3*5+kA1]) ) );
     
-  content.append( dsp->unmuteSequence() );
-
   dsp->sendParameterWifi( content );
 
-  enableGui( true );
+  dsp->unmuteDAC();
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */

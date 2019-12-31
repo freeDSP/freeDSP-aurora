@@ -1,7 +1,7 @@
 /*
  * File:           defines.h
  *
- * Created:        Saturday, November 09, 2019 7:54:16 PM
+ * Created:        Thursday, December 12, 2019 9:14:18 AM
  * Description:    8channels IC default download data definitions.
  *
  * This software is distributed in the hope that it will be useful,
@@ -19,8 +19,8 @@
 #ifndef __DEFINES_H__
 #define __DEFINES_H__
 
-#define BufferSize_IC_1     	92214
-#define NumTransactions_IC_1	59
+#define BufferSize_IC_1     	92490
+#define NumTransactions_IC_1	61
 
 
 #endif

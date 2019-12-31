@@ -1,4 +1,5 @@
 #include <QDebug>
+#include <QThread>
 
 #include "QPhase.hpp"
 #include "ui_QPhase.h"
@@ -41,6 +42,9 @@ QPhase::QPhase( tfloat freq, tfloat qfactor,
   ui->doubleSpinBoxQ->setAttribute( Qt::WA_MacShowFocusRect, 0 );
   ui->doubleSpinBoxQ->setValue( qfactor );
   ui->doubleSpinBoxQ->blockSignals( false );
+
+  connect( ui->doubleSpinBoxFc, SIGNAL(wheelMoved()), this, SLOT(delayDspUpdate()) );
+  connect( ui->doubleSpinBoxQ, SIGNAL(wheelMoved()), this, SLOT(delayDspUpdate()) );
 
 }
 
@@ -110,14 +114,16 @@ void QPhase::updateCoeffs( void )
     coeffs[kB2] = b2;
     coeffs[kA1] = (-1.0)*a1;
     coeffs[kA2] = (-1.0)*a2;
+
+    if( ui->checkBoxInvert->isChecked() )
+    {
+      coeffs[kB0] *= -1.0;
+      coeffs[kB1] *= -1.0;
+      coeffs[kB2] *= -1.0;
+    }
   }
 
-  if( ui->checkBoxInvert->isChecked() )
-  {
-    coeffs[kB0] *= -1.0;
-    coeffs[kB1] *= -1.0;
-    coeffs[kB2] *= -1.0;
-  }
+  
 }
 
 //==============================================================================
@@ -179,9 +185,8 @@ void QPhase::sendDspParameter( void )
 {
   QByteArray content;
 
-  enableGui( false );
-
-  content.append( dsp->muteSequence() );
+  dsp->muteDAC();
+  QThread::msleep( 200 );
 
   content.append( dsp->makeParameterForWifi( addr[kParamB2], static_cast<float>(coeffs[kB2]) ) );
   content.append( dsp->makeParameterForWifi( addr[kParamB1], static_cast<float>(coeffs[kB1]) ) );
@@ -189,11 +194,9 @@ void QPhase::sendDspParameter( void )
   content.append( dsp->makeParameterForWifi( addr[kParamA2], static_cast<float>(coeffs[kA2]) ) );
   content.append( dsp->makeParameterForWifi( addr[kParamA1], static_cast<float>(coeffs[kA1]) ) );
 
-  content.append( dsp->unmuteSequence() );
-
   dsp->sendParameterWifi( content );
 
-  enableGui( true );
+  dsp->unmuteDAC();
 }
 
 //==============================================================================

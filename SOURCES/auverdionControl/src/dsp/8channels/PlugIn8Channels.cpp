@@ -31,79 +31,9 @@ CPlugIn8Channels::CPlugIn8Channels( tfloat samplerate )
   //----------------------------------------------------------------------------
   //--- Init frequency vector
   //----------------------------------------------------------------------------
-  tuint n = 0;
-  tfloat pointsperdecade = 100.0;
   tfloat fstart = 1.0;
   tfloat fstop = 20000.0;
-
-  for( tfloat k = 1.0; k < 10.0; k = k + 10.0/pointsperdecade )
-  {
-    if( (k >= fstart) && (k <= fstop) )
-      n++;
-  }
-  for( tfloat k = 10.0; k < 100.0; k = k + 100.0/pointsperdecade )
-  {
-    if( (k >= fstart) && (k <= fstop) )
-      n++;
-  }
-  for( tfloat k = 100.0; k < 1000.0; k = k + 1000.0/pointsperdecade )
-  {
-    if( (k >= fstart) && (k <= fstop) )
-      n++;
-  }
-  for( tfloat k = 1000.0; k < 10000.0; k = k + 10000.0/pointsperdecade )
-  {
-    if( (k >= fstart) && (k <= fstop) )
-      n++;
-  }
-  for( tfloat k = 10000.0; k < 20001.0; k = k + 100000.0/pointsperdecade )
-  {
-    if( (k >= fstart) && (k <= fstop) )
-      n++;
-  }
-
-  tvector<tfloat> f( n );
-  n = 0;
-  for( tfloat k = 1.0; k < 10.0; k = k + 10.0/pointsperdecade )
-  {
-    if( (k >= fstart) && (k <= fstop) )
-    {
-      f[n] = k;
-      n++;
-    }
-  }
-  for( tfloat k = 10.0; k < 100.0; k = k + 100.0/pointsperdecade )
-  {
-    if( (k >= fstart) && (k <= fstop) )
-    {
-      f[n] = k;
-      n++;
-    }
-  }
-  for( tfloat k = 100.0; k < 1000.0; k = k + 1000.0/pointsperdecade )
-  {
-    if( (k >= fstart) && (k <= fstop) ) {
-      f[n] = k;
-      n++;
-    }
-  }
-  for( tfloat k = 1000.0; k < 10000.0; k = k + 10000.0/pointsperdecade )
-  {
-    if( (k >= fstart) && (k <= fstop) )
-    {
-      f[n] = k;
-      n++;
-    }
-  }
-  for( tfloat k = 10000.0; k < 20001.0; k = k + 100000.0/pointsperdecade )
-  {
-    if( (k >= fstart) && (k <= fstop) )
-    {
-      f[n] = k;
-      n++;
-    }
-  }
-  freq = f;
+  freq = pow( 10.0, linspace( log10(fstart), log10(fstop), 2048 ) );
 }
 
 //==============================================================================
@@ -1937,7 +1867,6 @@ void CPlugIn8Channels::setMasterVolume( double val, bool doSend )
 {
   if( doSend )
   {
-    //qDebug()<<"CPlugIn8Channels::setMasterVolume "<<val<<doSend;
     QByteArray content;
     content.append( dsp->makeParameterForWifi( MOD_MASTERVOLUME_ALG0_TARGET_ADDR, static_cast<float>(pow( 10.0, val/20.0 )) ) );
     dsp->sendParameterWifi( content );
@@ -1953,4 +1882,38 @@ void CPlugIn8Channels::setMasterVolume( double val, bool doSend )
 uint16_t CPlugIn8Channels::getAddressMasterVolume( void )
 {
   return MOD_MASTERVOLUME_ALG0_TARGET_ADDR;
+}
+
+//==============================================================================
+/*!
+ *
+ */
+void CPlugIn8Channels::setEnableVolumePoti( bool val, bool doSend )
+{
+  if( doSend )
+  {
+    QByteArray content;
+    if( val )
+      content.append( dsp->makeParameterForWifi( MOD_BYPASSVOLPOTI_MONOMUXSIGMA300NS49INDEX_ADDR, 0x00000000 ) );
+    else
+      content.append( dsp->makeParameterForWifi( MOD_BYPASSVOLPOTI_MONOMUXSIGMA300NS49INDEX_ADDR, 0x00000001 ) );
+    dsp->sendParameterWifi( content );
+  }
+  enableVolumePoti = val;
+}
+
+//==============================================================================
+/*! Get the parameters in DSP format. The parameters are returned with register 
+ *  address followed by value dword ready to be sent via i2c to DSP.
+ *
+ * \return Byte array with parameters for DSP. 
+ */
+QByteArray CPlugIn8Channels::getDspParams( void )
+{
+  QByteArray content;
+  if( enableVolumePoti )
+    content.append( dsp->makeParameterForWifi( MOD_BYPASSVOLPOTI_MONOMUXSIGMA300NS49INDEX_ADDR, 0x00000000 ) );
+  else
+    content.append( dsp->makeParameterForWifi( MOD_BYPASSVOLPOTI_MONOMUXSIGMA300NS49INDEX_ADDR, 0x00000001 ) );
+  return content;
 }

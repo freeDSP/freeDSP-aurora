@@ -128,6 +128,8 @@
    <addaction name="actionRead_from_DSP"/>
    <addaction name="actionWrite_to_DSP"/>
    <addaction name="actionSettings"/>
+   <addaction name="actionLoadParameters"/>
+   <addaction name="actionSaveParameters"/>
    <addaction name="actionAbout"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
@@ -171,6 +173,30 @@
    </property>
    <property name="text">
     <string>Settings</string>
+   </property>
+  </action>
+  <action name="actionLoadParameters">
+   <property name="icon">
+    <iconset resource="auverdionControl.qrc">
+     <normaloff>:/fileopen.png</normaloff>:/fileopen.png</iconset>
+   </property>
+   <property name="text">
+    <string>Load Parameters</string>
+   </property>
+   <property name="toolTip">
+    <string>Load parameters from file</string>
+   </property>
+  </action>
+  <action name="actionSaveParameters">
+   <property name="icon">
+    <iconset resource="auverdionControl.qrc">
+     <normaloff>:/filesaveas.png</normaloff>:/filesaveas.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save Parameters</string>
+   </property>
+   <property name="toolTip">
+    <string>Save parameters to file</string>
    </property>
   </action>
  </widget>

@@ -59,7 +59,7 @@
     </spacer>
    </item>
    <item>
-    <widget class="QDoubleSpinBox" name="doubleSpinBoxDelay">
+    <widget class="QMyDoubleSpinBox" name="doubleSpinBoxDelay">
      <property name="contextMenuPolicy">
       <enum>Qt::NoContextMenu</enum>
      </property>
@@ -71,6 +71,9 @@
      </property>
      <property name="suffix">
       <string> ms</string>
+     </property>
+     <property name="decimals">
+      <number>4</number>
      </property>
      <property name="maximum">
       <double>100.000000000000000</double>
@@ -128,6 +131,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QMyDoubleSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>QMyDoubleSpinBox.hpp</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

@@ -15,15 +15,23 @@
 #include <CoreFoundation/CFBundle.h>
 #endif
 
+#include "WizardConnect.hpp"
+
 #include "DialogSettings.hpp"
 #include "ui_DialogSettings.h"
 
-DialogSettings::DialogSettings( CFreeDspAurora* ptrdsp, QWidget* parent ) :
+#include "LogFile.h"
+
+#include "customdefines.hpp"
+
+extern CLogFile myLog;
+
+DialogSettings::DialogSettings( CFreeDspAurora* ptrdsp, bool bypassVolumePoti, QWidget* parent ) :
   QDialog(parent),
   ui(new Ui::DialogSettings)
 {
   ui->setupUi(this);
-  ui->pushButtonPing->setVisible( false );
+  //ui->pushButtonPing->setVisible( false );
   dsp = ptrdsp;
 
   #if defined( __MACOSX__ )
@@ -33,7 +41,7 @@ DialogSettings::DialogSettings( CFreeDspAurora* ptrdsp, QWidget* parent ) :
   //qDebug()<<appPath.absolutePath() + "/dspplugins.json";
   #elif defined( __WIN__ )
   QDir appPath = QDir( QCoreApplication::applicationDirPath() );
-  qDebug()<<appPath.absolutePath() + "/dspplugins.json";
+  //qDebug()<<appPath.absolutePath() + "/dspplugins.json";
 
   #else
   #error Platform not supported.
@@ -63,38 +71,31 @@ DialogSettings::DialogSettings( CFreeDspAurora* ptrdsp, QWidget* parent ) :
       #endif
       dspPluginMetaData.append( newMetaData );
 
-      qDebug()<<plugin["name"].toString()<<plugin["pid"].toInt()<<plugin["path"].toString();
+      //qDebug()<<plugin["name"].toString()<<plugin["pid"].toInt()<<plugin["path"].toString();
     }
     fileDspPlugins.close();
   }
+  ui->comboBoxPlugIn->addItem( "Custom", CFreeDspAurora::PLUGIN_CUSTOM );
   ui->comboBoxPlugIn->blockSignals( false );
 
-  ui->radioButtonAP->blockSignals( true );
-  ui->radioButtonLocalWifi->blockSignals( true );
-  if( dsp->getConnectionTypeWifi() == CFreeDspAurora::ACCESS_POINT )
-  {
-    ui->radioButtonAP->setChecked( true );
-    ui->pushButtonPing->setEnabled( false );
-    ui->lineEditIpAddress->setEnabled( false );
-  }
-  else
-  {
-    ui->radioButtonLocalWifi->setChecked( true );
-    ui->pushButtonPing->setEnabled( true );
-    ui->lineEditIpAddress->setEnabled( true );
-  }
-  ui->radioButtonAP->blockSignals( false );
-  ui->radioButtonLocalWifi->blockSignals( false );
+  ui->checkBoxEnableVolumePoti->setChecked( bypassVolumePoti );
 
-  ui->lineEditIpAddress->setText( dsp->getIpAddressWifi() );
+  ui->comboBoxConnection->blockSignals( true );
+  ui->comboBoxConnection->addItem( "Access Point", CFreeDspAurora::ACCESS_POINT );
+  ui->comboBoxConnection->addItem( "Local WiFi Network", CFreeDspAurora::LOCAL_WIFI );
+  ui->comboBoxConnection->addItem( "Offline Mode", CFreeDspAurora::OFFLINE );
+  int index = ui->comboBoxConnection->findData( dsp->getConnectionTypeWifi() );
+  if( index != -1 )
+    ui->comboBoxConnection->setCurrentIndex( index );
+  ui->comboBoxConnection->blockSignals( false );
 
   ui->comboBoxAddOnId->blockSignals( true );
   ui->comboBoxAddOnId->addItem( "None or Custom", 0x00 );
-  ui->comboBoxAddOnId->addItem( "A Woodworker's friend", ADDONA );
-  ui->comboBoxAddOnId->addItem( "B Down with developers", ADDONB );
-  ui->comboBoxAddOnId->addItem( "C Control over the crowd", ADDONC );
-  ui->comboBoxAddOnId->addItem( "D Balanced life", ADDOND );
-  int index = ui->comboBoxAddOnId->findData( dsp->getAddOnId() );
+  ui->comboBoxAddOnId->addItem( "A Woodworker's friend", CFreeDspAurora::ADDONA );
+  ui->comboBoxAddOnId->addItem( "B Down with developers", CFreeDspAurora::ADDONB );
+  ui->comboBoxAddOnId->addItem( "C Control over the crowd", CFreeDspAurora::ADDONC );
+  ui->comboBoxAddOnId->addItem( "D Balanced life", CFreeDspAurora::ADDOND );
+  index = ui->comboBoxAddOnId->findData( dsp->getAddOnId() );
   if( index != -1 )
     ui->comboBoxAddOnId->setCurrentIndex( index );
   ui->comboBoxAddOnId->blockSignals( false );
@@ -103,7 +104,7 @@ DialogSettings::DialogSettings( CFreeDspAurora* ptrdsp, QWidget* parent ) :
   ui->labelAccessPointIP->setText( dsp->getIpAddressAP() );
   ui->labelLocalWiFiIP->setText( dsp->getIpAddressLocalWifi() );
 
-  if( dsp->getAddOnId() == ADDONB )
+  if( dsp->getAddOnId() == CFreeDspAurora::ADDONB )
   {
     ui->comboBoxSpdifInput->clear();
 
@@ -163,52 +164,51 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
   QString pathTxBuffer;
   QString pathNumBytes;
 
-  #if defined( __MACOSX__ )
-  CFURLRef appUrlRef = CFBundleCopyBundleURL( CFBundleGetMainBundle() );
-  CFStringRef macPath = CFURLCopyFileSystemPath( appUrlRef, kCFURLPOSIXPathStyle );
-  QString pathAppBundle = QString( CFStringGetCStringPtr( macPath, CFStringGetSystemEncoding() ) );
-  CFRelease(appUrlRef);
-  CFRelease(macPath);
-  /*if( ui->comboBoxPlugIn->currentData().toInt() == CFreeDspAurora::PLUGIN_8CHANNELS )
+  if( ui->comboBoxPlugIn->currentData().toInt() == CFreeDspAurora::PLUGIN_CUSTOM )
   {
-    pathTxBuffer = pathAppBundle + QString( "/Contents/Resources/8channels/TxBuffer_IC_1.dat");
-    pathNumBytes = pathAppBundle + QString( "/Contents/Resources/8channels/NumBytes_IC_1.dat");
-  }
-  else
-  {
-    qDebug()<<"[ERROR] Unknown plugin id"<<ui->comboBoxPlugIn->currentData().toInt();
-  }*/
-
-  #elif defined( __WIN__ )
-  /*QString pathAppBundle = QCoreApplication::applicationDirPath();
-  if( ui->comboBoxPlugIn->currentData().toInt() == CFreeDspAurora::PLUGIN_8CHANNELS )
-  {
-    pathTxBuffer = pathAppBundle + QString( "/dspplugins/8channels/TxBuffer_IC_1.dat");
-    pathNumBytes = pathAppBundle + QString( "/dspplugins/8channels/NumBytes_IC_1.dat");
-  }
-  else
-  {
-    qDebug()<<"[ERROR] Unknown plugin id"<<ui->comboBoxPlugIn->currentData().toInt();
-  }*/
-  #endif
-
-  for( int ii = 0; ii < dspPluginMetaData.size(); ii++ )
-  {
-    if( dspPluginMetaData.at(ii).pid == ui->comboBoxPlugIn->currentData().toInt() )
+    QString fileName = QFileDialog::getOpenFileName( this, tr("Select SigmaStudio project"), 
+                                                     QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory),
+                                                     tr("IR Files (*.dspproj)") );
+    if( fileName.isEmpty() )
     {
-      pathTxBuffer = dspPluginMetaData.at(ii).path + "/TxBuffer_IC_1.dat";
-      pathNumBytes = dspPluginMetaData.at(ii).path + "/NumBytes_IC_1.dat";
-      break;
+      enableGui( true );
+      return;
+    }
+
+    QFile fileDspProj( fileName );
+    QFileInfo fileInfoDspProj( fileDspProj );
+    QDir dir = fileInfoDspProj.absoluteDir();
+    pathTxBuffer = dir.absolutePath() + QString( "/TxBuffer_IC_1.dat" );
+    pathNumBytes = dir.absolutePath() + QString( "/NumBytes_IC_1.dat" );
+    if( !QFile( pathTxBuffer ).exists() )
+    {
+      QMessageBox::critical( this, tr("Error"), pathTxBuffer + tr("does not exist."), QMessageBox::Ok );
+      enableGui( true );
+      return;
+    }
+    if( !QFile( pathNumBytes ).exists() )
+    {
+      QMessageBox::critical( this, tr("Error"), pathNumBytes + tr("does not exist."), QMessageBox::Ok );
+      enableGui( true );
+      return;
     }
   }
-  qDebug()<<"PATHES";
-  qDebug()<<pathTxBuffer;
-  qDebug()<<pathNumBytes;
+  else
+  {
+    for( int ii = 0; ii < dspPluginMetaData.size(); ii++ )
+    {
+      if( dspPluginMetaData.at(ii).pid == ui->comboBoxPlugIn->currentData().toInt() )
+      {
+        pathTxBuffer = dspPluginMetaData.at(ii).path + "/TxBuffer_IC_1.dat";
+        pathNumBytes = dspPluginMetaData.at(ii).path + "/NumBytes_IC_1.dat";
+        break;
+      }
+    }
+  }
   
   //----------------------------------------------------------------------------
   //--- Read and convert the TxBuffer_IC_1.dat file
   //----------------------------------------------------------------------------
-  qDebug()<<pathTxBuffer;
   QFile fileTxBuffer( pathTxBuffer );
   if( !fileTxBuffer.open( QIODevice::ReadOnly ) )
   {
@@ -238,7 +238,6 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
   //----------------------------------------------------------------------------
   //--- Read and convert the NumBytes_IC_1.dat file
   //----------------------------------------------------------------------------
-  qDebug()<<pathNumBytes;
   QFile fileNumBytes( pathNumBytes );
   if( !fileNumBytes.open( QIODevice::ReadOnly ) )
   {
@@ -271,10 +270,15 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
   dsp->storePidWifi( static_cast<uint8_t>(ui->comboBoxPlugIn->currentData().toInt()) );
 
   //----------------------------------------------------------------------------
+  //--- Send plugin version via WiFi
+  //----------------------------------------------------------------------------
+  dsp->storePluginVersionWifi( VERSION_STR );
+
+  //----------------------------------------------------------------------------
   //--- Send data to ESP32 via WiFi
   //----------------------------------------------------------------------------
   QByteArray content;
-  uint32_t offset = 0;
+  int32_t offset = 0;
   for( int ii = 0; ii < listNumBytes.size(); ii++ )
   {
     uint32_t numbytes = listNumBytes[ii].toUInt( nullptr, 10 );
@@ -286,7 +290,7 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
 
     for( uint32_t n = 0; n < numbytes; n++ )
     {
-      if( offset >= static_cast<uint32_t>(listTxBuffer.size()) )
+      if( offset >= listTxBuffer.size() )
       {
         qDebug()<<"TxBuffer too small";
         enableGui( true );
@@ -305,13 +309,13 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
   offset = 0;
   int npckt = 0;
   uint32_t totalTransmittedBytes = 0;
-  while( offset < static_cast<uint32_t>(content.size()) )
+  while( offset < content.size() )
   {
     QByteArray packet;
     for( int ii = 0; ii < 64; ii++ )
     {
-      if( offset < static_cast<uint32_t>(content.size()) )
-        packet.append( content.at(offset) );
+      if( offset < content.size() )
+        packet.append( content.at(static_cast<int>(offset)) );
       else
         packet.append( static_cast<char>(0) );
       offset++;
@@ -322,7 +326,7 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
     //  QMessageBox::critical( this, tr("Error"), tr("Did not receive an ACK. Please check your WiFi"), QMessageBox::Ok );
     totalTransmittedBytes += static_cast<uint32_t>(packet.size());
 
-    if( offset < static_cast<uint32_t>(content.size()) )
+    if( offset < content.size() )
       ui->progressBar->setValue( offset );
     else
       ui->progressBar->setValue( content.size() );  
@@ -330,13 +334,16 @@ void DialogSettings::on_pushButtonInstallPlugin_clicked()
   }
 
   if( dsp->finishDspFirmwareWifi( totalTransmittedBytes * 2 ) )
+  {
     QMessageBox::information( this, tr("Success"), tr("You have successfully installed the new DSP-Plugin!"), QMessageBox::Ok );
+    myLog()<<"Success";
+    QMessageBox::information( this, tr("Success"), tr("Please reboot your Aurora DSP and reconnect auverdionControl to it and rewrite your parameters settings."), QMessageBox::Ok );
+  }
   else
+  {
     QMessageBox::critical( this, tr("Error"), tr("Uups, something went wrong. Please double check everythind and try again."), QMessageBox::Ok );  
-
-  qDebug()<<"Success";
-  qDebug()<<"File size:"<<content.size() * 8 / 1024<<"kBit";
-  qDebug()<<"PID: "<<ui->comboBoxPlugIn->currentData().toInt();
+    myLog()<<"Failed";
+  }
 
   enableGui( true );
 }
@@ -448,7 +455,7 @@ void DialogSettings::on_pushButtonVerifyPlugin_clicked()
   fileNumBytes.close();
 
   QByteArray content;
-  uint32_t offset = 0;
+  int32_t offset = 0;
   for( int ii = 0; ii < listNumBytes.size(); ii++ )
   {
     uint32_t numbytes = listNumBytes[ii].toUInt( nullptr, 10 );
@@ -460,7 +467,7 @@ void DialogSettings::on_pushButtonVerifyPlugin_clicked()
 
     for( uint32_t n = 0; n < numbytes; n++ )
     {
-      if( offset >= static_cast<uint32_t>(listTxBuffer.size()) )
+      if( offset >= listTxBuffer.size() )
       {
         qDebug()<<"TxBuffer too small";
         enableGui( true );
@@ -511,59 +518,19 @@ void DialogSettings::on_pushButtonVerifyPlugin_clicked()
 /*!
  *
  */
+/*
 void DialogSettings::on_pushButtonStoreWiFiConfig_clicked()
 {
   enableGui( false );
   //if( !ui->lineEditSSID->text().isEmpty() )
   //{
     // --- Send WiFi configuration to DSP ---
-    dsp->storeSettingsWifi( ui->lineEditSSID->text(), ui->lineEditPassword->text() ); 
+    //dsp->storeSettingsWifi( ui->lineEditSSID->text(), ui->lineEditPassword->text() );
     ui->labelLocalWiFiIP->setText( dsp->getIpAddressLocalWifi() );
   //}
   enableGui( true );
 }
-
-//==============================================================================
-/*!
- *
- */
-void DialogSettings::on_pushButtonPing_clicked()
-{
-  enableGui( false );
-  dsp->pingWifi();
-  ui->lineEditIpAddress->setText( dsp->getIpAddressWifi() );
-  enableGui( true );
-}
-
-//==============================================================================
-/*!
- *
- */
-void DialogSettings::on_radioButtonAP_toggled(bool checked)
-{
-  if( checked )
-  {
-    dsp->setConnectionTypeWifi( CFreeDspAurora::ACCESS_POINT );
-    ui->lineEditIpAddress->setText( dsp->getIpAddressWifi() );
-    ui->pushButtonPing->setEnabled( false );
-    ui->lineEditIpAddress->setEnabled( false );
-  }
-}
-
-//==============================================================================
-/*!
- *
- */
-void DialogSettings::on_radioButtonLocalWifi_toggled(bool checked)
-{
-  if( checked )
-  {
-    dsp->setConnectionTypeWifi( CFreeDspAurora::LOCAL_WIFI );
-    ui->lineEditIpAddress->setText( dsp->getIpAddressWifi() );
-    ui->pushButtonPing->setEnabled( true );
-    ui->lineEditIpAddress->setEnabled( true );
-  }
-}
+*/
 
 //==============================================================================
 /*!
@@ -575,43 +542,14 @@ void DialogSettings::enableGui( bool state )
   {
     ui->pushButtonInstallPlugin->setEnabled( true );
     ui->pushButtonVerifyPlugin->setEnabled( true );
-    ui->radioButtonAP->setEnabled( true );
-    ui->radioButtonLocalWifi->setEnabled( true );
-    ui->lineEditSSID->setEnabled( true );
-    ui->lineEditPassword->setEnabled( true );
-    ui->pushButtonStoreWiFiConfig->setEnabled( true );
-    ui->lineEditIpAddress->setEnabled( true );
-    if( ui->radioButtonLocalWifi->isChecked() )
-      ui->pushButtonPing->setEnabled( true );
-    else
-      ui->pushButtonPing->setEnabled( false );
     ui->buttonBox->setEnabled( true );
   }
   else
   {
     ui->pushButtonInstallPlugin->setEnabled( false );
     ui->pushButtonVerifyPlugin->setEnabled( false );
-    ui->radioButtonAP->setEnabled( false );
-    ui->radioButtonLocalWifi->setEnabled( false );
-    ui->lineEditSSID->setEnabled( false );
-    ui->lineEditPassword->setEnabled( false );
-    ui->pushButtonStoreWiFiConfig->setEnabled( false );
-    ui->lineEditIpAddress->setEnabled( false );
-    ui->pushButtonPing->setEnabled( false );
     ui->buttonBox->setEnabled( false );
   }
-
-}
-
-//==============================================================================
-/*!
- *
- */
-void DialogSettings::on_lineEditIpAddress_editingFinished()
-{
-  qDebug()<<"DialogSettings::on_lineEditIpAddress_editingFinished";
-  if( ui->radioButtonLocalWifi->isChecked() )
-    dsp->setIpAddressWifi( ui->lineEditIpAddress->text() );
 
 }
 
@@ -623,7 +561,7 @@ void DialogSettings::on_comboBoxAddOnId_currentIndexChanged( int index )
 {
   dsp->storeAddOnIdWifi( ui->comboBoxAddOnId->itemData( index ).toUInt() );
 
-  if( ui->comboBoxAddOnId->itemData( index ).toUInt() == ADDONB )
+  if( ui->comboBoxAddOnId->itemData( index ).toUInt() == CFreeDspAurora::ADDONB )
   {
     ui->comboBoxSpdifInput->clear();
 
@@ -650,25 +588,30 @@ void DialogSettings::on_comboBoxAddOnId_currentIndexChanged( int index )
  */
 void DialogSettings::on_comboBoxSpdifInput_currentIndexChanged(int index)
 {
-  if( dsp->getAddOnId() == ADDONB )
+  dsp->muteDAC();
+  QThread::msleep( 400 );
+
+  if( dsp->getAddOnId() == CFreeDspAurora::ADDONB )
   {
     if( ui->comboBoxSpdifInput->itemData( index ).toUInt() == 0x00 )
-      dsp->writeI2C( 0x82, 0x01, 0x04 );
+      dsp->writeI2C( int8_t(0x82), 0x01, 0x04 );
     else if( ui->comboBoxSpdifInput->itemData( index ).toUInt() == 0x01 )
-      dsp->writeI2C( 0x82, 0x01, 0x05 );
+      dsp->writeI2C( int8_t(0x82), 0x01, 0x05 );
     else if( ui->comboBoxSpdifInput->itemData( index ).toUInt() == 0x02 )
-      dsp->writeI2C( 0x82, 0x01, 0x06 );
+      dsp->writeI2C( int8_t(0x82), 0x01, 0x06 );
     else if( ui->comboBoxSpdifInput->itemData( index ).toUInt() == 0x03 )
-      dsp->writeI2C( 0x82, 0x01, 0x07 );
+      dsp->writeI2C( int8_t(0x82), 0x01, 0x07 );
     else if( ui->comboBoxSpdifInput->itemData( index ).toUInt() == 0x04 )
-      dsp->writeI2C( 0x82, 0x01, 0x00 );
+      dsp->writeI2C( int8_t(0x82), 0x01, 0x00 );
     else if( ui->comboBoxSpdifInput->itemData( index ).toUInt() == 0x05 )
-      dsp->writeI2C( 0x82, 0x01, 0x01 );
+      dsp->writeI2C( int8_t(0x82), 0x01, 0x01 );
     else if( ui->comboBoxSpdifInput->itemData( index ).toUInt() == 0x06 )
-      dsp->writeI2C( 0x82, 0x01, 0x02 );
+      dsp->writeI2C( int8_t(0x82), 0x01, 0x02 );
     else if( ui->comboBoxSpdifInput->itemData( index ).toUInt() == 0x07 )
-      dsp->writeI2C( 0x82, 0x01, 0x03 );
+      dsp->writeI2C( int8_t(0x82), 0x01, 0x03 );
   }
+
+  dsp->unmuteDAC();
 }
 
 //==============================================================================
@@ -679,3 +622,57 @@ unsigned int DialogSettings::getSpdifInput( void )
   return ui->comboBoxSpdifInput->itemData( ui->comboBoxSpdifInput->currentIndex() ).toUInt();
 }
 
+//==============================================================================
+/*!
+ */
+void DialogSettings::on_pushButtonConfigureWiFi_clicked()
+{
+  WizardConnect wizardConnect( dsp );
+  int result = wizardConnect.exec();
+  if( result != QDialog::Accepted )
+    return;
+  
+  int index = ui->comboBoxConnection->findData( wizardConnect.field( "connection" ) );
+  if( index != -1 )
+    ui->comboBoxConnection->setCurrentIndex( index );
+
+  ui->labelLocalWiFiIP->setText( dsp->getIpAddressLocalWifi() );
+
+}
+
+//==============================================================================
+/*!
+ */
+unsigned int DialogSettings::getConnection( void )
+{
+  return ui->comboBoxConnection->itemData( ui->comboBoxConnection->currentIndex() ).toUInt();
+}
+
+//==============================================================================
+/*!
+ */
+void DialogSettings::on_comboBoxConnection_currentIndexChanged(const QString &arg1)
+{
+  dsp->setConnectionTypeWifi( static_cast<int>(getConnection()) );
+  
+  if( arg1 == QString( "Local WiFi Network" ) )
+  {
+    bool ok;
+    QString text = QInputDialog::getText( this, tr("Set IP address"),
+                                          tr("What is the IP of your Aurora in your local network?:"), QLineEdit::Normal,
+                                          dsp->getIpAddressLocalWifi(), &ok );
+    if( ok && !text.isEmpty() )
+    {
+      dsp->setIpAddressLocalWifi( text );
+      ui->labelLocalWiFiIP->setText( text );
+    }
+  }
+}
+
+//==============================================================================
+/*!
+ */
+bool DialogSettings::getEnableVolumePoti( void )
+{
+  return ui->checkBoxEnableVolumePoti->isChecked();
+}

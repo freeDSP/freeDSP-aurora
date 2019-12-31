@@ -59,7 +59,7 @@
     </spacer>
    </item>
    <item>
-    <widget class="QDoubleSpinBox" name="doubleSpinBoxGain">
+    <widget class="QMyDoubleSpinBox" name="doubleSpinBoxGain">
      <property name="contextMenuPolicy">
       <enum>Qt::NoContextMenu</enum>
      </property>
@@ -94,7 +94,7 @@
     </spacer>
    </item>
    <item>
-    <widget class="QDoubleSpinBox" name="doubleSpinBoxFc">
+    <widget class="QMyDoubleSpinBox" name="doubleSpinBoxFc">
      <property name="contextMenuPolicy">
       <enum>Qt::NoContextMenu</enum>
      </property>
@@ -129,7 +129,7 @@
     </spacer>
    </item>
    <item>
-    <widget class="QDoubleSpinBox" name="doubleSpinBoxS">
+    <widget class="QMyDoubleSpinBox" name="doubleSpinBoxS">
      <property name="contextMenuPolicy">
       <enum>Qt::NoContextMenu</enum>
      </property>
@@ -138,6 +138,9 @@
      </property>
      <property name="buttonSymbols">
       <enum>QAbstractSpinBox::NoButtons</enum>
+     </property>
+     <property name="minimum">
+      <double>0.100000000000000</double>
      </property>
      <property name="maximum">
       <double>2.000000000000000</double>
@@ -201,6 +204,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QMyDoubleSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>QMyDoubleSpinBox.hpp</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

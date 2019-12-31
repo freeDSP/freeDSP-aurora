@@ -36,11 +36,14 @@ void QDspBlock::paintEvent(QPaintEvent *)
     style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 /*!
  *
  */
-/*void QDspBlock::sendDspParameter( void )
+void QDspBlock::delayDspUpdate( void )
 {
-  qDebug()<<"sendDspParameter not implemented";
-}*/
+  updateCoeffs();
+  emit valueChanged();
+  timerDspUpdate.stop();
+  timerDspUpdate.start( DSPUPDATELATENCY );
+}

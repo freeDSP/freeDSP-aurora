@@ -1,7 +1,7 @@
 /*
  * File:           defines.h
  *
- * Created:        Saturday, November 09, 2019 7:50:41 PM
+ * Created:        Thursday, December 12, 2019 9:18:42 AM
  * Description:    HomeCinema71 IC default download data definitions.
  *
  * This software is distributed in the hope that it will be useful,
@@ -19,7 +19,7 @@
 #ifndef __DEFINES_H__
 #define __DEFINES_H__
 
-#define BufferSize_IC_1     	91994
+#define BufferSize_IC_1     	92262
 #define NumTransactions_IC_1	58
 
 

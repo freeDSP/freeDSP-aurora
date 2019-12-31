@@ -86,6 +86,10 @@ private slots:
 
   void on_tabPresets_currentChanged(int index);
 
+  void on_actionSaveParameters_triggered();
+
+  void on_actionLoadParameters_triggered();
+
 signals:
   void replyFinished( void );  
 
@@ -108,6 +112,9 @@ private:
   int currentPreset = 0;
   QByteArray presetUserParams[NUMPRESETS];
   QJsonObject jsonObjSettings;
+
+  QLabel* labelConnected;
+  QLabel* labelPlugIn;
 };
 
 #endif // MAINWINDOW_HPP

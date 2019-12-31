@@ -51,6 +51,10 @@ QPeq::QPeq( double gain, double freq, double qfactor,
 
   connect( action, &QAction::triggered, this, &QPeq::on_importRewPeqs );
 
+  connect( ui->doubleSpinBoxGain, SIGNAL(wheelMoved()), this, SLOT(delayDspUpdate()) );
+  connect( ui->doubleSpinBoxFc, SIGNAL(wheelMoved()), this, SLOT(delayDspUpdate()) );
+  connect( ui->doubleSpinBoxQ, SIGNAL(wheelMoved()), this, SLOT(delayDspUpdate()) );
+
   type = PEQ;
 
 }
@@ -185,9 +189,8 @@ void QPeq::sendDspParameter( void )
 {
   QByteArray content;
 
-  enableGui( false );
-
-  content.append( dsp->muteSequence() );
+  dsp->muteDAC();
+  QThread::msleep( 200 );
 
   content.append( dsp->makeParameterForWifi( addr[kParamB2], static_cast<float>(coeffs[kB2]) ) );
   content.append( dsp->makeParameterForWifi( addr[kParamB1], static_cast<float>(coeffs[kB1]) ) );
@@ -195,11 +198,9 @@ void QPeq::sendDspParameter( void )
   content.append( dsp->makeParameterForWifi( addr[kParamA2], static_cast<float>(coeffs[kA2]) ) );
   content.append( dsp->makeParameterForWifi( addr[kParamA1], static_cast<float>(coeffs[kA1]) ) );
 
-  content.append( dsp->unmuteSequence() );
-
   dsp->sendParameterWifi( content );
 
-  enableGui( true );
+  dsp->unmuteDAC();
 }
 
 //==============================================================================
@@ -227,7 +228,6 @@ void QPeq::on_showContextMenu( const QPoint &pos )
  */
 void QPeq::on_importRewPeqs( void )
 {
-  qDebug()<<"QPeq::on_importRewPeqs"<<channel->getName();
   emit importRewPeqs( this );
 }
 
@@ -321,15 +321,15 @@ void QPeq::setUserParams( QByteArray& userParams, int& idx )
     idx++;
 
     ui->doubleSpinBoxFc->blockSignals( true );
-    ui->doubleSpinBoxFc->setValue( fct );
+    ui->doubleSpinBoxFc->setValue( static_cast<double>(fct) );
     ui->doubleSpinBoxFc->blockSignals( false );
 
     ui->doubleSpinBoxQ->blockSignals( true );
-    ui->doubleSpinBoxQ->setValue( Qt );
+    ui->doubleSpinBoxQ->setValue( static_cast<double>(Qt) );
     ui->doubleSpinBoxQ->blockSignals( false );
 
     ui->doubleSpinBoxGain->blockSignals( true );
-    ui->doubleSpinBoxGain->setValue( V0t );
+    ui->doubleSpinBoxGain->setValue( static_cast<double>(V0t) );
     ui->doubleSpinBoxGain->blockSignals( false );
 
     ui->pushButtonBypass->blockSignals( true );

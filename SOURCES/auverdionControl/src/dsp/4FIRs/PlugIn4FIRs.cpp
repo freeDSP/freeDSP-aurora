@@ -73,6 +73,8 @@ tDspChannel CPlugIn4FIRs::getGuiForChannel( unsigned int chn, tfloat fs, CFreeDs
   QGain* gain = nullptr;
   QOutputSelect* output;
 
+  dsp = ptrdsp;
+
   QHBoxLayout* layout = new QHBoxLayout;
   QChannel* channel = new QChannel;
 
@@ -82,12 +84,19 @@ tDspChannel CPlugIn4FIRs::getGuiForChannel( unsigned int chn, tfloat fs, CFreeDs
     //--- Channel 1
     dspChannel.name = getChannelName(chn);
 
-    input = new QInputSelect( 0, MOD_NX1_1_1_MONOMUXSIGMA300NS1INDEX_ADDR, ptrdsp, channel );
+    input = new QInputSelect( 0, 
+                              MOD_INPUTSELECT_1_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS9INDEX_ADDR,
+                              MOD_INPUTSELECT_1_NX1_1_UAC_ALG0_MONOMUXSIGMA300NS10INDEX_ADDR, 
+                              MOD_INPUTSELECT_1_NX1_1_ESP32_ALG0_MONOMUXSIGMA300NS11INDEX_ADDR, 
+                              MOD_INPUTSELECT_1_NX1_1_EXP_ALG0_MONOMUXSIGMA300NS12INDEX_ADDR, 
+                              MOD_INPUTSELECT_1_NX1_1_SPDIF_ALG0_MONOMUXSIGMA300NS13INDEX_ADDR,
+                              MOD_INPUTSELECT_1_NX1_1_ALG0_MONOMUXSIGMA300NS14INDEX_ADDR, 
+                              ptrdsp, channel );
     layout->addWidget( input );
     channel->addDspBlock( input );
     channel->setName( dspChannel.name );
-
-    fir = new QFir( MOD_FIR1_ALG0_FIRSIGMA300ALG1FIRCOEFF0_ADDR, NFFT, ptrdsp, channel );
+ 
+    fir = new QFir( MOD_FIR1_ALG0_FIRSIGMA300ALG1FIRCOEFF0_ADDR, NFFT, fs, ptrdsp, channel );
     layout->addWidget( fir );
     channel->addDspBlock( fir );
 
@@ -227,12 +236,19 @@ tDspChannel CPlugIn4FIRs::getGuiForChannel( unsigned int chn, tfloat fs, CFreeDs
     //--- Channel 2
     dspChannel.name = getChannelName(chn);
 
-    input = new QInputSelect( 1, MOD_NX1_1_2_MONOMUXSIGMA300NS2INDEX_ADDR, ptrdsp, channel );
+    input = new QInputSelect( 1, 
+                              MOD_INPUTSELECT_2_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS1INDEX_ADDR,
+                              MOD_INPUTSELECT_2_NX1_1_UAC_ALG0_MONOMUXSIGMA300NS2INDEX_ADDR, 
+                              MOD_INPUTSELECT_2_NX1_1_ESP32_ALG0_MONOMUXSIGMA300NS3INDEX_ADDR, 
+                              MOD_INPUTSELECT_2_NX1_1_EXP_ALG0_MONOMUXSIGMA300NS4INDEX_ADDR, 
+                              MOD_INPUTSELECT_2_NX1_1_SPDIF_ALG0_MONOMUXSIGMA300NS5INDEX_ADDR,
+                              MOD_INPUTSELECT_2_NX1_1_ALG0_MONOMUXSIGMA300NS6INDEX_ADDR, 
+                              ptrdsp, channel );
     layout->addWidget( input );
     channel->addDspBlock( input );
     channel->setName( dspChannel.name );
 
-    fir = new QFir( MOD_FIR2_ALG0_FIRSIGMA300ALG2FIRCOEFF0_ADDR, NFFT, ptrdsp, channel );
+    fir = new QFir( MOD_FIR2_ALG0_FIRSIGMA300ALG2FIRCOEFF0_ADDR, NFFT, fs, ptrdsp, channel );
     layout->addWidget( fir );
     channel->addDspBlock( fir );
 
@@ -372,12 +388,19 @@ tDspChannel CPlugIn4FIRs::getGuiForChannel( unsigned int chn, tfloat fs, CFreeDs
     //--- Channel 3
     dspChannel.name = getChannelName(chn);
 
-    input = new QInputSelect( 2, MOD_NX1_1_3_MONOMUXSIGMA300NS3INDEX_ADDR, ptrdsp, channel );
+    input = new QInputSelect( 2, 
+                              MOD_INPUTSELECT_3_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS7INDEX_ADDR,
+                              MOD_INPUTSELECT_3_NX1_1_UAC_ALG0_MONOMUXSIGMA300NS8INDEX_ADDR, 
+                              MOD_INPUTSELECT_3_NX1_1_ESP32_ALG0_MONOMUXSIGMA300NS15INDEX_ADDR, 
+                              MOD_INPUTSELECT_3_NX1_1_EXP_ALG0_MONOMUXSIGMA300NS16INDEX_ADDR, 
+                              MOD_INPUTSELECT_3_NX1_1_SPDIF_ALG0_MONOMUXSIGMA300NS17INDEX_ADDR,
+                              MOD_INPUTSELECT_3_NX1_1_ALG0_MONOMUXSIGMA300NS18INDEX_ADDR, 
+                              ptrdsp, channel );
     layout->addWidget( input );
     channel->addDspBlock( input );
     channel->setName( dspChannel.name );
 
-    fir = new QFir( MOD_FIR3_ALG0_FIRSIGMA300ALG3FIRCOEFF0_ADDR, NFFT, ptrdsp, channel );
+    fir = new QFir( MOD_FIR3_ALG0_FIRSIGMA300ALG3FIRCOEFF0_ADDR, NFFT, fs, ptrdsp, channel );
     layout->addWidget( fir );
     channel->addDspBlock( fir );
 
@@ -517,12 +540,19 @@ tDspChannel CPlugIn4FIRs::getGuiForChannel( unsigned int chn, tfloat fs, CFreeDs
     //--- Channel 4
     dspChannel.name = getChannelName(chn);
 
-    input = new QInputSelect( 3, MOD_NX1_1_4_MONOMUXSIGMA300NS4INDEX_ADDR, ptrdsp, channel );
+    input = new QInputSelect( 3, 
+                              MOD_INPUTSELECT_4_NX1_1_ANALOG_ALG0_MONOMUXSIGMA300NS19INDEX_ADDR,
+                              MOD_INPUTSELECT_4_NX1_1_UAC_ALG0_MONOMUXSIGMA300NS20INDEX_ADDR, 
+                              MOD_INPUTSELECT_4_NX1_1_ESP32_ALG0_MONOMUXSIGMA300NS21INDEX_ADDR, 
+                              MOD_INPUTSELECT_4_NX1_1_EXP_ALG0_MONOMUXSIGMA300NS22INDEX_ADDR, 
+                              MOD_INPUTSELECT_4_NX1_1_SPDIF_ALG0_MONOMUXSIGMA300NS23INDEX_ADDR,
+                              MOD_INPUTSELECT_4_NX1_1_ALG0_MONOMUXSIGMA300NS24INDEX_ADDR, 
+                              ptrdsp, channel );
     layout->addWidget( input );
     channel->addDspBlock( input );
     channel->setName( dspChannel.name );
 
-    fir = new QFir( MOD_FIR4_ALG0_FIRSIGMA300ALG4FIRCOEFF0_ADDR, NFFT, ptrdsp, channel );
+    fir = new QFir( MOD_FIR4_ALG0_FIRSIGMA300ALG4FIRCOEFF0_ADDR, NFFT, fs, ptrdsp, channel );
     layout->addWidget( fir );
     channel->addDspBlock( fir );
 
@@ -657,7 +687,7 @@ tDspChannel CPlugIn4FIRs::getGuiForChannel( unsigned int chn, tfloat fs, CFreeDs
     listChannels.append( channel );
   }
 
-  //dsp->setMuteAddr( MOD_MASTERVOLUME_ALG0_TARGET_ADDR );
+  dsp->setMuteAddr( MOD_MASTERVOLUME_ALG0_TARGET_ADDR );
   
   dspChannel.layout = layout;
   dspChannel.channel = channel;
@@ -674,7 +704,14 @@ tDspChannel CPlugIn4FIRs::getGuiForChannel( unsigned int chn, tfloat fs, CFreeDs
  */
 void CPlugIn4FIRs::setMasterVolume( double val, bool doSend )
 {
-  qDebug()<<"CPlugInHomeCinema71::setMasterVolume not implemented";
+  if( doSend )
+  {
+    QByteArray content;
+    content.append( dsp->makeParameterForWifi( MOD_MASTERVOLUME_ALG0_TARGET_ADDR, static_cast<float>(pow( 10.0, val/20.0 )) ) );
+    dsp->sendParameterWifi( content );
+  }
+  dsp->setMasterVolume( val );
+  masterVolume = val;
 }
 
 //==============================================================================
@@ -683,6 +720,39 @@ void CPlugIn4FIRs::setMasterVolume( double val, bool doSend )
  */
 uint16_t CPlugIn4FIRs::getAddressMasterVolume( void )
 {
-  qDebug()<<"CPlugIn4FIRs::getAddressMasterVolume not implemented";
-  return 0;
+  return MOD_MASTERVOLUME_ALG0_TARGET_ADDR;
+}
+
+//==============================================================================
+/*!
+ *
+ */
+void CPlugIn4FIRs::setEnableVolumePoti( bool val, bool doSend )
+{
+  if( doSend )
+  {
+    QByteArray content;
+    if( val )
+      content.append( dsp->makeParameterForWifi( MOD_BYPASSVOLPOTI_MONOMUXSIGMA300NS49INDEX_ADDR, 0x00000000 ) );
+    else
+      content.append( dsp->makeParameterForWifi( MOD_BYPASSVOLPOTI_MONOMUXSIGMA300NS49INDEX_ADDR, 0x00000001 ) );
+    dsp->sendParameterWifi( content );
+  }
+  enableVolumePoti = val;
+}
+
+//==============================================================================
+/*! Get the parameters in DSP format. The parameters are returned with register 
+ *  address followed by value dword ready to be sent via i2c to DSP.
+ *
+ * \return Byte array with parameters for DSP. 
+ */
+QByteArray CPlugIn4FIRs::getDspParams( void )
+{
+  QByteArray content;
+  if( enableVolumePoti )
+    content.append( dsp->makeParameterForWifi( MOD_BYPASSVOLPOTI_MONOMUXSIGMA300NS49INDEX_ADDR, 0x00000000 ) );
+  else
+    content.append( dsp->makeParameterForWifi( MOD_BYPASSVOLPOTI_MONOMUXSIGMA300NS49INDEX_ADDR, 0x00000001 ) );
+  return content;
 }

@@ -47,6 +47,9 @@ public:
 
   bool eventFilter( QObject* object, QEvent* event );
 
+protected:
+  void updateCoeffs( void ) { }
+
 private slots:
   
 protected slots:
