@@ -23,6 +23,7 @@ public:
     logfile = new QFile( "auverdionControl.log" );
 
     #elif defined( __WIN__ )
+
     QString path = QStandardPaths::writableLocation( QStandardPaths::AppLocalDataLocation );
     if( !path.isEmpty() )
     {
@@ -31,6 +32,16 @@ public:
     }
     logfile = new QFile( path + "/auverdion/auverdionControl/auverdionControl.log" );
     qDebug()<<path + "/auverdionControl.log";
+
+    #elif defined( __LINUX__ )
+
+    QString path = QStandardPaths::writableLocation( QStandardPaths::AppLocalDataLocation );
+    path += "/auverdion/auverdionControl";
+    QDir d( path );
+    d.mkpath( d.absolutePath() );
+    logfile = new QFile( path + "/auverdionControl.log" );
+    qDebug()<<path + "/auverdionControl.log";
+
     #else
     #error StandardPath not defined.
     #endif

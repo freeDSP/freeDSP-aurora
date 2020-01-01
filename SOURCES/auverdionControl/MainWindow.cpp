@@ -91,10 +91,12 @@ MainWindow::MainWindow( QWidget* parent ) :
   ui->actionWrite_to_DSP->setEnabled( false );
 
   ptrMainStatusBar = ui->statusBar;
-  
+
+
   #if defined( __MACOSX__ )
   pathSettings = QString( "./settings.json" );
   QFile fileSettings( pathSettings );
+
   #elif defined( __WIN__ )
 
   pathSettings = QStandardPaths::writableLocation( QStandardPaths::AppLocalDataLocation );
@@ -106,6 +108,19 @@ MainWindow::MainWindow( QWidget* parent ) :
   pathSettings += QString( "/settings.json" );
 
   QFile fileSettings( pathSettings );
+
+  #elif defined( __LINUX__ )
+
+  pathSettings = QStandardPaths::writableLocation( QStandardPaths::AppLocalDataLocation );
+  if( !pathSettings.isEmpty() )
+  {
+    QDir d(pathSettings);
+    d.mkpath( d.absolutePath() );
+  }
+  pathSettings += QString( "/settings.json" );
+
+  QFile fileSettings( pathSettings );
+
   #else
   #error StandardPath not given.
   #endif

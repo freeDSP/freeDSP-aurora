@@ -15,9 +15,15 @@ QChannel::QChannel( QString chnname, QWidget *parent ) :
   #if defined( __MACOSX__ )
   ui->widgetChannel->setMinimumHeight( 183 );
   ui->scrollArea->setMinimumHeight( 185 );
+
   #elif defined( __WIN__ ) 
   ui->widgetChannel->setMinimumHeight( 140 );
   ui->scrollArea->setMinimumHeight( 160 );
+
+  #elif defined( __LINUX__ )
+  ui->widgetChannel->setMinimumHeight( 160 );
+  ui->scrollArea->setMinimumHeight( 180 );
+
   #endif
 
   widgetChannel = ui->widgetChannel;

@@ -35,14 +35,14 @@ DialogSettings::DialogSettings( CFreeDspAurora* ptrdsp, bool bypassVolumePoti, Q
   dsp = ptrdsp;
 
   #if defined( __MACOSX__ )
+
   QDir appPath = QDir( QCoreApplication::applicationDirPath() );
   appPath.cdUp();
   appPath.cd( "Resources" );
-  //qDebug()<<appPath.absolutePath() + "/dspplugins.json";
   #elif defined( __WIN__ )
   QDir appPath = QDir( QCoreApplication::applicationDirPath() );
-  //qDebug()<<appPath.absolutePath() + "/dspplugins.json";
-
+  #elif defined( __LINUX__ )
+  QDir appPath = QDir( "/usr/local/share/auverdionControl" );
   #else
   #error Platform not supported.
   #endif
@@ -66,6 +66,8 @@ DialogSettings::DialogSettings( CFreeDspAurora* ptrdsp, bool bypassVolumePoti, Q
       newMetaData.path = appPath.absolutePath() +  "/" + plugin["path"].toString();
       #elif defined( __WIN__ )
       newMetaData.path = appPath.absolutePath() +  "/dspplugins/" + plugin["path"].toString();
+      #elif defined( __LINUX__ )
+      newMetaData.path = appPath.absolutePath() +  "/" + plugin["path"].toString();
       #else
       #error Platform not supported.
       #endif

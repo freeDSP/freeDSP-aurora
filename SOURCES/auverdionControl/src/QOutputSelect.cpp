@@ -94,7 +94,7 @@ void QOutputSelect::update( tvector<tfloat> f )
     if( length(f) >= length(freq) )
     {
       myLog()<<"interpolate";
-      myLog()<<length(f)<<length(FR);
+      //myLog()<<length(f)<<length(FR);
       tvector<tfloat> mag = interp1( freq, magt, f, "spline" );
       tvector<tfloat> phi = interp1( freq, phit, f, "spline" );
       H = mag * exp( j*phi );
@@ -102,7 +102,7 @@ void QOutputSelect::update( tvector<tfloat> f )
     else
     {
       myLog()<<"decimate";
-      myLog()<<length(f)<<length(FR);
+      //myLog()<<length(f)<<length(FR);
       tvector<tcomplex> FR_dec = tvector<tcomplex>(length(f));
       tvector<tfloat> freq_dec = tvector<tfloat>(length(f));
       tfloat q = static_cast<tfloat>(length(freq)) / static_cast<tfloat>(length(f));
