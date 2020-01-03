@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include "PlugInHomeCinema71.h"
-#include </Users/rkn/Documents/freeDSP/freeDSP-aurora/SOURCES/SIGMASTUDIO/HomeCinema71/HomeCinema71_IC_1_PARAM.h>
+#include "HomeCinema71_IC_1_PARAM.h"
 
 extern void ADAU1452_WRITE_REGISTER( uint16_t reg, byte msb, byte lsb );
 extern void ADAU1452_WRITE_BLOCK( uint16_t regaddr, byte val[], uint16_t len ) ;

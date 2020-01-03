@@ -1,10 +1,15 @@
 
 #include <Wire.h>
 #include <WiFi.h>
-#include <ArduinoJson.h>
 #include <ArduinoOTA.h>
 #include <ESPmDNS.h>
 #include "SPIFFS.h"
+
+// ArduinoJSON 6.10.0
+#include <ArduinoJson.h>
+
+// CRC32 by Christopher Baker 2.0.0
+#include <CRC32.h>
 
 #include "AK4458.h"
 #include "AK5558.h"
@@ -243,32 +248,6 @@ void scan()
   Serial.print("Scan Completed, ");
   Serial.print(cnt);
   Serial.println(" I2C Devices found.");
-}
-
-//==============================================================================
-/*! Saves the global settings
- */
-void saveSettings( void )
-{
-  if( SPIFFS.exists( "/settings.ini" ) )
-    SPIFFS.remove( "/settings.ini" );
-
-  File fileSettings = SPIFFS.open( "/settings.ini", "w" );
-  // Allocate a temporary JsonDocument
-  // Don't forget to change the capacity to match your requirements.
-  // Use arduinojson.org/assistant to compute the capacity.
-  StaticJsonDocument<256> jsonSettings;
-  jsonSettings["pid"] = Settings.pid;
-  jsonSettings["ssid"] = Settings.ssid; // max 32 charachters
-  jsonSettings["pwd"] = Settings.password;  // max 64 charachters
-  jsonSettings["aid"] = Settings.addonid;
-  jsonSettings["preset"] = Settings.currentPreset;
-  jsonSettings["version"] = Settings.version;
-  jsonSettings["pver"] = Settings.pversion;
-  // Serialize JSON to file
-  if( serializeJson( jsonSettings, fileSettings ) == 0 )
-    Serial.println( "Failed to write to file" );
-  fileSettings.close();
 }
 
 //==============================================================================
@@ -641,34 +620,65 @@ void sendAddOnConfiguration( void )
 }
 
 //==============================================================================
-/*! Write default values to settings.ini
- *
+/*! Saves the global settings
  */
-void writeDefaultSettings( void )
+void saveSettings( void )
 {
+  if( SPIFFS.exists( "/settings.ini" ) )
+    SPIFFS.remove( "/settings.ini" );
+
   File fileSettings = SPIFFS.open( "/settings.ini", "w" );
   // Allocate a temporary JsonDocument
   // Don't forget to change the capacity to match your requirements.
   // Use arduinojson.org/assistant to compute the capacity.
   StaticJsonDocument<256> jsonSettings;
-  jsonSettings["pid"] = 0x01;
-  jsonSettings["ssid"] = "";
-  jsonSettings["pwd"] = "";
-  jsonSettings["aid"] = ADDON_CUSTOM;
-  jsonSettings["preset"] = 0x00;
-  jsonSettings["version"] = VERSION_STR;
-  jsonSettings["pver"] = "0.0.0";
+  jsonSettings["pid"] = Settings.pid;
+  jsonSettings["ssid"] = Settings.ssid; // max 32 charachters
+  jsonSettings["pwd"] = Settings.password;  // max 64 charachters
+  jsonSettings["aid"] = Settings.addonid;
+  jsonSettings["preset"] = Settings.currentPreset;
+  jsonSettings["version"] = Settings.version;
+  jsonSettings["pver"] = Settings.pversion;
   // Serialize JSON to file
   if( serializeJson( jsonSettings, fileSettings ) == 0 )
     Serial.println( "Failed to write to file" );
   fileSettings.close();
-  Settings.pid = jsonSettings["pid"];
-  Settings.ssid = jsonSettings["ssid"].as<String>();
-  Settings.password = jsonSettings["pwd"].as<String>();
-  Settings.addonid = jsonSettings["aid"];
-  Settings.currentPreset = jsonSettings["preset"];
-  Settings.version = jsonSettings["version"].as<String>();
-  Settings.pversion = jsonSettings["pver"].as<String>();
+}
+
+//==============================================================================
+/*! Write default values to settings.ini
+ *
+ */
+void writeDefaultSettings( void )
+{
+  Settings.pid = 0x01;
+  Settings.ssid = "";
+  Settings.password = "";
+  Settings.addonid = ADDON_CUSTOM;
+  Settings.currentPreset = 0x00;
+  Settings.version = VERSION_STR;
+  Settings.pversion = "0.0.0";
+
+  saveSettings();
+}
+
+//==============================================================================
+/*! Calculate CRC32 of a file
+ *
+ */
+uint32_t getChecksum( File& file )
+{
+  CRC32 crc;
+  size_t len = file.size();
+  int cntr = 0;
+  while( cntr < len )
+  {
+    uint8_t byteRead;
+    file.read( &byteRead, 1 );
+    crc.update( byteRead );
+    cntr++;
+  }
+  uint32_t checksum = crc.finalize();
 }
 
 //==============================================================================
@@ -748,7 +758,13 @@ void setup( void )
   //----------------------------------------------------------------------------
   if( SPIFFS.exists( "/settings.ini" ) )
   {
-    File fileSettings = SPIFFS.open( "/settings.ini" );
+    File fileSettings = SPIFFS.open( "/settings.ini", "r" );
+    uint32_t checksum = getChecksum( fileSettings );
+    Serial.print( "CRC32: " );
+    Serial.println( checksum, HEX );
+    fileSettings.close();    
+
+    fileSettings = SPIFFS.open( "/settings.ini", "r" );
     Serial.println( "Reading settings.ini" );
     // Allocate a temporary JsonDocument
     // Don't forget to change the capacity to match your requirements.
