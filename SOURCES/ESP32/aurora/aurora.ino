@@ -718,7 +718,8 @@ void myWiFiTask(void *pvParameters) {
           Serial.println("AP Config Failed");
 
         WiFi.begin(Settings.ssid.c_str(), Settings.password.c_str());
-
+        
+        server.begin();  
       } else if (state == WL_CONNECT_FAILED) {  // WiFi.begin has failed (AUTH_FAIL)
         Serial.println("Disconnecting WiFi");
 
@@ -867,26 +868,6 @@ void setup( void )
 
   // Create a connection task with 8kB stack on core 0
   xTaskCreatePinnedToCore(myWiFiTask, "myWiFiTask", 8192, NULL, 3, NULL, 0);
-
-  int cntrConnect = 0;
-  if( Settings.ssid.length() > 0 )
-  {
-    while( (WiFi.waitForConnectResult() != WL_CONNECTED) && (cntrConnect < 3) )
-    {
-      Serial.println("WiFi Connection Failed! Trying again..");
-      delay(100);
-      cntrConnect++;
-    }
-  }
-  
-  // print the ESP32 IP-Address
-  Serial.print( "Soft AP IP:" );
-  Serial.println( WiFi.softAPIP() );
-  Serial.print( "Local IP:" );
-  Serial.println( WiFi.localIP() );
-  Serial.println( WiFi.getHostname() );
-
-  server.begin();  
 
   //----------------------------------------------------------------------------
   //--- Download program to DSP
