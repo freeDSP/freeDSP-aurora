@@ -1713,6 +1713,9 @@ void MainWindow::on_actionSaveParameters_triggered()
                                                    tr("Parameters Files (*.dspPrj)") );
   if( fileName.isEmpty() )
     return;
+  else if (!fileName.endsWith(".dspPrj")) {
+    fileName += ".dspPrj";
+  }
 
   //----------------------------------------------------------------------------
   //--- Build usrparam.hex file
