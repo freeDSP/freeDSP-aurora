@@ -134,6 +134,7 @@ File fileDspParams;
 File fileUserParams;
 File fileAddOnConfig;
 
+bool myWiFiFirstConnect = true;
 WiFiClient client;
 WiFiServer server( 80 );
 
@@ -698,6 +699,65 @@ void setupAddOn( void )
   }            
 }
 
+void myWiFiTask(void *pvParameters) {
+  wl_status_t state;
+
+  while (true) {
+    state = WiFi.status();
+    if (state != WL_CONNECTED) {  // We have no connection
+      if (state == WL_NO_SHIELD) {  // WiFi.begin wasn't called yet
+        Serial.println("Connecting WiFi");
+
+        WiFi.mode( WIFI_AP_STA );
+        WiFi.setHostname( "freeDSP-aurora" );
+        // Start access point
+        WiFi.softAP( "AP-freeDSP-aurora" );
+        delay(100);
+        //wait for SYSTEM_EVENT_AP_START
+        if( !WiFi.softAPConfig( IPAddress(192, 168, 5, 1), IPAddress(192, 168, 5, 1), IPAddress(255, 255, 255, 0) ) )
+          Serial.println("AP Config Failed");
+
+        WiFi.begin(Settings.ssid.c_str(), Settings.password.c_str());
+
+      } else if (state == WL_CONNECT_FAILED) {  // WiFi.begin has failed (AUTH_FAIL)
+        Serial.println("Disconnecting WiFi");
+
+        WiFi.disconnect(true);
+
+      } else if (state == WL_DISCONNECTED) {  // WiFi.disconnect was done or Router.WiFi got out of range
+        if (!myWiFiFirstConnect) {  // Report only once
+          myWiFiFirstConnect = true;
+
+          Serial.println("WiFi disconnected");
+        }
+        Serial.println("No Connection -> Wifi Reset");
+        WiFi.persistent(false);
+        WiFi.disconnect();
+        WiFi.mode(WIFI_OFF);
+        WiFi.mode(WIFI_STA);
+        // WiFi.config(ip, gateway, subnet); // Only for fix IP needed
+        WiFi.begin(Settings.ssid.c_str(), Settings.password.c_str());
+        delay(3000); // Wait 3 Seconds, WL_DISCONNECTED is present until new connect!
+      }
+
+      vTaskDelay (250); // Check again in about 250ms
+
+    } else { // We have connection
+      if (myWiFiFirstConnect) {  // Report only once
+        myWiFiFirstConnect = false;
+
+        Serial.print("Connected to ");
+        Serial.println(Settings.ssid.c_str());
+        Serial.print("IP address: ");
+        Serial.println(WiFi.localIP());
+        Serial.println("");
+      }
+
+      vTaskDelay (5000); // Check again in about 5s
+    }
+  }
+}
+
 //==============================================================================
 /*! Arduino Setup
  *
@@ -805,20 +865,8 @@ void setup( void )
   //if( !MDNS.begin("freeDSP-aurora-mdns") ) 
   //  Serial.println( "[ERROR] Could not set up mDNS responder!" );   
 
-  WiFi.disconnect();
-  WiFi.mode( WIFI_AP_STA );
-  WiFi.setHostname( "freeDSP-aurora" );
-  // Start access point
-  WiFi.softAP( "AP-freeDSP-aurora" );
-  delay(100);
-  //wait for SYSTEM_EVENT_AP_START
-  if( !WiFi.softAPConfig( IPAddress(192, 168, 5, 1), IPAddress(192, 168, 5, 1), IPAddress(255, 255, 255, 0) ) )
-      Serial.println("AP Config Failed");
-
-  Serial.print( "Connecting to \"" );
-  Serial.print( Settings.ssid.c_str() );
-  Serial.println( "\"" );
-  WiFi.begin( Settings.ssid.c_str(), Settings.password.c_str() );
+  // Create a connection task with 8kB stack on core 0
+  xTaskCreatePinnedToCore(myWiFiTask, "myWiFiTask", 8192, NULL, 3, NULL, 0);
 
   int cntrConnect = 0;
   if( Settings.ssid.length() > 0 )
