@@ -68,6 +68,7 @@ private:
   uint16_t addr[kNumParams];
   CFreeDspAurora* dsp;
   QString fileName;
+  QString lastOpenLocation;
 
   Vektorraum::tvector<Vektorraum::tfloat> freq;
   Vektorraum::tvector<Vektorraum::tcomplex> FR;

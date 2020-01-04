@@ -154,7 +154,7 @@ bool QOutputSelect::eventFilter( QObject* object, QEvent* event )
 {
   if( object == ui->lineEditResponseFile && event->type() == QEvent::MouseButtonDblClick )
   {
-    WizardImportRewFrq wizardImport( dsp );
+    WizardImportRewFrq wizardImport( dsp, lastOpenLocation );
     int result = wizardImport.exec();
     if( result != QDialog::Accepted )
       return true;
@@ -222,7 +222,9 @@ bool QOutputSelect::eventFilter( QObject* object, QEvent* event )
         QFileInfo fileInfo( fileFRD.fileName() );
         ui->lineEditResponseFile->setText( fileInfo.fileName() );
         ui->lineEditResponseFile->blockSignals( false );
-      }      
+
+        lastOpenLocation = infoFRD.path();
+      }
     }
     
     emit valueChanged();

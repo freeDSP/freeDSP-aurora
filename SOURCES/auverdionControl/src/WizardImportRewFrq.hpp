@@ -23,7 +23,7 @@ public:
     PAGE_REFERENCELEVEL
   };
 
-  WizardImportRewFrq( CFreeDspAurora* ptrdsp, QWidget* parent = nullptr );
+  WizardImportRewFrq( CFreeDspAurora* ptrdsp, QString lastOpenLocation, QWidget* parent = nullptr );
 
 private slots:
 
@@ -62,7 +62,7 @@ class PageSelectFile : public QWizardPage
   Q_OBJECT
 
 public:
-  PageSelectFile( QWidget* parent = nullptr );
+  PageSelectFile( QString lastOpenLocation, QWidget* parent = nullptr );
 
   int nextId( void ) const override
   {
@@ -74,6 +74,7 @@ public:
 private:
   QLineEdit* lineEditFile;
 
+  QString lastOpenLocation;
 };
 
 //==============================================================================

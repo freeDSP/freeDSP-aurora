@@ -5,14 +5,14 @@
 //==============================================================================
 /*!
  */
-WizardImportRewFrq::WizardImportRewFrq( CFreeDspAurora* ptrdsp, QWidget* )
+WizardImportRewFrq::WizardImportRewFrq( CFreeDspAurora* ptrdsp, QString lastOpenLocation, QWidget* )
 {
   dsp = ptrdsp;
 
   pageReferenceLevel = new PageReferenceLevel;
 
   setPage( PAGE_WELCOME, new PageWelcome );
-  setPage( PAGE_SELECTFILE, new PageSelectFile );
+  setPage( PAGE_SELECTFILE, new PageSelectFile(lastOpenLocation) );
   setPage( PAGE_REFERENCELEVEL, pageReferenceLevel );
   setStartId( PAGE_WELCOME );
 
@@ -52,13 +52,15 @@ PageWelcome::PageWelcome( QWidget* )
 //==============================================================================
 /*!
  */
-PageSelectFile::PageSelectFile( QWidget* )
+PageSelectFile::PageSelectFile(QString lastOpenLocation, QWidget* )
 {
   setTitle( tr("Select the file with frequency response values that REW has exported.") );
   //setStyleSheet("background-color:#111111");
 
   lineEditFile = new QLineEdit;
   lineEditFile->installEventFilter( this );
+
+  this->lastOpenLocation = lastOpenLocation;
 
   QFormLayout* formLayout = new QFormLayout;
   formLayout->addRow( tr("File:"), lineEditFile );
@@ -76,11 +78,16 @@ bool PageSelectFile::eventFilter( QObject* object, QEvent* event )
 {
   if( object == lineEditFile && event->type() == QEvent::MouseButtonDblClick )
   {
+    QString dir = this->lastOpenLocation;
+    if (dir == nullptr || dir.isEmpty()) {
+      dir = QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory);
+    }
     QString fileName = QFileDialog::getOpenFileName( this, tr("Open Frequency Response"), 
-                                                     QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory),
+                                                     dir,
                                                      tr("FRD Files (*.frd, *.txt)") );
-    if( !fileName.isEmpty() )
+    if( !fileName.isEmpty() ) {
       lineEditFile->setText( fileName );
+    }
     
     return true;
   }

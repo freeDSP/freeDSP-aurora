@@ -1780,8 +1780,12 @@ void MainWindow::on_actionSaveParameters_triggered()
  */
 void MainWindow::on_actionLoadParameters_triggered()
 {
+  QString dir = this->lastOpenLocationSettings;
+  if (dir == nullptr || dir.isEmpty()) {
+      dir = QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory);
+  }
   QString fileName = QFileDialog::getOpenFileName( this, tr("Load parameters from file"), 
-                                                   QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory),
+                                                   dir,
                                                    tr("Parameters Files (*.dspPrj)") );
   if( fileName.isEmpty() )
     return;
@@ -1793,6 +1797,9 @@ void MainWindow::on_actionLoadParameters_triggered()
     myLog()<<"Could not open file "<<fileName;
     return;
   }
+
+  QFileInfo infoFRD( fileName );
+  this->lastOpenLocationSettings = infoFRD.path();
 
   QByteArray fileparams = file.readAll();
 

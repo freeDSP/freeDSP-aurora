@@ -115,6 +115,8 @@ private:
 
   QLabel* labelConnected;
   QLabel* labelPlugIn;
+
+  QString lastOpenLocationSettings;
 };
 
 #endif // MAINWINDOW_HPP
