@@ -88,6 +88,7 @@ MainWindow::MainWindow( QWidget* parent ) :
   #if defined( __IOS__ ) || defined( __WIN__ ) || defined( __LINUX__ )
   ui->menuBar->hide();
   #endif
+
   ui->actionWrite_to_DSP->setEnabled( false );
 
   ptrMainStatusBar = ui->statusBar;
@@ -264,7 +265,14 @@ MainWindow::MainWindow( QWidget* parent ) :
   }
 
   #else
+
+  #if defined( ALPHA )
+  setWindowTitle( QString("auverdionControl ").append( QString( VERSION_STR ).append( " ALPHA" ) ) );
+  #elif defined( BETA )
+  setWindowTitle( QString("auverdionControl ").append( QString( VERSION_STR ).append( " BETA" ) ) );
+  #else
   setWindowTitle( QString("auverdionControl ").append( VERSION_STR ) );
+  #endif
  
   qDebug()<<"Loading plugin 8channels";
 

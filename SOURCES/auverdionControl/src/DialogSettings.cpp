@@ -9,6 +9,7 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QMessageBox>
+#include <iostream>
 
 #if defined( __MACOSX__ )
 #include <CoreFoundation/CoreFoundation.h>
@@ -35,20 +36,25 @@ DialogSettings::DialogSettings( CFreeDspAurora* ptrdsp, bool bypassVolumePoti, Q
   dsp = ptrdsp;
 
   #if defined( __MACOSX__ )
-
   QDir appPath = QDir( QCoreApplication::applicationDirPath() );
   appPath.cdUp();
   appPath.cd( "Resources" );
+
   #elif defined( __WIN__ )
   QDir appPath = QDir( QCoreApplication::applicationDirPath() );
+
   #elif defined( __LINUX__ )
-  QDir appPath = QDir( "/usr/local/share/auverdionControl" );
+  QDir appPath = QDir( QCoreApplication::applicationDirPath() );
+  appPath.cdUp();
+  appPath.cd( "local/share/auverdionControl" );
+
   #else
   #error Platform not supported.
   #endif
 
   ui->comboBoxPlugIn->blockSignals( true );
   QFile fileDspPlugins( appPath.absolutePath() + "/dspplugins.json" );
+  std::cout<<appPath.absolutePath().toStdString()<<std::endl;
   if( fileDspPlugins.open( QIODevice::ReadOnly ) )
   {
     QJsonDocument jsonDoc( QJsonDocument::fromJson( fileDspPlugins.readAll() ) );
@@ -68,6 +74,7 @@ DialogSettings::DialogSettings( CFreeDspAurora* ptrdsp, bool bypassVolumePoti, Q
       newMetaData.path = appPath.absolutePath() +  "/dspplugins/" + plugin["path"].toString();
       #elif defined( __LINUX__ )
       newMetaData.path = appPath.absolutePath() +  "/" + plugin["path"].toString();
+      qDebug()<<newMetaData.path;
       #else
       #error Platform not supported.
       #endif
@@ -76,6 +83,10 @@ DialogSettings::DialogSettings( CFreeDspAurora* ptrdsp, bool bypassVolumePoti, Q
       //qDebug()<<plugin["name"].toString()<<plugin["pid"].toInt()<<plugin["path"].toString();
     }
     fileDspPlugins.close();
+  }
+  else
+  {
+    qDebug()<<"Cannot open dspplugins.json";
   }
   ui->comboBoxPlugIn->addItem( "Custom", CFreeDspAurora::PLUGIN_CUSTOM );
   ui->comboBoxPlugIn->blockSignals( false );

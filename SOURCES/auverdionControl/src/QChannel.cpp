@@ -21,8 +21,8 @@ QChannel::QChannel( QString chnname, QWidget *parent ) :
   ui->scrollArea->setMinimumHeight( 160 );
 
   #elif defined( __LINUX__ )
-  ui->widgetChannel->setMinimumHeight( 160 );
-  ui->scrollArea->setMinimumHeight( 180 );
+  //ui->widgetChannel->setMinimumHeight( 183 );
+  //ui->scrollArea->setMinimumHeight( 185 );
 
   #endif
 

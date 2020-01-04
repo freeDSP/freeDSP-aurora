@@ -15,6 +15,8 @@ QDspBlock::QDspBlock(QWidget *parent) :
   setFixedSize( QSize( 100, 185 ) );
   #elif defined( __WIN__ )
   setFixedSize( QSize( 100, 165 ) );
+  #elif defined( __LINUX__ )
+  setFixedSize( QSize( 100, 185 ) );
   #endif
 
   type = NONE;

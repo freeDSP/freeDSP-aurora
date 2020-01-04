@@ -18,8 +18,6 @@ int main(int argc, char *argv[])
 
   QApplication app(argc, argv);
 
-  
-
   QFile fileStyleSheet( QStringLiteral(":/freedsp.qss") );
   if( fileStyleSheet.open(QIODevice::ReadOnly | QIODevice::Text) )
   {
@@ -31,6 +29,11 @@ int main(int argc, char *argv[])
   QPalette p(app.palette());
   p.setColor(QPalette::Mid, p.color(QPalette::Base));
   app.setPalette(p);
+
+
+  #if defined( __LINUX__ )
+  app.setWindowIcon( QIcon( ":/auverdionControl.png" ) );
+  #endif
 
   MainWindow w;
   w.show();

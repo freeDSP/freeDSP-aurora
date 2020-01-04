@@ -419,46 +419,39 @@ linux {
   DEFINES += MATLIB_USE_UINT64
   DEFINES += __NOFFT__
   DEFINES += __NOSNDFILE__
+  DEFINES += ALPHA
 
+  # Create file structure for image
+  product.commands += $$quote( rm -r -f $${OUT_PWD}/AppDir  $$escape_expand(\n\t))
+  product.commands += $$quote( mkdir -p $${OUT_PWD}/AppDir/usr/bin  $$escape_expand(\n\t))
+  product.commands += $$quote( mkdir -p $${OUT_PWD}/AppDir/usr/lib  $$escape_expand(\n\t))
+  product.commands += $$quote( mkdir -p $${OUT_PWD}/AppDir/usr/share  $$escape_expand(\n\t))
+  product.commands += $$quote( mkdir -p $${OUT_PWD}/AppDir/usr/share/applications  $$escape_expand(\n\t))
+  product.commands += $$quote( mkdir -p $${OUT_PWD}/AppDir/usr/share/icons/hicolor/256x256/apps  $$escape_expand(\n\t))
+  product.commands += $$quote( mkdir -p $${OUT_PWD}/AppDir/usr/local/share/auverdionControl  $$escape_expand(\n\t))
 
-  RC_ICONS = $${PWD}/rc/appicon.ico
- # ICON = $${PWD}/rc/appicon.icns
+  product.commands += $$quote( cp $${OUT_PWD}/$${TARGET} $${OUT_PWD}/AppDir/usr/bin/$${TARGET} $$escape_expand(\n\t))
+  product.commands += $$quote( cp $${PWD}/linux/auverdionControl.desktop $${OUT_PWD}/AppDir/usr/share/applications/auverdionControl.desktop $$escape_expand(\n\t))
+  product.commands += $$quote( cp $${PWD}/rc/auverdionControl256x256.png $${OUT_PWD}/AppDir/usr/share/icons/hicolor/256x256/apps/auverdionControl.png $$escape_expand(\n\t))
+  product.commands += $$quote( cp $${PWD}/extras/dspplugins.json $${OUT_PWD}/AppDir/usr/local/share/auverdionControl/dspplugins.json $$escape_expand(\n\t))
 
-  product.commands += $$quote( rm -r -f $${OUT_PWD}/appimage  $$escape_expand(\n\t))
-  product.commands += $$quote( mkdir -p $${OUT_PWD}/appimage/usr/bin  $$escape_expand(\n\t))
-  product.commands += $$quote( mkdir -p $${OUT_PWD}/appimage/usr/lib  $$escape_expand(\n\t))
-  product.commands += $$quote( mkdir -p $${OUT_PWD}/appimage/usr/share  $$escape_expand(\n\t))
-  product.commands += $$quote( mkdir -p $${OUT_PWD}/appimage/usr/share/applications  $$escape_expand(\n\t))
-  product.commands += $$quote( mkdir -p $${OUT_PWD}/appimage/usr/share/icons/hicolor/scalable/apps  $$escape_expand(\n\t))
+  # Copy DSP plugins
+  product.commands += $$quote( mkdir -p $${OUT_PWD}/AppDir/usr/local/share/auverdionControl/8channels $$escape_expand(\n\t))
+  product.commands += $$quote( cp $${PWD}/../SIGMASTUDIO/8channels/TxBuffer_IC_1.dat $${OUT_PWD}/AppDir/usr/local/share/auverdionControl/8channels/TxBuffer_IC_1.dat $$escape_expand(\n\t))
+  product.commands += $$quote( cp $${PWD}/../SIGMASTUDIO/8channels/NumBytes_IC_1.dat $${OUT_PWD}/AppDir/usr/local/share/auverdionControl/8channels/NumBytes_IC_1.dat $$escape_expand(\n\t))
 
-  product.commands += $$quote( cp $${OUT_PWD}/$${TARGET} $${OUT_PWD}/appimage/usr/bin/$${TARGET} $$escape_expand(\n\t))
-  product.commands += $$quote( cp $${PWD}/linux/auverdionControl.desktop $${OUT_PWD}/appimage/usr/share/applications/auverdionControl.desktop $$escape_expand(\n\t))
-  product.commands += $$quote( cp $${PWD}/rc/auverdionControl.svg $${OUT_PWD}/appimage/usr/share/icons/hicolor/scalable/apps/auverdionControl.svg $$escape_expand(\n\t))
+  product.commands += $$quote( mkdir -p $${OUT_PWD}/AppDir/usr/local/share/auverdionControl/homecinema71 $$escape_expand(\n\t))
+  product.commands += $$quote( cp $${PWD}/../SIGMASTUDIO/HomeCinema71/TxBuffer_IC_1.dat $${OUT_PWD}/AppDir/usr/local/share/auverdionControl/homecinema71/TxBuffer_IC_1.dat $$escape_expand(\n\t))
+  product.commands += $$quote( cp $${PWD}/../SIGMASTUDIO/HomeCinema71/NumBytes_IC_1.dat $${OUT_PWD}/AppDir/usr/local/share/auverdionControl/homecinema71/NumBytes_IC_1.dat $$escape_expand(\n\t))
+
+  product.commands += $$quote( mkdir -p $${OUT_PWD}/AppDir/usr/local/share/auverdionControl/4firs $$escape_expand(\n\t))
+  product.commands += $$quote( cp $${PWD}/../SIGMASTUDIO/4FIRs/TxBuffer_IC_1.dat $${OUT_PWD}/AppDir/usr/local/share/auverdionControl/4firs/TxBuffer_IC_1.dat $$escape_expand(\n\t))
+  product.commands += $$quote( cp $${PWD}/../SIGMASTUDIO/4FIRs/NumBytes_IC_1.dat $${OUT_PWD}/AppDir/usr/local/share/auverdionControl/4firs/NumBytes_IC_1.dat $$escape_expand(\n\t))
+
+  # Run deployment tool
+  product.commands += $$quote( $${OUT_PWD}/../../../linuxdeployqt-6-x86_64.AppImage ./AppDir/usr/share/applications/auverdionControl.desktop -qmake=/home/rkn/Qt/5.12.5/gcc_64/bin/qmake -appimage -always-overwrite $$escape_expand(\n\t))
+
   QMAKE_EXTRA_TARGETS += product
-
-#  appicon.path = /usr/share/icons/hicolor/scalable/apps
-#  appicon.files = $${PWD}/rc/auverdionControl.svg
-#  INSTALLS += appicon
-
-#  desktop_entry.path = /usr/share/applications
-#  desktop_entry.files = $${PWD}/linux/auverdionControl.desktop
-#  INSTALLS += desktop_entry
-
-#  dspplugin_json.path = /usr/local/share/auverdionControl
-#  dspplugin_json.files = $${PWD}/extras/dspplugins.json
-#  INSTALLS += dspplugin_json
-
-#  dspplugin_8channels.path = /usr/local/share/auverdionControl/8channels
-#  dspplugin_8channels.files = $${PWD}/../SIGMASTUDIO/8channels/TxBuffer_IC_1.dat $${PWD}/../SIGMASTUDIO/8channels/NumBytes_IC_1.dat
-#  INSTALLS += dspplugin_8channels
-
-#  dspplugin_homecinema71.path = /usr/local/share/auverdionControl/homecinema71
-#  dspplugin_homecinema71.files = $${PWD}/../SIGMASTUDIO/HomeCinema71/TxBuffer_IC_1.dat $${PWD}/../SIGMASTUDIO/HomeCinema71/NumBytes_IC_1.dat
-#  INSTALLS += dspplugin_homecinema71
-
-#  dspplugin_4firs.path = /usr/local/share/auverdionControl/4firs
-#  dspplugin_4firs.files = $${PWD}/../SIGMASTUDIO/4FIRs/TxBuffer_IC_1.dat $${PWD}/../SIGMASTUDIO/4FIRs/NumBytes_IC_1.dat
-#  INSTALLS += dspplugin_4firs
 
 }
 
