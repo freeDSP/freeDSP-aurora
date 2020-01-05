@@ -147,6 +147,9 @@ String presetUsrparamFile[4] = { "/usrparam.001", "/usrparam.002", "/usrparam.00
 String presetDspparamFile[4] = { "/dspparam.001", "/dspparam.002", "/dspparam.003", "/dspparam.004" };
 String presetAddonCfgFile[4] = { "/addoncfg.001", "/addoncfg.002", "/addoncfg.003", "/addoncfg.004" };
 
+bool keepApAlive = false;
+int cntrAuthFailure = 0;
+
 //==============================================================================
 /*! 
  */
@@ -699,7 +702,12 @@ void setupAddOn( void )
   }            
 }
 
-void myWiFiTask(void *pvParameters) {
+//==============================================================================
+/*! Wifi connection task 
+ *
+ */
+void myWiFiTask(void *pvParameters)
+{
   wl_status_t state;
   
   WiFi.mode( WIFI_AP_STA );
@@ -711,30 +719,43 @@ void myWiFiTask(void *pvParameters) {
   if( !WiFi.softAPConfig( IPAddress(192, 168, 5, 1), IPAddress(192, 168, 5, 1), IPAddress(255, 255, 255, 0) ) )
     Serial.println("AP Config Failed");
   server.begin();
-  while (true) {
-    if( Settings.ssid.length() > 0 )
+  while (true) 
+  {
+    if( (Settings.ssid.length() > 0) && (cntrAuthFailure < 10) )
     {
       state = WiFi.status();
-      if (state != WL_CONNECTED) {  // We have no connection
-        if (state == WL_NO_SHIELD) {  // WiFi.begin wasn't called yet
+      if (state != WL_CONNECTED)  // We have no connection
+      {
+        if (state == WL_NO_SHIELD)  // WiFi.begin wasn't called yet
+        {
           Serial.println("Connecting WiFi");
           WiFi.begin(Settings.ssid.c_str(), Settings.password.c_str());
               
-        } else if (state == WL_CONNECT_FAILED) {  // WiFi.begin has failed (AUTH_FAIL)
+        } 
+        else if (state == WL_CONNECT_FAILED)  // WiFi.begin has failed (AUTH_FAIL)
+        {
+          cntrAuthFailure++;
           Serial.println("Disconnecting WiFi");
           WiFi.disconnect(true);
 
-        } else if (state == WL_DISCONNECTED) {  // WiFi.disconnect was done or Router.WiFi got out of range
-          if (!myWiFiFirstConnect) {  // Report only once
+        } 
+        else if (state == WL_DISCONNECTED)  // WiFi.disconnect was done or Router.WiFi got out of range
+        {  
+          cntrAuthFailure++;
+          if (!myWiFiFirstConnect)  // Report only once
+          {
             myWiFiFirstConnect = true;
-
             Serial.println("WiFi disconnected");
           }
           Serial.println("No Connection -> Wifi Reset");
+          
           WiFi.persistent(false);
           WiFi.disconnect();
-          WiFi.mode(WIFI_OFF);
-          WiFi.mode(WIFI_AP_STA);
+          if( !keepApAlive )
+          {
+            WiFi.mode(WIFI_OFF);
+            WiFi.mode(WIFI_AP_STA);
+          }
           // WiFi.config(ip, gateway, subnet); // Only for fix IP needed
           WiFi.begin(Settings.ssid.c_str(), Settings.password.c_str());
           delay(3000); // Wait 3 Seconds, WL_DISCONNECTED is present until new connect!
@@ -742,8 +763,11 @@ void myWiFiTask(void *pvParameters) {
 
         vTaskDelay (250); // Check again in about 250ms
 
-      } else { // We have connection
-        if (myWiFiFirstConnect) {  // Report only once
+      } 
+      else // We have connection
+      { 
+        if (myWiFiFirstConnect)  // Report only once
+        {
           myWiFiFirstConnect = false;
           Serial.print("Connected to ");
           Serial.println(Settings.ssid.c_str());
@@ -751,12 +775,13 @@ void myWiFiTask(void *pvParameters) {
           Serial.println(WiFi.localIP());
           Serial.println("");
         }
+        cntrAuthFailure = 0;
 
         vTaskDelay (5000); // Check again in about 5s
       }
-    }else{
-      vTaskDelay (5000);
     }
+    else
+      vTaskDelay (5000);
   }
 }
 
@@ -1218,19 +1243,31 @@ void handleHttpRequest()
                   Settings.ssid = paramValue;
                 else if( paramName == "Password" )
                   Settings.password = paramValue;
+                Settings.ssid.trim();
+                Settings.password.trim();
                 saveSettings();
 
+                //! TODO Connect to new network 
+                Serial.print( "Connecting to new network..." );
+                keepApAlive = true;
+                cntrAuthFailure = 0;
                 WiFi.disconnect();
-                Serial.println( "Connecting to new network..." );
+                delay(5000);
                 //WiFi.begin( Settings.ssid.c_str(), Settings.password.c_str() );
                 int cntrConnect = 0;
                 while( WiFi.status() != WL_CONNECTED && cntrConnect < 5 )
                 {
                 //  Serial.println( "WiFi Connection Failed! Trying again..." );
                   cntrConnect++;
-                  delay(1000);
+                  //WiFi.disconnect();
+                  //WiFi.begin( Settings.ssid.c_str(), Settings.password.c_str() );
+                  delay(5000);
                 }
-                
+                if( WiFi.status() != WL_CONNECTED )
+                  Serial.println ( "[FAILED]" );
+                else
+                  Serial.println( "[OK]" );
+
 
                 String httpResponse = "";
                 httpResponse += "HTTP/1.1 200 OK\r\n";

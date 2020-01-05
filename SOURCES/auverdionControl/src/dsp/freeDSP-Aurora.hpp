@@ -176,7 +176,7 @@ public:
    * \param ssid New SSID
    * \parma password New password
    */
-  bool storeSettingsWifi( QString ssid, QString password );
+  bool storeSettingsWifi( QString ssid, QString password, int32_t msec = 5000 );
 
   //============================================================================
   /*! Sends the PID to DSP and stores it nonvolatile.

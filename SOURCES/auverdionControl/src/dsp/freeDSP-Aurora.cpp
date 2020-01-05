@@ -830,7 +830,7 @@ bool CFreeDspAurora::requestDspFirmwareWifi( QByteArray& firmware, QProgressBar*
  * \param ssid New SSID
  * \parma password New password
  */
-bool CFreeDspAurora::storeSettingsWifi( QString ssid, QString password )
+bool CFreeDspAurora::storeSettingsWifi( QString ssid, QString password, int32_t msec )
 {
   myLog()<<"---------------------------------------------------------------";
   myLog()<<"storeSsidWifi";
@@ -853,7 +853,7 @@ bool CFreeDspAurora::storeSettingsWifi( QString ssid, QString password )
   
   writeRequestWifi( request );
 
-  if( !waitForReplyWifi(60000) )
+  if( !waitForReplyWifi(msec) )
   {
     myLog()<<"Did not get a reply by DSP";
     QMessageBox::critical( this, tr("Error"), tr("Uups, something went wrong when connecting to DSP. Please double check everythind and try again."), QMessageBox::Ok );
