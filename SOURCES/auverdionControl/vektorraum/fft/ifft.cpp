@@ -6,6 +6,7 @@
 
 #if defined( USE_FFTS )
 #include <ffts/ffts.h>
+#include "ffts_attributes.h"
 
 #elif defined( USE_APPLEVDSP )
 #include <Accelerate/Accelerate.h>
@@ -28,13 +29,13 @@ tvector<tcomplex> ifft( tvector<tcomplex> Y, tuint nfft )
 {
 	tvector<tcomplex> x( nfft );
 
-	#ifdef HAVE_SSE
-	float __attribute__ ((aligned(32))) *input = (float*)_mm_malloc(2 * nfft * sizeof(float), 32);
-	float __attribute__ ((aligned(32))) *output = (float*)_mm_malloc(2 * nfft * sizeof(float), 32);
-	#else
-	float __attribute__ ((aligned(32))) *input = valloc(2 * nfft * sizeof(float));
-	float __attribute__ ((aligned(32))) *output = valloc(2 * nfft * sizeof(float));
-	#endif
+    #ifdef HAVE_SSE
+    float FFTS_ALIGN(32) *input = _mm_malloc(2 * n * sizeof(float), 32);
+    float FFTS_ALIGN(32) *output = _mm_malloc(2 * n * sizeof(float), 32);
+    #else
+    float FFTS_ALIGN(32) *input = (float*)valloc(2 * nfft * sizeof(float));
+    float FFTS_ALIGN(32) *output = (float*)valloc(2 * nfft * sizeof(float));
+    #endif
 
   //--- load data to input buffers ---
 	for( tuint ii = 0; ii < nfft; ii++ )
