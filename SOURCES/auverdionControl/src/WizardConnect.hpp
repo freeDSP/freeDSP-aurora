@@ -166,7 +166,7 @@ public:
     msgBox->setStandardButtons( nullptr );
     msgBox->open();
     dsp->setConnectionTypeWifi( CFreeDspAurora::ACCESS_POINT );
-    bool connected = dsp->storeSettingsWifi( field("ssid").toString(), field("password").toString() ); 
+    bool connected = dsp->storeSettingsWifi( field("ssid").toString(), field("password").toString(), 60000 ); 
     setEnabled( true );
     msgBox->accept();
     if( connected )
