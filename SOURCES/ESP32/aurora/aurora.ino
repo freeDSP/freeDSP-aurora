@@ -798,6 +798,10 @@ void setup( void )
   Wire.begin( I2C_SDA_PIN, I2C_SCL_PIN );
   Wire.setClock( 100000 );
 
+  // wait until everythign is stable
+  // might be a bit to defensive
+  delay( 2000 );
+
   //----------------------------------------------------------------------------
   //--- Configure ADC
   //----------------------------------------------------------------------------
