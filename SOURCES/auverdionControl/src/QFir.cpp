@@ -153,9 +153,25 @@ bool QFir::eventFilter( QObject* object, QEvent* event )
 {
   if( object == ui->lineEditResponseFile && event->type() == QEvent::MouseButtonDblClick )
   {
+    #if defined( __LINUX__ )
+    QFileDialog dlg( this, tr("Open Impulse Response"),
+                     QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory),
+                     tr("IR Files (*.txt)") );
+    dlg.setStyleSheet( "QWidget { color: white; }" );
+    dlg.setOption( QFileDialog::DontUseNativeDialog );
+    QString fileName;
+
+    if( dlg.exec() )
+    {
+      QStringList files = dlg.selectedFiles();
+      fileName = files[0];
+    }
+
+    #else
     QString fileName = QFileDialog::getOpenFileName( this, tr("Open Impulse Response"), 
                                                      QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory) + QString("/auverdionControl"),
                                                      tr("IR Files (*.txt)") );
+    #endif
     
     QFile irFile( fileName );
     if( irFile.open(QIODevice::ReadOnly) )

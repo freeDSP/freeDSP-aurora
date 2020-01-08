@@ -1731,9 +1731,26 @@ switch( pid )
  */
 void MainWindow::on_actionSaveParameters_triggered()
 {
+  #if defined( __LINUX__ )
+  QFileDialog dlg( this, tr("Save parameters to file"),
+                   QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory),
+                   tr("Parameters Files (*.dspPrj)") );
+  dlg.setStyleSheet( "QWidget { color: white; }" );
+  dlg.setOption( QFileDialog::DontUseNativeDialog );
+  dlg.setAcceptMode( QFileDialog::AcceptSave );
+  QString fileName;
+
+  if( dlg.exec() )
+  {
+    QStringList files = dlg.selectedFiles();
+    fileName = files[0];
+  }
+  #else
   QString fileName = QFileDialog::getSaveFileName( this, tr("Save parameters to file"), 
                                                    QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory),
                                                    tr("Parameters Files (*.dspPrj)") );
+  #endif
+
   if( fileName.isEmpty() )
     return;
 
@@ -1800,9 +1817,25 @@ void MainWindow::on_actionSaveParameters_triggered()
  */
 void MainWindow::on_actionLoadParameters_triggered()
 {
-  QString fileName = QFileDialog::getOpenFileName( this, tr("Load parameters from file"), 
+  #if defined( __LINUX__ )
+  QFileDialog dlg( this, tr("Load parameters from file"),
+                   QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory),
+                   tr("Parameters Files (*.dspPrj)") );
+  dlg.setStyleSheet( "QWidget { color: white; }" );
+  dlg.setOption( QFileDialog::DontUseNativeDialog );
+  QString fileName;
+
+  if( dlg.exec() )
+  {
+    QStringList files = dlg.selectedFiles();
+    fileName = files[0];
+  }
+  #else
+  QString fileName = QFileDialog::getOpenFileName( this, tr("Load parameters from file"),
                                                    QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory),
                                                    tr("Parameters Files (*.dspPrj)") );
+  #endif
+
   if( fileName.isEmpty() )
     return;
 

@@ -411,7 +411,7 @@ win32 {
 
 linux {
   # Additional installs you need for Linux:
-  # linuxdeployqt: https://github.com/probonopd/linuxdeployqt (Install the AppImage from releases)
+  # linuxdeployqt: https://github.com/probonopd/linuxdeployqt (Install the AppImage from releases) and change the path below
   # FFTS lib: https://github.com/anthonix/ffts
 
   message( "Building for Linux" )
@@ -423,7 +423,7 @@ linux {
   DEFINES += MATLIB_USE_UINT64
   DEFINES += USE_FFTS
   DEFINES += __NOSNDFILE__
-  DEFINES += ALPHA
+  DEFINES += BETA
 
   LIBS += -lffts
 
@@ -455,8 +455,10 @@ linux {
   product.commands += $$quote( cp $${PWD}/../SIGMASTUDIO/4FIRs/NumBytes_IC_1.dat $${OUT_PWD}/AppDir/usr/local/share/auverdionControl/4firs/NumBytes_IC_1.dat $$escape_expand(\n\t))
 
   # Run deployment tool
-  #product.commands += $$quote( $${OUT_PWD}/../../../linuxdeployqt-6-x86_64.AppImage ./AppDir/usr/share/applications/auverdionControl.desktop -qmake=/home/rkn/Qt/5.12.5/gcc_64/bin/qmake -appimage -always-overwrite $$escape_expand(\n\t))
+  # Change the path to your install location of linuxdeployqt
   product.commands += $$quote( $${OUT_PWD}/../../../linuxdeployqt-6-x86_64.AppImage ./AppDir/usr/share/applications/auverdionControl.desktop -qmake=$${QMAKE_QMAKE} -appimage -always-overwrite $$escape_expand(\n\t))
+
+  product.depends += all
 
   QMAKE_EXTRA_TARGETS += product
 
