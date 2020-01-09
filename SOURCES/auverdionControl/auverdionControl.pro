@@ -301,10 +301,13 @@ win32 {
 
   DEFINES += __WIN__
   DEFINES += MATLIB_USE_UINT64
-  DEFINES += __NOFFT__
+  DEFINES +=  USE_FFTS
   DEFINES += __NOSNDFILE__
 
   RC_ICONS = $${PWD}/rc/appicon.ico
+
+  INCLUDEPATH += win64/include
+  LIBS += -L$${PWD}/win64/libs -lffts_staticd
 
   # Copy dspplugins.json
   SOURCE_APP_DSPPLUGIN_JSON = $${PWD}/extras/dspplugins.json
@@ -397,12 +400,12 @@ win32 {
   product.commands += $$quote( $$shell_quote($$shell_path($$dirname(QMAKE_QMAKE)/../../../Tools/QtCreator/bin/jom.exe)) -f Makefile.Release clean $$escape_expand(\n\t))
 
   product.commands += $$quote(cd release $$escape_expand(\n\t))
-  product.commands += $$quote( $$shell_quote($$shell_path($$dirname(QMAKE_QMAKE)/../../../Tools/QtInstallerFramework/3.1/bin/archivegen.exe)) auverdionControl.7z * $$escape_expand(\n\t))
+  product.commands += $$quote( $$shell_quote($$shell_path($$dirname(QMAKE_QMAKE)/../../../Tools/QtInstallerFramework/3.2/bin/archivegen.exe)) auverdionControl.7z * $$escape_expand(\n\t))
   product.commands += $$quote(cd.. $$escape_expand(\n\t))
 
   product.commands += $$quote(cmd /c move /y $$shell_quote($$shell_path($${OUT_PWD}/release/auverdionControl.7z)) $$shell_quote($$shell_path($${PWD}/installer/win64/packages/com.auverdion.auverdionControl/data/auverdionControl.7z))$$escape_expand(\n\t))
 
-  product.commands += $$quote( $$shell_quote($$shell_path($$dirname(QMAKE_QMAKE)/../../../Tools/QtInstallerFramework/3.1/bin/binarycreator.exe))  -c $$shell_quote($$shell_path($${PWD}/installer/win64/config/config.xml)) -p $$shell_quote($$shell_path($${PWD}/installer/win64/packages)) $$shell_quote($$shell_path($${PWD}/installer/win64/auverdionInstaller.exe)) $$escape_expand(\n\t))
+  product.commands += $$quote( $$shell_quote($$shell_path($$dirname(QMAKE_QMAKE)/../../../Tools/QtInstallerFramework/3.2/bin/binarycreator.exe))  -c $$shell_quote($$shell_path($${PWD}/installer/win64/config/config.xml)) -p $$shell_quote($$shell_path($${PWD}/installer/win64/packages)) $$shell_quote($$shell_path($${PWD}/installer/win64/auverdionInstaller.exe)) $$escape_expand(\n\t))
 
   QMAKE_EXTRA_TARGETS += product
 
