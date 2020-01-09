@@ -22,7 +22,7 @@
 #define I2C_SDA_PIN 17
 #define I2C_SCL_PIN 16
 
-#define VERSION_STR "1.2.0"
+#define VERSION_STR "1.2.1"
 
 #define FORMAT_SPIFFS_IF_FAILED true
 
