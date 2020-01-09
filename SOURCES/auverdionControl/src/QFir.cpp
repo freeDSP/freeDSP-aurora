@@ -94,6 +94,7 @@ void QFir::update( tvector<tfloat> f )
     tvector<tfloat> phi = interp1( freq_dec, angle( FR_dec ), f, "spline" );
     H = mag * exp( j*phi );
   }
+
 }
 
 //==============================================================================

@@ -346,7 +346,7 @@ tvector<double> abs( const tvector<T>& A )
 {
   tvector<double> y( A.size );
   for( uint64_t idx = 0; idx < A.size; idx++ )
-      y[idx] = std::abs( A.elem[idx] );
+    y[idx] = std::abs( A.elem[idx] );
   return y;
 }
 

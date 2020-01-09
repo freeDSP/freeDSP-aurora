@@ -22,7 +22,7 @@
 #define I2C_SDA_PIN 17
 #define I2C_SCL_PIN 16
 
-#define VERSION_STR "1.2.0"
+#define VERSION_STR "1.2.1"
 
 #define FORMAT_SPIFFS_IF_FAILED true
 
@@ -134,6 +134,7 @@ File fileDspParams;
 File fileUserParams;
 File fileAddOnConfig;
 
+bool myWiFiFirstConnect = true;
 WiFiClient client;
 WiFiServer server( 80 );
 
@@ -145,6 +146,9 @@ String receivedPostRequest;
 String presetUsrparamFile[4] = { "/usrparam.001", "/usrparam.002", "/usrparam.003", "/usrparam.004" };
 String presetDspparamFile[4] = { "/dspparam.001", "/dspparam.002", "/dspparam.003", "/dspparam.004" };
 String presetAddonCfgFile[4] = { "/addoncfg.001", "/addoncfg.002", "/addoncfg.003", "/addoncfg.004" };
+
+bool keepApAlive = false;
+int cntrAuthFailure = 0;
 
 //==============================================================================
 /*! 
@@ -699,6 +703,89 @@ void setupAddOn( void )
 }
 
 //==============================================================================
+/*! Wifi connection task 
+ *
+ */
+void myWiFiTask(void *pvParameters)
+{
+  wl_status_t state;
+  
+  WiFi.mode( WIFI_AP_STA );
+  WiFi.setHostname( "freeDSP-aurora" );
+  // Start access point
+  WiFi.softAP( "AP-freeDSP-aurora" );
+  delay(100);
+  //wait for SYSTEM_EVENT_AP_START
+  if( !WiFi.softAPConfig( IPAddress(192, 168, 5, 1), IPAddress(192, 168, 5, 1), IPAddress(255, 255, 255, 0) ) )
+    Serial.println("AP Config Failed");
+  server.begin();
+  while (true) 
+  {
+    if( (Settings.ssid.length() > 0) && (cntrAuthFailure < 10) )
+    {
+      state = WiFi.status();
+      if (state != WL_CONNECTED)  // We have no connection
+      {
+        if (state == WL_NO_SHIELD)  // WiFi.begin wasn't called yet
+        {
+          Serial.println("Connecting WiFi");
+          WiFi.begin(Settings.ssid.c_str(), Settings.password.c_str());
+              
+        } 
+        else if (state == WL_CONNECT_FAILED)  // WiFi.begin has failed (AUTH_FAIL)
+        {
+          cntrAuthFailure++;
+          Serial.println("Disconnecting WiFi");
+          WiFi.disconnect(true);
+
+        } 
+        else if (state == WL_DISCONNECTED)  // WiFi.disconnect was done or Router.WiFi got out of range
+        {  
+          cntrAuthFailure++;
+          if (!myWiFiFirstConnect)  // Report only once
+          {
+            myWiFiFirstConnect = true;
+            Serial.println("WiFi disconnected");
+          }
+          Serial.println("No Connection -> Wifi Reset");
+          
+          WiFi.persistent(false);
+          WiFi.disconnect();
+          if( !keepApAlive )
+          {
+            WiFi.mode(WIFI_OFF);
+            WiFi.mode(WIFI_AP_STA);
+          }
+          // WiFi.config(ip, gateway, subnet); // Only for fix IP needed
+          WiFi.begin(Settings.ssid.c_str(), Settings.password.c_str());
+          delay(3000); // Wait 3 Seconds, WL_DISCONNECTED is present until new connect!
+        }
+
+        vTaskDelay (250); // Check again in about 250ms
+
+      } 
+      else // We have connection
+      { 
+        if (myWiFiFirstConnect)  // Report only once
+        {
+          myWiFiFirstConnect = false;
+          Serial.print("Connected to ");
+          Serial.println(Settings.ssid.c_str());
+          Serial.print("IP address: ");
+          Serial.println(WiFi.localIP());
+          Serial.println("");
+        }
+        cntrAuthFailure = 0;
+
+        vTaskDelay (5000); // Check again in about 5s
+      }
+    }
+    else
+      vTaskDelay (5000);
+  }
+}
+
+//==============================================================================
 /*! Arduino Setup
  *
  */
@@ -710,6 +797,10 @@ void setup( void )
 
   Wire.begin( I2C_SDA_PIN, I2C_SCL_PIN );
   Wire.setClock( 100000 );
+
+  // wait until everythign is stable
+  // might be a bit to defensive
+  delay( 2000 );
 
   //----------------------------------------------------------------------------
   //--- Configure ADC
@@ -805,40 +896,8 @@ void setup( void )
   //if( !MDNS.begin("freeDSP-aurora-mdns") ) 
   //  Serial.println( "[ERROR] Could not set up mDNS responder!" );   
 
-  WiFi.disconnect();
-  WiFi.mode( WIFI_AP_STA );
-  WiFi.setHostname( "freeDSP-aurora" );
-  // Start access point
-  WiFi.softAP( "AP-freeDSP-aurora" );
-  delay(100);
-  //wait for SYSTEM_EVENT_AP_START
-  if( !WiFi.softAPConfig( IPAddress(192, 168, 5, 1), IPAddress(192, 168, 5, 1), IPAddress(255, 255, 255, 0) ) )
-      Serial.println("AP Config Failed");
-
-  Serial.print( "Connecting to \"" );
-  Serial.print( Settings.ssid.c_str() );
-  Serial.println( "\"" );
-  WiFi.begin( Settings.ssid.c_str(), Settings.password.c_str() );
-
-  int cntrConnect = 0;
-  if( Settings.ssid.length() > 0 )
-  {
-    while( (WiFi.waitForConnectResult() != WL_CONNECTED) && (cntrConnect < 3) )
-    {
-      Serial.println("WiFi Connection Failed! Trying again..");
-      delay(100);
-      cntrConnect++;
-    }
-  }
-  
-  // print the ESP32 IP-Address
-  Serial.print( "Soft AP IP:" );
-  Serial.println( WiFi.softAPIP() );
-  Serial.print( "Local IP:" );
-  Serial.println( WiFi.localIP() );
-  Serial.println( WiFi.getHostname() );
-
-  server.begin();  
+  // Create a connection task with 8kB stack on core 0
+  xTaskCreatePinnedToCore(myWiFiTask, "myWiFiTask", 8192, NULL, 3, NULL, 0);
 
   //----------------------------------------------------------------------------
   //--- Download program to DSP
@@ -1188,26 +1247,45 @@ void handleHttpRequest()
                   Settings.ssid = paramValue;
                 else if( paramName == "Password" )
                   Settings.password = paramValue;
+                Settings.ssid.trim();
+                Settings.password.trim();
                 saveSettings();
 
+                //! TODO Connect to new network 
+                Serial.print( "Connecting to new network..." );
+                keepApAlive = true;
+                cntrAuthFailure = 0;
                 WiFi.disconnect();
-                Serial.println( "Connecting to new network..." );
-                WiFi.begin( Settings.ssid.c_str(), Settings.password.c_str() );
+                delay(5000);
+                //WiFi.begin( Settings.ssid.c_str(), Settings.password.c_str() );
                 int cntrConnect = 0;
-                while( WiFi.waitForConnectResult() != WL_CONNECTED && cntrConnect < 3 )
+                while( WiFi.status() != WL_CONNECTED && cntrConnect < 5 )
                 {
-                  Serial.println( "WiFi Connection Failed! Trying again..." );
+                //  Serial.println( "WiFi Connection Failed! Trying again..." );
                   cntrConnect++;
+                  //WiFi.disconnect();
+                  //WiFi.begin( Settings.ssid.c_str(), Settings.password.c_str() );
+                  delay(5000);
                 }
-                Serial.println( WiFi.localIP() );
+                if( WiFi.status() != WL_CONNECTED )
+                  Serial.println ( "[FAILED]" );
+                else
+                  Serial.println( "[OK]" );
+
 
                 String httpResponse = "";
                 httpResponse += "HTTP/1.1 200 OK\r\n";
                 httpResponse += "Content-type:text/plain\r\n\r\n";
                 if( WiFi.status() == WL_CONNECTED )
+                {
                   httpResponse += "CONNECTED";
+                  Serial.println( WiFi.localIP() );
+                }
                 else
+                {
                   httpResponse += "FAILED";
+                  Serial.println( "Connection failed");
+                }
                 httpResponse += "?";
                 httpResponse += WiFi.localIP().toString();
                 httpResponse += "\r\n";
