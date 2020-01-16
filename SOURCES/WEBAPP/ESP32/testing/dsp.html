@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<head><title>AURORA DSP</title></head>
+<style>
+body{font-family:Helvetica;background-color: #181818;}
+
+* {font-size: 14px;
+  color: #F0F0F0;}
+
+button{
+  height: 50px;
+  width: 50px;
+  background-color: #101010;
+  border: 2px solid;
+  border-radius: 3px;
+  font-size: 12px;
+}
+
+input[type=number]{
+  height: 20px;
+  background-color: #101010;
+  border: 1px solid #F0F0F0;
+  border-radius: 5px;
+  color: #FFFFFF;
+}
+
+select{
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 25px;
+  background-color: #101010;
+  border: 1px solid #F0F0F0;
+  border-radius: 5px;
+  color: #FFFFFF;
+  font-size: 14px;
+  padding-left: 10px;
+  outline: none;
+  cursor: pointer;
+}
+
+
+td{text-align:center;}
+
+input[type=range].range {
+  cursor: pointer;
+  width: 100px !important;
+  transform: rotate(270deg)
+}
+
+.send{
+  height: 30px;
+  width: 100%;
+  background-color: #101010;
+  border: 1px solid #F0F0F0;
+  border-radius: 5px;
+  color: #FFFFFF;
+  font-size: 14px;
+}
+
+.modal{
+  display: none;
+  position: fixed;
+  z-index: 1;
+  padding-top: 30px;
+  left: 37.5%;
+  top: 37.5%;
+  width: 25%;
+  height: 25%;
+  overflow: auto;
+  background-color: #101010;
+  border-radius: 10px;
+  border: 2px solid;
+  border-top: 20px solid;
+  color: #F0F0F0;
+}
+
+/* Modal Content */
+.modal-content {
+  position: relative;
+  background-color: #101010;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 90%;
+  max-width: 1200px;
+  border: 0px;
+}
+
+/* The Close Button */
+.close {
+  color: white;
+  position: absolute;
+  top: 10px;
+  right: 25px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #999;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.cursor {
+  cursor: pointer;
+}
+
+.caption-container {
+  text-align: center;
+  background-color: black;
+  padding: 2px 16px;
+  color: white;
+}
+
+.ptbl{
+  width: 100%;
+  height: 100%;
+}
+
+.input{border-color:#FFFFFF;}
+.hp{border-color:#54F4F9;}
+.shlv{border-color:#005EF0;}
+.peq{border-color:#A05EF0;}
+.phase{border-color:#FD8E28;}
+.delay{border-color:#73EC6F;}
+.gain{border-color:#FC527F;}
+</style>
+
+<body>
+
+
+  <table style="border-spacing: 5px 10px;">
+  <tr><td>
+  Channel 1
+  </td><td>
+  <button style="color:#FFFFFF;" onclick="openInput();">Input</button>
+  </td><td>
+  <button style="color:#54F4F9;" onclick="openHP();">HP</button>
+  </td><td>
+  <button style="color:#005EF0;" onclick="openLShelv();">LShlv</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(0);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(1);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(2);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(3);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(4);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(5);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(6);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(7);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(8);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(9);">PEQ</button>
+  </td><td>
+  <button style="color:#005EF0;" onclick="openHShelv();">HShlv</button>
+  </td><td>
+  <button style="color:#54F4F9;" onclick="openLP();">LP</button>
+  </td><td>
+  <button style="color:#FD8E28;" onclick="openPhase();">Phase</button>
+  </td><td>
+  <button style="color:#73EC6F;" onclick="openDelay();">Delay</button>
+  </td><td>
+  <button style="color:#FC527F;" onclick="openGain();">Gain</button>
+  </td><td>
+  OUT 1
+  </td></tr>
+
+  <tr><td>
+  Channel 2
+  </td><td>
+  <button style="color:#FFFFFF;" onclick="openInput();">Input</button>
+  </td><td>
+  <button style="color:#54F4F9;" onclick="openHP();">HP</button>
+  </td><td>
+  <button style="color:#005EF0;" onclick="openLShelv();">LShlv</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(0);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(1);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(2);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(3);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(4);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(5);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(6);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(7);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(8);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(9);">PEQ</button>
+  </td><td>
+  <button style="color:#005EF0;" onclick="openHShelv();">HShlv</button>
+  </td><td>
+  <button style="color:#54F4F9;" onclick="openLP();">LP</button>
+  </td><td>
+  <button style="color:#FD8E28;" onclick="openPhase();">Phase</button>
+  </td><td>
+  <button style="color:#73EC6F;" onclick="openDelay();">Delay</button>
+  </td><td>
+  <button style="color:#FC527F;" onclick="openGain();">Gain</button>
+  </td><td>
+  OUT 2
+  </td></tr>
+
+  <tr><td>
+  Channel 3
+  </td><td>
+  <button style="color:#FFFFFF;" onclick="openInput();">Input</button>
+  </td><td>
+  <button style="color:#54F4F9;" onclick="openHP();">HP</button>
+  </td><td>
+  <button style="color:#005EF0;" onclick="openLShelv();">LShlv</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(0);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(1);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(2);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(3);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(4);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(5);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(6);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(7);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(8);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(9);">PEQ</button>
+  </td><td>
+  <button style="color:#005EF0;" onclick="openHShelv();">HShlv</button>
+  </td><td>
+  <button style="color:#54F4F9;" onclick="openLP();">LP</button>
+  </td><td>
+  <button style="color:#FD8E28;" onclick="openPhase();">Phase</button>
+  </td><td>
+  <button style="color:#73EC6F;" onclick="openDelay();">Delay</button>
+  </td><td>
+  <button style="color:#FC527F;" onclick="openGain();">Gain</button>
+  </td><td>
+  OUT 3
+  </td></tr>
+
+  <tr><td>
+  Channel 4
+  </td><td>
+  <button style="color:#FFFFFF;" onclick="openInput();">Input</button>
+  </td><td>
+  <button style="color:#54F4F9;" onclick="openHP();">HP</button>
+  </td><td>
+  <button style="color:#005EF0;" onclick="openLShelv();">LShlv</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(0);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(1);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(2);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(3);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(4);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(5);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(6);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(7);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(8);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(9);">PEQ</button>
+  </td><td>
+  <button style="color:#005EF0;" onclick="openHShelv();">HShlv</button>
+  </td><td>
+  <button style="color:#54F4F9;" onclick="openLP();">LP</button>
+  </td><td>
+  <button style="color:#FD8E28;" onclick="openPhase();">Phase</button>
+  </td><td>
+  <button style="color:#73EC6F;" onclick="openDelay();">Delay</button>
+  </td><td>
+  <button style="color:#FC527F;" onclick="openGain();">Gain</button>
+  </td><td>
+  OUT 4
+  </td></tr>
+
+  <tr><td>
+  Channel 5
+  </td><td>
+  <button style="color:#FFFFFF;" onclick="openInput();">Input</button>
+  </td><td>
+  <button style="color:#54F4F9;" onclick="openHP();">HP</button>
+  </td><td>
+  <button style="color:#005EF0;" onclick="openLShelv();">LShlv</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(0);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(1);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(2);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(3);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(4);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(5);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(6);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(7);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(8);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(9);">PEQ</button>
+  </td><td>
+  <button style="color:#005EF0;" onclick="openHShelv();">HShlv</button>
+  </td><td>
+  <button style="color:#54F4F9;" onclick="openLP();">LP</button>
+  </td><td>
+  <button style="color:#FD8E28;" onclick="openPhase();">Phase</button>
+  </td><td>
+  <button style="color:#73EC6F;" onclick="openDelay();">Delay</button>
+  </td><td>
+  <button style="color:#FC527F;" onclick="openGain();">Gain</button>
+  </td><td>
+  OUT 5
+  </td></tr>
+
+  <tr><td>
+  Channel 6
+  </td><td>
+  <button style="color:#FFFFFF;" onclick="openInput();">Input</button>
+  </td><td>
+  <button style="color:#54F4F9;" onclick="openHP();">HP</button>
+  </td><td>
+  <button style="color:#005EF0;" onclick="openLShelv();">LShlv</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(0);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(1);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(2);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(3);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(4);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(5);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(6);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(7);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(8);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(9);">PEQ</button>
+  </td><td>
+  <button style="color:#005EF0;" onclick="openHShelv();">HShlv</button>
+  </td><td>
+  <button style="color:#54F4F9;" onclick="openLP();">LP</button>
+  </td><td>
+  <button style="color:#FD8E28;" onclick="openPhase();">Phase</button>
+  </td><td>
+  <button style="color:#73EC6F;" onclick="openDelay();">Delay</button>
+  </td><td>
+  <button style="color:#FC527F;" onclick="openGain();">Gain</button>
+  </td><td>
+  OUT 6
+  </td></tr>
+
+  <tr><td>
+  Channel 7
+  </td><td>
+  <button style="color:#FFFFFF;" onclick="openInput();">Input</button>
+  </td><td>
+  <button style="color:#54F4F9;" onclick="openHP();">HP</button>
+  </td><td>
+  <button style="color:#005EF0;" onclick="openLShelv();">LShlv</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(0);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(1);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(2);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(3);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(4);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(5);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(6);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(7);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(8);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(9);">PEQ</button>
+  </td><td>
+  <button style="color:#005EF0;" onclick="openHShelv();">HShlv</button>
+  </td><td>
+  <button style="color:#54F4F9;" onclick="openLP();">LP</button>
+  </td><td>
+  <button style="color:#FD8E28;" onclick="openPhase();">Phase</button>
+  </td><td>
+  <button style="color:#73EC6F;" onclick="openDelay();">Delay</button>
+  </td><td>
+  <button style="color:#FC527F;" onclick="openGain();">Gain</button>
+  </td><td>
+  OUT 7
+  </td></tr>
+
+  <tr><td>
+  Channel 8
+  </td><td>
+  <button style="color:#FFFFFF;" onclick="openInput();">Input</button>
+  </td><td>
+  <button style="color:#54F4F9;" onclick="openHP();">HP</button>
+  </td><td>
+  <button style="color:#005EF0;" onclick="openLShelv();">LShlv</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(0);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(1);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(2);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(3);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(4);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(5);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(6);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(7);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(8);">PEQ</button>
+  </td><td>
+  <button style="color:#A05EF0;" onclick="openPEQ(9);">PEQ</button>
+  </td><td>
+  <button style="color:#005EF0;" onclick="openHShelv();">HShlv</button>
+  </td><td>
+  <button style="color:#54F4F9;" onclick="openLP();">LP</button>
+  </td><td>
+  <button style="color:#FD8E28;" onclick="openPhase();">Phase</button>
+  </td><td>
+  <button style="color:#73EC6F;" onclick="openDelay();">Delay</button>
+  </td><td>
+  <button style="color:#FC527F;" onclick="openGain();">Gain</button>
+  </td><td>
+  OUT 8
+  </td></tr>
+
+  </table>
+
+
+
+  <!--
+  <div class="container" style="margin-right: 0px">
+    <br><br>
+    <input class="range vertical-heighest-first round" type="range" min="-120" max="0" step="1" value="0">
+    <br><br><br>
+  -->
+
+  <div id="input" class="modal input">
+    <span class="close cursor" onclick="closeModal('input')">&times;</span>
+    <div class="modal-content">
+      <table class="ptbl">
+      <tr><td>Input</td</tr>
+      <tr><td>
+        <select>
+          <option value="0">Analog 1</option>
+          <option value="1">Analog 2</option>
+          <option value="2">Analog 3</option>
+          <option value="3">Analog 4</option>
+          <option value="4">Analog 5</option>
+          <option value="5">Analog 6</option>
+          <option value="6">Analog 7</option>
+          <option value="7">Analog 8</option>
+        </select>
+      </td></tr>
+      <tr><td><button class="send">Send</button></td</tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="highPass" class="modal hp">
+    <span class="close cursor" onclick="closeModal('highPass')">&times;</span>
+    <div class="modal-content">
+      <table class="ptbl">
+      <tr><td colspan="2">High Pass</td></tr>
+      <tr><td colspan="2">
+        <select>
+          <option value="0">Bes 6</option>
+          <option value="1">Bes 12</option>
+          <option value="2">Bes 18</option>
+          <option value="3">Bes 24</option>
+          <option value="4">But 12</option>
+          <option value="5">But 18</option>
+          <option value="6">But 24</option>
+          <option value="7">LR 12</option>
+          <option value="8">LR 24</option>
+          <option value="9">LR 36</option>
+          <option value="10">LR 48</option>
+        </select>
+      </td></tr>
+      <tr><td><input type="number" style="width:95%;"></td><td style="text-align:left;width:10%;">Hz</td></tr>
+      <tr><td colspan="2"><button class="send">Send</button></td</tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="lowShelv" class="modal shlv">
+    <span class="close cursor" onclick="closeModal('lowShelv')">&times;</span>
+    <div class="modal-content">
+      <table class="ptbl">
+      <tr><td colspan="2">Low Shelving</td></tr>
+      <tr><td><input type="number" style="width:95%;"></td><td style="text-align:left;width:10%;">dB</td></tr>
+      <tr><td><input type="number" style="width:95%;"></td><td style="text-align:left;width:10%;">Hz</td></tr>
+      <tr><td><input type="number" style="width:95%;"></td><td style="text-align:left;width:10%;">S</td></tr>
+      <tr><td colspan="2"><button class="send">Send</button></td</tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="peq" class="modal peq">
+    <span class="close cursor" onclick="closeModal('peq')">&times;</span>
+    <div class="modal-content">
+      <table class="ptbl">
+      <tr><td colspan="2">Parametric EQ</td></tr>
+      <tr><td><input type="number" style="width:95%;"></td><td style="text-align:left;width:10%;">dB</td></tr>
+      <tr><td><input type="number" style="width:95%;"></td><td style="text-align:left;width:10%;">Hz</td></tr>
+      <tr><td><input type="number" style="width:95%;"></td><td style="text-align:left;width:10%;">Q</td></tr>
+      <tr><td colspan="2"><button class="send">Send</button></td</tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="highShelv" class="modal shlv">
+    <span class="close cursor" onclick="closeModal('highShelv')">&times;</span>
+    <div class="modal-content">
+      <table class="ptbl">
+      <tr><td colspan="2">High Shelving</td></tr>
+      <tr><td><input type="number" style="width:95%;"></td><td style="text-align:left;width:10%;">dB</td></tr>
+      <tr><td><input type="number" style="width:95%;"></td><td style="text-align:left;width:10%;">Hz</td></tr>
+      <tr><td><input type="number" style="width:95%;"></td><td style="text-align:left;width:10%;">S</td></tr>
+      <tr><td colspan="2"><button class="send">Send</button></td</tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="lowPass" class="modal hp">
+    <span class="close cursor" onclick="closeModal('lowPass')">&times;</span>
+    <div class="modal-content">
+      <table class="ptbl">
+      <tr><td colspan="2">Low Pass</td></tr>
+      <tr><td colspan="2">
+        <select>
+          <option value="0">Bes 6</option>
+          <option value="1">Bes 12</option>
+          <option value="2">Bes 18</option>
+          <option value="3">Bes 24</option>
+          <option value="4">But 12</option>
+          <option value="5">But 18</option>
+          <option value="6">But 24</option>
+          <option value="7">LR 12</option>
+          <option value="8">LR 24</option>
+          <option value="9">LR 36</option>
+          <option value="10">LR 48</option>
+        </select>
+      </td></tr>
+      <tr><td><input type="number" style="width:95%;"></td><td style="text-align:left;width:10%;">Hz</td></tr>
+      <tr><td colspan="2"><button class="send">Send</button></td</tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="phase" class="modal phase">
+    <span class="close cursor" onclick="closeModal('phase')">&times;</span>
+    <div class="modal-content">
+      <table class="ptbl">
+      <tr><td colspan="2">Phase</td></tr>
+      <tr><td><input type="number" style="width:95%;"></td><td style="text-align:left;width:10%;">Hz</td></tr>
+      <tr><td><input type="number" style="width:95%;"></td><td style="text-align:left;width:10%;">Q</td></tr>
+      <tr><td colspan="2"><input type="checkbox">Invert</td></tr>
+      <tr><td colspan="2"><button class="send">Send</button></td</tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="delay" class="modal delay">
+    <span class="close cursor" onclick="closeModal('delay')">&times;</span>
+    <div class="modal-content">
+      <table class="ptbl">
+      <tr><td colspan="2">Delay</td></tr>
+      <tr><td><input type="number" style="width:95%;"></td><td style="text-align:left;width:10%;">ms</td></tr>
+      <tr><td colspan="2"><button class="send">Send</button></td</tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="gain" class="modal gain">
+    <span class="close cursor" onclick="closeModal('gain')">&times;</span>
+    <div class="modal-content">
+      <table class="ptbl">
+      <tr><td colspan="2">Gain</td></tr>
+      <tr><td><input type="number" style="width:95%;"></td><td style="text-align:left;width:10%;">dB</td></tr>
+      <tr><td colspan="2"><button class="send">Send</button></td</tr>
+      </table>
+    </div>
+  </div>
+
+  <script>
+  function openInput(){document.getElementById("input").style.display = "block";}
+  function openHP(){document.getElementById("highPass").style.display = "block";}
+  function openLShelv(){document.getElementById("lowShelv").style.display = "block";}
+  function openPEQ(){document.getElementById("peq").style.display = "block";}
+  function openHShelv(){document.getElementById("highShelv").style.display = "block";}
+  function openLP(){document.getElementById("lowPass").style.display = "block";}
+  function openPhase(){document.getElementById("phase").style.display = "block";}
+  function openDelay(){document.getElementById("delay").style.display = "block";}
+  function openGain(){document.getElementById("gain").style.display = "block";}
+
+    function openModal(fxo) {
+      document.getElementById("highPass").style.display = "block";
+      document.getElementById("fxo_hp").value = fxo;
+    }
+    
+    function closeModal(id) {
+      document.getElementById(id).style.display = "none";
+    }
+    </script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+Vertical slider:
+https://stackoverflow.com/questions/15935837/how-to-display-a-range-input-slider-vertically
+
+https://www.clickstorm.de/blog/dropdown-css3/
+
+https://css-tricks.com/snippets/css/text-rotation/
+
+
+https://www.w3schools.com/howto/howto_js_rangeslider.asp
+
+https://stackoverflow.com/questions/57242860/range-slider-vertically-with-label
