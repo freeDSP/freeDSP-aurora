@@ -3009,17 +3009,5 @@ Text Label 12450 8300 0    39   ~ 0
 D-
 Text Label 12350 8750 0    39   ~ 0
 USB_SHIELD
-$Comp
-L Connector:TestPoint B101
-U 1 1 5FEF607F
-P 11100 10550
-F 0 "B101" H 11158 10662 39  0000 L CNN
-F 1 "Montagewinkel" H 11158 10587 39  0000 L CNN
-F 2 "rklib:Montagewinkel" H 11300 10550 50  0001 C CNN
-F 3 "~" H 11300 10550 50  0001 C CNN
-	1    11100 10550
-	1    0    0    -1  
-$EndComp
 NoConn ~ 10500 10550
-NoConn ~ 11100 10550
 $EndSCHEMATC
