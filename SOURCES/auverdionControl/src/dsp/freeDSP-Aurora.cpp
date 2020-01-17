@@ -1006,6 +1006,7 @@ bool CFreeDspAurora::selectPresetWifi( int presetid, int msec )
 {
   myLog()<<"---------------------------------------------------------------";
   myLog()<<"selectPresetWifi";
+  myLog()<<presetid;
 
   if( isConnected )
   {

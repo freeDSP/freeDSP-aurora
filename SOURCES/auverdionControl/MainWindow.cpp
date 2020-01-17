@@ -1809,7 +1809,7 @@ void MainWindow::on_actionLoadParameters_triggered()
     fileversion.append( fileparams.at(idx) );
     idx++;
     uint32_t pver = *reinterpret_cast<const uint32_t*>(fileversion.data());
-    if( pver != VERSION_HEX )
+    if( (pver != VERSION_HEX) && (pver != 0x00010200) )
     {
       QMessageBox::critical( this, tr("Error"), tr("File version incompatible with current version of auverdionControl."), QMessageBox::Ok ); 
       myLog()<<"File version incompatible with current version of auverdionControl.";
