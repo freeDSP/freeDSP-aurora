@@ -7,6 +7,7 @@
 
 #include "AK4458.h"
 #include "AK5558.h"
+#include "AudioFilterFactory.h"
 
 #define VERSION_STR 0.0.1
 
@@ -48,17 +49,20 @@ typedef uint8_t tInputSelection;
 
 struct tInput
 {
+  uint16_t addr;
   tInputSelection sel;
 };
 
 struct tHPLP
 {
+  uint16_t addr[4];
   float fc;
   tFilterType typ;
 };
 
 struct tShelving
 {
+  uint16_t addr;
   float gain;
   float fc;
   float slope;
@@ -66,6 +70,7 @@ struct tShelving
 
 struct tPeq
 {
+  uint16_t addr;
   float gain;
   float fc;
   float Q;
@@ -73,6 +78,7 @@ struct tPeq
 
 struct tPhase
 {
+  uint16_t addr;
   float fc;
   float Q;
   bool inv;
@@ -80,11 +86,13 @@ struct tPhase
 
 struct tDelay
 {
+  uint16_t addr;
   float delay;
 };
 
 struct tGain
 {
+  uint16_t addr;
   float gain;
 };
 
@@ -101,6 +109,7 @@ tGain paramGain[8];
 
 File fileDspProgram;
 
+float sampleRate = 48000.0;
 float masterVolume = -60.0;
 uint8_t currentPreset = 0;
 
@@ -778,8 +787,9 @@ void handlePostInputJson( AsyncWebServerRequest* request, uint8_t* data )
   Serial.println( root["idx"].as<String>() );
   Serial.println( root["sel"].as<String>() );
 
-  uint32_t idx = root["idx"].as<uint32_t>();
-  paramInputs[idx].sel = root["sel"].as<tInputSelection>();
+  uint32_t idx = static_cast<uint32_t>(root["idx"].as<String>().toInt());
+  paramInputs[idx].addr = static_cast<uint16_t>(root["addr"].as<String>().toInt());
+  paramInputs[idx].sel = static_cast<tInputSelection>(root["sel"].as<String>().toInt());
        
   request->send(200, "text/plain", "");  
 }
@@ -808,12 +818,67 @@ void handlePostHpJson( AsyncWebServerRequest* request, uint8_t* data )
 
   JsonObject root = jsonDoc.as<JsonObject>();
   Serial.println( root["idx"].as<String>() );
+  Serial.println( root["addr"].as<String>() );
   Serial.println( root["fc"].as<String>() );
   Serial.println( root["typ"].as<String>() );
 
-  uint32_t idx = root["idx"].as<uint32_t>();
-  paramHP[idx].fc = root["fc"].as<float>();
-  paramHP[idx].typ = root["typ"].as<tFilterType>();
+  uint32_t idx = static_cast<uint32_t>(root["idx"].as<String>().toInt());
+  paramHP[idx].addr[0] = static_cast<uint16_t>(root["addr0"].as<String>().toInt());
+  paramHP[idx].addr[1] = static_cast<uint16_t>(root["addr1"].as<String>().toInt());
+  paramHP[idx].addr[2] = static_cast<uint16_t>(root["addr2"].as<String>().toInt());
+  paramHP[idx].addr[3] = static_cast<uint16_t>(root["addr3"].as<String>().toInt());
+  paramHP[idx].fc = root["fc"].as<String>().toFloat();
+  paramHP[idx].typ = static_cast<tFilterType>(root["typ"].as<String>().toInt());
+
+  float a[12] = { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0 };
+  float b[12] = { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0 };
+  byte val[4];
+  uint32_t floatval;
+  AudioFilterFactory::makeHighPass( a, b, paramHP[idx].typ, paramHP[idx].fc, sampleRate );
+
+  for( int ii = 0; ii < 4; ii++ )
+  {
+    uint16_t addr = paramHP[idx].addr[ii];
+    floatval = convertTo824(b[ 3*ii + 2 ]);
+    val[0] = (floatval >> 24 ) & 0xFF;
+    val[1] = (floatval >> 16 ) & 0xFF;
+    val[2] = (floatval >> 8 ) & 0xFF;
+    val[3] =  floatval & 0xFF;
+    ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B2
+    addr++;
+
+    floatval = convertTo824(b[ 3*ii + 1 ]);
+    val[0] = (floatval >> 24 ) & 0xFF;
+    val[1] = (floatval >> 16 ) & 0xFF;
+    val[2] = (floatval >> 8 ) & 0xFF;
+    val[3] =  floatval & 0xFF;
+    ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B1
+    addr++;
+
+    floatval = convertTo824(b[ 3*ii + 0 ]);
+    val[0] = (floatval >> 24 ) & 0xFF;
+    val[1] = (floatval >> 16 ) & 0xFF;
+    val[2] = (floatval >> 8 ) & 0xFF;
+    val[3] =  floatval & 0xFF;
+    ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B0
+    addr++;
+
+    floatval = convertTo824(a[ 3*ii + 2 ]);
+    val[0] = (floatval >> 24 ) & 0xFF;
+    val[1] = (floatval >> 16 ) & 0xFF;
+    val[2] = (floatval >> 8 ) & 0xFF;
+    val[3] =  floatval & 0xFF;
+    ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A2
+    addr++;
+    
+    floatval = convertTo824(a[ 3*ii + 1 ]);
+    val[0] = (floatval >> 24 ) & 0xFF;
+    val[1] = (floatval >> 16 ) & 0xFF;
+    val[2] = (floatval >> 8 ) & 0xFF;
+    val[3] =  floatval & 0xFF;
+    ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A1
+    addr++;
+  }
        
   request->send(200, "text/plain", "");  
 }
@@ -842,14 +907,62 @@ void handlePostLshelvJson( AsyncWebServerRequest* request, uint8_t* data )
 
   JsonObject root = jsonDoc.as<JsonObject>();
   Serial.println( root["idx"].as<String>() );
+  Serial.println( root["addr"].as<String>() );
   Serial.println( root["gain"].as<String>() );
   Serial.println( root["fc"].as<String>() );
   Serial.println( root["slope"].as<String>() );
 
-  uint32_t idx = root["idx"].as<uint32_t>();
-  paramLshelv[idx].gain = root["gain"].as<float>();
-  paramLshelv[idx].fc = root["fc"].as<float>();
-  paramLshelv[idx].slope = root["slop"].as<float>();
+  uint32_t idx = static_cast<uint32_t>(root["idx"].as<String>().toInt());
+  paramLshelv[idx].addr = static_cast<uint16_t>(root["addr"].as<String>().toInt());
+  paramLshelv[idx].gain = root["gain"].as<String>().toFloat();
+  paramLshelv[idx].fc = root["fc"].as<String>().toFloat();
+  paramLshelv[idx].slope = root["slope"].as<String>().toFloat();
+
+  float a[3];
+  float b[3];
+  byte val[4];
+  uint32_t floatval;
+  AudioFilterFactory::makeLowShelv( a, b, paramLshelv[idx].gain, paramLshelv[idx].fc, paramLshelv[idx].slope, sampleRate );
+
+  uint16_t addr = paramLshelv[idx].addr;
+  floatval = convertTo824(b[2]);
+  val[0] = (floatval >> 24 ) & 0xFF;
+  val[1] = (floatval >> 16 ) & 0xFF;
+  val[2] = (floatval >> 8 ) & 0xFF;
+  val[3] =  floatval & 0xFF;
+  ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B2
+  addr++;
+
+  floatval = convertTo824(b[1]);
+  val[0] = (floatval >> 24 ) & 0xFF;
+  val[1] = (floatval >> 16 ) & 0xFF;
+  val[2] = (floatval >> 8 ) & 0xFF;
+  val[3] =  floatval & 0xFF;
+  ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B1
+  addr++;
+
+  floatval = convertTo824(b[0]);
+  val[0] = (floatval >> 24 ) & 0xFF;
+  val[1] = (floatval >> 16 ) & 0xFF;
+  val[2] = (floatval >> 8 ) & 0xFF;
+  val[3] =  floatval & 0xFF;
+  ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B0
+  addr++;
+
+  floatval = convertTo824(a[2]);
+  val[0] = (floatval >> 24 ) & 0xFF;
+  val[1] = (floatval >> 16 ) & 0xFF;
+  val[2] = (floatval >> 8 ) & 0xFF;
+  val[3] =  floatval & 0xFF;
+  ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A2
+  addr++;
+  
+  floatval = convertTo824(a[1]);
+  val[0] = (floatval >> 24 ) & 0xFF;
+  val[1] = (floatval >> 16 ) & 0xFF;
+  val[2] = (floatval >> 8 ) & 0xFF;
+  val[3] =  floatval & 0xFF;
+  ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A1
        
   request->send(200, "text/plain", "");  
 }
@@ -878,15 +991,68 @@ void handlePostPeqJson( AsyncWebServerRequest* request, uint8_t* data )
 
   JsonObject root = jsonDoc.as<JsonObject>();
   Serial.println( root["idx"].as<String>() );
+  Serial.println( root["addr"].as<String>() );
   Serial.println( root["gain"].as<String>() );
   Serial.println( root["fc"].as<String>() );
   Serial.println( root["Q"].as<String>() );
 
-  uint32_t idx = root["idx"].as<uint32_t>();
-  paramPeq[idx].gain = root["gain"].as<float>();
-  paramPeq[idx].fc = root["fc"].as<float>();
-  paramPeq[idx].Q = root["Q"].as<float>();
-       
+  uint32_t idx = static_cast<uint32_t>(root["idx"].as<String>().toInt());
+  paramPeq[idx].addr = static_cast<uint16_t>(root["addr"].as<String>().toInt());
+  paramPeq[idx].gain = root["gain"].as<String>().toFloat();
+  paramPeq[idx].fc = root["fc"].as<String>().toFloat();
+  paramPeq[idx].Q = root["Q"].as<String>().toFloat();
+
+  float a[3];
+  float b[3];
+  byte val[4];
+  uint32_t floatval;
+  AudioFilterFactory::makeParametricEQ( a, b, paramPeq[idx].gain, paramPeq[idx].fc, paramPeq[idx].Q, sampleRate );
+
+  uint32_t addr = paramPeq[idx].addr;
+  floatval = convertTo824(b[2]);
+  val[0] = (floatval >> 24 ) & 0xFF;
+  val[1] = (floatval >> 16 ) & 0xFF;
+  val[2] = (floatval >> 8 ) & 0xFF;
+  val[3] =  floatval & 0xFF;
+  ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B2
+  Serial.println( addr );
+  addr++;
+
+  floatval = convertTo824(b[1]);
+  val[0] = (floatval >> 24 ) & 0xFF;
+  val[1] = (floatval >> 16 ) & 0xFF;
+  val[2] = (floatval >> 8 ) & 0xFF;
+  val[3] =  floatval & 0xFF;
+  ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B1
+  Serial.println( addr );
+  addr++;
+
+  floatval = convertTo824(b[0]);
+  val[0] = (floatval >> 24 ) & 0xFF;
+  val[1] = (floatval >> 16 ) & 0xFF;
+  val[2] = (floatval >> 8 ) & 0xFF;
+  val[3] =  floatval & 0xFF;
+  ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B0
+  Serial.println( addr );
+  addr++;
+
+  floatval = convertTo824(a[2]);
+  val[0] = (floatval >> 24 ) & 0xFF;
+  val[1] = (floatval >> 16 ) & 0xFF;
+  val[2] = (floatval >> 8 ) & 0xFF;
+  val[3] =  floatval & 0xFF;
+  ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A2
+  Serial.println( addr );
+  addr++;
+  
+  floatval = convertTo824(a[1]);
+  val[0] = (floatval >> 24 ) & 0xFF;
+  val[1] = (floatval >> 16 ) & 0xFF;
+  val[2] = (floatval >> 8 ) & 0xFF;
+  val[3] =  floatval & 0xFF;
+  ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A1
+  Serial.println( addr );
+
   request->send(200, "text/plain", "");  
 }
 
@@ -914,14 +1080,67 @@ void handlePostHshelvJson( AsyncWebServerRequest* request, uint8_t* data )
 
   JsonObject root = jsonDoc.as<JsonObject>();
   Serial.println( root["idx"].as<String>() );
+  Serial.println( root["addr"].as<String>() );
   Serial.println( root["gain"].as<String>() );
   Serial.println( root["fc"].as<String>() );
   Serial.println( root["slope"].as<String>() );
 
-  uint32_t idx = root["idx"].as<uint32_t>();
-  paramHshelv[idx].gain = root["gain"].as<float>();
-  paramHshelv[idx].fc = root["fc"].as<float>();
-  paramHshelv[idx].slope = root["slop"].as<float>();
+  uint32_t idx = static_cast<uint32_t>(root["idx"].as<String>().toInt());
+  paramHshelv[idx].addr = static_cast<uint16_t>(root["addr"].as<String>().toInt());
+  paramHshelv[idx].gain = root["gain"].as<String>().toFloat();
+  paramHshelv[idx].fc = root["fc"].as<String>().toFloat();
+  paramHshelv[idx].slope = root["slope"].as<String>().toFloat();
+
+  float a[3];
+  float b[3];
+  byte val[4];
+  uint32_t floatval;
+  AudioFilterFactory::makeHighShelv( a, b, paramHshelv[idx].gain, paramHshelv[idx].fc, paramHshelv[idx].slope, sampleRate );
+
+  uint16_t addr = paramHshelv[idx].addr;
+  Serial.println( addr );
+  floatval = convertTo824(b[2]);
+  val[0] = (floatval >> 24 ) & 0xFF;
+  val[1] = (floatval >> 16 ) & 0xFF;
+  val[2] = (floatval >> 8 ) & 0xFF;
+  val[3] =  floatval & 0xFF;
+  ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B2
+  addr++;
+
+  Serial.println( addr );
+  floatval = convertTo824(b[1]);
+  val[0] = (floatval >> 24 ) & 0xFF;
+  val[1] = (floatval >> 16 ) & 0xFF;
+  val[2] = (floatval >> 8 ) & 0xFF;
+  val[3] =  floatval & 0xFF;
+  ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B1
+  addr++;
+
+  Serial.println( addr );
+  floatval = convertTo824(b[0]);
+  val[0] = (floatval >> 24 ) & 0xFF;
+  val[1] = (floatval >> 16 ) & 0xFF;
+  val[2] = (floatval >> 8 ) & 0xFF;
+  val[3] =  floatval & 0xFF;
+  ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B0
+  addr++;
+
+  Serial.println( addr );
+  floatval = convertTo824(a[2]);
+  val[0] = (floatval >> 24 ) & 0xFF;
+  val[1] = (floatval >> 16 ) & 0xFF;
+  val[2] = (floatval >> 8 ) & 0xFF;
+  val[3] =  floatval & 0xFF;
+  ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A2
+  addr++;
+  
+  Serial.println( addr );
+  floatval = convertTo824(a[1]);
+  val[0] = (floatval >> 24 ) & 0xFF;
+  val[1] = (floatval >> 16 ) & 0xFF;
+  val[2] = (floatval >> 8 ) & 0xFF;
+  val[3] =  floatval & 0xFF;
+  ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A1
        
   request->send(200, "text/plain", "");  
 }
@@ -950,13 +1169,67 @@ void handlePostLpJson( AsyncWebServerRequest* request, uint8_t* data )
 
   JsonObject root = jsonDoc.as<JsonObject>();
   Serial.println( root["idx"].as<String>() );
+  Serial.println( root["addr"].as<String>() );
   Serial.println( root["fc"].as<String>() );
   Serial.println( root["typ"].as<String>() );
 
-  uint32_t idx = root["idx"].as<uint32_t>();
-  paramLP[idx].fc = root["fc"].as<float>();
-  paramLP[idx].typ = root["typ"].as<tFilterType>();
-       
+  uint32_t idx = static_cast<uint32_t>(root["idx"].as<String>().toInt());
+  paramLP[idx].addr[0] = static_cast<uint16_t>(root["addr0"].as<String>().toInt());
+  paramLP[idx].addr[1] = static_cast<uint16_t>(root["addr1"].as<String>().toInt());
+  paramLP[idx].addr[2] = static_cast<uint16_t>(root["addr2"].as<String>().toInt());
+  paramLP[idx].addr[3] = static_cast<uint16_t>(root["addr3"].as<String>().toInt());
+  paramLP[idx].fc = root["fc"].as<String>().toFloat();
+  paramLP[idx].typ = static_cast<tFilterType>(root["typ"].as<String>().toInt());
+
+  float a[12] = { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0 };
+  float b[12] = { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0 };
+  byte val[4];
+  uint32_t floatval;
+  AudioFilterFactory::makeLowPass( a, b, paramLP[idx].typ, paramLP[idx].fc, sampleRate );
+
+  for( int ii = 0; ii < 4; ii++ )
+  {
+    uint16_t addr = paramLP[idx].addr[ii];
+    floatval = convertTo824(b[ 3*ii + 2 ]);
+    val[0] = (floatval >> 24 ) & 0xFF;
+    val[1] = (floatval >> 16 ) & 0xFF;
+    val[2] = (floatval >> 8 ) & 0xFF;
+    val[3] =  floatval & 0xFF;
+    ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B2
+    addr++;
+
+    floatval = convertTo824(b[ 3*ii + 1 ]);
+    val[0] = (floatval >> 24 ) & 0xFF;
+    val[1] = (floatval >> 16 ) & 0xFF;
+    val[2] = (floatval >> 8 ) & 0xFF;
+    val[3] =  floatval & 0xFF;
+    ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B1
+    addr++;
+
+    floatval = convertTo824(b[ 3*ii + 0 ]);
+    val[0] = (floatval >> 24 ) & 0xFF;
+    val[1] = (floatval >> 16 ) & 0xFF;
+    val[2] = (floatval >> 8 ) & 0xFF;
+    val[3] =  floatval & 0xFF;
+    ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B0
+    addr++;
+
+    floatval = convertTo824(a[ 3*ii + 2 ]);
+    val[0] = (floatval >> 24 ) & 0xFF;
+    val[1] = (floatval >> 16 ) & 0xFF;
+    val[2] = (floatval >> 8 ) & 0xFF;
+    val[3] =  floatval & 0xFF;
+    ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A2
+    addr++;
+    
+    floatval = convertTo824(a[ 3*ii + 1 ]);
+    val[0] = (floatval >> 24 ) & 0xFF;
+    val[1] = (floatval >> 16 ) & 0xFF;
+    val[2] = (floatval >> 8 ) & 0xFF;
+    val[3] =  floatval & 0xFF;
+    ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A1
+    addr++;
+  }
   request->send(200, "text/plain", "");  
 }
 
@@ -984,13 +1257,65 @@ void handlePostPhaseJson( AsyncWebServerRequest* request, uint8_t* data )
 
   JsonObject root = jsonDoc.as<JsonObject>();
   Serial.println( root["idx"].as<String>() );
+  Serial.println( root["addr"].as<String>() );
   Serial.println( root["fc"].as<String>() );
   Serial.println( root["Q"].as<String>() );
 
-  uint32_t idx = root["idx"].as<uint32_t>();
-  paramPhase[idx].fc = root["fc"].as<float>();
-  paramPhase[idx].Q = root["Q"].as<tFilterType>();
-  paramPhase[idx].inv = root["inv"].as<bool>();
+  uint32_t idx = static_cast<uint32_t>(root["idx"].as<String>().toInt());
+  paramPhase[idx].addr = static_cast<uint16_t>(root["addr"].as<String>().toInt());
+  paramPhase[idx].fc = root["fc"].as<String>().toFloat();
+  paramPhase[idx].Q = root["Q"].as<String>().toFloat();
+
+  float a[3];
+  float b[3];
+  byte val[4];
+  uint32_t floatval;
+  AudioFilterFactory::makeAllpass( a, b, paramPeq[idx].fc, paramPeq[idx].Q, sampleRate );
+
+  uint16_t addr = paramPhase[idx].addr;
+  floatval = convertTo824(b[2]);
+  val[0] = (floatval >> 24 ) & 0xFF;
+  val[1] = (floatval >> 16 ) & 0xFF;
+  val[2] = (floatval >> 8 ) & 0xFF;
+  val[3] =  floatval & 0xFF;
+  ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B2
+  Serial.println( addr );
+  addr++;
+
+  floatval = convertTo824(b[1]);
+  val[0] = (floatval >> 24 ) & 0xFF;
+  val[1] = (floatval >> 16 ) & 0xFF;
+  val[2] = (floatval >> 8 ) & 0xFF;
+  val[3] =  floatval & 0xFF;
+  ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B1
+  Serial.println( addr );
+  addr++;
+
+  floatval = convertTo824(b[0]);
+  val[0] = (floatval >> 24 ) & 0xFF;
+  val[1] = (floatval >> 16 ) & 0xFF;
+  val[2] = (floatval >> 8 ) & 0xFF;
+  val[3] =  floatval & 0xFF;
+  ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B0
+  Serial.println( addr );
+  addr++;
+
+  floatval = convertTo824(a[2]);
+  val[0] = (floatval >> 24 ) & 0xFF;
+  val[1] = (floatval >> 16 ) & 0xFF;
+  val[2] = (floatval >> 8 ) & 0xFF;
+  val[3] =  floatval & 0xFF;
+  ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A2
+  Serial.println( addr );
+  addr++;
+  
+  floatval = convertTo824(a[1]);
+  val[0] = (floatval >> 24 ) & 0xFF;
+  val[1] = (floatval >> 16 ) & 0xFF;
+  val[2] = (floatval >> 8 ) & 0xFF;
+  val[3] =  floatval & 0xFF;
+  ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A1
+  Serial.println( addr );
 
   request->send(200, "text/plain", "");  
 }
@@ -1021,9 +1346,21 @@ void handlePostDelayJson( AsyncWebServerRequest* request, uint8_t* data )
   Serial.println( root["idx"].as<String>() );
   Serial.println( root["delay"].as<String>() );
 
-  uint32_t idx = root["idx"].as<uint32_t>();
-  paramDelay[idx].delay = root["delay"].as<float>();
-       
+  uint32_t idx = static_cast<uint32_t>(root["idx"].as<String>().toInt());
+  paramDelay[idx].delay = root["delay"].as<String>().toFloat();
+  paramDelay[idx].addr = static_cast<uint16_t>(root["addr"].as<String>().toInt());
+  
+  float dly = paramDelay[idx].delay/1000.0 * sampleRate;
+  int32_t idly = static_cast<int32_t>(dly + 0.5);
+
+  uint16_t addr = paramDelay[idx].addr;
+  byte val[4];
+  val[0] = (idly >> 24 ) & 0xFF;
+  val[1] = (idly >> 16 ) & 0xFF;
+  val[2] = (idly >> 8 ) & 0xFF;
+  val[3] =  idly & 0xFF;
+  ADAU1452_WRITE_BLOCK( addr, val, 4 );
+      
   request->send(200, "text/plain", "");  
 }
 
@@ -1033,7 +1370,7 @@ void handlePostDelayJson( AsyncWebServerRequest* request, uint8_t* data )
  */
 void handlePostGainJson( AsyncWebServerRequest* request, uint8_t* data )
 {
-  Serial.println( "POST /delay" );
+  Serial.println( "POST /gain" );
   //Serial.println( "Body:");
   //for(size_t i=0; i<len; i++)
   //  Serial.write(data[i]);
@@ -1053,8 +1390,17 @@ void handlePostGainJson( AsyncWebServerRequest* request, uint8_t* data )
   Serial.println( root["idx"].as<String>() );
   Serial.println( root["gain"].as<String>() );
 
-  uint32_t idx = root["idx"].as<uint32_t>();
-  paramGain[idx].gain = root["gain"].as<float>();
+  uint32_t idx = static_cast<uint32_t>(root["idx"].as<String>().toInt());
+  paramGain[idx].addr = static_cast<uint16_t>(root["addr"].as<String>().toInt());
+  paramGain[idx].gain = root["gain"].as<String>().toFloat();
+  uint32_t float824val = convertTo824( pow( 10.0, paramGain[idx].gain / 20.0 ) );
+
+  byte val[4];
+  val[0] = (float824val >> 24 ) & 0xFF;
+  val[1] = (float824val >> 16 ) & 0xFF;
+  val[2] = (float824val >> 8 ) & 0xFF;
+  val[3] = float824val & 0xFF;
+  ADAU1452_WRITE_BLOCK( paramGain[idx].addr, val, 4 );  
        
   request->send(200, "text/plain", "");  
 }
@@ -1206,6 +1552,7 @@ void setup()
   server.on( "/input",  HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetInputJson(request); });
   server.on( "/hp",     HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetHpJson(request); });
   server.on( "/lshelv", HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetLshelvJson(request); });
+  server.on( "/peq",    HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetPeqJson(request); });
   server.on( "/hshelv", HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetHshelvJson(request); });
   server.on( "/lp",     HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetLpJson(request); });
   server.on( "/phase",  HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetPhaseJson(request); });
@@ -1225,6 +1572,10 @@ void setup()
   server.on( "/lshelv", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
   {
     handlePostLshelvJson( request, data );
+  });
+  server.on( "/peq", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
+  {
+    handlePostPeqJson( request, data );
   });
   server.on( "/hshelv", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
   {

@@ -32,7 +32,5 @@ Installing the ArduinJSON library (if you haven't done yet)
 
 Uploading Code and Files
 
-Go to sketch folder, and create a folder called data if it does not exist. Copy your html file to that folder.
-
 Open the file aurora.ino in your ArduinoIDE and click on Upload.
 After uploading the code, you need to upload the data files. Go to Tools > ESP32 Data Sketch Upload and wait for the files to be uploaded.
