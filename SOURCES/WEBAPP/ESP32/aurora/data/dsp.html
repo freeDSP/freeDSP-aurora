@@ -1,706 +1,514 @@
 <!DOCTYPE html>
 <html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<head><meta charset="utf-8"/><title>AURORA DSP</title></head>
-<style>
-body{background-color: #101010;}
+<head>
+<title>AURORA DSP</title>
+<link rel="stylesheet" href="dark.css">
+</head>
 
-* {font-size: 14px;
-  font-family:Helvetica;
-  color: #F0F0F0;
-  background-color: #101010;}
-
-h1{
-  font-family:Helvetica;
-  font-weight:normal;
-  font-size: 28px;
-  text-align: center;
-}
-
-button{
-  height: 50px;
-  width: 50px;
-  background-color: #101010;
-  border: 1px solid #808080;
-  border-top: 3px solid;
-  border-radius: 2px;
-  font-size: 12px;
-  color: #FFFFFF;
-}
-
-.prebtn{
-  width:160px;
-  height:50px;
-  border: 1px solid #73EC6F;
-  border-radius: 5px;
-  color: #F0F0F0;
-}
-.prebtn:hover{
-  background-color: #73EC6F18;
-}
-
-input[type=number]{
-  height: 20px;
-  background-color: #101010;
-  border: 1px solid #F0F0F0;
-  border-radius: 5px;
-  color: #FFFFFF;
-}
-
-select{
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  appearance: none;
-  width: 100%;
-  height: 25px;
-  background-color: #101010;
-  border: 1px solid #F0F0F0;
-  border-radius: 5px;
-  color: #FFFFFF;
-  font-size: 14px;
-  padding-left: 10px;
-  outline: none;
-  cursor: pointer;
-}
-
-
-td{text-align:center;}
-
-input[type=range].range {
-  cursor: pointer;
-  transform: rotate(270deg);
-  width: 480px; 
-}
-
-.container{
-  background-color: red;
-  width: 20px;
-height:480px;
-}
-
-.send{
-  height: 30px;
-  width: 75%;
-  background-color: #101010;
-  border: 1px solid #F0F0F0;
-  border-radius: 5px;
-  color: #FFFFFF;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.modal{
-  display: none;
-  position: fixed;
-  z-index: 1;
-  padding-top: 30px;
-  left: 37.5%;
-  top: 37.5%;
-  width: 25%;
-  height: 25%;
-  overflow: auto;
-  background-color: #101010;
-  border-radius: 10px;
-  border: 2px solid;
-  border-top: 20px solid;
-  color: #F0F0F0;
-}
-
-/* Modal Content */
-.modal-content {
-  position: relative;
-  background-color: #101010;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 90%;
-  max-width: 1200px;
-  border: 0px;
-}
-
-/* The Close Button */
-.close {
-  color: white;
-  position: absolute;
-  top: 10px;
-  right: 25px;
-  font-size: 20px;
-  font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-text-decoration: none;
-cursor: pointer;
-}
-
-.cursor {cursor: pointer;}
-
-.caption-container {
-text-align: center;
-background-color: black;
-padding: 2px 16px;
-color: white;
-}
-
-.ptbl{
-width: 100%;
-height: 100%;
-}
-
-.input{border-color:#FFFFFF;}
-.hp{border-color:#54F4F9;}
-.shlv{border-color:#005EF0;}
-.peq{border-color:#A05EF0;}
-.phase{border-color:#FD8E28;}
-.delay{border-color:#73EC6F;}
-.gain{border-color:#FC527F;}
-
-.rotate{
-transform:rotate(-90deg);
-height:60px;
-}
-
-.volslider{
-  -webkit-appearance: none;
-  -webkit-transform:rotate(270deg) translateY(-200px);
-  width: 480px;
-  height: 20px;
-  margin: 0px;
-}
-
-.volslider::-webkit-slider-runnable-track {
-  height: 5px;
-  border: none;
-  border-radius: 3px;
-  background-color: #F0F0F0;
-}
-
-.volslider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  border: none;
-  height: 20px;
-  width: 20px;
-  border-radius: 50%;
-  background: #73EC6F;
-  margin-top: -8px;
-}
-
-.volslider::-moz-range-track{
-  height: 5px;
-  border: none;
-  border-radius: 3px;
-  background-color: #F0F0F0;
-  color: #F0F0F0;
-}
-
-.volslider::-moz-range-thumb{
-  -webkit-appearance: none;
-  border: none;
-  height: 20px;
-  width: 20px;
-  border-radius: 50%;
-  background: #73EC6F;
-  margin-top: -8px;
-}
-
-
-</style>
-
-<body onload="{getInputChannels();getPreset();getMVol();}">
+<body>
+	<nav>
+		<ul>
+			<li><a onclick="configDev()">Config Device</a></li>
+			<li><a onclick="configWifi()">Config Wifi</a></li>
+			<li><a onclick="store()">Store Preset</a></li>
+		</ul>
+	</nav>
+	
+	<div>
   <center>
   <h1>Aurora DSP</h1>
   <table style="border-spacing: 5px 10px;">
-  <tr><td class="rotate">
-  Channel 1
-  </td><td style="min-width:80px">
-  <select id="chn0" onchange="postInputJson('chn0',0);">
-    <option value="0">Analog 1</option>
-    <option value="1">Analog 2</option>
-    <option value="2">Analog 3</option>
-    <option value="3">Analog 4</option>
-    <option value="4">Analog 5</option>
-    <option value="5">Analog 6</option>
-    <option value="6">Analog 7</option>
-    <option value="7">Analog 8</option>
-    <option value="8">USB 1</option>
-    <option value="9">USB 2</option>
-    <option value="10">USB 3</option>
-    <option value="11">USB 4</option>
-    <option value="12">USB 5</option>
-    <option value="13">USB 6</option>
-    <option value="14">USB 7</option>
-    <option value="15">USB 8</option>
-    <option value="16">SPDIF L</option>
-    <option value="17">SPDIF R</option>
-  </select>
-  </td><td>
-  <button style="color:#54F4F9;" onclick="openHP(0,19536,19576,19616,19656);">HP</button>
-  </td><td>
-  <button style="color:#005EF0;" onclick="openLShelv(0,19696);">LShlv</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(0,19736);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(1,19741);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(2,19746);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(3,19751);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(4,19756);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(5,19761);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(6,19766);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(7,19771);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(8,19776);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(9,19781);">PEQ</button>
-  </td><td>
-  <button style="color:#005EF0;" onclick="openHShelv(0,20136);">HShlv</button>
-  </td><td>
-  <button style="color:#54F4F9;" onclick="openLP(0,20176,20216,20256,20296);">LP</button>
-  </td><td>
-  <button style="color:#FD8E28;" onclick="openPhase(0,20336);">Phase</button>
-  </td><td>
-  <button style="color:#73EC6F;" onclick="openDelay(0,20376);">Delay</button>
-  </td><td>
-  <button style="color:#FC527F;" onclick="openGain(0,20385);">Gain</button>
-  </td><td style="min-width:60px">
-  OUT 1
-  </td><td rowspan="8" style="max-width: 80px;">
-    <input type="range" id="mvol" class="volslider" min="-120" max="0" onchange="postMVol()"/>  
-    <div style="transform: translateY(240px);">Master<br>Volume</div>  
-  </td></tr>
-
-  <tr><td class="rotate">
-  Channel 2
-  </td><td>
-  <select id="chn1" onchange="postInputJson('chn1',1);">
-    <option value="0">Analog 1</option>
-    <option value="1">Analog 2</option>
-    <option value="2">Analog 3</option>
-    <option value="3">Analog 4</option>
-    <option value="4">Analog 5</option>
-    <option value="5">Analog 6</option>
-    <option value="6">Analog 7</option>
-    <option value="7">Analog 8</option>
-    <option value="8">USB 1</option>
-    <option value="9">USB 2</option>
-    <option value="10">USB 3</option>
-    <option value="11">USB 4</option>
-    <option value="12">USB 5</option>
-    <option value="13">USB 6</option>
-    <option value="14">USB 7</option>
-    <option value="15">USB 8</option>
-    <option value="16">SPDIF L</option>
-    <option value="17">SPDIF R</option>
-  </select>
-  </td><td>
-  <button style="color:#54F4F9;" onclick="openHP(1,19541,19581,19621,19661);">HP</button>
-  </td><td>
-  <button style="color:#005EF0;" onclick="openLShelv(1,19701);">LShlv</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(10,19786);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(11,19791);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(12,19796);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(13,19801);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(14,19806);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(15,19811);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(16,19816);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(17,19821);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(18,19826);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(19,19831);">PEQ</button>
-  </td><td>
-  <button style="color:#005EF0;" onclick="openHShelv(1,20141);">HShlv</button>
-  </td><td>
-  <button style="color:#54F4F9;" onclick="openLP(1,20181,20221,20261,20301);">LP</button>
-  </td><td>
-  <button style="color:#FD8E28;" onclick="openPhase(1,20341);">Phase</button>
-  </td><td>
-  <button style="color:#73EC6F;" onclick="openDelay(1,20377);">Delay</button>
-  </td><td>
-  <button style="color:#FC527F;" onclick="openGain(1,20388);">Gain</button>
-  </td><td>
-  OUT 2
-  </td></tr>
-
-  <tr><td class="rotate">
-  Channel 3
-  </td><td>
-  <select id="chn2" onchange="postInputJson('chn2',2);">
-    <option value="0">Analog 1</option>
-    <option value="1">Analog 2</option>
-    <option value="2">Analog 3</option>
-    <option value="3">Analog 4</option>
-    <option value="4">Analog 5</option>
-    <option value="5">Analog 6</option>
-    <option value="6">Analog 7</option>
-    <option value="7">Analog 8</option>
-    <option value="8">USB 1</option>
-    <option value="9">USB 2</option>
-    <option value="10">USB 3</option>
-    <option value="11">USB 4</option>
-    <option value="12">USB 5</option>
-    <option value="13">USB 6</option>
-    <option value="14">USB 7</option>
-    <option value="15">USB 8</option>
-    <option value="16">SPDIF L</option>
-    <option value="17">SPDIF R</option>
-  </select>
-  </td><td>
-  <button style="color:#54F4F9;" onclick="openHP(2,19546,19586,19626,19666);">HP</button>
-  </td><td>
-  <button style="color:#005EF0;" onclick="openLShelv(2,19706);">LShlv</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(20,19836);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(21,19841);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(22,19846);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(23,19851);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(24,19856);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(25,19861);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(26,19866);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(27,19871);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(28,19876);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(29,19881);">PEQ</button>
-  </td><td>
-  <button style="color:#005EF0;" onclick="openHShelv(2,20146);">HShlv</button>
-  </td><td>
-  <button style="color:#54F4F9;" onclick="openLP(2,20186,20226,20266,20306);">LP</button>
-  </td><td>
-  <button style="color:#FD8E28;" onclick="openPhase(2,20346);">Phase</button>
-  </td><td>
-  <button style="color:#73EC6F;" onclick="openDelay(2,20378);">Delay</button>
-  </td><td>
-  <button style="color:#FC527F;" onclick="openGain(2,20391);">Gain</button>
-  </td><td>
-  OUT 3
-  </td></tr>
-
-  <tr><td class="rotate">
-  Channel 4
-  </td><td>
-  <select id="chn3" onchange="postInputJson('chn3',3);">
-    <option value="0">Analog 1</option>
-    <option value="1">Analog 2</option>
-    <option value="2">Analog 3</option>
-    <option value="3">Analog 4</option>
-    <option value="4">Analog 5</option>
-    <option value="5">Analog 6</option>
-    <option value="6">Analog 7</option>
-    <option value="7">Analog 8</option>
-    <option value="8">USB 1</option>
-    <option value="9">USB 2</option>
-    <option value="10">USB 3</option>
-    <option value="11">USB 4</option>
-    <option value="12">USB 5</option>
-    <option value="13">USB 6</option>
-    <option value="14">USB 7</option>
-    <option value="15">USB 8</option>
-    <option value="16">SPDIF L</option>
-    <option value="17">SPDIF R</option>
-  </select>
-  </td><td>
-  <button style="color:#54F4F9;" onclick="openHP(3,19551,19591,19631,19671);">HP</button>
-  </td><td>
-  <button style="color:#005EF0;" onclick="openLShelv(3,19711);">LShlv</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(30,19886);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(31,19891);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(32,19896);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(33,19901);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(34,19906);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(35,19911);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(36,19916);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(37,19921);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(38,19926);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(39,19931);">PEQ</button>
-  </td><td>
-  <button style="color:#005EF0;" onclick="openHShelv(3,20151);">HShlv</button>
-  </td><td>
-  <button style="color:#54F4F9;" onclick="openLP(3,20191,20231,20271,20311);">LP</button>
-  </td><td>
-  <button style="color:#FD8E28;" onclick="openPhase(3,20351);">Phase</button>
-  </td><td>
-  <button style="color:#73EC6F;" onclick="openDelay(3,20379);">Delay</button>
-  </td><td>
-  <button style="color:#FC527F;" onclick="openGain(3,20394);">Gain</button>
-  </td><td>
-  OUT 4
-  </td></tr>
-
-  <tr><td class="rotate">
-  Channel 5
-  </td><td>
-  <select id="chn4" onchange="postInputJson('chn4',4);">
-    <option value="0">Analog 1</option>
-    <option value="1">Analog 2</option>
-    <option value="2">Analog 3</option>
-    <option value="3">Analog 4</option>
-    <option value="4">Analog 5</option>
-    <option value="5">Analog 6</option>
-    <option value="6">Analog 7</option>
-    <option value="7">Analog 8</option>
-    <option value="8">USB 1</option>
-    <option value="9">USB 2</option>
-    <option value="10">USB 3</option>
-    <option value="11">USB 4</option>
-    <option value="12">USB 5</option>
-    <option value="13">USB 6</option>
-    <option value="14">USB 7</option>
-    <option value="15">USB 8</option>
-    <option value="16">SPDIF L</option>
-    <option value="17">SPDIF R</option>
-  </select>
-  </td><td>
-  <button style="color:#54F4F9;" onclick="openHP(4,19571,19601,19636,19686);">HP</button>
-  </td><td>
-  <button style="color:#005EF0;" onclick="openLShelv(4,19726);">LShlv</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(40,19986);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(41,19991);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(42,19996);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(43,20001);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(44,20006);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(45,20011);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(46,20016);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(47,20021);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(48,20026);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(49,20031);">PEQ</button>
-  </td><td>
-  <button style="color:#005EF0;" onclick="openHShelv(4,20166);">HShlv</button>
-  </td><td>
-  <button style="color:#54F4F9;" onclick="openLP(4,20196,20251,20281,20316);">LP</button>
-  </td><td>
-  <button style="color:#FD8E28;" onclick="openPhase(4,20356);">Phase</button>
-  </td><td>
-  <button style="color:#73EC6F;" onclick="openDelay(4,20382);">Delay</button>
-  </td><td>
-  <button style="color:#FC527F;" onclick="openGain(4,20403);">Gain</button>
-  </td><td>
-  OUT 5
-  </td></tr>
-
-  <tr><td class="rotate">
-  Channel 6
-  </td><td>
-  <select id="chn5" onchange="postInputJson('chn5',5);">
-    <option value="0">Analog 1</option>
-    <option value="1">Analog 2</option>
-    <option value="2">Analog 3</option>
-    <option value="3">Analog 4</option>
-    <option value="4">Analog 5</option>
-    <option value="5">Analog 6</option>
-    <option value="6">Analog 7</option>
-    <option value="7">Analog 8</option>
-    <option value="8">USB 1</option>
-    <option value="9">USB 2</option>
-    <option value="10">USB 3</option>
-    <option value="11">USB 4</option>
-    <option value="12">USB 5</option>
-    <option value="13">USB 6</option>
-    <option value="14">USB 7</option>
-    <option value="15">USB 8</option>
-    <option value="16">SPDIF L</option>
-    <option value="17">SPDIF R</option>
-  </select>
-  </td><td>
-  <button style="color:#54F4F9;" onclick="openHP(5,19556,19606,19651,19691);">HP</button>
-  </td><td>
-  <button style="color:#005EF0;" onclick="openLShelv(5,19731);">LShlv</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(50,19936);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(51,19941);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(52,19946);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(53,19951);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(54,19956);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(55,19961);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(56,19966);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(57,19971);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(58,19976);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(59,19981);">PEQ</button>
-  </td><td>
-  <button style="color:#005EF0;" onclick="openHShelv(5,20161);">HShlv</button>
-  </td><td>
-  <button style="color:#54F4F9;" onclick="openLP(5,20206,20241,20291,20331);">LP</button>
-  </td><td>
-  <button style="color:#FD8E28;" onclick="openPhase(5,20366);">Phase</button>
-  </td><td>
-  <button style="color:#73EC6F;" onclick="openDelay(5,20380);">Delay</button>
-  </td><td>
-  <button style="color:#FC527F;" onclick="openGain(5,20406);">Gain</button>
-  </td><td>
-  OUT 6
-  </td></tr>
-
-  <tr><td class="rotate">
-  Channel 7
-  </td><td>
-  <select id="chn6" onchange="postInputJson('chn6',6);">
-    <option value="0">Analog 1</option>
-    <option value="1">Analog 2</option>
-    <option value="2">Analog 3</option>
-    <option value="3">Analog 4</option>
-    <option value="4">Analog 5</option>
-    <option value="5">Analog 6</option>
-    <option value="6">Analog 7</option>
-    <option value="7">Analog 8</option>
-    <option value="8">USB 1</option>
-    <option value="9">USB 2</option>
-    <option value="10">USB 3</option>
-    <option value="11">USB 4</option>
-    <option value="12">USB 5</option>
-    <option value="13">USB 6</option>
-    <option value="14">USB 7</option>
-    <option value="15">USB 8</option>
-    <option value="16">SPDIF L</option>
-    <option value="17">SPDIF R</option>
-  </select>
-  </td><td>
-  <button style="color:#54F4F9;" onclick="openHP(6,19566,19611,19646,19676);">HP</button>
-  </td><td>
-  <button style="color:#005EF0;" onclick="openLShelv(6,19716);">LShlv</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(60,20036);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(61,20041);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(62,20046);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(63,20051);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(64,20056);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(65,20061);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(66,20066);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(67,20071);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(68,20076);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(69,20081);">PEQ</button>
-  </td><td>
-  <button style="color:#005EF0;" onclick="openHShelv(6,20156);">HShlv</button>
-  </td><td>
-  <button style="color:#54F4F9;" onclick="openLP(6,20201,20236,20286,20326);">LP</button>
-  </td><td>
-  <button style="color:#FD8E28;" onclick="openPhase(6,20371);">Phase</button>
-  </td><td>
-  <button style="color:#73EC6F;" onclick="openDelay(6,20383);">Delay</button>
-  </td><td>
-  <button style="color:#FC527F;" onclick="openGain(6,20400);">Gain</button>
-  </td><td>
-  OUT 7
-  </td></tr>
-
-  <tr><td class="rotate">
-  Channel 8
-  </td><td>
-  <select id="chn7" onchange="postInputJson('chn7',7);">
-    <option value="0">Analog 1</option>
-    <option value="1">Analog 2</option>
-    <option value="2">Analog 3</option>
-    <option value="3">Analog 4</option>
-    <option value="4">Analog 5</option>
-    <option value="5">Analog 6</option>
-    <option value="6">Analog 7</option>
-    <option value="7">Analog 8</option>
-    <option value="8">USB 1</option>
-    <option value="9">USB 2</option>
-    <option value="10">USB 3</option>
-    <option value="11">USB 4</option>
-    <option value="12">USB 5</option>
-    <option value="13">USB 6</option>
-    <option value="14">USB 7</option>
-    <option value="15">USB 8</option>
-    <option value="16">SPDIF L</option>
-    <option value="17">SPDIF R</option>
-  </select>
-  </td><td>
-  <button style="color:#54F4F9;" onclick="openHP(7,19561,19596,19641,19681);">HP</button>
-  </td><td>
-  <button style="color:#005EF0;" onclick="openLShelv(7,19721);">LShlv</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(70,20086);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(71,20091);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(72,20096);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(73,20101);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(74,20106);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(75,20111);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(76,20116);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(77,20121);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(78,20126);">PEQ</button>
-  </td><td>
-  <button style="color:#A05EF0;" onclick="openPEQ(79,20131);">PEQ</button>
-  </td><td>
-  <button style="color:#005EF0;" onclick="openHShelv(7,20171);">HShlv</button>
-  </td><td>
-  <button style="color:#54F4F9;" onclick="openLP(7,20211,20246,20276,20321);">LP</button>
-  </td><td>
-  <button style="color:#FD8E28;" onclick="openPhase(7,20361);">Phase</button>
-  </td><td>
-  <button style="color:#73EC6F;" onclick="openDelay(7,20381);">Delay</button>
-  </td><td>
-  <button style="color:#FC527F;" onclick="openGain(7,20397);">Gain</button>
-  </td><td>
-  OUT 8
-  </td></tr>
+    <tr><td class="rotate">
+    Channel 1
+    </td><td style="min-width:80px">
+    <select id="chn0" onchange="postInputJson('chn0',0);">
+      <option value="0">Analog 1</option>
+      <option value="1">Analog 2</option>
+      <option value="2">Analog 3</option>
+      <option value="3">Analog 4</option>
+      <option value="4">Analog 5</option>
+      <option value="5">Analog 6</option>
+      <option value="6">Analog 7</option>
+      <option value="7">Analog 8</option>
+      <option value="8">USB 1</option>
+      <option value="9">USB 2</option>
+      <option value="10">USB 3</option>
+      <option value="11">USB 4</option>
+      <option value="12">USB 5</option>
+      <option value="13">USB 6</option>
+      <option value="14">USB 7</option>
+      <option value="15">USB 8</option>
+      <option value="16">SPDIF L</option>
+      <option value="17">SPDIF R</option>
+    </select>
+    </td><td>
+    <button style="color:#54F4F9;" onclick="openHP(0,19536,19576,19616,19656);">HP</button>
+    </td><td>
+    <button style="color:#005EF0;" onclick="openLShelv(0,19696);">LShlv</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(0,19736);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(1,19741);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(2,19746);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(3,19751);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(4,19756);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(5,19761);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(6,19766);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(7,19771);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(8,19776);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(9,19781);">PEQ</button>
+    </td><td>
+    <button style="color:#005EF0;" onclick="openHShelv(0,20136);">HShlv</button>
+    </td><td>
+    <button style="color:#54F4F9;" onclick="openLP(0,20176,20216,20256,20296);">LP</button>
+    </td><td>
+    <button style="color:#FD8E28;" onclick="openPhase(0,20336);">Phase</button>
+    </td><td>
+    <button style="color:#73EC6F;" onclick="openDelay(0,20376);">Delay</button>
+    </td><td>
+    <button style="color:#FC527F;" onclick="openGain(0,20385);">Gain</button>
+    </td><td style="min-width:60px">
+    OUT 1
+    </td><td rowspan="8" style="max-width: 80px;">
+      <input type="range" id="mvol" class="volslider" min="-120" max="0" onchange="postMVol()"/>  
+      <div style="transform: translateY(240px);">Master<br>Volume</div>  
+    </td></tr>
+  
+    <tr><td class="rotate">
+    Channel 2
+    </td><td>
+    <select id="chn1" onchange="postInputJson('chn1',1);">
+      <option value="0">Analog 1</option>
+      <option value="1">Analog 2</option>
+      <option value="2">Analog 3</option>
+      <option value="3">Analog 4</option>
+      <option value="4">Analog 5</option>
+      <option value="5">Analog 6</option>
+      <option value="6">Analog 7</option>
+      <option value="7">Analog 8</option>
+      <option value="8">USB 1</option>
+      <option value="9">USB 2</option>
+      <option value="10">USB 3</option>
+      <option value="11">USB 4</option>
+      <option value="12">USB 5</option>
+      <option value="13">USB 6</option>
+      <option value="14">USB 7</option>
+      <option value="15">USB 8</option>
+      <option value="16">SPDIF L</option>
+      <option value="17">SPDIF R</option>
+    </select>
+    </td><td>
+    <button style="color:#54F4F9;" onclick="openHP(1,19541,19581,19621,19661);">HP</button>
+    </td><td>
+    <button style="color:#005EF0;" onclick="openLShelv(1,19701);">LShlv</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(10,19786);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(11,19791);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(12,19796);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(13,19801);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(14,19806);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(15,19811);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(16,19816);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(17,19821);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(18,19826);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(19,19831);">PEQ</button>
+    </td><td>
+    <button style="color:#005EF0;" onclick="openHShelv(1,20141);">HShlv</button>
+    </td><td>
+    <button style="color:#54F4F9;" onclick="openLP(1,20181,20221,20261,20301);">LP</button>
+    </td><td>
+    <button style="color:#FD8E28;" onclick="openPhase(1,20341);">Phase</button>
+    </td><td>
+    <button style="color:#73EC6F;" onclick="openDelay(1,20377);">Delay</button>
+    </td><td>
+    <button style="color:#FC527F;" onclick="openGain(1,20388);">Gain</button>
+    </td><td>
+    OUT 2
+    </td></tr>
+  
+    <tr><td class="rotate">
+    Channel 3
+    </td><td>
+    <select id="chn2" onchange="postInputJson('chn2',2);">
+      <option value="0">Analog 1</option>
+      <option value="1">Analog 2</option>
+      <option value="2">Analog 3</option>
+      <option value="3">Analog 4</option>
+      <option value="4">Analog 5</option>
+      <option value="5">Analog 6</option>
+      <option value="6">Analog 7</option>
+      <option value="7">Analog 8</option>
+      <option value="8">USB 1</option>
+      <option value="9">USB 2</option>
+      <option value="10">USB 3</option>
+      <option value="11">USB 4</option>
+      <option value="12">USB 5</option>
+      <option value="13">USB 6</option>
+      <option value="14">USB 7</option>
+      <option value="15">USB 8</option>
+      <option value="16">SPDIF L</option>
+      <option value="17">SPDIF R</option>
+    </select>
+    </td><td>
+    <button style="color:#54F4F9;" onclick="openHP(2,19546,19586,19626,19666);">HP</button>
+    </td><td>
+    <button style="color:#005EF0;" onclick="openLShelv(2,19706);">LShlv</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(20,19836);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(21,19841);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(22,19846);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(23,19851);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(24,19856);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(25,19861);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(26,19866);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(27,19871);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(28,19876);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(29,19881);">PEQ</button>
+    </td><td>
+    <button style="color:#005EF0;" onclick="openHShelv(2,20146);">HShlv</button>
+    </td><td>
+    <button style="color:#54F4F9;" onclick="openLP(2,20186,20226,20266,20306);">LP</button>
+    </td><td>
+    <button style="color:#FD8E28;" onclick="openPhase(2,20346);">Phase</button>
+    </td><td>
+    <button style="color:#73EC6F;" onclick="openDelay(2,20378);">Delay</button>
+    </td><td>
+    <button style="color:#FC527F;" onclick="openGain(2,20391);">Gain</button>
+    </td><td>
+    OUT 3
+    </td></tr>
+  
+    <tr><td class="rotate">
+    Channel 4
+    </td><td>
+    <select id="chn3" onchange="postInputJson('chn3',3);">
+      <option value="0">Analog 1</option>
+      <option value="1">Analog 2</option>
+      <option value="2">Analog 3</option>
+      <option value="3">Analog 4</option>
+      <option value="4">Analog 5</option>
+      <option value="5">Analog 6</option>
+      <option value="6">Analog 7</option>
+      <option value="7">Analog 8</option>
+      <option value="8">USB 1</option>
+      <option value="9">USB 2</option>
+      <option value="10">USB 3</option>
+      <option value="11">USB 4</option>
+      <option value="12">USB 5</option>
+      <option value="13">USB 6</option>
+      <option value="14">USB 7</option>
+      <option value="15">USB 8</option>
+      <option value="16">SPDIF L</option>
+      <option value="17">SPDIF R</option>
+    </select>
+    </td><td>
+    <button style="color:#54F4F9;" onclick="openHP(3,19551,19591,19631,19671);">HP</button>
+    </td><td>
+    <button style="color:#005EF0;" onclick="openLShelv(3,19711);">LShlv</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(30,19886);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(31,19891);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(32,19896);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(33,19901);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(34,19906);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(35,19911);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(36,19916);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(37,19921);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(38,19926);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(39,19931);">PEQ</button>
+    </td><td>
+    <button style="color:#005EF0;" onclick="openHShelv(3,20151);">HShlv</button>
+    </td><td>
+    <button style="color:#54F4F9;" onclick="openLP(3,20191,20231,20271,20311);">LP</button>
+    </td><td>
+    <button style="color:#FD8E28;" onclick="openPhase(3,20351);">Phase</button>
+    </td><td>
+    <button style="color:#73EC6F;" onclick="openDelay(3,20379);">Delay</button>
+    </td><td>
+    <button style="color:#FC527F;" onclick="openGain(3,20394);">Gain</button>
+    </td><td>
+    OUT 4
+    </td></tr>
+  
+    <tr><td class="rotate">
+    Channel 5
+    </td><td>
+    <select id="chn4" onchange="postInputJson('chn4',4);">
+      <option value="0">Analog 1</option>
+      <option value="1">Analog 2</option>
+      <option value="2">Analog 3</option>
+      <option value="3">Analog 4</option>
+      <option value="4">Analog 5</option>
+      <option value="5">Analog 6</option>
+      <option value="6">Analog 7</option>
+      <option value="7">Analog 8</option>
+      <option value="8">USB 1</option>
+      <option value="9">USB 2</option>
+      <option value="10">USB 3</option>
+      <option value="11">USB 4</option>
+      <option value="12">USB 5</option>
+      <option value="13">USB 6</option>
+      <option value="14">USB 7</option>
+      <option value="15">USB 8</option>
+      <option value="16">SPDIF L</option>
+      <option value="17">SPDIF R</option>
+    </select>
+    </td><td>
+    <button style="color:#54F4F9;" onclick="openHP(4,19571,19601,19636,19686);">HP</button>
+    </td><td>
+    <button style="color:#005EF0;" onclick="openLShelv(4,19726);">LShlv</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(40,19986);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(41,19991);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(42,19996);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(43,20001);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(44,20006);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(45,20011);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(46,20016);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(47,20021);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(48,20026);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(49,20031);">PEQ</button>
+    </td><td>
+    <button style="color:#005EF0;" onclick="openHShelv(4,20166);">HShlv</button>
+    </td><td>
+    <button style="color:#54F4F9;" onclick="openLP(4,20196,20251,20281,20316);">LP</button>
+    </td><td>
+    <button style="color:#FD8E28;" onclick="openPhase(4,20356);">Phase</button>
+    </td><td>
+    <button style="color:#73EC6F;" onclick="openDelay(4,20382);">Delay</button>
+    </td><td>
+    <button style="color:#FC527F;" onclick="openGain(4,20403);">Gain</button>
+    </td><td>
+    OUT 5
+    </td></tr>
+  
+    <tr><td class="rotate">
+    Channel 6
+    </td><td>
+    <select id="chn5" onchange="postInputJson('chn5',5);">
+      <option value="0">Analog 1</option>
+      <option value="1">Analog 2</option>
+      <option value="2">Analog 3</option>
+      <option value="3">Analog 4</option>
+      <option value="4">Analog 5</option>
+      <option value="5">Analog 6</option>
+      <option value="6">Analog 7</option>
+      <option value="7">Analog 8</option>
+      <option value="8">USB 1</option>
+      <option value="9">USB 2</option>
+      <option value="10">USB 3</option>
+      <option value="11">USB 4</option>
+      <option value="12">USB 5</option>
+      <option value="13">USB 6</option>
+      <option value="14">USB 7</option>
+      <option value="15">USB 8</option>
+      <option value="16">SPDIF L</option>
+      <option value="17">SPDIF R</option>
+    </select>
+    </td><td>
+    <button style="color:#54F4F9;" onclick="openHP(5,19556,19606,19651,19691);">HP</button>
+    </td><td>
+    <button style="color:#005EF0;" onclick="openLShelv(5,19731);">LShlv</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(50,19936);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(51,19941);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(52,19946);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(53,19951);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(54,19956);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(55,19961);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(56,19966);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(57,19971);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(58,19976);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(59,19981);">PEQ</button>
+    </td><td>
+    <button style="color:#005EF0;" onclick="openHShelv(5,20161);">HShlv</button>
+    </td><td>
+    <button style="color:#54F4F9;" onclick="openLP(5,20206,20241,20291,20331);">LP</button>
+    </td><td>
+    <button style="color:#FD8E28;" onclick="openPhase(5,20366);">Phase</button>
+    </td><td>
+    <button style="color:#73EC6F;" onclick="openDelay(5,20380);">Delay</button>
+    </td><td>
+    <button style="color:#FC527F;" onclick="openGain(5,20406);">Gain</button>
+    </td><td>
+    OUT 6
+    </td></tr>
+  
+    <tr><td class="rotate">
+    Channel 7
+    </td><td>
+    <select id="chn6" onchange="postInputJson('chn6',6);">
+      <option value="0">Analog 1</option>
+      <option value="1">Analog 2</option>
+      <option value="2">Analog 3</option>
+      <option value="3">Analog 4</option>
+      <option value="4">Analog 5</option>
+      <option value="5">Analog 6</option>
+      <option value="6">Analog 7</option>
+      <option value="7">Analog 8</option>
+      <option value="8">USB 1</option>
+      <option value="9">USB 2</option>
+      <option value="10">USB 3</option>
+      <option value="11">USB 4</option>
+      <option value="12">USB 5</option>
+      <option value="13">USB 6</option>
+      <option value="14">USB 7</option>
+      <option value="15">USB 8</option>
+      <option value="16">SPDIF L</option>
+      <option value="17">SPDIF R</option>
+    </select>
+    </td><td>
+    <button style="color:#54F4F9;" onclick="openHP(6,19566,19611,19646,19676);">HP</button>
+    </td><td>
+    <button style="color:#005EF0;" onclick="openLShelv(6,19716);">LShlv</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(60,20036);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(61,20041);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(62,20046);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(63,20051);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(64,20056);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(65,20061);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(66,20066);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(67,20071);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(68,20076);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(69,20081);">PEQ</button>
+    </td><td>
+    <button style="color:#005EF0;" onclick="openHShelv(6,20156);">HShlv</button>
+    </td><td>
+    <button style="color:#54F4F9;" onclick="openLP(6,20201,20236,20286,20326);">LP</button>
+    </td><td>
+    <button style="color:#FD8E28;" onclick="openPhase(6,20371);">Phase</button>
+    </td><td>
+    <button style="color:#73EC6F;" onclick="openDelay(6,20383);">Delay</button>
+    </td><td>
+    <button style="color:#FC527F;" onclick="openGain(6,20400);">Gain</button>
+    </td><td>
+    OUT 7
+    </td></tr>
+  
+    <tr><td class="rotate">
+    Channel 8
+    </td><td>
+    <select id="chn7" onchange="postInputJson('chn7',7);">
+      <option value="0">Analog 1</option>
+      <option value="1">Analog 2</option>
+      <option value="2">Analog 3</option>
+      <option value="3">Analog 4</option>
+      <option value="4">Analog 5</option>
+      <option value="5">Analog 6</option>
+      <option value="6">Analog 7</option>
+      <option value="7">Analog 8</option>
+      <option value="8">USB 1</option>
+      <option value="9">USB 2</option>
+      <option value="10">USB 3</option>
+      <option value="11">USB 4</option>
+      <option value="12">USB 5</option>
+      <option value="13">USB 6</option>
+      <option value="14">USB 7</option>
+      <option value="15">USB 8</option>
+      <option value="16">SPDIF L</option>
+      <option value="17">SPDIF R</option>
+    </select>
+    </td><td>
+    <button style="color:#54F4F9;" onclick="openHP(7,19561,19596,19641,19681);">HP</button>
+    </td><td>
+    <button style="color:#005EF0;" onclick="openLShelv(7,19721);">LShlv</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(70,20086);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(71,20091);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(72,20096);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(73,20101);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(74,20106);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(75,20111);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(76,20116);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(77,20121);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(78,20126);">PEQ</button>
+    </td><td>
+    <button style="color:#A05EF0;" onclick="openPEQ(79,20131);">PEQ</button>
+    </td><td>
+    <button style="color:#005EF0;" onclick="openHShelv(7,20171);">HShlv</button>
+    </td><td>
+    <button style="color:#54F4F9;" onclick="openLP(7,20211,20246,20276,20321);">LP</button>
+    </td><td>
+    <button style="color:#FD8E28;" onclick="openPhase(7,20361);">Phase</button>
+    </td><td>
+    <button style="color:#73EC6F;" onclick="openDelay(7,20381);">Delay</button>
+    </td><td>
+    <button style="color:#FC527F;" onclick="openGain(7,20397);">Gain</button>
+    </td><td>
+    OUT 8
+    </td></tr>
   </table>
 
   <table><tr><td><button class="prebtn" id="pre0" onclick="switchPreset(0)">Preset A</button></td>
@@ -708,6 +516,7 @@ height:60px;
   <td><button class="prebtn" id="pre2" onclick="switchPreset(2)">Preset C</button></td>
   <td><button class="prebtn" id="pre3" onclick="switchPreset(3)">Preset D</button></td></tr></table>
   </center>
+  </div>
 
   <div id="highPass" class="modal hp" data-idx="0" data-addr="0">
     <span class="close cursor" onclick="closeModal('highPass')">&times;</span>
@@ -835,7 +644,38 @@ height:60px;
     </div>
   </div>
 
-<script>
+  <div id="configDev" class="modal">
+    <span class="close cursor" onclick="closeModal('configDev')">&times;</span>
+    <div class="modal-content">
+      <table class="ptbl">
+      <tr><td>AddOn</td></tr>
+      <tr><td><select id="aid">
+        <option value="0">None or custom</option>
+        <option value="1">A The woodworker's friend</option>
+        <option value="2">B Down with developers</option>
+        <option value="3">C Control over the crowd</option>
+        <option value="4">D Balanced life</option>
+      </select></td></tr>
+      <tr><td><input type="checkbox" id="vpot">Volume Potentiometer</td></tr>
+      <tr><td><button class="send" onclick="sendConfig()">Store</button></td</tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="configWifi" class="modal">
+    <span class="close cursor" onclick="closeModal('configWifi')">&times;</span>
+    <div class="modal-content">
+      <table class="ptbl">
+      <tr><td>SSID</td></tr>
+      <tr><td><input type="text" id="ssid" style="width:95%;"></td></tr>
+      <tr><td>Password</td</tr>
+      <tr><td><input type="password" id="pwd" style="width:95%;"></td></tr>
+      <tr><td><button class="send" onclick="sendWifi()">Store</button></td</tr>
+      </table>
+    </div>
+  </div>
+
+  <script>
   function getInputChannels(){
     fetch("/input").then (function (response) {
       return response.json();
@@ -971,6 +811,15 @@ height:60px;
     }).catch (function (error) {console.log(error);
     });
   }
+  function getConfig(){
+    fetch("/config").then (function (response) {
+      return response.json();
+    }).then (function (data) {  
+      document.getElementById("aid").value = data.aid;
+      document.getElementById("vpot").value = data.vpot;
+    }).catch (function (error) {console.log(error);
+    });
+  }
 
   function postInputJson(id,idx){
     var data={};
@@ -1085,6 +934,15 @@ height:60px;
   }
   function sendParam(btp){postJson(btp).catch(function(error){console.log(error);});}
   function closeModal(id){document.getElementById(id).style.display = "none";}
-</script>
+  function configDev(){document.getElementById("configDev").style.display = "block";}
+  function configWifi(){document.getElementById("configWifi").style.display = "block";}
+  function sendConfig(){
+    var data={};
+    data.aid=document.getElementById("aid").value;
+    data.vpot=document.getElementById("vpot").checked;
+    return fetch("/config",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)});
+  }
+
+  </script>
 </body>
 </html>

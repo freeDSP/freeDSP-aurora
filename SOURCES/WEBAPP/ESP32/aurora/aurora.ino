@@ -25,6 +25,16 @@
 // S/P-DIF-Mux on AddOnB
 #define ADDONB_SPDIFMUX_ADDR (0x82>>1)
 
+#define MAX_NUM_INPUTS 8
+#define MAX_NUM_HPS 8
+#define MAX_NUM_LSHELVS 8
+#define MAX_NUM_PEQS 80
+#define MAX_NUM_HSHELVS 8
+#define MAX_NUM_LPS 8
+#define MAX_NUM_PHASES 8
+#define MAX_NUM_DELAYS 8
+#define MAX_NUM_GAINS 8
+
 enum taddonid
 {
   ADDON_CUSTOM = 0x00,
@@ -38,8 +48,9 @@ struct tSettings
 {
   String ssid;
   String password;
-  uint32_t addonid;
+  int addonid;
   byte currentPreset;
+  bool vpot;
 };
 
 tSettings Settings;
@@ -96,7 +107,6 @@ struct tGain
   float gain;
 };
 
-
 tInput paramInputs[8];
 tHPLP paramHP[8];
 tShelving paramLshelv[8];
@@ -107,6 +117,16 @@ tPhase paramPhase[8];
 tDelay paramDelay[8];
 tGain paramGain[8];
 
+int numInputs;
+int numHPs;
+int numLShelvs;
+int numPEQs;
+int numHShelvs;
+int numLPs;
+int numPhases;
+int numDelays;
+int numGains;
+
 File fileDspProgram;
 
 float sampleRate = 48000.0;
@@ -114,17 +134,6 @@ float masterVolume = -60.0;
 uint8_t currentPreset = 0;
 
 AsyncWebServer server( 80 );
-
-void readParams( void )
-{
-  for( int ii = 0; ii < 8; ii++ )
-  {
-    paramInputs[ii].sel = static_cast<tInputSelection>(ii);
-
-    paramHP[ii].fc = 1000.0;
-    paramHP[ii].typ = 0;
-  }
-}
 
 //==============================================================================
 /*! 
@@ -198,6 +207,177 @@ void AK5558_REGWRITE( byte reg, byte val)
   Wire.write( reg );
   Wire.write( val );
   Wire.endTransmission( true );
+}
+
+//==============================================================================
+/*! Inits the default values for filters etc.
+ */
+void initUserParams( void )
+{
+  for( int ii = 0; ii < MAX_NUM_INPUTS; ii++ )
+  {
+    paramInputs[ii].sel = static_cast<tInputSelection>(ii);
+  }
+
+  for( int ii = 0; ii < MAX_NUM_HPS; ii++ )
+  {
+    paramHP[ii].fc = 100.0;
+    paramHP[ii].typ = 0;
+  }
+
+  for( int ii = 0; ii < MAX_NUM_LSHELVS; ii++ )
+  {
+    paramLshelv[ii].gain = 0.0;
+    paramLshelv[ii].fc = 100.0;
+    paramLshelv[ii].slope = 1.0;
+  }
+
+  for( int ii = 0; ii < MAX_NUM_PEQS; ii = ii + 8 )
+  {
+    for( int nn = 0; nn < 8; nn++ )
+    {
+      paramPeq[ii + nn].gain = 0.0;
+      paramPeq[ii + nn].fc = static_cast<float>( (nn+1)*1000 );
+      paramPeq[ii + nn].Q = 0.707;
+    }
+  }
+
+  for( int ii = 0; ii < MAX_NUM_HSHELVS; ii++ )
+  {
+    paramHshelv[ii].gain = 0.0;
+    paramHshelv[ii].fc = 10000.0;
+    paramHshelv[ii].slope = 1.0;
+  }
+
+  for( int ii = 0; ii < MAX_NUM_LPS; ii++ )
+  {
+    paramLP[ii].fc = 1000.0;
+    paramLP[ii].typ = 0;
+  }
+
+  for( int ii = 0; ii < MAX_NUM_PHASES; ii++ )
+  {
+    paramPhase[ii].fc = 1000.0;
+    paramPhase[ii].Q = 1.0;
+    paramPhase[ii].inv = false;
+  }
+
+  for( int ii = 0; ii < MAX_NUM_DELAYS; ii++ )
+  {
+    paramDelay[ii].delay = 0;
+  }
+
+  for( int ii = 0; ii < MAX_NUM_GAINS; ii++ )
+  {
+    paramGain[ii].gain = 0.0;
+  }
+}
+
+//==============================================================================
+/*! Reads the device settings from JSON file.
+ */
+void readSettings( void )
+{
+  Serial.println( "Reading settings.ini" );
+  File fileSettings = SPIFFS.open( "/settings.ini" );
+
+  if( fileSettings )
+  {
+    StaticJsonDocument<512> jsonDoc;
+    DeserializationError err = deserializeJson( jsonDoc, fileSettings );
+    if( err )
+    {
+      Serial.print( "[ERROR] readSettings(): Deserialization failed." );
+      Serial.println( err.c_str() );
+      return;
+    }
+
+    JsonObject jsonSettings = jsonDoc.as<JsonObject>();
+    Settings.ssid = jsonSettings["ssid"].as<String>();
+    Settings.password = jsonSettings["pwd"].as<String>();
+    Settings.addonid = jsonSettings["aid"].as<String>().toInt();
+    Settings.currentPreset = jsonSettings["preset"].as<String>().toInt();
+    if( jsonSettings["vpot"].as<String>() == "true" )
+      Settings.vpot = true;
+    else
+      Settings.vpot = false;
+
+    Serial.println( "Device config" );
+    //Serial.print( "PID: " ); Serial.println( Settings.pid );
+    Serial.print( "AID: " ); Serial.println( Settings.addonid );
+    Serial.print( "Preset: " ); Serial.println( Settings.currentPreset ); 
+    Serial.print( "Volume Poti: " ); Serial.println( Settings.vpot ); 
+  }
+  else
+    Serial.println( "[ERROR] readSettings(): Opening settings.ini failed." );
+
+  fileSettings.close();
+}
+
+//==============================================================================
+/*! Write the device settings to JSON file.
+ */
+void writeSettings( void )
+{
+  Serial.println( "Writing settings.ini" );
+  File fileSettings = SPIFFS.open( "/settings.ini", "w" );
+  
+  if( fileSettings )
+  {
+    StaticJsonDocument<512> jsonSettings;
+    jsonSettings["ssid"] = Settings.ssid;
+    jsonSettings["pwd"] = Settings.password;
+    jsonSettings["aid"] = Settings.addonid;
+    jsonSettings["preset"] = Settings.currentPreset;
+    jsonSettings["vpot"] = Settings.vpot;
+
+    if( serializeJson( jsonSettings, fileSettings ) == 0 )
+      Serial.println( "[ERROR] writeSettings(): Failed to write settings to file" );
+  }
+  else
+    Serial.println( "[ERROR] writeSettings(): Opening settings.ini failed." );
+
+  fileSettings.close();
+}
+
+//==============================================================================
+/*! Reads the plugin meta data from JSON file.
+ */
+void readPluginMeta( void )
+{
+  Serial.print( "Reading plugin.ini......" );
+  File filePluginMeta = SPIFFS.open( "/plugin.ini" );
+
+  if( filePluginMeta )
+  {
+    StaticJsonDocument<512> jsonDoc;
+    DeserializationError err = deserializeJson( jsonDoc, filePluginMeta );
+    if( err )
+    {
+      Serial.print( "[ERROR] readPluginMeta(): Deserialization failed." );
+      Serial.println( err.c_str() );
+      return;
+    }
+
+    JsonObject jsonPluginMeta = jsonDoc.as<JsonObject>();
+    numInputs = jsonPluginMeta["inputs"].as<String>().toInt();
+    numHPs = jsonPluginMeta["hp"].as<String>().toInt();
+    numLShelvs = jsonPluginMeta["lshelv"].as<String>().toInt();
+    numPEQs = jsonPluginMeta["peq"].as<String>().toInt();
+    numHShelvs = jsonPluginMeta["hshelv"].as<String>().toInt();
+    numLPs = jsonPluginMeta["lp"].as<String>().toInt();
+    numPhases = jsonPluginMeta["phase"].as<String>().toInt();
+    numDelays = jsonPluginMeta["dly"].as<String>().toInt();
+    numGains = jsonPluginMeta["gain"].as<String>().toInt();
+  }
+  else
+  {
+    Serial.println( "\n[ERROR] readPluginMeta(): Opening plugin.ini failed." );
+    return;
+  }
+
+  filePluginMeta.close();
+  Serial.println( "[OK]" );
 }
 
 //==============================================================================
@@ -760,6 +940,21 @@ void handleGetPresetJson( AsyncWebServerRequest* request )
   request->send(response);
 }
 
+//==============================================================================
+/*! Handles the GET request for device configuration
+ *
+ */
+void handleGetConfigJson( AsyncWebServerRequest* request )
+{
+  Serial.println( "GET /config" );
+
+  AsyncJsonResponse* response = new AsyncJsonResponse();
+  JsonVariant& jsonResponse = response->getRoot();
+  jsonResponse["aid"] = Settings.addonid;
+  jsonResponse["vpot"] = Settings.vpot;
+  response->setLength();
+  request->send(response);
+}
 
 //==============================================================================
 /*! Handles the POST request for Input selection
@@ -1477,7 +1672,42 @@ void handlePostPresetJson( AsyncWebServerRequest* request, uint8_t* data )
   request->send(200, "text/plain", "");  
 }
  
+//==============================================================================
+/*! Handles the POST request for device configuration
+ *
+ */
+void handlePostConfigJson( AsyncWebServerRequest* request, uint8_t* data )
+{
+  Serial.println( "POST /config" );
+  //Serial.println( "Body:");
+  //for(size_t i=0; i<len; i++)
+  //  Serial.write(data[i]);
+  //Serial.println();
 
+  DynamicJsonDocument jsonDoc(1024);
+  DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
+  if( err )
+  {
+    Serial.print( "[ERROR] handlePostConfigJson(): Deserialization failed. " );
+    Serial.println( err.c_str() );
+    request->send( 404, "text/plain", "" );
+    return;
+  }
+
+  JsonObject root = jsonDoc.as<JsonObject>();
+  Serial.println( root["aid"].as<String>() );
+  Serial.println( root["vpot"].as<String>() );
+
+  Settings.addonid = root["aid"].as<String>().toInt();
+  if( root["vpot"].as<String>() == "true" )
+    Settings.vpot = true;
+  else
+    Settings.vpot = false;
+
+  writeSettings();
+       
+  request->send(200, "text/plain", "");  
+}
 
 //==============================================================================
 /*! Arduino Setup
@@ -1522,7 +1752,12 @@ void setup()
   Serial.print( (SPIFFS.totalBytes() - SPIFFS.usedBytes()) / 1024 );
   Serial.println( "KiB" );
 
-  readParams();
+  readSettings();
+
+  Serial.print( "Init user parameter......" );
+  initUserParams();
+  Serial.println( "[OK]" );
+  readPluginMeta();
 
   //----------------------------------------------------------------------------
   //--- Configure ESP for WiFi access
@@ -1548,18 +1783,20 @@ void setup()
   //----------------------------------------------------------------------------
   //--- Configure Webserver
   //----------------------------------------------------------------------------
-  server.on( "/",       HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( SPIFFS, "/dsp.html", "text/html" ); });
-  server.on( "/input",  HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetInputJson(request); });
-  server.on( "/hp",     HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetHpJson(request); });
-  server.on( "/lshelv", HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetLshelvJson(request); });
-  server.on( "/peq",    HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetPeqJson(request); });
-  server.on( "/hshelv", HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetHshelvJson(request); });
-  server.on( "/lp",     HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetLpJson(request); });
-  server.on( "/phase",  HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetPhaseJson(request); });
-  server.on( "/delay",  HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetDelayJson(request); });
-  server.on( "/gain",   HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetGainJson(request); });
-  server.on( "/mvol",   HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetMasterVolumeJson(request); });
-  server.on( "/preset", HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetPresetJson(request); });
+  server.on( "/",         HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( SPIFFS, "/dsp.html", "text/html" ); });
+  server.on( "/dark.css", HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( SPIFFS, "/dark.css", "text/css" ); });
+  server.on( "/input",    HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetInputJson(request); });
+  server.on( "/hp",       HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetHpJson(request); });
+  server.on( "/lshelv",   HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetLshelvJson(request); });
+  server.on( "/peq",      HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetPeqJson(request); });
+  server.on( "/hshelv",   HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetHshelvJson(request); });
+  server.on( "/lp",       HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetLpJson(request); });
+  server.on( "/phase",    HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetPhaseJson(request); });
+  server.on( "/delay",    HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetDelayJson(request); });
+  server.on( "/gain",     HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetGainJson(request); });
+  server.on( "/mvol",     HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetMasterVolumeJson(request); });
+  server.on( "/preset",   HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetPresetJson(request); });
+  server.on( "/config",   HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetConfigJson(request); });
   
   server.on( "/input", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
   {
@@ -1605,6 +1842,11 @@ void setup()
   {
     handlePostPresetJson( request, data );
   });
+  server.on( "/config", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
+  {
+    handlePostConfigJson( request, data );
+  });
+
 
   // Start server
   server.begin();
