@@ -132,6 +132,7 @@ File fileDspProgram;
 float sampleRate = 48000.0;
 float masterVolume = -60.0;
 uint8_t currentPreset = 0;
+byte currentAddOnCfg[3];
 
 AsyncWebServer server( 80 );
 
@@ -952,6 +953,14 @@ void handleGetConfigJson( AsyncWebServerRequest* request )
   JsonVariant& jsonResponse = response->getRoot();
   jsonResponse["aid"] = Settings.addonid;
   jsonResponse["vpot"] = Settings.vpot;
+
+  if( Settings.addonid == ADDON_B )
+  {
+    jsonResponse["addcfg"] = currentAddOnCfg[2];
+  }
+  else
+    jsonResponse["addcfg"] = 0;
+
   response->setLength();
   request->send(response);
 }
@@ -1710,6 +1719,58 @@ void handlePostConfigJson( AsyncWebServerRequest* request, uint8_t* data )
 }
 
 //==============================================================================
+/*! Handles the POST request for storing current preset
+ *
+ */
+void handlePostStore( AsyncWebServerRequest* request, uint8_t* data )
+{
+  Serial.println( "POST /store" );
+  request->send(200, "text/plain", "");  
+}
+
+//==============================================================================
+/*! Handles the POST request for storing addon configuration
+ *
+ */
+void handlePostAddonConfig( AsyncWebServerRequest* request, uint8_t* data )
+{
+  Serial.println( "POST /addoncfg" );
+  //Serial.println( "Body:");
+  //for(size_t i=0; i<len; i++)
+  //  Serial.write(data[i]);
+  //Serial.println();
+
+  DynamicJsonDocument jsonDoc(1024);
+  DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
+  if( err )
+  {
+    Serial.print( "[ERROR] handlePostAddonConfig(): Deserialization failed. " );
+    Serial.println( err.c_str() );
+    request->send( 404, "text/plain", "" );
+    return;
+  }
+
+  if( Settings.addonid == ADDON_B )
+  {
+    JsonObject root = jsonDoc.as<JsonObject>();
+    int len = root["len"].as<String>().toInt();
+    for( int ii = 0; ii < len; ii++ )
+      Serial.println( root["i2c"][ii].as<String>() );
+
+    currentAddOnCfg[0] = (uint8_t)strtoul( root["i2c"][0].as<String>().c_str(), NULL, 16 );
+    currentAddOnCfg[1] = (uint8_t)strtoul( root["i2c"][1].as<String>().c_str(), NULL, 16 );
+    currentAddOnCfg[2] = (uint8_t)strtoul( root["i2c"][2].as<String>().c_str(), NULL, 16 );
+
+    Wire.beginTransmission( currentAddOnCfg[0]>>1 ); //ADDONB_SPDIFMUX_ADDR
+    Wire.write( currentAddOnCfg[1] ); // regaddr
+    Wire.write( currentAddOnCfg[2] ); // data
+    Wire.endTransmission( true );
+  }
+
+  request->send(200, "text/plain", "");  
+}
+
+//==============================================================================
 /*! Arduino Setup
  *
  */
@@ -1845,6 +1906,16 @@ void setup()
   server.on( "/config", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
   {
     handlePostConfigJson( request, data );
+  });
+  server.on( "/store", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
+  {
+    // \TODO Client does not send any JSON data
+    handlePostStore( request, data );
+  });
+  server.on( "/addoncfg", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
+  {
+    // \TODO Client does not send any JSON data
+    handlePostAddonConfig( request, data );
   });
 
 

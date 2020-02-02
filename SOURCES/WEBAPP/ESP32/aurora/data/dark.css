@@ -16,6 +16,13 @@ h1{
   text-align: center;
 }
 
+h2{
+  font-family:Helvetica;
+  font-weight:normal;
+  font-size: 18px;
+  text-align: center;
+}
+
 button{
   height: 50px;
   width: 50px;
@@ -239,7 +246,7 @@ ul {
   color: white;
 }
 
-.content {
+.hidden {
   display:none;
 }
 
