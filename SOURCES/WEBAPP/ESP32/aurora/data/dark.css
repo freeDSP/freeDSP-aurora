@@ -9,6 +9,22 @@ body{
   color: #F0F0F0;
   background-color: #101010;}
 
+button{
+  height: 50px;
+  width: 50px;
+  background-color: #101010;
+  border: 1px solid #808080;
+  border-top: 3px solid;
+  border-radius: 2px;
+  font-size: 12px;
+  color: #FFFFFF;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #303030
+}
+
 h1{
   font-family:Helvetica;
   font-weight:normal;
@@ -23,35 +39,45 @@ h2{
   text-align: center;
 }
 
-button{
-  height: 50px;
-  width: 50px;
-  background-color: #101010;
-  border: 1px solid #808080;
-  border-top: 3px solid;
-  border-radius: 2px;
-  font-size: 12px;
-  color: #FFFFFF;
-  cursor: pointer;
-}
-
-.prebtn{
-  width:160px;
-  height:50px;
-  border: 1px solid #73EC6F;
-  border-radius: 5px;
-  color: #F0F0F0;
-}
-.prebtn:hover{
-  background-color: #73EC6F18;
-}
-
 input[type=number]{
   height: 20px;
   background-color: #101010;
   border: 1px solid #F0F0F0;
-  border-radius: 5px;
+  border-radius: 2px;
   color: #FFFFFF;
+}
+
+input[type=range].range {
+  cursor: pointer;
+  transform: rotate(270deg);
+  width: 480px; 
+}
+
+li a {
+  padding: 16px 16px 16px 16px;
+  font-size: 16px;
+  color: #B0B0B0;
+  display: block;
+  text-align:center;
+  cursor: pointer;
+}
+
+li a:hover {
+  color: #f1f1f1;
+  background-color: #202020
+}
+
+nav {
+  height: 100%;
+  width: 200px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  right: 0;
+  background-color: #101010;
+  overflow-x: hidden;
+  padding-top: 30px;
+  border-left: 1px solid #808080
 }
 
 select{
@@ -62,7 +88,7 @@ select{
   height: 25px;
   background-color: #101010;
   border: 1px solid #F0F0F0;
-  border-radius: 5px;
+  border-radius: 2px;
   color: #FFFFFF;
   font-size: 14px;
   padding-left: 10px;
@@ -72,11 +98,21 @@ select{
 
 td{text-align:center;}
 
-input[type=range].range {
-  cursor: pointer;
-  transform: rotate(270deg);
-  width: 480px; 
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
 }
+
+
+.prebtn{
+  width:160px;
+  height:50px;
+  border: 1px solid #73EC6F;
+  border-radius: 2px;
+  color: #F0F0F0;
+}
+
 
 .container{
   background-color: red;
@@ -89,10 +125,13 @@ height:480px;
   width: 75%;
   background-color: #101010;
   border: 1px solid #F0F0F0;
-  border-radius: 5px;
+  border-radius: 2px;
   color: #FFFFFF;
   font-size: 14px;
   cursor: pointer;
+}
+.send:hover{
+  background-color: #181818;
 }
 
 .modal{
@@ -206,39 +245,6 @@ height:60px;
   border-radius: 50%;
   background: #73EC6F;
   margin-top: -8px;
-}
-
-nav {
-  height: 100%;
-  width: 200px;
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  right: 0;
-  background-color: #101010;
-  overflow-x: hidden;
-  padding-top: 30px;
-  border: 1px solid #808080
-}
-
-li a {
-  padding: 16px 16px 16px 16px;
-  font-size: 16px;
-  color: #A0A0A0;
-  display: block;
-  text-align:center;
-  cursor: pointer;
-}
-
-li a:hover {
-  color: #f1f1f1;
-  background-color: #181818
-}
-
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
 }
 
 .active {

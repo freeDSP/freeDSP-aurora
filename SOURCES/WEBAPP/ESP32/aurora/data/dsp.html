@@ -49,25 +49,25 @@
     <td class="rotate">
     Channel 1
     <td style="min-width:80px">
-    <select id="chn0" onchange="postInputJson('chn0',0);">
-      <option value="0">Analog 1</option>
-      <option value="1">Analog 2</option>
-      <option value="2">Analog 3</option>
-      <option value="3">Analog 4</option>
-      <option value="4">Analog 5</option>
-      <option value="5">Analog 6</option>
-      <option value="6">Analog 7</option>
-      <option value="7">Analog 8</option>
-      <option value="8">USB 1</option>
-      <option value="9">USB 2</option>
-      <option value="10">USB 3</option>
-      <option value="11">USB 4</option>
-      <option value="12">USB 5</option>
-      <option value="13">USB 6</option>
-      <option value="14">USB 7</option>
-      <option value="15">USB 8</option>
-      <option value="16">SPDIF L</option>
-      <option value="17">SPDIF R</option>
+    <select id="chn0" onchange="postInputJson('chn0',0);" data-port=20460>
+      <option value="0x00000000" data-chn=20448>Analog 1</option>
+      <option value="0x00000001" data-chn=20448>Analog 2</option>
+      <option value="0x00000002" data-chn=20448>Analog 3</option>
+      <option value="0x00000003" data-chn=20448>Analog 4</option>
+      <option value="0x00000004" data-chn=20448>Analog 5</option>
+      <option value="0x00000005" data-chn=20448>Analog 6</option>
+      <option value="0x00000006" data-chn=20448>Analog 7</option>
+      <option value="0x00000007" data-chn=20448>Analog 8</option>
+      <option value="0x00010000" data-chn=20449>USB 1</option>
+      <option value="0x00010001" data-chn=20449>USB 2</option>
+      <option value="0x00010002" data-chn=20449>USB 3</option>
+      <option value="0x00010003" data-chn=20449>USB 4</option>
+      <option value="0x00010004" data-chn=20449>USB 5</option>
+      <option value="0x00010005" data-chn=20449>USB 6</option>
+      <option value="0x00010006" data-chn=20449>USB 7</option>
+      <option value="0x00010007" data-chn=20449>USB 8</option>
+      <option value="0x00040000" data-chn=20452>SPDIF L</option>
+      <option value="0x00040001" data-chn=20452>SPDIF R</option>
     </select>
     </td><td>
     <button style="color:#54F4F9;" onclick="openHP(0,19536,19576,19616,19656);">HP</button>
@@ -113,25 +113,25 @@
     <tr><td class="rotate">
     Channel 2
     </td><td>
-    <select id="chn1" onchange="postInputJson('chn1',1);">
-      <option value="0">Analog 1</option>
-      <option value="1">Analog 2</option>
-      <option value="2">Analog 3</option>
-      <option value="3">Analog 4</option>
-      <option value="4">Analog 5</option>
-      <option value="5">Analog 6</option>
-      <option value="6">Analog 7</option>
-      <option value="7">Analog 8</option>
-      <option value="8">USB 1</option>
-      <option value="9">USB 2</option>
-      <option value="10">USB 3</option>
-      <option value="11">USB 4</option>
-      <option value="12">USB 5</option>
-      <option value="13">USB 6</option>
-      <option value="14">USB 7</option>
-      <option value="15">USB 8</option>
-      <option value="16">SPDIF L</option>
-      <option value="17">SPDIF R</option>
+    <select id="chn1" onchange="postInputJson('chn1',1);" data-port=20459>
+      <option value="0x00000000" data-chn=20446>Analog 1</option>
+      <option value="0x00000001" data-chn=20446>Analog 2</option>
+      <option value="0x00000002" data-chn=20446>Analog 3</option>
+      <option value="0x00000003" data-chn=20446>Analog 4</option>
+      <option value="0x00000004" data-chn=20446>Analog 5</option>
+      <option value="0x00000005" data-chn=20446>Analog 6</option>
+      <option value="0x00000006" data-chn=20446>Analog 7</option>
+      <option value="0x00000007" data-chn=20446>Analog 8</option>
+      <option value="0x00010000" data-chn=20445>USB 1</option>
+      <option value="0x00010001" data-chn=20445>USB 2</option>
+      <option value="0x00010002" data-chn=20445>USB 3</option>
+      <option value="0x00010003" data-chn=20445>USB 4</option>
+      <option value="0x00010004" data-chn=20445>USB 5</option>
+      <option value="0x00010005" data-chn=20445>USB 6</option>
+      <option value="0x00010006" data-chn=20445>USB 7</option>
+      <option value="0x00010007" data-chn=20445>USB 8</option>
+      <option value="0x00040000" data-chn=20444>SPDIF L</option>
+      <option value="0x00040001" data-chn=20444>SPDIF R</option>
     </select>
     </td><td>
     <button style="color:#54F4F9;" onclick="openHP(1,19541,19581,19621,19661);">HP</button>
@@ -174,25 +174,25 @@
     <tr><td class="rotate">
     Channel 3
     </td><td>
-    <select id="chn2" onchange="postInputJson('chn2',2);">
-      <option value="0">Analog 1</option>
-      <option value="1">Analog 2</option>
-      <option value="2">Analog 3</option>
-      <option value="3">Analog 4</option>
-      <option value="4">Analog 5</option>
-      <option value="5">Analog 6</option>
-      <option value="6">Analog 7</option>
-      <option value="7">Analog 8</option>
-      <option value="8">USB 1</option>
-      <option value="9">USB 2</option>
-      <option value="10">USB 3</option>
-      <option value="11">USB 4</option>
-      <option value="12">USB 5</option>
-      <option value="13">USB 6</option>
-      <option value="14">USB 7</option>
-      <option value="15">USB 8</option>
-      <option value="16">SPDIF L</option>
-      <option value="17">SPDIF R</option>
+    <select id="chn2" onchange="postInputJson('chn2',2);" data-port=20458>
+      <option value="0x00000000" data-chn=20439>Analog 1</option>
+      <option value="0x00000001" data-chn=20439>Analog 2</option>
+      <option value="0x00000002" data-chn=20439>Analog 3</option>
+      <option value="0x00000003" data-chn=20439>Analog 4</option>
+      <option value="0x00000004" data-chn=20439>Analog 5</option>
+      <option value="0x00000005" data-chn=20439>Analog 6</option>
+      <option value="0x00000006" data-chn=20439>Analog 7</option>
+      <option value="0x00000007" data-chn=20439>Analog 8</option>
+      <option value="0x00010000" data-chn=20442>USB 1</option>
+      <option value="0x00010001" data-chn=20442>USB 2</option>
+      <option value="0x00010002" data-chn=20442>USB 3</option>
+      <option value="0x00010003" data-chn=20442>USB 4</option>
+      <option value="0x00010004" data-chn=20442>USB 5</option>
+      <option value="0x00010005" data-chn=20442>USB 6</option>
+      <option value="0x00010006" data-chn=20442>USB 7</option>
+      <option value="0x00010007" data-chn=20442>USB 8</option>
+      <option value="0x00040000" data-chn=20440>SPDIF L</option>
+      <option value="0x00040001" data-chn=20440>SPDIF R</option>
     </select>
     </td><td>
     <button style="color:#54F4F9;" onclick="openHP(2,19546,19586,19626,19666);">HP</button>
@@ -235,25 +235,25 @@
     <tr><td class="rotate">
     Channel 4
     </td><td>
-    <select id="chn3" onchange="postInputJson('chn3',3);">
-      <option value="0">Analog 1</option>
-      <option value="1">Analog 2</option>
-      <option value="2">Analog 3</option>
-      <option value="3">Analog 4</option>
-      <option value="4">Analog 5</option>
-      <option value="5">Analog 6</option>
-      <option value="6">Analog 7</option>
-      <option value="7">Analog 8</option>
-      <option value="8">USB 1</option>
-      <option value="9">USB 2</option>
-      <option value="10">USB 3</option>
-      <option value="11">USB 4</option>
-      <option value="12">USB 5</option>
-      <option value="13">USB 6</option>
-      <option value="14">USB 7</option>
-      <option value="15">USB 8</option>
-      <option value="16">SPDIF L</option>
-      <option value="17">SPDIF R</option>
+    <select id="chn3" onchange="postInputJson('chn3',3);" data-port=20457>
+      <option value="0x00000000" data-chn=20435>Analog 1</option>
+      <option value="0x00000001" data-chn=20435>Analog 2</option>
+      <option value="0x00000002" data-chn=20435>Analog 3</option>
+      <option value="0x00000003" data-chn=20435>Analog 4</option>
+      <option value="0x00000004" data-chn=20435>Analog 5</option>
+      <option value="0x00000005" data-chn=20435>Analog 6</option>
+      <option value="0x00000006" data-chn=20435>Analog 7</option>
+      <option value="0x00000007" data-chn=20435>Analog 8</option>
+      <option value="0x00010000" data-chn=20437>USB 1</option>
+      <option value="0x00010001" data-chn=20437>USB 2</option>
+      <option value="0x00010002" data-chn=20437>USB 3</option>
+      <option value="0x00010003" data-chn=20437>USB 4</option>
+      <option value="0x00010004" data-chn=20437>USB 5</option>
+      <option value="0x00010005" data-chn=20437>USB 6</option>
+      <option value="0x00010006" data-chn=20437>USB 7</option>
+      <option value="0x00010007" data-chn=20437>USB 8</option>
+      <option value="0x00040000" data-chn=20436>SPDIF L</option>
+      <option value="0x00040001" data-chn=20436>SPDIF R</option>
     </select>
     </td><td>
     <button style="color:#54F4F9;" onclick="openHP(3,19551,19591,19631,19671);">HP</button>
@@ -296,25 +296,25 @@
     <tr><td class="rotate">
     Channel 5
     </td><td>
-    <select id="chn4" onchange="postInputJson('chn4',4);">
-      <option value="0">Analog 1</option>
-      <option value="1">Analog 2</option>
-      <option value="2">Analog 3</option>
-      <option value="3">Analog 4</option>
-      <option value="4">Analog 5</option>
-      <option value="5">Analog 6</option>
-      <option value="6">Analog 7</option>
-      <option value="7">Analog 8</option>
-      <option value="8">USB 1</option>
-      <option value="9">USB 2</option>
-      <option value="10">USB 3</option>
-      <option value="11">USB 4</option>
-      <option value="12">USB 5</option>
-      <option value="13">USB 6</option>
-      <option value="14">USB 7</option>
-      <option value="15">USB 8</option>
-      <option value="16">SPDIF L</option>
-      <option value="17">SPDIF R</option>
+    <select id="chn4" onchange="postInputJson('chn4',4);" data-port=20456>
+      <option value="0x00000000" data-chn=20432>Analog 1</option>
+      <option value="0x00000001" data-chn=20432>Analog 2</option>
+      <option value="0x00000002" data-chn=20432>Analog 3</option>
+      <option value="0x00000003" data-chn=20432>Analog 4</option>
+      <option value="0x00000004" data-chn=20432>Analog 5</option>
+      <option value="0x00000005" data-chn=20432>Analog 6</option>
+      <option value="0x00000006" data-chn=20432>Analog 7</option>
+      <option value="0x00000007" data-chn=20432>Analog 8</option>
+      <option value="0x00010000" data-chn=20429>USB 1</option>
+      <option value="0x00010001" data-chn=20429>USB 2</option>
+      <option value="0x00010002" data-chn=20429>USB 3</option>
+      <option value="0x00010003" data-chn=20429>USB 4</option>
+      <option value="0x00010004" data-chn=20429>USB 5</option>
+      <option value="0x00010005" data-chn=20429>USB 6</option>
+      <option value="0x00010006" data-chn=20429>USB 7</option>
+      <option value="0x00010007" data-chn=20429>USB 8</option>
+      <option value="0x00040000" data-chn=20431>SPDIF L</option>
+      <option value="0x00040001" data-chn=20431>SPDIF R</option>
     </select>
     </td><td>
     <button style="color:#54F4F9;" onclick="openHP(4,19571,19601,19636,19686);">HP</button>
@@ -357,25 +357,25 @@
     <tr><td class="rotate">
     Channel 6
     </td><td>
-    <select id="chn5" onchange="postInputJson('chn5',5);">
-      <option value="0">Analog 1</option>
-      <option value="1">Analog 2</option>
-      <option value="2">Analog 3</option>
-      <option value="3">Analog 4</option>
-      <option value="4">Analog 5</option>
-      <option value="5">Analog 6</option>
-      <option value="6">Analog 7</option>
-      <option value="7">Analog 8</option>
-      <option value="8">USB 1</option>
-      <option value="9">USB 2</option>
-      <option value="10">USB 3</option>
-      <option value="11">USB 4</option>
-      <option value="12">USB 5</option>
-      <option value="13">USB 6</option>
-      <option value="14">USB 7</option>
-      <option value="15">USB 8</option>
-      <option value="16">SPDIF L</option>
-      <option value="17">SPDIF R</option>
+    <select id="chn5" onchange="postInputJson('chn5',5);" data-port=20455>
+      <option value="0x00000000" data-chn=20425>Analog 1</option>
+      <option value="0x00000001" data-chn=20425>Analog 2</option>
+      <option value="0x00000002" data-chn=20425>Analog 3</option>
+      <option value="0x00000003" data-chn=20425>Analog 4</option>
+      <option value="0x00000004" data-chn=20425>Analog 5</option>
+      <option value="0x00000005" data-chn=20425>Analog 6</option>
+      <option value="0x00000006" data-chn=20425>Analog 7</option>
+      <option value="0x00000007" data-chn=20425>Analog 8</option>
+      <option value="0x00010000" data-chn=20424>USB 1</option>
+      <option value="0x00010001" data-chn=20424>USB 2</option>
+      <option value="0x00010002" data-chn=20424>USB 3</option>
+      <option value="0x00010003" data-chn=20424>USB 4</option>
+      <option value="0x00010004" data-chn=20424>USB 5</option>
+      <option value="0x00010005" data-chn=20424>USB 6</option>
+      <option value="0x00010006" data-chn=20424>USB 7</option>
+      <option value="0x00010007" data-chn=20424>USB 8</option>
+      <option value="0x00040000" data-chn=20426>SPDIF L</option>
+      <option value="0x00040001" data-chn=20426>SPDIF R</option>
     </select>
     </td><td>
     <button style="color:#54F4F9;" onclick="openHP(5,19556,19606,19651,19691);">HP</button>
@@ -418,25 +418,25 @@
     <tr><td class="rotate">
     Channel 7
     </td><td>
-    <select id="chn6" onchange="postInputJson('chn6',6);">
-      <option value="0">Analog 1</option>
-      <option value="1">Analog 2</option>
-      <option value="2">Analog 3</option>
-      <option value="3">Analog 4</option>
-      <option value="4">Analog 5</option>
-      <option value="5">Analog 6</option>
-      <option value="6">Analog 7</option>
-      <option value="7">Analog 8</option>
-      <option value="8">USB 1</option>
-      <option value="9">USB 2</option>
-      <option value="10">USB 3</option>
-      <option value="11">USB 4</option>
-      <option value="12">USB 5</option>
-      <option value="13">USB 6</option>
-      <option value="14">USB 7</option>
-      <option value="15">USB 8</option>
-      <option value="16">SPDIF L</option>
-      <option value="17">SPDIF R</option>
+    <select id="chn6" onchange="postInputJson('chn6',6);" data-port=20454>
+      <option value="0x00000000" data-chn=20420>Analog 1</option>
+      <option value="0x00000001" data-chn=20420>Analog 2</option>
+      <option value="0x00000002" data-chn=20420>Analog 3</option>
+      <option value="0x00000003" data-chn=20420>Analog 4</option>
+      <option value="0x00000004" data-chn=20420>Analog 5</option>
+      <option value="0x00000005" data-chn=20420>Analog 6</option>
+      <option value="0x00000006" data-chn=20420>Analog 7</option>
+      <option value="0x00000007" data-chn=20420>Analog 8</option>
+      <option value="0x00010000" data-chn=20419>USB 1</option>
+      <option value="0x00010001" data-chn=20419>USB 2</option>
+      <option value="0x00010002" data-chn=20419>USB 3</option>
+      <option value="0x00010003" data-chn=20419>USB 4</option>
+      <option value="0x00010004" data-chn=20419>USB 5</option>
+      <option value="0x00010005" data-chn=20419>USB 6</option>
+      <option value="0x00010006" data-chn=20419>USB 7</option>
+      <option value="0x00010007" data-chn=20419>USB 8</option>
+      <option value="0x00040000" data-chn=20422>SPDIF L</option>
+      <option value="0x00040001" data-chn=20422>SPDIF R</option>
     </select>
     </td><td>
     <button style="color:#54F4F9;" onclick="openHP(6,19566,19611,19646,19676);">HP</button>
@@ -479,25 +479,25 @@
     <tr><td class="rotate">
     Channel 8
     </td><td>
-    <select id="chn7" onchange="postInputJson('chn7',7);">
-      <option value="0">Analog 1</option>
-      <option value="1">Analog 2</option>
-      <option value="2">Analog 3</option>
-      <option value="3">Analog 4</option>
-      <option value="4">Analog 5</option>
-      <option value="5">Analog 6</option>
-      <option value="6">Analog 7</option>
-      <option value="7">Analog 8</option>
-      <option value="8">USB 1</option>
-      <option value="9">USB 2</option>
-      <option value="10">USB 3</option>
-      <option value="11">USB 4</option>
-      <option value="12">USB 5</option>
-      <option value="13">USB 6</option>
-      <option value="14">USB 7</option>
-      <option value="15">USB 8</option>
-      <option value="16">SPDIF L</option>
-      <option value="17">SPDIF R</option>
+    <select id="chn7" onchange="postInputJson('chn7',7);" data-port=20453>
+      <option value="0x00000000" data-chn=20416>Analog 1</option>
+      <option value="0x00000001" data-chn=20416>Analog 2</option>
+      <option value="0x00000002" data-chn=20416>Analog 3</option>
+      <option value="0x00000003" data-chn=20416>Analog 4</option>
+      <option value="0x00000004" data-chn=20416>Analog 5</option>
+      <option value="0x00000005" data-chn=20416>Analog 6</option>
+      <option value="0x00000006" data-chn=20416>Analog 7</option>
+      <option value="0x00000007" data-chn=20416>Analog 8</option>
+      <option value="0x00010000" data-chn=20413>USB 1</option>
+      <option value="0x00010001" data-chn=20413>USB 2</option>
+      <option value="0x00010002" data-chn=20413>USB 3</option>
+      <option value="0x00010003" data-chn=20413>USB 4</option>
+      <option value="0x00010004" data-chn=20413>USB 5</option>
+      <option value="0x00010005" data-chn=20413>USB 6</option>
+      <option value="0x00010006" data-chn=20413>USB 7</option>
+      <option value="0x00010007" data-chn=20413>USB 8</option>
+      <option value="0x00040000" data-chn=20417>SPDIF L</option>
+      <option value="0x00040001" data-chn=20417>SPDIF R</option>
     </select>
     </td><td>
     <button style="color:#54F4F9;" onclick="openHP(7,19561,19596,19641,19681);">HP</button>
@@ -704,20 +704,20 @@
   </div>
 
   <script>
-  function getInputChannels(){
-    fetch("/input").then (function (response) {
-      return response.json();
-    }).then (function (data) {
-      document.getElementById("chn0").value=data.chn0;
-      document.getElementById("chn1").value=data.chn1;
-      document.getElementById("chn2").value=data.chn2;
-      document.getElementById("chn3").value=data.chn3;
-      document.getElementById("chn4").value=data.chn4;
-      document.getElementById("chn5").value=data.chn5;
-      document.getElementById("chn6").value=data.chn6;
-      document.getElementById("chn7").value=data.chn7;
-    }).catch (function (error) {console.log(error);});
-  }
+  //function getInputChannels(){
+  //  fetch("/input").then (function (response) {
+  //    return response.json();
+  //  }).then (function (data) {
+  //    document.getElementById("chn0").value=data.chn0;
+  //    document.getElementById("chn1").value=data.chn1;
+  //    document.getElementById("chn2").value=data.chn2;
+  //    document.getElementById("chn3").value=data.chn3;
+  //    document.getElementById("chn4").value=data.chn4;
+  //    document.getElementById("chn5").value=data.chn5;
+  //    document.getElementById("chn6").value=data.chn6;
+  //    document.getElementById("chn7").value=data.chn7;
+  //  }).catch (function (error) {console.log(error);});
+ // }
   function openHP(idx,addr0,addr1,addr2,addr3){
     document.getElementById("highPass").style.display = "block";
     fetch("/hp?idx="+idx).then (function (response) {
@@ -851,7 +851,11 @@
 
   function postInputJson(id,idx){
     var data={};
+    var elem = document.getElementById(id);
+    var selected = elem.options[elem.selectedIndex];
     data.idx=idx;
+    data.chn=selected.getAttribute('data-chn');
+    data.port=document.getElementById(id).dataset.port;
     data.sel=document.getElementById(id).value;
     fetch("/input",{method:"POST",headers:{
     "Content-Type": "application/json"},
@@ -1003,35 +1007,20 @@
       }
       else if(cfg.aid==3) document.getElementById('addon_c').style.display = "block";
       else if(cfg.aid==4) document.getElementById('addon_d').style.display = "block";
+      return fetch("/allinputs");
+    }).then(function(response){
+      return response.json();
+	  }).then(function(data){
+      document.getElementById("chn0").value = data.in0;
+      document.getElementById("chn1").value = data.in1;
+      document.getElementById("chn2").value = data.in2;
+      document.getElementById("chn3").value = data.in3;
+      document.getElementById("chn4").value = data.in4;
+      document.getElementById("chn5").value = data.in5;
+      document.getElementById("chn6").value = data.in6;
+      document.getElementById("chn7").value = data.in7;
     }).catch (function(error){console.log(error);
     });
-
-    //Promise.all([
-    //  fetch("/config").then(devcfg => devcfg.json())
-    //  //,
-    //  //fetch("/addoncfg").then(addon => addon.json())
-    //]).then((devcfg) => {
-    //  console.log(devcfg);
-    //  //console.log(addon);
-      
-    //  else if(devcfg.aid==1) document.getElementById('addon_a').style.display = "block";
-    //  else if(devcfg.aid==2)
-    //  {
-        //if(addon.cfg==0) document.getElementById("spdif_b").value = "0x00";
-        //else if(addon.cfg==1) document.getElementById("spdif_b").value = "0x01";
-        //else if(addon.cfg==2) document.getElementById("spdif_b").value = "0x02";
-        //else if(addon.cfg==3) document.getElementById("spdif_b").value = "0x03";
-        //else if(addon.cfg==4) document.getElementById("spdif_b").value = "0x04";
-        //else if(addon.cfg==5) document.getElementById("spdif_b").value = "0x05";
-        //else if(addon.cfg==6) document.getElementById("spdif_b").value = "0x06";
-        //else if(addon.cfg==7) document.getElementById("spdif_b").value = "0x07";
-    //    document.getElementById('addon_b').style.display = "block";
-    //  }
-    //  else if(devcfg.aid==3) document.getElementById('addon_c').style.display = "block";
-    //  else if(devcfg.aid==4) document.getElementById('addon_d').style.display = "block";
-    //}).catch((err) => {
-    //  console.log(err);
-    //});
   }
   function hideAddon(){
     document.getElementById('addon_none').style.display = "none";

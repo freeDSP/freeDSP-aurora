@@ -56,12 +56,12 @@ struct tSettings
 tSettings Settings;
 
 typedef uint8_t tFilterType;
-typedef uint8_t tInputSelection;
 
 struct tInput
 {
-  uint16_t addr;
-  tInputSelection sel;
+  uint16_t addrChn;
+  uint16_t addrPort;
+  uint32_t sel;
 };
 
 struct tHPLP
@@ -117,7 +117,7 @@ tPhase paramPhase[8];
 tDelay paramDelay[8];
 tGain paramGain[8];
 
-int numInputs;
+int numInputs = MAX_NUM_INPUTS;
 int numHPs;
 int numLShelvs;
 int numPEQs;
@@ -217,7 +217,7 @@ void initUserParams( void )
 {
   for( int ii = 0; ii < MAX_NUM_INPUTS; ii++ )
   {
-    paramInputs[ii].sel = static_cast<tInputSelection>(ii);
+    paramInputs[ii].sel = static_cast<uint32_t>(ii);
   }
 
   for( int ii = 0; ii < MAX_NUM_HPS; ii++ )
@@ -361,7 +361,6 @@ void readPluginMeta( void )
     }
 
     JsonObject jsonPluginMeta = jsonDoc.as<JsonObject>();
-    numInputs = jsonPluginMeta["inputs"].as<String>().toInt();
     numHPs = jsonPluginMeta["hp"].as<String>().toInt();
     numLShelvs = jsonPluginMeta["lshelv"].as<String>().toInt();
     numPEQs = jsonPluginMeta["peq"].as<String>().toInt();
@@ -493,7 +492,7 @@ void uploadDspFirmware( void )
     int file_size = fileDspProgram.size();
 
     fileDspProgram.close();
-    Serial.println( "[ok]" );
+    Serial.println( "[OK]" );
     Serial.print( "File size: " );
     Serial.println( file_size );
   }
@@ -966,6 +965,48 @@ void handleGetConfigJson( AsyncWebServerRequest* request )
 }
 
 //==============================================================================
+/*! Handles the GET request for all input selections
+ *
+ */
+void handleGetAllInputsJson( AsyncWebServerRequest* request )
+{
+  Serial.println( "GET /allinputs" );
+
+  AsyncJsonResponse* response = new AsyncJsonResponse();
+  JsonVariant& jsonResponse = response->getRoot();
+
+  String str;
+  uint8_t val;
+  String key[] = {"in0", "in1", "in2", "in3", "in4", "in5", "in6", "in7"};
+  
+  for( int nn = 0; nn < 8; nn++ )
+  {
+    str = String("0x");
+    for( int ii = 0; ii < 4; ii++ )
+    {
+      val = (paramInputs[nn].sel>>(24-ii*8)) & 0xFF;
+      if( val < 0x10 )
+        str = str + String( "0") + String( val, HEX );
+      else
+        str = str + String( val, HEX );
+    }
+    jsonResponse[key[nn]] = str;
+  }
+/*
+  Serial.println(jsonResponse["in0"].as<String>());
+  Serial.println(jsonResponse["in1"].as<String>());
+  Serial.println(jsonResponse["in2"].as<String>());
+  Serial.println(jsonResponse["in3"].as<String>());
+  Serial.println(jsonResponse["in4"].as<String>());
+  Serial.println(jsonResponse["in5"].as<String>());
+  Serial.println(jsonResponse["in6"].as<String>());
+  Serial.println(jsonResponse["in7"].as<String>());
+*/
+  response->setLength();
+  request->send(response);
+}
+
+//==============================================================================
 /*! Handles the POST request for Input selection
  *
  */
@@ -988,12 +1029,30 @@ void handlePostInputJson( AsyncWebServerRequest* request, uint8_t* data )
   }
 
   JsonObject root = jsonDoc.as<JsonObject>();
-  Serial.println( root["idx"].as<String>() );
-  Serial.println( root["sel"].as<String>() );
+  //Serial.println( root["idx"].as<String>() );
+  //Serial.println( root["chn"].as<String>() );
+  //Serial.println( root["port"].as<String>() );
+  //Serial.println( root["sel"].as<String>() );
 
-  uint32_t idx = static_cast<uint32_t>(root["idx"].as<String>().toInt());
-  paramInputs[idx].addr = static_cast<uint16_t>(root["addr"].as<String>().toInt());
-  paramInputs[idx].sel = static_cast<tInputSelection>(root["sel"].as<String>().toInt());
+  int idx = root["idx"].as<String>().toInt();
+  paramInputs[idx].addrChn = static_cast<uint16_t>( root["chn"].as<String>().toInt() );
+  paramInputs[idx].addrPort = static_cast<uint16_t>( root["port"].as<String>().toInt() );
+  paramInputs[idx].sel = (uint32_t)strtoul( root["sel"].as<String>().c_str(), NULL, 16 );
+
+  byte val[4];
+  uint32_t intval = paramInputs[idx].sel & 0x0000ffff;
+  val[0] = (intval >> 24 ) & 0xFF;
+  val[1] = (intval >> 16 ) & 0xFF;
+  val[2] = (intval >> 8 ) & 0xFF;
+  val[3] =  intval & 0xFF;
+  ADAU1452_WRITE_BLOCK( paramInputs[idx].addrChn, val, 4 );
+
+  intval = (paramInputs[idx].sel >> 16) & 0x0000ffff;
+  val[0] = (intval >> 24 ) & 0xFF;
+  val[1] = (intval >> 16 ) & 0xFF;
+  val[2] = (intval >> 8 ) & 0xFF;
+  val[3] =  intval & 0xFF;
+  ADAU1452_WRITE_BLOCK( paramInputs[idx].addrPort, val, 4 );
        
   request->send(200, "text/plain", "");  
 }
@@ -1844,20 +1903,21 @@ void setup()
   //----------------------------------------------------------------------------
   //--- Configure Webserver
   //----------------------------------------------------------------------------
-  server.on( "/",         HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( SPIFFS, "/dsp.html", "text/html" ); });
-  server.on( "/dark.css", HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( SPIFFS, "/dark.css", "text/css" ); });
-  server.on( "/input",    HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetInputJson(request); });
-  server.on( "/hp",       HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetHpJson(request); });
-  server.on( "/lshelv",   HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetLshelvJson(request); });
-  server.on( "/peq",      HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetPeqJson(request); });
-  server.on( "/hshelv",   HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetHshelvJson(request); });
-  server.on( "/lp",       HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetLpJson(request); });
-  server.on( "/phase",    HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetPhaseJson(request); });
-  server.on( "/delay",    HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetDelayJson(request); });
-  server.on( "/gain",     HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetGainJson(request); });
-  server.on( "/mvol",     HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetMasterVolumeJson(request); });
-  server.on( "/preset",   HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetPresetJson(request); });
-  server.on( "/config",   HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetConfigJson(request); });
+  server.on( "/",          HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( SPIFFS, "/dsp.html", "text/html" ); });
+  server.on( "/dark.css",  HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( SPIFFS, "/dark.css", "text/css" ); });
+  server.on( "/input",     HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetInputJson(request); });
+  server.on( "/hp",        HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetHpJson(request); });
+  server.on( "/lshelv",    HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetLshelvJson(request); });
+  server.on( "/peq",       HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetPeqJson(request); });
+  server.on( "/hshelv",    HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetHshelvJson(request); });
+  server.on( "/lp",        HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetLpJson(request); });
+  server.on( "/phase",     HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetPhaseJson(request); });
+  server.on( "/delay",     HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetDelayJson(request); });
+  server.on( "/gain",      HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetGainJson(request); });
+  server.on( "/mvol",      HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetMasterVolumeJson(request); });
+  server.on( "/preset",    HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetPresetJson(request); });
+  server.on( "/config",    HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetConfigJson(request); });
+  server.on( "/allinputs", HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetAllInputsJson(request); });
   
   server.on( "/input", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
   {
