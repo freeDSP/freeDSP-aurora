@@ -9,7 +9,7 @@
 #include "AK5558.h"
 #include "AudioFilterFactory.h"
 
-#define VERSION_STR 0.0.1
+#define VERSION_STR "0.0.1"
 
 #define I2C_SDA_PIN 17
 #define I2C_SCL_PIN 16
@@ -2105,6 +2105,40 @@ void handlePostStore( AsyncWebServerRequest* request, uint8_t* data )
   Serial.print( totalSize );
   Serial.println( "bytes" );
 
+  fileName = presetAddonCfgFile[currentPreset];
+
+  if( SPIFFS.exists( fileName ) )
+  {
+    if( SPIFFS.remove( fileName ) )
+      Serial.println( fileName + " deleted" );
+    else
+      Serial.println( "[ERROR] Deleting " + fileName );
+  }
+
+  Serial.println( "Writing " + fileName );
+  File fileAddonConfig = SPIFFS.open( fileName, "w" );
+  if( !fileAddonConfig )
+    Serial.println( "[ERROR] Failed to open " + fileName );
+  else
+    Serial.println( "Opened " + fileName );
+
+  totalSize = 0;
+
+  if( Settings.addonid == ADDON_B )
+  {
+    size_t len = fileAddonConfig.write( currentAddOnCfg, 3 );
+    if( len != 3 )
+      Serial.println( "[ERROR] Writing AddOn config to " + fileName );
+    totalSize += len;
+  }
+
+  fileAddonConfig.flush();
+  fileAddonConfig.close();
+
+  Serial.print( "Wrote " );
+  Serial.print( totalSize );
+  Serial.println( "bytes" );
+
   request->send(200, "text/plain", "");  
 }
 
@@ -2148,6 +2182,35 @@ void handlePostAddonConfig( AsyncWebServerRequest* request, uint8_t* data )
   }
 
   request->send(200, "text/plain", "");  
+}
+
+//==============================================================================
+/*! Setup AddOn B
+ *
+ */
+void setupAddOnB( void )
+{
+  Serial.print( "Init AddOn B......" );
+  Wire.beginTransmission( ADDONB_SPDIFMUX_ADDR );
+  Wire.write( 0x03 );
+  Wire.write( 0x00 );
+  Wire.endTransmission( true );
+
+  String fileName = presetAddonCfgFile[currentPreset];
+
+  File fileAddonConfig = SPIFFS.open( fileName );
+  if( !fileAddonConfig )
+    Serial.println( "[ERROR] Failed to open " + fileName );
+  else
+    Serial.println( "Opened " + fileName );
+
+  size_t len = fileAddonConfig.read( currentAddOnCfg, 3 );
+  if( len != 3 )
+    Serial.println( "[ERROR] Reading AddOn config " + fileName );
+
+  fileAddonConfig.close();
+
+  Serial.println( "[OK]" );
 }
 
 //==============================================================================
@@ -2202,6 +2265,22 @@ void setup()
   readPluginMeta();
 
   //----------------------------------------------------------------------------
+  //--- Upload program to DSP
+  //----------------------------------------------------------------------------
+  uploadDspFirmware();
+
+  //----------------------------------------------------------------------------
+  //--- Upload user parameters to DSP
+  //----------------------------------------------------------------------------
+  uploadUserParams();
+
+  //----------------------------------------------------------------------------
+  //--- Configure AddOn
+  //----------------------------------------------------------------------------
+  if( Settings.addonid == ADDON_B )
+    setupAddOnB();
+
+  //----------------------------------------------------------------------------
   //--- Configure ESP for WiFi access
   //----------------------------------------------------------------------------
   WiFi.mode( WIFI_AP );
@@ -2215,16 +2294,6 @@ void setup()
 
   // Print ESP32 Local IP Address
   //Serial.println(WiFi.localIP());
-
-  //----------------------------------------------------------------------------
-  //--- Upload program to DSP
-  //----------------------------------------------------------------------------
-  uploadDspFirmware();
-
-  //----------------------------------------------------------------------------
-  //--- Upload user parameters to DSP
-  //----------------------------------------------------------------------------
-  uploadUserParams();
 
   //----------------------------------------------------------------------------
   //--- Configure Webserver
