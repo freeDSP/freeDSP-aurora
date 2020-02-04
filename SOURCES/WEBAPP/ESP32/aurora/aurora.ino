@@ -49,7 +49,6 @@ struct tSettings
   String ssid;
   String password;
   int addonid;
-  byte currentPreset;
   bool vpot;
 };
 
@@ -107,6 +106,12 @@ struct tGain
   float gain;
 };
 
+struct tMasterVolume
+{
+  uint16_t addr;
+  float val;
+};
+
 tInput paramInputs[8];
 tHPLP paramHP[8];
 tShelving paramLshelv[8];
@@ -116,6 +121,7 @@ tHPLP paramLP[8];
 tPhase paramPhase[8];
 tDelay paramDelay[8];
 tGain paramGain[8];
+tMasterVolume masterVolume = { 0x0000, -60.0 };
 
 int numInputs = MAX_NUM_INPUTS;
 int numHPs;
@@ -130,9 +136,12 @@ int numGains;
 File fileDspProgram;
 
 float sampleRate = 48000.0;
-float masterVolume = -60.0;
+//float masterVolume = -60.0;
 uint8_t currentPreset = 0;
 byte currentAddOnCfg[3];
+
+String presetUsrparamFile[4] = { "/usrparam.001", "/usrparam.002", "/usrparam.003", "/usrparam.004" };
+String presetAddonCfgFile[4] = { "/addoncfg.001", "/addoncfg.002", "/addoncfg.003", "/addoncfg.004" };
 
 AsyncWebServer server( 80 );
 
@@ -297,7 +306,6 @@ void readSettings( void )
     Settings.ssid = jsonSettings["ssid"].as<String>();
     Settings.password = jsonSettings["pwd"].as<String>();
     Settings.addonid = jsonSettings["aid"].as<String>().toInt();
-    Settings.currentPreset = jsonSettings["preset"].as<String>().toInt();
     if( jsonSettings["vpot"].as<String>() == "true" )
       Settings.vpot = true;
     else
@@ -306,7 +314,6 @@ void readSettings( void )
     Serial.println( "Device config" );
     //Serial.print( "PID: " ); Serial.println( Settings.pid );
     Serial.print( "AID: " ); Serial.println( Settings.addonid );
-    Serial.print( "Preset: " ); Serial.println( Settings.currentPreset ); 
     Serial.print( "Volume Poti: " ); Serial.println( Settings.vpot ); 
   }
   else
@@ -329,7 +336,6 @@ void writeSettings( void )
     jsonSettings["ssid"] = Settings.ssid;
     jsonSettings["pwd"] = Settings.password;
     jsonSettings["aid"] = Settings.addonid;
-    jsonSettings["preset"] = Settings.currentPreset;
     jsonSettings["vpot"] = Settings.vpot;
 
     if( serializeJson( jsonSettings, fileSettings ) == 0 )
@@ -498,6 +504,145 @@ void uploadDspFirmware( void )
   }
   else
     Serial.println( "\n[ERROR] Failed to open file dsp.fw" );
+}
+
+
+//==============================================================================
+/*! Uploads the user parameters from ESP32 SPI flash to DSP.
+ */
+void uploadUserParams( void )
+{
+  String fileName = presetUsrparamFile[currentPreset];
+ 
+  if( !SPIFFS.exists( fileName ) )
+  {
+    Serial.println( "Preset " + fileName + " not written yet" );
+    return;
+  }
+
+  File fileUserParams = SPIFFS.open( fileName );
+
+  if( fileUserParams )
+  {
+    Serial.print( "Uploading user parameters from " + fileName );
+    uint32_t totalSize = 0;
+    for( int ii = 0; ii < numInputs; ii++ )
+    {
+      size_t len = fileUserParams.read( (uint8_t*)&(paramInputs[ii]), sizeof(tInput) );
+      if( len != sizeof(tInput) )
+        Serial.println( "[ERROR] Reading inputs from " + presetUsrparamFile[currentPreset] );
+      else
+        setInput( paramInputs[ii].addrChn, paramInputs[ii].addrPort, paramInputs[ii].sel );
+      totalSize += len;
+    }
+    Serial.print( "." );
+
+    for( int ii = 0; ii < numHPs; ii++ )
+    {
+      size_t len = fileUserParams.read( (uint8_t*)&(paramHP[ii]), sizeof(tHPLP) );
+      if( len != sizeof(tHPLP) )
+        Serial.println( "[ERROR] Reading HPs from " + presetUsrparamFile[currentPreset] );
+      else
+        setHighPass( ii );
+      totalSize += len;
+    }
+    Serial.print( "." );
+
+    for( int ii = 0; ii < numLShelvs; ii++ )
+    {
+      size_t len = fileUserParams.read( (uint8_t*)&(paramLshelv[ii]), sizeof(tShelving) );
+      if( len != sizeof(tShelving) )
+        Serial.println( "[ERROR] Reading LShelvs from " + presetUsrparamFile[currentPreset] );
+      else
+        setLowShelving( ii );
+      totalSize += len;
+    }
+    Serial.print( "." );
+
+    for( int ii = 0; ii < numPEQs; ii++ )
+    {
+      size_t len = fileUserParams.read( (uint8_t*)&(paramPeq[ii]), sizeof(tPeq) );
+      if( len != sizeof(tPeq) )
+        Serial.println( "[ERROR] Writing PEQs to " + presetUsrparamFile[currentPreset] );
+      else
+        setPEQ( ii );
+      totalSize += len;
+    }
+    Serial.print( "." );
+
+    for( int ii = 0; ii < numHShelvs; ii++ )
+    {
+      size_t len = fileUserParams.read( (uint8_t*)&(paramHshelv[ii]), sizeof(tShelving) );
+      if( len != sizeof(tShelving) )
+        Serial.println( "[ERROR] Writing HShelvs to " + presetUsrparamFile[currentPreset] );
+      else
+        setHighShelving( ii );
+      totalSize += len;
+    }
+    Serial.print( "." );
+
+    for( int ii = 0; ii < numLPs; ii++ )
+    {
+      size_t len = fileUserParams.read( (uint8_t*)&(paramLP[ii]), sizeof(tHPLP) );
+      if( len != sizeof(tHPLP) )
+        Serial.println( "[ERROR] Writing LPs to " + presetUsrparamFile[currentPreset] );
+      else
+        setLowPass( ii );
+      totalSize += len;
+    }
+    Serial.print( "." );
+
+    for( int ii = 0; ii < numPhases; ii++ )
+    {
+      size_t len = fileUserParams.read( (uint8_t*)&(paramPhase[ii]), sizeof(tPhase) );
+      if( len != sizeof(tPhase) )
+        Serial.println( "[ERROR] Writing Phases to " + presetUsrparamFile[currentPreset] );
+      else
+        setPhase( ii );
+      totalSize += len;
+    }
+    Serial.print( "." );
+
+    for( int ii = 0; ii < numDelays; ii++ )
+    {
+      size_t len = fileUserParams.read( (uint8_t*)&(paramDelay[ii]), sizeof(tDelay) );
+      if( len != sizeof(tDelay) )
+        Serial.println( "[ERROR] Writing Delays to " + presetUsrparamFile[currentPreset] );
+      else
+        setDelay( ii );
+      totalSize += len;
+    }
+    Serial.print( "." );
+
+    for( int ii = 0; ii < numGains; ii++ )
+    {
+      size_t len = fileUserParams.read( (uint8_t*)&(paramGain[ii]), sizeof(tGain) );
+      if( len != sizeof(tGain) )
+        Serial.println( "[ERROR] Writing Gains to " + presetUsrparamFile[currentPreset] );
+      else
+        setGain( ii );
+      totalSize += len;
+    }
+    Serial.print( "." );
+
+    size_t len = fileUserParams.read( (uint8_t*)&masterVolume, sizeof(tMasterVolume) );
+    if( len != sizeof(tMasterVolume) )
+      Serial.println( "[ERROR] Writing masterVolume to " + presetUsrparamFile[currentPreset] );
+    else
+      setMasterVolume();
+    totalSize += len;
+
+    Serial.println( "[OK]" );
+    Serial.print( "Read " );
+    Serial.print( totalSize );
+    Serial.println( "bytes" );
+  }
+  else
+    Serial.println( "[ERROR] uploadUserParams(): Reading preset file failed." );
+
+  fileUserParams.close();
+  
+
 }
 
 //==============================================================================
@@ -917,10 +1062,9 @@ void handleGetGainJson( AsyncWebServerRequest* request )
 void handleGetMasterVolumeJson( AsyncWebServerRequest* request )
 {
   Serial.println( "GET /mvol" );
-  Serial.println( masterVolume );
   AsyncJsonResponse* response = new AsyncJsonResponse();
   JsonVariant& jsonResponse = response->getRoot();
-  jsonResponse["vol"] = masterVolume;
+  jsonResponse["vol"] = masterVolume.val;
   response->setLength();
   request->send(response);
 }
@@ -1039,22 +1183,31 @@ void handlePostInputJson( AsyncWebServerRequest* request, uint8_t* data )
   paramInputs[idx].addrPort = static_cast<uint16_t>( root["port"].as<String>().toInt() );
   paramInputs[idx].sel = (uint32_t)strtoul( root["sel"].as<String>().c_str(), NULL, 16 );
 
-  byte val[4];
-  uint32_t intval = paramInputs[idx].sel & 0x0000ffff;
-  val[0] = (intval >> 24 ) & 0xFF;
-  val[1] = (intval >> 16 ) & 0xFF;
-  val[2] = (intval >> 8 ) & 0xFF;
-  val[3] =  intval & 0xFF;
-  ADAU1452_WRITE_BLOCK( paramInputs[idx].addrChn, val, 4 );
-
-  intval = (paramInputs[idx].sel >> 16) & 0x0000ffff;
-  val[0] = (intval >> 24 ) & 0xFF;
-  val[1] = (intval >> 16 ) & 0xFF;
-  val[2] = (intval >> 8 ) & 0xFF;
-  val[3] =  intval & 0xFF;
-  ADAU1452_WRITE_BLOCK( paramInputs[idx].addrPort, val, 4 );
+  setInput( paramInputs[idx].addrChn, paramInputs[idx].addrPort, paramInputs[idx].sel );
        
   request->send(200, "text/plain", "");  
+}
+
+//==============================================================================
+/*! Sets a new input selection on DSP.
+ *
+ */
+void setInput( const uint16_t addrChn, const uint16_t addrPort, const uint32_t sel )
+{
+  byte val[4];
+  uint32_t intval = sel & 0x0000ffff;
+  val[0] = (intval >> 24 ) & 0xFF;
+  val[1] = (intval >> 16 ) & 0xFF;
+  val[2] = (intval >> 8 ) & 0xFF;
+  val[3] =  intval & 0xFF;
+  ADAU1452_WRITE_BLOCK( addrChn, val, 4 );
+
+  intval = (sel >> 16) & 0x0000ffff;
+  val[0] = (intval >> 24 ) & 0xFF;
+  val[1] = (intval >> 16 ) & 0xFF;
+  val[2] = (intval >> 8 ) & 0xFF;
+  val[3] =  intval & 0xFF;
+  ADAU1452_WRITE_BLOCK( addrPort, val, 4 );
 }
 
 //==============================================================================
@@ -1093,6 +1246,17 @@ void handlePostHpJson( AsyncWebServerRequest* request, uint8_t* data )
   paramHP[idx].fc = root["fc"].as<String>().toFloat();
   paramHP[idx].typ = static_cast<tFilterType>(root["typ"].as<String>().toInt());
 
+  setHighPass( idx );
+       
+  request->send(200, "text/plain", "");  
+}
+
+//==============================================================================
+/*! Sets the values for a highpass block on DSP.
+ *
+ */
+void setHighPass( int idx )
+{
   float a[12] = { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0 };
   float b[12] = { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0 };
   byte val[4];
@@ -1142,10 +1306,7 @@ void handlePostHpJson( AsyncWebServerRequest* request, uint8_t* data )
     ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A1
     addr++;
   }
-       
-  request->send(200, "text/plain", "");  
 }
-
 //==============================================================================
 /*! Handles the POST request for Low Shelving parameter
  *
@@ -1181,6 +1342,17 @@ void handlePostLshelvJson( AsyncWebServerRequest* request, uint8_t* data )
   paramLshelv[idx].fc = root["fc"].as<String>().toFloat();
   paramLshelv[idx].slope = root["slope"].as<String>().toFloat();
 
+  setLowShelving( idx );
+       
+  request->send(200, "text/plain", "");  
+}
+
+//==============================================================================
+/*! Sets the values for a low shelving block on DSP.
+ *
+ */
+void setLowShelving( int idx )
+{
   float a[3];
   float b[3];
   byte val[4];
@@ -1226,8 +1398,6 @@ void handlePostLshelvJson( AsyncWebServerRequest* request, uint8_t* data )
   val[2] = (floatval >> 8 ) & 0xFF;
   val[3] =  floatval & 0xFF;
   ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A1
-       
-  request->send(200, "text/plain", "");  
 }
 
 //==============================================================================
@@ -1265,6 +1435,17 @@ void handlePostPeqJson( AsyncWebServerRequest* request, uint8_t* data )
   paramPeq[idx].fc = root["fc"].as<String>().toFloat();
   paramPeq[idx].Q = root["Q"].as<String>().toFloat();
 
+  setPEQ( idx );
+
+  request->send(200, "text/plain", "");  
+}
+
+//==============================================================================
+/*! Sets the values for a peq block on DSP.
+ *
+ */
+void setPEQ( int idx )
+{
   float a[3];
   float b[3];
   byte val[4];
@@ -1278,7 +1459,6 @@ void handlePostPeqJson( AsyncWebServerRequest* request, uint8_t* data )
   val[2] = (floatval >> 8 ) & 0xFF;
   val[3] =  floatval & 0xFF;
   ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B2
-  Serial.println( addr );
   addr++;
 
   floatval = convertTo824(b[1]);
@@ -1287,7 +1467,6 @@ void handlePostPeqJson( AsyncWebServerRequest* request, uint8_t* data )
   val[2] = (floatval >> 8 ) & 0xFF;
   val[3] =  floatval & 0xFF;
   ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B1
-  Serial.println( addr );
   addr++;
 
   floatval = convertTo824(b[0]);
@@ -1296,7 +1475,6 @@ void handlePostPeqJson( AsyncWebServerRequest* request, uint8_t* data )
   val[2] = (floatval >> 8 ) & 0xFF;
   val[3] =  floatval & 0xFF;
   ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B0
-  Serial.println( addr );
   addr++;
 
   floatval = convertTo824(a[2]);
@@ -1305,7 +1483,6 @@ void handlePostPeqJson( AsyncWebServerRequest* request, uint8_t* data )
   val[2] = (floatval >> 8 ) & 0xFF;
   val[3] =  floatval & 0xFF;
   ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A2
-  Serial.println( addr );
   addr++;
   
   floatval = convertTo824(a[1]);
@@ -1314,9 +1491,6 @@ void handlePostPeqJson( AsyncWebServerRequest* request, uint8_t* data )
   val[2] = (floatval >> 8 ) & 0xFF;
   val[3] =  floatval & 0xFF;
   ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A1
-  Serial.println( addr );
-
-  request->send(200, "text/plain", "");  
 }
 
 //==============================================================================
@@ -1354,6 +1528,17 @@ void handlePostHshelvJson( AsyncWebServerRequest* request, uint8_t* data )
   paramHshelv[idx].fc = root["fc"].as<String>().toFloat();
   paramHshelv[idx].slope = root["slope"].as<String>().toFloat();
 
+  setHighShelving( idx );
+       
+  request->send(200, "text/plain", "");  
+}
+
+//==============================================================================
+/*! Sets the values for a high shelving block on DSP.
+ *
+ */
+void setHighShelving( int idx )
+{
   float a[3];
   float b[3];
   byte val[4];
@@ -1361,7 +1546,6 @@ void handlePostHshelvJson( AsyncWebServerRequest* request, uint8_t* data )
   AudioFilterFactory::makeHighShelv( a, b, paramHshelv[idx].gain, paramHshelv[idx].fc, paramHshelv[idx].slope, sampleRate );
 
   uint16_t addr = paramHshelv[idx].addr;
-  Serial.println( addr );
   floatval = convertTo824(b[2]);
   val[0] = (floatval >> 24 ) & 0xFF;
   val[1] = (floatval >> 16 ) & 0xFF;
@@ -1370,7 +1554,6 @@ void handlePostHshelvJson( AsyncWebServerRequest* request, uint8_t* data )
   ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B2
   addr++;
 
-  Serial.println( addr );
   floatval = convertTo824(b[1]);
   val[0] = (floatval >> 24 ) & 0xFF;
   val[1] = (floatval >> 16 ) & 0xFF;
@@ -1379,7 +1562,6 @@ void handlePostHshelvJson( AsyncWebServerRequest* request, uint8_t* data )
   ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B1
   addr++;
 
-  Serial.println( addr );
   floatval = convertTo824(b[0]);
   val[0] = (floatval >> 24 ) & 0xFF;
   val[1] = (floatval >> 16 ) & 0xFF;
@@ -1388,7 +1570,6 @@ void handlePostHshelvJson( AsyncWebServerRequest* request, uint8_t* data )
   ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B0
   addr++;
 
-  Serial.println( addr );
   floatval = convertTo824(a[2]);
   val[0] = (floatval >> 24 ) & 0xFF;
   val[1] = (floatval >> 16 ) & 0xFF;
@@ -1397,15 +1578,12 @@ void handlePostHshelvJson( AsyncWebServerRequest* request, uint8_t* data )
   ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A2
   addr++;
   
-  Serial.println( addr );
   floatval = convertTo824(a[1]);
   val[0] = (floatval >> 24 ) & 0xFF;
   val[1] = (floatval >> 16 ) & 0xFF;
   val[2] = (floatval >> 8 ) & 0xFF;
   val[3] =  floatval & 0xFF;
   ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A1
-       
-  request->send(200, "text/plain", "");  
 }
 
 //==============================================================================
@@ -1444,6 +1622,17 @@ void handlePostLpJson( AsyncWebServerRequest* request, uint8_t* data )
   paramLP[idx].fc = root["fc"].as<String>().toFloat();
   paramLP[idx].typ = static_cast<tFilterType>(root["typ"].as<String>().toInt());
 
+  setLowPass( idx );
+
+  request->send(200, "text/plain", "");  
+}
+
+//==============================================================================
+/*! Sets the values for a low pass block on DSP.
+ *
+ */
+void setLowPass( int idx )
+{
   float a[12] = { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0 };
   float b[12] = { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0 };
   byte val[4];
@@ -1493,7 +1682,6 @@ void handlePostLpJson( AsyncWebServerRequest* request, uint8_t* data )
     ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A1
     addr++;
   }
-  request->send(200, "text/plain", "");  
 }
 
 //==============================================================================
@@ -1529,6 +1717,17 @@ void handlePostPhaseJson( AsyncWebServerRequest* request, uint8_t* data )
   paramPhase[idx].fc = root["fc"].as<String>().toFloat();
   paramPhase[idx].Q = root["Q"].as<String>().toFloat();
 
+  setPhase( idx );
+
+  request->send(200, "text/plain", "");  
+}
+
+//==============================================================================
+/*! Sets the values for a phase block on DSP.
+ *
+ */
+void setPhase( int idx )
+{
   float a[3];
   float b[3];
   byte val[4];
@@ -1542,7 +1741,6 @@ void handlePostPhaseJson( AsyncWebServerRequest* request, uint8_t* data )
   val[2] = (floatval >> 8 ) & 0xFF;
   val[3] =  floatval & 0xFF;
   ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B2
-  Serial.println( addr );
   addr++;
 
   floatval = convertTo824(b[1]);
@@ -1551,7 +1749,6 @@ void handlePostPhaseJson( AsyncWebServerRequest* request, uint8_t* data )
   val[2] = (floatval >> 8 ) & 0xFF;
   val[3] =  floatval & 0xFF;
   ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B1
-  Serial.println( addr );
   addr++;
 
   floatval = convertTo824(b[0]);
@@ -1560,7 +1757,6 @@ void handlePostPhaseJson( AsyncWebServerRequest* request, uint8_t* data )
   val[2] = (floatval >> 8 ) & 0xFF;
   val[3] =  floatval & 0xFF;
   ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B0
-  Serial.println( addr );
   addr++;
 
   floatval = convertTo824(a[2]);
@@ -1569,7 +1765,6 @@ void handlePostPhaseJson( AsyncWebServerRequest* request, uint8_t* data )
   val[2] = (floatval >> 8 ) & 0xFF;
   val[3] =  floatval & 0xFF;
   ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A2
-  Serial.println( addr );
   addr++;
   
   floatval = convertTo824(a[1]);
@@ -1578,9 +1773,6 @@ void handlePostPhaseJson( AsyncWebServerRequest* request, uint8_t* data )
   val[2] = (floatval >> 8 ) & 0xFF;
   val[3] =  floatval & 0xFF;
   ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A1
-  Serial.println( addr );
-
-  request->send(200, "text/plain", "");  
 }
 
 //==============================================================================
@@ -1613,6 +1805,17 @@ void handlePostDelayJson( AsyncWebServerRequest* request, uint8_t* data )
   paramDelay[idx].delay = root["delay"].as<String>().toFloat();
   paramDelay[idx].addr = static_cast<uint16_t>(root["addr"].as<String>().toInt());
   
+  setDelay( idx );
+      
+  request->send(200, "text/plain", "");  
+}
+
+//==============================================================================
+/*! Sets the values for a delay block on DSP.
+ *
+ */
+void setDelay( int idx )
+{
   float dly = paramDelay[idx].delay/1000.0 * sampleRate;
   int32_t idly = static_cast<int32_t>(dly + 0.5);
 
@@ -1623,8 +1826,6 @@ void handlePostDelayJson( AsyncWebServerRequest* request, uint8_t* data )
   val[2] = (idly >> 8 ) & 0xFF;
   val[3] =  idly & 0xFF;
   ADAU1452_WRITE_BLOCK( addr, val, 4 );
-      
-  request->send(200, "text/plain", "");  
 }
 
 //==============================================================================
@@ -1656,6 +1857,18 @@ void handlePostGainJson( AsyncWebServerRequest* request, uint8_t* data )
   uint32_t idx = static_cast<uint32_t>(root["idx"].as<String>().toInt());
   paramGain[idx].addr = static_cast<uint16_t>(root["addr"].as<String>().toInt());
   paramGain[idx].gain = root["gain"].as<String>().toFloat();
+
+  setGain( idx );  
+       
+  request->send(200, "text/plain", "");  
+}
+
+//==============================================================================
+/*! Sets the values for a gain block on DSP.
+ *
+ */
+void setGain( int idx )
+{
   uint32_t float824val = convertTo824( pow( 10.0, paramGain[idx].gain / 20.0 ) );
 
   byte val[4];
@@ -1663,9 +1876,7 @@ void handlePostGainJson( AsyncWebServerRequest* request, uint8_t* data )
   val[1] = (float824val >> 16 ) & 0xFF;
   val[2] = (float824val >> 8 ) & 0xFF;
   val[3] = float824val & 0xFF;
-  ADAU1452_WRITE_BLOCK( paramGain[idx].addr, val, 4 );  
-       
-  request->send(200, "text/plain", "");  
+  ADAU1452_WRITE_BLOCK( paramGain[idx].addr, val, 4 );
 }
 
 //==============================================================================
@@ -1691,23 +1902,30 @@ void handlePostMasterVolumeJson( AsyncWebServerRequest* request, uint8_t* data )
   }
 
   JsonObject root = jsonDoc.as<JsonObject>();
+
+  masterVolume.addr = static_cast<uint16_t>(root["addr"].as<String>().toInt());
+  masterVolume.val = root["vol"].as<String>().toFloat();
   
-  uint16_t reg = (uint16_t)strtoul( root["addr"].as<String>().c_str(), NULL, 10 );
-  masterVolume = root["vol"].as<String>().toFloat();
-  uint32_t rxval = convertTo824( pow( 10.0, masterVolume / 20.0 ) );
+  setMasterVolume(); 
+    
+  request->send(200, "text/plain", "");  
+}
+
+//==============================================================================
+/*! Sets the value for master volume on DSP.
+ *
+ */
+void setMasterVolume( void )
+{
+  uint16_t reg = masterVolume.addr;
+  uint32_t rxval = convertTo824( pow( 10.0, masterVolume.val / 20.0 ) );
 
   byte val[4];
   val[0] = (rxval >> 24 ) & 0xFF;
   val[1] = (rxval >> 16 ) & 0xFF;
   val[2] = (rxval >> 8 ) & 0xFF;
   val[3] = rxval & 0xFF;
-  ADAU1452_WRITE_BLOCK( reg, val, 4 );  
-
-  Serial.println( masterVolume );
-  Serial.println( reg, HEX );
-  Serial.println( masterVolume );
-  Serial.println( rxval, HEX );     
-  request->send(200, "text/plain", "");  
+  ADAU1452_WRITE_BLOCK( reg, val, 4 ); 
 }
 
 //==============================================================================
@@ -1784,6 +2002,109 @@ void handlePostConfigJson( AsyncWebServerRequest* request, uint8_t* data )
 void handlePostStore( AsyncWebServerRequest* request, uint8_t* data )
 {
   Serial.println( "POST /store" );
+
+  String fileName = presetUsrparamFile[currentPreset];
+
+  if( SPIFFS.exists( fileName ) )
+  {
+    if( SPIFFS.remove( fileName ) )
+      Serial.println( fileName + " deleted" );
+    else
+      Serial.println( "[ERROR] Deleting " + fileName );
+  }
+
+  Serial.println( "Writing " + fileName );
+  File fileUserParams = SPIFFS.open( fileName, "w" );
+  if( !fileUserParams )
+    Serial.println( "[ERROR] Failed to open " + fileName );
+  else
+    Serial.println( "Opened " + fileName );
+
+  uint32_t totalSize = 0;
+  for( int ii = 0; ii < numInputs; ii++ )
+  {
+    size_t len = fileUserParams.write( (uint8_t*)&(paramInputs[ii]), sizeof(tInput) );
+    if( len != sizeof(tInput) )
+      Serial.println( "[ERROR] Writing inputs to " + presetUsrparamFile[currentPreset] );
+    totalSize += len;
+  }
+
+  for( int ii = 0; ii < numHPs; ii++ )
+  {
+    size_t len = fileUserParams.write( (uint8_t*)&(paramHP[ii]), sizeof(tHPLP) );
+    if( len != sizeof(tHPLP) )
+      Serial.println( "[ERROR] Writing HPs to " + presetUsrparamFile[currentPreset] );
+    totalSize += len;
+  }
+
+  for( int ii = 0; ii < numLShelvs; ii++ )
+  {
+    size_t len = fileUserParams.write( (uint8_t*)&(paramLshelv[ii]), sizeof(tShelving) );
+    if( len != sizeof(tShelving) )
+      Serial.println( "[ERROR] Writing LShelvs to " + presetUsrparamFile[currentPreset] );
+    totalSize += len;
+  }
+
+  for( int ii = 0; ii < numPEQs; ii++ )
+  {
+    size_t len = fileUserParams.write( (uint8_t*)&(paramPeq[ii]), sizeof(tPeq) );
+    if( len != sizeof(tPeq) )
+      Serial.println( "[ERROR] Writing PEQs to " + presetUsrparamFile[currentPreset] );
+    totalSize += len;
+  }
+
+  for( int ii = 0; ii < numHShelvs; ii++ )
+  {
+    size_t len = fileUserParams.write( (uint8_t*)&(paramHshelv[ii]), sizeof(tShelving) );
+    if( len != sizeof(tShelving) )
+      Serial.println( "[ERROR] Writing HShelvs to " + presetUsrparamFile[currentPreset] );
+    totalSize += len;
+  }
+
+  for( int ii = 0; ii < numLPs; ii++ )
+  {
+    size_t len = fileUserParams.write( (uint8_t*)&(paramLP[ii]), sizeof(tHPLP) );
+    if( len != sizeof(tHPLP) )
+      Serial.println( "[ERROR] Writing LPs to " + presetUsrparamFile[currentPreset] );
+    totalSize += len;
+  }
+
+  for( int ii = 0; ii < numPhases; ii++ )
+  {
+    size_t len = fileUserParams.write( (uint8_t*)&(paramPhase[ii]), sizeof(tPhase) );
+    if( len != sizeof(tPhase) )
+      Serial.println( "[ERROR] Writing Phases to " + presetUsrparamFile[currentPreset] );
+    totalSize += len;
+  }
+
+  for( int ii = 0; ii < numDelays; ii++ )
+  {
+    size_t len = fileUserParams.write( (uint8_t*)&(paramDelay[ii]), sizeof(tDelay) );
+    if( len != sizeof(tDelay) )
+      Serial.println( "[ERROR] Writing Delays to " + presetUsrparamFile[currentPreset] );
+    totalSize += len;
+  }
+
+  for( int ii = 0; ii < numGains; ii++ )
+  {
+    size_t len = fileUserParams.write( (uint8_t*)&(paramGain[ii]), sizeof(tGain) );
+    if( len != sizeof(tGain) )
+      Serial.println( "[ERROR] Writing Gains to " + presetUsrparamFile[currentPreset] );
+    totalSize += len;
+  }
+
+  size_t len = fileUserParams.write( (uint8_t*)&masterVolume, sizeof(tMasterVolume) );
+  if( len != sizeof(tMasterVolume) )
+    Serial.println( "[ERROR] Writing masterVolume to " + presetUsrparamFile[currentPreset] );
+  totalSize += len;
+
+  fileUserParams.flush();
+  fileUserParams.close();
+
+  Serial.print( "Wrote " );
+  Serial.print( totalSize );
+  Serial.println( "bytes" );
+
   request->send(200, "text/plain", "");  
 }
 
@@ -1837,6 +2158,7 @@ void setup()
 {
   Serial.begin(115200);
   Serial.println( "AURORA Debug Log" );
+  Serial.println( VERSION_STR );
 
   //----------------------------------------------------------------------------
   //--- Configure I2C
@@ -1899,6 +2221,10 @@ void setup()
   //----------------------------------------------------------------------------
   uploadDspFirmware();
 
+  //----------------------------------------------------------------------------
+  //--- Upload user parameters to DSP
+  //----------------------------------------------------------------------------
+  uploadUserParams();
 
   //----------------------------------------------------------------------------
   //--- Configure Webserver
