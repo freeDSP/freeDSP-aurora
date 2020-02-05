@@ -9,7 +9,7 @@
 #include "AK5558.h"
 #include "AudioFilterFactory.h"
 
-#define VERSION_STR "0.0.1"
+#define VERSION_STR "v2.0.0-alpha.1"
 
 #define I2C_SDA_PIN 17
 #define I2C_SCL_PIN 16
@@ -1096,6 +1096,9 @@ void handleGetConfigJson( AsyncWebServerRequest* request )
   JsonVariant& jsonResponse = response->getRoot();
   jsonResponse["aid"] = Settings.addonid;
   jsonResponse["vpot"] = Settings.vpot;
+  jsonResponse["fw"] = VERSION_STR;
+  jsonResponse["ip"] = WiFi.localIP().toString();
+  jsonResponse["pre"] = currentPreset;
 
   if( Settings.addonid == ADDON_B )
   {
@@ -2146,7 +2149,7 @@ void handlePostStore( AsyncWebServerRequest* request, uint8_t* data )
 /*! Handles the POST request for storing addon configuration
  *
  */
-void handlePostAddonConfig( AsyncWebServerRequest* request, uint8_t* data )
+void handlePostAddonConfigJson( AsyncWebServerRequest* request, uint8_t* data )
 {
   Serial.println( "POST /addoncfg" );
   //Serial.println( "Body:");
@@ -2185,6 +2188,47 @@ void handlePostAddonConfig( AsyncWebServerRequest* request, uint8_t* data )
 }
 
 //==============================================================================
+/*! Handles the POST request for device configuration
+ *
+ */
+void handlePostWifiConfigJson( AsyncWebServerRequest* request, uint8_t* data )
+{
+  Serial.println( "POST /config" );
+  //Serial.println( "Body:");
+  //for(size_t i=0; i<len; i++)
+  //  Serial.write(data[i]);
+  //Serial.println();
+
+  DynamicJsonDocument jsonDoc(1024);
+  DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
+  if( err )
+  {
+    Serial.print( "[ERROR] handlePostWifiConfigJson(): Deserialization failed. " );
+    Serial.println( err.c_str() );
+    request->send( 404, "text/plain", "" );
+    return;
+  }
+
+  JsonObject root = jsonDoc.as<JsonObject>();
+
+  Settings.ssid = root["ssid"].as<String>();
+  Settings.password = root["pwd"].as<String>();
+
+  writeSettings();
+       
+  request->send(200, "text/plain", "");  
+}
+
+//==============================================================================
+/*! Setup AddOn A
+ *
+ */
+void setupAddOnA( void )
+{
+  
+}
+
+//==============================================================================
 /*! Setup AddOn B
  *
  */
@@ -2211,6 +2255,84 @@ void setupAddOnB( void )
   fileAddonConfig.close();
 
   Serial.println( "[OK]" );
+}
+
+//==============================================================================
+/*! Wifi connection task 
+ *
+ */
+void myWiFiTask(void *pvParameters)
+{
+  wl_status_t state;
+  bool firstConnectAttempt = true;
+  bool myWiFiFirstConnect = true;
+  int cntrAuthFailure = 0;
+  
+  WiFi.mode( WIFI_AP_STA );
+  WiFi.setHostname( "freeDSP-aurora" );
+  // Start access point
+  WiFi.softAP( "AP-freeDSP-aurora" );
+  delay(100);
+  //wait for SYSTEM_EVENT_AP_START
+  if( !WiFi.softAPConfig( IPAddress(192, 168, 5, 1), IPAddress(192, 168, 5, 1), IPAddress(255, 255, 255, 0) ) )
+    Serial.println("AP Config Failed");
+  
+  while (true)
+  {
+    if( (Settings.ssid.length() > 0) &&  (cntrAuthFailure < 10) )
+    {
+      state = WiFi.status();
+      if( state != WL_CONNECTED )         // We have no connection yet
+      {  
+        //if (state == WL_NO_SHIELD) {  
+        if( firstConnectAttempt )   // WiFi.begin wasn't called yet
+        {
+          firstConnectAttempt = false;
+          Serial.print( "Connecting to " );
+          Serial.println( Settings.ssid.c_str() );
+          WiFi.begin(Settings.ssid.c_str(), Settings.password.c_str());  
+        } 
+        else if( state == WL_CONNECT_FAILED )  // WiFi.begin has failed (AUTH_FAIL)
+        {  
+          Serial.println("Disconnecting WiFi");
+          WiFi.disconnect(true);
+          cntrAuthFailure++;
+        } 
+        else if( state == WL_DISCONNECTED ) // WiFi.disconnect was done or Router.WiFi got out of range
+        {  
+          if (!myWiFiFirstConnect) // Report only once
+          {  
+            myWiFiFirstConnect = true;
+            Serial.println( "WiFi disconnected" );
+          }
+          Serial.println("No Connection -> Wifi Reset");
+          WiFi.persistent(false);
+          WiFi.disconnect();
+          WiFi.mode(WIFI_OFF);
+          WiFi.mode(WIFI_AP_STA);
+          // WiFi.config(ip, gateway, subnet); // Only for fix IP needed
+          WiFi.begin(Settings.ssid.c_str(), Settings.password.c_str());
+          delay(3000); // Wait 3 Seconds, WL_DISCONNECTED is present until new connect!
+          cntrAuthFailure++;
+        }
+        vTaskDelay (250); // Check again in about 250ms
+      } 
+      else // We have connection
+      { 
+        if( myWiFiFirstConnect ) // Report only once
+        {  
+          myWiFiFirstConnect = false;
+          cntrAuthFailure = 0;
+          Serial.println( "Connected" );
+          Serial.print( "IP address: " );
+          Serial.println( WiFi.localIP() );
+        }
+        vTaskDelay (5000); // Check again in about 5s
+      }
+    }
+    else
+      vTaskDelay (5000);
+  }
 }
 
 //==============================================================================
@@ -2277,13 +2399,15 @@ void setup()
   //----------------------------------------------------------------------------
   //--- Configure AddOn
   //----------------------------------------------------------------------------
-  if( Settings.addonid == ADDON_B )
+  if( Settings.addonid == ADDON_A )
+    setupAddOnA();
+  else if( Settings.addonid == ADDON_B )
     setupAddOnB();
 
   //----------------------------------------------------------------------------
   //--- Configure ESP for WiFi access
   //----------------------------------------------------------------------------
-  WiFi.mode( WIFI_AP );
+  /*WiFi.mode( WIFI_AP );
   WiFi.setHostname( "freeDSP-aurora" );
   // Start access point
   WiFi.softAP( "AP-freeDSP-aurora" );
@@ -2291,9 +2415,10 @@ void setup()
   //wait for SYSTEM_EVENT_AP_START
   if( !WiFi.softAPConfig( IPAddress(192, 168, 5, 1), IPAddress(192, 168, 5, 1), IPAddress(255, 255, 255, 0) ) )
     Serial.println("AP Config Failed");
+  */
 
-  // Print ESP32 Local IP Address
-  //Serial.println(WiFi.localIP());
+  // Create a connection task with 8kB stack on core 0
+  xTaskCreatePinnedToCore(myWiFiTask, "myWiFiTask", 8192, NULL, 3, NULL, 0);
 
   //----------------------------------------------------------------------------
   //--- Configure Webserver
@@ -2369,8 +2494,11 @@ void setup()
   });
   server.on( "/addoncfg", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
   {
-    // \TODO Client does not send any JSON data
-    handlePostAddonConfig( request, data );
+    handlePostAddonConfigJson( request, data );
+  });
+  server.on( "/wifi", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
+  {
+    handlePostWifiConfigJson( request, data );
   });
 
 
