@@ -112,6 +112,13 @@ struct tMasterVolume
   float val;
 };
 
+struct tInputSelector
+{
+  uint16_t analog[8];
+  uint16_t spdif[8];
+  uint16_t port[8];
+};
+
 tInput paramInputs[8];
 tHPLP paramHP[8];
 tShelving paramLshelv[8];
@@ -122,6 +129,7 @@ tPhase paramPhase[8];
 tDelay paramDelay[8];
 tGain paramGain[8];
 tMasterVolume masterVolume = { 0x0000, -60.0 };
+tInputSelector inputSelector;
 
 int numInputs = MAX_NUM_INPUTS;
 int numHPs;
@@ -357,7 +365,7 @@ void readPluginMeta( void )
 
   if( filePluginMeta )
   {
-    StaticJsonDocument<512> jsonDoc;
+    StaticJsonDocument<1024> jsonDoc;
     DeserializationError err = deserializeJson( jsonDoc, filePluginMeta );
     if( err )
     {
@@ -375,6 +383,15 @@ void readPluginMeta( void )
     numPhases = jsonPluginMeta["phase"].as<String>().toInt();
     numDelays = jsonPluginMeta["dly"].as<String>().toInt();
     numGains = jsonPluginMeta["gain"].as<String>().toInt();
+
+    for( int ii = 0; ii < 8; ii++ )
+      inputSelector.analog[ii] = static_cast<uint16_t>(jsonPluginMeta["analog"][ii].as<String>().toInt());
+    
+    for( int ii = 0; ii < 8; ii++ )
+      inputSelector.spdif[ii] = static_cast<uint16_t>(jsonPluginMeta["spdif"][ii].as<String>().toInt());
+ 
+    for( int ii = 0; ii < 8; ii++ )
+      inputSelector.port[ii] = static_cast<uint16_t>(jsonPluginMeta["port"][ii].as<String>().toInt());
   }
   else
   {
@@ -2225,7 +2242,140 @@ void handlePostWifiConfigJson( AsyncWebServerRequest* request, uint8_t* data )
  */
 void setupAddOnA( void )
 {
-  
+  Wire.beginTransmission( ADDONA_SPDIFMUX_ADDR );
+  Wire.write( 0x03 );
+  Wire.write( 0xFF );
+  Wire.endTransmission( true );
+
+  Wire.beginTransmission( ADDONA_SPDIFMUX_ADDR );
+  Wire.write( 0x00 );
+  Wire.endTransmission();
+  Wire.requestFrom( ADDONA_SPDIFMUX_ADDR, 1 );
+  if( Wire.available() == 1 )
+  {
+    byte value = Wire.read();
+
+    // Analog RCA
+    if( (value == 0xfe) || (value == 0xff) )
+    {
+      uint32_t data = 0x00000004;
+      byte val[4];
+      val[0] = (data >> 24 ) & 0xFF;
+      val[1] = (data >> 16 ) & 0xFF;
+      val[2] = (data >> 8 ) & 0xFF;
+      val[3] = data & 0xFF;
+      for( int ii = 0; ii < 8; ii++ )
+        ADAU1452_WRITE_BLOCK( inputSelector.analog[ii],  val, 4 ); 
+      
+      data = 0x00000000;
+      val[0] = (data >> 24 ) & 0xFF;
+      val[1] = (data >> 16 ) & 0xFF;
+      val[2] = (data >> 8 ) & 0xFF;
+      val[3] = data & 0xFF;
+      for( int ii = 0; ii < 8; ii++ )
+        ADAU1452_WRITE_BLOCK( inputSelector.port[ii], val, 4 );
+    }
+    // Analog XLR
+    else if( value == 0xf7 )
+    {
+      uint32_t data = 0x00000000;
+      byte val[4];
+      val[0] = (data >> 24 ) & 0xFF;
+      val[1] = (data >> 16 ) & 0xFF;
+      val[2] = (data >> 8 ) & 0xFF;
+      val[3] = data & 0xFF;
+      for( int ii = 0; ii < 8; ii++ )
+        ADAU1452_WRITE_BLOCK( inputSelector.analog[ii],  val, 4 ); 
+
+      data = 0x00000000;
+      val[0] = (data >> 24 ) & 0xFF;
+      val[1] = (data >> 16 ) & 0xFF;
+      val[2] = (data >> 8 ) & 0xFF;
+      val[3] = data & 0xFF;
+      for( int ii = 0; ii < 8; ii++ )
+        ADAU1452_WRITE_BLOCK( inputSelector.port[ii], val, 4 );
+    }
+    // Toslink left channel
+    else if( (value == 0xfa) || (value == 0xfb) )
+    {
+      uint32_t data = 0x00000000;
+      byte val[4];
+      val[0] = (data >> 24 ) & 0xFF;
+      val[1] = (data >> 16 ) & 0xFF;
+      val[2] = (data >> 8 ) & 0xFF;
+      val[3] = data & 0xFF;
+      for( int ii = 0; ii < 8; ii++ )
+        ADAU1452_WRITE_BLOCK( inputSelector.spdif[ii],  val, 4 ); 
+
+      data = 0x00000004;
+      val[0] = (data >> 24 ) & 0xFF;
+      val[1] = (data >> 16 ) & 0xFF;
+      val[2] = (data >> 8 ) & 0xFF;
+      val[3] = data & 0xFF;
+      for( int ii = 0; ii < 8; ii++ )
+        ADAU1452_WRITE_BLOCK( inputSelector.port[ii], val, 4 );
+    }
+    // Toslink right channel
+    else if( value == 0xf3 )
+    {
+      uint32_t data = 0x00000001;
+      byte val[4];
+      val[0] = (data >> 24 ) & 0xFF;
+      val[1] = (data >> 16 ) & 0xFF;
+      val[2] = (data >> 8 ) & 0xFF;
+      val[3] = data & 0xFF;
+      for( int ii = 0; ii < 8; ii++ )
+        ADAU1452_WRITE_BLOCK( inputSelector.spdif[ii],  val, 4 ); 
+
+      data = 0x00000004;
+      val[0] = (data >> 24 ) & 0xFF;
+      val[1] = (data >> 16 ) & 0xFF;
+      val[2] = (data >> 8 ) & 0xFF;
+      val[3] = data & 0xFF;
+      for( int ii = 0; ii < 8; ii++ )
+        ADAU1452_WRITE_BLOCK( inputSelector.port[ii], val, 4 );
+    }
+    // Digital RCA left
+    else if( (value == 0xfc) || (value == 0xfd) )
+    {
+      uint32_t data = 0x00000000;
+      byte val[4];
+      val[0] = (data >> 24 ) & 0xFF;
+      val[1] = (data >> 16 ) & 0xFF;
+      val[2] = (data >> 8 ) & 0xFF;
+      val[3] = data & 0xFF;
+      for( int ii = 0; ii < 8; ii++ )
+        ADAU1452_WRITE_BLOCK( inputSelector.spdif[ii],  val, 4 ); 
+
+      data = 0x00000004;
+      val[0] = (data >> 24 ) & 0xFF;
+      val[1] = (data >> 16 ) & 0xFF;
+      val[2] = (data >> 8 ) & 0xFF;
+      val[3] = data & 0xFF;
+      for( int ii = 0; ii < 8; ii++ )
+        ADAU1452_WRITE_BLOCK( inputSelector.port[ii], val, 4 );
+    }
+    // Digital RCA right
+    else if( value == 0xf5 )
+    {
+      uint32_t data = 0x00000001;
+      byte val[4];
+      val[0] = (data >> 24 ) & 0xFF;
+      val[1] = (data >> 16 ) & 0xFF;
+      val[2] = (data >> 8 ) & 0xFF;
+      val[3] = data & 0xFF;
+      for( int ii = 0; ii < 8; ii++ )
+        ADAU1452_WRITE_BLOCK( inputSelector.spdif[ii],  val, 4 ); 
+
+      data = 0x00000004;
+      val[0] = (data >> 24 ) & 0xFF;
+      val[1] = (data >> 16 ) & 0xFF;
+      val[2] = (data >> 8 ) & 0xFF;
+      val[3] = data & 0xFF;
+      for( int ii = 0; ii < 8; ii++ )
+        ADAU1452_WRITE_BLOCK( inputSelector.port[ii], val, 4 );
+    }
+  }
 }
 
 //==============================================================================
