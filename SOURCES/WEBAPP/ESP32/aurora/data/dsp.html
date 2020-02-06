@@ -14,7 +14,7 @@
       <li><a onclick="storePreset()">Store Preset</a></li>
     </ul>
     <div style="position:absolute;bottom:30px;right:30px;">
-      <p class="info">GUI: v2.0.0-alpha.1</p>
+      <p class="info">GUI: v2.0.0-alpha.2</p>
       <p class="info" id="fw">FW: 0.0.0</p>
       <p class="info" id="ip">Local Wifi IP: 0.0.0.0</p>
       </div>
@@ -551,11 +551,16 @@
   </center>
   </div>
 
-  <div id="highPass" class="modal d_hp" data-idx="0" data-addr="0">
-    <span class="close cursor" onclick="closeModal('highPass')">&times;</span>
-    <div class="modal-content">
+  <div id="highPass" class="modal" data-idx="0" data-addr="0">
+    <div class="modal-content d_hp">
       <table class="ptbl">
-      <tr><td colspan="2">High Pass</td></tr>
+      <tr><td colspan="2" style="height:20px;padding-top:10px;">
+      <table style="width:100%;">
+      <tr>
+        <td class="headline">High Pass</td><td class="close" onclick="closeModal('highPass')">&times;</td>
+      </tr>
+      </table>
+      </td></tr>
       <tr><td colspan="2">
         <select id="hp_typ">
           <option value="0">Bes 6</option>
@@ -572,55 +577,71 @@
         </select>
       </td></tr>
       <tr><td><input type="number" id="hp_fc" style="width:95%;"></td><td style="text-align:left;width:10%;">Hz</td></tr>
+      <tr><td colspan="2"><button class="send" id="hp_bypass" onclick="bypass('hp_bypass');sendParam('hp');" data-bypass="0">Bypass</button></td</tr>
       <tr><td colspan="2"><button class="send" onclick="sendParam('hp')">Send</button></td</tr>
       </table>
     </div>
   </div>
 
-  <div id="lowShelv" class="modal d_shlv" data-idx="0" data-addr="0">
-    <span class="close cursor" onclick="closeModal('lowShelv')">&times;</span>
-    <div class="modal-content">
+  <div id="lowShelv" class="modal" data-idx="0" data-addr="0">
+    <div class="modal-content d_shlv">
       <table class="ptbl">
-      <tr><td colspan="2">Low Shelving</td></tr>
+      <tr><td colspan="2" style="height:20px;padding-top:10px;">
+      <table style="width:100%;">
+      <tr><td class="headline">Low Shelving</td><td class="close" onclick="closeModal('lowShelv')">&times;</td></tr>
+      </table>
+      </td></tr>
       <tr><td><input type="number" id="ls_v" style="width:95%;"></td><td style="text-align:left;width:10%;">dB</td></tr>
       <tr><td><input type="number" id="ls_fc" style="width:95%;"></td><td style="text-align:left;width:10%;">Hz</td></tr>
       <tr><td><input type="number" id="ls_s" style="width:95%;"></td><td style="text-align:left;width:10%;">S</td></tr>
+      <tr><td colspan="2"><button class="send" id="ls_bypass" onclick="bypass('ls_bypass');sendParam('lshelv');" data-bypass="0">Bypass</button></td</tr>
       <tr><td colspan="2"><button class="send" onclick="sendParam('lshelv')">Send</button></td</tr>
       </table>
     </div>
   </div>
   
-  <div id="peq" class="modal d_peq" data-idx="0" data-addr="0">
-    <span class="close cursor" onclick="closeModal('peq')">&times;</span>
-    <div class="modal-content">
+  <div id="peq" class="modal" data-idx="0" data-addr="0">
+    <div class="modal-content d_peq">
       <table class="ptbl">
-      <tr><td colspan="2">Parametric EQ</td></tr>
+      <tr><td colspan="2" style="height:20px;padding-top:10px;">
+      <table style="width:100%;">
+      <tr><td class="headline">Parametric EQ</td><td class="close" onclick="closeModal('peq')">&times;</td></tr>
+      </table>
+      </td></tr>
       <tr><td><input type="number" id="peq_v" style="width:95%;"></td><td style="text-align:left;width:10%;">dB</td></tr>
       <tr><td><input type="number" id="peq_fc" style="width:95%;"></td><td style="text-align:left;width:10%;">Hz</td></tr>
       <tr><td><input type="number" id="peq_q" style="width:95%;"></td><td style="text-align:left;width:10%;">Q</td></tr>
+      <tr><td colspan="2"><button class="send" id="peq_bypass" onclick="bypass('peq_bypass');sendParam('peq');" data-bypass="0">Bypass</button></td</tr>
       <tr><td colspan="2"><button class="send" onclick="sendParam('peq')">Send</button></td</tr>
       </table>
     </div>
   </div>
   
-  <div id="highShelv" class="modal d_shlv" data-idx="0" data-addr="0">
-    <span class="close cursor" onclick="closeModal('highShelv')">&times;</span>
-    <div class="modal-content">
+  <div id="highShelv" class="modal" data-idx="0" data-addr="0">
+    <div class="modal-content d_shlv">
       <table class="ptbl">
-      <tr><td colspan="2">High Shelving</td></tr>
+      <tr><td colspan="2" style="height:20px;padding-top:10px;">
+      <table style="width:100%;">
+      <tr><td class="headline">High Shelving</td><td class="close" onclick="closeModal('highShelv')">&times;</td></tr>
+      </table>
+      </td></tr>
       <tr><td><input type="number" id="hs_v" style="width:95%;"></td><td style="text-align:left;width:10%;">dB</td></tr>
       <tr><td><input type="number" id="hs_fc" style="width:95%;"></td><td style="text-align:left;width:10%;">Hz</td></tr>
       <tr><td><input type="number" id="hs_s" style="width:95%;"></td><td style="text-align:left;width:10%;">S</td></tr>
+      <tr><td colspan="2"><button class="send" id="hs_bypass" onclick="bypass('hs_bypass');sendParam('hshelv');" data-bypass="0">Bypass</button></td</tr>
       <tr><td colspan="2"><button class="send" onclick="sendParam('hshelv')">Send</button></td</tr>
       </table>
     </div>
   </div>
 
-  <div id="lowPass" class="modal d_hp" data-idx="0" data-addr="0">
-    <span class="close cursor" onclick="closeModal('lowPass')">&times;</span>
-    <div class="modal-content">
+  <div id="lowPass" class="modal" data-idx="0" data-addr="0">
+    <div class="modal-content d_hp">
       <table class="ptbl">
-      <tr><td colspan="2">Low Pass</td></tr>
+      <tr><td colspan="2" style="height:20px;padding-top:10px;">
+      <table style="width:100%;">
+      <tr><td class="headline">Low Pass</td><td class="close" onclick="closeModal('lowPass')">&times;</td></tr>
+      </table>
+      </td></tr>
       <tr><td colspan="2">
         <select id="lp_typ">
           <option value="0">Bes 6</option>
@@ -637,41 +658,54 @@
         </select>
       </td></tr>
       <tr><td><input type="number" id="lp_fc" style="width:95%;"></td><td style="text-align:left;width:10%;">Hz</td></tr>
+      <tr><td colspan="2"><button class="send" id="lp_bypass" onclick="bypass('lp_bypass');sendParam('lp');" data-bypass="0">Bypass</button></td</tr>
       <tr><td colspan="2"><button class="send" onclick="sendParam('lp')">Send</button></td</tr>
       </table>
     </div>
   </div>
 
-  <div id="phase" class="modal d_phase" data-idx="0" data-addr="0">
-    <span class="close cursor" onclick="closeModal('phase')">&times;</span>
-    <div class="modal-content">
+  <div id="phase" class="modal" data-idx="0" data-addr="0">
+    <div class="modal-content d_phase">
       <table class="ptbl">
-      <tr><td colspan="2">Phase</td></tr>
+      <tr><td colspan="2" style="height:20px;padding-top:10px;">
+      <table style="width:100%;">
+      <tr><td class="headline">Phase</td><td class="close" onclick="closeModal('phase')">&times;</td></tr>
+      </table>
+      </td></tr>
       <tr><td><input type="number" id="ph_fc" style="width:95%;"></td><td style="text-align:left;width:10%;">Hz</td></tr>
       <tr><td><input type="number" id="ph_q" style="width:95%;"></td><td style="text-align:left;width:10%;">Q</td></tr>
       <tr><td colspan="2"><input type="checkbox" id="ph_inv">Invert</td></tr>
+      <tr><td colspan="2"><button class="send" id="ph_bypass" onclick="bypass('ph_bypass');sendParam('phase');" data-bypass="0">Bypass</button></td</tr>
       <tr><td colspan="2"><button class="send" onclick="sendParam('phase')">Send</button></td</tr>
       </table>
     </div>
   </div>
 
-  <div id="delay" class="modal d_delay" data-idx="0" data-addr="0">
-    <span class="close cursor" onclick="closeModal('delay')">&times;</span>
-    <div class="modal-content">
+  <div id="delay" class="modal" data-idx="0" data-addr="0">
+    <div class="modal-content d_delay">
       <table class="ptbl">
-      <tr><td colspan="2">Delay</td></tr>
+      <tr><td colspan="2" style="height:20px;padding-top:10px;">
+      <table style="width:100%;">
+      <tr><td class="headline">Delay</td><td class="close" onclick="closeModal('delay')">&times;</td></tr>
+      </table>
+      </td></tr>
       <tr><td><input type="number" id="delayval" style="width:95%;"></td><td style="text-align:left;width:10%;">ms</td></tr>
+      <tr><td colspan="2"><button class="send" id="delay_bypass" onclick="bypass('delay_bypass');sendParam('delay');" data-bypass="0">Bypass</button></td</tr>
       <tr><td colspan="2"><button class="send" onclick="sendParam('delay')">Send</button></td</tr>
       </table>
     </div>
   </div>
 
-  <div id="gain" class="modal d_gain" data-idx="0" data-addr="0">
-    <span class="close cursor" onclick="closeModal('gain')">&times;</span>
-    <div class="modal-content">
+  <div id="gain" class="modal" data-idx="0" data-addr="0">
+    <div class="modal-content d_gain">
       <table class="ptbl">
-      <tr><td colspan="2">Gain</td></tr>
+      <tr><td colspan="2" style="height:20px;padding-top:10px;">
+      <table style="width:100%;">
+      <tr><td class="headline">Gain</td><td class="close" onclick="closeModal('gain')">&times;</td></tr>
+      </table>
+      </td></tr>
       <tr><td><input type="number" id="gainval" style="width:95%;"></td><td style="text-align:left;width:10%;">dB</td></tr>
+      <tr><td colspan="2"><button class="send" id="mute" onclick="mute()" data-mute="0">Mute</button></td</tr>
       <tr><td colspan="2"><button class="send" onclick="sendParam('gain')">Send</button></td</tr>
       </table>
     </div>
@@ -721,6 +755,8 @@
       document.getElementById("highPass").dataset.addr3=addr3;
       document.getElementById("hp_fc").value=data.fc;
       document.getElementById("hp_typ").value=data.typ;
+      document.getElementById("hp_bypass").dataset.bypass=data.bypass;
+      switchBypass("hp_bypass");
     }).catch (function (error) {console.log(error);
     });
   }
@@ -734,6 +770,7 @@
       document.getElementById("ls_v").value=data.gain;
       document.getElementById("ls_fc").value=data.fc;
       document.getElementById("ls_s").value=data.slope;
+      document.getElementById("ls_bypass").dataset.bypass=data.bypass;
     }).catch (function (error) {console.log(error);
     });
   }
@@ -747,6 +784,7 @@
       document.getElementById("peq_v").value=data.gain;
       document.getElementById("peq_fc").value=data.fc;
       document.getElementById("peq_q").value=data.Q;
+      document.getElementById("peq_bypass").dataset.bypass=data.bypass;
     }).catch (function (error) {console.log(error);
     });
   }
@@ -760,6 +798,7 @@
       document.getElementById("hs_v").value=data.gain;
       document.getElementById("hs_fc").value=data.fc;
       document.getElementById("hs_s").value=data.slope;
+      document.getElementById("hs_bypass").dataset.bypass=data.bypass;
     }).catch (function (error) {console.log(error);
     });
   }
@@ -775,6 +814,7 @@
       document.getElementById("lowPass").dataset.addr3=addr3;
       document.getElementById("lp_fc").value=data.fc;
       document.getElementById("lp_typ").value=data.typ;
+      document.getElementById("lp_bypass").dataset.bypass=data.bypass;
     }).catch (function (error) {console.log(error);
     });
   }
@@ -788,6 +828,7 @@
       document.getElementById("ph_fc").value=data.fc;
       document.getElementById("ph_q").value=data.Q;
       document.getElementById("ph_inv").value=data.inv;
+      document.getElementById("ph_bypass").dataset.bypass=data.bypass;
     }).catch (function (error) {console.log(error);
     });
   }
@@ -799,6 +840,7 @@
       document.getElementById("delay").dataset.idx=idx;
       document.getElementById("delay").dataset.addr=addr;
       document.getElementById("delayval").value=data.dly;
+      document.getElementById("delay_bypass").dataset.bypass=data.bypass;
     }).catch (function (error) {console.log(error);
     });
   }
@@ -810,6 +852,8 @@
       document.getElementById("gain").dataset.idx=idx;
       document.getElementById("gain").dataset.addr=addr;
       document.getElementById("gainval").value=data.gain;
+      document.getElementById("mute").dataset.mute=data.mute;
+      switchMute();
     }).catch (function (error) {console.log(error);
     });
   }
@@ -839,7 +883,6 @@
     }).catch (function (error) {console.log(error);
     });
   }
-
   function postInputJson(id,idx){
     var data={};
     var elem = document.getElementById(id);
@@ -862,6 +905,7 @@
       data.addr3=document.getElementById("highPass").dataset.addr3;
       data.fc=document.getElementById("hp_fc").value;
       data.typ=document.getElementById("hp_typ").value;
+      data.bypass=document.getElementById("hp_bypass").dataset.bypass;
       return fetch("/hp",{method:"POST",headers:{
       "Content-Type": "application/json"},
       body:JSON.stringify(data)});
@@ -872,6 +916,7 @@
       data.gain=document.getElementById("ls_v").value;
       data.fc=document.getElementById("ls_fc").value;
       data.slope=document.getElementById("ls_s").value;
+      data.bypass=document.getElementById("ls_bypass").dataset.bypass;
       return fetch("/lshelv",{method:"POST",headers:{
       "Content-Type": "application/json"},
       body:JSON.stringify(data)});
@@ -882,6 +927,7 @@
       data.gain=document.getElementById("peq_v").value;
       data.fc=document.getElementById("peq_fc").value;
       data.Q=document.getElementById("peq_q").value;
+      data.bypass=document.getElementById("peq_bypass").dataset.bypass;
       return fetch("/peq",{method:"POST",headers:{
       "Content-Type": "application/json"},
       body:JSON.stringify(data)});
@@ -892,6 +938,7 @@
       data.gain=document.getElementById("hs_v").value;
       data.fc=document.getElementById("hs_fc").value;
       data.slope=document.getElementById("hs_s").value;
+      data.bypass=document.getElementById("hs_bypass").dataset.bypass;
       return fetch("/hshelv",{method:"POST",headers:{
       "Content-Type": "application/json"},
       body:JSON.stringify(data)});
@@ -904,6 +951,7 @@
       data.addr3=document.getElementById("highPass").dataset.addr3;
       data.fc=document.getElementById("lp_fc").value;
       data.typ=document.getElementById("lp_typ").value;
+      data.bypass=document.getElementById("lp_bypass").dataset.bypass;
       return fetch("/lp",{method:"POST",headers:{
       "Content-Type": "application/json"},
       body:JSON.stringify(data)});
@@ -914,6 +962,7 @@
       data.fc=document.getElementById("ph_fc").value;
       data.Q=document.getElementById("ph_q").value;
       data.inv=document.getElementById("ph_inv").value;
+      data.bypass=document.getElementById("ph_bypass").dataset.bypass;
       return fetch("/phase",{method:"POST",headers:{
       "Content-Type": "application/json"},
       body:JSON.stringify(data)});
@@ -922,6 +971,7 @@
       data.idx=document.getElementById("delay").dataset.idx;
       data.addr=document.getElementById("delay").dataset.addr;
       data.delay=document.getElementById("delayval").value;
+      data.bypass=document.getElementById("delay_bypass").dataset.bypass;
       return fetch("/delay",{method:"POST",headers:{
       "Content-Type": "application/json"},
       body:JSON.stringify(data)});
@@ -930,6 +980,8 @@
       data.idx=document.getElementById("gain").dataset.idx;
       data.addr=document.getElementById("gain").dataset.addr;
       data.gain=document.getElementById("gainval").value;
+      data.mute=document.getElementById("mute").dataset.mute;
+      console.log( data.mute );
       return fetch("/gain",{method:"POST",headers:{
       "Content-Type": "application/json"},
       body:JSON.stringify(data)});
@@ -956,6 +1008,43 @@
     document.getElementById("pre"+p).style.backgroundColor = "#73EC6F";
   }
   function sendParam(btp){postJson(btp).catch(function(error){console.log(error);});}
+  function mute(){
+    if(document.getElementById("mute").dataset.mute=="0")
+      document.getElementById("mute").dataset.mute="1";
+    else
+      document.getElementById("mute").dataset.mute="0";
+    switchMute();
+    sendParam("gain");
+  }
+  function switchMute(){
+    if(document.getElementById("mute").dataset.mute=="1"){
+      document.getElementById("mute").style.backgroundColor="#FF0000";
+      document.getElementById("mute").style.borderColor="#FF0000";
+      document.getElementById("mute").style.color="#101010";
+    }else{
+      document.getElementById("mute").style.backgroundColor = "#101010";
+      document.getElementById("mute").style.borderColor="#808080";
+      document.getElementById("mute").style.color="#D0D0D0";
+    }
+  }
+  function bypass(id){
+    if(document.getElementById(id).dataset.bypass=="0")
+      document.getElementById(id).dataset.bypass="1";
+    else
+      document.getElementById(id).dataset.bypass="0";
+    switchBypass(id);
+  }
+  function switchBypass(id){
+    if(document.getElementById(id).dataset.bypass=="1"){
+      document.getElementById(id).style.backgroundColor="#FF0000";
+      document.getElementById(id).style.borderColor="#FF0000";
+      document.getElementById(id).style.color="#101010";
+    }else{
+      document.getElementById(id).style.backgroundColor = "#101010";
+      document.getElementById(id).style.borderColor="#808080";
+      document.getElementById(id).style.color="#D0D0D0";
+    }
+  }
   function closeModal(id){document.getElementById(id).style.display = "none";}
   function configDev(){document.getElementById("configDev").style.display = "block";}
   function configWifi(){document.getElementById("configWifi").style.display = "block";}

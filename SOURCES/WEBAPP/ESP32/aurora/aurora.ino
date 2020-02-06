@@ -9,7 +9,7 @@
 #include "AK5558.h"
 #include "AudioFilterFactory.h"
 
-#define VERSION_STR "v2.0.0-alpha.1"
+#define VERSION_STR "v2.0.0-alpha.2"
 
 #define I2C_SDA_PIN 17
 #define I2C_SCL_PIN 16
@@ -68,6 +68,7 @@ struct tHPLP
   uint16_t addr[4];
   float fc;
   tFilterType typ;
+  bool bypass;
 };
 
 struct tShelving
@@ -76,6 +77,7 @@ struct tShelving
   float gain;
   float fc;
   float slope;
+  bool bypass;
 };
 
 struct tPeq
@@ -84,6 +86,7 @@ struct tPeq
   float gain;
   float fc;
   float Q;
+  bool bypass;
 };
 
 struct tPhase
@@ -92,18 +95,21 @@ struct tPhase
   float fc;
   float Q;
   bool inv;
+  bool bypass;
 };
 
 struct tDelay
 {
   uint16_t addr;
   float delay;
+  bool bypass;
 };
 
 struct tGain
 {
   uint16_t addr;
   float gain;
+  bool mute;
 };
 
 struct tMasterVolume
@@ -241,6 +247,7 @@ void initUserParams( void )
   {
     paramHP[ii].fc = 100.0;
     paramHP[ii].typ = 0;
+    paramHP[ii].bypass = false;
   }
 
   for( int ii = 0; ii < MAX_NUM_LSHELVS; ii++ )
@@ -248,6 +255,7 @@ void initUserParams( void )
     paramLshelv[ii].gain = 0.0;
     paramLshelv[ii].fc = 100.0;
     paramLshelv[ii].slope = 1.0;
+    paramLshelv[ii].bypass = false;
   }
 
   for( int ii = 0; ii < MAX_NUM_PEQS; ii = ii + 8 )
@@ -257,6 +265,7 @@ void initUserParams( void )
       paramPeq[ii + nn].gain = 0.0;
       paramPeq[ii + nn].fc = static_cast<float>( (nn+1)*1000 );
       paramPeq[ii + nn].Q = 0.707;
+      paramPeq[ii].bypass = false;
     }
   }
 
@@ -265,12 +274,14 @@ void initUserParams( void )
     paramHshelv[ii].gain = 0.0;
     paramHshelv[ii].fc = 10000.0;
     paramHshelv[ii].slope = 1.0;
+    paramHshelv[ii].bypass = false;
   }
 
   for( int ii = 0; ii < MAX_NUM_LPS; ii++ )
   {
     paramLP[ii].fc = 1000.0;
     paramLP[ii].typ = 0;
+    paramLP[ii].bypass = false;
   }
 
   for( int ii = 0; ii < MAX_NUM_PHASES; ii++ )
@@ -278,16 +289,19 @@ void initUserParams( void )
     paramPhase[ii].fc = 1000.0;
     paramPhase[ii].Q = 1.0;
     paramPhase[ii].inv = false;
+    paramPhase[ii].bypass = false;
   }
 
   for( int ii = 0; ii < MAX_NUM_DELAYS; ii++ )
   {
     paramDelay[ii].delay = 0;
+    paramDelay[ii].bypass = false;
   }
 
   for( int ii = 0; ii < MAX_NUM_GAINS; ii++ )
   {
     paramGain[ii].gain = 0.0;
+    paramGain[ii].mute = false;
   }
 }
 
@@ -884,10 +898,13 @@ void handleGetHpJson( AsyncWebServerRequest* request )
   {
     AsyncWebParameter* idx = request->getParam(0);
     int offset = idx->value().toInt();
-    Serial.println( offset );
     JsonVariant& jsonResponse = response->getRoot();
     jsonResponse["typ"] = paramHP[offset].typ;
     jsonResponse["fc"] = paramHP[offset].fc;
+    if( paramHP[offset].bypass )
+      jsonResponse["bypass"] = String( "1" );
+    else
+      jsonResponse["bypass"] = String( "0" );
   }
   else
     Serial.println( "[ERROR] handleGetHpJson(): No id param" );
@@ -914,6 +931,10 @@ void handleGetLshelvJson( AsyncWebServerRequest* request )
     jsonResponse["gain"] = paramLshelv[offset].gain;
     jsonResponse["fc"] = paramLshelv[offset].fc;
     jsonResponse["slope"] = paramLshelv[offset].slope;
+    if( paramLshelv[offset].bypass )
+      jsonResponse["bypass"] = String( "1" );
+    else
+      jsonResponse["bypass"] = String( "0" );
   }
   else
     Serial.println( "[ERROR] handleGetLshelvJson(): No id param" );
@@ -940,6 +961,10 @@ void handleGetPeqJson( AsyncWebServerRequest* request )
     jsonResponse["gain"] = paramPeq[offset].gain;
     jsonResponse["fc"] = paramPeq[offset].fc;
     jsonResponse["Q"] = paramPeq[offset].Q;
+    if( paramPeq[offset].bypass )
+      jsonResponse["bypass"] = String( "1" );
+    else
+      jsonResponse["bypass"] = String( "0" );
   }
   else
     Serial.println( "[ERROR] handleGetPeqJson(): No id param" );
@@ -966,6 +991,10 @@ void handleGetHshelvJson( AsyncWebServerRequest* request )
     jsonResponse["gain"] = paramHshelv[offset].gain;
     jsonResponse["fc"] = paramHshelv[offset].fc;
     jsonResponse["slope"] = paramHshelv[offset].slope;
+    if( paramHshelv[offset].bypass )
+      jsonResponse["bypass"] = String( "1" );
+    else
+      jsonResponse["bypass"] = String( "0" );
   }
   else
     Serial.println( "[ERROR] handleGetHshelvJson(): No id param" );
@@ -991,6 +1020,10 @@ void handleGetLpJson( AsyncWebServerRequest* request )
     JsonVariant& jsonResponse = response->getRoot();
     jsonResponse["typ"] = paramLP[offset].typ;
     jsonResponse["fc"] = paramLP[offset].fc;
+    if( paramLP[offset].bypass )
+      jsonResponse["bypass"] = String( "1" );
+    else
+      jsonResponse["bypass"] = String( "0" );
   }
   else
     Serial.println( "[ERROR] handleGetLpJson(): No id param" );
@@ -1016,6 +1049,10 @@ void handleGetPhaseJson( AsyncWebServerRequest* request )
     JsonVariant& jsonResponse = response->getRoot();
     jsonResponse["Q"] = paramPhase[offset].Q;
     jsonResponse["fc"] = paramPhase[offset].fc;
+    if( paramPhase[offset].bypass )
+      jsonResponse["bypass"] = String( "1" );
+    else
+      jsonResponse["bypass"] = String( "0" );
   }
   else
     Serial.println( "[ERROR] handleGetPhaseJson(): No id param" );
@@ -1040,6 +1077,10 @@ void handleGetDelayJson( AsyncWebServerRequest* request )
     int offset = idx->value().toInt();
     JsonVariant& jsonResponse = response->getRoot();
     jsonResponse["dly"] = paramDelay[offset].delay;
+    if( paramDelay[offset].bypass )
+      jsonResponse["bypass"] = String( "1" );
+    else
+      jsonResponse["bypass"] = String( "0" );
   }
   else
     Serial.println( "[ERROR] handleGetDelayJson(): No id param" );
@@ -1064,6 +1105,10 @@ void handleGetGainJson( AsyncWebServerRequest* request )
     int offset = idx->value().toInt();
     JsonVariant& jsonResponse = response->getRoot();
     jsonResponse["gain"] = paramGain[offset].gain;
+    if( paramGain[offset].mute == true )
+      jsonResponse["mute"] = String( "1" );
+    else
+      jsonResponse["mute"] = String( "0" );
   }
   else
     Serial.println( "[ERROR] handleGetGainJson(): No id param" );
@@ -1265,6 +1310,10 @@ void handlePostHpJson( AsyncWebServerRequest* request, uint8_t* data )
   paramHP[idx].addr[3] = static_cast<uint16_t>(root["addr3"].as<String>().toInt());
   paramHP[idx].fc = root["fc"].as<String>().toFloat();
   paramHP[idx].typ = static_cast<tFilterType>(root["typ"].as<String>().toInt());
+  if( root["bypass"].as<String>().toInt() == 0 )
+    paramHP[idx].bypass = false;
+  else
+    paramHP[idx].bypass = true;
 
   setHighPass( idx );
        
@@ -1281,7 +1330,8 @@ void setHighPass( int idx )
   float b[12] = { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0 };
   byte val[4];
   uint32_t floatval;
-  AudioFilterFactory::makeHighPass( a, b, paramHP[idx].typ, paramHP[idx].fc, sampleRate );
+  if( !paramHP[idx].bypass )
+    AudioFilterFactory::makeHighPass( a, b, paramHP[idx].typ, paramHP[idx].fc, sampleRate );
 
   for( int ii = 0; ii < 4; ii++ )
   {
@@ -1361,6 +1411,10 @@ void handlePostLshelvJson( AsyncWebServerRequest* request, uint8_t* data )
   paramLshelv[idx].gain = root["gain"].as<String>().toFloat();
   paramLshelv[idx].fc = root["fc"].as<String>().toFloat();
   paramLshelv[idx].slope = root["slope"].as<String>().toFloat();
+  if( root["bypass"].as<String>().toInt() == 0 )
+    paramLshelv[idx].bypass = false;
+  else
+    paramLshelv[idx].bypass = true;
 
   setLowShelving( idx );
        
@@ -1373,11 +1427,12 @@ void handlePostLshelvJson( AsyncWebServerRequest* request, uint8_t* data )
  */
 void setLowShelving( int idx )
 {
-  float a[3];
-  float b[3];
+  float a[3] = { 1.0, 0.0, 0.0 };
+  float b[3] = { 1.0, 0.0, 0.0 };
   byte val[4];
   uint32_t floatval;
-  AudioFilterFactory::makeLowShelv( a, b, paramLshelv[idx].gain, paramLshelv[idx].fc, paramLshelv[idx].slope, sampleRate );
+  if( !paramLshelv[idx].bypass )
+    AudioFilterFactory::makeLowShelv( a, b, paramLshelv[idx].gain, paramLshelv[idx].fc, paramLshelv[idx].slope, sampleRate );
 
   uint16_t addr = paramLshelv[idx].addr;
   floatval = convertTo824(b[2]);
@@ -1454,6 +1509,10 @@ void handlePostPeqJson( AsyncWebServerRequest* request, uint8_t* data )
   paramPeq[idx].gain = root["gain"].as<String>().toFloat();
   paramPeq[idx].fc = root["fc"].as<String>().toFloat();
   paramPeq[idx].Q = root["Q"].as<String>().toFloat();
+  if( root["bypass"].as<String>().toInt() == 0 )
+    paramPeq[idx].bypass = false;
+  else
+    paramPeq[idx].bypass = true;
 
   setPEQ( idx );
 
@@ -1466,11 +1525,12 @@ void handlePostPeqJson( AsyncWebServerRequest* request, uint8_t* data )
  */
 void setPEQ( int idx )
 {
-  float a[3];
-  float b[3];
+  float a[3] = { 1.0, 0.0, 0.0 };
+  float b[3] = { 1.0, 0.0, 0.0 };
   byte val[4];
   uint32_t floatval;
-  AudioFilterFactory::makeParametricEQ( a, b, paramPeq[idx].gain, paramPeq[idx].fc, paramPeq[idx].Q, sampleRate );
+  if( !paramPeq[idx].bypass )
+    AudioFilterFactory::makeParametricEQ( a, b, paramPeq[idx].gain, paramPeq[idx].fc, paramPeq[idx].Q, sampleRate );
 
   uint32_t addr = paramPeq[idx].addr;
   floatval = convertTo824(b[2]);
@@ -1547,6 +1607,10 @@ void handlePostHshelvJson( AsyncWebServerRequest* request, uint8_t* data )
   paramHshelv[idx].gain = root["gain"].as<String>().toFloat();
   paramHshelv[idx].fc = root["fc"].as<String>().toFloat();
   paramHshelv[idx].slope = root["slope"].as<String>().toFloat();
+  if( root["bypass"].as<String>().toInt() == 0 )
+    paramHshelv[idx].bypass = false;
+  else
+    paramHshelv[idx].bypass = true;
 
   setHighShelving( idx );
        
@@ -1559,11 +1623,12 @@ void handlePostHshelvJson( AsyncWebServerRequest* request, uint8_t* data )
  */
 void setHighShelving( int idx )
 {
-  float a[3];
-  float b[3];
+  float a[3] = { 1.0, 0.0, 0.0 };
+  float b[3] = { 1.0, 0.0, 0.0 };
   byte val[4];
   uint32_t floatval;
-  AudioFilterFactory::makeHighShelv( a, b, paramHshelv[idx].gain, paramHshelv[idx].fc, paramHshelv[idx].slope, sampleRate );
+  if( !paramHshelv[idx].bypass )
+    AudioFilterFactory::makeHighShelv( a, b, paramHshelv[idx].gain, paramHshelv[idx].fc, paramHshelv[idx].slope, sampleRate );
 
   uint16_t addr = paramHshelv[idx].addr;
   floatval = convertTo824(b[2]);
@@ -1641,6 +1706,10 @@ void handlePostLpJson( AsyncWebServerRequest* request, uint8_t* data )
   paramLP[idx].addr[3] = static_cast<uint16_t>(root["addr3"].as<String>().toInt());
   paramLP[idx].fc = root["fc"].as<String>().toFloat();
   paramLP[idx].typ = static_cast<tFilterType>(root["typ"].as<String>().toInt());
+  if( root["bypass"].as<String>().toInt() == 0 )
+    paramLP[idx].bypass = false;
+  else
+    paramLP[idx].bypass = true;
 
   setLowPass( idx );
 
@@ -1657,7 +1726,8 @@ void setLowPass( int idx )
   float b[12] = { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0 };
   byte val[4];
   uint32_t floatval;
-  AudioFilterFactory::makeLowPass( a, b, paramLP[idx].typ, paramLP[idx].fc, sampleRate );
+  if( !paramLP[idx].bypass )
+    AudioFilterFactory::makeLowPass( a, b, paramLP[idx].typ, paramLP[idx].fc, sampleRate );
 
   for( int ii = 0; ii < 4; ii++ )
   {
@@ -1736,6 +1806,10 @@ void handlePostPhaseJson( AsyncWebServerRequest* request, uint8_t* data )
   paramPhase[idx].addr = static_cast<uint16_t>(root["addr"].as<String>().toInt());
   paramPhase[idx].fc = root["fc"].as<String>().toFloat();
   paramPhase[idx].Q = root["Q"].as<String>().toFloat();
+  if( root["bypass"].as<String>().toInt() == 0 )
+    paramPhase[idx].bypass = false;
+  else
+    paramPhase[idx].bypass = true;
 
   setPhase( idx );
 
@@ -1748,11 +1822,12 @@ void handlePostPhaseJson( AsyncWebServerRequest* request, uint8_t* data )
  */
 void setPhase( int idx )
 {
-  float a[3];
-  float b[3];
+  float a[3] = { 1.0, 0.0, 0.0 };
+  float b[3] = { 1.0, 0.0, 0.0 };
   byte val[4];
   uint32_t floatval;
-  AudioFilterFactory::makeAllpass( a, b, paramPeq[idx].fc, paramPeq[idx].Q, sampleRate );
+  if( !paramPhase[idx].bypass )
+    AudioFilterFactory::makeAllpass( a, b, paramPhase[idx].fc, paramPhase[idx].Q, sampleRate );
 
   uint16_t addr = paramPhase[idx].addr;
   floatval = convertTo824(b[2]);
@@ -1824,6 +1899,10 @@ void handlePostDelayJson( AsyncWebServerRequest* request, uint8_t* data )
   uint32_t idx = static_cast<uint32_t>(root["idx"].as<String>().toInt());
   paramDelay[idx].delay = root["delay"].as<String>().toFloat();
   paramDelay[idx].addr = static_cast<uint16_t>(root["addr"].as<String>().toInt());
+  if( root["bypass"].as<String>().toInt() == 0 )
+    paramDelay[idx].bypass = false;
+  else
+    paramDelay[idx].bypass = true;
   
   setDelay( idx );
       
@@ -1838,6 +1917,8 @@ void setDelay( int idx )
 {
   float dly = paramDelay[idx].delay/1000.0 * sampleRate;
   int32_t idly = static_cast<int32_t>(dly + 0.5);
+  if( paramDelay[idx].bypass )
+    idly = 0;
 
   uint16_t addr = paramDelay[idx].addr;
   byte val[4];
@@ -1873,10 +1954,15 @@ void handlePostGainJson( AsyncWebServerRequest* request, uint8_t* data )
   JsonObject root = jsonDoc.as<JsonObject>();
   Serial.println( root["idx"].as<String>() );
   Serial.println( root["gain"].as<String>() );
+  Serial.println( root["mute"].as<String>() );
 
   uint32_t idx = static_cast<uint32_t>(root["idx"].as<String>().toInt());
   paramGain[idx].addr = static_cast<uint16_t>(root["addr"].as<String>().toInt());
   paramGain[idx].gain = root["gain"].as<String>().toFloat();
+  if( root["mute"].as<String>().toInt() == 0 )
+    paramGain[idx].mute = false;
+  else
+    paramGain[idx].mute = true;
 
   setGain( idx );  
        
@@ -1889,8 +1975,12 @@ void handlePostGainJson( AsyncWebServerRequest* request, uint8_t* data )
  */
 void setGain( int idx )
 {
-  uint32_t float824val = convertTo824( pow( 10.0, paramGain[idx].gain / 20.0 ) );
-
+  uint32_t float824val;
+  if( paramGain[idx].mute )
+    convertTo824( 0.0 );
+  else
+    convertTo824( pow( 10.0, paramGain[idx].gain / 20.0 ) );
+  
   byte val[4];
   val[0] = (float824val >> 24 ) & 0xFF;
   val[1] = (float824val >> 16 ) & 0xFF;
@@ -2528,6 +2618,14 @@ void setup()
   Serial.print( "Free disk space: " );
   Serial.print( (SPIFFS.totalBytes() - SPIFFS.usedBytes()) / 1024 );
   Serial.println( "KiB" );
+
+  File root = SPIFFS.open("/");
+  File file = root.openNextFile();
+  while(file)
+  {
+    Serial.println(file.name());
+    file = root.openNextFile();
+  }
 
   readSettings();
 
