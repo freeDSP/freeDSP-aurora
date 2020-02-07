@@ -771,6 +771,7 @@
       document.getElementById("ls_fc").value=data.fc;
       document.getElementById("ls_s").value=data.slope;
       document.getElementById("ls_bypass").dataset.bypass=data.bypass;
+      switchBypass("ls_bypass");
     }).catch (function (error) {console.log(error);
     });
   }
@@ -785,6 +786,7 @@
       document.getElementById("peq_fc").value=data.fc;
       document.getElementById("peq_q").value=data.Q;
       document.getElementById("peq_bypass").dataset.bypass=data.bypass;
+      switchBypass("peq_bypass");
     }).catch (function (error) {console.log(error);
     });
   }
@@ -799,6 +801,7 @@
       document.getElementById("hs_fc").value=data.fc;
       document.getElementById("hs_s").value=data.slope;
       document.getElementById("hs_bypass").dataset.bypass=data.bypass;
+      switchBypass("hs_bypass");
     }).catch (function (error) {console.log(error);
     });
   }
@@ -815,6 +818,7 @@
       document.getElementById("lp_fc").value=data.fc;
       document.getElementById("lp_typ").value=data.typ;
       document.getElementById("lp_bypass").dataset.bypass=data.bypass;
+      switchBypass("lp_bypass");
     }).catch (function (error) {console.log(error);
     });
   }
@@ -829,6 +833,7 @@
       document.getElementById("ph_q").value=data.Q;
       document.getElementById("ph_inv").value=data.inv;
       document.getElementById("ph_bypass").dataset.bypass=data.bypass;
+      switchBypass("ph_bypass");
     }).catch (function (error) {console.log(error);
     });
   }
@@ -841,6 +846,7 @@
       document.getElementById("delay").dataset.addr=addr;
       document.getElementById("delayval").value=data.dly;
       document.getElementById("delay_bypass").dataset.bypass=data.bypass;
+      switchBypass("delay_bypass");
     }).catch (function (error) {console.log(error);
     });
   }
