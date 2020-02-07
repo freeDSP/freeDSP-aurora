@@ -13,3 +13,5 @@ https://stackoverflow.com/questions/57242860/range-slider-vertically-with-label
 https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_modal
 
 https://www.w3schools.com/howto/howto_css_modals.asp
+
+https://wicg.github.io/directory-upload/

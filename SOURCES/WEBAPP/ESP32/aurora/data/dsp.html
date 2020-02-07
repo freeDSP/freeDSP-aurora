@@ -10,7 +10,8 @@
 	<nav>
 		<ul>
 			<li><a onclick="configDev()">Config Device</a></li>
-			<li><a onclick="configWifi()">Config Wifi</a></li>
+      <li><a onclick="configWifi()">Config Wifi</a></li>
+      <li><a onclick="openPlugin()">Upload Plugin</a></li>
       <li><a onclick="storePreset()">Store Preset</a></li>
     </ul>
     <div style="position:absolute;bottom:30px;right:30px;">
@@ -712,9 +713,13 @@
   </div>
 
   <div id="configDev" class="modal">
-    <span class="close cursor" onclick="closeModal('configDev')">&times;</span>
     <div class="modal-content">
       <table class="ptbl">
+      <tr><td colspan="2" style="height:20px;padding-top:10px;">
+      <table style="width:100%;">
+      <tr><td class="headline">Device Config</td><td class="close" onclick="closeModal('configDev')">&times;</td></tr>
+      </table>
+      </td></tr>
       <tr><td>AddOn</td></tr>
       <tr><td><select id="aid">
       <option value="0">None or custom</option>
@@ -730,14 +735,32 @@
   </div>
 
   <div id="configWifi" class="modal">
-    <span class="close cursor" onclick="closeModal('configWifi')">&times;</span>
     <div class="modal-content">
       <table class="ptbl">
+      <tr><td colspan="2" style="height:20px;padding-top:10px;">
+      <table style="width:100%;">
+      <tr><td class="headline">WiFi Config</td><td class="close" onclick="closeModal('configWifi')">&times;</td></tr>
+      </table>
+      </td></tr>
       <tr><td>SSID</td></tr>
       <tr><td><input type="text" id="ssid" style="width:95%;"></td></tr>
       <tr><td>Password</td</tr>
       <tr><td><input type="password" id="pwd" style="width:95%;"></td></tr>
       <tr><td><button class="send" onclick="sendWifi()">Store</button></td</tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="plugin" class="modal">
+    <div class="modal-content" style="width:600px;">
+      <table class="ptbl">
+      <tr><td colspan="2" style="height:20px;padding-top:10px;">
+      <table style="width:100%;">
+      <tr><td class="headline">Upload Plugin</td><td class="close" onclick="closeModal('plugin')">&times;</td></tr>
+      </table>
+      </td></tr>
+      <tr><td><input type="file" id="dirPlugin" webkitdirectory mozdirectory style="width:95%;" onchange="uploadPlugin()"></td></tr>
+      <tr><td><button class="send" onclick="upload()">Upload</button></td</tr>
       </table>
     </div>
   </div>
@@ -1135,6 +1158,25 @@
     data.len=3;
     data.i2c=["0x82", "0x01", document.getElementById(id).value];
     fetch("/addoncfg",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)});
+  }
+  function openPlugin()
+  {
+    document.getElementById("plugin").style.display = "block"; 
+  }
+  function uploadPlugin()
+  {
+    var data={};
+    fetch("/delete",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)})
+    .then(function(){
+      var input = document.getElementById('dirPlugin');
+      if('getFilesAndDirectories' in input) {
+      input.getFilesAndDirectories().then(function(filesAndDirs) {
+        // iterate through each item
+        // see drag and drop example below for more details
+        })
+      }
+    })
+    .catch(function(error){console.log(error);});
   }
 
   </script>

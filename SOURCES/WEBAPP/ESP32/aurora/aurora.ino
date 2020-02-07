@@ -2517,6 +2517,9 @@ void myWiFiTask(void *pvParameters)
   if( !WiFi.softAPConfig( IPAddress(192, 168, 5, 1), IPAddress(192, 168, 5, 1), IPAddress(255, 255, 255, 0) ) )
     Serial.println("AP Config Failed");
   
+  // Start server
+  server.begin();
+
   while (true)
   {
     if( (Settings.ssid.length() > 0) &&  (cntrAuthFailure < 10) )
@@ -2524,8 +2527,8 @@ void myWiFiTask(void *pvParameters)
       state = WiFi.status();
       if( state != WL_CONNECTED )         // We have no connection yet
       {  
-        //if (state == WL_NO_SHIELD) {  
-        if( firstConnectAttempt )   // WiFi.begin wasn't called yet
+        if (state == WL_NO_SHIELD)
+        //if( firstConnectAttempt )   // WiFi.begin wasn't called yet
         {
           firstConnectAttempt = false;
           Serial.print( "Connecting to " );
@@ -2566,6 +2569,7 @@ void myWiFiTask(void *pvParameters)
           Serial.println( "Connected" );
           Serial.print( "IP address: " );
           Serial.println( WiFi.localIP() );
+          Serial.println( WiFi.getHostname() );
         }
         vTaskDelay (5000); // Check again in about 5s
       }
@@ -2653,22 +2657,6 @@ void setup()
     setupAddOnB();
 
   //----------------------------------------------------------------------------
-  //--- Configure ESP for WiFi access
-  //----------------------------------------------------------------------------
-  /*WiFi.mode( WIFI_AP );
-  WiFi.setHostname( "freeDSP-aurora" );
-  // Start access point
-  WiFi.softAP( "AP-freeDSP-aurora" );
-  delay(100);
-  //wait for SYSTEM_EVENT_AP_START
-  if( !WiFi.softAPConfig( IPAddress(192, 168, 5, 1), IPAddress(192, 168, 5, 1), IPAddress(255, 255, 255, 0) ) )
-    Serial.println("AP Config Failed");
-  */
-
-  // Create a connection task with 8kB stack on core 0
-  xTaskCreatePinnedToCore(myWiFiTask, "myWiFiTask", 8192, NULL, 3, NULL, 0);
-
-  //----------------------------------------------------------------------------
   //--- Configure Webserver
   //----------------------------------------------------------------------------
   server.on( "/",          HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( SPIFFS, "/dsp.html", "text/html" ); });
@@ -2749,9 +2737,12 @@ void setup()
     handlePostWifiConfigJson( request, data );
   });
 
-
-  // Start server
-  server.begin();
+  //----------------------------------------------------------------------------
+  //--- Configure ESP for WiFi access
+  //----------------------------------------------------------------------------
+  // Create a connection task with 8kB stack on core 0
+  xTaskCreatePinnedToCore(myWiFiTask, "myWiFiTask", 8192, NULL, 3, NULL, 0);
+  
 
   unmuteDAC();
 
