@@ -15,3 +15,8 @@ https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_modal
 https://www.w3schools.com/howto/howto_css_modals.asp
 
 https://wicg.github.io/directory-upload/
+
+https://stackoverflow.com/questions/36067767/how-do-i-upload-a-file-with-the-js-fetch-api
+
+https://github.com/me-no-dev/ESPAsyncWebServer/issues/542
+

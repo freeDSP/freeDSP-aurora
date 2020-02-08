@@ -759,8 +759,10 @@
       <tr><td class="headline">Upload Plugin</td><td class="close" onclick="closeModal('plugin')">&times;</td></tr>
       </table>
       </td></tr>
-      <tr><td><input type="file" id="dirPlugin" webkitdirectory mozdirectory style="width:95%;" onchange="uploadPlugin()"></td></tr>
-      <tr><td><button class="send" onclick="upload()">Upload</button></td</tr>
+      <tr><td>Please select the folder of the plugin.</td></tr>
+      <tr><td><input type="file" id="picker" name="fileList" webkitdirectory multiple width="95%"></td></tr>
+      <tr><td><div id="wait" style="display:none;">Please wait while uploading.</div></td></tr>
+      <tr><td><div id="prg" style="border: 1px solid #73EC6F; background: #73EC6F; height:2px; width:0%;"></div></td></tr>
       </table>
     </div>
   </div>
@@ -1143,7 +1145,7 @@
       document.getElementById("chn5").value=data.in5;
       document.getElementById("chn6").value=data.in6;
       document.getElementById("chn7").value=data.in7;
-    }).catch (function(error){console.log(error);
+    }).catch(function(err){console.log(err);
     });
   }
   function hideAddon(){
@@ -1163,22 +1165,42 @@
   {
     document.getElementById("plugin").style.display = "block"; 
   }
-  function uploadPlugin()
-  {
-    var data={};
-    fetch("/delete",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)})
-    .then(function(){
-      var input = document.getElementById('dirPlugin');
-      if('getFilesAndDirectories' in input) {
-      input.getFilesAndDirectories().then(function(filesAndDirs) {
-        // iterate through each item
-        // see drag and drop example below for more details
-        })
-      }
-    })
-    .catch(function(error){console.log(error);});
-  }
+  let picker = document.getElementById('picker');
+  picker.addEventListener('change', e => {
+    var html,fw,css,plugin;
+    for(let file of Array.from(e.target.files)){
+      if(file.name=="dark.css")
+        css = file;
+      if(file.name=="dsp.fw")
+        fw = file;
+      if(file.name=="dsp.html")
+        html = file;
+      if(file.name=="plugin.ini")
+        plugin = file;
+    }
+    var prg=document.getElementById('prg');
+		prg.style.width="5%";
+    document.getElementById("wait").style.display="block";
 
+    fetch("/upload?fname=dark.css",{method:'POST',headers:{},body:css})
+    .then(function(response){
+      prg.style.width="25%";
+      return fetch("/upload?fname=dsp.fw",{method:'POST',headers:{},body:fw});})
+    .then(function(response){
+      prg.style.width="50%";
+      return fetch("/upload?fname=dsp.html",{method:'POST',headers:{},body:html});})
+    .then(function(response){
+      prg.style.width="75%";
+      return fetch("/upload?fname=plugin.ini",{method:'POST',headers:{},body:plugin});})
+    .then(function(response){
+      prg.style.width="100%";
+      return response;})
+    .then(function(response){
+      alert("Success! Your plugin has been installed. Please reboot your DSP and reconnect to it.");
+      document.getElementById("wait").style.display="none";
+      return response;})
+    .catch(function(err){alert( "Uploading your plugin failed: "+err);});
+  });
   </script>
 </body>
 </html>

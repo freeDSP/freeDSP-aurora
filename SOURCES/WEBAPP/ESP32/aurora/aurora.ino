@@ -148,6 +148,7 @@ int numDelays;
 int numGains;
 
 File fileDspProgram;
+File fileUpload;
 
 float sampleRate = 48000.0;
 //float masterVolume = -60.0;
@@ -158,6 +159,7 @@ String presetUsrparamFile[4] = { "/usrparam.001", "/usrparam.002", "/usrparam.00
 String presetAddonCfgFile[4] = { "/addoncfg.001", "/addoncfg.002", "/addoncfg.003", "/addoncfg.004" };
 
 AsyncWebServer server( 80 );
+
 
 //==============================================================================
 /*! 
@@ -2498,6 +2500,61 @@ void setupAddOnB( void )
 }
 
 //==============================================================================
+/*! Handles a file upload
+ *
+ */
+void handleFileUpload( AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
+{
+  if (!index)
+  {
+    Serial.println("POST /upload");
+
+    if( request->hasParam( "fname" ) )
+    {
+      AsyncWebParameter* fname = request->getParam(0);
+      String fileName = String( "/" ) + fname->value();
+      Serial.println( fileName );
+      if( SPIFFS.exists( fileName ) )
+      {
+        if( SPIFFS.remove( fileName ) )
+          Serial.println( fileName + " deleted." );
+        else
+          Serial.println( "[ERROR] Deleting " + fileName );
+      }
+      fileUpload = SPIFFS.open( fileName, "w" );
+      if( !fileUpload )
+        Serial.println( "[ERROR] Failed to open " + fileName );
+      else
+        Serial.println( "Opened " + fileName );
+    }
+  }
+
+  size_t written = 0;
+  if( len > 0 )
+    written = fileUpload.write( data, len );
+
+  if( written != len )
+    Serial.println( "[ERROR] Writing file" );
+              
+  Serial.print( "." );
+    
+  if( index + len >= total )
+  {
+    fileUpload.flush();
+    fileUpload.close();
+
+    AsyncWebParameter* fname = request->getParam(0);
+    String fileName = String( "/" ) + fname->value();
+    fileUpload = SPIFFS.open( fileName );
+    written = fileUpload.size();
+    fileUpload.close();
+
+    Serial.println( "[OK]" );
+    Serial.println( "Upload complete." + String(written) + "bytes written." );
+  }
+}
+
+//==============================================================================
 /*! Wifi connection task 
  *
  */
@@ -2641,12 +2698,12 @@ void setup()
   //----------------------------------------------------------------------------
   //--- Upload program to DSP
   //----------------------------------------------------------------------------
-  uploadDspFirmware();
+  //uploadDspFirmware();
 
   //----------------------------------------------------------------------------
   //--- Upload user parameters to DSP
   //----------------------------------------------------------------------------
-  uploadUserParams();
+  //uploadUserParams();
 
   //----------------------------------------------------------------------------
   //--- Configure AddOn
@@ -2736,6 +2793,19 @@ void setup()
   {
     handlePostWifiConfigJson( request, data );
   });
+  server.on( "/upload", HTTP_POST, [](AsyncWebServerRequest *request){
+    request->send(200, "text/plain", "OK"); 
+    //AsyncWebServerResponse *response = request->beginResponse(200, "text/plain", "OK");
+    //response->addHeader("Connection", "close");
+    //request->send(response);
+  }, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
+  {
+    handleFileUpload( request, data, len, index, total ); 
+  });
+
+//  server.onNotFound([](AsyncWebServerRequest *request){
+//    Serial.println(request->url().c_str());
+//  });
 
   //----------------------------------------------------------------------------
   //--- Configure ESP for WiFi access
