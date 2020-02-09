@@ -8,6 +8,7 @@
 #include "AK4458.h"
 #include "AK5558.h"
 #include "AudioFilterFactory.h"
+#include "fallback.h"
 
 #define VERSION_STR "v2.0.0-alpha.2"
 
@@ -2066,6 +2067,9 @@ void handlePostPresetJson( AsyncWebServerRequest* request, uint8_t* data )
   Serial.println( root["pre"].as<String>() );
 
   currentPreset = root["pre"].as<uint8_t>();
+
+  initUserParams();
+  uploadUserParams();
        
   request->send(200, "text/plain", "");  
 }
@@ -2716,7 +2720,10 @@ void setup()
   //----------------------------------------------------------------------------
   //--- Configure Webserver
   //----------------------------------------------------------------------------
-  server.on( "/",          HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( SPIFFS, "/dsp.html", "text/html" ); });
+  if( SPIFFS.exists( "/dsp.html" ) )
+    server.on( "/",          HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( SPIFFS, "/dsp.html", "text/html" ); });
+  else
+    server.on( "/",          HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( 200, "text/html", fallback_html ); });
   server.on( "/dark.css",  HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( SPIFFS, "/dark.css", "text/css" ); });
   server.on( "/input",     HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetInputJson(request); });
   server.on( "/hp",        HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetHpJson(request); });

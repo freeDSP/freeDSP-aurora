@@ -760,7 +760,7 @@
       </table>
       </td></tr>
       <tr><td>Please select the folder of the plugin.</td></tr>
-      <tr><td><input type="file" id="picker" name="fileList" webkitdirectory multiple width="95%"></td></tr>
+      <tr><td><input type="file" id="picker" name="fileList" webkitdirectory mozdirectory multiple width="95%"></td></tr>
       <tr><td><div id="wait" style="display:none;">Please wait while uploading.</div></td></tr>
       <tr><td><div id="prg" style="border: 1px solid #73EC6F; background: #73EC6F; height:2px; width:0%;"></div></td></tr>
       </table>
@@ -1161,10 +1161,7 @@
     data.i2c=["0x82", "0x01", document.getElementById(id).value];
     fetch("/addoncfg",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)});
   }
-  function openPlugin()
-  {
-    document.getElementById("plugin").style.display = "block"; 
-  }
+  function openPlugin(){document.getElementById("plugin").style.display = "block";}
   let picker = document.getElementById('picker');
   picker.addEventListener('change', e => {
     var html,fw,css,plugin;
