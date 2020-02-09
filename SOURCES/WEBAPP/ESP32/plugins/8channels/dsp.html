@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+<title>AURORA DSP</title>
+<link rel="stylesheet" href="dark.css">
+</head>
+
+<body onload="onLoad()">
+	<nav>
+		<ul>
+			<li><a onclick="configDev()">Config Device</a></li>
+      <li><a onclick="configWifi()">Config Wifi</a></li>
+      <li><a onclick="openPlugin()">Upload Plugin</a></li>
+      <li><a onclick="storePreset()">Store Preset</a></li>
+    </ul>
+    <div style="position:absolute;bottom:30px;right:30px;">
+      <p class="info">GUI: v2.0.0-alpha.2</p>
+      <p class="info" id="fw">FW: 0.0.0</p>
+      <p class="info" id="ip">Local Wifi IP: 0.0.0.0</p>
+      </div>
+	</nav>
+	
+	<div>
+  <center>
+  <table>
+  <tr><td style="border-bottom:1px solid;"><h1>Aurora DSP</h1></td></tr>
+  <tr><td><h2>8channels</h2></td></tr>
+  </table>  
+  <table><tr><td valign=top rowspan="8" style="border-right: 1px solid #808080">
+  <table style="min-width:150px;">
+    <tr><td><h2>AddOn</h2></td></tr>
+    <tr><td>
+      <div class="hidden" id="addon_none">None or custom</div> 
+      <div class="hidden" id="addon_a">The woodworker's friend</div> 
+      <div class="hidden" id="addon_b">Down with developers
+      <select id="spdif_b" onchange="changeSPDIF('spdif_b')">
+      <option value="0x04">Coax 1</option>
+      <option value="0x05">Coax 2</option>
+      <option value="0x06">Coax 3</option>
+      <option value="0x07">Coax 4</option>
+      <option value="0x00">Optical 1</option>
+      <option value="0x01">Optical 2</option>
+      <option value="0x02">Optical 3</option>
+      <option value="0x03">Optical 4</option>
+      </select>
+      </div> 
+      <div class="hidden" id="addon_c">Control over the crowd</div> 
+      <div class="hidden" id="addon_d">Balanced life</div> 
+    </td></tr> 
+  </table>
+  </td><td>
+  <table style="border-spacing: 5px 10px;">
+    <tr>
+    <td class="rotate">
+    Channel 1
+    <td style="min-width:80px">
+    <select id="chn0" onchange="postInputJson('chn0',0);" data-port=20460>
+      <option value="0x00000000" data-chn=20448>Analog 1</option>
+      <option value="0x00000001" data-chn=20448>Analog 2</option>
+      <option value="0x00000002" data-chn=20448>Analog 3</option>
+      <option value="0x00000003" data-chn=20448>Analog 4</option>
+      <option value="0x00000004" data-chn=20448>Analog 5</option>
+      <option value="0x00000005" data-chn=20448>Analog 6</option>
+      <option value="0x00000006" data-chn=20448>Analog 7</option>
+      <option value="0x00000007" data-chn=20448>Analog 8</option>
+      <option value="0x00010000" data-chn=20449>USB 1</option>
+      <option value="0x00010001" data-chn=20449>USB 2</option>
+      <option value="0x00010002" data-chn=20449>USB 3</option>
+      <option value="0x00010003" data-chn=20449>USB 4</option>
+      <option value="0x00010004" data-chn=20449>USB 5</option>
+      <option value="0x00010005" data-chn=20449>USB 6</option>
+      <option value="0x00010006" data-chn=20449>USB 7</option>
+      <option value="0x00010007" data-chn=20449>USB 8</option>
+      <option value="0x00040000" data-chn=20452>SPDIF L</option>
+      <option value="0x00040001" data-chn=20452>SPDIF R</option>
+    </select>
+    </td><td>
+    <button class="hp" onclick="openHP(0,19536,19576,19616,19656);">HP</button>
+    </td><td>
+    <button class="shlv" onclick="openLShelv(0,19696);">LShlv</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(0,19736);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(1,19741);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(2,19746);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(3,19751);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(4,19756);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(5,19761);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(6,19766);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(7,19771);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(8,19776);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(9,19781);">PEQ</button>
+    </td><td>
+    <button class="shlv" onclick="openHShelv(0,20136);">HShlv</button>
+    </td><td>
+    <button class="hp" onclick="openLP(0,20176,20216,20256,20296);">LP</button>
+    </td><td>
+    <button class="phase" onclick="openPhase(0,20336);">Phase</button>
+    </td><td>
+    <button class="delay" onclick="openDelay(0,20376);">Delay</button>
+    </td><td>
+    <button class="gain" onclick="openGain(0,20385);">Gain</button>
+    </td><td style="min-width:60px">
+    OUT 1
+    </td><td rowspan="8" style="max-width: 80px;">
+      <input type="range" id="mvol" class="volslider" min="-120" max="0" onchange="postMVol()"/>  
+      <div style="transform: translateY(240px);">Master<br>Volume</div>  
+    </td></tr>
+  
+    <tr><td class="rotate">
+    Channel 2
+    </td><td>
+    <select id="chn1" onchange="postInputJson('chn1',1);" data-port=20459>
+      <option value="0x00000000" data-chn=20446>Analog 1</option>
+      <option value="0x00000001" data-chn=20446>Analog 2</option>
+      <option value="0x00000002" data-chn=20446>Analog 3</option>
+      <option value="0x00000003" data-chn=20446>Analog 4</option>
+      <option value="0x00000004" data-chn=20446>Analog 5</option>
+      <option value="0x00000005" data-chn=20446>Analog 6</option>
+      <option value="0x00000006" data-chn=20446>Analog 7</option>
+      <option value="0x00000007" data-chn=20446>Analog 8</option>
+      <option value="0x00010000" data-chn=20445>USB 1</option>
+      <option value="0x00010001" data-chn=20445>USB 2</option>
+      <option value="0x00010002" data-chn=20445>USB 3</option>
+      <option value="0x00010003" data-chn=20445>USB 4</option>
+      <option value="0x00010004" data-chn=20445>USB 5</option>
+      <option value="0x00010005" data-chn=20445>USB 6</option>
+      <option value="0x00010006" data-chn=20445>USB 7</option>
+      <option value="0x00010007" data-chn=20445>USB 8</option>
+      <option value="0x00040000" data-chn=20444>SPDIF L</option>
+      <option value="0x00040001" data-chn=20444>SPDIF R</option>
+    </select>
+    </td><td>
+    <button class="hp" onclick="openHP(1,19541,19581,19621,19661);">HP</button>
+    </td><td>
+    <button class="shlv" onclick="openLShelv(1,19701);">LShlv</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(10,19786);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(11,19791);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(12,19796);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(13,19801);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(14,19806);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(15,19811);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(16,19816);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(17,19821);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(18,19826);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(19,19831);">PEQ</button>
+    </td><td>
+    <button class="shlv" onclick="openHShelv(1,20141);">HShlv</button>
+    </td><td>
+    <button class="hp" onclick="openLP(1,20181,20221,20261,20301);">LP</button>
+    </td><td>
+    <button class="phase" onclick="openPhase(1,20341);">Phase</button>
+    </td><td>
+    <button class="delay" onclick="openDelay(1,20377);">Delay</button>
+    </td><td>
+    <button class="gain" onclick="openGain(1,20388);">Gain</button>
+    </td><td>
+    OUT 2
+    </td></tr>
+  
+    <tr><td class="rotate">
+    Channel 3
+    </td><td>
+    <select id="chn2" onchange="postInputJson('chn2',2);" data-port=20458>
+      <option value="0x00000000" data-chn=20439>Analog 1</option>
+      <option value="0x00000001" data-chn=20439>Analog 2</option>
+      <option value="0x00000002" data-chn=20439>Analog 3</option>
+      <option value="0x00000003" data-chn=20439>Analog 4</option>
+      <option value="0x00000004" data-chn=20439>Analog 5</option>
+      <option value="0x00000005" data-chn=20439>Analog 6</option>
+      <option value="0x00000006" data-chn=20439>Analog 7</option>
+      <option value="0x00000007" data-chn=20439>Analog 8</option>
+      <option value="0x00010000" data-chn=20442>USB 1</option>
+      <option value="0x00010001" data-chn=20442>USB 2</option>
+      <option value="0x00010002" data-chn=20442>USB 3</option>
+      <option value="0x00010003" data-chn=20442>USB 4</option>
+      <option value="0x00010004" data-chn=20442>USB 5</option>
+      <option value="0x00010005" data-chn=20442>USB 6</option>
+      <option value="0x00010006" data-chn=20442>USB 7</option>
+      <option value="0x00010007" data-chn=20442>USB 8</option>
+      <option value="0x00040000" data-chn=20440>SPDIF L</option>
+      <option value="0x00040001" data-chn=20440>SPDIF R</option>
+    </select>
+    </td><td>
+    <button class="hp" onclick="openHP(2,19546,19586,19626,19666);">HP</button>
+    </td><td>
+    <button class="shlv" onclick="openLShelv(2,19706);">LShlv</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(20,19836);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(21,19841);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(22,19846);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(23,19851);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(24,19856);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(25,19861);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(26,19866);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(27,19871);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(28,19876);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(29,19881);">PEQ</button>
+    </td><td>
+    <button class="shlv" onclick="openHShelv(2,20146);">HShlv</button>
+    </td><td>
+    <button class="hp" onclick="openLP(2,20186,20226,20266,20306);">LP</button>
+    </td><td>
+    <button class="phase" onclick="openPhase(2,20346);">Phase</button>
+    </td><td>
+    <button class="delay" onclick="openDelay(2,20378);">Delay</button>
+    </td><td>
+    <button class="gain" onclick="openGain(2,20391);">Gain</button>
+    </td><td>
+    OUT 3
+    </td></tr>
+  
+    <tr><td class="rotate">
+    Channel 4
+    </td><td>
+    <select id="chn3" onchange="postInputJson('chn3',3);" data-port=20457>
+      <option value="0x00000000" data-chn=20435>Analog 1</option>
+      <option value="0x00000001" data-chn=20435>Analog 2</option>
+      <option value="0x00000002" data-chn=20435>Analog 3</option>
+      <option value="0x00000003" data-chn=20435>Analog 4</option>
+      <option value="0x00000004" data-chn=20435>Analog 5</option>
+      <option value="0x00000005" data-chn=20435>Analog 6</option>
+      <option value="0x00000006" data-chn=20435>Analog 7</option>
+      <option value="0x00000007" data-chn=20435>Analog 8</option>
+      <option value="0x00010000" data-chn=20437>USB 1</option>
+      <option value="0x00010001" data-chn=20437>USB 2</option>
+      <option value="0x00010002" data-chn=20437>USB 3</option>
+      <option value="0x00010003" data-chn=20437>USB 4</option>
+      <option value="0x00010004" data-chn=20437>USB 5</option>
+      <option value="0x00010005" data-chn=20437>USB 6</option>
+      <option value="0x00010006" data-chn=20437>USB 7</option>
+      <option value="0x00010007" data-chn=20437>USB 8</option>
+      <option value="0x00040000" data-chn=20436>SPDIF L</option>
+      <option value="0x00040001" data-chn=20436>SPDIF R</option>
+    </select>
+    </td><td>
+    <button class="hp" onclick="openHP(3,19551,19591,19631,19671);">HP</button>
+    </td><td>
+    <button class="shlv" onclick="openLShelv(3,19711);">LShlv</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(30,19886);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(31,19891);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(32,19896);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(33,19901);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(34,19906);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(35,19911);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(36,19916);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(37,19921);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(38,19926);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(39,19931);">PEQ</button>
+    </td><td>
+    <button class="shlv" onclick="openHShelv(3,20151);">HShlv</button>
+    </td><td>
+    <button class="hp" onclick="openLP(3,20191,20231,20271,20311);">LP</button>
+    </td><td>
+    <button class="phase" onclick="openPhase(3,20351);">Phase</button>
+    </td><td>
+    <button class="delay" onclick="openDelay(3,20379);">Delay</button>
+    </td><td>
+    <button class="gain" onclick="openGain(3,20394);">Gain</button>
+    </td><td>
+    OUT 4
+    </td></tr>
+  
+    <tr><td class="rotate">
+    Channel 5
+    </td><td>
+    <select id="chn4" onchange="postInputJson('chn4',4);" data-port=20456>
+      <option value="0x00000000" data-chn=20432>Analog 1</option>
+      <option value="0x00000001" data-chn=20432>Analog 2</option>
+      <option value="0x00000002" data-chn=20432>Analog 3</option>
+      <option value="0x00000003" data-chn=20432>Analog 4</option>
+      <option value="0x00000004" data-chn=20432>Analog 5</option>
+      <option value="0x00000005" data-chn=20432>Analog 6</option>
+      <option value="0x00000006" data-chn=20432>Analog 7</option>
+      <option value="0x00000007" data-chn=20432>Analog 8</option>
+      <option value="0x00010000" data-chn=20429>USB 1</option>
+      <option value="0x00010001" data-chn=20429>USB 2</option>
+      <option value="0x00010002" data-chn=20429>USB 3</option>
+      <option value="0x00010003" data-chn=20429>USB 4</option>
+      <option value="0x00010004" data-chn=20429>USB 5</option>
+      <option value="0x00010005" data-chn=20429>USB 6</option>
+      <option value="0x00010006" data-chn=20429>USB 7</option>
+      <option value="0x00010007" data-chn=20429>USB 8</option>
+      <option value="0x00040000" data-chn=20431>SPDIF L</option>
+      <option value="0x00040001" data-chn=20431>SPDIF R</option>
+    </select>
+    </td><td>
+    <button class="hp" onclick="openHP(4,19571,19601,19636,19686);">HP</button>
+    </td><td>
+    <button class="shlv" onclick="openLShelv(4,19726);">LShlv</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(40,19986);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(41,19991);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(42,19996);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(43,20001);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(44,20006);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(45,20011);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(46,20016);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(47,20021);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(48,20026);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(49,20031);">PEQ</button>
+    </td><td>
+    <button class="shlv" onclick="openHShelv(4,20166);">HShlv</button>
+    </td><td>
+    <button class="hp" onclick="openLP(4,20196,20251,20281,20316);">LP</button>
+    </td><td>
+    <button class="phase" onclick="openPhase(4,20356);">Phase</button>
+    </td><td>
+    <button class="delay" onclick="openDelay(4,20382);">Delay</button>
+    </td><td>
+    <button class="gain" onclick="openGain(4,20403);">Gain</button>
+    </td><td>
+    OUT 5
+    </td></tr>
+  
+    <tr><td class="rotate">
+    Channel 6
+    </td><td>
+    <select id="chn5" onchange="postInputJson('chn5',5);" data-port=20455>
+      <option value="0x00000000" data-chn=20425>Analog 1</option>
+      <option value="0x00000001" data-chn=20425>Analog 2</option>
+      <option value="0x00000002" data-chn=20425>Analog 3</option>
+      <option value="0x00000003" data-chn=20425>Analog 4</option>
+      <option value="0x00000004" data-chn=20425>Analog 5</option>
+      <option value="0x00000005" data-chn=20425>Analog 6</option>
+      <option value="0x00000006" data-chn=20425>Analog 7</option>
+      <option value="0x00000007" data-chn=20425>Analog 8</option>
+      <option value="0x00010000" data-chn=20424>USB 1</option>
+      <option value="0x00010001" data-chn=20424>USB 2</option>
+      <option value="0x00010002" data-chn=20424>USB 3</option>
+      <option value="0x00010003" data-chn=20424>USB 4</option>
+      <option value="0x00010004" data-chn=20424>USB 5</option>
+      <option value="0x00010005" data-chn=20424>USB 6</option>
+      <option value="0x00010006" data-chn=20424>USB 7</option>
+      <option value="0x00010007" data-chn=20424>USB 8</option>
+      <option value="0x00040000" data-chn=20426>SPDIF L</option>
+      <option value="0x00040001" data-chn=20426>SPDIF R</option>
+    </select>
+    </td><td>
+    <button class="hp" onclick="openHP(5,19556,19606,19651,19691);">HP</button>
+    </td><td>
+    <button class="shlv" onclick="openLShelv(5,19731);">LShlv</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(50,19936);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(51,19941);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(52,19946);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(53,19951);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(54,19956);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(55,19961);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(56,19966);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(57,19971);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(58,19976);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(59,19981);">PEQ</button>
+    </td><td>
+    <button class="shlv" onclick="openHShelv(5,20161);">HShlv</button>
+    </td><td>
+    <button class="hp" onclick="openLP(5,20206,20241,20291,20331);">LP</button>
+    </td><td>
+    <button class="phase" onclick="openPhase(5,20366);">Phase</button>
+    </td><td>
+    <button class="delay" onclick="openDelay(5,20380);">Delay</button>
+    </td><td>
+    <button class="gain" onclick="openGain(5,20406);">Gain</button>
+    </td><td>
+    OUT 6
+    </td></tr>
+  
+    <tr><td class="rotate">
+    Channel 7
+    </td><td>
+    <select id="chn6" onchange="postInputJson('chn6',6);" data-port=20454>
+      <option value="0x00000000" data-chn=20420>Analog 1</option>
+      <option value="0x00000001" data-chn=20420>Analog 2</option>
+      <option value="0x00000002" data-chn=20420>Analog 3</option>
+      <option value="0x00000003" data-chn=20420>Analog 4</option>
+      <option value="0x00000004" data-chn=20420>Analog 5</option>
+      <option value="0x00000005" data-chn=20420>Analog 6</option>
+      <option value="0x00000006" data-chn=20420>Analog 7</option>
+      <option value="0x00000007" data-chn=20420>Analog 8</option>
+      <option value="0x00010000" data-chn=20419>USB 1</option>
+      <option value="0x00010001" data-chn=20419>USB 2</option>
+      <option value="0x00010002" data-chn=20419>USB 3</option>
+      <option value="0x00010003" data-chn=20419>USB 4</option>
+      <option value="0x00010004" data-chn=20419>USB 5</option>
+      <option value="0x00010005" data-chn=20419>USB 6</option>
+      <option value="0x00010006" data-chn=20419>USB 7</option>
+      <option value="0x00010007" data-chn=20419>USB 8</option>
+      <option value="0x00040000" data-chn=20422>SPDIF L</option>
+      <option value="0x00040001" data-chn=20422>SPDIF R</option>
+    </select>
+    </td><td>
+    <button class="hp" onclick="openHP(6,19566,19611,19646,19676);">HP</button>
+    </td><td>
+    <button class="shlv" onclick="openLShelv(6,19716);">LShlv</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(60,20036);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(61,20041);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(62,20046);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(63,20051);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(64,20056);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(65,20061);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(66,20066);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(67,20071);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(68,20076);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(69,20081);">PEQ</button>
+    </td><td>
+    <button class="shlv" onclick="openHShelv(6,20156);">HShlv</button>
+    </td><td>
+    <button class="hp" onclick="openLP(6,20201,20236,20286,20326);">LP</button>
+    </td><td>
+    <button class="phase" onclick="openPhase(6,20371);">Phase</button>
+    </td><td>
+    <button class="delay" onclick="openDelay(6,20383);">Delay</button>
+    </td><td>
+    <button class="gain" onclick="openGain(6,20400);">Gain</button>
+    </td><td>
+    OUT 7
+    </td></tr>
+  
+    <tr><td class="rotate">
+    Channel 8
+    </td><td>
+    <select id="chn7" onchange="postInputJson('chn7',7);" data-port=20453>
+      <option value="0x00000000" data-chn=20416>Analog 1</option>
+      <option value="0x00000001" data-chn=20416>Analog 2</option>
+      <option value="0x00000002" data-chn=20416>Analog 3</option>
+      <option value="0x00000003" data-chn=20416>Analog 4</option>
+      <option value="0x00000004" data-chn=20416>Analog 5</option>
+      <option value="0x00000005" data-chn=20416>Analog 6</option>
+      <option value="0x00000006" data-chn=20416>Analog 7</option>
+      <option value="0x00000007" data-chn=20416>Analog 8</option>
+      <option value="0x00010000" data-chn=20413>USB 1</option>
+      <option value="0x00010001" data-chn=20413>USB 2</option>
+      <option value="0x00010002" data-chn=20413>USB 3</option>
+      <option value="0x00010003" data-chn=20413>USB 4</option>
+      <option value="0x00010004" data-chn=20413>USB 5</option>
+      <option value="0x00010005" data-chn=20413>USB 6</option>
+      <option value="0x00010006" data-chn=20413>USB 7</option>
+      <option value="0x00010007" data-chn=20413>USB 8</option>
+      <option value="0x00040000" data-chn=20417>SPDIF L</option>
+      <option value="0x00040001" data-chn=20417>SPDIF R</option>
+    </select>
+    </td><td>
+    <button class="hp" onclick="openHP(7,19561,19596,19641,19681);">HP</button>
+    </td><td>
+    <button class="shlv" onclick="openLShelv(7,19721);">LShlv</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(70,20086);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(71,20091);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(72,20096);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(73,20101);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(74,20106);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(75,20111);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(76,20116);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(77,20121);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(78,20126);">PEQ</button>
+    </td><td>
+    <button class="peq" onclick="openPEQ(79,20131);">PEQ</button>
+    </td><td>
+    <button class="shlv" onclick="openHShelv(7,20171);">HShlv</button>
+    </td><td>
+    <button class="hp" onclick="openLP(7,20211,20246,20276,20321);">LP</button>
+    </td><td>
+    <button class="phase" onclick="openPhase(7,20361);">Phase</button>
+    </td><td>
+    <button class="delay" onclick="openDelay(7,20381);">Delay</button>
+    </td><td>
+    <button class="gain" onclick="openGain(7,20397);">Gain</button>
+    </td><td>
+    OUT 8
+    </td></tr>
+  </table>
+  </td></table>
+
+  <table><tr><td><button class="prebtn" id="pre0" onclick="switchPreset(0)">Preset A</button></td>
+  <td><button class="prebtn" id="pre1" onclick="switchPreset(1)">Preset B</button></td>
+  <td><button class="prebtn" id="pre2" onclick="switchPreset(2)">Preset C</button></td>
+  <td><button class="prebtn" id="pre3" onclick="switchPreset(3)">Preset D</button></td></tr></table>
+  </center>
+  </div>
+
+  <div id="highPass" class="modal" data-idx="0" data-addr="0">
+    <div class="modal-content d_hp">
+      <table class="ptbl">
+      <tr><td colspan="2" style="height:20px;padding-top:10px;">
+      <table style="width:100%;">
+      <tr>
+        <td class="headline">High Pass</td><td class="close" onclick="closeModal('highPass')">&times;</td>
+      </tr>
+      </table>
+      </td></tr>
+      <tr><td colspan="2">
+        <select id="hp_typ">
+          <option value="0">Bes 6</option>
+          <option value="1">Bes 12</option>
+          <option value="2">Bes 18</option>
+          <option value="3">Bes 24</option>
+          <option value="4">But 12</option>
+          <option value="5">But 18</option>
+          <option value="6">But 24</option>
+          <option value="7">LR 12</option>
+          <option value="8">LR 24</option>
+          <option value="9">LR 36</option>
+          <option value="10">LR 48</option>
+        </select>
+      </td></tr>
+      <tr><td><input type="number" id="hp_fc" style="width:95%;"></td><td style="text-align:left;width:10%;">Hz</td></tr>
+      <tr><td colspan="2"><button class="send" id="hp_bypass" onclick="bypass('hp_bypass');sendParam('hp');" data-bypass="0">Bypass</button></td</tr>
+      <tr><td colspan="2"><button class="send" onclick="sendParam('hp')">Send</button></td</tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="lowShelv" class="modal" data-idx="0" data-addr="0">
+    <div class="modal-content d_shlv">
+      <table class="ptbl">
+      <tr><td colspan="2" style="height:20px;padding-top:10px;">
+      <table style="width:100%;">
+      <tr><td class="headline">Low Shelving</td><td class="close" onclick="closeModal('lowShelv')">&times;</td></tr>
+      </table>
+      </td></tr>
+      <tr><td><input type="number" id="ls_v" style="width:95%;"></td><td style="text-align:left;width:10%;">dB</td></tr>
+      <tr><td><input type="number" id="ls_fc" style="width:95%;"></td><td style="text-align:left;width:10%;">Hz</td></tr>
+      <tr><td><input type="number" id="ls_s" style="width:95%;"></td><td style="text-align:left;width:10%;">S</td></tr>
+      <tr><td colspan="2"><button class="send" id="ls_bypass" onclick="bypass('ls_bypass');sendParam('lshelv');" data-bypass="0">Bypass</button></td</tr>
+      <tr><td colspan="2"><button class="send" onclick="sendParam('lshelv')">Send</button></td</tr>
+      </table>
+    </div>
+  </div>
+  
+  <div id="peq" class="modal" data-idx="0" data-addr="0">
+    <div class="modal-content d_peq">
+      <table class="ptbl">
+      <tr><td colspan="2" style="height:20px;padding-top:10px;">
+      <table style="width:100%;">
+      <tr><td class="headline">Parametric EQ</td><td class="close" onclick="closeModal('peq')">&times;</td></tr>
+      </table>
+      </td></tr>
+      <tr><td><input type="number" id="peq_v" style="width:95%;"></td><td style="text-align:left;width:10%;">dB</td></tr>
+      <tr><td><input type="number" id="peq_fc" style="width:95%;"></td><td style="text-align:left;width:10%;">Hz</td></tr>
+      <tr><td><input type="number" id="peq_q" style="width:95%;"></td><td style="text-align:left;width:10%;">Q</td></tr>
+      <tr><td colspan="2"><button class="send" id="peq_bypass" onclick="bypass('peq_bypass');sendParam('peq');" data-bypass="0">Bypass</button></td</tr>
+      <tr><td colspan="2"><button class="send" onclick="sendParam('peq')">Send</button></td</tr>
+      </table>
+    </div>
+  </div>
+  
+  <div id="highShelv" class="modal" data-idx="0" data-addr="0">
+    <div class="modal-content d_shlv">
+      <table class="ptbl">
+      <tr><td colspan="2" style="height:20px;padding-top:10px;">
+      <table style="width:100%;">
+      <tr><td class="headline">High Shelving</td><td class="close" onclick="closeModal('highShelv')">&times;</td></tr>
+      </table>
+      </td></tr>
+      <tr><td><input type="number" id="hs_v" style="width:95%;"></td><td style="text-align:left;width:10%;">dB</td></tr>
+      <tr><td><input type="number" id="hs_fc" style="width:95%;"></td><td style="text-align:left;width:10%;">Hz</td></tr>
+      <tr><td><input type="number" id="hs_s" style="width:95%;"></td><td style="text-align:left;width:10%;">S</td></tr>
+      <tr><td colspan="2"><button class="send" id="hs_bypass" onclick="bypass('hs_bypass');sendParam('hshelv');" data-bypass="0">Bypass</button></td</tr>
+      <tr><td colspan="2"><button class="send" onclick="sendParam('hshelv')">Send</button></td</tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="lowPass" class="modal" data-idx="0" data-addr="0">
+    <div class="modal-content d_hp">
+      <table class="ptbl">
+      <tr><td colspan="2" style="height:20px;padding-top:10px;">
+      <table style="width:100%;">
+      <tr><td class="headline">Low Pass</td><td class="close" onclick="closeModal('lowPass')">&times;</td></tr>
+      </table>
+      </td></tr>
+      <tr><td colspan="2">
+        <select id="lp_typ">
+          <option value="0">Bes 6</option>
+          <option value="1">Bes 12</option>
+          <option value="2">Bes 18</option>
+          <option value="3">Bes 24</option>
+          <option value="4">But 12</option>
+          <option value="5">But 18</option>
+          <option value="6">But 24</option>
+          <option value="7">LR 12</option>
+          <option value="8">LR 24</option>
+          <option value="9">LR 36</option>
+          <option value="10">LR 48</option>
+        </select>
+      </td></tr>
+      <tr><td><input type="number" id="lp_fc" style="width:95%;"></td><td style="text-align:left;width:10%;">Hz</td></tr>
+      <tr><td colspan="2"><button class="send" id="lp_bypass" onclick="bypass('lp_bypass');sendParam('lp');" data-bypass="0">Bypass</button></td</tr>
+      <tr><td colspan="2"><button class="send" onclick="sendParam('lp')">Send</button></td</tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="phase" class="modal" data-idx="0" data-addr="0">
+    <div class="modal-content d_phase">
+      <table class="ptbl">
+      <tr><td colspan="2" style="height:20px;padding-top:10px;">
+      <table style="width:100%;">
+      <tr><td class="headline">Phase</td><td class="close" onclick="closeModal('phase')">&times;</td></tr>
+      </table>
+      </td></tr>
+      <tr><td><input type="number" id="ph_fc" style="width:95%;"></td><td style="text-align:left;width:10%;">Hz</td></tr>
+      <tr><td><input type="number" id="ph_q" style="width:95%;"></td><td style="text-align:left;width:10%;">Q</td></tr>
+      <tr><td colspan="2"><input type="checkbox" id="ph_inv">Invert</td></tr>
+      <tr><td colspan="2"><button class="send" id="ph_bypass" onclick="bypass('ph_bypass');sendParam('phase');" data-bypass="0">Bypass</button></td</tr>
+      <tr><td colspan="2"><button class="send" onclick="sendParam('phase')">Send</button></td</tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="delay" class="modal" data-idx="0" data-addr="0">
+    <div class="modal-content d_delay">
+      <table class="ptbl">
+      <tr><td colspan="2" style="height:20px;padding-top:10px;">
+      <table style="width:100%;">
+      <tr><td class="headline">Delay</td><td class="close" onclick="closeModal('delay')">&times;</td></tr>
+      </table>
+      </td></tr>
+      <tr><td><input type="number" id="delayval" style="width:95%;"></td><td style="text-align:left;width:10%;">ms</td></tr>
+      <tr><td colspan="2"><button class="send" id="delay_bypass" onclick="bypass('delay_bypass');sendParam('delay');" data-bypass="0">Bypass</button></td</tr>
+      <tr><td colspan="2"><button class="send" onclick="sendParam('delay')">Send</button></td</tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="gain" class="modal" data-idx="0" data-addr="0">
+    <div class="modal-content d_gain">
+      <table class="ptbl">
+      <tr><td colspan="2" style="height:20px;padding-top:10px;">
+      <table style="width:100%;">
+      <tr><td class="headline">Gain</td><td class="close" onclick="closeModal('gain')">&times;</td></tr>
+      </table>
+      </td></tr>
+      <tr><td><input type="number" id="gainval" style="width:95%;"></td><td style="text-align:left;width:10%;">dB</td></tr>
+      <tr><td colspan="2"><button class="send" id="mute" onclick="mute()" data-mute="0">Mute</button></td</tr>
+      <tr><td colspan="2"><button class="send" onclick="sendParam('gain')">Send</button></td</tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="configDev" class="modal">
+    <div class="modal-content">
+      <table class="ptbl">
+      <tr><td colspan="2" style="height:20px;padding-top:10px;">
+      <table style="width:100%;">
+      <tr><td class="headline">Device Config</td><td class="close" onclick="closeModal('configDev')">&times;</td></tr>
+      </table>
+      </td></tr>
+      <tr><td>AddOn</td></tr>
+      <tr><td><select id="aid">
+      <option value="0">None or custom</option>
+      <option value="1">A The woodworker's friend</option>
+      <option value="2">B Down with developers</option>
+      <!--<option value="3">C Control over the crowd</option>-->
+      <option value="4">D Balanced life</option>
+      </select></td></tr>
+      <tr><td><input type="checkbox" id="vpot">Volume Potentiometer</td></tr>
+      <tr><td><button class="send" onclick="sendConfig()">Store</button></td</tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="configWifi" class="modal">
+    <div class="modal-content">
+      <table class="ptbl">
+      <tr><td colspan="2" style="height:20px;padding-top:10px;">
+      <table style="width:100%;">
+      <tr><td class="headline">WiFi Config</td><td class="close" onclick="closeModal('configWifi')">&times;</td></tr>
+      </table>
+      </td></tr>
+      <tr><td>SSID</td></tr>
+      <tr><td><input type="text" id="ssid" style="width:95%;"></td></tr>
+      <tr><td>Password</td</tr>
+      <tr><td><input type="password" id="pwd" style="width:95%;"></td></tr>
+      <tr><td><button class="send" onclick="sendWifi()">Store</button></td</tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="plugin" class="modal">
+    <div class="modal-content" style="width:600px;">
+      <table class="ptbl">
+      <tr><td colspan="2" style="height:20px;padding-top:10px;">
+      <table style="width:100%;">
+      <tr><td class="headline">Upload Plugin</td><td class="close" onclick="closeModal('plugin')">&times;</td></tr>
+      </table>
+      </td></tr>
+      <tr><td>Please select the folder of the plugin.</td></tr>
+      <tr><td><input type="file" id="picker" name="fileList" webkitdirectory mozdirectory multiple width="95%"></td></tr>
+      <tr><td><div id="wait" style="display:none;">Please wait while uploading.</div></td></tr>
+      <tr><td><div id="prg" style="border: 1px solid #73EC6F; background: #73EC6F; height:2px; width:0%;"></div></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <script>
+  function openHP(idx,addr0,addr1,addr2,addr3){
+    document.getElementById("highPass").style.display = "block";
+    fetch("/hp?idx="+idx).then (function (response) {
+      return response.json();
+    }).then (function (data) {
+      document.getElementById("highPass").dataset.idx=idx;
+      document.getElementById("highPass").dataset.addr0=addr0;
+      document.getElementById("highPass").dataset.addr1=addr1;
+      document.getElementById("highPass").dataset.addr2=addr2;
+      document.getElementById("highPass").dataset.addr3=addr3;
+      document.getElementById("hp_fc").value=data.fc;
+      document.getElementById("hp_typ").value=data.typ;
+      document.getElementById("hp_bypass").dataset.bypass=data.bypass;
+      switchBypass("hp_bypass");
+    }).catch (function (error) {console.log(error);
+    });
+  }
+  function openLShelv(idx,addr){
+    document.getElementById("lowShelv").style.display = "block";
+    fetch("/lshelv?idx="+idx).then (function (response) {
+      return response.json();
+    }).then (function (data) {
+      document.getElementById("lowShelv").dataset.idx=idx;
+      document.getElementById("lowShelv").dataset.addr=addr;
+      document.getElementById("ls_v").value=data.gain;
+      document.getElementById("ls_fc").value=data.fc;
+      document.getElementById("ls_s").value=data.slope;
+      document.getElementById("ls_bypass").dataset.bypass=data.bypass;
+      switchBypass("ls_bypass");
+    }).catch (function (error) {console.log(error);
+    });
+  }
+  function openPEQ(idx,addr){
+    document.getElementById("peq").style.display = "block";
+    fetch("/peq?idx="+idx).then (function (response) {
+      return response.json();
+    }).then (function (data){
+      document.getElementById("peq").dataset.idx=idx;
+      document.getElementById("peq").dataset.addr=addr;
+      document.getElementById("peq_v").value=data.gain;
+      document.getElementById("peq_fc").value=data.fc;
+      document.getElementById("peq_q").value=data.Q;
+      document.getElementById("peq_bypass").dataset.bypass=data.bypass;
+      switchBypass("peq_bypass");
+    }).catch (function (error) {console.log(error);
+    });
+  }
+  function openHShelv(idx,addr){
+    document.getElementById("highShelv").style.display = "block";
+    fetch("/hshelv?idx="+idx).then (function (response) {
+      return response.json();
+    }).then (function (data) {
+      document.getElementById("highShelv").dataset.idx=idx;
+      document.getElementById("highShelv").dataset.addr=addr;
+      document.getElementById("hs_v").value=data.gain;
+      document.getElementById("hs_fc").value=data.fc;
+      document.getElementById("hs_s").value=data.slope;
+      document.getElementById("hs_bypass").dataset.bypass=data.bypass;
+      switchBypass("hs_bypass");
+    }).catch (function (error) {console.log(error);
+    });
+  }
+  function openLP(idx,addr0,addr1,addr2,addr3){
+    document.getElementById("lowPass").style.display = "block";
+    fetch("/lp?idx="+idx).then (function (response) {
+      return response.json();
+    }).then (function (data) {
+      document.getElementById("lowPass").dataset.idx=idx;
+      document.getElementById("lowPass").dataset.addr0=addr0;
+      document.getElementById("lowPass").dataset.addr1=addr1;
+      document.getElementById("lowPass").dataset.addr2=addr2;
+      document.getElementById("lowPass").dataset.addr3=addr3;
+      document.getElementById("lp_fc").value=data.fc;
+      document.getElementById("lp_typ").value=data.typ;
+      document.getElementById("lp_bypass").dataset.bypass=data.bypass;
+      switchBypass("lp_bypass");
+    }).catch (function (error) {console.log(error);
+    });
+  }
+  function openPhase(idx,addr){
+    document.getElementById("phase").style.display = "block";
+    fetch("/phase?idx="+idx).then (function (response) {
+      return response.json();
+    }).then (function (data) {  
+      document.getElementById("phase").dataset.idx=idx;
+      document.getElementById("phase").dataset.addr=addr;
+      document.getElementById("ph_fc").value=data.fc;
+      document.getElementById("ph_q").value=data.Q;
+      document.getElementById("ph_inv").value=data.inv;
+      document.getElementById("ph_bypass").dataset.bypass=data.bypass;
+      switchBypass("ph_bypass");
+    }).catch (function (error) {console.log(error);
+    });
+  }
+  function openDelay(idx,addr){
+    document.getElementById("delay").style.display = "block";
+    fetch("/delay?idx="+idx).then (function (response) {
+      return response.json();
+    }).then (function (data) {  
+      document.getElementById("delay").dataset.idx=idx;
+      document.getElementById("delay").dataset.addr=addr;
+      document.getElementById("delayval").value=data.dly;
+      document.getElementById("delay_bypass").dataset.bypass=data.bypass;
+      switchBypass("delay_bypass");
+    }).catch (function (error) {console.log(error);
+    });
+  }
+  function openGain(idx,addr){
+    document.getElementById("gain").style.display = "block";
+    fetch("/gain?idx="+idx).then (function (response) {
+      return response.json();
+    }).then (function (data) {  
+      document.getElementById("gain").dataset.idx=idx;
+      document.getElementById("gain").dataset.addr=addr;
+      document.getElementById("gainval").value=data.gain;
+      document.getElementById("mute").dataset.mute=data.mute;
+      switchMute();
+    }).catch (function (error) {console.log(error);
+    });
+  }
+  function getMVol(addr){
+    fetch("/mvol").then (function (response) {
+      return response.json();
+    }).then (function (data) {  
+      document.getElementById("mvol").dataset.addr=addr;
+      document.getElementById("mvol").value=data.vol;
+    }).catch (function (error) {console.log(error);
+    });
+  }
+  function getPreset(){
+    fetch("/preset").then (function (response) {
+      return response.json();
+    }).then (function (data) {  
+      switchPreset(data.pre);
+    }).catch (function (error) {console.log(error);
+    });
+  }
+  function getConfig(){
+    fetch("/config").then (function (response) {
+      return response.json();
+    }).then (function (data) {  
+      document.getElementById("aid").value = data.aid;
+      document.getElementById("vpot").value = data.vpot;
+    }).catch (function (error) {console.log(error);
+    });
+  }
+  function postInputJson(id,idx){
+    var data={};
+    var elem = document.getElementById(id);
+    var selected = elem.options[elem.selectedIndex];
+    data.idx=idx;
+    data.chn=selected.getAttribute('data-chn');
+    data.port=document.getElementById(id).dataset.port;
+    data.sel=document.getElementById(id).value;
+    fetch("/input",{method:"POST",headers:{
+    "Content-Type": "application/json"},
+    body:JSON.stringify(data)}).catch(function(error){console.log(error);});
+  }
+  function postJson(btp){
+    var data={};
+    if(btp=="hp"){
+      data.idx=document.getElementById("highPass").dataset.idx;
+      data.addr0=document.getElementById("highPass").dataset.addr0;
+      data.addr1=document.getElementById("highPass").dataset.addr1;
+      data.addr2=document.getElementById("highPass").dataset.addr2;
+      data.addr3=document.getElementById("highPass").dataset.addr3;
+      data.fc=document.getElementById("hp_fc").value;
+      data.typ=document.getElementById("hp_typ").value;
+      data.bypass=document.getElementById("hp_bypass").dataset.bypass;
+      return fetch("/hp",{method:"POST",headers:{
+      "Content-Type": "application/json"},
+      body:JSON.stringify(data)});
+    }
+    else if(btp=="lshelv"){
+      data.idx=document.getElementById("lowShelv").dataset.idx;
+      data.addr=document.getElementById("lowShelv").dataset.addr;
+      data.gain=document.getElementById("ls_v").value;
+      data.fc=document.getElementById("ls_fc").value;
+      data.slope=document.getElementById("ls_s").value;
+      data.bypass=document.getElementById("ls_bypass").dataset.bypass;
+      return fetch("/lshelv",{method:"POST",headers:{
+      "Content-Type": "application/json"},
+      body:JSON.stringify(data)});
+    }
+    else if(btp=="peq"){
+      data.idx=document.getElementById("peq").dataset.idx;
+      data.addr=document.getElementById("peq").dataset.addr;
+      data.gain=document.getElementById("peq_v").value;
+      data.fc=document.getElementById("peq_fc").value;
+      data.Q=document.getElementById("peq_q").value;
+      data.bypass=document.getElementById("peq_bypass").dataset.bypass;
+      return fetch("/peq",{method:"POST",headers:{
+      "Content-Type": "application/json"},
+      body:JSON.stringify(data)});
+    }
+    else if(btp=="hshelv"){
+      data.idx=document.getElementById("highShelv").dataset.idx;
+      data.addr=document.getElementById("highShelv").dataset.addr;
+      data.gain=document.getElementById("hs_v").value;
+      data.fc=document.getElementById("hs_fc").value;
+      data.slope=document.getElementById("hs_s").value;
+      data.bypass=document.getElementById("hs_bypass").dataset.bypass;
+      return fetch("/hshelv",{method:"POST",headers:{
+      "Content-Type": "application/json"},
+      body:JSON.stringify(data)});
+    }
+    else if(btp=="lp"){
+      data.idx=document.getElementById("lowPass").dataset.idx;
+      data.addr0=document.getElementById("highPass").dataset.addr0;
+      data.addr1=document.getElementById("highPass").dataset.addr1;
+      data.addr2=document.getElementById("highPass").dataset.addr2;
+      data.addr3=document.getElementById("highPass").dataset.addr3;
+      data.fc=document.getElementById("lp_fc").value;
+      data.typ=document.getElementById("lp_typ").value;
+      data.bypass=document.getElementById("lp_bypass").dataset.bypass;
+      return fetch("/lp",{method:"POST",headers:{
+      "Content-Type": "application/json"},
+      body:JSON.stringify(data)});
+    }
+    else if(btp=="phase"){
+      data.idx=document.getElementById("phase").dataset.idx;
+      data.addr=document.getElementById("phase").dataset.addr;
+      data.fc=document.getElementById("ph_fc").value;
+      data.Q=document.getElementById("ph_q").value;
+      data.inv=document.getElementById("ph_inv").value;
+      data.bypass=document.getElementById("ph_bypass").dataset.bypass;
+      return fetch("/phase",{method:"POST",headers:{
+      "Content-Type": "application/json"},
+      body:JSON.stringify(data)});
+    }
+    else if(btp=="delay"){
+      data.idx=document.getElementById("delay").dataset.idx;
+      data.addr=document.getElementById("delay").dataset.addr;
+      data.delay=document.getElementById("delayval").value;
+      data.bypass=document.getElementById("delay_bypass").dataset.bypass;
+      return fetch("/delay",{method:"POST",headers:{
+      "Content-Type": "application/json"},
+      body:JSON.stringify(data)});
+    }
+    else if(btp=="gain"){
+      data.idx=document.getElementById("gain").dataset.idx;
+      data.addr=document.getElementById("gain").dataset.addr;
+      data.gain=document.getElementById("gainval").value;
+      data.mute=document.getElementById("mute").dataset.mute;
+      console.log( data.mute );
+      return fetch("/gain",{method:"POST",headers:{
+      "Content-Type": "application/json"},
+      body:JSON.stringify(data)});
+    }
+  }
+  function postMVol(){
+    var data={};
+    data.addr="20409";
+    data.vol=document.getElementById("mvol").value;
+    fetch("/mvol",{method:"POST",headers:{
+    "Content-Type": "application/json"},
+    body:JSON.stringify(data)}).catch(function(error){console.log(error);});
+  }
+  function switchPreset(p){
+    var data={};
+    data.pre=p;
+    fetch("/preset",{method:"POST",headers:{
+    "Content-Type": "application/json"},
+    body:JSON.stringify(data)}).catch(function(error){console.log(error);});
+    document.getElementById("pre0").style.backgroundColor = "#101010";
+    document.getElementById("pre1").style.backgroundColor = "#101010";
+    document.getElementById("pre2").style.backgroundColor = "#101010";
+    document.getElementById("pre3").style.backgroundColor = "#101010";
+    document.getElementById("pre"+p).style.backgroundColor = "#73EC6F";
+  }
+  function sendParam(btp){postJson(btp).catch(function(error){console.log(error);});}
+  function mute(){
+    if(document.getElementById("mute").dataset.mute=="0")
+      document.getElementById("mute").dataset.mute="1";
+    else
+      document.getElementById("mute").dataset.mute="0";
+    switchMute();
+    sendParam("gain");
+  }
+  function switchMute(){
+    if(document.getElementById("mute").dataset.mute=="1"){
+      document.getElementById("mute").style.backgroundColor="#FF0000";
+      document.getElementById("mute").style.borderColor="#FF0000";
+      document.getElementById("mute").style.color="#101010";
+    }else{
+      document.getElementById("mute").style.backgroundColor = "#101010";
+      document.getElementById("mute").style.borderColor="#808080";
+      document.getElementById("mute").style.color="#D0D0D0";
+    }
+  }
+  function bypass(id){
+    if(document.getElementById(id).dataset.bypass=="0")
+      document.getElementById(id).dataset.bypass="1";
+    else
+      document.getElementById(id).dataset.bypass="0";
+    switchBypass(id);
+  }
+  function switchBypass(id){
+    if(document.getElementById(id).dataset.bypass=="1"){
+      document.getElementById(id).style.backgroundColor="#FF0000";
+      document.getElementById(id).style.borderColor="#FF0000";
+      document.getElementById(id).style.color="#101010";
+    }else{
+      document.getElementById(id).style.backgroundColor = "#101010";
+      document.getElementById(id).style.borderColor="#808080";
+      document.getElementById(id).style.color="#D0D0D0";
+    }
+  }
+  function closeModal(id){document.getElementById(id).style.display = "none";}
+  function configDev(){document.getElementById("configDev").style.display = "block";}
+  function configWifi(){document.getElementById("configWifi").style.display = "block";}
+  function sendConfig(){
+    var data={};
+    data.aid=document.getElementById("aid").value;
+    data.vpot=document.getElementById("vpot").checked;
+    fetch("/config",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)})
+    .then(function(result) {
+    hideAddon();
+    if(data.aid==0) document.getElementById('addon_none').style.display = "block";
+    else if(data.aid==1) document.getElementById('addon_a').style.display = "block";
+    else if(data.aid==2) document.getElementById('addon_b').style.display = "block";
+    else if(data.aid==3) document.getElementById('addon_c').style.display = "block";
+    else if(data.aid==4) document.getElementById('addon_d').style.display = "block";
+    }).catch (function(err){console.log(err);});
+  }
+  function sendWifi(){
+    var data={};
+    data.ssid=document.getElementById("ssid").value;
+    data.pwd=document.getElementById("pwd").value;
+    fetch("/wifi",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)})
+    .catch(function(err){console.log(err);});
+  }
+  function storePreset(){
+    var data={};
+    fetch("/store",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)});
+  }
+  function onLoad(){
+    hideAddon();
+    fetch("/config").then(function(response){
+      return response.json();
+    }).then(function(cfg){  
+      document.getElementById("fw").innerHTML="FW: "+cfg.fw;
+      document.getElementById("ip").innerHTML="Local WiFi IP: "+cfg.ip;
+      var p=cfg.pre;
+      document.getElementById("pre0").style.backgroundColor = "#101010";
+      document.getElementById("pre1").style.backgroundColor = "#101010";
+      document.getElementById("pre2").style.backgroundColor = "#101010";
+      document.getElementById("pre3").style.backgroundColor = "#101010";
+      document.getElementById("pre"+p).style.backgroundColor = "#73EC6F";
+      if(cfg.aid==0) document.getElementById('addon_none').style.display = "block";
+      else if(cfg.aid==1) document.getElementById('addon_a').style.display = "block";
+      else if(cfg.aid==2)
+      {
+        if(cfg.addcfg==0) document.getElementById("spdif_b").value="0x00";
+        else if(cfg.addcfg==1) document.getElementById("spdif_b").value="0x01";
+        else if(cfg.addcfg==2) document.getElementById("spdif_b").value="0x02";
+        else if(cfg.addcfg==3) document.getElementById("spdif_b").value="0x03";
+        else if(cfg.addcfg==4) document.getElementById("spdif_b").value="0x04";
+        else if(cfg.addcfg==5) document.getElementById("spdif_b").value="0x05";
+        else if(cfg.addcfg==6) document.getElementById("spdif_b").value="0x06";
+        else if(cfg.addcfg==7) document.getElementById("spdif_b").value="0x07";
+        document.getElementById('addon_b').style.display = "block";
+      }
+      else if(cfg.aid==3) document.getElementById('addon_c').style.display="block";
+      else if(cfg.aid==4) document.getElementById('addon_d').style.display="block";
+      return fetch("/allinputs");
+    }).then(function(response){
+      return response.json();
+	  }).then(function(data){
+      document.getElementById("chn0").value=data.in0;
+      document.getElementById("chn1").value=data.in1;
+      document.getElementById("chn2").value=data.in2;
+      document.getElementById("chn3").value=data.in3;
+      document.getElementById("chn4").value=data.in4;
+      document.getElementById("chn5").value=data.in5;
+      document.getElementById("chn6").value=data.in6;
+      document.getElementById("chn7").value=data.in7;
+    }).catch(function(err){console.log(err);
+    });
+  }
+  function hideAddon(){
+    document.getElementById('addon_none').style.display = "none";
+    document.getElementById('addon_a').style.display = "none";
+    document.getElementById('addon_b').style.display = "none";
+    //document.getElementById('addon_c').style.display = "none";
+    document.getElementById('addon_d').style.display = "none";
+  }
+  function changeSPDIF(id){
+    var data={};
+    data.len=3;
+    data.i2c=["0x82", "0x01", document.getElementById(id).value];
+    fetch("/addoncfg",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)});
+  }
+  function openPlugin(){document.getElementById("plugin").style.display = "block";}
+  let picker = document.getElementById('picker');
+  picker.addEventListener('change', e => {
+    var html,fw,css,plugin;
+    for(let file of Array.from(e.target.files)){
+      if(file.name=="dark.css")
+        css = file;
+      if(file.name=="dsp.fw")
+        fw = file;
+      if(file.name=="dsp.html")
+        html = file;
+      if(file.name=="plugin.ini")
+        plugin = file;
+    }
+    var prg=document.getElementById('prg');
+		prg.style.width="5%";
+    document.getElementById("wait").style.display="block";
+
+    fetch("/upload?fname=dark.css",{method:'POST',headers:{},body:css})
+    .then(function(response){
+      prg.style.width="25%";
+      return fetch("/upload?fname=dsp.fw",{method:'POST',headers:{},body:fw});})
+    .then(function(response){
+      prg.style.width="50%";
+      return fetch("/upload?fname=dsp.html",{method:'POST',headers:{},body:html});})
+    .then(function(response){
+      prg.style.width="75%";
+      return fetch("/upload?fname=plugin.ini",{method:'POST',headers:{},body:plugin});})
+    .then(function(response){
+      prg.style.width="100%";
+      return response;})
+    .then(function(response){
+      alert("Success! Your plugin has been installed. Please reboot your DSP and reconnect to it.");
+      document.getElementById("wait").style.display="none";
+      return response;})
+    .catch(function(err){alert( "Uploading your plugin failed: "+err);});
+  });
+  </script>
+</body>
+</html>
