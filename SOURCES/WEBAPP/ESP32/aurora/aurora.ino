@@ -548,135 +548,146 @@ void uploadUserParams( void )
 {
   String fileName = presetUsrparamFile[currentPreset];
  
+  //--- Read the preset file
   if( !SPIFFS.exists( fileName ) )
-  {
     Serial.println( "Preset " + fileName + " not written yet" );
-    return;
-  }
-
-  File fileUserParams = SPIFFS.open( fileName );
-
-  if( fileUserParams )
-  {
-    Serial.print( "Uploading user parameters from " + fileName );
-    uint32_t totalSize = 0;
-    for( int ii = 0; ii < numInputs; ii++ )
-    {
-      size_t len = fileUserParams.read( (uint8_t*)&(paramInputs[ii]), sizeof(tInput) );
-      if( len != sizeof(tInput) )
-        Serial.println( "[ERROR] Reading inputs from " + presetUsrparamFile[currentPreset] );
-      else
-        setInput( paramInputs[ii].addrChn, paramInputs[ii].addrPort, paramInputs[ii].sel );
-      totalSize += len;
-    }
-    Serial.print( "." );
-
-    for( int ii = 0; ii < numHPs; ii++ )
-    {
-      size_t len = fileUserParams.read( (uint8_t*)&(paramHP[ii]), sizeof(tHPLP) );
-      if( len != sizeof(tHPLP) )
-        Serial.println( "[ERROR] Reading HPs from " + presetUsrparamFile[currentPreset] );
-      else
-        setHighPass( ii );
-      totalSize += len;
-    }
-    Serial.print( "." );
-
-    for( int ii = 0; ii < numLShelvs; ii++ )
-    {
-      size_t len = fileUserParams.read( (uint8_t*)&(paramLshelv[ii]), sizeof(tShelving) );
-      if( len != sizeof(tShelving) )
-        Serial.println( "[ERROR] Reading LShelvs from " + presetUsrparamFile[currentPreset] );
-      else
-        setLowShelving( ii );
-      totalSize += len;
-    }
-    Serial.print( "." );
-
-    for( int ii = 0; ii < numPEQs; ii++ )
-    {
-      size_t len = fileUserParams.read( (uint8_t*)&(paramPeq[ii]), sizeof(tPeq) );
-      if( len != sizeof(tPeq) )
-        Serial.println( "[ERROR] Writing PEQs to " + presetUsrparamFile[currentPreset] );
-      else
-        setPEQ( ii );
-      totalSize += len;
-    }
-    Serial.print( "." );
-
-    for( int ii = 0; ii < numHShelvs; ii++ )
-    {
-      size_t len = fileUserParams.read( (uint8_t*)&(paramHshelv[ii]), sizeof(tShelving) );
-      if( len != sizeof(tShelving) )
-        Serial.println( "[ERROR] Writing HShelvs to " + presetUsrparamFile[currentPreset] );
-      else
-        setHighShelving( ii );
-      totalSize += len;
-    }
-    Serial.print( "." );
-
-    for( int ii = 0; ii < numLPs; ii++ )
-    {
-      size_t len = fileUserParams.read( (uint8_t*)&(paramLP[ii]), sizeof(tHPLP) );
-      if( len != sizeof(tHPLP) )
-        Serial.println( "[ERROR] Writing LPs to " + presetUsrparamFile[currentPreset] );
-      else
-        setLowPass( ii );
-      totalSize += len;
-    }
-    Serial.print( "." );
-
-    for( int ii = 0; ii < numPhases; ii++ )
-    {
-      size_t len = fileUserParams.read( (uint8_t*)&(paramPhase[ii]), sizeof(tPhase) );
-      if( len != sizeof(tPhase) )
-        Serial.println( "[ERROR] Writing Phases to " + presetUsrparamFile[currentPreset] );
-      else
-        setPhase( ii );
-      totalSize += len;
-    }
-    Serial.print( "." );
-
-    for( int ii = 0; ii < numDelays; ii++ )
-    {
-      size_t len = fileUserParams.read( (uint8_t*)&(paramDelay[ii]), sizeof(tDelay) );
-      if( len != sizeof(tDelay) )
-        Serial.println( "[ERROR] Writing Delays to " + presetUsrparamFile[currentPreset] );
-      else
-        setDelay( ii );
-      totalSize += len;
-    }
-    Serial.print( "." );
-
-    for( int ii = 0; ii < numGains; ii++ )
-    {
-      size_t len = fileUserParams.read( (uint8_t*)&(paramGain[ii]), sizeof(tGain) );
-      if( len != sizeof(tGain) )
-        Serial.println( "[ERROR] Writing Gains to " + presetUsrparamFile[currentPreset] );
-      else
-        setGain( ii );
-      totalSize += len;
-    }
-    Serial.print( "." );
-
-    size_t len = fileUserParams.read( (uint8_t*)&masterVolume, sizeof(tMasterVolume) );
-    if( len != sizeof(tMasterVolume) )
-      Serial.println( "[ERROR] Writing masterVolume to " + presetUsrparamFile[currentPreset] );
-    else
-      setMasterVolume();
-    totalSize += len;
-
-    Serial.println( "[OK]" );
-    Serial.print( "Read " );
-    Serial.print( totalSize );
-    Serial.println( "bytes" );
-  }
   else
-    Serial.println( "[ERROR] uploadUserParams(): Reading preset file failed." );
+  {
+    File fileUserParams = SPIFFS.open( fileName );
 
-  fileUserParams.close();
+    if( fileUserParams )
+    {
+      Serial.print( "Uploading user parameters from " + fileName );
+      uint32_t totalSize = 0;
+      for( int ii = 0; ii < numInputs; ii++ )
+      {
+        size_t len = fileUserParams.read( (uint8_t*)&(paramInputs[ii]), sizeof(tInput) );
+        if( len != sizeof(tInput) )
+          Serial.println( "[ERROR] Reading inputs from " + presetUsrparamFile[currentPreset] );
+        totalSize += len;
+      }
+
+      for( int ii = 0; ii < numHPs; ii++ )
+      {
+        size_t len = fileUserParams.read( (uint8_t*)&(paramHP[ii]), sizeof(tHPLP) );
+        if( len != sizeof(tHPLP) )
+          Serial.println( "[ERROR] Reading HPs from " + presetUsrparamFile[currentPreset] );
+        totalSize += len;
+      }
+
+      for( int ii = 0; ii < numLShelvs; ii++ )
+      {
+        size_t len = fileUserParams.read( (uint8_t*)&(paramLshelv[ii]), sizeof(tShelving) );
+        if( len != sizeof(tShelving) )
+          Serial.println( "[ERROR] Reading LShelvs from " + presetUsrparamFile[currentPreset] );
+        totalSize += len;
+      }
+
+      for( int ii = 0; ii < numPEQs; ii++ )
+      {
+        size_t len = fileUserParams.read( (uint8_t*)&(paramPeq[ii]), sizeof(tPeq) );
+        if( len != sizeof(tPeq) )
+          Serial.println( "[ERROR] Reading PEQs from " + presetUsrparamFile[currentPreset] );
+        totalSize += len;
+      }
+
+      for( int ii = 0; ii < numHShelvs; ii++ )
+      {
+        size_t len = fileUserParams.read( (uint8_t*)&(paramHshelv[ii]), sizeof(tShelving) );
+        if( len != sizeof(tShelving) )
+          Serial.println( "[ERROR] Reading HShelvs from " + presetUsrparamFile[currentPreset] );
+        totalSize += len;
+      }
+
+      for( int ii = 0; ii < numLPs; ii++ )
+      {
+        size_t len = fileUserParams.read( (uint8_t*)&(paramLP[ii]), sizeof(tHPLP) );
+        if( len != sizeof(tHPLP) )
+          Serial.println( "[ERROR] Reading LPs from " + presetUsrparamFile[currentPreset] );
+        totalSize += len;
+      }
+
+      for( int ii = 0; ii < numPhases; ii++ )
+      {
+        size_t len = fileUserParams.read( (uint8_t*)&(paramPhase[ii]), sizeof(tPhase) );
+        if( len != sizeof(tPhase) )
+          Serial.println( "[ERROR] Reading Phases from " + presetUsrparamFile[currentPreset] );
+        totalSize += len;
+      }
+
+      for( int ii = 0; ii < numDelays; ii++ )
+      {
+        size_t len = fileUserParams.read( (uint8_t*)&(paramDelay[ii]), sizeof(tDelay) );
+        if( len != sizeof(tDelay) )
+          Serial.println( "[ERROR] Reading Delays from " + presetUsrparamFile[currentPreset] );
+        totalSize += len;
+      }
+
+      for( int ii = 0; ii < numGains; ii++ )
+      {
+        size_t len = fileUserParams.read( (uint8_t*)&(paramGain[ii]), sizeof(tGain) );
+        if( len != sizeof(tGain) )
+          Serial.println( "[ERROR] Reading Gains from " + presetUsrparamFile[currentPreset] );
+        totalSize += len;
+      }
+
+      size_t len = fileUserParams.read( (uint8_t*)&masterVolume, sizeof(tMasterVolume) );
+      if( len != sizeof(tMasterVolume) )
+        Serial.println( "[ERROR] Reading masterVolume from " + presetUsrparamFile[currentPreset] );
+      totalSize += len;
+
+      Serial.println( "[OK]" );
+      Serial.print( "Read " );
+      Serial.print( totalSize );
+      Serial.println( "bytes" );
+    }
+    else
+      Serial.println( "[ERROR] uploadUserParams(): Reading preset file failed." );
+
+    fileUserParams.close();
+  }
+
+  //--- Now upload the parameters
+  Serial.print( "Uploading user parameters"  );
+  for( int ii = 0; ii < numInputs; ii++ )
+    setInput( paramInputs[ii].addrChn, paramInputs[ii].addrPort, paramInputs[ii].sel );
+  Serial.print( "." );
+
+  for( int ii = 0; ii < numHPs; ii++ )
+    setHighPass( ii );
+  Serial.print( "." );
+
+  for( int ii = 0; ii < numLShelvs; ii++ )
+    setLowShelving( ii );
+  Serial.print( "." );
+
+  for( int ii = 0; ii < numPEQs; ii++ )
+    setPEQ( ii );
+  Serial.print( "." );
+
+  for( int ii = 0; ii < numHShelvs; ii++ )
+    setHighShelving( ii );
+  Serial.print( "." );
+
+  for( int ii = 0; ii < numLPs; ii++ )
+    setLowPass( ii );
+  Serial.print( "." );
+
+  for( int ii = 0; ii < numPhases; ii++ )
+    setPhase( ii );
+  Serial.print( "." );
+
+  for( int ii = 0; ii < numDelays; ii++ )
+    setDelay( ii );
+  Serial.print( "." );
+
+  for( int ii = 0; ii < numGains; ii++ )
+    setGain( ii );
+  Serial.print( "." );
+
+  setMasterVolume();
+  Serial.println( "[OK]" );
   
-
 }
 
 //==============================================================================
