@@ -10,7 +10,7 @@
 #include "AudioFilterFactory.h"
 #include "fallback.h"
 
-#define VERSION_STR "v2.0.0-alpha.2"
+#define VERSION_STR "v2.0.0-alpha.3"
 
 #define I2C_SDA_PIN 17
 #define I2C_SCL_PIN 16
@@ -2702,12 +2702,12 @@ void setup()
   //----------------------------------------------------------------------------
   //--- Upload program to DSP
   //----------------------------------------------------------------------------
-  //uploadDspFirmware();
+  uploadDspFirmware();
 
   //----------------------------------------------------------------------------
   //--- Upload user parameters to DSP
   //----------------------------------------------------------------------------
-  //uploadUserParams();
+  uploadUserParams();
 
   //----------------------------------------------------------------------------
   //--- Configure AddOn
