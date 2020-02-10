@@ -10,7 +10,7 @@
 #include "AudioFilterFactory.h"
 #include "fallback.h"
 
-#define VERSION_STR "v2.0.0-alpha.3"
+#define VERSION_STR "v2.0.0-alpha.4"
 
 #define I2C_SDA_PIN 17
 #define I2C_SCL_PIN 16
@@ -2582,10 +2582,12 @@ void myWiFiTask(void *pvParameters)
   
   WiFi.mode( WIFI_AP_STA );
   WiFi.setHostname( "freeDSP-aurora" );
+  WiFi.persistent( false );
+  WiFi.disconnect();
   // Start access point
   WiFi.softAP( "AP-freeDSP-aurora" );
   delay(100);
-  //wait for SYSTEM_EVENT_AP_START
+
   if( !WiFi.softAPConfig( IPAddress(192, 168, 5, 1), IPAddress(192, 168, 5, 1), IPAddress(255, 255, 255, 0) ) )
     Serial.println("AP Config Failed");
   
@@ -2597,25 +2599,41 @@ void myWiFiTask(void *pvParameters)
     if( (Settings.ssid.length() > 0) &&  (cntrAuthFailure < 10) )
     {
       state = WiFi.status();
-      if( state != WL_CONNECTED )         // We have no connection yet
+      if( state != WL_CONNECTED )
       {  
-        if (state == WL_NO_SHIELD)
-        //if( firstConnectAttempt )   // WiFi.begin wasn't called yet
+        //if (state == WL_NO_SHIELD)
+        if( firstConnectAttempt )
         {
           firstConnectAttempt = false;
           Serial.print( "Connecting to " );
           Serial.println( Settings.ssid.c_str() );
           WiFi.begin(Settings.ssid.c_str(), Settings.password.c_str());  
+          cntrAuthFailure++;
         } 
-        else if( state == WL_CONNECT_FAILED )  // WiFi.begin has failed (AUTH_FAIL)
+        else if( state == WL_IDLE_STATUS )
+        {
+          Serial.println( "Idle" );
+        }
+        else if( state == WL_NO_SSID_AVAIL )
+        {
+          Serial.println( "No SSID available" );
+        }
+        else if( state == WL_CONNECTION_LOST )
         {  
-          Serial.println("Disconnecting WiFi");
+          Serial.println("WiFi connection lost");
           WiFi.disconnect(true);
           cntrAuthFailure++;
         } 
-        else if( state == WL_DISCONNECTED ) // WiFi.disconnect was done or Router.WiFi got out of range
+        // else if( state == WL_SCAN_COMPLETED )
+        else if( state == WL_CONNECT_FAILED )
         {  
-          if (!myWiFiFirstConnect) // Report only once
+          Serial.println("WiFi connection failed");
+          WiFi.disconnect(true);
+          cntrAuthFailure++;
+        } 
+        else if( state == WL_DISCONNECTED )
+        {  
+          if (!myWiFiFirstConnect)
           {  
             myWiFiFirstConnect = true;
             Serial.println( "WiFi disconnected" );
@@ -2627,7 +2645,7 @@ void myWiFiTask(void *pvParameters)
           WiFi.mode(WIFI_AP_STA);
           // WiFi.config(ip, gateway, subnet); // Only for fix IP needed
           WiFi.begin(Settings.ssid.c_str(), Settings.password.c_str());
-          delay(3000); // Wait 3 Seconds, WL_DISCONNECTED is present until new connect!
+          delay(3000);
           cntrAuthFailure++;
         }
         vTaskDelay (250); // Check again in about 250ms
