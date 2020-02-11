@@ -250,7 +250,7 @@ void initUserParams( void )
   {
     paramHP[ii].fc = 100.0;
     paramHP[ii].typ = 0;
-    paramHP[ii].bypass = false;
+    paramHP[ii].bypass = true;
   }
 
   for( int ii = 0; ii < MAX_NUM_LSHELVS; ii++ )
@@ -282,7 +282,7 @@ void initUserParams( void )
 
   for( int ii = 0; ii < MAX_NUM_LPS; ii++ )
   {
-    paramLP[ii].fc = 1000.0;
+    paramLP[ii].fc = 10000.0;
     paramLP[ii].typ = 0;
     paramLP[ii].bypass = false;
   }
@@ -306,6 +306,9 @@ void initUserParams( void )
     paramGain[ii].gain = 0.0;
     paramGain[ii].mute = false;
   }
+
+  masterVolume.val = -60.0;
+
 }
 
 //==============================================================================
@@ -313,7 +316,22 @@ void initUserParams( void )
  */
 void readSettings( void )
 {
-  Serial.println( "Reading settings.ini" );
+  if( !SPIFFS.exists( "/settings.ini" ) )
+  {
+    Serial.print( "Writing default settings.ini..." );
+
+    Settings.ssid = "";
+    Settings.password = "";
+    Settings.addonid = ADDON_CUSTOM;
+    Settings.vpot = false;
+    writeSettings();
+
+    Serial.println( "[OK]" );
+    return;
+  }
+
+  Serial.print( "Reading settings.ini..." );
+
   File fileSettings = SPIFFS.open( "/settings.ini" );
 
   if( fileSettings )
@@ -336,15 +354,18 @@ void readSettings( void )
     else
       Settings.vpot = false;
 
+    Serial.println( "[OK]" );
     Serial.println( "Device config" );
     //Serial.print( "PID: " ); Serial.println( Settings.pid );
     Serial.print( "AID: " ); Serial.println( Settings.addonid );
     Serial.print( "Volume Poti: " ); Serial.println( Settings.vpot ); 
+    Serial.println( "[OK]" );
   }
   else
     Serial.println( "[ERROR] readSettings(): Opening settings.ini failed." );
 
   fileSettings.close();
+
 }
 
 //==============================================================================
@@ -352,7 +373,6 @@ void readSettings( void )
  */
 void writeSettings( void )
 {
-  Serial.println( "Writing settings.ini" );
   File fileSettings = SPIFFS.open( "/settings.ini", "w" );
   
   if( fileSettings )
@@ -378,6 +398,13 @@ void writeSettings( void )
 void readPluginMeta( void )
 {
   Serial.print( "Reading plugin.ini......" );
+
+  if( !SPIFFS.exists( "/plugin.ini" ) )
+  {
+    Serial.println( "File does not exist yet" );
+    return;
+  }
+
   File filePluginMeta = SPIFFS.open( "/plugin.ini" );
 
   if( filePluginMeta )
@@ -409,6 +436,8 @@ void readPluginMeta( void )
  
     for( int ii = 0; ii < 8; ii++ )
       inputSelector.port[ii] = static_cast<uint16_t>(jsonPluginMeta["port"][ii].as<String>().toInt());
+
+    masterVolume.addr = jsonPluginMeta["master"].as<String>().toInt();
   }
   else
   {
@@ -427,6 +456,12 @@ void uploadDspFirmware( void )
 {
   Serial.print( "Init dsp......" );
 
+  if( !SPIFFS.exists( "/dsp.fw" ) )
+  {
+    Serial.println( "File does not exist yet" );
+    return;
+  }
+
   fileDspProgram = SPIFFS.open( "/dsp.fw" );
 
   uint32_t numBytesToRead = 0;
@@ -441,8 +476,6 @@ void uploadDspFirmware( void )
     int cntr = 0;
     while( cntr < len )
     {
-      //Serial.print( "Line: ");
-      //Serial.println(cntr);
       uint8_t byteRead;
       fileDspProgram.read( &byteRead, 1 );
       numBytesToRead = (numBytesToRead << 8) + (uint32_t)byteRead;
@@ -645,48 +678,48 @@ void uploadUserParams( void )
       Serial.println( "[ERROR] uploadUserParams(): Reading preset file failed." );
 
     fileUserParams.close();
+
+    //--- Now upload the parameters
+    Serial.print( "Uploading user parameters"  );
+    for( int ii = 0; ii < numInputs; ii++ )
+      setInput( paramInputs[ii].addrChn, paramInputs[ii].addrPort, paramInputs[ii].sel );
+    Serial.print( "." );
+
+    for( int ii = 0; ii < numHPs; ii++ )
+      setHighPass( ii );
+    Serial.print( "." );
+
+    for( int ii = 0; ii < numLShelvs; ii++ )
+      setLowShelving( ii );
+    Serial.print( "." );
+
+    for( int ii = 0; ii < numPEQs; ii++ )
+      setPEQ( ii );
+    Serial.print( "." );
+
+    for( int ii = 0; ii < numHShelvs; ii++ )
+      setHighShelving( ii );
+    Serial.print( "." );
+
+    for( int ii = 0; ii < numLPs; ii++ )
+      setLowPass( ii );
+    Serial.print( "." );
+
+    for( int ii = 0; ii < numPhases; ii++ )
+      setPhase( ii );
+    Serial.print( "." );
+
+    for( int ii = 0; ii < numDelays; ii++ )
+      setDelay( ii );
+    Serial.print( "." );
+
+    for( int ii = 0; ii < numGains; ii++ )
+      setGain( ii );
+    Serial.print( "." );
+
+    setMasterVolume();
+    Serial.println( "[OK]" );
   }
-
-  //--- Now upload the parameters
-  Serial.print( "Uploading user parameters"  );
-  for( int ii = 0; ii < numInputs; ii++ )
-    setInput( paramInputs[ii].addrChn, paramInputs[ii].addrPort, paramInputs[ii].sel );
-  Serial.print( "." );
-
-  for( int ii = 0; ii < numHPs; ii++ )
-    setHighPass( ii );
-  Serial.print( "." );
-
-  for( int ii = 0; ii < numLShelvs; ii++ )
-    setLowShelving( ii );
-  Serial.print( "." );
-
-  for( int ii = 0; ii < numPEQs; ii++ )
-    setPEQ( ii );
-  Serial.print( "." );
-
-  for( int ii = 0; ii < numHShelvs; ii++ )
-    setHighShelving( ii );
-  Serial.print( "." );
-
-  for( int ii = 0; ii < numLPs; ii++ )
-    setLowPass( ii );
-  Serial.print( "." );
-
-  for( int ii = 0; ii < numPhases; ii++ )
-    setPhase( ii );
-  Serial.print( "." );
-
-  for( int ii = 0; ii < numDelays; ii++ )
-    setDelay( ii );
-  Serial.print( "." );
-
-  for( int ii = 0; ii < numGains; ii++ )
-    setGain( ii );
-  Serial.print( "." );
-
-  setMasterVolume();
-  Serial.println( "[OK]" );
   
 }
 
@@ -1241,6 +1274,9 @@ void handlePostInputJson( AsyncWebServerRequest* request, uint8_t* data )
   //  Serial.write(data[i]);
   //Serial.println();
 
+  muteDAC();
+  delay(500);
+
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
   if( err )
@@ -1248,6 +1284,7 @@ void handlePostInputJson( AsyncWebServerRequest* request, uint8_t* data )
     Serial.print( "[ERROR] handlePostHpJson(): Deserialization failed. " );
     Serial.println( err.c_str() );
     request->send( 404, "text/plain", "" );
+    unmuteDAC();
     return;
   }
 
@@ -1265,6 +1302,8 @@ void handlePostInputJson( AsyncWebServerRequest* request, uint8_t* data )
   setInput( paramInputs[idx].addrChn, paramInputs[idx].addrPort, paramInputs[idx].sel );
        
   request->send(200, "text/plain", "");  
+
+  unmuteDAC();
 }
 
 //==============================================================================
@@ -1301,6 +1340,9 @@ void handlePostHpJson( AsyncWebServerRequest* request, uint8_t* data )
   //  Serial.write(data[i]);
   //Serial.println();
 
+  muteDAC();
+  delay(500);
+
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
   if( err )
@@ -1308,6 +1350,7 @@ void handlePostHpJson( AsyncWebServerRequest* request, uint8_t* data )
     Serial.print( "[ERROR] handlePostHpJson(): Deserialization failed. " );
     Serial.println( err.c_str() );
     request->send( 404, "text/plain", "" );
+    unmuteDAC();
     return;
   }
 
@@ -1332,6 +1375,9 @@ void handlePostHpJson( AsyncWebServerRequest* request, uint8_t* data )
   setHighPass( idx );
        
   request->send(200, "text/plain", "");  
+
+  unmuteDAC();
+
 }
 
 //==============================================================================
@@ -1403,6 +1449,9 @@ void handlePostLshelvJson( AsyncWebServerRequest* request, uint8_t* data )
   //  Serial.write(data[i]);
   //Serial.println();
 
+  muteDAC();
+  delay(500);
+
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
   if( err )
@@ -1410,6 +1459,7 @@ void handlePostLshelvJson( AsyncWebServerRequest* request, uint8_t* data )
     Serial.print( "[ERROR] handlePostHpJson(): Deserialization failed. " );
     Serial.println( err.c_str() );
     request->send( 404, "text/plain", "" );
+    unmuteDAC();
     return;
   }
 
@@ -1432,7 +1482,9 @@ void handlePostLshelvJson( AsyncWebServerRequest* request, uint8_t* data )
 
   setLowShelving( idx );
        
-  request->send(200, "text/plain", "");  
+  request->send(200, "text/plain", ""); 
+
+  unmuteDAC(); 
 }
 
 //==============================================================================
@@ -1501,6 +1553,9 @@ void handlePostPeqJson( AsyncWebServerRequest* request, uint8_t* data )
   //  Serial.write(data[i]);
   //Serial.println();
 
+  muteDAC();
+  delay(500);
+
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
   if( err )
@@ -1508,6 +1563,7 @@ void handlePostPeqJson( AsyncWebServerRequest* request, uint8_t* data )
     Serial.print( "[ERROR] handlePostPeqJson(): Deserialization failed. " );
     Serial.println( err.c_str() );
     request->send( 404, "text/plain", "" );
+    unmuteDAC();
     return;
   }
 
@@ -1531,6 +1587,8 @@ void handlePostPeqJson( AsyncWebServerRequest* request, uint8_t* data )
   setPEQ( idx );
 
   request->send(200, "text/plain", "");  
+
+  unmuteDAC();
 }
 
 //==============================================================================
@@ -1599,6 +1657,9 @@ void handlePostHshelvJson( AsyncWebServerRequest* request, uint8_t* data )
   //  Serial.write(data[i]);
   //Serial.println();
 
+  muteDAC();
+  delay(500);
+
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
   if( err )
@@ -1606,6 +1667,7 @@ void handlePostHshelvJson( AsyncWebServerRequest* request, uint8_t* data )
     Serial.print( "[ERROR] handlePostHpJson(): Deserialization failed. " );
     Serial.println( err.c_str() );
     request->send( 404, "text/plain", "" );
+    unmuteDAC();
     return;
   }
 
@@ -1629,6 +1691,8 @@ void handlePostHshelvJson( AsyncWebServerRequest* request, uint8_t* data )
   setHighShelving( idx );
        
   request->send(200, "text/plain", "");  
+
+  unmuteDAC();
 }
 
 //==============================================================================
@@ -1697,6 +1761,9 @@ void handlePostLpJson( AsyncWebServerRequest* request, uint8_t* data )
   //  Serial.write(data[i]);
   //Serial.println();
 
+  muteDAC();
+  delay(500);
+
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
   if( err )
@@ -1704,6 +1771,7 @@ void handlePostLpJson( AsyncWebServerRequest* request, uint8_t* data )
     Serial.print( "[ERROR] handlePostLpJson(): Deserialization failed. " );
     Serial.println( err.c_str() );
     request->send( 404, "text/plain", "" );
+    unmuteDAC();
     return;
   }
 
@@ -1727,7 +1795,9 @@ void handlePostLpJson( AsyncWebServerRequest* request, uint8_t* data )
 
   setLowPass( idx );
 
-  request->send(200, "text/plain", "");  
+  request->send(200, "text/plain", ""); 
+
+  unmuteDAC(); 
 }
 
 //==============================================================================
@@ -1800,6 +1870,9 @@ void handlePostPhaseJson( AsyncWebServerRequest* request, uint8_t* data )
   //  Serial.write(data[i]);
   //Serial.println();
 
+  muteDAC();
+  delay(500);
+
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
   if( err )
@@ -1807,6 +1880,7 @@ void handlePostPhaseJson( AsyncWebServerRequest* request, uint8_t* data )
     Serial.print( "[ERROR] handlePostPhaseJson(): Deserialization failed. " );
     Serial.println( err.c_str() );
     request->send( 404, "text/plain", "" );
+    unmuteDAC();
     return;
   }
 
@@ -1828,6 +1902,8 @@ void handlePostPhaseJson( AsyncWebServerRequest* request, uint8_t* data )
   setPhase( idx );
 
   request->send(200, "text/plain", "");  
+
+  unmuteDAC();
 }
 
 //==============================================================================
@@ -1896,6 +1972,9 @@ void handlePostDelayJson( AsyncWebServerRequest* request, uint8_t* data )
   //  Serial.write(data[i]);
   //Serial.println();
 
+  muteDAC();
+  delay(500);
+
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
   if( err )
@@ -1903,6 +1982,7 @@ void handlePostDelayJson( AsyncWebServerRequest* request, uint8_t* data )
     Serial.print( "[ERROR] handlePostDelayJson(): Deserialization failed. " );
     Serial.println( err.c_str() );
     request->send( 404, "text/plain", "" );
+    unmuteDAC();
     return;
   }
 
@@ -1921,6 +2001,8 @@ void handlePostDelayJson( AsyncWebServerRequest* request, uint8_t* data )
   setDelay( idx );
       
   request->send(200, "text/plain", "");  
+
+  unmuteDAC();
 }
 
 //==============================================================================
@@ -1955,6 +2037,9 @@ void handlePostGainJson( AsyncWebServerRequest* request, uint8_t* data )
   //  Serial.write(data[i]);
   //Serial.println();
 
+  muteDAC();
+  delay(500);
+
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
   if( err )
@@ -1962,6 +2047,7 @@ void handlePostGainJson( AsyncWebServerRequest* request, uint8_t* data )
     Serial.print( "[ERROR] handlePostGainJson(): Deserialization failed. " );
     Serial.println( err.c_str() );
     request->send( 404, "text/plain", "" );
+    unmuteDAC();
     return;
   }
 
@@ -1981,6 +2067,8 @@ void handlePostGainJson( AsyncWebServerRequest* request, uint8_t* data )
   setGain( idx );  
        
   request->send(200, "text/plain", "");  
+
+  unmuteDAC();
 }
 
 //==============================================================================
@@ -2041,15 +2129,18 @@ void handlePostMasterVolumeJson( AsyncWebServerRequest* request, uint8_t* data )
  */
 void setMasterVolume( void )
 {
-  uint16_t reg = masterVolume.addr;
-  uint32_t rxval = convertTo824( pow( 10.0, masterVolume.val / 20.0 ) );
+  if( masterVolume.addr != 0x0000 )
+  {
+    uint16_t reg = masterVolume.addr;
+    uint32_t rxval = convertTo824( pow( 10.0, masterVolume.val / 20.0 ) );
 
-  byte val[4];
-  val[0] = (rxval >> 24 ) & 0xFF;
-  val[1] = (rxval >> 16 ) & 0xFF;
-  val[2] = (rxval >> 8 ) & 0xFF;
-  val[3] = rxval & 0xFF;
-  ADAU1452_WRITE_BLOCK( reg, val, 4 ); 
+    byte val[4];
+    val[0] = (rxval >> 24 ) & 0xFF;
+    val[1] = (rxval >> 16 ) & 0xFF;
+    val[2] = (rxval >> 8 ) & 0xFF;
+    val[3] = rxval & 0xFF;
+    ADAU1452_WRITE_BLOCK( reg, val, 4 ); 
+  }
 }
 
 //==============================================================================
@@ -2064,6 +2155,9 @@ void handlePostPresetJson( AsyncWebServerRequest* request, uint8_t* data )
   //  Serial.write(data[i]);
   //Serial.println();
 
+  muteDAC();
+  delay(500);
+
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
   if( err )
@@ -2071,6 +2165,7 @@ void handlePostPresetJson( AsyncWebServerRequest* request, uint8_t* data )
     Serial.print( "[ERROR] handlePostPresetJson(): Deserialization failed. " );
     Serial.println( err.c_str() );
     request->send( 404, "text/plain", "" );
+    unmuteDAC();
     return;
   }
 
@@ -2082,7 +2177,8 @@ void handlePostPresetJson( AsyncWebServerRequest* request, uint8_t* data )
   initUserParams();
   uploadUserParams();
        
-  request->send(200, "text/plain", "");  
+  request->send(200, "text/plain", "");
+  unmuteDAC();  
 }
  
 //==============================================================================
@@ -2129,6 +2225,9 @@ void handlePostConfigJson( AsyncWebServerRequest* request, uint8_t* data )
 void handlePostStore( AsyncWebServerRequest* request, uint8_t* data )
 {
   Serial.println( "POST /store" );
+
+  muteDAC();
+  delay(500);
 
   String fileName = presetUsrparamFile[currentPreset];
 
@@ -2267,6 +2366,8 @@ void handlePostStore( AsyncWebServerRequest* request, uint8_t* data )
   Serial.println( "bytes" );
 
   request->send(200, "text/plain", "");  
+
+  unmuteDAC();
 }
 
 //==============================================================================
@@ -2281,6 +2382,9 @@ void handlePostAddonConfigJson( AsyncWebServerRequest* request, uint8_t* data )
   //  Serial.write(data[i]);
   //Serial.println();
 
+  muteDAC();
+  delay(500);
+
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
   if( err )
@@ -2288,6 +2392,7 @@ void handlePostAddonConfigJson( AsyncWebServerRequest* request, uint8_t* data )
     Serial.print( "[ERROR] handlePostAddonConfig(): Deserialization failed. " );
     Serial.println( err.c_str() );
     request->send( 404, "text/plain", "" );
+    unmuteDAC();
     return;
   }
 
@@ -2309,6 +2414,8 @@ void handlePostAddonConfigJson( AsyncWebServerRequest* request, uint8_t* data )
   }
 
   request->send(200, "text/plain", "");  
+
+  unmuteDAC();
 }
 
 //==============================================================================
