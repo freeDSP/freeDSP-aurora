@@ -10,7 +10,7 @@
 #include "AudioFilterFactory.h"
 #include "fallback.h"
 
-#define VERSION_STR "v2.0.0-alpha.4"
+#define VERSION_STR "v2.0.0-alpha.5"
 
 #define I2C_SDA_PIN 17
 #define I2C_SCL_PIN 16
@@ -409,7 +409,7 @@ void readPluginMeta( void )
 
   if( filePluginMeta )
   {
-    StaticJsonDocument<1024> jsonDoc;
+    StaticJsonDocument<4096> jsonDoc;
     DeserializationError err = deserializeJson( jsonDoc, filePluginMeta );
     if( err )
     {
@@ -419,14 +419,14 @@ void readPluginMeta( void )
     }
 
     JsonObject jsonPluginMeta = jsonDoc.as<JsonObject>();
-    numHPs = jsonPluginMeta["hp"].as<String>().toInt();
-    numLShelvs = jsonPluginMeta["lshelv"].as<String>().toInt();
-    numPEQs = jsonPluginMeta["peq"].as<String>().toInt();
-    numHShelvs = jsonPluginMeta["hshelv"].as<String>().toInt();
-    numLPs = jsonPluginMeta["lp"].as<String>().toInt();
-    numPhases = jsonPluginMeta["phase"].as<String>().toInt();
-    numDelays = jsonPluginMeta["dly"].as<String>().toInt();
-    numGains = jsonPluginMeta["gain"].as<String>().toInt();
+    numHPs = jsonPluginMeta["nhp"].as<String>().toInt();
+    numLShelvs = jsonPluginMeta["nlshelv"].as<String>().toInt();
+    numPEQs = jsonPluginMeta["npeq"].as<String>().toInt();
+    numHShelvs = jsonPluginMeta["nhshelv"].as<String>().toInt();
+    numLPs = jsonPluginMeta["nlp"].as<String>().toInt();
+    numPhases = jsonPluginMeta["nphase"].as<String>().toInt();
+    numDelays = jsonPluginMeta["ndly"].as<String>().toInt();
+    numGains = jsonPluginMeta["ngain"].as<String>().toInt();
 
     for( int ii = 0; ii < 8; ii++ )
       inputSelector.analog[ii] = static_cast<uint16_t>(jsonPluginMeta["analog"][ii].as<String>().toInt());
@@ -436,6 +436,46 @@ void readPluginMeta( void )
  
     for( int ii = 0; ii < 8; ii++ )
       inputSelector.port[ii] = static_cast<uint16_t>(jsonPluginMeta["port"][ii].as<String>().toInt());
+
+    for( int ii = 0; ii < numInputs; ii++ )
+    {
+      paramInputs[ii].addrChn = static_cast<uint16_t>(jsonPluginMeta["analog"][ii].as<String>().toInt());
+      paramInputs[ii].addrPort = static_cast<uint16_t>(jsonPluginMeta["port"][ii].as<String>().toInt());
+    }
+
+    for( int ii = 0; ii < numHPs; ii++ )
+    {
+      paramHP[ii].addr[0] = static_cast<uint16_t>(jsonPluginMeta["hp"][0+ii*4]);
+      paramHP[ii].addr[1] = static_cast<uint16_t>(jsonPluginMeta["hp"][1+ii*4]);
+      paramHP[ii].addr[2] = static_cast<uint16_t>(jsonPluginMeta["hp"][2+ii*4]);
+      paramHP[ii].addr[3] = static_cast<uint16_t>(jsonPluginMeta["hp"][3+ii*4]);
+    }
+
+    for( int ii = 0; ii < numLShelvs; ii++ )
+      paramLshelv[ii].addr = static_cast<uint16_t>(jsonPluginMeta["lshelv"][ii]);
+
+    for( int ii = 0; ii < numPEQs; ii++ )
+      paramPeq[ii].addr = static_cast<uint16_t>(jsonPluginMeta["peq"][ii]);
+
+    for( int ii = 0; ii < numHShelvs; ii++ )
+      paramHshelv[ii].addr = static_cast<uint16_t>(jsonPluginMeta["hshelv"][ii]);
+
+    for( int ii = 0; ii < numLPs; ii++ )
+    {
+      paramLP[ii].addr[0] = static_cast<uint16_t>(jsonPluginMeta["lp"][0+ii*4]);
+      paramLP[ii].addr[1] = static_cast<uint16_t>(jsonPluginMeta["lp"][1+ii*4]);
+      paramLP[ii].addr[2] = static_cast<uint16_t>(jsonPluginMeta["lp"][2+ii*4]);
+      paramLP[ii].addr[3] = static_cast<uint16_t>(jsonPluginMeta["lp"][3+ii*4]);
+    }
+
+    for( int ii = 0; ii < numPhases; ii++ )
+      paramPhase[ii].addr = static_cast<uint16_t>(jsonPluginMeta["phase"][ii]);
+
+    for( int ii = 0; ii < numDelays; ii++ )
+      paramDelay[ii].addr = static_cast<uint16_t>(jsonPluginMeta["dly"][ii]);
+
+    for( int ii = 0; ii < numGains; ii++ )
+      paramGain[ii].addr = static_cast<uint16_t>(jsonPluginMeta["gain"][ii]);
 
     masterVolume.addr = jsonPluginMeta["master"].as<String>().toInt();
   }
@@ -679,47 +719,48 @@ void uploadUserParams( void )
 
     fileUserParams.close();
 
-    //--- Now upload the parameters
-    Serial.print( "Uploading user parameters"  );
-    for( int ii = 0; ii < numInputs; ii++ )
-      setInput( paramInputs[ii].addrChn, paramInputs[ii].addrPort, paramInputs[ii].sel );
-    Serial.print( "." );
-
-    for( int ii = 0; ii < numHPs; ii++ )
-      setHighPass( ii );
-    Serial.print( "." );
-
-    for( int ii = 0; ii < numLShelvs; ii++ )
-      setLowShelving( ii );
-    Serial.print( "." );
-
-    for( int ii = 0; ii < numPEQs; ii++ )
-      setPEQ( ii );
-    Serial.print( "." );
-
-    for( int ii = 0; ii < numHShelvs; ii++ )
-      setHighShelving( ii );
-    Serial.print( "." );
-
-    for( int ii = 0; ii < numLPs; ii++ )
-      setLowPass( ii );
-    Serial.print( "." );
-
-    for( int ii = 0; ii < numPhases; ii++ )
-      setPhase( ii );
-    Serial.print( "." );
-
-    for( int ii = 0; ii < numDelays; ii++ )
-      setDelay( ii );
-    Serial.print( "." );
-
-    for( int ii = 0; ii < numGains; ii++ )
-      setGain( ii );
-    Serial.print( "." );
-
-    setMasterVolume();
-    Serial.println( "[OK]" );
   }
+
+  //--- Now upload the parameters
+  Serial.print( "Uploading user parameters..."  );
+  for( int ii = 0; ii < numInputs; ii++ )
+    setInput( paramInputs[ii].addrChn, paramInputs[ii].addrPort, paramInputs[ii].sel );
+  Serial.print( "." );
+
+  for( int ii = 0; ii < numHPs; ii++ )
+    setHighPass( ii );
+  Serial.print( "." );
+
+  for( int ii = 0; ii < numLShelvs; ii++ )
+    setLowShelving( ii );
+  Serial.print( "." );
+
+  for( int ii = 0; ii < numPEQs; ii++ )
+    setPEQ( ii );
+  Serial.print( "." );
+
+  for( int ii = 0; ii < numHShelvs; ii++ )
+    setHighShelving( ii );
+  Serial.print( "." );
+
+  for( int ii = 0; ii < numLPs; ii++ )
+    setLowPass( ii );
+  Serial.print( "." );
+
+  for( int ii = 0; ii < numPhases; ii++ )
+    setPhase( ii );
+  Serial.print( "." );
+
+  for( int ii = 0; ii < numDelays; ii++ )
+    setDelay( ii );
+  Serial.print( "." );
+
+  for( int ii = 0; ii < numGains; ii++ )
+    setGain( ii );
+  Serial.print( "." );
+
+  setMasterVolume();
+  Serial.println( "[OK]" );
   
 }
 
@@ -1390,7 +1431,7 @@ void setHighPass( int idx )
   float b[12] = { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0 };
   byte val[4];
   uint32_t floatval;
-  if( !paramHP[idx].bypass )
+  if( !(paramHP[idx].bypass) )
     AudioFilterFactory::makeHighPass( a, b, paramHP[idx].typ, paramHP[idx].fc, sampleRate );
 
   for( int ii = 0; ii < 4; ii++ )
@@ -1497,7 +1538,7 @@ void setLowShelving( int idx )
   float b[3] = { 1.0, 0.0, 0.0 };
   byte val[4];
   uint32_t floatval;
-  if( !paramLshelv[idx].bypass )
+  if( !(paramLshelv[idx].bypass) )
     AudioFilterFactory::makeLowShelv( a, b, paramLshelv[idx].gain, paramLshelv[idx].fc, paramLshelv[idx].slope, sampleRate );
 
   uint16_t addr = paramLshelv[idx].addr;
@@ -1601,7 +1642,7 @@ void setPEQ( int idx )
   float b[3] = { 1.0, 0.0, 0.0 };
   byte val[4];
   uint32_t floatval;
-  if( !paramPeq[idx].bypass )
+  if( !(paramPeq[idx].bypass) )
     AudioFilterFactory::makeParametricEQ( a, b, paramPeq[idx].gain, paramPeq[idx].fc, paramPeq[idx].Q, sampleRate );
 
   uint32_t addr = paramPeq[idx].addr;
@@ -1705,7 +1746,7 @@ void setHighShelving( int idx )
   float b[3] = { 1.0, 0.0, 0.0 };
   byte val[4];
   uint32_t floatval;
-  if( !paramHshelv[idx].bypass )
+  if( !(paramHshelv[idx].bypass) )
     AudioFilterFactory::makeHighShelv( a, b, paramHshelv[idx].gain, paramHshelv[idx].fc, paramHshelv[idx].slope, sampleRate );
 
   uint16_t addr = paramHshelv[idx].addr;
@@ -1810,7 +1851,7 @@ void setLowPass( int idx )
   float b[12] = { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0 };
   byte val[4];
   uint32_t floatval;
-  if( !paramLP[idx].bypass )
+  if( !(paramLP[idx].bypass) )
     AudioFilterFactory::makeLowPass( a, b, paramLP[idx].typ, paramLP[idx].fc, sampleRate );
 
   for( int ii = 0; ii < 4; ii++ )
@@ -2079,9 +2120,9 @@ void setGain( int idx )
 {
   uint32_t float824val;
   if( paramGain[idx].mute )
-    convertTo824( 0.0 );
+    float824val = convertTo824( 0.0 );
   else
-    convertTo824( pow( 10.0, paramGain[idx].gain / 20.0 ) );
+    float824val = convertTo824( pow( 10.0, paramGain[idx].gain / 20.0 ) );
   
   byte val[4];
   val[0] = (float824val >> 24 ) & 0xFF;

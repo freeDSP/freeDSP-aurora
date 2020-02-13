@@ -15,7 +15,7 @@
       <li><a onclick="storePreset()">Store Preset</a></li>
     </ul>
     <div style="position:absolute;bottom:30px;right:30px;">
-      <p class="info">GUI: v2.0.0-alpha.4</p>
+      <p class="info">GUI: v2.0.0-alpha.5</p>
       <p class="info" id="fw">FW: 0.0.0</p>
       <p class="info" id="ip">Local Wifi IP: 0.0.0.0</p>
       </div>
@@ -577,7 +577,7 @@
           <option value="10">LR 48</option>
         </select>
       </td></tr>
-      <tr><td><input type="number" id="hp_fc" style="width:95%;"></td><td style="text-align:left;width:10%;">Hz</td></tr>
+      <tr><td><input type="number" id="hp_fc" style="width:95%;" step="any" min="1" max="20000"></td><td style="text-align:left;width:10%;">Hz</td></tr>
       <tr><td colspan="2"><button class="send" id="hp_bypass" onclick="bypass('hp_bypass');sendParam('hp');" data-bypass="0">Bypass</button></td</tr>
       <tr><td colspan="2"><button class="send" onclick="sendParam('hp')">Send</button></td</tr>
       </table>
@@ -592,9 +592,9 @@
       <tr><td class="headline">Low Shelving</td><td class="close" onclick="closeModal('lowShelv')">&times;</td></tr>
       </table>
       </td></tr>
-      <tr><td><input type="number" id="ls_v" style="width:95%;"></td><td style="text-align:left;width:10%;">dB</td></tr>
-      <tr><td><input type="number" id="ls_fc" style="width:95%;"></td><td style="text-align:left;width:10%;">Hz</td></tr>
-      <tr><td><input type="number" id="ls_s" style="width:95%;"></td><td style="text-align:left;width:10%;">S</td></tr>
+      <tr><td><input type="number" id="ls_v" style="width:95%;" step="any" min="-24" max="24"></td><td style="text-align:left;width:10%;">dB</td></tr>
+      <tr><td><input type="number" id="ls_fc" style="width:95%;" step="any" min="1" max="20000"></td><td style="text-align:left;width:10%;">Hz</td></tr>
+      <tr><td><input type="number" id="ls_s" style="width:95%;" step="0.01" min="0.1" max="2"></td><td style="text-align:left;width:10%;">S</td></tr>
       <tr><td colspan="2"><button class="send" id="ls_bypass" onclick="bypass('ls_bypass');sendParam('lshelv');" data-bypass="0">Bypass</button></td</tr>
       <tr><td colspan="2"><button class="send" onclick="sendParam('lshelv')">Send</button></td</tr>
       </table>
@@ -609,9 +609,9 @@
       <tr><td class="headline">Parametric EQ</td><td class="close" onclick="closeModal('peq')">&times;</td></tr>
       </table>
       </td></tr>
-      <tr><td><input type="number" id="peq_v" style="width:95%;"></td><td style="text-align:left;width:10%;">dB</td></tr>
-      <tr><td><input type="number" id="peq_fc" style="width:95%;"></td><td style="text-align:left;width:10%;">Hz</td></tr>
-      <tr><td><input type="number" id="peq_q" style="width:95%;"></td><td style="text-align:left;width:10%;">Q</td></tr>
+      <tr><td><input type="number" id="peq_v" style="width:95%;" step="any" min="-24" max="24"></td><td style="text-align:left;width:10%;">dB</td></tr>
+      <tr><td><input type="number" id="peq_fc" style="width:95%;" step="any" min="1" max="20000"></td><td style="text-align:left;width:10%;">Hz</td></tr>
+      <tr><td><input type="number" id="peq_q" style="width:95%;" step="any" min="0.1" max="100"></td><td style="text-align:left;width:10%;">Q</td></tr>
       <tr><td colspan="2"><button class="send" id="peq_bypass" onclick="bypass('peq_bypass');sendParam('peq');" data-bypass="0">Bypass</button></td</tr>
       <tr><td colspan="2"><button class="send" onclick="sendParam('peq')">Send</button></td</tr>
       </table>
@@ -626,9 +626,9 @@
       <tr><td class="headline">High Shelving</td><td class="close" onclick="closeModal('highShelv')">&times;</td></tr>
       </table>
       </td></tr>
-      <tr><td><input type="number" id="hs_v" style="width:95%;"></td><td style="text-align:left;width:10%;">dB</td></tr>
-      <tr><td><input type="number" id="hs_fc" style="width:95%;"></td><td style="text-align:left;width:10%;">Hz</td></tr>
-      <tr><td><input type="number" id="hs_s" style="width:95%;"></td><td style="text-align:left;width:10%;">S</td></tr>
+      <tr><td><input type="number" id="hs_v" style="width:95%;" step="any" min="-24" max="24"></td><td style="text-align:left;width:10%;">dB</td></tr>
+      <tr><td><input type="number" id="hs_fc" style="width:95%;" step="any" min="1" max="20000"></td><td style="text-align:left;width:10%;">Hz</td></tr>
+      <tr><td><input type="number" id="hs_s" style="width:95%;" step="0.01" min="0.1" max="2"></td><td style="text-align:left;width:10%;">S</td></tr>
       <tr><td colspan="2"><button class="send" id="hs_bypass" onclick="bypass('hs_bypass');sendParam('hshelv');" data-bypass="0">Bypass</button></td</tr>
       <tr><td colspan="2"><button class="send" onclick="sendParam('hshelv')">Send</button></td</tr>
       </table>
@@ -658,7 +658,7 @@
           <option value="10">LR 48</option>
         </select>
       </td></tr>
-      <tr><td><input type="number" id="lp_fc" style="width:95%;"></td><td style="text-align:left;width:10%;">Hz</td></tr>
+      <tr><td><input type="number" id="lp_fc" style="width:95%;" step="any" min="1" max="20000"></td><td style="text-align:left;width:10%;">Hz</td></tr>
       <tr><td colspan="2"><button class="send" id="lp_bypass" onclick="bypass('lp_bypass');sendParam('lp');" data-bypass="0">Bypass</button></td</tr>
       <tr><td colspan="2"><button class="send" onclick="sendParam('lp')">Send</button></td</tr>
       </table>
@@ -673,8 +673,8 @@
       <tr><td class="headline">Phase</td><td class="close" onclick="closeModal('phase')">&times;</td></tr>
       </table>
       </td></tr>
-      <tr><td><input type="number" id="ph_fc" style="width:95%;"></td><td style="text-align:left;width:10%;">Hz</td></tr>
-      <tr><td><input type="number" id="ph_q" style="width:95%;"></td><td style="text-align:left;width:10%;">Q</td></tr>
+      <tr><td><input type="number" id="ph_fc" style="width:95%;" step="any" min="1" max="20000"></td><td style="text-align:left;width:10%;">Hz</td></tr>
+      <tr><td><input type="number" id="ph_q" style="width:95%;" step="any" min="0.1" max="100"></td><td style="text-align:left;width:10%;">Q</td></tr>
       <tr><td colspan="2"><input type="checkbox" id="ph_inv">Invert</td></tr>
       <tr><td colspan="2"><button class="send" id="ph_bypass" onclick="bypass('ph_bypass');sendParam('phase');" data-bypass="0">Bypass</button></td</tr>
       <tr><td colspan="2"><button class="send" onclick="sendParam('phase')">Send</button></td</tr>
@@ -690,7 +690,7 @@
       <tr><td class="headline">Delay</td><td class="close" onclick="closeModal('delay')">&times;</td></tr>
       </table>
       </td></tr>
-      <tr><td><input type="number" id="delayval" style="width:95%;"></td><td style="text-align:left;width:10%;">ms</td></tr>
+      <tr><td><input type="number" id="delayval" style="width:95%;" step="any" min="0" max="100"></td><td style="text-align:left;width:10%;">ms</td></tr>
       <tr><td colspan="2"><button class="send" id="delay_bypass" onclick="bypass('delay_bypass');sendParam('delay');" data-bypass="0">Bypass</button></td</tr>
       <tr><td colspan="2"><button class="send" onclick="sendParam('delay')">Send</button></td</tr>
       </table>
@@ -705,7 +705,7 @@
       <tr><td class="headline">Gain</td><td class="close" onclick="closeModal('gain')">&times;</td></tr>
       </table>
       </td></tr>
-      <tr><td><input type="number" id="gainval" style="width:95%;"></td><td style="text-align:left;width:10%;">dB</td></tr>
+      <tr><td><input type="number" id="gainval" style="width:95%;" step="any" min="-120" max="0"></td><td style="text-align:left;width:10%;">dB</td></tr>
       <tr><td colspan="2"><button class="send" id="mute" onclick="mute()" data-mute="0">Mute</button></td</tr>
       <tr><td colspan="2"><button class="send" onclick="sendParam('gain')">Send</button></td</tr>
       </table>
