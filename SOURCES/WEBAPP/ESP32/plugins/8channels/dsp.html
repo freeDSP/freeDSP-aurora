@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="en">
+<meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
 <head>
 <title>AURORA DSP</title>
 <link rel="stylesheet" href="dark.css">
@@ -15,7 +15,7 @@
       <li><a onclick="storePreset()">Store Preset</a></li>
     </ul>
     <div style="position:absolute;bottom:30px;right:30px;">
-      <p class="info">GUI: v2.0.0-alpha.5</p>
+      <p class="info">GUI: v2.0.0-alpha.6</p>
       <p class="info" id="fw">FW: 0.0.0</p>
       <p class="info" id="ip">Local Wifi IP: 0.0.0.0</p>
       </div>
@@ -888,11 +888,11 @@
     }).catch (function (error) {console.log(error);
     });
   }
-  function getMVol(addr){
-    fetch("/mvol").then (function (response) {
-      return response.json();
-    }).then (function (data) {  
-      document.getElementById("mvol").dataset.addr=addr;
+  //function getMVol(addr){
+  function getMVol(){
+    fetch("/mvol").then (function (response) {return response.json();})
+    .then(function (data){  
+      //document.getElementById("mvol").dataset.addr=addr;
       document.getElementById("mvol").value=data.vol;
     }).catch (function (error) {console.log(error);
     });
@@ -1031,7 +1031,23 @@
     data.pre=p;
     fetch("/preset",{method:"POST",headers:{
     "Content-Type": "application/json"},
-    body:JSON.stringify(data)}).catch(function(error){console.log(error);});
+    body:JSON.stringify(data)})
+    .then(function(response){return fetch("/addoncfg");})
+    .then(function(response){return response.json();})
+    .then(function(cfg){
+      if(document.getElementById("aid").value==2){
+      if(cfg.addcfg==0) document.getElementById("spdif_b").value="0x00";
+        else if(cfg.addcfg==1) document.getElementById("spdif_b").value="0x01";
+        else if(cfg.addcfg==2) document.getElementById("spdif_b").value="0x02";
+        else if(cfg.addcfg==3) document.getElementById("spdif_b").value="0x03";
+        else if(cfg.addcfg==4) document.getElementById("spdif_b").value="0x04";
+        else if(cfg.addcfg==5) document.getElementById("spdif_b").value="0x05";
+        else if(cfg.addcfg==6) document.getElementById("spdif_b").value="0x06";
+        else if(cfg.addcfg==7) document.getElementById("spdif_b").value="0x07";
+      }
+      return cfg;})
+    .then(function(response){getMVol();return response;})
+    .catch(function(error){console.log(error);});
     document.getElementById("pre0").style.backgroundColor = "#101010";
     document.getElementById("pre1").style.backgroundColor = "#101010";
     document.getElementById("pre2").style.backgroundColor = "#101010";
@@ -1105,7 +1121,11 @@
   }
   function storePreset(){
     var data={};
-    fetch("/store",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)});
+    fetch("/store",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)})
+    .then(function(response){
+      alert("Success! Your preset has been stored.");
+      return response;})
+    .catch(function(err){console.log(err);});
   }
   function onLoad(){
     hideAddon();
@@ -1148,6 +1168,7 @@
       document.getElementById("chn5").value=data.in5;
       document.getElementById("chn6").value=data.in6;
       document.getElementById("chn7").value=data.in7;
+      getMVol();
     }).catch(function(err){console.log(err);
     });
   }
@@ -1181,7 +1202,6 @@
     var prg=document.getElementById('prg');
 		prg.style.width="5%";
     document.getElementById("wait").style.display="block";
-
     fetch("/upload?fname=dark.css",{method:'POST',headers:{},body:css})
     .then(function(response){
       prg.style.width="25%";

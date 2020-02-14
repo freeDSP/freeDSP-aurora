@@ -10,7 +10,7 @@
 #include "AudioFilterFactory.h"
 #include "fallback.h"
 
-#define VERSION_STR "v2.0.0-alpha.5"
+#define VERSION_STR "v2.0.0-alpha.6"
 
 #define I2C_SDA_PIN 17
 #define I2C_SCL_PIN 16
@@ -123,6 +123,8 @@ struct tInputSelector
 {
   uint16_t analog[8];
   uint16_t spdif[8];
+  uint16_t uac[8];
+  uint16_t exp[8];
   uint16_t port[8];
 };
 
@@ -139,14 +141,14 @@ tMasterVolume masterVolume = { 0x0000, -60.0 };
 tInputSelector inputSelector;
 
 int numInputs = MAX_NUM_INPUTS;
-int numHPs;
-int numLShelvs;
-int numPEQs;
-int numHShelvs;
-int numLPs;
-int numPhases;
-int numDelays;
-int numGains;
+int numHPs = MAX_NUM_HPS;
+int numLShelvs = MAX_NUM_LSHELVS;
+int numPEQs = MAX_NUM_PEQS;
+int numHShelvs = MAX_NUM_HSHELVS;
+int numLPs = MAX_NUM_LPS;
+int numPhases = MAX_NUM_PHASES;
+int numDelays = MAX_NUM_DELAYS;
+int numGains = MAX_NUM_GAINS;
 
 File fileDspProgram;
 File fileUpload;
@@ -433,6 +435,12 @@ void readPluginMeta( void )
     
     for( int ii = 0; ii < 8; ii++ )
       inputSelector.spdif[ii] = static_cast<uint16_t>(jsonPluginMeta["spdif"][ii].as<String>().toInt());
+
+    for( int ii = 0; ii < 8; ii++ )
+      inputSelector.uac[ii] = static_cast<uint16_t>(jsonPluginMeta["uac"][ii].as<String>().toInt());
+
+    for( int ii = 0; ii < 8; ii++ )
+      inputSelector.exp[ii] = static_cast<uint16_t>(jsonPluginMeta["exp"][ii].as<String>().toInt());
  
     for( int ii = 0; ii < 8; ii++ )
       inputSelector.port[ii] = static_cast<uint16_t>(jsonPluginMeta["port"][ii].as<String>().toInt());
@@ -933,19 +941,30 @@ void configDAC( void )
 }
 
 //==============================================================================
+/*! Set DAC into reset.
+ */
+void resetDAC( bool rst )
+{
+  if( rst )
+    AK4458_REGWRITE( AK4458_CONTROL1, 0b00001100 );
+  else
+    AK4458_REGWRITE( AK4458_CONTROL1, 0b00001101 );
+}
+
+//==============================================================================
 /*! Mute DAC
  */
-void muteDAC( void )
+void softMuteDAC( void )
 {
-  AK4458_REGWRITE( AK4458_CONTROL1, 0b00001100 );
+  AK4458_REGWRITE( AK4458_CONTROL2, 0b00100011 );
 }
 
 //==============================================================================
 /*! Unmute DAC
  */
-void unmuteDAC( void )
+void softUnmuteDAC( void )
 {
-  AK4458_REGWRITE( AK4458_CONTROL1, 0b00001101 );
+  AK4458_REGWRITE( AK4458_CONTROL2, 0b00100010 );
 }
 
 //==============================================================================
@@ -1262,6 +1281,28 @@ void handleGetConfigJson( AsyncWebServerRequest* request )
 }
 
 //==============================================================================
+/*! Handles the GET request for device configuration
+ *
+ */
+void handleGetAddonConfigJson( AsyncWebServerRequest* request )
+{
+  Serial.println( "GET /addoncfg" );
+
+  AsyncJsonResponse* response = new AsyncJsonResponse();
+  JsonVariant& jsonResponse = response->getRoot();
+
+  if( Settings.addonid == ADDON_B )
+  {
+    jsonResponse["addcfg"] = currentAddOnCfg[2];
+  }
+  else
+    jsonResponse["addcfg"] = 0;
+
+  response->setLength();
+  request->send(response);
+}
+
+//==============================================================================
 /*! Handles the GET request for all input selections
  *
  */
@@ -1315,7 +1356,7 @@ void handlePostInputJson( AsyncWebServerRequest* request, uint8_t* data )
   //  Serial.write(data[i]);
   //Serial.println();
 
-  muteDAC();
+  softMuteDAC();
   delay(500);
 
   DynamicJsonDocument jsonDoc(1024);
@@ -1325,7 +1366,7 @@ void handlePostInputJson( AsyncWebServerRequest* request, uint8_t* data )
     Serial.print( "[ERROR] handlePostHpJson(): Deserialization failed. " );
     Serial.println( err.c_str() );
     request->send( 404, "text/plain", "" );
-    unmuteDAC();
+    softUnmuteDAC();
     return;
   }
 
@@ -1344,7 +1385,7 @@ void handlePostInputJson( AsyncWebServerRequest* request, uint8_t* data )
        
   request->send(200, "text/plain", "");  
 
-  unmuteDAC();
+  softUnmuteDAC();
 }
 
 //==============================================================================
@@ -1381,7 +1422,7 @@ void handlePostHpJson( AsyncWebServerRequest* request, uint8_t* data )
   //  Serial.write(data[i]);
   //Serial.println();
 
-  muteDAC();
+  softMuteDAC();
   delay(500);
 
   DynamicJsonDocument jsonDoc(1024);
@@ -1391,15 +1432,11 @@ void handlePostHpJson( AsyncWebServerRequest* request, uint8_t* data )
     Serial.print( "[ERROR] handlePostHpJson(): Deserialization failed. " );
     Serial.println( err.c_str() );
     request->send( 404, "text/plain", "" );
-    unmuteDAC();
+    softUnmuteDAC();
     return;
   }
 
   JsonObject root = jsonDoc.as<JsonObject>();
-  Serial.println( root["idx"].as<String>() );
-  Serial.println( root["addr"].as<String>() );
-  Serial.println( root["fc"].as<String>() );
-  Serial.println( root["typ"].as<String>() );
 
   uint32_t idx = static_cast<uint32_t>(root["idx"].as<String>().toInt());
   paramHP[idx].addr[0] = static_cast<uint16_t>(root["addr0"].as<String>().toInt());
@@ -1417,7 +1454,7 @@ void handlePostHpJson( AsyncWebServerRequest* request, uint8_t* data )
        
   request->send(200, "text/plain", "");  
 
-  unmuteDAC();
+  softUnmuteDAC();
 
 }
 
@@ -1490,7 +1527,7 @@ void handlePostLshelvJson( AsyncWebServerRequest* request, uint8_t* data )
   //  Serial.write(data[i]);
   //Serial.println();
 
-  muteDAC();
+  softMuteDAC();
   delay(500);
 
   DynamicJsonDocument jsonDoc(1024);
@@ -1500,7 +1537,7 @@ void handlePostLshelvJson( AsyncWebServerRequest* request, uint8_t* data )
     Serial.print( "[ERROR] handlePostHpJson(): Deserialization failed. " );
     Serial.println( err.c_str() );
     request->send( 404, "text/plain", "" );
-    unmuteDAC();
+    softUnmuteDAC();
     return;
   }
 
@@ -1525,7 +1562,7 @@ void handlePostLshelvJson( AsyncWebServerRequest* request, uint8_t* data )
        
   request->send(200, "text/plain", ""); 
 
-  unmuteDAC(); 
+  softUnmuteDAC(); 
 }
 
 //==============================================================================
@@ -1594,7 +1631,7 @@ void handlePostPeqJson( AsyncWebServerRequest* request, uint8_t* data )
   //  Serial.write(data[i]);
   //Serial.println();
 
-  muteDAC();
+  softMuteDAC();
   delay(500);
 
   DynamicJsonDocument jsonDoc(1024);
@@ -1604,7 +1641,8 @@ void handlePostPeqJson( AsyncWebServerRequest* request, uint8_t* data )
     Serial.print( "[ERROR] handlePostPeqJson(): Deserialization failed. " );
     Serial.println( err.c_str() );
     request->send( 404, "text/plain", "" );
-    unmuteDAC();
+    delay(250);
+    softUnmuteDAC();
     return;
   }
 
@@ -1629,7 +1667,7 @@ void handlePostPeqJson( AsyncWebServerRequest* request, uint8_t* data )
 
   request->send(200, "text/plain", "");  
 
-  unmuteDAC();
+  softUnmuteDAC();
 }
 
 //==============================================================================
@@ -1698,7 +1736,7 @@ void handlePostHshelvJson( AsyncWebServerRequest* request, uint8_t* data )
   //  Serial.write(data[i]);
   //Serial.println();
 
-  muteDAC();
+  softMuteDAC();
   delay(500);
 
   DynamicJsonDocument jsonDoc(1024);
@@ -1708,7 +1746,7 @@ void handlePostHshelvJson( AsyncWebServerRequest* request, uint8_t* data )
     Serial.print( "[ERROR] handlePostHpJson(): Deserialization failed. " );
     Serial.println( err.c_str() );
     request->send( 404, "text/plain", "" );
-    unmuteDAC();
+    softUnmuteDAC();
     return;
   }
 
@@ -1733,7 +1771,7 @@ void handlePostHshelvJson( AsyncWebServerRequest* request, uint8_t* data )
        
   request->send(200, "text/plain", "");  
 
-  unmuteDAC();
+  softUnmuteDAC();
 }
 
 //==============================================================================
@@ -1802,7 +1840,7 @@ void handlePostLpJson( AsyncWebServerRequest* request, uint8_t* data )
   //  Serial.write(data[i]);
   //Serial.println();
 
-  muteDAC();
+  softMuteDAC();
   delay(500);
 
   DynamicJsonDocument jsonDoc(1024);
@@ -1812,7 +1850,7 @@ void handlePostLpJson( AsyncWebServerRequest* request, uint8_t* data )
     Serial.print( "[ERROR] handlePostLpJson(): Deserialization failed. " );
     Serial.println( err.c_str() );
     request->send( 404, "text/plain", "" );
-    unmuteDAC();
+    softUnmuteDAC();
     return;
   }
 
@@ -1838,7 +1876,7 @@ void handlePostLpJson( AsyncWebServerRequest* request, uint8_t* data )
 
   request->send(200, "text/plain", ""); 
 
-  unmuteDAC(); 
+  softUnmuteDAC(); 
 }
 
 //==============================================================================
@@ -1911,7 +1949,7 @@ void handlePostPhaseJson( AsyncWebServerRequest* request, uint8_t* data )
   //  Serial.write(data[i]);
   //Serial.println();
 
-  muteDAC();
+  softMuteDAC();
   delay(500);
 
   DynamicJsonDocument jsonDoc(1024);
@@ -1921,7 +1959,7 @@ void handlePostPhaseJson( AsyncWebServerRequest* request, uint8_t* data )
     Serial.print( "[ERROR] handlePostPhaseJson(): Deserialization failed. " );
     Serial.println( err.c_str() );
     request->send( 404, "text/plain", "" );
-    unmuteDAC();
+    softUnmuteDAC();
     return;
   }
 
@@ -1944,7 +1982,7 @@ void handlePostPhaseJson( AsyncWebServerRequest* request, uint8_t* data )
 
   request->send(200, "text/plain", "");  
 
-  unmuteDAC();
+  softUnmuteDAC();
 }
 
 //==============================================================================
@@ -2013,7 +2051,7 @@ void handlePostDelayJson( AsyncWebServerRequest* request, uint8_t* data )
   //  Serial.write(data[i]);
   //Serial.println();
 
-  muteDAC();
+  softMuteDAC();
   delay(500);
 
   DynamicJsonDocument jsonDoc(1024);
@@ -2023,7 +2061,7 @@ void handlePostDelayJson( AsyncWebServerRequest* request, uint8_t* data )
     Serial.print( "[ERROR] handlePostDelayJson(): Deserialization failed. " );
     Serial.println( err.c_str() );
     request->send( 404, "text/plain", "" );
-    unmuteDAC();
+    softUnmuteDAC();
     return;
   }
 
@@ -2043,7 +2081,7 @@ void handlePostDelayJson( AsyncWebServerRequest* request, uint8_t* data )
       
   request->send(200, "text/plain", "");  
 
-  unmuteDAC();
+  softUnmuteDAC();
 }
 
 //==============================================================================
@@ -2078,7 +2116,7 @@ void handlePostGainJson( AsyncWebServerRequest* request, uint8_t* data )
   //  Serial.write(data[i]);
   //Serial.println();
 
-  muteDAC();
+  softMuteDAC();
   delay(500);
 
   DynamicJsonDocument jsonDoc(1024);
@@ -2088,7 +2126,7 @@ void handlePostGainJson( AsyncWebServerRequest* request, uint8_t* data )
     Serial.print( "[ERROR] handlePostGainJson(): Deserialization failed. " );
     Serial.println( err.c_str() );
     request->send( 404, "text/plain", "" );
-    unmuteDAC();
+    softUnmuteDAC();
     return;
   }
 
@@ -2109,7 +2147,7 @@ void handlePostGainJson( AsyncWebServerRequest* request, uint8_t* data )
        
   request->send(200, "text/plain", "");  
 
-  unmuteDAC();
+  softUnmuteDAC();
 }
 
 //==============================================================================
@@ -2196,7 +2234,7 @@ void handlePostPresetJson( AsyncWebServerRequest* request, uint8_t* data )
   //  Serial.write(data[i]);
   //Serial.println();
 
-  muteDAC();
+  softMuteDAC();
   delay(500);
 
   DynamicJsonDocument jsonDoc(1024);
@@ -2206,7 +2244,7 @@ void handlePostPresetJson( AsyncWebServerRequest* request, uint8_t* data )
     Serial.print( "[ERROR] handlePostPresetJson(): Deserialization failed. " );
     Serial.println( err.c_str() );
     request->send( 404, "text/plain", "" );
-    unmuteDAC();
+    softUnmuteDAC();
     return;
   }
 
@@ -2217,9 +2255,11 @@ void handlePostPresetJson( AsyncWebServerRequest* request, uint8_t* data )
 
   initUserParams();
   uploadUserParams();
-       
+
+  updateAddOnA();
+     
   request->send(200, "text/plain", "");
-  unmuteDAC();  
+  softUnmuteDAC();  
 }
  
 //==============================================================================
@@ -2267,7 +2307,7 @@ void handlePostStore( AsyncWebServerRequest* request, uint8_t* data )
 {
   Serial.println( "POST /store" );
 
-  muteDAC();
+  softMuteDAC();
   delay(500);
 
   String fileName = presetUsrparamFile[currentPreset];
@@ -2408,7 +2448,7 @@ void handlePostStore( AsyncWebServerRequest* request, uint8_t* data )
 
   request->send(200, "text/plain", "");  
 
-  unmuteDAC();
+  softUnmuteDAC();
 }
 
 //==============================================================================
@@ -2423,7 +2463,7 @@ void handlePostAddonConfigJson( AsyncWebServerRequest* request, uint8_t* data )
   //  Serial.write(data[i]);
   //Serial.println();
 
-  muteDAC();
+  softMuteDAC();
   delay(500);
 
   DynamicJsonDocument jsonDoc(1024);
@@ -2433,7 +2473,7 @@ void handlePostAddonConfigJson( AsyncWebServerRequest* request, uint8_t* data )
     Serial.print( "[ERROR] handlePostAddonConfig(): Deserialization failed. " );
     Serial.println( err.c_str() );
     request->send( 404, "text/plain", "" );
-    unmuteDAC();
+    softUnmuteDAC();
     return;
   }
 
@@ -2456,7 +2496,7 @@ void handlePostAddonConfigJson( AsyncWebServerRequest* request, uint8_t* data )
 
   request->send(200, "text/plain", "");  
 
-  unmuteDAC();
+  softUnmuteDAC();
 }
 
 //==============================================================================
@@ -2489,6 +2529,32 @@ void handlePostWifiConfigJson( AsyncWebServerRequest* request, uint8_t* data )
   writeSettings();
        
   request->send(200, "text/plain", "");  
+}
+
+//==============================================================================
+/*! Setup the AddOn
+ *
+ */
+void updateAddOnA( void )
+{
+  switch( Settings.addonid )
+  {
+  case ADDON_A:
+    // Nothing to do
+    break;
+  case ADDON_B:
+    setupAddOnB();
+    break;
+  case ADDON_C:
+    // Nothing to do
+    break;
+  case ADDON_D:
+    // Nothing to do
+    break;
+  case ADDON_CUSTOM:
+    // Nothing to do
+    break;
+  }
 }
 
 //==============================================================================
@@ -2915,6 +2981,7 @@ void setup()
   server.on( "/preset",    HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetPresetJson(request); });
   server.on( "/config",    HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetConfigJson(request); });
   server.on( "/allinputs", HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetAllInputsJson(request); });
+  server.on( "/addoncfg",  HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetAddonConfigJson(request); });
   
   server.on( "/input", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
   {
@@ -2998,7 +3065,7 @@ void setup()
   xTaskCreatePinnedToCore(myWiFiTask, "myWiFiTask", 8192, NULL, 3, NULL, 0);
   
 
-  unmuteDAC();
+  resetDAC( false );
 
   Serial.println( "Ready" );
 }
