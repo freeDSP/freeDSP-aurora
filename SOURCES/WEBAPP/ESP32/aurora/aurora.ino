@@ -4,13 +4,15 @@
 #include <SPIFFS.h>
 #include "AsyncJson.h"
 #include <ArduinoJson.h>
+#include <Update.h>
 
 #include "AK4458.h"
 #include "AK5558.h"
 #include "AudioFilterFactory.h"
 #include "fallback.h"
+#include "webota.h"
 
-#define VERSION_STR "v2.0.0-alpha.6"
+#define VERSION_STR "v2.0.0-alpha.7"
 
 #define I2C_SDA_PIN 17
 #define I2C_SCL_PIN 16
@@ -3053,6 +3055,47 @@ void setup()
   {
     handleFileUpload( request, data, len, index, total ); 
   });
+
+  //--- webOTA stuff ---
+  server.on( "/webota", HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( 200, "text/html", webota_html ); });
+
+  server.on( "/update", HTTP_POST, [](AsyncWebServerRequest *request){
+    request->send(200, "text/plain", "OK"); 
+    //AsyncWebServerResponse *response = request->beginResponse(200, "text/plain", "OK");
+    //response->addHeader("Connection", "close");
+    //request->send(response);
+  }, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
+  {
+    if (!index)
+    {
+      Serial.println("POST /update");
+      Serial.setDebugOutput( true );
+      if( !Update.begin() )
+        Update.printError(Serial);
+    }
+
+    size_t written = 0;
+    if( len > 0 )
+    {
+      if( Update.write( data, len ) != len )
+        Update.printError(Serial);
+    }
+              
+    Serial.print( "." );
+    
+    if( index + len >= total )
+    {
+      if( Update.end(true) )
+        Serial.printf( "Update Success: %u\nPlease reboot\n", total );
+      else 
+        Update.printError( Serial );
+        
+      Serial.setDebugOutput( false );
+    }
+
+  });
+
+
 
 //  server.onNotFound([](AsyncWebServerRequest *request){
 //    Serial.println(request->url().c_str());
