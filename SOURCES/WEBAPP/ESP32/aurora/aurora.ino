@@ -53,6 +53,7 @@ struct tSettings
   String password;
   int addonid;
   bool vpot;
+  String pwdap;
 };
 
 tSettings Settings;
@@ -328,6 +329,7 @@ void readSettings( void )
     Settings.password = "";
     Settings.addonid = ADDON_CUSTOM;
     Settings.vpot = false;
+    Settings.pwdap = "";
     writeSettings();
 
     Serial.println( "[OK]" );
@@ -357,6 +359,7 @@ void readSettings( void )
       Settings.vpot = true;
     else
       Settings.vpot = false;
+    Settings.pwdap = jsonSettings["pwdap"].as<String>();
 
     Serial.println( "[OK]" );
     Serial.println( "Device config" );
@@ -386,6 +389,7 @@ void writeSettings( void )
     jsonSettings["pwd"] = Settings.password;
     jsonSettings["aid"] = Settings.addonid;
     jsonSettings["vpot"] = Settings.vpot;
+    jsonSettings["pwdap"] = Settings.pwdap;
 
     if( serializeJson( jsonSettings, fileSettings ) == 0 )
       Serial.println( "[ERROR] writeSettings(): Failed to write settings to file" );
@@ -2507,7 +2511,7 @@ void handlePostAddonConfigJson( AsyncWebServerRequest* request, uint8_t* data )
  */
 void handlePostWifiConfigJson( AsyncWebServerRequest* request, uint8_t* data )
 {
-  Serial.println( "POST /config" );
+  Serial.println( "POST /wifi" );
   //Serial.println( "Body:");
   //for(size_t i=0; i<len; i++)
   //  Serial.write(data[i]);
@@ -2527,6 +2531,37 @@ void handlePostWifiConfigJson( AsyncWebServerRequest* request, uint8_t* data )
 
   Settings.ssid = root["ssid"].as<String>();
   Settings.password = root["pwd"].as<String>();
+
+  writeSettings();
+       
+  request->send(200, "text/plain", "");  
+}
+
+//==============================================================================
+/*! Handles the POST request for access point password
+ *
+ */
+void handlePostPasswordApJson( AsyncWebServerRequest* request, uint8_t* data )
+{
+  Serial.println( "POST /pwdap" );
+  //Serial.println( "Body:");
+  //for(size_t i=0; i<len; i++)
+  //  Serial.write(data[i]);
+  //Serial.println();
+
+  DynamicJsonDocument jsonDoc(1024);
+  DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
+  if( err )
+  {
+    Serial.print( "[ERROR] handlePostPasswordApJson(): Deserialization failed. " );
+    Serial.println( err.c_str() );
+    request->send( 404, "text/plain", "" );
+    return;
+  }
+
+  JsonObject root = jsonDoc.as<JsonObject>();
+
+  Settings.pwdap = root["pwdap"].as<String>();
 
   writeSettings();
        
@@ -2795,13 +2830,20 @@ void myWiFiTask(void *pvParameters)
   bool firstConnectAttempt = true;
   bool myWiFiFirstConnect = true;
   int cntrAuthFailure = 0;
-  
-  WiFi.mode( WIFI_AP_STA );
+
+  WiFi.mode(WIFI_AP_STA);
   WiFi.setHostname( "freeDSP-aurora" );
-  WiFi.persistent( false );
-  WiFi.disconnect();
   // Start access point
-  WiFi.softAP( "AP-freeDSP-aurora" );
+  if( Settings.pwdap.length() > 0 )
+  {
+    Serial.println( "AP password protected" );
+    WiFi.softAP( "AP-freeDSP-aurora", Settings.pwdap.c_str() );
+  }
+  else
+  {
+    Serial.println( "AP open" );
+    WiFi.softAP( "AP-freeDSP-aurora" );
+  }
   delay(100);
 
   if( !WiFi.softAPConfig( IPAddress(192, 168, 5, 1), IPAddress(192, 168, 5, 1), IPAddress(255, 255, 255, 0) ) )
@@ -2859,6 +2901,7 @@ void myWiFiTask(void *pvParameters)
           WiFi.disconnect();
           WiFi.mode(WIFI_OFF);
           WiFi.mode(WIFI_AP_STA);
+          delay(1000);
           // WiFi.config(ip, gateway, subnet); // Only for fix IP needed
           WiFi.begin(Settings.ssid.c_str(), Settings.password.c_str());
           delay(3000);
@@ -3046,6 +3089,10 @@ void setup()
   {
     handlePostWifiConfigJson( request, data );
   });
+  server.on( "/pwdap", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
+  {
+    handlePostPasswordApJson( request, data );
+  });
   server.on( "/upload", HTTP_POST, [](AsyncWebServerRequest *request){
     request->send(200, "text/plain", "OK"); 
     //AsyncWebServerResponse *response = request->beginResponse(200, "text/plain", "OK");
@@ -3058,7 +3105,6 @@ void setup()
 
   //--- webOTA stuff ---
   server.on( "/webota", HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( 200, "text/html", webota_html ); });
-
   server.on( "/update", HTTP_POST, [](AsyncWebServerRequest *request){
     request->send(200, "text/plain", "OK"); 
     //AsyncWebServerResponse *response = request->beginResponse(200, "text/plain", "OK");

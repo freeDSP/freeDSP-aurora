@@ -746,7 +746,10 @@
       <tr><td><input type="text" id="ssid" style="width:95%;"></td></tr>
       <tr><td>Password</td</tr>
       <tr><td><input type="password" id="pwd" style="width:95%;"></td></tr>
-      <tr><td><button class="send" onclick="sendWifi()">Store</button></td</tr>
+      <tr><td><button class="send" onclick="sendWifi()">Store WiFi</button></td</tr>
+      <tr><td>Password Access Point</td</tr>
+      <tr><td><input type="password" id="pwdap" style="width:95%;"></td></tr>
+      <tr><td><button class="send" onclick="sendPwdAP()">Store AP Password</button></td</tr>
       </table>
     </div>
   </div>
@@ -1118,6 +1121,19 @@
       alert("Success! Your WiFi settings have been stored.");
       return response;})
     .catch(function(err){console.log(err);});
+  }
+  function sendPwdAP(){
+    var data={};
+    data.pwdap=document.getElementById("pwdap").value;
+    if((data.pwdap.length>7) || (data.pwdap.length==0)){
+    fetch("/pwdap",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)})
+    .then(function(response){
+      alert("Success! The password for the access point has been stored.");
+      return response;})
+    .catch(function(err){console.log(err);});
+    }else{
+      alert("Please select a password with at least 8 characters.");
+    }
   }
   function storePreset(){
     var data={};
