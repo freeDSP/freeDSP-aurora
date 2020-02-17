@@ -12,7 +12,7 @@
 #include "fallback.h"
 #include "webota.h"
 
-#define VERSION_STR "v2.0.0-alpha.7"
+#define VERSION_STR "v2.0.0-alpha.8"
 
 #define I2C_SDA_PIN 17
 #define I2C_SCL_PIN 16
@@ -37,6 +37,7 @@
 #define MAX_NUM_PHASES 8
 #define MAX_NUM_DELAYS 8
 #define MAX_NUM_GAINS 8
+#define MAX_NUM_CROSSOVER 8;
 
 enum taddonid
 {
@@ -60,9 +61,18 @@ tSettings Settings;
 
 typedef uint8_t tFilterType;
 
+enum
+{
+  ADDR_ANALOG,
+  ADDR_UAC,
+  ADDR_EXP,
+  ADDR_ESP,
+  ADDR_SPDIF
+};
+
 struct tInput
 {
-  uint16_t addrChn;
+  uint16_t addrChn[5];
   uint16_t addrPort;
   uint32_t sel;
 };
@@ -116,6 +126,19 @@ struct tGain
   bool mute;
 };
 
+struct tCrossover
+{
+  uint16_t hp_addr[4];
+  float hp_fc;
+  tFilterType hp_typ;
+  bool hp_bypass;
+
+  uint16_t lp_addr[4];
+  float lp_fc;
+  tFilterType lp_typ;
+  bool lp_bypass;
+};
+
 struct tMasterVolume
 {
   uint16_t addr;
@@ -140,6 +163,7 @@ tHPLP paramLP[8];
 tPhase paramPhase[8];
 tDelay paramDelay[8];
 tGain paramGain[8];
+tCrossover paramCrossover[8];
 tMasterVolume masterVolume = { 0x0000, -60.0 };
 tInputSelector inputSelector;
 
@@ -152,6 +176,7 @@ int numLPs = MAX_NUM_LPS;
 int numPhases = MAX_NUM_PHASES;
 int numDelays = MAX_NUM_DELAYS;
 int numGains = MAX_NUM_GAINS;
+int numCrossovers = MAX_NUM_CROSSOVER;
 
 File fileDspProgram;
 File fileUpload;
@@ -312,6 +337,17 @@ void initUserParams( void )
     paramGain[ii].mute = false;
   }
 
+  for( int ii = 0; ii < MAX_NUM_CROSSOVER; ii++ )
+  {
+    paramCrossover[ii].lp_fc = 1000.0;
+    paramCrossover[ii].lp_typ = 0;
+    paramCrossover[ii].lp_bypass = false;
+
+    paramCrossover[ii].hp_fc = 1000.0;
+    paramCrossover[ii].hp_typ = 0;
+    paramCrossover[ii].hp_bypass = false;
+  }
+
   masterVolume.val = -60.0;
 
 }
@@ -435,6 +471,7 @@ void readPluginMeta( void )
     numPhases = jsonPluginMeta["nphase"].as<String>().toInt();
     numDelays = jsonPluginMeta["ndly"].as<String>().toInt();
     numGains = jsonPluginMeta["ngain"].as<String>().toInt();
+    numCrossovers = jsonPluginMeta["nxo"].as<String>().toInt();
 
     for( int ii = 0; ii < 8; ii++ )
       inputSelector.analog[ii] = static_cast<uint16_t>(jsonPluginMeta["analog"][ii].as<String>().toInt());
@@ -453,7 +490,11 @@ void readPluginMeta( void )
 
     for( int ii = 0; ii < numInputs; ii++ )
     {
-      paramInputs[ii].addrChn = static_cast<uint16_t>(jsonPluginMeta["analog"][ii].as<String>().toInt());
+      paramInputs[ii].addrChn[ADDR_ANALOG] = static_cast<uint16_t>(jsonPluginMeta["analog"][ii].as<String>().toInt());
+      paramInputs[ii].addrChn[ADDR_UAC] = static_cast<uint16_t>(jsonPluginMeta["uac"][ii].as<String>().toInt());
+      paramInputs[ii].addrChn[ADDR_EXP] = static_cast<uint16_t>(jsonPluginMeta["exp"][ii].as<String>().toInt());
+      //paramInputs[ii].addrChn[ADDR_ESP] = static_cast<uint16_t>(jsonPluginMeta["esp"][ii].as<String>().toInt());
+      paramInputs[ii].addrChn[ADDR_SPDIF] = static_cast<uint16_t>(jsonPluginMeta["spdif"][ii].as<String>().toInt());
       paramInputs[ii].addrPort = static_cast<uint16_t>(jsonPluginMeta["port"][ii].as<String>().toInt());
     }
 
@@ -490,6 +531,19 @@ void readPluginMeta( void )
 
     for( int ii = 0; ii < numGains; ii++ )
       paramGain[ii].addr = static_cast<uint16_t>(jsonPluginMeta["gain"][ii]);
+
+    for( int ii = 0; ii < numCrossovers; ii++ )
+    {
+      paramCrossover[ii].hp_addr[0] = static_cast<uint16_t>(jsonPluginMeta["hp_xo"][0+ii*4]);
+      paramCrossover[ii].hp_addr[1] = static_cast<uint16_t>(jsonPluginMeta["hp_xo"][1+ii*4]);
+      paramCrossover[ii].hp_addr[2] = static_cast<uint16_t>(jsonPluginMeta["hp_xo"][2+ii*4]);
+      paramCrossover[ii].hp_addr[3] = static_cast<uint16_t>(jsonPluginMeta["hp_xo"][3+ii*4]);
+
+      paramCrossover[ii].lp_addr[0] = static_cast<uint16_t>(jsonPluginMeta["lp_xo"][0+ii*4]);
+      paramCrossover[ii].lp_addr[1] = static_cast<uint16_t>(jsonPluginMeta["lp_xo"][1+ii*4]);
+      paramCrossover[ii].lp_addr[2] = static_cast<uint16_t>(jsonPluginMeta["lp_xo"][2+ii*4]);
+      paramCrossover[ii].lp_addr[3] = static_cast<uint16_t>(jsonPluginMeta["lp_xo"][3+ii*4]);
+    }
 
     masterVolume.addr = jsonPluginMeta["master"].as<String>().toInt();
   }
@@ -738,7 +792,8 @@ void uploadUserParams( void )
   //--- Now upload the parameters
   Serial.print( "Uploading user parameters..."  );
   for( int ii = 0; ii < numInputs; ii++ )
-    setInput( paramInputs[ii].addrChn, paramInputs[ii].addrPort, paramInputs[ii].sel );
+    setInput( ii );
+    //setInput( paramInputs[ii].addrChn, paramInputs[ii].addrPort, paramInputs[ii].sel );
   Serial.print( "." );
 
   for( int ii = 0; ii < numHPs; ii++ )
@@ -1231,6 +1286,41 @@ void handleGetGainJson( AsyncWebServerRequest* request )
 }
 
 //==============================================================================
+/*! Handles the GET request for crossover parameters
+ *
+ */
+void handleGetXoJson( AsyncWebServerRequest* request )
+{
+  Serial.println( "GET /xo" );
+
+  AsyncJsonResponse* response = new AsyncJsonResponse();
+
+  if( request->hasParam( "idx" ) )
+  {
+    AsyncWebParameter* idx = request->getParam(0);
+    int offset = idx->value().toInt();
+    JsonVariant& jsonResponse = response->getRoot();
+    jsonResponse["lp_typ"] = paramCrossover[offset].lp_typ;
+    jsonResponse["lp_fc"] = paramCrossover[offset].lp_fc;
+    if( paramCrossover[offset].lp_bypass )
+      jsonResponse["lp_bypass"] = String( "1" );
+    else
+      jsonResponse["lp_bypass"] = String( "0" );
+    jsonResponse["hp_typ"] = paramCrossover[offset].hp_typ;
+    jsonResponse["hp_fc"] = paramCrossover[offset].hp_fc;
+    if( paramCrossover[offset].hp_bypass )
+      jsonResponse["hp_bypass"] = String( "1" );
+    else
+      jsonResponse["hp_bypass"] = String( "0" );
+  }
+  else
+    Serial.println( "[ERROR] handleGetXoJson(): No id param" );
+
+  response->setLength();
+  request->send(response);
+}
+
+//==============================================================================
 /*! Handles the GET request for Master Volume parameter
  *
  */
@@ -1383,11 +1473,9 @@ void handlePostInputJson( AsyncWebServerRequest* request, uint8_t* data )
   //Serial.println( root["sel"].as<String>() );
 
   int idx = root["idx"].as<String>().toInt();
-  paramInputs[idx].addrChn = static_cast<uint16_t>( root["chn"].as<String>().toInt() );
-  paramInputs[idx].addrPort = static_cast<uint16_t>( root["port"].as<String>().toInt() );
   paramInputs[idx].sel = (uint32_t)strtoul( root["sel"].as<String>().c_str(), NULL, 16 );
 
-  setInput( paramInputs[idx].addrChn, paramInputs[idx].addrPort, paramInputs[idx].sel );
+  setInput( idx );
        
   request->send(200, "text/plain", "");  
 
@@ -1398,8 +1486,14 @@ void handlePostInputJson( AsyncWebServerRequest* request, uint8_t* data )
 /*! Sets a new input selection on DSP.
  *
  */
-void setInput( const uint16_t addrChn, const uint16_t addrPort, const uint32_t sel )
+//void setInput( const uint16_t addrChn, const uint16_t addrPort, const uint32_t sel )
+void setInput( const int idx )
 {
+  uint32_t sel = (paramInputs[idx].sel >> 16) & 0x0000ffff;
+  uint16_t addrChn = paramInputs[idx].addrChn[sel];
+  uint16_t addrPort = paramInputs[idx].addrPort;
+  sel = paramInputs[idx].sel;
+  
   byte val[4];
   uint32_t intval = sel & 0x0000ffff;
   val[0] = (intval >> 24 ) & 0xFF;
@@ -1445,10 +1539,6 @@ void handlePostHpJson( AsyncWebServerRequest* request, uint8_t* data )
   JsonObject root = jsonDoc.as<JsonObject>();
 
   uint32_t idx = static_cast<uint32_t>(root["idx"].as<String>().toInt());
-  paramHP[idx].addr[0] = static_cast<uint16_t>(root["addr0"].as<String>().toInt());
-  paramHP[idx].addr[1] = static_cast<uint16_t>(root["addr1"].as<String>().toInt());
-  paramHP[idx].addr[2] = static_cast<uint16_t>(root["addr2"].as<String>().toInt());
-  paramHP[idx].addr[3] = static_cast<uint16_t>(root["addr3"].as<String>().toInt());
   paramHP[idx].fc = root["fc"].as<String>().toFloat();
   paramHP[idx].typ = static_cast<tFilterType>(root["typ"].as<String>().toInt());
   if( root["bypass"].as<String>().toInt() == 0 )
@@ -1555,7 +1645,6 @@ void handlePostLshelvJson( AsyncWebServerRequest* request, uint8_t* data )
   Serial.println( root["slope"].as<String>() );
 
   uint32_t idx = static_cast<uint32_t>(root["idx"].as<String>().toInt());
-  paramLshelv[idx].addr = static_cast<uint16_t>(root["addr"].as<String>().toInt());
   paramLshelv[idx].gain = root["gain"].as<String>().toFloat();
   paramLshelv[idx].fc = root["fc"].as<String>().toFloat();
   paramLshelv[idx].slope = root["slope"].as<String>().toFloat();
@@ -1660,7 +1749,6 @@ void handlePostPeqJson( AsyncWebServerRequest* request, uint8_t* data )
   Serial.println( root["Q"].as<String>() );
 
   uint32_t idx = static_cast<uint32_t>(root["idx"].as<String>().toInt());
-  paramPeq[idx].addr = static_cast<uint16_t>(root["addr"].as<String>().toInt());
   paramPeq[idx].gain = root["gain"].as<String>().toFloat();
   paramPeq[idx].fc = root["fc"].as<String>().toFloat();
   paramPeq[idx].Q = root["Q"].as<String>().toFloat();
@@ -1764,7 +1852,6 @@ void handlePostHshelvJson( AsyncWebServerRequest* request, uint8_t* data )
   Serial.println( root["slope"].as<String>() );
 
   uint32_t idx = static_cast<uint32_t>(root["idx"].as<String>().toInt());
-  paramHshelv[idx].addr = static_cast<uint16_t>(root["addr"].as<String>().toInt());
   paramHshelv[idx].gain = root["gain"].as<String>().toFloat();
   paramHshelv[idx].fc = root["fc"].as<String>().toFloat();
   paramHshelv[idx].slope = root["slope"].as<String>().toFloat();
@@ -1867,10 +1954,6 @@ void handlePostLpJson( AsyncWebServerRequest* request, uint8_t* data )
   Serial.println( root["typ"].as<String>() );
 
   uint32_t idx = static_cast<uint32_t>(root["idx"].as<String>().toInt());
-  paramLP[idx].addr[0] = static_cast<uint16_t>(root["addr0"].as<String>().toInt());
-  paramLP[idx].addr[1] = static_cast<uint16_t>(root["addr1"].as<String>().toInt());
-  paramLP[idx].addr[2] = static_cast<uint16_t>(root["addr2"].as<String>().toInt());
-  paramLP[idx].addr[3] = static_cast<uint16_t>(root["addr3"].as<String>().toInt());
   paramLP[idx].fc = root["fc"].as<String>().toFloat();
   paramLP[idx].typ = static_cast<tFilterType>(root["typ"].as<String>().toInt());
   if( root["bypass"].as<String>().toInt() == 0 )
@@ -1976,7 +2059,6 @@ void handlePostPhaseJson( AsyncWebServerRequest* request, uint8_t* data )
   Serial.println( root["Q"].as<String>() );
 
   uint32_t idx = static_cast<uint32_t>(root["idx"].as<String>().toInt());
-  paramPhase[idx].addr = static_cast<uint16_t>(root["addr"].as<String>().toInt());
   paramPhase[idx].fc = root["fc"].as<String>().toFloat();
   paramPhase[idx].Q = root["Q"].as<String>().toFloat();
   if( root["bypass"].as<String>().toInt() == 0 )
@@ -2077,7 +2159,6 @@ void handlePostDelayJson( AsyncWebServerRequest* request, uint8_t* data )
 
   uint32_t idx = static_cast<uint32_t>(root["idx"].as<String>().toInt());
   paramDelay[idx].delay = root["delay"].as<String>().toFloat();
-  paramDelay[idx].addr = static_cast<uint16_t>(root["addr"].as<String>().toInt());
   if( root["bypass"].as<String>().toInt() == 0 )
     paramDelay[idx].bypass = false;
   else
@@ -2142,7 +2223,6 @@ void handlePostGainJson( AsyncWebServerRequest* request, uint8_t* data )
   Serial.println( root["mute"].as<String>() );
 
   uint32_t idx = static_cast<uint32_t>(root["idx"].as<String>().toInt());
-  paramGain[idx].addr = static_cast<uint16_t>(root["addr"].as<String>().toInt());
   paramGain[idx].gain = root["gain"].as<String>().toFloat();
   if( root["mute"].as<String>().toInt() == 0 )
     paramGain[idx].mute = false;
@@ -2177,6 +2257,175 @@ void setGain( int idx )
 }
 
 //==============================================================================
+/*! Handles the POST request for Low Pass parameter
+ *
+ */
+void handlePostXoJson( AsyncWebServerRequest* request, uint8_t* data )
+{
+  Serial.println( "POST /xo" );
+  //Serial.println( "Body:");
+  //for(size_t i=0; i<len; i++)
+  //  Serial.write(data[i]);
+  //Serial.println();
+
+  softMuteDAC();
+  delay(500);
+
+  DynamicJsonDocument jsonDoc(1024);
+  DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
+  if( err )
+  {
+    Serial.print( "[ERROR] handlePostLpJson(): Deserialization failed. " );
+    Serial.println( err.c_str() );
+    request->send( 404, "text/plain", "" );
+    softUnmuteDAC();
+    return;
+  }
+
+  JsonObject root = jsonDoc.as<JsonObject>();
+  Serial.println( root["idx"].as<String>() );
+  Serial.println( root["lp_fc"].as<String>() );
+  Serial.println( root["lp_typ"].as<String>() );
+  Serial.println( root["hp_fc"].as<String>() );
+  Serial.println( root["hp_typ"].as<String>() );
+
+  uint32_t idx = static_cast<uint32_t>(root["idx"].as<String>().toInt());
+  paramCrossover[idx].lp_fc = root["lp_fc"].as<String>().toFloat();
+  paramCrossover[idx].lp_typ = static_cast<tFilterType>(root["lp_typ"].as<String>().toInt());
+  if( root["lp_bypass"].as<String>().toInt() == 0 )
+    paramCrossover[idx].lp_bypass = false;
+  else
+    paramCrossover[idx].lp_bypass = true;
+
+  paramCrossover[idx].hp_fc = root["hp_fc"].as<String>().toFloat();
+  paramCrossover[idx].hp_typ = static_cast<tFilterType>(root["hp_typ"].as<String>().toInt());
+  if( root["hp_bypass"].as<String>().toInt() == 0 )
+    paramCrossover[idx].hp_bypass = false;
+  else
+    paramCrossover[idx].hp_bypass = true;
+
+  setCrossover( idx );
+
+  request->send(200, "text/plain", ""); 
+
+  softUnmuteDAC(); 
+}
+
+//==============================================================================
+/*! Sets the values for a crossover block on DSP.
+ *
+ */
+void setCrossover( int idx )
+{
+  {
+    float a[12] = { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0 };
+    float b[12] = { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0 };
+    byte val[4];
+    uint32_t floatval;
+    if( !(paramCrossover[idx].lp_bypass) )
+      AudioFilterFactory::makeLowPass( a, b, paramCrossover[idx].lp_typ, paramCrossover[idx].lp_fc, sampleRate );
+
+    for( int ii = 0; ii < 4; ii++ )
+    {
+      uint16_t addr = paramCrossover[idx].lp_addr[ii];
+      floatval = convertTo824(b[ 3*ii + 2 ]);
+      val[0] = (floatval >> 24 ) & 0xFF;
+      val[1] = (floatval >> 16 ) & 0xFF;
+      val[2] = (floatval >> 8 ) & 0xFF;
+      val[3] =  floatval & 0xFF;
+      ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B2
+      addr++;
+
+      floatval = convertTo824(b[ 3*ii + 1 ]);
+      val[0] = (floatval >> 24 ) & 0xFF;
+      val[1] = (floatval >> 16 ) & 0xFF;
+      val[2] = (floatval >> 8 ) & 0xFF;
+      val[3] =  floatval & 0xFF;
+      ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B1
+      addr++;
+
+      floatval = convertTo824(b[ 3*ii + 0 ]);
+      val[0] = (floatval >> 24 ) & 0xFF;
+      val[1] = (floatval >> 16 ) & 0xFF;
+      val[2] = (floatval >> 8 ) & 0xFF;
+      val[3] =  floatval & 0xFF;
+      ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B0
+      addr++;
+
+      floatval = convertTo824(a[ 3*ii + 2 ]);
+      val[0] = (floatval >> 24 ) & 0xFF;
+      val[1] = (floatval >> 16 ) & 0xFF;
+      val[2] = (floatval >> 8 ) & 0xFF;
+      val[3] =  floatval & 0xFF;
+      ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A2
+      addr++;
+      
+      floatval = convertTo824(a[ 3*ii + 1 ]);
+      val[0] = (floatval >> 24 ) & 0xFF;
+      val[1] = (floatval >> 16 ) & 0xFF;
+      val[2] = (floatval >> 8 ) & 0xFF;
+      val[3] =  floatval & 0xFF;
+      ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A1
+      addr++;
+    }
+  }
+
+  {
+    float a[12] = { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0 };
+    float b[12] = { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0 };
+    byte val[4];
+    uint32_t floatval;
+    if( !(paramCrossover[idx].hp_bypass) )
+      AudioFilterFactory::makeLowPass( a, b, paramCrossover[idx].hp_typ, paramCrossover[idx].hp_fc, sampleRate );
+
+    for( int ii = 0; ii < 4; ii++ )
+    {
+      uint16_t addr = paramCrossover[idx].hp_addr[ii];
+      floatval = convertTo824(b[ 3*ii + 2 ]);
+      val[0] = (floatval >> 24 ) & 0xFF;
+      val[1] = (floatval >> 16 ) & 0xFF;
+      val[2] = (floatval >> 8 ) & 0xFF;
+      val[3] =  floatval & 0xFF;
+      ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B2
+      addr++;
+
+      floatval = convertTo824(b[ 3*ii + 1 ]);
+      val[0] = (floatval >> 24 ) & 0xFF;
+      val[1] = (floatval >> 16 ) & 0xFF;
+      val[2] = (floatval >> 8 ) & 0xFF;
+      val[3] =  floatval & 0xFF;
+      ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B1
+      addr++;
+
+      floatval = convertTo824(b[ 3*ii + 0 ]);
+      val[0] = (floatval >> 24 ) & 0xFF;
+      val[1] = (floatval >> 16 ) & 0xFF;
+      val[2] = (floatval >> 8 ) & 0xFF;
+      val[3] =  floatval & 0xFF;
+      ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B0
+      addr++;
+
+      floatval = convertTo824(a[ 3*ii + 2 ]);
+      val[0] = (floatval >> 24 ) & 0xFF;
+      val[1] = (floatval >> 16 ) & 0xFF;
+      val[2] = (floatval >> 8 ) & 0xFF;
+      val[3] =  floatval & 0xFF;
+      ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A2
+      addr++;
+      
+      floatval = convertTo824(a[ 3*ii + 1 ]);
+      val[0] = (floatval >> 24 ) & 0xFF;
+      val[1] = (floatval >> 16 ) & 0xFF;
+      val[2] = (floatval >> 8 ) & 0xFF;
+      val[3] =  floatval & 0xFF;
+      ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A1
+      addr++;
+    }
+  }
+
+}
+
+//==============================================================================
 /*! Handles the POST request for Master Volume
  *
  */
@@ -2200,7 +2449,6 @@ void handlePostMasterVolumeJson( AsyncWebServerRequest* request, uint8_t* data )
 
   JsonObject root = jsonDoc.as<JsonObject>();
 
-  masterVolume.addr = static_cast<uint16_t>(root["addr"].as<String>().toInt());
   masterVolume.val = root["vol"].as<String>().toFloat();
   
   setMasterVolume(); 
@@ -3022,6 +3270,7 @@ void setup()
   server.on( "/phase",     HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetPhaseJson(request); });
   server.on( "/delay",     HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetDelayJson(request); });
   server.on( "/gain",      HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetGainJson(request); });
+  server.on( "/xo",        HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetXoJson(request); });
   server.on( "/mvol",      HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetMasterVolumeJson(request); });
   server.on( "/preset",    HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetPresetJson(request); });
   server.on( "/config",    HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetConfigJson(request); });
@@ -3063,6 +3312,10 @@ void setup()
   server.on( "/gain", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
   {
     handlePostGainJson( request, data );
+  });
+  server.on( "/xo", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
+  {
+    handlePostXoJson( request, data );
   });
   server.on( "/mvol", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
   {
