@@ -25,7 +25,7 @@
   <center>
   <table>
   <tr><td style="border-bottom:1px solid;"><h1>Aurora DSP</h1></td></tr>
-  <tr><td><h2>Home Cinema 7.1</h2></td></tr>
+  <tr><td><h2>4FIRs</h2></td></tr>
   </table>  
   <table><tr><td valign=top rowspan="8" style="border-right: 1px solid #808080; min-width:150px">
   <table align="center" style="padding:10px">
@@ -77,7 +77,7 @@
       <option value="0x00040001">SPDIF R</option>
     </select>
     </td><td>
-    <button class="shlv" onclick="openLShelv(0);">LShlv</button>
+    <button class="fir" onclick="openFIR(0);">FIR</button>
     </td><td>
     <button class="peq" onclick="openPEQ(0);">PEQ</button>
     </td><td>
@@ -98,12 +98,6 @@
     <button class="peq" onclick="openPEQ(8);">PEQ</button>
     </td><td>
     <button class="peq" onclick="openPEQ(9);">PEQ</button>
-    </td><td>
-    <button class="shlv" onclick="openHShelv(0);">HShlv</button>
-    </td><td>
-    <button class="hp" onclick="openXO(0);">XO</button>
-    </td><td>
-    <button class="phase" onclick="openPhase(0);">Phase</button>
     </td><td>
     <button class="delay" onclick="openDelay(0);">Delay</button>
     </td><td>
@@ -139,7 +133,7 @@
       <option value="0x00040001">SPDIF R</option>
     </select>
     </td><td>
-    <button class="shlv" onclick="openLShelv(1);">LShlv</button>
+    <button class="fir" onclick="openFIR(1);">FIR</button>
     </td><td>
     <button class="peq" onclick="openPEQ(10);">PEQ</button>
     </td><td>
@@ -160,12 +154,6 @@
     <button class="peq" onclick="openPEQ(18);">PEQ</button>
     </td><td>
     <button class="peq" onclick="openPEQ(19);">PEQ</button>
-    </td><td>
-    <button class="shlv" onclick="openHShelv(1);">HShlv</button>
-    </td><td>
-    <button class="hp" onclick="openXO(1);">XO</button>
-    </td><td>
-    <button class="phase" onclick="openPhase(1);">Phase</button>
     </td><td>
     <button class="delay" onclick="openDelay(1);">Delay</button>
     </td><td>
@@ -198,7 +186,7 @@
       <option value="0x00040001">SPDIF R</option>
     </select>
     </td><td>
-    <button class="shlv" onclick="openLShelv(2);">LShlv</button>
+    <button class="fir" onclick="openFIR(2);">FIR</button>
     </td><td>
     <button class="peq" onclick="openPEQ(20);">PEQ</button>
     </td><td>
@@ -219,12 +207,6 @@
     <button class="peq" onclick="openPEQ(28);">PEQ</button>
     </td><td>
     <button class="peq" onclick="openPEQ(29);">PEQ</button>
-    </td><td>
-    <button class="shlv" onclick="openHShelv(2);">HShlv</button>
-    </td><td>
-    <button class="hp" onclick="openXO(2);">XO</button>
-    </td><td>
-    <button class="phase" onclick="openPhase(2);">Phase</button>
     </td><td>
     <button class="delay" onclick="openDelay(2);">Delay</button>
     </td><td>
@@ -257,7 +239,7 @@
       <option value="0x00040001">SPDIF R</option>
     </select>
     </td><td>
-    <button class="shlv" onclick="openLShelv(3);">LShlv</button>
+    <button class="fir" onclick="openFIR(0);">FIR</button>
     </td><td>
     <button class="peq" onclick="openPEQ(30);">PEQ</button>
     </td><td>
@@ -279,12 +261,6 @@
     </td><td>
     <button class="peq" onclick="openPEQ(39);">PEQ</button>
     </td><td>
-    <button class="shlv" onclick="openHShelv(3);">HShlv</button>
-    </td><td>
-    <button class="hp" onclick="openXO(3);">XO</button>
-    </td><td>
-    <button class="phase" onclick="openPhase(3);">Phase</button>
-    </td><td>
     <button class="delay" onclick="openDelay(3);">Delay</button>
     </td><td>
     <button class="gain" onclick="openGain(3);">Gain</button>
@@ -292,241 +268,6 @@
     OUT 4
     </td></tr>
   
-    <tr><td class="rotate">
-    Channel 5
-    </td><td>
-    <select id="chn4" onchange="postInputJson('chn4',4);">
-      <option value="0x00000000">Analog 1</option>
-      <option value="0x00000001">Analog 2</option>
-      <option value="0x00000002">Analog 3</option>
-      <option value="0x00000003">Analog 4</option>
-      <option value="0x00000004">Analog 5</option>
-      <option value="0x00000005">Analog 6</option>
-      <option value="0x00000006">Analog 7</option>
-      <option value="0x00000007">Analog 8</option>
-      <option value="0x00010000">USB 1</option>
-      <option value="0x00010001">USB 2</option>
-      <option value="0x00010002">USB 3</option>
-      <option value="0x00010003">USB 4</option>
-      <option value="0x00010004">USB 5</option>
-      <option value="0x00010005">USB 6</option>
-      <option value="0x00010006">USB 7</option>
-      <option value="0x00010007">USB 8</option>
-      <option value="0x00040000">SPDIF L</option>
-      <option value="0x00040001">SPDIF R</option>
-    </select>
-    </td><td>
-    <button class="shlv" onclick="openLShelv(4);">LShlv</button>
-    </td><td>
-    <button class="peq" onclick="openPEQ(40);">PEQ</button>
-    </td><td>
-    <button class="peq" onclick="openPEQ(41);">PEQ</button>
-    </td><td>
-    <button class="peq" onclick="openPEQ(42);">PEQ</button>
-    </td><td>
-    <button class="peq" onclick="openPEQ(43);">PEQ</button>
-    </td><td>
-    <button class="peq" onclick="openPEQ(44);">PEQ</button>
-    </td><td>
-    <button class="peq" onclick="openPEQ(45);">PEQ</button>
-    </td><td>
-    <button class="peq" onclick="openPEQ(46);">PEQ</button>
-    </td><td>
-    <button class="peq" onclick="openPEQ(47);">PEQ</button>
-    </td><td>
-    <button class="peq" onclick="openPEQ(48);">PEQ</button>
-    </td><td>
-    <button class="peq" onclick="openPEQ(49);">PEQ</button>
-    </td><td>
-    <button class="shlv" onclick="openHShelv(4);">HShlv</button>
-    </td><td>
-    <button class="hp" onclick="openXO(4);">XO</button>
-    </td><td>
-    <button class="phase" onclick="openPhase(4);">Phase</button>
-    </td><td>
-    <button class="delay" onclick="openDelay(4);">Delay</button>
-    </td><td>
-    <button class="gain" onclick="openGain(4);">Gain</button>
-    </td><td>
-    OUT 5
-    </td></tr>
-  
-    <tr><td class="rotate">
-    Channel 6
-    </td><td>
-    <select id="chn5" onchange="postInputJson('chn5',5);">
-      <option value="0x00000000">Analog 1</option>
-      <option value="0x00000001">Analog 2</option>
-      <option value="0x00000002">Analog 3</option>
-      <option value="0x00000003">Analog 4</option>
-      <option value="0x00000004">Analog 5</option>
-      <option value="0x00000005">Analog 6</option>
-      <option value="0x00000006">Analog 7</option>
-      <option value="0x00000007">Analog 8</option>
-      <option value="0x00010000">USB 1</option>
-      <option value="0x00010001">USB 2</option>
-      <option value="0x00010002">USB 3</option>
-      <option value="0x00010003">USB 4</option>
-      <option value="0x00010004">USB 5</option>
-      <option value="0x00010005">USB 6</option>
-      <option value="0x00010006">USB 7</option>
-      <option value="0x00010007">USB 8</option>
-      <option value="0x00040000">SPDIF L</option>
-      <option value="0x00040001">SPDIF R</option>
-    </select>
-    </td><td>
-    <button class="shlv" onclick="openLShelv(5);">LShlv</button>
-    </td><td>
-    <button class="peq" onclick="openPEQ(50);">PEQ</button>
-    </td><td>
-    <button class="peq" onclick="openPEQ(51);">PEQ</button>
-    </td><td>
-    <button class="peq" onclick="openPEQ(52);">PEQ</button>
-    </td><td>
-    <button class="peq" onclick="openPEQ(53);">PEQ</button>
-    </td><td>
-    <button class="peq" onclick="openPEQ(54);">PEQ</button>
-    </td><td>
-    <button class="peq" onclick="openPEQ(55);">PEQ</button>
-    </td><td>
-    <button class="peq" onclick="openPEQ(56);">PEQ</button>
-    </td><td>
-    <button class="peq" onclick="openPEQ(57);">PEQ</button>
-    </td><td>
-    <button class="peq" onclick="openPEQ(58);">PEQ</button>
-    </td><td>
-    <button class="peq" onclick="openPEQ(59);">PEQ</button>
-    </td><td>
-    <button class="shlv" onclick="openHShelv(5);">HShlv</button>
-    </td><td>
-    <button class="hp" onclick="openXO(5);">XO</button>
-    </td><td>
-    <button class="phase" onclick="openPhase(5);">Phase</button>
-    </td><td>
-    <button class="delay" onclick="openDelay(5);">Delay</button>
-    </td><td>
-    <button class="gain" onclick="openGain(5);">Gain</button>
-    </td><td>
-    OUT 6
-    </td></tr>
-  
-    <tr><td class="rotate">
-    Channel 7
-    </td><td>
-    <select id="chn6" onchange="postInputJson('chn6',6);">
-      <option value="0x00000000">Analog 1</option>
-      <option value="0x00000001">Analog 2</option>
-      <option value="0x00000002">Analog 3</option>
-      <option value="0x00000003">Analog 4</option>
-      <option value="0x00000004">Analog 5</option>
-      <option value="0x00000005">Analog 6</option>
-      <option value="0x00000006">Analog 7</option>
-      <option value="0x00000007">Analog 8</option>
-      <option value="0x00010000">USB 1</option>
-      <option value="0x00010001">USB 2</option>
-      <option value="0x00010002">USB 3</option>
-      <option value="0x00010003">USB 4</option>
-      <option value="0x00010004">USB 5</option>
-      <option value="0x00010005">USB 6</option>
-      <option value="0x00010006">USB 7</option>
-      <option value="0x00010007">USB 8</option>
-      <option value="0x00040000">SPDIF L</option>
-      <option value="0x00040001">SPDIF R</option>
-    </select>
-    </td><td>
-    <button class="shlv" onclick="openLShelv(6);">LShlv</button>
-    </td><td>
-    <button class="peq" onclick="openPEQ(60);">PEQ</button>
-    </td><td>
-    <button class="peq" onclick="openPEQ(61);">PEQ</button>
-    </td><td>
-    <button class="peq" onclick="openPEQ(62);">PEQ</button>
-    </td><td>
-    <button class="peq" onclick="openPEQ(63);">PEQ</button>
-    </td><td>
-    <button class="peq" onclick="openPEQ(64);">PEQ</button>
-    </td><td>
-    <button class="peq" onclick="openPEQ(65);">PEQ</button>
-    </td><td>
-    <button class="peq" onclick="openPEQ(66);">PEQ</button>
-    </td><td>
-    <button class="peq" onclick="openPEQ(67);">PEQ</button>
-    </td><td>
-    <button class="peq" onclick="openPEQ(68);">PEQ</button>
-    </td><td>
-    <button class="peq" onclick="openPEQ(69);">PEQ</button>
-    </td><td>
-    <button class="shlv" onclick="openHShelv(6);">HShlv</button>
-    </td><td>
-    <button class="hp" onclick="openXO(6);">XO</button>
-    </td><td>
-    <button class="phase" onclick="openPhase(6);">Phase</button>
-    </td><td>
-    <button class="delay" onclick="openDelay(6);">Delay</button>
-    </td><td>
-    <button class="gain" onclick="openGain(6);">Gain</button>
-    </td><td>
-    OUT 7
-    </td></tr>
-  
-    <tr><td class="rotate">
-    Channel 8
-    </td><td>
-    <select id="chn7" onchange="postInputJson('chn7',7);">
-      <option value="0x00000000">Analog 1</option>
-      <option value="0x00000001">Analog 2</option>
-      <option value="0x00000002">Analog 3</option>
-      <option value="0x00000003">Analog 4</option>
-      <option value="0x00000004">Analog 5</option>
-      <option value="0x00000005">Analog 6</option>
-      <option value="0x00000006">Analog 7</option>
-      <option value="0x00000007">Analog 8</option>
-      <option value="0x00010000">USB 1</option>
-      <option value="0x00010001">USB 2</option>
-      <option value="0x00010002">USB 3</option>
-      <option value="0x00010003">USB 4</option>
-      <option value="0x00010004">USB 5</option>
-      <option value="0x00010005">USB 6</option>
-      <option value="0x00010006">USB 7</option>
-      <option value="0x00010007">USB 8</option>
-      <option value="0x00040000">SPDIF L</option>
-      <option value="0x00040001">SPDIF R</option>
-    </select>
-    </td><td>
-    <button class="shlv" onclick="openLShelv(7);">LShlv</button>
-    </td><td>
-    <button class="peq" onclick="openPEQ(70);">PEQ</button>
-    </td><td>
-    <button class="peq" onclick="openPEQ(71);">PEQ</button>
-    </td><td>
-    <button class="peq" onclick="openPEQ(72);">PEQ</button>
-    </td><td>
-    <button class="peq" onclick="openPEQ(73);">PEQ</button>
-    </td><td>
-    <button class="peq" onclick="openPEQ(74);">PEQ</button>
-    </td><td>
-    <button class="peq" onclick="openPEQ(75);">PEQ</button>
-    </td><td>
-    <button class="peq" onclick="openPEQ(76);">PEQ</button>
-    </td><td>
-    <button class="peq" onclick="openPEQ(77);">PEQ</button>
-    </td><td>
-    <button class="peq" onclick="openPEQ(78);">PEQ</button>
-    </td><td>
-    <button class="peq" onclick="openPEQ(79);">PEQ</button>
-    </td><td>
-    <button class="shlv" onclick="openHShelv(7);">HShlv</button>
-    </td><td>
-    <button class="hp" onclick="openLP(0);">LP</button>
-    </td><td>
-    <button class="phase" onclick="openPhase(7);">Phase</button>
-    </td><td>
-    <button class="delay" onclick="openDelay(7);">Delay</button>
-    </td><td>
-    <button class="gain" onclick="openGain(7);">Gain</button>
-    </td><td>
-    OUT 8
-    </td></tr>
   </table>
   </td></table>
 
@@ -537,19 +278,18 @@
   </center>
   </div>
 
-  <div id="lowShelv" class="modal" data-idx="0">
-    <div class="modal-content d_shlv">
+  <div id="fir" class="modal" data-idx="0">
+    <div class="modal-content d_fir">
       <table class="ptbl">
       <tr><td colspan="2" style="height:20px;padding-top:10px;">
       <table style="width:100%;">
-      <tr><td class="headline">Low Shelving</td><td class="close" onclick="closeModal('lowShelv')">&times;</td></tr>
+      <tr><td class="headline">FIR</td><td class="close" onclick="closeModal('fir')">&times;</td></tr>
       </table>
       </td></tr>
-      <tr><td><input type="number" id="ls_v" style="width:95%;" step="any" min="-24" max="24"></td><td style="text-align:left;width:10%;">dB</td></tr>
-      <tr><td><input type="number" id="ls_fc" style="width:95%;" step="any" min="1" max="20000"></td><td style="text-align:left;width:10%;">Hz</td></tr>
-      <tr><td><input type="number" id="ls_s" style="width:95%;" step="0.01" min="0.1" max="2"></td><td style="text-align:left;width:10%;">S</td></tr>
-      <tr><td colspan="2"><button class="send" id="ls_bypass" onclick="bypass('ls_bypass');sendParam('lshelv');" data-bypass="0">Bypass</button></td></tr>
-      <tr><td colspan="2"><button class="send" onclick="sendParam('lshelv')">Send</button></td></tr>
+      <tr><td>Impulse Response:</td></tr>
+      <tr><td><input type="file" id="ir" name="fileList" width="95%"></td></tr>
+      <tr><td colspan="2"><button class="send" id="fir_bypass" onclick="bypass('fir_bypass');sendParam('fir');" data-bypass="0">Bypass</button></td></tr>
+      <tr><td colspan="2"><button class="send" onclick="sendParam('fir')">Send</button></td></tr>
       </table>
     </div>
   </div>
@@ -567,118 +307,6 @@
       <tr><td><input type="number" id="peq_q" style="width:95%;" step="any" min="0.1" max="100"></td><td style="text-align:left;width:10%;">Q</td></tr>
       <tr><td colspan="2"><button class="send" id="peq_bypass" onclick="bypass('peq_bypass');sendParam('peq');" data-bypass="0">Bypass</button></td></tr>
       <tr><td colspan="2"><button class="send" onclick="sendParam('peq')">Send</button></td></tr>
-      </table>
-    </div>
-  </div>
-  
-  <div id="highShelv" class="modal" data-idx="0">
-    <div class="modal-content d_shlv">
-      <table class="ptbl">
-      <tr><td colspan="2" style="height:20px;padding-top:10px;">
-      <table style="width:100%;">
-      <tr><td class="headline">High Shelving</td><td class="close" onclick="closeModal('highShelv')">&times;</td></tr>
-      </table>
-      </td></tr>
-      <tr><td><input type="number" id="hs_v" style="width:95%;" step="any" min="-24" max="24"></td><td style="text-align:left;width:10%;">dB</td></tr>
-      <tr><td><input type="number" id="hs_fc" style="width:95%;" step="any" min="1" max="20000"></td><td style="text-align:left;width:10%;">Hz</td></tr>
-      <tr><td><input type="number" id="hs_s" style="width:95%;" step="0.01" min="0.1" max="2"></td><td style="text-align:left;width:10%;">S</td></tr>
-      <tr><td colspan="2"><button class="send" id="hs_bypass" onclick="bypass('hs_bypass');sendParam('hshelv');" data-bypass="0">Bypass</button></td></tr>
-      <tr><td colspan="2"><button class="send" onclick="sendParam('hshelv')">Send</button></td></tr>
-      </table>
-    </div>
-  </div>
-
-  <div id="crossOver" class="modal" data-idx="0">
-    <div class="modal-content d_hp" style="width:600px;">
-      <table class="ptbl">
-      <tr><td colspan="4" style="height:20px;padding-top:10px;">
-      <table style="width:100%;">
-      <tr><td class="headline">Crossover</td><td class="close" onclick="closeModal('crossOver')">&times;</td></tr>
-      </table>
-      </td></tr>
-      <tr><td colspan="2">Lowpass</td><td colspan="2">Highpass</td></tr>
-      <tr><td colspan="2">
-        <select id="lp_typ">
-          <option value="0">Bes 6</option>
-          <option value="1">Bes 12</option>
-          <option value="2">Bes 18</option>
-          <option value="3">Bes 24</option>
-          <option value="4">But 12</option>
-          <option value="5">But 18</option>
-          <option value="6">But 24</option>
-          <option value="7">LR 12</option>
-          <option value="8">LR 24</option>
-          <option value="9">LR 36</option>
-          <option value="10">LR 48</option>
-        </select>
-      </td>
-      <td colspan="2">
-        <select id="hp_typ">
-          <option value="0">Bes 6</option>
-          <option value="1">Bes 12</option>
-          <option value="2">Bes 18</option>
-          <option value="3">Bes 24</option>
-          <option value="4">But 12</option>
-          <option value="5">But 18</option>
-          <option value="6">But 24</option>
-          <option value="7">LR 12</option>
-          <option value="8">LR 24</option>
-          <option value="9">LR 36</option>
-          <option value="10">LR 48</option>
-        </select>
-      </td></tr>
-      <tr><td><input type="number" id="lp_fc" style="width:95%;" step="any" min="1" max="20000"></td><td style="text-align:left;width:10%;">Hz</td>
-          <td><input type="number" id="hp_fc" style="width:95%;" step="any" min="1" max="20000"></td><td style="text-align:left;width:10%;">Hz</td></tr>
-      <tr><td colspan="2"><button class="send" id="lp_bypass" onclick="bypass('lp_bypass');sendParam('xo');" data-bypass="0">Bypass</button></td>
-          <td colspan="2"><button class="send" id="hp_bypass" onclick="bypass('hp_bypass');sendParam('xo');" data-bypass="0">Bypass</button></td></tr>
-      <tr><td colspan="4"><button class="send" onclick="sendParam('xo')">Send</button></td></tr>
-      </table>
-    </div>
-  </div>
-
-  <div id="lowPass" class="modal" data-idx="0">
-    <div class="modal-content d_hp">
-      <table class="ptbl">
-      <tr><td colspan="2" style="height:20px;padding-top:10px;">
-      <table style="width:100%;">
-      <tr><td class="headline">Low Pass</td><td class="close" onclick="closeModal('lowPass')">&times;</td></tr>
-      </table>
-      </td></tr>
-      <tr><td colspan="2">
-        <select id="lp_typ">
-          <option value="0">Bes 6</option>
-          <option value="1">Bes 12</option>
-          <option value="2">Bes 18</option>
-          <option value="3">Bes 24</option>
-          <option value="4">But 12</option>
-          <option value="5">But 18</option>
-          <option value="6">But 24</option>
-          <option value="7">LR 12</option>
-          <option value="8">LR 24</option>
-          <option value="9">LR 36</option>
-          <option value="10">LR 48</option>
-        </select>
-      </td></tr>
-      <tr><td><input type="number" id="lp_fc" style="width:95%;" step="any" min="1" max="20000"></td><td style="text-align:left;width:10%;">Hz</td></tr>
-      <tr><td colspan="2"><button class="send" id="lp_bypass" onclick="bypass('lp_bypass');sendParam('lp');" data-bypass="0">Bypass</button></td></tr>
-      <tr><td colspan="2"><button class="send" onclick="sendParam('lp')">Send</button></td></tr>
-      </table>
-    </div>
-  </div>
-
-  <div id="phase" class="modal" data-idx="0">
-    <div class="modal-content d_phase">
-      <table class="ptbl">
-      <tr><td colspan="2" style="height:20px;padding-top:10px;">
-      <table style="width:100%;">
-      <tr><td class="headline">Phase</td><td class="close" onclick="closeModal('phase')">&times;</td></tr>
-      </table>
-      </td></tr>
-      <tr><td><input type="number" id="ph_fc" style="width:95%;" step="any" min="1" max="20000"></td><td style="text-align:left;width:10%;">Hz</td></tr>
-      <tr><td><input type="number" id="ph_q" style="width:95%;" step="any" min="0.1" max="100"></td><td style="text-align:left;width:10%;">Q</td></tr>
-      <tr><td colspan="2"><input type="checkbox" id="ph_inv">Invert</td></tr>
-      <tr><td colspan="2"><button class="send" id="ph_bypass" onclick="bypass('ph_bypass');sendParam('phase');" data-bypass="0">Bypass</button></td></tr>
-      <tr><td colspan="2"><button class="send" onclick="sendParam('phase')">Send</button></td></tr>
       </table>
     </div>
   </div>
@@ -772,6 +400,17 @@
   </div>
 
   <script>
+  function openFIR(idx){
+    document.getElementById("fir").style.display = "block";
+    fetch("/fir?idx="+idx).then (function (response) {
+      return response.json();
+    }).then (function (data) {
+      document.getElementById("fir").dataset.idx=idx;
+      document.getElementById("fir_bypass").dataset.bypass=data.bypass;
+      switchBypass("fir_bypass");
+    }).catch (function (error){console.log(error);
+    });
+  }
   function openLShelv(idx){
     document.getElementById("lowShelv").style.display = "block";
     fetch("/lshelv?idx="+idx).then (function (response) {
@@ -1002,6 +641,13 @@
       data.mute=document.getElementById("mute").dataset.mute;
       console.log( data.mute );
       return fetch("/gain",{method:"POST",headers:{
+      "Content-Type": "application/json"},
+      body:JSON.stringify(data)});
+    }
+    else if(btp=="fir"){
+      data.idx=document.getElementById("fir").dataset.idx;
+      data.bypass=document.getElementById("fir_bypass").dataset.bypass;
+      return fetch("/fir",{method:"POST",headers:{
       "Content-Type": "application/json"},
       body:JSON.stringify(data)});
     }

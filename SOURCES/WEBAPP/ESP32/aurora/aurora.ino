@@ -37,7 +37,10 @@
 #define MAX_NUM_PHASES 8
 #define MAX_NUM_DELAYS 8
 #define MAX_NUM_GAINS 8
-#define MAX_NUM_CROSSOVER 8;
+#define MAX_NUM_CROSSOVER 8
+#define MAX_NUM_FIRS 4
+
+#define MAX_LENGTH_IR 4096
 
 enum taddonid
 {
@@ -139,6 +142,13 @@ struct tCrossover
   bool lp_bypass;
 };
 
+struct tFir
+{
+  uint16_t addr;
+  float ir[MAX_LENGTH_IR];
+  bool bypass;
+};
+
 struct tMasterVolume
 {
   uint16_t addr;
@@ -164,19 +174,21 @@ tPhase paramPhase[8];
 tDelay paramDelay[8];
 tGain paramGain[8];
 tCrossover paramCrossover[8];
+tFir paramFir[MAX_NUM_FIRS];
 tMasterVolume masterVolume = { 0x0000, -60.0 };
 tInputSelector inputSelector;
 
 int numInputs = MAX_NUM_INPUTS;
-int numHPs = MAX_NUM_HPS;
-int numLShelvs = MAX_NUM_LSHELVS;
-int numPEQs = MAX_NUM_PEQS;
-int numHShelvs = MAX_NUM_HSHELVS;
-int numLPs = MAX_NUM_LPS;
-int numPhases = MAX_NUM_PHASES;
-int numDelays = MAX_NUM_DELAYS;
-int numGains = MAX_NUM_GAINS;
-int numCrossovers = MAX_NUM_CROSSOVER;
+int numHPs = 0;
+int numLShelvs = 0;
+int numPEQs = 0;
+int numHShelvs = 0;
+int numLPs = 0;
+int numPhases = 0;
+int numDelays = 0;
+int numGains = 0;
+int numCrossovers = 0;
+int numFIRs = 0;
 
 File fileDspProgram;
 File fileUpload;
@@ -274,6 +286,13 @@ void initUserParams( void )
   for( int ii = 0; ii < MAX_NUM_INPUTS; ii++ )
   {
     paramInputs[ii].sel = static_cast<uint32_t>(ii);
+  }
+
+  for( int ii = 0; ii < MAX_NUM_FIRS; ii++ )
+  {
+    paramFir[ii].bypass = false;
+    for( int kk = 0; kk < MAX_LENGTH_IR; kk++ )
+      paramFir[ii].ir[kk] = 0.0;
   }
 
   for( int ii = 0; ii < MAX_NUM_HPS; ii++ )
@@ -472,6 +491,7 @@ void readPluginMeta( void )
     numDelays = jsonPluginMeta["ndly"].as<String>().toInt();
     numGains = jsonPluginMeta["ngain"].as<String>().toInt();
     numCrossovers = jsonPluginMeta["nxo"].as<String>().toInt();
+    numFIRs = jsonPluginMeta["nfir"].as<String>().toInt();
 
     for( int ii = 0; ii < 8; ii++ )
       inputSelector.analog[ii] = static_cast<uint16_t>(jsonPluginMeta["analog"][ii].as<String>().toInt());
@@ -544,6 +564,9 @@ void readPluginMeta( void )
       paramCrossover[ii].lp_addr[2] = static_cast<uint16_t>(jsonPluginMeta["lp_xo"][2+ii*4]);
       paramCrossover[ii].lp_addr[3] = static_cast<uint16_t>(jsonPluginMeta["lp_xo"][3+ii*4]);
     }
+
+    for( int ii = 0; ii < numFIRs; ii++ )
+      paramFir[ii].addr = static_cast<uint16_t>(jsonPluginMeta["fir"][ii]);
 
     masterVolume.addr = jsonPluginMeta["master"].as<String>().toInt();
   }
@@ -708,6 +731,14 @@ void uploadUserParams( void )
         totalSize += len;
       }
 
+      for( int ii = 0; ii < numFIRs; ii++ )
+      {
+        size_t len = fileUserParams.read( (uint8_t*)&(paramFir[ii]), sizeof(tFir) );
+        if( len != sizeof(tFir) )
+          Serial.println( "[ERROR] Reading FIR from " + presetUsrparamFile[currentPreset] );
+        totalSize += len;
+      }
+
       for( int ii = 0; ii < numHPs; ii++ )
       {
         size_t len = fileUserParams.read( (uint8_t*)&(paramHP[ii]), sizeof(tHPLP) );
@@ -737,6 +768,14 @@ void uploadUserParams( void )
         size_t len = fileUserParams.read( (uint8_t*)&(paramHshelv[ii]), sizeof(tShelving) );
         if( len != sizeof(tShelving) )
           Serial.println( "[ERROR] Reading HShelvs from " + presetUsrparamFile[currentPreset] );
+        totalSize += len;
+      }
+
+      for( int ii = 0; ii < numCrossovers; ii++ )
+      {
+        size_t len = fileUserParams.read( (uint8_t*)&(paramCrossover[ii]), sizeof(tCrossover) );
+        if( len != sizeof(tCrossover) )
+          Serial.println( "[ERROR] Reading XO from " + presetUsrparamFile[currentPreset] );
         totalSize += len;
       }
 
@@ -793,7 +832,10 @@ void uploadUserParams( void )
   Serial.print( "Uploading user parameters..."  );
   for( int ii = 0; ii < numInputs; ii++ )
     setInput( ii );
-    //setInput( paramInputs[ii].addrChn, paramInputs[ii].addrPort, paramInputs[ii].sel );
+  Serial.print( "." );
+
+  for( int ii = 0; ii < numFIRs; ii++ )
+    setFir( ii );
   Serial.print( "." );
 
   for( int ii = 0; ii < numHPs; ii++ )
@@ -810,6 +852,10 @@ void uploadUserParams( void )
 
   for( int ii = 0; ii < numHShelvs; ii++ )
     setHighShelving( ii );
+  Serial.print( "." );
+
+  for( int ii = 0; ii < numCrossovers; ii++ )
+    setCrossover( ii );
   Serial.print( "." );
 
   for( int ii = 0; ii < numLPs; ii++ )
@@ -1315,6 +1361,34 @@ void handleGetXoJson( AsyncWebServerRequest* request )
   }
   else
     Serial.println( "[ERROR] handleGetXoJson(): No id param" );
+
+  response->setLength();
+  request->send(response);
+}
+
+//==============================================================================
+/*! Handles the GET request for a FIR impulse response
+ *
+ */
+void handleGetFirJson( AsyncWebServerRequest* request )
+{
+  Serial.println( "GET /fir" );
+
+  AsyncJsonResponse* response = new AsyncJsonResponse();
+
+  if( request->hasParam( "idx" ) )
+  {
+    AsyncWebParameter* idx = request->getParam(0);
+    int offset = idx->value().toInt();
+    JsonVariant& jsonResponse = response->getRoot();
+
+    if( paramFir[offset].bypass )
+      jsonResponse["bypass"] = String( "1" );
+    else
+      jsonResponse["bypass"] = String( "0" );
+  }
+  else
+    Serial.println( "[ERROR] handleGetFirJson(): No id param" );
 
   response->setLength();
   request->send(response);
@@ -2275,7 +2349,7 @@ void handlePostXoJson( AsyncWebServerRequest* request, uint8_t* data )
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
   if( err )
   {
-    Serial.print( "[ERROR] handlePostLpJson(): Deserialization failed. " );
+    Serial.print( "[ERROR] handlePostXoJson(): Deserialization failed. " );
     Serial.println( err.c_str() );
     request->send( 404, "text/plain", "" );
     softUnmuteDAC();
@@ -2423,6 +2497,52 @@ void setCrossover( int idx )
     }
   }
 
+}
+
+//==============================================================================
+/*! Handles the POST request for a FIR impulse response
+ *
+ */
+void handlePostFirJson( AsyncWebServerRequest* request, uint8_t* data )
+{
+  Serial.println( "POST /fir" );
+  //Serial.println( "Body:");
+  //for(size_t i=0; i<len; i++)
+  //  Serial.write(data[i]);
+  //Serial.println();
+
+  softMuteDAC();
+  delay(500);
+
+  DynamicJsonDocument jsonDoc(1024);
+  DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
+  if( err )
+  {
+    Serial.print( "[ERROR] handlePostFirJson(): Deserialization failed. " );
+    Serial.println( err.c_str() );
+    request->send( 404, "text/plain", "" );
+    softUnmuteDAC();
+    return;
+  }
+
+  JsonObject root = jsonDoc.as<JsonObject>();
+  Serial.println( root["idx"].as<String>() );
+
+  uint32_t idx = static_cast<uint32_t>(root["idx"].as<String>().toInt());
+
+  setFir( idx );
+
+  request->send(200, "text/plain", ""); 
+
+  softUnmuteDAC(); 
+}
+
+//==============================================================================
+/*! Sets the ir for a fir block on DSP.
+ *
+ */
+void setFir( int idx )
+{
 }
 
 //==============================================================================
@@ -2590,6 +2710,14 @@ void handlePostStore( AsyncWebServerRequest* request, uint8_t* data )
     totalSize += len;
   }
 
+  for( int ii = 0; ii < numFIRs; ii++ )
+  {
+    size_t len = fileUserParams.write( (uint8_t*)&(paramFir[ii]), sizeof(tFir) );
+    if( len != sizeof(tFir) )
+      Serial.println( "[ERROR] Writing FIRs to " + presetUsrparamFile[currentPreset] );
+    totalSize += len;
+  }
+
   for( int ii = 0; ii < numHPs; ii++ )
   {
     size_t len = fileUserParams.write( (uint8_t*)&(paramHP[ii]), sizeof(tHPLP) );
@@ -2619,6 +2747,14 @@ void handlePostStore( AsyncWebServerRequest* request, uint8_t* data )
     size_t len = fileUserParams.write( (uint8_t*)&(paramHshelv[ii]), sizeof(tShelving) );
     if( len != sizeof(tShelving) )
       Serial.println( "[ERROR] Writing HShelvs to " + presetUsrparamFile[currentPreset] );
+    totalSize += len;
+  }
+
+  for( int ii = 0; ii < numCrossovers; ii++ )
+  {
+    size_t len = fileUserParams.write( (uint8_t*)&(paramCrossover[ii]), sizeof(tCrossover) );
+    if( len != sizeof(tCrossover) )
+      Serial.println( "[ERROR] Writing XOs to " + presetUsrparamFile[currentPreset] );
     totalSize += len;
   }
 
@@ -3224,7 +3360,10 @@ void setup()
   File file = root.openNextFile();
   while(file)
   {
-    Serial.println(file.name());
+    Serial.print( file.name() );
+    Serial.print( " " );
+    Serial.print( file.size() );
+    Serial.println( " Bytes" );
     file = root.openNextFile();
   }
 
@@ -3276,6 +3415,7 @@ void setup()
   server.on( "/config",    HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetConfigJson(request); });
   server.on( "/allinputs", HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetAllInputsJson(request); });
   server.on( "/addoncfg",  HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetAddonConfigJson(request); });
+  server.on( "/fir",       HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetFirJson(request); });
   
   server.on( "/input", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
   {
@@ -3354,6 +3494,10 @@ void setup()
   }, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
   {
     handleFileUpload( request, data, len, index, total ); 
+  });
+  server.on( "/fir", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
+  {
+    handlePostFirJson( request, data );
   });
 
   //--- webOTA stuff ---
