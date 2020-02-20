@@ -224,6 +224,7 @@ height: 100%;
 .delay{border-top-color:#73EC6F;}
 .gain{border-top-color:#FC527F;}
 .fir{border-top-color:rgb(225,191,140);}
+/*box-shadow: 0px 0px 5px 1px rgba(255,0,0,0.75);*/
 
 .hp:hover{background-color:#54F4F9;color:#FFFFFF;border-color:#54F4F9;}
 .shlv:hover{background-color:#005EF0;color:#FFFFFF;border-color:#005EF0;}

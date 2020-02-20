@@ -287,7 +287,7 @@
       </table>
       </td></tr>
       <tr><td>Impulse Response:</td></tr>
-      <tr><td><input type="file" id="ir" name="fileList" width="95%"></td></tr>
+      <tr><td><input type="file" id="irfile" width="95%"></td></tr>
       <tr><td colspan="2"><button class="send" id="fir_bypass" onclick="bypass('fir_bypass');sendParam('fir');" data-bypass="0">Bypass</button></td></tr>
       <tr><td colspan="2"><button class="send" onclick="sendParam('fir')">Send</button></td></tr>
       </table>
@@ -399,9 +399,16 @@
     </div>
   </div>
 
+  <div id="ufir" class="modal" style="z-index:100;">
+    <div class="modal-content" style="width:50%">
+      <h2>Updating FIRs, please wait...</h2>
+    </div>
+  </div>
+
   <script>
   function openFIR(idx){
     document.getElementById("fir").style.display = "block";
+    document.getElementById('irfile').value="";
     fetch("/fir?idx="+idx).then (function (response) {
       return response.json();
     }).then (function (data) {
@@ -645,12 +652,50 @@
       body:JSON.stringify(data)});
     }
     else if(btp=="fir"){
-      data.idx=document.getElementById("fir").dataset.idx;
-      data.bypass=document.getElementById("fir_bypass").dataset.bypass;
-      return fetch("/fir",{method:"POST",headers:{
-      "Content-Type": "application/json"},
-      body:JSON.stringify(data)});
+      var idx=document.getElementById("fir").dataset.idx;
+      var bypass=document.getElementById("fir_bypass").dataset.bypass;
+      var taps = new Float32Array(4096);
+      for(var k=0;k<4096;k++) taps[k]=0;
+      taps[0]=1;
+      document.getElementById("ufir").style.display = "block";
+      if(document.getElementById('irfile').files.length>0){
+        return new Promise((resolve, reject) => {
+          var file=document.getElementById('irfile').files[0];
+          readFirFile(file).then(function(result){
+            var lines = result.split('\n');
+            for(var ll=0; ll<lines.length; ll++){
+              if(ll<4096){
+                val = parseFloat(lines[ll]);
+                if(!isNaN(val)){taps[ll]=val;}
+              }
+            }
+          }).then(function(response){
+            var fir = new Blob([taps], {type:'application/octet-binary'});
+            return fetch("/fir?idx="+idx+"&bypass="+bypass,{method:'POST',headers:{},body:fir});
+          }).then(function(response){
+            document.getElementById("ufir").style.display = "none";
+            resolve(response);
+          });
+        });
+      }
+      else
+      {
+        return new Promise((resolve, reject) => {
+          var fir = new Blob([taps], {type:'application/octet-binary'});
+          return fetch("/fir?idx="+idx+"&bypass="+bypass,{method:'POST',headers:{},body:fir});
+        }).then(function(response){
+          document.getElementById("ufir").style.display = "none";
+          resolve(response);
+        });
+      }
     }
+  }
+  function readFirFile(file){
+    return new Promise((resolve, reject) => {
+    var reader=new FileReader();
+    reader.onload = function found(){resolve(reader.result);}
+    reader.readAsText(file);
+    })
   }
   function postMVol(){
     var data={};
@@ -803,17 +848,12 @@
       else if(cfg.aid==3) document.getElementById('addon_c').style.display="block";
       else if(cfg.aid==4) document.getElementById('addon_d').style.display="block";
       return fetch("/allinputs");
-    }).then(function(response){
-      return response.json();
+    }).then(function(response){return response.json();
 	  }).then(function(data){
       document.getElementById("chn0").value=data.in0;
       document.getElementById("chn1").value=data.in1;
       document.getElementById("chn2").value=data.in2;
       document.getElementById("chn3").value=data.in3;
-      document.getElementById("chn4").value=data.in4;
-      document.getElementById("chn5").value=data.in5;
-      document.getElementById("chn6").value=data.in6;
-      document.getElementById("chn7").value=data.in7;
       getMVol();
     }).catch(function(err){console.log(err);
     });

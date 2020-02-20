@@ -5,6 +5,8 @@
 #include "AsyncJson.h"
 #include <ArduinoJson.h>
 #include <Update.h>
+#include "soc/timer_group_struct.h"
+#include "soc/timer_group_reg.h"
 
 #include "AK4458.h"
 #include "AK5558.h"
@@ -178,7 +180,7 @@ tFir paramFir[MAX_NUM_FIRS];
 tMasterVolume masterVolume = { 0x0000, -60.0 };
 tInputSelector inputSelector;
 
-int numInputs = MAX_NUM_INPUTS;
+int numInputs = 0;
 int numHPs = 0;
 int numLShelvs = 0;
 int numPEQs = 0;
@@ -196,7 +198,9 @@ File fileUpload;
 float sampleRate = 48000.0;
 //float masterVolume = -60.0;
 uint8_t currentPreset = 0;
+uint8_t currentFirUploadIdx = 0;
 byte currentAddOnCfg[3];
+uint16_t addrVPot = 0x0000;
 
 String presetUsrparamFile[4] = { "/usrparam.001", "/usrparam.002", "/usrparam.003", "/usrparam.004" };
 String presetAddonCfgFile[4] = { "/addoncfg.001", "/addoncfg.002", "/addoncfg.003", "/addoncfg.004" };
@@ -293,6 +297,7 @@ void initUserParams( void )
     paramFir[ii].bypass = false;
     for( int kk = 0; kk < MAX_LENGTH_IR; kk++ )
       paramFir[ii].ir[kk] = 0.0;
+    paramFir[ii].ir[0] = 1.0;
   }
 
   for( int ii = 0; ii < MAX_NUM_HPS; ii++ )
@@ -310,9 +315,9 @@ void initUserParams( void )
     paramLshelv[ii].bypass = false;
   }
 
-  for( int ii = 0; ii < MAX_NUM_PEQS; ii = ii + 8 )
+  for( int ii = 0; ii < MAX_NUM_PEQS; ii = ii + 10 )
   {
-    for( int nn = 0; nn < 8; nn++ )
+    for( int nn = 0; nn < 10; nn++ )
     {
       paramPeq[ii + nn].gain = 0.0;
       paramPeq[ii + nn].fc = static_cast<float>( (nn+1)*1000 );
@@ -482,6 +487,7 @@ void readPluginMeta( void )
     }
 
     JsonObject jsonPluginMeta = jsonDoc.as<JsonObject>();
+    numInputs = jsonPluginMeta["nchn"].as<String>().toInt();
     numHPs = jsonPluginMeta["nhp"].as<String>().toInt();
     numLShelvs = jsonPluginMeta["nlshelv"].as<String>().toInt();
     numPEQs = jsonPluginMeta["npeq"].as<String>().toInt();
@@ -493,19 +499,19 @@ void readPluginMeta( void )
     numCrossovers = jsonPluginMeta["nxo"].as<String>().toInt();
     numFIRs = jsonPluginMeta["nfir"].as<String>().toInt();
 
-    for( int ii = 0; ii < 8; ii++ )
+    for( int ii = 0; ii < numInputs; ii++ )
       inputSelector.analog[ii] = static_cast<uint16_t>(jsonPluginMeta["analog"][ii].as<String>().toInt());
     
-    for( int ii = 0; ii < 8; ii++ )
+    for( int ii = 0; ii < numInputs; ii++ )
       inputSelector.spdif[ii] = static_cast<uint16_t>(jsonPluginMeta["spdif"][ii].as<String>().toInt());
 
-    for( int ii = 0; ii < 8; ii++ )
+    for( int ii = 0; ii < numInputs; ii++ )
       inputSelector.uac[ii] = static_cast<uint16_t>(jsonPluginMeta["uac"][ii].as<String>().toInt());
 
-    for( int ii = 0; ii < 8; ii++ )
+    for( int ii = 0; ii < numInputs; ii++ )
       inputSelector.exp[ii] = static_cast<uint16_t>(jsonPluginMeta["exp"][ii].as<String>().toInt());
  
-    for( int ii = 0; ii < 8; ii++ )
+    for( int ii = 0; ii < numInputs; ii++ )
       inputSelector.port[ii] = static_cast<uint16_t>(jsonPluginMeta["port"][ii].as<String>().toInt());
 
     for( int ii = 0; ii < numInputs; ii++ )
@@ -569,6 +575,7 @@ void readPluginMeta( void )
       paramFir[ii].addr = static_cast<uint16_t>(jsonPluginMeta["fir"][ii]);
 
     masterVolume.addr = jsonPluginMeta["master"].as<String>().toInt();
+    addrVPot = jsonPluginMeta["vpot"].as<String>().toInt();
   }
   else
   {
@@ -835,8 +842,10 @@ void uploadUserParams( void )
   Serial.print( "." );
 
   for( int ii = 0; ii < numFIRs; ii++ )
+  {
     setFir( ii );
-  Serial.print( "." );
+    Serial.print( "." );
+  }
 
   for( int ii = 0; ii < numHPs; ii++ )
     setHighPass( ii );
@@ -1263,6 +1272,11 @@ void handleGetPhaseJson( AsyncWebServerRequest* request )
     JsonVariant& jsonResponse = response->getRoot();
     jsonResponse["Q"] = paramPhase[offset].Q;
     jsonResponse["fc"] = paramPhase[offset].fc;
+    if( paramPhase[offset].inv )
+      jsonResponse["inv"] = String( "1" );
+    else
+      jsonResponse["inv"] = String( "0" );
+
     if( paramPhase[offset].bypass )
       jsonResponse["bypass"] = String( "1" );
     else
@@ -2135,6 +2149,11 @@ void handlePostPhaseJson( AsyncWebServerRequest* request, uint8_t* data )
   uint32_t idx = static_cast<uint32_t>(root["idx"].as<String>().toInt());
   paramPhase[idx].fc = root["fc"].as<String>().toFloat();
   paramPhase[idx].Q = root["Q"].as<String>().toFloat();
+  if( root["inv"].as<String>().toInt() == 0 )
+    paramPhase[idx].inv = false;
+  else
+    paramPhase[idx].inv = true;
+
   if( root["bypass"].as<String>().toInt() == 0 )
     paramPhase[idx].bypass = false;
   else
@@ -2159,6 +2178,13 @@ void setPhase( int idx )
   uint32_t floatval;
   if( !paramPhase[idx].bypass )
     AudioFilterFactory::makeAllpass( a, b, paramPhase[idx].fc, paramPhase[idx].Q, sampleRate );
+
+  if( paramPhase[idx].inv )
+  {
+    b[0] *= -1.0;
+    b[1] *= -1.0;
+    b[2] *= -1.0;
+  }
 
   uint16_t addr = paramPhase[idx].addr;
   floatval = convertTo824(b[2]);
@@ -2538,14 +2564,6 @@ void handlePostFirJson( AsyncWebServerRequest* request, uint8_t* data )
 }
 
 //==============================================================================
-/*! Sets the ir for a fir block on DSP.
- *
- */
-void setFir( int idx )
-{
-}
-
-//==============================================================================
 /*! Handles the POST request for Master Volume
  *
  */
@@ -2630,7 +2648,7 @@ void handlePostPresetJson( AsyncWebServerRequest* request, uint8_t* data )
   initUserParams();
   uploadUserParams();
 
-  updateAddOnA();
+  updateAddOn();
      
   request->send(200, "text/plain", "");
   softUnmuteDAC();  
@@ -2956,7 +2974,7 @@ void handlePostPasswordApJson( AsyncWebServerRequest* request, uint8_t* data )
 /*! Setup the AddOn
  *
  */
-void updateAddOnA( void )
+void updateAddOn( void )
 {
   switch( Settings.addonid )
   {
@@ -3205,6 +3223,82 @@ void handleFileUpload( AsyncWebServerRequest* request, uint8_t* data, size_t len
 }
 
 //==============================================================================
+/*! Handles upload of an ir file
+ *
+ */
+void handleIrUpload( AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
+{
+  if (!index)
+  {
+    Serial.println("POST /fir");
+    if( request->hasParam( "idx" ) )
+    {
+      AsyncWebParameter* idx = request->getParam(0);
+      currentFirUploadIdx = idx->value().toInt();
+    }
+    if( request->hasParam( "bypass" ) )
+    {
+      AsyncWebParameter* bypass = request->getParam(1);
+      if( bypass->value().toInt() )
+        paramFir[currentFirUploadIdx].bypass = true;
+      else
+        paramFir[currentFirUploadIdx].bypass = false;
+    }
+  }
+
+  if( len > 0 )
+  {
+    for( int kk = 0; kk < len; kk++ )
+      ((uint8_t*)(paramFir[currentFirUploadIdx].ir))[index + kk] = data[kk];
+  }
+    
+  if( index + len >= total )
+  {
+    softMuteDAC();
+    delay(500);
+
+    setFir( currentFirUploadIdx );
+
+    delay(250);
+    softUnmuteDAC();
+
+    Serial.println( "[OK]" );
+    Serial.println( index + len );
+  }
+  
+}
+
+//==============================================================================
+/*! Sets the ir for a fir block on DSP.
+ *
+ */
+void setFir( int idx )
+{
+  byte val[4];
+  uint32_t floatval;
+
+  for( uint16_t kk = 0; kk < MAX_LENGTH_IR; kk++ )
+  {
+    uint16_t addr = paramFir[idx].addr + kk;
+    if( paramFir[idx].bypass )
+    {
+      if( kk == 0 )
+        floatval = convertTo824( 1.0 );
+      else
+        floatval = convertTo824( 0.0 );
+    }
+    else
+      floatval = convertTo824( paramFir[idx].ir[kk] );
+
+    val[0] = (floatval >> 24 ) & 0xFF;
+    val[1] = (floatval >> 16 ) & 0xFF;
+    val[2] = (floatval >> 8 ) & 0xFF;
+    val[3] =  floatval & 0xFF;
+    ADAU1452_WRITE_BLOCK( addr, val, 4 );
+  }
+}
+
+//==============================================================================
 /*! Wifi connection task 
  *
  */
@@ -3309,6 +3403,29 @@ void myWiFiTask(void *pvParameters)
     }
     else
       vTaskDelay (5000);
+  }
+}
+
+//==============================================================================
+/*! Enables or disables the volume potentiometer
+ *
+ */
+void enableVolPot( void )
+{
+  if( addrVPot )
+  {
+    uint32_t vpot;
+    if( Settings.vpot == true )
+      vpot = 0x00000000;
+    else
+      vpot = 0x00000001;
+    
+    byte val[4];
+    val[0] = (vpot >> 24 ) & 0xFF;
+    val[1] = (vpot >> 16 ) & 0xFF;
+    val[2] = (vpot >> 8 ) & 0xFF;
+    val[3] =  vpot & 0xFF;
+    ADAU1452_WRITE_BLOCK( addrVPot, val, 4 );  
   }
 }
 
@@ -3495,10 +3612,13 @@ void setup()
   {
     handleFileUpload( request, data, len, index, total ); 
   });
-  server.on( "/fir", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
+  server.on( "/fir", HTTP_POST, [](AsyncWebServerRequest *request){
+    request->send(200, "text/plain", "OK"); 
+  }, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
   {
-    handlePostFirJson( request, data );
+    handleIrUpload( request, data, len, index, total ); 
   });
+
 
   //--- webOTA stuff ---
   server.on( "/webota", HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( 200, "text/html", webota_html ); });
@@ -3549,7 +3669,8 @@ void setup()
   //----------------------------------------------------------------------------
   // Create a connection task with 8kB stack on core 0
   xTaskCreatePinnedToCore(myWiFiTask, "myWiFiTask", 8192, NULL, 3, NULL, 0);
-  
+
+  enableVolPot();
 
   resetDAC( false );
 
@@ -3562,5 +3683,7 @@ void setup()
  */ 
 void loop()
 {
-  
+  TIMERG0.wdt_wprotect=TIMG_WDT_WKEY_VALUE;
+  TIMERG0.wdt_feed=1;
+  TIMERG0.wdt_wprotect=0;
 }
