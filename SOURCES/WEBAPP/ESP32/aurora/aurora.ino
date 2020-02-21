@@ -1577,6 +1577,7 @@ void handlePostInputJson( AsyncWebServerRequest* request, uint8_t* data )
 //void setInput( const uint16_t addrChn, const uint16_t addrPort, const uint32_t sel )
 void setInput( const int idx )
 {
+  Serial.println( "setInput()" );
   uint32_t sel = (paramInputs[idx].sel >> 16) & 0x0000ffff;
   uint16_t addrChn = paramInputs[idx].addrChn[sel];
   uint16_t addrPort = paramInputs[idx].addrPort;
