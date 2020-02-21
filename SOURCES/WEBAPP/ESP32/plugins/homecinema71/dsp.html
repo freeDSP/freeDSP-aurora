@@ -771,6 +771,13 @@
     </div>
   </div>
 
+  <div id="plzw" class="modal" style="z-index:100;">
+    <div class="modal-content" style="width:50%">
+      <h2><br></h2>
+      <h2 id="msg">Please wait...</h2>
+    </div>
+  </div>
+
   <script>
   function openLShelv(idx){
     document.getElementById("lowShelv").style.display = "block";
@@ -1016,6 +1023,8 @@
   function switchPreset(p){
     var data={};
     data.pre=p;
+    document.getElementById("msg").innerHTML="Switching preset, please wait...";
+    document.getElementById("plzw").style.display="block";
     fetch("/preset",{method:"POST",headers:{
     "Content-Type": "application/json"},
     body:JSON.stringify(data)})
@@ -1034,6 +1043,7 @@
       }
       return cfg;})
     .then(function(response){getMVol();return response;})
+    .then(function(response){document.getElementById("plzw").style.display="none";})
     .catch(function(error){console.log(error);});
     document.getElementById("pre0").style.backgroundColor = "#101010";
     document.getElementById("pre1").style.backgroundColor = "#101010";
@@ -1121,10 +1131,13 @@
   }
   function storePreset(){
     var data={};
+    document.getElementById("msg").innerHTML="Storing preset, please wait...";
+    document.getElementById("plzw").style.display="block";
     fetch("/store",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)})
     .then(function(response){
       alert("Success! Your preset has been stored.");
       return response;})
+    .then(function(response){document.getElementById("plzw").style.display="none";})
     .catch(function(err){console.log(err);});
   }
   function onLoad(){

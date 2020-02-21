@@ -399,9 +399,10 @@
     </div>
   </div>
 
-  <div id="ufir" class="modal" style="z-index:100;">
+  <div id="plzw" class="modal" style="z-index:100;">
     <div class="modal-content" style="width:50%">
-      <h2>Updating FIRs, please wait...</h2>
+      <h2><br></h2>
+      <h2 id="msg">Please wait...</h2>
     </div>
   </div>
 
@@ -657,8 +658,9 @@
       var taps = new Float32Array(4096);
       for(var k=0;k<4096;k++) taps[k]=0;
       taps[0]=1;
-      document.getElementById("ufir").style.display = "block";
-      if(document.getElementById('irfile').files.length>0){
+      document.getElementById("msg").innerHTML="Updating FIRs, please wait...";
+      document.getElementById("plzw").style.display="block";
+      if(document.getElementById("irfile").files.length>0){
         return new Promise((resolve, reject) => {
           var file=document.getElementById('irfile').files[0];
           readFirFile(file).then(function(result){
@@ -673,7 +675,7 @@
             var fir = new Blob([taps], {type:'application/octet-binary'});
             return fetch("/fir?idx="+idx+"&bypass="+bypass,{method:'POST',headers:{},body:fir});
           }).then(function(response){
-            document.getElementById("ufir").style.display = "none";
+            document.getElementById("plzw").style.display = "none";
             resolve(response);
           });
         });
@@ -684,7 +686,7 @@
           var fir = new Blob([taps], {type:'application/octet-binary'});
           return fetch("/fir?idx="+idx+"&bypass="+bypass,{method:'POST',headers:{},body:fir});
         }).then(function(response){
-          document.getElementById("ufir").style.display = "none";
+          document.getElementById("wait").style.display = "none";
           resolve(response);
         });
       }
@@ -707,6 +709,8 @@
   function switchPreset(p){
     var data={};
     data.pre=p;
+    document.getElementById("msg").innerHTML="Switching preset, please wait...";
+    document.getElementById("plzw").style.display="block";
     fetch("/preset",{method:"POST",headers:{
     "Content-Type": "application/json"},
     body:JSON.stringify(data)})
@@ -725,6 +729,7 @@
       }
       return cfg;})
     .then(function(response){getMVol();return response;})
+    .then(function(response){document.getElementById("plzw").style.display="none";})
     .catch(function(error){console.log(error);});
     document.getElementById("pre0").style.backgroundColor = "#101010";
     document.getElementById("pre1").style.backgroundColor = "#101010";
@@ -812,10 +817,13 @@
   }
   function storePreset(){
     var data={};
+    document.getElementById("msg").innerHTML="Storing preset, please wait...";
+    document.getElementById("plzw").style.display="block";
     fetch("/store",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)})
     .then(function(response){
       alert("Success! Your preset has been stored.");
       return response;})
+    .then(function(response){document.getElementById("plzw").style.display="none";})
     .catch(function(err){console.log(err);});
   }
   function onLoad(){

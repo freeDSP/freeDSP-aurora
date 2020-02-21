@@ -16,7 +16,8 @@ public:
     kLinkwitzRiley12,
     kLinkwitzRiley24,
     kLinkwitzRiley36,
-    kLinkwitzRiley48
+    kLinkwitzRiley48,
+    kNumFilterDesigns
   };
 
 public:
