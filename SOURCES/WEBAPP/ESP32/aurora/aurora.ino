@@ -302,9 +302,9 @@ void initUserParams( void )
 
   for( int ii = 0; ii < MAX_NUM_HPS; ii++ )
   {
-    paramHP[ii].fc = 100.0;
+    paramHP[ii].fc = 1000.0;
     paramHP[ii].typ = 0;
-    paramHP[ii].bypass = true;
+    paramHP[ii].bypass = false;
   }
 
   for( int ii = 0; ii < MAX_NUM_LSHELVS; ii++ )
@@ -336,9 +336,9 @@ void initUserParams( void )
 
   for( int ii = 0; ii < MAX_NUM_LPS; ii++ )
   {
-    paramLP[ii].fc = 10000.0;
+    paramLP[ii].fc = 1000.0;
     paramLP[ii].typ = 0;
-    paramLP[ii].bypass = false;
+    paramLP[ii].bypass = true;
   }
 
   for( int ii = 0; ii < MAX_NUM_PHASES; ii++ )
@@ -477,7 +477,7 @@ void readPluginMeta( void )
 
   if( filePluginMeta )
   {
-    StaticJsonDocument<4096> jsonDoc;
+    StaticJsonDocument<5000> jsonDoc;
     DeserializationError err = deserializeJson( jsonDoc, filePluginMeta );
     if( err )
     {
@@ -1487,6 +1487,238 @@ void handleGetAddonConfigJson( AsyncWebServerRequest* request )
 }
 
 //==============================================================================
+/*! Handles the GET request for bypass status of all dsp blocks
+ *
+ */
+String handleGetAllBypJson( void )
+{
+  Serial.println( "GET /allbyp" );
+
+  // Build the JSON response manually. Via ArduinoJson it did not work somehow.
+  String array( "{\"byp\":[" );
+  for( int ii = 0; ii < numHPs; ii++ )
+  {
+    array += String("{\"name\":\"hp") + String(ii) + String("\",\"val\":");
+   
+    if( paramHP[ii].bypass )
+      array += String( "1}" );
+    else
+      array += String( "0}" );
+
+    array += String( "," );
+  }
+  for( int ii = 0; ii < numLShelvs; ii++ )
+  {
+    array += String("{\"name\":\"ls") + String(ii) + String("\",\"val\":");
+   
+    if( paramLshelv[ii].bypass )
+      array += String( "1}" );
+    else
+      array += String( "0}" );
+
+    array += String( "," );
+  }
+  for( int ii = 0; ii < numPEQs; ii++ )
+  {
+    array += String("{\"name\":\"peq") + String(ii) + String("\",\"val\":");
+   
+    if( paramPeq[ii].bypass )
+      array += String( "1}" );
+    else
+      array += String( "0}" );
+
+    array += String( "," );
+  }
+  for( int ii = 0; ii < numHShelvs; ii++ )
+  {
+    array += String("{\"name\":\"hs") + String(ii) + String("\",\"val\":");
+   
+    if( paramHshelv[ii].bypass )
+      array += String( "1}" );
+    else
+      array += String( "0}" );
+
+    array += String( "," );
+  }
+  for( int ii = 0; ii < numLPs; ii++ )
+  {
+    array += String("{\"name\":\"lp") + String(ii) + String("\",\"val\":");
+   
+    if( paramLP[ii].bypass )
+      array += String( "1}" );
+    else
+      array += String( "0}" );
+
+   array += String( "," );
+  }
+  for( int ii = 0; ii < numPhases; ii++ )
+  {
+    array += String("{\"name\":\"ph") + String(ii) + String("\",\"val\":");
+   
+    if( paramPhase[ii].bypass )
+      array += String( "1}" );
+    else
+      array += String( "0}" );
+
+    array += String( "," );
+  }
+  for( int ii = 0; ii < numDelays; ii++ )
+  {
+    array += String("{\"name\":\"dly") + String(ii) + String("\",\"val\":");
+   
+    if( paramDelay[ii].bypass )
+      array += String( "1}" );
+    else
+      array += String( "0}" );
+
+   array += String( "," );
+  }
+  for( int ii = 0; ii < numGains; ii++ )
+  {
+    array += String("{\"name\":\"gn") + String(ii) + String("\",\"val\":");
+   
+    if( paramGain[ii].mute )
+      array += String( "1}" );
+    else
+      array += String( "0}" );
+
+    array += String( "," );
+  }
+  for( int ii = 0; ii < numCrossovers; ii++ )
+  {
+    array += String("{\"name\":\"xo") + String(ii) + String("\",\"val\":");
+   
+    if( paramCrossover[ii].lp_bypass || paramCrossover[ii].hp_bypass )
+      array += String( "1}" );
+    else
+      array += String( "0}" );
+
+    array += String( "," );
+  }
+  for( int ii = 0; ii < numFIRs; ii++ )
+  {
+    array += String("{\"name\":\"fir") + String(ii) + String("\",\"val\":");
+   
+    if( paramFir[ii].bypass )
+      array += String( "1}" );
+    else
+      array += String( "0}" );
+
+    array += String( "," );
+  }
+
+  if( array.length() > 1 )
+   array = array.substring( 0, array.length()-1 );
+  
+  array += String( "]}" );
+
+  return array;
+}
+
+//==============================================================================
+/*! Handles the GET request for fc of all dsp blocks
+ *
+ */
+String handleGetAllFcJson( void )
+{
+  Serial.println( "GET /allfc" );
+
+  // Build the JSON response manually. Via ArduinoJson it did not work somehow.
+  String array( "{\"fc\":[" );
+  for( int ii = 0; ii < numHPs; ii++ )
+  {
+    array += String("{\"name\":\"hp") + String(ii) + String("\",\"val\":");
+    if( paramHP[ii].fc < 1000.0 )
+      array += String( "\"HP<br><h4>" ) + String( static_cast<int>(paramHP[ii].fc) ) + String( " Hz</h4>\"}" );
+    else
+    {
+      char buf[20];
+      dtostrf( paramHP[ii].fc/1000.0 , 1, 1, buf );
+      array += String( "\"HP<br><h4>" ) + String( buf ) + String( " kHz</h4>\"}" );
+    }
+    array += String( "," );
+  }
+  for( int ii = 0; ii < numLShelvs; ii++ )
+  {
+    array += String("{\"name\":\"ls") + String(ii) + String("\",\"val\":");
+    char buf[20];
+    dtostrf( paramLshelv[ii].gain , 1, 1, buf );
+    array += String( "\"LShlv<br><h4>" ) + String( buf ) + String( " dB</h4>\"}" );
+    array += String( "," );
+  }
+  for( int ii = 0; ii < numPEQs; ii++ )
+  {
+    array += String("{\"name\":\"peq") + String(ii) + String("\",\"val\":");
+    if( paramPeq[ii].fc < 1000.0 )
+      array += String( "\"PEQ<br><h4>" ) + String( static_cast<int>(paramPeq[ii].fc) ) + String( " Hz</h4>\"}" );
+    else
+    {
+      char buf[20];
+      dtostrf( paramPeq[ii].fc/1000.0 , 1, 1, buf );
+      array += String( "\"PEQ<br><h4>" ) + String( buf ) + String( " kHz</h4>\"}" );
+    }
+    array += String( "," );
+  }
+  for( int ii = 0; ii < numHShelvs; ii++ )
+  {
+    array += String("{\"name\":\"hs") + String(ii) + String("\",\"val\":");
+    char buf[20];
+    dtostrf( paramHshelv[ii].gain , 1, 1, buf );
+    array += String( "\"HShlv<br><h4>" ) + String( buf ) + String( " dB</h4>\"}" );
+    array += String( "," );
+  }
+  for( int ii = 0; ii < numLPs; ii++ )
+  {
+    array += String("{\"name\":\"lp") + String(ii) + String("\",\"val\":");
+    if( paramLP[ii].fc < 1000.0 )
+      array += String( "\"LP<br><h4>" ) + String( static_cast<int>(paramLP[ii].fc) ) + String( " Hz</h4>\"}" );
+    else
+    {
+      char buf[20];
+      dtostrf( paramLP[ii].fc/1000.0 , 1, 1, buf );
+      array += String( "\"LP<br><h4>" ) + String( buf ) + String( " kHz</h4>\"}" );
+    }
+    array += String( "," );
+  }
+  for( int ii = 0; ii < numPhases; ii++ )
+  {
+    array += String("{\"name\":\"ph") + String(ii) + String("\",\"val\":");
+    if( paramPhase[ii].fc < 1000.0 )
+      array += String( "\"Phase<br><h4>" ) + String( static_cast<int>(paramPhase[ii].fc) ) + String( " Hz</h4>\"}" );
+    else
+    {
+      char buf[20];
+      dtostrf( paramPhase[ii].fc/1000.0 , 1, 1, buf );
+      array += String( "\"Phase<br><h4>" ) + String( buf ) + String( " kHz</h4>\"}" );
+    }
+    array += String( "," );
+  }
+  for( int ii = 0; ii < numDelays; ii++ )
+  {
+    array += String("{\"name\":\"dly") + String(ii) + String("\",\"val\":");
+    char buf[20];
+    dtostrf( paramDelay[ii].delay, 1, 1, buf );
+    array += String( "\"Delay<br><h4>" ) + String( buf ) + String( " ms</h4>\"}" );
+    array += String( "," );
+  }
+  for( int ii = 0; ii < numGains; ii++ )
+  {
+    array += String("{\"name\":\"gn") + String(ii) + String("\",\"val\":");
+    char buf[20];
+    dtostrf( paramGain[ii].gain , 1, 1, buf );
+    array += String( "\"Gain<br><h4>" ) + String( buf ) + String( " dB</h4>\"}" );
+    array += String( "," );
+  }
+
+  if( array.length() > 1 )
+   array = array.substring( 0, array.length()-1 );
+  
+  array += String( "]}" );
+
+  return array;
+}
+
+//==============================================================================
 /*! Handles the GET request for all input selections
  *
  */
@@ -1577,7 +1809,6 @@ void handlePostInputJson( AsyncWebServerRequest* request, uint8_t* data )
 //void setInput( const uint16_t addrChn, const uint16_t addrPort, const uint32_t sel )
 void setInput( const int idx )
 {
-  Serial.println( "setInput()" );
   uint32_t sel = (paramInputs[idx].sel >> 16) & 0x0000ffff;
   uint16_t addrChn = paramInputs[idx].addrChn[sel];
   uint16_t addrPort = paramInputs[idx].addrPort;
@@ -3575,6 +3806,8 @@ void setup()
   server.on( "/allinputs", HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetAllInputsJson(request); });
   server.on( "/addoncfg",  HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetAddonConfigJson(request); });
   server.on( "/fir",       HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetFirJson(request); });
+  server.on( "/allbyp",    HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( 200, "text/plain", handleGetAllBypJson() ); });
+  server.on( "/allfc",     HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( 200, "text/plain", handleGetAllFcJson() ); });
   
   server.on( "/input", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
   {
