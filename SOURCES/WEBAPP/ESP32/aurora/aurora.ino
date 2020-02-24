@@ -3290,13 +3290,14 @@ void setupAddOnA( void )
     // Analog RCA
     if( (value == 0xfe) || (value == 0xff) )
     {
+      Serial.println( "Analog RCA" );
       uint32_t data = 0x00000004;
       byte val[4];
       val[0] = (data >> 24 ) & 0xFF;
       val[1] = (data >> 16 ) & 0xFF;
       val[2] = (data >> 8 ) & 0xFF;
       val[3] = data & 0xFF;
-      for( int ii = 0; ii < 8; ii++ )
+      for( int ii = 0; ii < numInputs; ii++ )
         ADAU1452_WRITE_BLOCK( inputSelector.analog[ii],  val, 4 ); 
       
       data = 0x00000000;
@@ -3304,12 +3305,16 @@ void setupAddOnA( void )
       val[1] = (data >> 16 ) & 0xFF;
       val[2] = (data >> 8 ) & 0xFF;
       val[3] = data & 0xFF;
-      for( int ii = 0; ii < 8; ii++ )
+      for( int ii = 0; ii < numInputs; ii++ )
         ADAU1452_WRITE_BLOCK( inputSelector.port[ii], val, 4 );
+
+      for( int ii = 0; ii < numInputs; ii++ )
+        paramInputs[ii].sel = 0x00000004;
     }
     // Analog XLR
     else if( value == 0xf7 )
     {
+      Serial.println( "Analog XLR" );
       uint32_t data = 0x00000000;
       byte val[4];
       val[0] = (data >> 24 ) & 0xFF;
@@ -3326,10 +3331,14 @@ void setupAddOnA( void )
       val[3] = data & 0xFF;
       for( int ii = 0; ii < 8; ii++ )
         ADAU1452_WRITE_BLOCK( inputSelector.port[ii], val, 4 );
+
+      for( int ii = 0; ii < numInputs; ii++ )
+        paramInputs[ii].sel = 0x00000000;
     }
     // Toslink left channel
     else if( (value == 0xfa) || (value == 0xfb) )
     {
+      Serial.println( "Toslink left channel" );
       uint32_t data = 0x00000000;
       byte val[4];
       val[0] = (data >> 24 ) & 0xFF;
@@ -3346,10 +3355,14 @@ void setupAddOnA( void )
       val[3] = data & 0xFF;
       for( int ii = 0; ii < 8; ii++ )
         ADAU1452_WRITE_BLOCK( inputSelector.port[ii], val, 4 );
+
+      for( int ii = 0; ii < numInputs; ii++ )
+        paramInputs[ii].sel = 0x00040000;
     }
     // Toslink right channel
     else if( value == 0xf3 )
     {
+      Serial.println( "Toslink right channel" );
       uint32_t data = 0x00000001;
       byte val[4];
       val[0] = (data >> 24 ) & 0xFF;
@@ -3366,10 +3379,14 @@ void setupAddOnA( void )
       val[3] = data & 0xFF;
       for( int ii = 0; ii < 8; ii++ )
         ADAU1452_WRITE_BLOCK( inputSelector.port[ii], val, 4 );
+
+      for( int ii = 0; ii < numInputs; ii++ )
+        paramInputs[ii].sel = 0x00040001;
     }
     // Digital RCA left
     else if( (value == 0xfc) || (value == 0xfd) )
     {
+      Serial.println( "Digital RCA left" );
       uint32_t data = 0x00000000;
       byte val[4];
       val[0] = (data >> 24 ) & 0xFF;
@@ -3386,10 +3403,14 @@ void setupAddOnA( void )
       val[3] = data & 0xFF;
       for( int ii = 0; ii < 8; ii++ )
         ADAU1452_WRITE_BLOCK( inputSelector.port[ii], val, 4 );
+
+      for( int ii = 0; ii < numInputs; ii++ )
+        paramInputs[ii].sel = 0x00040000;
     }
     // Digital RCA right
     else if( value == 0xf5 )
     {
+      Serial.println( "Digital RCA right" );
       uint32_t data = 0x00000001;
       byte val[4];
       val[0] = (data >> 24 ) & 0xFF;
@@ -3406,6 +3427,9 @@ void setupAddOnA( void )
       val[3] = data & 0xFF;
       for( int ii = 0; ii < 8; ii++ )
         ADAU1452_WRITE_BLOCK( inputSelector.port[ii], val, 4 );
+
+      for( int ii = 0; ii < numInputs; ii++ )
+        paramInputs[ii].sel = 0x00040001;
     }
   }
 }
@@ -3764,6 +3788,14 @@ void setup()
   readPluginMeta();
 
   //----------------------------------------------------------------------------
+  //--- Configure AddOn
+  //----------------------------------------------------------------------------
+  if( Settings.addonid == ADDON_A )
+    setupAddOnA();
+  else if( Settings.addonid == ADDON_B )
+    setupAddOnB();
+
+  //----------------------------------------------------------------------------
   //--- Upload program to DSP
   //----------------------------------------------------------------------------
   uploadDspFirmware();
@@ -3772,14 +3804,6 @@ void setup()
   //--- Upload user parameters to DSP
   //----------------------------------------------------------------------------
   uploadUserParams();
-
-  //----------------------------------------------------------------------------
-  //--- Configure AddOn
-  //----------------------------------------------------------------------------
-  if( Settings.addonid == ADDON_A )
-    setupAddOnA();
-  else if( Settings.addonid == ADDON_B )
-    setupAddOnB();
 
   //----------------------------------------------------------------------------
   //--- Configure Webserver
