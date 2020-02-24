@@ -44,6 +44,8 @@
 
 #define MAX_LENGTH_IR 4096
 
+#define MAX_NUM_PRESETS 4
+
 enum taddonid
 {
   ADDON_CUSTOM = 0x00,
@@ -201,8 +203,8 @@ uint8_t currentFirUploadIdx = 0;
 byte currentAddOnCfg[3];
 uint16_t addrVPot = 0x0000;
 
-String presetUsrparamFile[4] = { "/usrparam.001", "/usrparam.002", "/usrparam.003", "/usrparam.004" };
-String presetAddonCfgFile[4] = { "/addoncfg.001", "/addoncfg.002", "/addoncfg.003", "/addoncfg.004" };
+String presetUsrparamFile[MAX_NUM_PRESETS] = { "/usrparam.001", "/usrparam.002", "/usrparam.003", "/usrparam.004" };
+String presetAddonCfgFile[MAX_NUM_PRESETS] = { "/addoncfg.001", "/addoncfg.002", "/addoncfg.003", "/addoncfg.004" };
 
 AsyncWebServer server( 80 );
 
@@ -3485,6 +3487,30 @@ void handleFileUpload( AsyncWebServerRequest* request, uint8_t* data, size_t len
         else
           Serial.println( "[ERROR] Deleting " + fileName );
       }
+
+      // Delete old presets and addon configuration if uploading new plugin
+      if( fileName == String( "/dsp.fw") )
+      {
+        for( int ii = 0; ii < MAX_NUM_PRESETS; ii++ )
+        {
+          if( SPIFFS.exists( presetUsrparamFile[ii] ) )
+          {
+            if( SPIFFS.remove( presetUsrparamFile[ii] ) )
+              Serial.println( presetUsrparamFile[ii] + " deleted." );
+            else
+              Serial.println( "[ERROR] Deleting " + presetUsrparamFile[ii] );
+          }
+
+          if( SPIFFS.exists( presetAddonCfgFile[ii] ) )
+          {
+            if( SPIFFS.remove( presetAddonCfgFile[ii] ) )
+              Serial.println( presetAddonCfgFile[ii] + " deleted." );
+            else
+              Serial.println( "[ERROR] Deleting " + presetAddonCfgFile[ii] );
+          }
+        }
+      }
+
       fileUpload = SPIFFS.open( fileName, "w" );
       if( !fileUpload )
         Serial.println( "[ERROR] Failed to open " + fileName );
