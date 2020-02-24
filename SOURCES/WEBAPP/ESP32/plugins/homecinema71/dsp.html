@@ -13,6 +13,8 @@
       <li><a onclick="configWifi()">Config Wifi</a></li>
       <li><a onclick="openPlugin()">Upload Plugin</a></li>
       <li><a onclick="storePreset()">Store Preset</a></li>
+      <li><a href="preset.param" download>Export Preset</a></li>
+      <li><label for="presetimp">Import Preset</label><input type="file" id="presetimp" style="display:none"/></li>
     </ul>
     <div style="position:absolute;bottom:30px;right:30px;">
       <p class="info">GUI: v2.0.0-alpha.8</p>
@@ -1275,6 +1277,22 @@
       document.getElementById("wait").style.display="none";
       return response;})
     .catch(function(err){alert( "Uploading your plugin failed: "+err);});
+  });
+  let preimport = document.getElementById("presetimp");
+  preimport.addEventListener('change', e => {
+    let file = e.target.files[0];
+    fetch("/config").then(function(response){
+      return response.json();
+    }).then(function(cfg){
+      var fname = file.name;
+      var p=cfg.pre;
+      if(p==0) fname="usrparam.001";
+      else if(p==1) fname="usrparam.002";
+      else if(p==2) fname="usrparam.003";
+      else if(p==3) fname="usrparam.004";
+      return fetch("/upload?fname="+fname,{method:'POST',headers:{},body:file});
+    }).then(function(response){alert("Super! Successfully uploaded your preset.");switchPreset(p);
+    }).catch(function(err){alert( "Uploading your preset failed: "+err);});
   });
   </script>
 </body>

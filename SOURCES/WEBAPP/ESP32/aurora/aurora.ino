@@ -14,7 +14,7 @@
 #include "fallback.h"
 #include "webota.h"
 
-#define VERSION_STR "v2.0.0-alpha.8"
+#define VERSION_STR "v2.0.0-alpha.9"
 
 #define I2C_SDA_PIN 17
 #define I2C_SCL_PIN 16
@@ -196,7 +196,6 @@ File fileDspProgram;
 File fileUpload;
 
 float sampleRate = 48000.0;
-//float masterVolume = -60.0;
 uint8_t currentPreset = 0;
 uint8_t currentFirUploadIdx = 0;
 byte currentAddOnCfg[3];
@@ -3808,6 +3807,11 @@ void setup()
   server.on( "/fir",       HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetFirJson(request); });
   server.on( "/allbyp",    HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( 200, "text/plain", handleGetAllBypJson() ); });
   server.on( "/allfc",     HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( 200, "text/plain", handleGetAllFcJson() ); });
+  server.on( "/preset.param", HTTP_GET, [](AsyncWebServerRequest *request )
+  { 
+    Serial.println( "/preset.param" );
+    request->send( SPIFFS, presetUsrparamFile[currentPreset], "application/octet-stream" ); 
+  });
   
   server.on( "/input", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
   {

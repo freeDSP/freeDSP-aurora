@@ -101,6 +101,21 @@ li a:hover {
   background-color: #202020
 }
 
+li label {
+  padding: 16px 16px 16px 16px;
+  font-size: 16px;
+  color: #D0D0D0;
+  display: block;
+  text-align:center;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+li label:hover {
+  color: #f1f1f1;
+  background-color: #202020
+}
+
 nav {
   height: 100%;
   width: 200px;
