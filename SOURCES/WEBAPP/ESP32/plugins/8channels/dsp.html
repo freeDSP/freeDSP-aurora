@@ -716,23 +716,30 @@
   </div>
 
   <div id="configDev" class="modal">
-    <div class="modal-content">
+    <div class="modal-content" style="width:600px;">
       <table class="ptbl">
       <tr><td colspan="2" style="height:20px;padding-top:10px;">
       <table style="width:100%;">
       <tr><td class="headline">Device Config</td><td class="close" onclick="closeModal('configDev')">&times;</td></tr>
       </table>
       </td></tr>
-      <tr><td>AddOn</td></tr>
-      <tr><td><select id="aid">
+      <tr><td>AddOn</td><td>ADC Channel Summation</td></tr>
+      <tr style="vertical-align:top;"><td><select id="aid">
       <option value="0">None or custom</option>
       <option value="1">A The woodworker's friend</option>
       <option value="2">B Down with developers</option>
       <!--<option value="3">C Control over the crowd</option>-->
       <option value="4">D Balanced life</option>
-      </select></td></tr>
-      <tr><td><input type="checkbox" id="vpot">Volume Potentiometer</td></tr>
-      <tr><td><button class="send" onclick="sendConfig()">Store</button></td></tr>
+      </select></td>
+      <td><select id="adcsum">
+      <option value="0">None</option>
+      <option value="1">8 to 4</option>
+      <option value="2">8 to 2</option>
+      <option value="3">8 to 1</option>
+      </select>
+      </td></tr>
+      <tr><td><input type="checkbox" id="vpot">Volume Potentiometer</td><td></td></tr>
+      <tr><td colspan="2"><button class="send" onclick="sendConfig()">Store</button></td></tr>
       </table>
     </div>
   </div>
@@ -908,6 +915,7 @@
     }).then (function (data) {  
       document.getElementById("aid").value = data.aid;
       document.getElementById("vpot").value = data.vpot;
+      document.getElementById("adcsum").value = data.adcsum;
     }).catch (function (error) {console.log(error);
     });
   }
@@ -1118,12 +1126,13 @@
       for(ii in data.fc){document.getElementById(data.fc[ii].name).innerHTML=data.fc[ii].val;}
     }).catch(function(err){console.log(err);});
   }
-  function configDev(){document.getElementById("configDev").style.display = "block";}
+  function configDev(){document.getElementById("configDev").style.display = "block";getConfig();}
   function configWifi(){document.getElementById("configWifi").style.display = "block";}
   function sendConfig(){
     var data={};
     data.aid=document.getElementById("aid").value;
     data.vpot=document.getElementById("vpot").checked;
+    data.adcsum=document.getElementById("adcsum").value;
     fetch("/config",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)})
     .then(function(result) {
     hideAddon();

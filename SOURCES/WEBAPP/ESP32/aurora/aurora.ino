@@ -62,6 +62,7 @@ struct tSettings
   int addonid;
   bool vpot;
   String pwdap;
+  int adcsum;
 };
 
 tSettings Settings;
@@ -391,6 +392,7 @@ void readSettings( void )
     Settings.addonid = ADDON_CUSTOM;
     Settings.vpot = false;
     Settings.pwdap = "";
+    Settings.adcsum = 0;
     writeSettings();
 
     Serial.println( "[OK]" );
@@ -421,12 +423,14 @@ void readSettings( void )
     else
       Settings.vpot = false;
     Settings.pwdap = jsonSettings["pwdap"].as<String>();
+    Settings.adcsum = jsonSettings["adcsum"].as<String>().toInt();
 
     Serial.println( "[OK]" );
     Serial.println( "Device config" );
     //Serial.print( "PID: " ); Serial.println( Settings.pid );
     Serial.print( "AID: " ); Serial.println( Settings.addonid );
     Serial.print( "Volume Poti: " ); Serial.println( Settings.vpot ); 
+    Serial.print( "ADC Channel Sum: " );Serial.println( Settings.adcsum );
     Serial.println( "[OK]" );
   }
   else
@@ -451,6 +455,7 @@ void writeSettings( void )
     jsonSettings["aid"] = Settings.addonid;
     jsonSettings["vpot"] = Settings.vpot;
     jsonSettings["pwdap"] = Settings.pwdap;
+    jsonSettings["adcsum"] = Settings.adcsum;
 
     if( serializeJson( jsonSettings, fileSettings ) == 0 )
       Serial.println( "[ERROR] writeSettings(): Failed to write settings to file" );
@@ -932,6 +937,31 @@ void configADC( void )
    * bit[2:1] : MONO2-1: Channel Summation mode Select                :  00 Not- Summation mode (default)
    */
   AK5558_REGWRITE( AK5558_POWERMANAGEMENT2, 0b00000001 );
+}
+
+//==============================================================================
+/*! Change the channel summation of AK5558 ADC
+ */
+void changeChannelSummationADC( void )
+{
+  AK5558_REGWRITE( AK5558_POWERMANAGEMENT2, 0b00000000 );
+  delay(100);
+
+  // Normal operation
+  if( Settings.adcsum == 0 )
+    AK5558_REGWRITE( AK5558_POWERMANAGEMENT2, 0b00000001 );
+  // 8-to-4 mode
+  else if( Settings.adcsum == 1 )
+    AK5558_REGWRITE( AK5558_POWERMANAGEMENT2, 0b00000101 );    
+  // 8-to-2 mode
+  else if( Settings.adcsum == 2 )
+    AK5558_REGWRITE( AK5558_POWERMANAGEMENT2, 0b00000011 );
+  // 8-to-1 mode
+  else if( Settings.adcsum == 3 )
+    AK5558_REGWRITE( AK5558_POWERMANAGEMENT2, 0b00000111 );   
+  // fallback to normal operation
+  else
+    AK5558_REGWRITE( AK5558_POWERMANAGEMENT2, 0b00000001 );
 }
 
 //==============================================================================
@@ -1460,6 +1490,8 @@ void handleGetConfigJson( AsyncWebServerRequest* request )
   }
   else
     jsonResponse["addcfg"] = 0;
+
+  jsonResponse["adcsum"] = Settings.adcsum;
 
   response->setLength();
   request->send(response);
@@ -2953,14 +2985,18 @@ void handlePostConfigJson( AsyncWebServerRequest* request, uint8_t* data )
   JsonObject root = jsonDoc.as<JsonObject>();
   Serial.println( root["aid"].as<String>() );
   Serial.println( root["vpot"].as<String>() );
+  Serial.println( root["adcsum"].as<String>().toInt() );
 
   Settings.addonid = root["aid"].as<String>().toInt();
   if( root["vpot"].as<String>() == "true" )
     Settings.vpot = true;
   else
     Settings.vpot = false;
+  Settings.adcsum = root["adcsum"].as<String>().toInt();
 
   writeSettings();
+
+  changeChannelSummationADC();
        
   request->send(200, "text/plain", "");  
 }
@@ -3807,6 +3843,7 @@ void setup()
   }
 
   readSettings();
+  changeChannelSummationADC();
 
   Serial.print( "Init user parameter......" );
   initUserParams();
