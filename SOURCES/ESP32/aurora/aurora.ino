@@ -773,7 +773,7 @@ void myWiFiTask(void *pvParameters)
           Serial.println(Settings.ssid.c_str());
           Serial.print("IP address: ");
           Serial.println(WiFi.localIP());
-          Serial.println("");
+          Serial.println(WiFi.getHostname());
         }
         cntrAuthFailure = 0;
 

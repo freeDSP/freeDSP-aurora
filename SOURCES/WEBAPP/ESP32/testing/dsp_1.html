@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head><title>AURORA DSP</title></head>
+<style>
+body{font-family:Helvetica;}
+table.a{border: 1px solid #AAAAAA;border-radius: 4px;border-top-width: 4px;padding:4px;width:100px;height:120px;}
+td{text-align: center;}
+input{width:60px;}
+</style>
+<body>
+<table><tr><td>
+<table class="a" style="border-top-color: #54F4F9;">
+<tr><td colspan="2">LR24</td></tr>
+<tr><td><input type="number" name="p00"></td><td>Hz</td></tr>
+<tr><td colspan="2">High Pass</td></tr>
+</table>
+</td><td>
+<table class="a" style="border-top-color: #005EF0;">
+<tr><td><input type="number" name="p01"></td><td>dB</td></tr>
+<tr><td><input type="number" name="p02"></td><td>Hz</td></tr>
+<tr><td><input type="number" name="p03"></td><td>S</td></tr>
+<tr><td colspan="2">Low Shelv</td></tr>
+</table>
+</td><td>
+<table class="a" style="border-top-color: #A05EF0;">
+<tr><td><input type="number" name="p04"></td><td>dB</td></tr>
+<tr><td><input type="number" name="p05"></td><td>Hz</td></tr>
+<tr><td><input type="number" name="p06"></td><td>Q</td></tr>
+<tr><td colspan="2">Param EQ</td colspan="2"></tr>
+</table>
+</td><td>
+<table class="a" style="border-top-color: #A05EF0;">
+<tr><td><input type="number" name="p07"></td><td>dB</td></tr>
+<tr><td><input type="number" name="p08"></td><td>Hz</td></tr>
+<tr><td><input type="number" name="p09"></td><td>Q</td></tr>
+<tr><td colspan="2">Param EQ</td colspan="2"></tr>
+</table>
+</td><td>
+<table class="a" style="border-top-color: #A05EF0;">
+<tr><td><input type="number" name="p10"></td><td>dB</td></tr>
+<tr><td><input type="number" name="p11"></td><td>Hz</td></tr>
+<tr><td><input type="number" name="p12"></td><td>Q</td></tr>
+<tr><td colspan="2">Param EQ</td colspan="2"></tr>
+</table>
+</td><td>
+<table class="a" style="border-top-color: #A05EF0;">
+<tr><td><input type="number" name="p13"></td><td>dB</td></tr>
+<tr><td><input type="number" name="p14"></td><td>Hz</td></tr>
+<tr><td><input type="number" name="p15"></td><td>Q</td></tr>
+<tr><td colspan="2">Param EQ</td colspan="2"></tr>
+</table>
+</td><td>
+<table class="a" style="border-top-color: #A05EF0;">
+<tr><td><input type="number" name="p16"></td><td>dB</td></tr>
+<tr><td><input type="number" name="p17"></td><td>Hz</td></tr>
+<tr><td><input type="number" name="p18"></td><td>Q</td></tr>
+<tr><td colspan="2">Param EQ</td colspan="2"></tr>
+</table>
+</td><td>
+<table class="a" style="border-top-color: #A05EF0;">
+<tr><td><input type="number" name="p19"></td><td>dB</td></tr>
+<tr><td><input type="number" name="p20"></td><td>Hz</td></tr>
+<tr><td><input type="number" name="p21"></td><td>Q</td></tr>
+<tr><td colspan="2">Param EQ</td colspan="2"></tr>
+</table>
+</td><td>
+<table class="a" style="border-top-color: #A05EF0;">
+<tr><td><input type="number" name="p22"></td><td>dB</td></tr>
+<tr><td><input type="number" name="p23"></td><td>Hz</td></tr>
+<tr><td><input type="number" name="p24"></td><td>Q</td></tr>
+<tr><td colspan="2">Param EQ</td colspan="2"></tr>
+</table>
+</td><td>
+<table class="a" style="border-top-color: #A05EF0;">
+<tr><td><input type="number" name="p25"></td><td>dB</td></tr>
+<tr><td><input type="number" name="p26"></td><td>Hz</td></tr>
+<tr><td><input type="number" name="p27"></td><td>Q</td></tr>
+<tr><td colspan="2">Param EQ</td></tr>
+</table>
+</td><td>
+<table class="a" style="border-top-color: #A05EF0;">
+<tr><td><input type="number" name="p28"></td><td>dB</td></tr>
+<tr><td><input type="number" name="p29"></td><td>Hz</td></tr>
+<tr><td><input type="number" name="p30"></td><td>Q</td></tr>
+<tr><td colspan="2">Param EQ</td></tr>
+</table>
+</td><td>
+<table class="a" style="border-top-color: #A05EF0;">
+<tr><td><input type="number" name="p31"></td><td>dB</td></tr>
+<tr><td><input type="number" name="p32"></td><td>Hz</td></tr>
+<tr><td><input type="number" name="p33"></td><td>Q</td></tr>
+<tr><td colspan="2">Param EQ</td></tr>
+</table>
+</td><td>
+<table class="a" style="border-top-color: #005EF0;">
+<tr><td><input type="number" name="p34"></td><td>dB</td></tr>
+<tr><td><input type="number" name="p35"></td><td>Hz</td></tr>
+<tr><td><input type="number" name="p36"></td><td>S</td></tr>
+<tr><td colspan="2">High Shelv</td></tr>
+</table>
+</td><td>
+<table class="a" style="border-top-color: #54F4F9;">
+<tr><td colspan="2">LR24</td></tr>
+<tr><td><input type="number" name="p37"></td><td>Hz</td></tr>
+<tr><td colspan="2">Low Pass</td></tr>
+</table>
+</td><td>
+<table class="a" style="border-top-color: #FD8E28;">
+<tr><td><input type="number" name="p38"></td><td>Hz</td></tr>
+<tr><td><input type="number" name="p39"></td><td>Q</td></tr>
+<tr><td><input type="checkbox" name="p40"></td><td>Inv</td></tr>
+<tr><td colspan="2">Phase</td></tr>
+</table>
+</td><td>
+<table class="a" style="border-top-color: #73EC6F;">
+<tr><td><input type="number" name="p41"></td><td>ms</td></tr>
+<tr><td colspan="2">Delay</td></tr>
+</table>
+</td><td>
+<table class="a" style="border-top-color: #FC527F;">
+<tr><td><input type="number" name="p42"></td><td>dB</td></tr>
+<tr><td colspan="2">Gain</td></tr>
+</table>
+</td></tr>
+
+
+<tr><td>
+  <table class="a" style="border-top-color: #54F4F9;">
+  <tr><td colspan="2">LR24</td></tr>
+  <tr><td><input type="number" name="p00"></td><td>Hz</td></tr>
+  <tr><td colspan="2">High Pass</td></tr>
+  </table>
+  </td><td>
+  <table class="a" style="border-top-color: #005EF0;">
+  <tr><td><input type="number" name="p01"></td><td>dB</td></tr>
+  <tr><td><input type="number" name="p02"></td><td>Hz</td></tr>
+  <tr><td><input type="number" name="p03"></td><td>S</td></tr>
+  <tr><td colspan="2">Low Shelv</td></tr>
+  </table>
+  </td><td>
+  <table class="a" style="border-top-color: #A05EF0;">
+  <tr><td><input type="number" name="p04"></td><td>dB</td></tr>
+  <tr><td><input type="number" name="p05"></td><td>Hz</td></tr>
+  <tr><td><input type="number" name="p06"></td><td>Q</td></tr>
+  <tr><td colspan="2">Param EQ</td colspan="2"></tr>
+  </table>
+  </td><td>
+  <table class="a" style="border-top-color: #A05EF0;">
+  <tr><td><input type="number" name="p07"></td><td>dB</td></tr>
+  <tr><td><input type="number" name="p08"></td><td>Hz</td></tr>
+  <tr><td><input type="number" name="p09"></td><td>Q</td></tr>
+  <tr><td colspan="2">Param EQ</td colspan="2"></tr>
+  </table>
+  </td><td>
+  <table class="a" style="border-top-color: #A05EF0;">
+  <tr><td><input type="number" name="p10"></td><td>dB</td></tr>
+  <tr><td><input type="number" name="p11"></td><td>Hz</td></tr>
+  <tr><td><input type="number" name="p12"></td><td>Q</td></tr>
+  <tr><td colspan="2">Param EQ</td colspan="2"></tr>
+  </table>
+  </td><td>
+  <table class="a" style="border-top-color: #A05EF0;">
+  <tr><td><input type="number" name="p13"></td><td>dB</td></tr>
+  <tr><td><input type="number" name="p14"></td><td>Hz</td></tr>
+  <tr><td><input type="number" name="p15"></td><td>Q</td></tr>
+  <tr><td colspan="2">Param EQ</td colspan="2"></tr>
+  </table>
+  </td><td>
+  <table class="a" style="border-top-color: #A05EF0;">
+  <tr><td><input type="number" name="p16"></td><td>dB</td></tr>
+  <tr><td><input type="number" name="p17"></td><td>Hz</td></tr>
+  <tr><td><input type="number" name="p18"></td><td>Q</td></tr>
+  <tr><td colspan="2">Param EQ</td colspan="2"></tr>
+  </table>
+  </td><td>
+  <table class="a" style="border-top-color: #A05EF0;">
+  <tr><td><input type="number" name="p19"></td><td>dB</td></tr>
+  <tr><td><input type="number" name="p20"></td><td>Hz</td></tr>
+  <tr><td><input type="number" name="p21"></td><td>Q</td></tr>
+  <tr><td colspan="2">Param EQ</td colspan="2"></tr>
+  </table>
+  </td><td>
+  <table class="a" style="border-top-color: #A05EF0;">
+  <tr><td><input type="number" name="p22"></td><td>dB</td></tr>
+  <tr><td><input type="number" name="p23"></td><td>Hz</td></tr>
+  <tr><td><input type="number" name="p24"></td><td>Q</td></tr>
+  <tr><td colspan="2">Param EQ</td colspan="2"></tr>
+  </table>
+  </td><td>
+  <table class="a" style="border-top-color: #A05EF0;">
+  <tr><td><input type="number" name="p25"></td><td>dB</td></tr>
+  <tr><td><input type="number" name="p26"></td><td>Hz</td></tr>
+  <tr><td><input type="number" name="p27"></td><td>Q</td></tr>
+  <tr><td colspan="2">Param EQ</td></tr>
+  </table>
+  </td><td>
+  <table class="a" style="border-top-color: #A05EF0;">
+  <tr><td><input type="number" name="p28"></td><td>dB</td></tr>
+  <tr><td><input type="number" name="p29"></td><td>Hz</td></tr>
+  <tr><td><input type="number" name="p30"></td><td>Q</td></tr>
+  <tr><td colspan="2">Param EQ</td></tr>
+  </table>
+  </td><td>
+  <table class="a" style="border-top-color: #A05EF0;">
+  <tr><td><input type="number" name="p31"></td><td>dB</td></tr>
+  <tr><td><input type="number" name="p32"></td><td>Hz</td></tr>
+  <tr><td><input type="number" name="p33"></td><td>Q</td></tr>
+  <tr><td colspan="2">Param EQ</td></tr>
+  </table>
+  </td><td>
+  <table class="a" style="border-top-color: #005EF0;">
+  <tr><td><input type="number" name="p34"></td><td>dB</td></tr>
+  <tr><td><input type="number" name="p35"></td><td>Hz</td></tr>
+  <tr><td><input type="number" name="p36"></td><td>S</td></tr>
+  <tr><td colspan="2">High Shelv</td></tr>
+  </table>
+  </td><td>
+  <table class="a" style="border-top-color: #54F4F9;">
+  <tr><td colspan="2">LR24</td></tr>
+  <tr><td><input type="number" name="p37"></td><td>Hz</td></tr>
+  <tr><td colspan="2">Low Pass</td></tr>
+  </table>
+  </td><td>
+  <table class="a" style="border-top-color: #FD8E28;">
+  <tr><td><input type="number" name="p38"></td><td>Hz</td></tr>
+  <tr><td><input type="number" name="p39"></td><td>Q</td></tr>
+  <tr><td><input type="checkbox" name="p40"></td><td>Inv</td></tr>
+  <tr><td colspan="2">Phase</td></tr>
+  </table>
+  </td><td>
+  <table class="a" style="border-top-color: #73EC6F;">
+  <tr><td><input type="number" name="p41"></td><td>ms</td></tr>
+  <tr><td colspan="2">Delay</td></tr>
+  </table>
+  </td><td>
+  <table class="a" style="border-top-color: #FC527F;">
+  <tr><td><input type="number" name="p42"></td><td>dB</td></tr>
+  <tr><td colspan="2">Gain</td></tr>
+  </table>
+  </td></tr>
+
+  
+</table>
+</body>
+</html>
