@@ -14,7 +14,7 @@
 #include "fallback.h"
 #include "webota.h"
 
-#define VERSION_STR "v2.0.0-alpha.9"
+#define VERSION_STR "v2.0.0-beta.1"
 
 #define I2C_SDA_PIN 17
 #define I2C_SCL_PIN 16
