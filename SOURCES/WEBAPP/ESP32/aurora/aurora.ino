@@ -14,7 +14,7 @@
 #include "fallback.h"
 #include "webota.h"
 
-#define VERSION_STR "v2.0.0-beta.1"
+#define VERSION_STR "v2.0.0-beta.2"
 
 #define I2C_SDA_PIN 17
 #define I2C_SCL_PIN 16
@@ -2430,7 +2430,6 @@ void handlePostPhaseJson( AsyncWebServerRequest* request, uint8_t* data )
 
   JsonObject root = jsonDoc.as<JsonObject>();
   Serial.println( root["idx"].as<String>() );
-  Serial.println( root["addr"].as<String>() );
   Serial.println( root["fc"].as<String>() );
   Serial.println( root["Q"].as<String>() );
 
@@ -3497,6 +3496,11 @@ void setupAddOnB( void )
     Serial.println( "[ERROR] Reading AddOn config " + fileName );
 
   fileAddonConfig.close();
+
+  Wire.beginTransmission( currentAddOnCfg[0]>>1 ); //ADDONB_SPDIFMUX_ADDR
+  Wire.write( currentAddOnCfg[1] ); // regaddr
+  Wire.write( currentAddOnCfg[2] ); // data
+  Wire.endTransmission( true );
 
   Serial.println( "[OK]" );
 }
