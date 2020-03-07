@@ -17,19 +17,19 @@
       <li><label for="presetimp">Import Preset</label><input type="file" id="presetimp" style="display:none"/></li>
     </ul>
     <div style="position:absolute;bottom:30px;right:30px;">
-      <p class="info">GUI: v2.0.0-beta.1</p>
+      <p class="info">GUI: v2.0.0-beta.2</p>
       <p class="info" id="fw">FW: 0.0.0</p>
       <p class="info" id="ip">Local Wifi IP: 0.0.0.0</p>
       </div>
 	</nav>
 	
 	<div>
-  <center>
   <table>
-  <tr><td style="border-bottom:1px solid;"><h1>Aurora DSP</h1></td></tr>
-  <tr><td><h2>Home Cinema 7.1</h2></td></tr>
-  </table>  
-  <table><tr><td valign=top rowspan="8" style="border-right: 1px solid #808080; min-width:150px">
+  <tr><td colspan="2"><center>
+  <table style="border-bottom:1px solid;"><tr><td><h1>Aurora DSP</h1></td></tr></table>  
+  </center></td></tr>
+  <tr><td colspan="2"><h2>Home Cinema 7.1</h2></td></tr>
+  <tr><td valign=top style="border-right: 1px solid #808080; min-width:200px; max-width:200px;">
   <table align="center" style="padding:10px">
     <tr><td><h2>AddOn</h2></td></tr>
     <tr><td>
@@ -56,7 +56,7 @@
   <table style="border-spacing: 5px 10px;">
     <tr>
     <td class="rotate">
-    Channel 1
+    Front<br>Left
     <td style="min-width:80px">
     <select id="chn0" onchange="postInputJson('chn0',0);">
       <option value="0x00000000">Analog 1</option>
@@ -118,7 +118,7 @@
     </td></tr>
   
     <tr><td class="rotate">
-    Channel 2
+    Front<br>Right
     </td><td>
     <select id="chn1" onchange="postInputJson('chn1',1);">
       <option value="0x00000000">Analog 1</option>
@@ -177,7 +177,7 @@
     </td></tr>
   
     <tr><td class="rotate">
-    Channel 3
+    Center
     </td><td>
     <select id="chn2" onchange="postInputJson('chn2',2);">
       <option value="0x00000000">Analog 1</option>
@@ -236,7 +236,7 @@
     </td></tr>
   
     <tr><td class="rotate">
-    Channel 4
+    Rear<br>Left
     </td><td>
     <select id="chn3" onchange="postInputJson('chn3',3);">
       <option value="0x00000000">Analog 1</option>
@@ -295,7 +295,7 @@
     </td></tr>
   
     <tr><td class="rotate">
-    Channel 5
+    Rear<br>Right
     </td><td>
     <select id="chn4" onchange="postInputJson('chn4',4);">
       <option value="0x00000000">Analog 1</option>
@@ -354,7 +354,7 @@
     </td></tr>
   
     <tr><td class="rotate">
-    Channel 6
+    Surround<br>Left
     </td><td>
     <select id="chn5" onchange="postInputJson('chn5',5);">
       <option value="0x00000000">Analog 1</option>
@@ -413,7 +413,7 @@
     </td></tr>
   
     <tr><td class="rotate">
-    Channel 7
+    Surround<br>Right
     </td><td>
     <select id="chn6" onchange="postInputJson('chn6',6);">
       <option value="0x00000000">Analog 1</option>
@@ -472,7 +472,7 @@
     </td></tr>
   
     <tr><td class="rotate">
-    Channel 8
+    LFE
     </td><td>
     <select id="chn7" onchange="postInputJson('chn7',7);">
       <option value="0x00000000">Analog 1</option>
@@ -530,13 +530,14 @@
     OUT 8
     </td></tr>
   </table>
-  </td></table>
-
+  </td></tr>
+  <tr><td colspan="2"><center>
   <table><tr><td><button class="prebtn" id="pre0" onclick="switchPreset(0)">Preset A</button></td>
   <td><button class="prebtn" id="pre1" onclick="switchPreset(1)">Preset B</button></td>
   <td><button class="prebtn" id="pre2" onclick="switchPreset(2)">Preset C</button></td>
   <td><button class="prebtn" id="pre3" onclick="switchPreset(3)">Preset D</button></td></tr></table>
-  </center>
+  </center></td></tr>
+  </table>
   </div>
 
   <div id="lowShelv" class="modal" data-idx="0">

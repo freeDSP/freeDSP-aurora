@@ -17,19 +17,19 @@
       <li><label for="presetimp">Import Preset</label><input type="file" id="presetimp" style="display:none"/></li>
     </ul>
     <div style="position:absolute;bottom:30px;right:30px;">
-      <p class="info">GUI: v2.0.0-beta.1</p>
+      <p class="info">GUI: v2.0.0-beta.2</p>
       <p class="info" id="fw">FW: 0.0.0</p>
       <p class="info" id="ip">Local Wifi IP: 0.0.0.0</p>
       </div>
 	</nav>
 	
 	<div>
-  <center>
   <table>
-  <tr><td style="border-bottom:1px solid;"><h1>Aurora DSP</h1></td></tr>
-  <tr><td><h2>4FIRs</h2></td></tr>
-  </table>  
-  <table><tr><td valign=top rowspan="8" style="border-right: 1px solid #808080; min-width:150px">
+  <tr><td colspan="2"><center>
+  <table style="border-bottom:1px solid;"><tr><td><h1>Aurora DSP</h1></td></tr></table>  
+  </center></td></tr>
+  <tr><td colspan="2"><h2>4FIRs</h2></td></tr>
+  <tr><td valign=top style="border-right: 1px solid #808080; min-width:200px; max-width:200px;">
   <table align="center" style="padding:10px">
     <tr><td><h2>AddOn</h2></td></tr>
     <tr><td>
@@ -269,15 +269,19 @@
     </td><td>
     OUT 4
     </td></tr>
-  
+    <tr><td><div style="height: 50px;"></div></td></tr>
+    <tr><td><div style="height: 50px;"></div></td></tr>
+    <tr><td><div style="height: 50px;"></div></td></tr>
+    <tr><td><div style="height: 50px;"></div></td></tr>
   </table>
-  </td></table>
-
+  </td></tr>
+  <tr><td colspan="2"><center>
   <table><tr><td><button class="prebtn" id="pre0" onclick="switchPreset(0)">Preset A</button></td>
   <td><button class="prebtn" id="pre1" onclick="switchPreset(1)">Preset B</button></td>
   <td><button class="prebtn" id="pre2" onclick="switchPreset(2)">Preset C</button></td>
   <td><button class="prebtn" id="pre3" onclick="switchPreset(3)">Preset D</button></td></tr></table>
-  </center>
+  </center></td></tr>
+  </table>
   </div>
 
   <div id="fir" class="modal" data-idx="0">
