@@ -1,7 +1,7 @@
 /*
  * File:           Z:\Documents\freeDSP\freeDSP-aurora\SOURCES\SIGMASTUDIO\4FIRs\4FIRs_IC_1_REG.h
  *
- * Created:        Thursday, December 12, 2019 9:05:58 AM
+ * Created:        Monday, March 9, 2020 3:04:54 PM
  * Description:    4FIRs:IC 1 control register definitions.
  *
  * This software is distributed in the hope that it will be useful,
@@ -14,7 +14,7 @@
  * are intended for resale to audio product end users. This software
  * may not be distributed whole or in any part to third parties.
  *
- * Copyright ©2019 Analog Devices, Inc. All rights reserved.
+ * Copyright ©2020 Analog Devices, Inc. All rights reserved.
  */
 #ifndef __4FIRS_IC_1_REG_H__
 #define __4FIRS_IC_1_REG_H__
