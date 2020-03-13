@@ -14,7 +14,7 @@
 #include "fallback.h"
 #include "webota.h"
 
-#define VERSION_STR "v2.0.0-beta.2"
+#define VERSION_STR "v2.0.0"
 
 #define I2C_SDA_PIN 17
 #define I2C_SCL_PIN 16
@@ -413,8 +413,22 @@ void readSettings( void )
       Serial.println( err.c_str() );
       return;
     }
+    fileSettings.close();
 
     JsonObject jsonSettings = jsonDoc.as<JsonObject>();
+
+    if( jsonSettings["version"].as<String>().startsWith( "1." ) )
+    {
+      Serial.println( "Updateing from 1.x.x" );
+      Settings.ssid = "";
+      Settings.password = "";
+      Settings.addonid = ADDON_CUSTOM;
+      Settings.vpot = false;
+      Settings.pwdap = "";
+      Settings.adcsum = 0;
+      writeSettings();
+    }
+
     Settings.ssid = jsonSettings["ssid"].as<String>();
     Settings.password = jsonSettings["pwd"].as<String>();
     Settings.addonid = jsonSettings["aid"].as<String>().toInt();
@@ -436,7 +450,7 @@ void readSettings( void )
   else
     Serial.println( "[ERROR] readSettings(): Opening settings.ini failed." );
 
-  fileSettings.close();
+  
 
 }
 
@@ -3831,6 +3845,49 @@ void setup()
     Serial.println("An Error has occurred while mounting SPIFFS");
     return;
   }
+  
+  //--- check for old stuff (version == 1.x.x)
+  String fileName = "/dspfw.hex";
+  if( SPIFFS.exists( fileName ) )
+  {
+    if( SPIFFS.remove( fileName ) )
+      Serial.println( fileName + " deleted." );
+    else
+      Serial.println( "[ERROR] Deleting " + fileName );
+  }
+  fileName = "/dspparam.001";
+  if( SPIFFS.exists( fileName ) )
+  {
+    if( SPIFFS.remove( fileName ) )
+      Serial.println( fileName + " deleted." );
+    else
+      Serial.println( "[ERROR] Deleting " + fileName );
+  }
+  fileName = "/dspparam.002";
+  if( SPIFFS.exists( fileName ) )
+  {
+    if( SPIFFS.remove( fileName ) )
+      Serial.println( fileName + " deleted." );
+    else
+      Serial.println( "[ERROR] Deleting " + fileName );
+  }
+  fileName = "/dspparam.003";
+  if( SPIFFS.exists( fileName ) )
+  {
+    if( SPIFFS.remove( fileName ) )
+      Serial.println( fileName + " deleted." );
+    else
+      Serial.println( "[ERROR] Deleting " + fileName );
+  }
+  fileName = "/dspparam.004";
+  if( SPIFFS.exists( fileName ) )
+  {
+    if( SPIFFS.remove( fileName ) )
+      Serial.println( fileName + " deleted." );
+    else
+      Serial.println( "[ERROR] Deleting " + fileName );
+  }
+
   Serial.print( "Free disk space: " );
   Serial.print( (SPIFFS.totalBytes() - SPIFFS.usedBytes()) / 1024 );
   Serial.println( "KiB" );
