@@ -10,7 +10,7 @@
  * are intended for resale to audio product end users. This software
  * may not be distributed whole or in any part to third parties.
  *
- * Copyright © 2019 Analog Devices, Inc. All rights reserved.
+ * Copyright © 2020 Analog Devices, Inc. All rights reserved.
  */
 -->
 <!--NetList XML file-->
@@ -75,6 +75,30 @@
                 <Link pin="I_C674_A0_P2_in" dir="in" link="Link170" />
                 <Link pin="I_C674_A0_P3_in" dir="in" link="Link169" />
                 <Link pin="O_C674_A0_P1_out" dir="out" link="Link171" />
+            </Algorithm>
+            <Algorithm name="ICOutADAU145X9" friendlyname="Output" cell="Output_UAC1 ">
+                <Link pin="I_C17_A0_P1_in" dir="in" link="Link192" />
+            </Algorithm>
+            <Algorithm name="ICOutADAU145X10" friendlyname="Output" cell="Output_UAC2 ">
+                <Link pin="I_C102_A0_P1_in" dir="in" link="Link186" />
+            </Algorithm>
+            <Algorithm name="ICOutADAU145X11" friendlyname="Output" cell="Output_UAC3 ">
+                <Link pin="I_C105_A0_P1_in" dir="in" link="Link194" />
+            </Algorithm>
+            <Algorithm name="ICOutADAU145X12" friendlyname="Output" cell="Output_UAC4 ">
+                <Link pin="I_C107_A0_P1_in" dir="in" link="Link184" />
+            </Algorithm>
+            <Algorithm name="ICOutADAU145X13" friendlyname="Output" cell="Output_UAC5 ">
+                <Link pin="I_C109_A0_P1_in" dir="in" link="Link180" />
+            </Algorithm>
+            <Algorithm name="ICOutADAU145X14" friendlyname="Output" cell="Output_UAC6 ">
+                <Link pin="I_C111_A0_P1_in" dir="in" link="Link189" />
+            </Algorithm>
+            <Algorithm name="ICOutADAU145X15" friendlyname="Output" cell="Output_UAC7 ">
+                <Link pin="I_C113_A0_P1_in" dir="in" link="Link195" />
+            </Algorithm>
+            <Algorithm name="ICOutADAU145X16" friendlyname="Output" cell="Output_UAC8 ">
+                <Link pin="I_C115_A0_P1_in" dir="in" link="Link200" />
             </Algorithm>
             <Algorithm name="monomuxSigma300ns44" friendlyname="Mono" cell="InputSelect_8.Nx1-1_UAC ">
                 <Link pin="I_C5191_A0_P2_in" dir="in" link="Link203" />
