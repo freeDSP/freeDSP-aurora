@@ -14,7 +14,7 @@
 #include "fallback.h"
 #include "webota.h"
 
-#define VERSION_STR "v2.0.0"
+#define VERSION_STR "v2.0.1"
 
 #define I2C_SDA_PIN 17
 #define I2C_SCL_PIN 16
@@ -1928,7 +1928,7 @@ void handlePostHpJson( AsyncWebServerRequest* request, uint8_t* data )
 void setHighPass( int idx )
 {
   if( (paramHP[idx].fc > 0.0) && (paramHP[idx].fc < 20000.0)
-      && (paramHP[idx].typ > 0) && (paramHP[idx].typ < AudioFilterFactory::kNumFilterDesigns) )
+      && (paramHP[idx].typ >= 0) && (paramHP[idx].typ < AudioFilterFactory::kNumFilterDesigns) )
   {
     float a[12] = { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0 };
     float b[12] = { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0 };
@@ -2338,6 +2338,7 @@ void handlePostLpJson( AsyncWebServerRequest* request, uint8_t* data )
   Serial.println( root["addr"].as<String>() );
   Serial.println( root["fc"].as<String>() );
   Serial.println( root["typ"].as<String>() );
+  Serial.println( root["bypass"].as<String>() );
 
   uint32_t idx = static_cast<uint32_t>(root["idx"].as<String>().toInt());
   paramLP[idx].fc = root["fc"].as<String>().toFloat();
@@ -2361,7 +2362,7 @@ void handlePostLpJson( AsyncWebServerRequest* request, uint8_t* data )
 void setLowPass( int idx )
 {
   if( (paramLP[idx].fc > 0.0) && (paramLP[idx].fc < 20000.0)
-      && (paramLP[idx].typ > 0) && (paramLP[idx].typ < AudioFilterFactory::kNumFilterDesigns) )
+      && (paramLP[idx].typ >= 0) && (paramLP[idx].typ < AudioFilterFactory::kNumFilterDesigns) )
   {
     float a[12] = { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0 };
     float b[12] = { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0 };
@@ -2369,6 +2370,8 @@ void setLowPass( int idx )
     uint32_t floatval;
     if( !(paramLP[idx].bypass) )
       AudioFilterFactory::makeLowPass( a, b, paramLP[idx].typ, paramLP[idx].fc, sampleRate );
+    else
+      Serial.println("Bypass");
 
     for( int ii = 0; ii < 4; ii++ )
     {
@@ -2446,14 +2449,16 @@ void handlePostPhaseJson( AsyncWebServerRequest* request, uint8_t* data )
   Serial.println( root["idx"].as<String>() );
   Serial.println( root["fc"].as<String>() );
   Serial.println( root["Q"].as<String>() );
+  Serial.println( root["inv"].as<String>() );
+  Serial.println( root["bypass"].as<String>() );
 
   uint32_t idx = static_cast<uint32_t>(root["idx"].as<String>().toInt());
   paramPhase[idx].fc = root["fc"].as<String>().toFloat();
   paramPhase[idx].Q = root["Q"].as<String>().toFloat();
-  if( root["inv"].as<String>().toInt() == 0 )
-    paramPhase[idx].inv = false;
-  else
+  if( root["inv"].as<String>() == "true" )
     paramPhase[idx].inv = true;
+  else
+    paramPhase[idx].inv = false;
 
   if( root["bypass"].as<String>().toInt() == 0 )
     paramPhase[idx].bypass = false;
@@ -2482,9 +2487,13 @@ void setPhase( int idx )
     uint32_t floatval;
     if( !paramPhase[idx].bypass )
       AudioFilterFactory::makeAllpass( a, b, paramPhase[idx].fc, paramPhase[idx].Q, sampleRate );
+    else
+      Serial.println("Bypass");
 
-    if( paramPhase[idx].inv )
+
+    if( paramPhase[idx].inv == true )
     {
+      Serial.println("Inverting");
       b[0] *= -1.0;
       b[1] *= -1.0;
       b[2] *= -1.0;
@@ -3009,6 +3018,7 @@ void handlePostConfigJson( AsyncWebServerRequest* request, uint8_t* data )
 
   writeSettings();
 
+  enableVolPot();
   changeChannelSummationADC();
        
   request->send(200, "text/plain", "");  

@@ -17,7 +17,7 @@
       <li><label for="presetimp">Import Preset</label><input type="file" id="presetimp" style="display:none"/></li>
     </ul>
     <div style="position:absolute;bottom:30px;right:30px;">
-      <p class="info">GUI: v2.0.0</p>
+      <p class="info">GUI: v2.0.1</p>
       <p class="info" id="fw">FW: 0.0.0</p>
       <p class="info" id="ip">Local Wifi IP: 0.0.0.0</p>
       </div>
@@ -869,7 +869,8 @@
       document.getElementById("phase").dataset.idx=idx;
       document.getElementById("ph_fc").value=data.fc;
       document.getElementById("ph_q").value=data.Q;
-      document.getElementById("ph_inv").value=data.inv;
+      if(data.inv==1) document.getElementById("ph_inv").checked=true;
+      else document.getElementById("ph_inv").checked=false;
       document.getElementById("ph_bypass").dataset.bypass=data.bypass;
       switchBypass("ph_bypass");
     }).catch (function (error){console.log(error);
@@ -919,7 +920,8 @@
       return response.json();
     }).then (function (data) {  
       document.getElementById("aid").value = data.aid;
-      document.getElementById("vpot").value = data.vpot;
+      if(data.vpot==1) document.getElementById("vpot").checked=true;
+      else document.getElementById("vpot").checked=false;
     }).catch (function (error) {console.log(error);
     });
   }
@@ -999,7 +1001,7 @@
       data.idx=document.getElementById("phase").dataset.idx;
       data.fc=document.getElementById("ph_fc").value;
       data.Q=document.getElementById("ph_q").value;
-      data.inv=document.getElementById("ph_inv").value;
+      data.inv=document.getElementById("ph_inv").checked;
       data.bypass=document.getElementById("ph_bypass").dataset.bypass;
       return fetch("/phase",{method:"POST",headers:{
       "Content-Type": "application/json"},
