@@ -2591,7 +2591,7 @@ void handlePostDelayJson( AsyncWebServerRequest* request, uint8_t* data )
  */
 void setDelay( int idx )
 {
-  if( (paramDelay[idx].delay > 0) && (paramDelay[idx].delay < 100) )
+  if( (paramDelay[idx].delay >= 0) && (paramDelay[idx].delay <= 100) )
   {
     float dly = paramDelay[idx].delay/1000.0 * sampleRate;
     int32_t idly = static_cast<int32_t>(dly + 0.5);
