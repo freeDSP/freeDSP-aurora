@@ -14,7 +14,7 @@
 #include "fallback.h"
 #include "webota.h"
 
-#define VERSION_STR "v2.0.1"
+#define VERSION_STR "v2.0.2"
 
 #define I2C_SDA_PIN 17
 #define I2C_SCL_PIN 16
@@ -2591,7 +2591,7 @@ void handlePostDelayJson( AsyncWebServerRequest* request, uint8_t* data )
  */
 void setDelay( int idx )
 {
-  if( (paramDelay[idx].delay > 0) && (paramDelay[idx].delay < 100) )
+  if( (paramDelay[idx].delay >= 0) && (paramDelay[idx].delay <= 100) )
   {
     float dly = paramDelay[idx].delay/1000.0 * sampleRate;
     int32_t idly = static_cast<int32_t>(dly + 0.5);
@@ -3946,6 +3946,7 @@ void setup()
     server.on( "/",          HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( SPIFFS, "/dsp.html", "text/html" ); });
   else
     server.on( "/",          HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( 200, "text/html", fallback_html ); });
+  server.on( "/fallback",  HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( 200, "text/html", fallback_html ); });
   server.on( "/dark.css",  HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( SPIFFS, "/dark.css", "text/css" ); });
   server.on( "/input",     HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetInputJson(request); });
   server.on( "/hp",        HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetHpJson(request); });
