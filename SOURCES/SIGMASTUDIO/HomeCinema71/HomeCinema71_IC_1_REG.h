@@ -1,7 +1,7 @@
 /*
  * File:           Z:\Documents\freeDSP\freeDSP-aurora\SOURCES\SIGMASTUDIO\HomeCinema71\HomeCinema71_IC_1_REG.h
  *
- * Created:        Monday, March 9, 2020 3:11:24 PM
+ * Created:        Friday, April 3, 2020 2:41:24 PM
  * Description:    HomeCinema71:IC 1 control register definitions.
  *
  * This software is distributed in the hope that it will be useful,

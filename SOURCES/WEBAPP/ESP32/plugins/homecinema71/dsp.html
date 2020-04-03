@@ -17,7 +17,7 @@
       <li><label for="presetimp">Import Preset</label><input type="file" id="presetimp" style="display:none"/></li>
     </ul>
     <div style="position:absolute;bottom:30px;right:30px;">
-      <p class="info">GUI: v2.0.2</p>
+      <p class="info">GUI: v2.0.3</p>
       <p class="info" id="fw">FW: 0.0.0</p>
       <p class="info" id="ip">Local Wifi IP: 0.0.0.0</p>
       </div>
@@ -519,7 +519,7 @@
     </td><td>
     <button class="shlv" id="hs7" onclick="openHShelv(7);">HShlv</button>
     </td><td>
-    <button class="hp" id="xo7" onclick="openLP(0);">LP</button>
+    <button class="hp" id="lp0" onclick="openLP(0);">LP</button>
     </td><td>
     <button class="phase" id="ph7" onclick="openPhase(7);">Phase</button>
     </td><td>
@@ -601,7 +601,7 @@
       </td></tr>
       <tr><td colspan="2">Lowpass</td><td colspan="2">Highpass</td></tr>
       <tr><td colspan="2">
-        <select id="lp_typ">
+        <select id="xo_lp_typ">
           <option value="0">Bes 6</option>
           <option value="1">Bes 12</option>
           <option value="2">Bes 18</option>
@@ -616,7 +616,7 @@
         </select>
       </td>
       <td colspan="2">
-        <select id="hp_typ">
+        <select id="xo_hp_typ">
           <option value="0">Bes 6</option>
           <option value="1">Bes 12</option>
           <option value="2">Bes 18</option>
@@ -630,10 +630,10 @@
           <option value="10">LR 48</option>
         </select>
       </td></tr>
-      <tr><td><input type="number" id="lp_fc" style="width:95%;" step="any" min="1" max="20000"></td><td style="text-align:left;width:10%;">Hz</td>
-          <td><input type="number" id="hp_fc" style="width:95%;" step="any" min="1" max="20000"></td><td style="text-align:left;width:10%;">Hz</td></tr>
-      <tr><td colspan="2"><button class="send" id="lp_bypass" onclick="bypass('lp_bypass');sendParam('xo');" data-bypass="0">Bypass</button></td>
-          <td colspan="2"><button class="send" id="hp_bypass" onclick="bypass('hp_bypass');sendParam('xo');" data-bypass="0">Bypass</button></td></tr>
+      <tr><td><input type="number" id="xo_lp_fc" style="width:95%;" step="any" min="1" max="20000"></td><td style="text-align:left;width:10%;">Hz</td>
+          <td><input type="number" id="xo_hp_fc" style="width:95%;" step="any" min="1" max="20000"></td><td style="text-align:left;width:10%;">Hz</td></tr>
+      <tr><td colspan="2"><button class="send" id="xo_lp_bypass" onclick="bypass('xo_lp_bypass');sendParam('xo');" data-bypass="0">Bypass</button></td>
+          <td colspan="2"><button class="send" id="xo_hp_bypass" onclick="bypass('xo_hp_bypass');sendParam('xo');" data-bypass="0">Bypass</button></td></tr>
       <tr><td colspan="4"><button class="send" onclick="sendParam('xo')">Send</button></td></tr>
       </table>
     </div>
@@ -837,14 +837,14 @@
       return response.json();
     }).then (function (data) {
       document.getElementById("crossOver").dataset.idx=idx;
-      document.getElementById("lp_fc").value=data.lp_fc;
-      document.getElementById("lp_typ").value=data.lp_typ;
-      document.getElementById("lp_bypass").dataset.bypass=data.lp_bypass;
-      switchBypass("lp_bypass");
-      document.getElementById("hp_fc").value=data.hp_fc;
-      document.getElementById("hp_typ").value=data.hp_typ;
-      document.getElementById("hp_bypass").dataset.bypass=data.hp_bypass;
-      switchBypass("hp_bypass");
+      document.getElementById("xo_lp_fc").value=data.lp_fc;
+      document.getElementById("xo_lp_typ").value=data.lp_typ;
+      document.getElementById("xo_lp_bypass").dataset.bypass=data.lp_bypass;
+      switchBypass("xo_lp_bypass");
+      document.getElementById("xo_hp_fc").value=data.hp_fc;
+      document.getElementById("xo_hp_typ").value=data.hp_typ;
+      document.getElementById("xo_hp_bypass").dataset.bypass=data.hp_bypass;
+      switchBypass("xo_hp_bypass");
     }).catch (function (error){console.log(error);
     });
   }
@@ -977,13 +977,13 @@
       body:JSON.stringify(data)});
     }
     else if(btp=="xo"){
-      data.idx=document.getElementById("lowPass").dataset.idx;
-      data.lp_fc=document.getElementById("lp_fc").value;
-      data.lp_typ=document.getElementById("lp_typ").value;
-      data.lp_bypass=document.getElementById("lp_bypass").dataset.bypass;
-      data.hp_fc=document.getElementById("hp_fc").value;
-      data.hp_typ=document.getElementById("hp_typ").value;
-      data.hp_bypass=document.getElementById("hp_bypass").dataset.bypass;
+      data.idx=document.getElementById("crossOver").dataset.idx;
+      data.lp_fc=document.getElementById("xo_lp_fc").value;
+      data.lp_typ=document.getElementById("xo_lp_typ").value;
+      data.lp_bypass=document.getElementById("xo_lp_bypass").dataset.bypass;
+      data.hp_fc=document.getElementById("xo_hp_fc").value;
+      data.hp_typ=document.getElementById("xo_hp_typ").value;
+      data.hp_bypass=document.getElementById("xo_hp_bypass").dataset.bypass;
       return fetch("/xo",{method:"POST",headers:{
       "Content-Type": "application/json"},
       body:JSON.stringify(data)});
