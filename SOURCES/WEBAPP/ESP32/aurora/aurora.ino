@@ -14,7 +14,7 @@
 #include "fallback.h"
 #include "webota.h"
 
-#define VERSION_STR "v2.0.2"
+#define VERSION_STR "v2.0.3"
 
 #define I2C_SDA_PIN 17
 #define I2C_SCL_PIN 16
@@ -580,15 +580,15 @@ void readPluginMeta( void )
 
     for( int ii = 0; ii < numCrossovers; ii++ )
     {
-      paramCrossover[ii].hp_addr[0] = static_cast<uint16_t>(jsonPluginMeta["hp_xo"][0+ii*4]);
-      paramCrossover[ii].hp_addr[1] = static_cast<uint16_t>(jsonPluginMeta["hp_xo"][1+ii*4]);
-      paramCrossover[ii].hp_addr[2] = static_cast<uint16_t>(jsonPluginMeta["hp_xo"][2+ii*4]);
-      paramCrossover[ii].hp_addr[3] = static_cast<uint16_t>(jsonPluginMeta["hp_xo"][3+ii*4]);
+      paramCrossover[ii].hp_addr[0] = static_cast<uint16_t>(jsonPluginMeta["xohp"][0+ii*4]);
+      paramCrossover[ii].hp_addr[1] = static_cast<uint16_t>(jsonPluginMeta["xohp"][1+ii*4]);
+      paramCrossover[ii].hp_addr[2] = static_cast<uint16_t>(jsonPluginMeta["xohp"][2+ii*4]);
+      paramCrossover[ii].hp_addr[3] = static_cast<uint16_t>(jsonPluginMeta["xohp"][3+ii*4]);
 
-      paramCrossover[ii].lp_addr[0] = static_cast<uint16_t>(jsonPluginMeta["lp_xo"][0+ii*4]);
-      paramCrossover[ii].lp_addr[1] = static_cast<uint16_t>(jsonPluginMeta["lp_xo"][1+ii*4]);
-      paramCrossover[ii].lp_addr[2] = static_cast<uint16_t>(jsonPluginMeta["lp_xo"][2+ii*4]);
-      paramCrossover[ii].lp_addr[3] = static_cast<uint16_t>(jsonPluginMeta["lp_xo"][3+ii*4]);
+      paramCrossover[ii].lp_addr[0] = static_cast<uint16_t>(jsonPluginMeta["xolp"][0+ii*4]);
+      paramCrossover[ii].lp_addr[1] = static_cast<uint16_t>(jsonPluginMeta["xolp"][1+ii*4]);
+      paramCrossover[ii].lp_addr[2] = static_cast<uint16_t>(jsonPluginMeta["xolp"][2+ii*4]);
+      paramCrossover[ii].lp_addr[3] = static_cast<uint16_t>(jsonPluginMeta["xolp"][3+ii*4]);
     }
 
     for( int ii = 0; ii < numFIRs; ii++ )
@@ -2119,7 +2119,6 @@ void handlePostPeqJson( AsyncWebServerRequest* request, uint8_t* data )
 
   JsonObject root = jsonDoc.as<JsonObject>();
   Serial.println( root["idx"].as<String>() );
-  Serial.println( root["addr"].as<String>() );
   Serial.println( root["gain"].as<String>() );
   Serial.println( root["fc"].as<String>() );
   Serial.println( root["Q"].as<String>() );
@@ -2738,7 +2737,7 @@ void handlePostXoJson( AsyncWebServerRequest* request, uint8_t* data )
 void setCrossover( int idx )
 {
   if( (paramCrossover[idx].lp_fc > 0) && (paramCrossover[idx].lp_fc < 20000)
-      && (paramCrossover[idx].lp_typ > 0) && (paramCrossover[idx].lp_typ < AudioFilterFactory::kNumFilterDesigns) )
+      && (paramCrossover[idx].lp_typ >= 0) && (paramCrossover[idx].lp_typ < AudioFilterFactory::kNumFilterDesigns) )
   {
     float a[12] = { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0 };
     float b[12] = { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0 };
@@ -2794,14 +2793,14 @@ void setCrossover( int idx )
   }
 
   if( (paramCrossover[idx].hp_fc > 0) && (paramCrossover[idx].hp_fc < 20000)
-    && (paramCrossover[idx].hp_typ > 0) && (paramCrossover[idx].hp_typ < AudioFilterFactory::kNumFilterDesigns) )
+    && (paramCrossover[idx].hp_typ >= 0) && (paramCrossover[idx].hp_typ < AudioFilterFactory::kNumFilterDesigns) )
   {
     float a[12] = { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0 };
     float b[12] = { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0 };
     byte val[4];
     uint32_t floatval;
     if( !(paramCrossover[idx].hp_bypass) )
-      AudioFilterFactory::makeLowPass( a, b, paramCrossover[idx].hp_typ, paramCrossover[idx].hp_fc, sampleRate );
+      AudioFilterFactory::makeHighPass( a, b, paramCrossover[idx].hp_typ, paramCrossover[idx].hp_fc, sampleRate );
 
     for( int ii = 0; ii < 4; ii++ )
     {
