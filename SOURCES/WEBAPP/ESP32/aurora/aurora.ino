@@ -8,27 +8,15 @@
 #include "soc/timer_group_struct.h"
 #include "soc/timer_group_reg.h"
 
+#include "hwconfig.h"
 #include "AK4458.h"
 #include "AK5558.h"
 #include "AudioFilterFactory.h"
 #include "fallback.h"
 #include "webota.h"
+#include "OLED128x64_SH1106.h"
 
-#define VERSION_STR "v2.0.3"
-
-#define I2C_SDA_PIN 17
-#define I2C_SCL_PIN 16
-
-// DSP address on I2C bus
-#define DSP_ADDR           (0x70>>1)
-// ADC address on I2C bus
-#define AK5558_I2C_ADDR    (0x22>>1)
-// DAC address on I2C bus
-#define AK4458_I2C_ADDR    (0x20>>1)
-// S/P-DIF-Mux on AddOnA
-#define ADDONA_SPDIFMUX_ADDR (0x82>>1)
-// S/P-DIF-Mux on AddOnB
-#define ADDONB_SPDIFMUX_ADDR (0x82>>1)
+#define VERSION_STR "v2.1.0"
 
 #define MAX_NUM_INPUTS 8
 #define MAX_NUM_HPS 8
@@ -199,9 +187,12 @@ File fileDspProgram;
 File fileUpload;
 
 float sampleRate = 48000.0;
+
 uint8_t currentPreset = 0;
 uint8_t currentFirUploadIdx = 0;
 byte currentAddOnCfg[3];
+String currentPlugInName;
+
 uint16_t addrVPot = 0x0000;
 
 String presetUsrparamFile[MAX_NUM_PRESETS] = { "/usrparam.001", "/usrparam.002", "/usrparam.003", "/usrparam.004" };
@@ -209,6 +200,9 @@ String presetAddonCfgFile[MAX_NUM_PRESETS] = { "/addoncfg.001", "/addoncfg.002",
 
 AsyncWebServer server( 80 );
 
+OLED128x64_SH1106 myDisplay;
+bool haveDisplay = true;
+bool needUpdateUI = false;
 
 //==============================================================================
 /*! 
@@ -507,6 +501,8 @@ void readPluginMeta( void )
     }
 
     JsonObject jsonPluginMeta = jsonDoc.as<JsonObject>();
+
+    currentPlugInName = jsonPluginMeta["name"].as<String>(); 
     numInputs = jsonPluginMeta["nchn"].as<String>().toInt();
     numHPs = jsonPluginMeta["nhp"].as<String>().toInt();
     numLShelvs = jsonPluginMeta["nlshelv"].as<String>().toInt();
@@ -2369,8 +2365,6 @@ void setLowPass( int idx )
     uint32_t floatval;
     if( !(paramLP[idx].bypass) )
       AudioFilterFactory::makeLowPass( a, b, paramLP[idx].typ, paramLP[idx].fc, sampleRate );
-    else
-      Serial.println("Bypass");
 
     for( int ii = 0; ii < 4; ii++ )
     {
@@ -2486,9 +2480,6 @@ void setPhase( int idx )
     uint32_t floatval;
     if( !paramPhase[idx].bypass )
       AudioFilterFactory::makeAllpass( a, b, paramPhase[idx].fc, paramPhase[idx].Q, sampleRate );
-    else
-      Serial.println("Bypass");
-
 
     if( paramPhase[idx].inv == true )
     {
@@ -2937,6 +2928,8 @@ void setMasterVolume( void )
       val[2] = (rxval >> 8 ) & 0xFF;
       val[3] = rxval & 0xFF;
       ADAU1452_WRITE_BLOCK( reg, val, 4 ); 
+
+      updateUI();
     }
   }
 }
@@ -3782,6 +3775,7 @@ void myWiFiTask(void *pvParameters)
           Serial.print( "IP address: " );
           Serial.println( WiFi.localIP() );
           Serial.println( WiFi.getHostname() );
+          needUpdateUI = true;
         }
         vTaskDelay (5000); // Check again in about 5s
       }
@@ -3815,6 +3809,43 @@ void enableVolPot( void )
 }
 
 //==============================================================================
+/*! Updates the user interface on the display
+ *
+ */
+void updateUI( void )
+{
+  if( haveDisplay )
+  {
+    String ip;
+    if( WiFi.status() != WL_CONNECTED )
+      ip = "Not Connected";
+    else
+      ip = WiFi.localIP().toString();
+
+    switch( currentPreset )
+    {
+    case 0:
+      myDisplay.drawUI( currentPlugInName.c_str(), ip.c_str(), "A", masterVolume.val );
+      break;
+    case 1:
+      myDisplay.drawUI( currentPlugInName.c_str(), ip.c_str(), "B", masterVolume.val );
+      break;
+    case 2:
+      myDisplay.drawUI( currentPlugInName.c_str(), ip.c_str(), "C", masterVolume.val );
+      break;
+    case 3:
+      myDisplay.drawUI( currentPlugInName.c_str(), ip.c_str(), "D", masterVolume.val );
+      break;
+    default:
+      myDisplay.drawUI( currentPlugInName.c_str(), ip.c_str(), "A", masterVolume.val );
+      break;
+    }
+    
+  }
+}
+
+
+//==============================================================================
 /*! Arduino Setup
  *
  */
@@ -3834,6 +3865,15 @@ void setup()
   // might be a bit to defensive
   delay( 2000 );
 
+  //----------------------------------------------------------------------------
+  //--- Init Display (if present)
+  //----------------------------------------------------------------------------
+  if( haveDisplay )
+  {
+    myDisplay.begin();
+    myDisplay.drawBootScreen();
+  }
+  
   //----------------------------------------------------------------------------
   //--- Configure DAC
   //----------------------------------------------------------------------------
@@ -4111,6 +4151,8 @@ void setup()
 
   resetDAC( false );
 
+  updateUI();
+  
   Serial.println( "Ready" );
 }
 
@@ -4123,4 +4165,9 @@ void loop()
   TIMERG0.wdt_wprotect=TIMG_WDT_WKEY_VALUE;
   TIMERG0.wdt_feed=1;
   TIMERG0.wdt_wprotect=0;
+  if( needUpdateUI )
+  {
+    updateUI();
+    needUpdateUI = false;
+  }
 }
