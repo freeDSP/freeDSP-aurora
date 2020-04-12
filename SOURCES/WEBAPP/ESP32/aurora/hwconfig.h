@@ -17,4 +17,7 @@
 // S/P-DIF-Mux on AddOnB
 #define ADDONB_SPDIFMUX_ADDR (0x82>>1)
 
+// SH1106 I2C display controller
+#define SH1106_I2C_ADDR (0x3C) // 0x78 >> 1
+
 #endif

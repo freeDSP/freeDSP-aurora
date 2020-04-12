@@ -3860,7 +3860,21 @@ void setup()
   //----------------------------------------------------------------------------
   Wire.begin( I2C_SDA_PIN, I2C_SCL_PIN );
   Wire.setClock( 100000 );
+  delay( 100 );
 
+  //----------------------------------------------------------------------------
+  //--- Scan for I2C display connected?
+  //----------------------------------------------------------------------------
+  Wire.beginTransmission( SH1106_I2C_ADDR );
+  uint8_t ec = Wire.endTransmission( true );
+  if( ec == 0 )
+  {
+    Serial.println( "Detected SH1106 display" );
+    haveDisplay = true;
+  }
+  else
+    haveDisplay = false;
+  
   // wait until everything is stable
   // might be a bit to defensive
   delay( 2000 );
@@ -4152,7 +4166,7 @@ void setup()
   resetDAC( false );
 
   updateUI();
-  
+ 
   Serial.println( "Ready" );
 }
 
