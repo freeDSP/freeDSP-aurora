@@ -47,7 +47,7 @@ void OLED128x64_SH1106::drawBootScreen( void )
   u8g2.sendBuffer();
 }
 
-void OLED128x64_SH1106::drawUI( const char* plugin, const char* ip, const char* preset, float vol )
+void OLED128x64_SH1106::drawUI( const char* plugin, const char* ip, const char* preset, float vol, int editMode )
 {
   u8g2.clearBuffer();
 
@@ -58,6 +58,11 @@ void OLED128x64_SH1106::drawUI( const char* plugin, const char* ip, const char* 
   
   u8g2.setFont( u8g2_font_helvB18_tf );
   u8g2.drawStr( 13, 20, preset );
+  if( editMode == 1 )
+  {
+    u8g2.drawLine( 13, 44, 31, 44 );
+    u8g2.drawLine( 13, 45, 31, 45 );
+  }
   char buf[10];
   dtostrf( vol, 4, 1, buf );
   u8g2.drawStr( 60, 20, buf );
@@ -69,6 +74,17 @@ void OLED128x64_SH1106::drawUI( const char* plugin, const char* ip, const char* 
   u8g2.setFontRefHeightExtendedText();
   u8g2.drawStr( 0,  0, plugin );
   u8g2.drawStr( 0, 54, ip );
+  
+  u8g2.sendBuffer();
+}
+
+void OLED128x64_SH1106::drawSwitchingPreset( void )
+{
+  u8g2.clearBuffer();
+ 
+  u8g2.setFont( u8g2_font_helvR08_tf );
+  u8g2.setFontRefHeightExtendedText();
+  u8g2.drawStr( 5, 10, "Switching Preset...");
   
   u8g2.sendBuffer();
 }

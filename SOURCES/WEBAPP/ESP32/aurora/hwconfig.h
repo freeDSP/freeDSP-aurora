@@ -20,4 +20,10 @@
 // SH1106 I2C display controller
 #define SH1106_I2C_ADDR (0x3C) // 0x78 >> 1
 
+// KY-040 rotary encoder
+#define HAVE_ROTARYENCODER (1)  // Enable Rotary Encoder
+#define ROTARYENCODER_PINA  21 // DT Pin
+#define ROTARYENCODER_PINB  19 // CLK Pin
+#define ROTARYENCODER_PINSW 18 // SW Pin
+
 #endif

@@ -16,6 +16,10 @@
 #include "webota.h"
 #include "OLED128x64_SH1106.h"
 
+#if HAVE_ROTARYENCODER
+#include "rotaryencoder.h"
+#endif
+
 #define VERSION_STR "v2.1.0"
 
 #define MAX_NUM_INPUTS 8
@@ -200,9 +204,27 @@ String presetAddonCfgFile[MAX_NUM_PRESETS] = { "/addoncfg.001", "/addoncfg.002",
 
 AsyncWebServer server( 80 );
 
+//------------------------------------------------------------------------------
+//
+// Display Driver 
+//
+//------------------------------------------------------------------------------
 OLED128x64_SH1106 myDisplay;
 bool haveDisplay = true;
 bool needUpdateUI = false;
+
+//------------------------------------------------------------------------------
+//
+// Rotary Encoder 
+//
+//------------------------------------------------------------------------------
+#if HAVE_ROTARYENCODER
+long int lastREval = 0;
+long int lastREsw = 0;
+#endif
+
+int editMode = 0;
+
 
 //==============================================================================
 /*! 
@@ -2905,6 +2927,7 @@ void handlePostMasterVolumeJson( AsyncWebServerRequest* request, uint8_t* data )
   masterVolume.val = root["vol"].as<String>().toFloat();
   
   setMasterVolume(); 
+  updateUI();
     
   request->send(200, "text/plain", "");  
 }
@@ -2928,8 +2951,7 @@ void setMasterVolume( void )
       val[2] = (rxval >> 8 ) & 0xFF;
       val[3] = rxval & 0xFF;
       ADAU1452_WRITE_BLOCK( reg, val, 4 ); 
-
-      updateUI();
+      
     }
   }
 }
@@ -2945,6 +2967,9 @@ void handlePostPresetJson( AsyncWebServerRequest* request, uint8_t* data )
   //for(size_t i=0; i<len; i++)
   //  Serial.write(data[i]);
   //Serial.println();
+
+  if( haveDisplay )
+    myDisplay.drawSwitchingPreset();
 
   softMuteDAC();
   delay(500);
@@ -2971,6 +2996,9 @@ void handlePostPresetJson( AsyncWebServerRequest* request, uint8_t* data )
   updateAddOn();
      
   request->send(200, "text/plain", "");
+
+  updateUI();
+
   softUnmuteDAC();  
 }
  
@@ -3822,23 +3850,26 @@ void updateUI( void )
     else
       ip = WiFi.localIP().toString();
 
-    switch( currentPreset )
+    if( (editMode == 0) || (editMode == 1) )
     {
-    case 0:
-      myDisplay.drawUI( currentPlugInName.c_str(), ip.c_str(), "A", masterVolume.val );
-      break;
-    case 1:
-      myDisplay.drawUI( currentPlugInName.c_str(), ip.c_str(), "B", masterVolume.val );
-      break;
-    case 2:
-      myDisplay.drawUI( currentPlugInName.c_str(), ip.c_str(), "C", masterVolume.val );
-      break;
-    case 3:
-      myDisplay.drawUI( currentPlugInName.c_str(), ip.c_str(), "D", masterVolume.val );
-      break;
-    default:
-      myDisplay.drawUI( currentPlugInName.c_str(), ip.c_str(), "A", masterVolume.val );
-      break;
+      switch( currentPreset )
+      {
+      case 0:
+        myDisplay.drawUI( currentPlugInName.c_str(), ip.c_str(), "A", masterVolume.val, editMode );
+        break;
+      case 1:
+        myDisplay.drawUI( currentPlugInName.c_str(), ip.c_str(), "B", masterVolume.val, editMode );
+        break;
+      case 2:
+        myDisplay.drawUI( currentPlugInName.c_str(), ip.c_str(), "C", masterVolume.val, editMode );
+        break;
+      case 3:
+        myDisplay.drawUI( currentPlugInName.c_str(), ip.c_str(), "D", masterVolume.val, editMode );
+        break;
+      default:
+        myDisplay.drawUI( currentPlugInName.c_str(), ip.c_str(), "A", masterVolume.val, editMode );
+        break;
+      }
     }
     
   }
@@ -3985,12 +4016,12 @@ void setup()
   //----------------------------------------------------------------------------
   //--- Upload program to DSP
   //----------------------------------------------------------------------------
-  uploadDspFirmware();
+  //uploadDspFirmware();
 
   //----------------------------------------------------------------------------
   //--- Upload user parameters to DSP
   //----------------------------------------------------------------------------
-  uploadUserParams();
+  //uploadUserParams();
 
   //----------------------------------------------------------------------------
   //--- Configure Webserver
@@ -4161,7 +4192,18 @@ void setup()
   // Create a connection task with 8kB stack on core 0
   xTaskCreatePinnedToCore(myWiFiTask, "myWiFiTask", 8192, NULL, 3, NULL, 0);
 
+  //----------------------------------------------------------------------------
+  //--- Enable Volume Potentiometer
+  //----------------------------------------------------------------------------
   enableVolPot();
+
+  //----------------------------------------------------------------------------
+  //--- Init Rotary Encoder Handling
+  //----------------------------------------------------------------------------
+  #if HAVE_ROTARYENCODER
+  lastREsw = rotaryEncoder.getSwitchValue();
+  lastREval = rotaryEncoder.getRotationValue(); 
+  #endif
 
   resetDAC( false );
 
@@ -4179,9 +4221,86 @@ void loop()
   TIMERG0.wdt_wprotect=TIMG_WDT_WKEY_VALUE;
   TIMERG0.wdt_feed=1;
   TIMERG0.wdt_wprotect=0;
+  
+
+  #if HAVE_ROTARYENCODER
+  if( rotaryEncoder.getSwitchValue() != lastREsw )
+  {
+    editMode++;
+    if( editMode > 1 )
+      editMode = 0; 
+    delay( 300 );
+    lastREsw = rotaryEncoder.getSwitchValue();
+    lastREval = rotaryEncoder.getRotationValue(); 
+    needUpdateUI = true;
+  }
+  else if( rotaryEncoder.getRotationValue() > lastREval + 1 )
+  {
+    if( editMode == 0 )
+    {
+      masterVolume.val += 0.5f;
+      if( masterVolume.val > 0.f )
+        masterVolume.val = 0.f;
+      setMasterVolume();
+      lastREval = rotaryEncoder.getRotationValue(); 
+      needUpdateUI = true;
+    }
+    else if( editMode == 1 )
+    {
+      myDisplay.drawSwitchingPreset();
+
+      currentPreset++;
+      if( currentPreset >= MAX_NUM_PRESETS )
+        currentPreset = 0;
+
+      softMuteDAC();
+      delay(500);
+      initUserParams();
+      uploadUserParams();
+      updateAddOn();   
+      softUnmuteDAC();
+
+      lastREval = rotaryEncoder.getRotationValue(); 
+      needUpdateUI = true;
+    }
+  }
+  else if( rotaryEncoder.getRotationValue() < lastREval - 1 )
+  {
+    if( editMode == 0 )
+    {
+      masterVolume.val -= 0.5f;
+      if( masterVolume.val <= -80.f )
+        masterVolume.val = -80.f;
+      setMasterVolume();
+      lastREval = rotaryEncoder.getRotationValue(); 
+      needUpdateUI = true;
+    }
+    else if( editMode == 1 )
+    {
+      myDisplay.drawSwitchingPreset();
+
+      if( currentPreset == 0 )
+        currentPreset = MAX_NUM_PRESETS - 1;
+      else
+        currentPreset--;
+
+      softMuteDAC();
+      delay(500);
+      initUserParams();
+      uploadUserParams();
+      updateAddOn();   
+      softUnmuteDAC();
+
+      lastREval = rotaryEncoder.getRotationValue(); 
+      needUpdateUI = true;
+    }
+  }
+  #endif
+
   if( needUpdateUI )
   {
     updateUI();
     needUpdateUI = false;
   }
+   
 }

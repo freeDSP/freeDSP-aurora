@@ -17,7 +17,8 @@ public:
   void sendBuffer(void );
 
   void drawBootScreen( void );
-  void drawUI( const char* plugin, const char* ip, const char* preset, float vol );
+  void drawUI( const char* plugin, const char* ip, const char* preset, float vol, int editMode = 0 );
+  void drawSwitchingPreset( void );
 
 private:
   
