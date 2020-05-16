@@ -20,6 +20,10 @@
 #include "rotaryencoder.h"
 #endif
 
+#if HAVE_IRRECEIVER
+#include <IRremote.h>
+#endif 
+
 #define VERSION_STR "v2.1.0"
 
 #define MAX_NUM_INPUTS 8
@@ -222,6 +226,15 @@ bool needUpdateUI = false;
 long int lastREval = 0;
 long int lastREsw = 0;
 #endif
+
+//------------------------------------------------------------------------------
+//
+// IR Receiver 
+//
+//------------------------------------------------------------------------------
+#if HAVE_IRRECEIVER
+IRrecv irReceiver( IR_RECEIVER_PIN );
+#endif 
 
 int editMode = 0;
 
@@ -4016,12 +4029,12 @@ void setup()
   //----------------------------------------------------------------------------
   //--- Upload program to DSP
   //----------------------------------------------------------------------------
-  //uploadDspFirmware();
+  uploadDspFirmware();
 
   //----------------------------------------------------------------------------
   //--- Upload user parameters to DSP
   //----------------------------------------------------------------------------
-  //uploadUserParams();
+  uploadUserParams();
 
   //----------------------------------------------------------------------------
   //--- Configure Webserver
@@ -4205,6 +4218,13 @@ void setup()
   lastREval = rotaryEncoder.getRotationValue(); 
   #endif
 
+  //----------------------------------------------------------------------------
+  //--- Init IR Receiver
+  //----------------------------------------------------------------------------
+  #if HAVE_IRRECEIVER
+  irReceiver.enableIRIn();
+  #endif
+
   resetDAC( false );
 
   updateUI();
@@ -4294,6 +4314,67 @@ void loop()
       lastREval = rotaryEncoder.getRotationValue(); 
       needUpdateUI = true;
     }
+  }
+  #endif
+
+  #if HAVE_IRRECEIVER
+  decode_results irResults;
+  if( irReceiver.decode( &irResults ) )
+  {
+    if( irResults.value == APPLE_REMOTE_UP )
+    {
+      masterVolume.val += 0.5f;
+      if( masterVolume.val > 0.f )
+        masterVolume.val = 0.f;
+      setMasterVolume(); 
+      needUpdateUI = true;
+    }
+    else if( irResults.value == APPLE_REMOTE_DOWN )
+    {
+      masterVolume.val -= 0.5f;
+      if( masterVolume.val <= -80.f )
+        masterVolume.val = -80.f;
+      setMasterVolume();
+      needUpdateUI = true;
+    }
+    else if( irResults.value == APPLE_REMOTE_LEFT )
+    {
+      myDisplay.drawSwitchingPreset();
+
+      if( currentPreset == 0 )
+        currentPreset = MAX_NUM_PRESETS - 1;
+      else
+        currentPreset--;
+
+      softMuteDAC();
+      delay(500);
+      initUserParams();
+      uploadUserParams();
+      updateAddOn();   
+      softUnmuteDAC();
+
+      needUpdateUI = true;
+    }
+    else if( irResults.value == APPLE_REMOTE_RIGHT )
+    {
+      myDisplay.drawSwitchingPreset();
+
+      currentPreset++;
+      if( currentPreset >= MAX_NUM_PRESETS )
+        currentPreset = 0;
+
+      softMuteDAC();
+      delay(500);
+      initUserParams();
+      uploadUserParams();
+      updateAddOn();   
+      softUnmuteDAC();
+
+      needUpdateUI = true;
+    }
+    //else
+    //  Serial.println(irResults.value, HEX);
+    irReceiver.resume();
   }
   #endif
 
