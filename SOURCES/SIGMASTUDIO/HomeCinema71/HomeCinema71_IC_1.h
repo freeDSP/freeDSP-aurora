@@ -1,7 +1,7 @@
 /*
  * File:           Z:\Documents\freeDSP\freeDSP-aurora\SOURCES\SIGMASTUDIO\HomeCinema71\HomeCinema71_IC_1.h
  *
- * Created:        Friday, April 3, 2020 2:41:24 PM
+ * Created:        Sunday, June 14, 2020 12:48:54 PM
  * Description:    HomeCinema71:IC 1 program data.
  *
  * This software is distributed in the hope that it will be useful,
@@ -23157,7 +23157,7 @@ ADI_REG_TYPE R15_POWER_ENABLE0_IC_1_Default[REG_POWER_ENABLE0_IC_1_BYTE] = {
 
 /* Register Default - IC 1.POWER_ENABLE1 Register */
 ADI_REG_TYPE R16_POWER_ENABLE1_IC_1_Default[REG_POWER_ENABLE1_IC_1_BYTE] = {
-0x00, 0x02
+0x00, 0x07
 };
 
 /* Register Default - IC 1.PANIC_PARITY_MASK */

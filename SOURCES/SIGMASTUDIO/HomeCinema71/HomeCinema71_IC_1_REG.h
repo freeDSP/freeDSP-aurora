@@ -1,7 +1,7 @@
 /*
  * File:           Z:\Documents\freeDSP\freeDSP-aurora\SOURCES\SIGMASTUDIO\HomeCinema71\HomeCinema71_IC_1_REG.h
  *
- * Created:        Friday, April 3, 2020 2:41:24 PM
+ * Created:        Sunday, June 14, 2020 12:48:54 PM
  * Description:    HomeCinema71:IC 1 control register definitions.
  *
  * This software is distributed in the hope that it will be useful,
@@ -103,7 +103,7 @@
 /* POWER_ENABLE1  - Registers (IC 1) */
 #define REG_POWER_ENABLE1_IC_1_ADDR               0xF051
 #define REG_POWER_ENABLE1_IC_1_BYTE               2
-#define REG_POWER_ENABLE1_IC_1_VALUE              0x2
+#define REG_POWER_ENABLE1_IC_1_VALUE              0x7
 
 /* ASRC_INPUT0  - Registers (IC 1) */
 #define REG_ASRC_INPUT0_IC_1_ADDR                 0xF100
@@ -2850,9 +2850,9 @@
 #define R15_POWER_ENABLE0_CLK_GEN3_PWR_IC_1_SHIFT 12
 
 /* POWER_ENABLE1 (IC 1) */
-#define R16_POWER_ENABLE1_ADC_PWR_IC_1            0x0    /* 0b	[0] */
+#define R16_POWER_ENABLE1_ADC_PWR_IC_1            0x1    /* 1b	[0] */
 #define R16_POWER_ENABLE1_RX_PWR_IC_1             0x1    /* 1b	[1] */
-#define R16_POWER_ENABLE1_TX_PWR_IC_1             0x0    /* 0b	[2] */
+#define R16_POWER_ENABLE1_TX_PWR_IC_1             0x1    /* 1b	[2] */
 #define R16_POWER_ENABLE1_PDM0_PWR_IC_1           0x0    /* 0b	[3] */
 #define R16_POWER_ENABLE1_PDM1_PWR_IC_1           0x0    /* 0b	[4] */
 #define R16_POWER_ENABLE1_ADC_PWR_IC_1_MASK       0x1

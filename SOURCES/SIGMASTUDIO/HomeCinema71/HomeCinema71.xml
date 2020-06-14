@@ -135,7 +135,7 @@
             <Name>IC 1.POWER_ENABLE1 Register</Name>
             <Address>61521</Address>
             <Size>2</Size>
-            <Data>0x00, 0x02, </Data>
+            <Data>0x00, 0x07, </Data>
         </Register>
         <Register>
             <Name>IC 1.PANIC_PARITY_MASK</Name>

@@ -1,7 +1,7 @@
 /*
  * File:           Z:\Documents\freeDSP\freeDSP-aurora\SOURCES\SIGMASTUDIO\HomeCinema71\HomeCinema71_IC_1_PARAM.h
  *
- * Created:        Friday, April 3, 2020 2:41:24 PM
+ * Created:        Sunday, June 14, 2020 12:48:54 PM
  * Description:    HomeCinema71:IC 1 parameter RAM definitions.
  *
  * This software is distributed in the hope that it will be useful,
