@@ -4,6 +4,7 @@
 <head>
 <title>AURORA DSP</title>
 <link rel="stylesheet" href="dark.css">
+<script type="text/javascript" src="aurora.js"></script>
 </head>
 
 <body onload="onLoad()">
@@ -739,7 +740,47 @@
       <option value="3">8 to 1</option>
       </select>
       </td></tr>
-      <tr><td><input type="checkbox" id="vpot">Volume Potentiometer</td><td></td></tr>
+      <tr><td><input type="checkbox" id="vpot">Enable Volume Potentiometer</td>
+      <td>SPDIF Output Left</td></tr>
+      <tr><td></td><td><select id="spdifleft">
+      <option value="0x00000000">Analog 1</option>
+      <option value="0x00000001">Analog 2</option>
+      <option value="0x00000002">Analog 3</option>
+      <option value="0x00000003">Analog 4</option>
+      <option value="0x00000004">Analog 5</option>
+      <option value="0x00000005">Analog 6</option>
+      <option value="0x00000006">Analog 7</option>
+      <option value="0x00000007">Analog 8</option>
+      <option value="0x00010000">USB 1</option>
+      <option value="0x00010001">USB 2</option>
+      <option value="0x00010002">USB 3</option>
+      <option value="0x00010003">USB 4</option>
+      <option value="0x00010004">USB 5</option>
+      <option value="0x00010005">USB 6</option>
+      <option value="0x00010006">USB 7</option>
+      <option value="0x00010007">USB 8</option>
+      <option value="0x00040000">SPDIF In L</option>
+      <option value="0x00040001">SPDIF In R</option></select></td></tr>
+      <tr><td></td><td>SPDIF Output Right</td></tr>
+      <tr><td></td><td><select id="spdifright">
+      <option value="0x00000000">Analog 1</option>
+      <option value="0x00000001">Analog 2</option>
+      <option value="0x00000002">Analog 3</option>
+      <option value="0x00000003">Analog 4</option>
+      <option value="0x00000004">Analog 5</option>
+      <option value="0x00000005">Analog 6</option>
+      <option value="0x00000006">Analog 7</option>
+      <option value="0x00000007">Analog 8</option>
+      <option value="0x00010000">USB 1</option>
+      <option value="0x00010001">USB 2</option>
+      <option value="0x00010002">USB 3</option>
+      <option value="0x00010003">USB 4</option>
+      <option value="0x00010004">USB 5</option>
+      <option value="0x00010005">USB 6</option>
+      <option value="0x00010006">USB 7</option>
+      <option value="0x00010007">USB 8</option>
+      <option value="0x00040000">SPDIF In L</option>
+      <option value="0x00040001">SPDIF In R</option></select></td></tr>
       <tr><td colspan="2"><button class="send" onclick="sendConfig()">Store</button></td></tr>
       </table>
     </div>
@@ -908,17 +949,6 @@
       return response.json();
     }).then (function (data) {  
       switchPreset(data.pre);
-    }).catch (function (error) {console.log(error);
-    });
-  }
-  function getConfig(){
-    fetch("/config").then (function (response) {
-      return response.json();
-    }).then (function (data) {  
-      document.getElementById("aid").value = data.aid;
-      if(data.vpot==1) document.getElementById("vpot").checked=true;
-      else document.getElementById("vpot").checked=false;
-      document.getElementById("adcsum").value = data.adcsum;
     }).catch (function (error) {console.log(error);
     });
   }
@@ -1131,21 +1161,7 @@
   }
   function configDev(){document.getElementById("configDev").style.display = "block";getConfig();}
   function configWifi(){document.getElementById("configWifi").style.display = "block";}
-  function sendConfig(){
-    var data={};
-    data.aid=document.getElementById("aid").value;
-    data.vpot=document.getElementById("vpot").checked;
-    data.adcsum=document.getElementById("adcsum").value;
-    fetch("/config",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)})
-    .then(function(result) {
-    hideAddon();
-    if(data.aid==0) document.getElementById('addon_none').style.display = "block";
-    else if(data.aid==1) document.getElementById('addon_a').style.display = "block";
-    else if(data.aid==2) document.getElementById('addon_b').style.display = "block";
-    else if(data.aid==3) document.getElementById('addon_c').style.display = "block";
-    else if(data.aid==4) document.getElementById('addon_d').style.display = "block";
-    }).catch (function(err){console.log(err);});
-  }
+  
   function sendWifi(){
     var data={};
     data.ssid=document.getElementById("ssid").value;

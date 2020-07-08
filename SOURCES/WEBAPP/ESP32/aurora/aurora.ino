@@ -59,6 +59,8 @@ struct tSettings
   bool vpot;
   String pwdap;
   int adcsum;
+  uint32_t spdifleft;
+  uint32_t spdifright;
 };
 
 tSettings Settings;
@@ -165,6 +167,14 @@ struct tInputSelector
   uint16_t port[8];
 };
 
+struct tSpdifOutput
+{
+  uint16_t addrChnLeft;
+  uint16_t addrPortLeft;
+  uint16_t addrChnRight;
+  uint16_t addrPortRight;
+};
+
 tInput paramInputs[8];
 tHPLP paramHP[8];
 tShelving paramLshelv[8];
@@ -178,6 +188,7 @@ tCrossover paramCrossover[8];
 tFir paramFir[MAX_NUM_FIRS];
 tMasterVolume masterVolume = { 0x0000, -60.0 };
 tInputSelector inputSelector;
+tSpdifOutput spdifOutput;
 
 int numInputs = 0;
 int numHPs = 0;
@@ -289,6 +300,26 @@ uint32_t convertTo824( double val )
       + ((static_cast<uint32_t>(fractpart * 16777216.0)) & 0x00ffffff);
 
   return ret;
+}
+
+//==============================================================================
+/*! Converts a uint32 to a hex string with leading 0x
+ *
+ * \param uintval Value to be converted
+ * \return Hex string
+ */
+String uinttohexstring( uint32_t uintval )
+{
+  String str = String("0x");
+  for( int ii = 0; ii < 4; ii++ )
+  {
+    uint8_t val = (uintval>>(24-ii*8)) & 0xFF;
+    if( val < 0x10 )
+      str = str + String( "0") + String( val, HEX );
+    else
+      str = str + String( val, HEX );
+  }
+  return str;
 }
 
 //==============================================================================
@@ -422,6 +453,8 @@ void readSettings( void )
     Settings.vpot = false;
     Settings.pwdap = "";
     Settings.adcsum = 0;
+    Settings.spdifleft = 0;
+    Settings.spdifright = 0;
     writeSettings();
 
     Serial.println( "[OK]" );
@@ -448,13 +481,15 @@ void readSettings( void )
 
     if( jsonSettings["version"].as<String>().startsWith( "1." ) )
     {
-      Serial.println( "Updateing from 1.x.x" );
+      Serial.println( "Updating from 1.x.x" );
       Settings.ssid = "";
       Settings.password = "";
       Settings.addonid = ADDON_CUSTOM;
       Settings.vpot = false;
       Settings.pwdap = "";
       Settings.adcsum = 0;
+      Settings.spdifleft = 0;
+      Settings.spdifright = 0;
       writeSettings();
     }
 
@@ -467,20 +502,20 @@ void readSettings( void )
       Settings.vpot = false;
     Settings.pwdap = jsonSettings["pwdap"].as<String>();
     Settings.adcsum = jsonSettings["adcsum"].as<String>().toInt();
+    Settings.spdifleft = jsonSettings["spdifleft"].as<String>().toInt();
+    Settings.spdifright = jsonSettings["spdifright"].as<String>().toInt();
 
     Serial.println( "[OK]" );
     Serial.println( "Device config" );
-    //Serial.print( "PID: " ); Serial.println( Settings.pid );
     Serial.print( "AID: " ); Serial.println( Settings.addonid );
     Serial.print( "Volume Poti: " ); Serial.println( Settings.vpot ); 
     Serial.print( "ADC Channel Sum: " );Serial.println( Settings.adcsum );
+    Serial.print( "SPDIF Output Left: " );Serial.println( Settings.spdifleft );
+    Serial.print( "SPDIF Output Right: " );Serial.println( Settings.spdifright );
     Serial.println( "[OK]" );
   }
   else
     Serial.println( "[ERROR] readSettings(): Opening settings.ini failed." );
-
-  
-
 }
 
 //==============================================================================
@@ -499,6 +534,8 @@ void writeSettings( void )
     jsonSettings["vpot"] = Settings.vpot;
     jsonSettings["pwdap"] = Settings.pwdap;
     jsonSettings["adcsum"] = Settings.adcsum;
+    jsonSettings["spdifleft"] = Settings.spdifleft;
+    jsonSettings["spdifright"] = Settings.spdifright;
 
     if( serializeJson( jsonSettings, fileSettings ) == 0 )
       Serial.println( "[ERROR] writeSettings(): Failed to write settings to file" );
@@ -627,6 +664,11 @@ void readPluginMeta( void )
 
     masterVolume.addr = jsonPluginMeta["master"].as<String>().toInt();
     addrVPot = jsonPluginMeta["vpot"].as<String>().toInt();
+
+    spdifOutput.addrChnLeft = static_cast<uint16_t>(jsonPluginMeta["spdifout"][0]);
+    spdifOutput.addrPortLeft = static_cast<uint16_t>(jsonPluginMeta["spdifout"][1]);
+    spdifOutput.addrChnRight = static_cast<uint16_t>(jsonPluginMeta["spdifout"][2]);
+    spdifOutput.addrPortRight = static_cast<uint16_t>(jsonPluginMeta["spdifout"][3]);
   }
   else
   {
@@ -1160,6 +1202,57 @@ void softUnmuteDAC( void )
 }
 
 //==============================================================================
+/*! Changes the routing for the SPDIF output
+ */
+void setSpdifOutputRouting( void )
+{
+  uint32_t sel = (Settings.spdifleft >> 16) & 0x0000ffff;
+  uint16_t addrChn = spdifOutput.addrChnLeft[sel];
+  uint16_t addrPort = spdifOutput.addrPortLeft;
+  sel = Settings.spdifleft;
+  
+  byte val[4];
+  uint32_t intval = sel & 0x0000ffff;
+  val[0] = (intval >> 24 ) & 0xFF;
+  val[1] = (intval >> 16 ) & 0xFF;
+  val[2] = (intval >> 8 ) & 0xFF;
+  val[3] =  intval & 0xFF;
+  ADAU1452_WRITE_BLOCK( addrChn, val, 4 );
+
+  intval = (sel >> 16) & 0x0000ffff;
+  val[0] = (intval >> 24 ) & 0xFF;
+  val[1] = (intval >> 16 ) & 0xFF;
+  val[2] = (intval >> 8 ) & 0xFF;
+  val[3] =  intval & 0xFF;
+  ADAU1452_WRITE_BLOCK( addrPort, val, 4 );
+
+  Serial.println( addrChn );
+  Serial.println( addrPort );
+
+  sel = (Settings.spdifright >> 16) & 0x0000ffff;
+  addrChn = spdifOutput.addrChnRight[sel];
+  addrPort = spdifOutput.addrPortRight;
+  sel = Settings.spdifright;
+
+  intval = sel & 0x0000ffff;
+  val[0] = (intval >> 24 ) & 0xFF;
+  val[1] = (intval >> 16 ) & 0xFF;
+  val[2] = (intval >> 8 ) & 0xFF;
+  val[3] =  intval & 0xFF;
+  ADAU1452_WRITE_BLOCK( addrChn, val, 4 );
+
+  intval = (sel >> 16) & 0x0000ffff;
+  val[0] = (intval >> 24 ) & 0xFF;
+  val[1] = (intval >> 16 ) & 0xFF;
+  val[2] = (intval >> 8 ) & 0xFF;
+  val[3] =  intval & 0xFF;
+  ADAU1452_WRITE_BLOCK( addrPort, val, 4 );
+
+  Serial.println( addrChn );
+  Serial.println( addrPort );
+}
+
+//==============================================================================
 /*! Handles the GET request for Input selection
  *
  */
@@ -1537,6 +1630,8 @@ void handleGetConfigJson( AsyncWebServerRequest* request )
     jsonResponse["addcfg"] = 0;
 
   jsonResponse["adcsum"] = Settings.adcsum;
+  jsonResponse["spdifleft"] = uinttohexstring( Settings.spdifleft );
+  jsonResponse["spdifright"] = uinttohexstring( Settings.spdifright );
 
   response->setLength();
   request->send(response);
@@ -1884,7 +1979,6 @@ void handlePostInputJson( AsyncWebServerRequest* request, uint8_t* data )
 /*! Sets a new input selection on DSP.
  *
  */
-//void setInput( const uint16_t addrChn, const uint16_t addrPort, const uint32_t sel )
 void setInput( const int idx )
 {
   uint32_t sel = (paramInputs[idx].sel >> 16) & 0x0000ffff;
@@ -3022,10 +3116,6 @@ void handlePostPresetJson( AsyncWebServerRequest* request, uint8_t* data )
 void handlePostConfigJson( AsyncWebServerRequest* request, uint8_t* data )
 {
   Serial.println( "POST /config" );
-  //Serial.println( "Body:");
-  //for(size_t i=0; i<len; i++)
-  //  Serial.write(data[i]);
-  //Serial.println();
 
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
@@ -3041,6 +3131,8 @@ void handlePostConfigJson( AsyncWebServerRequest* request, uint8_t* data )
   Serial.println( root["aid"].as<String>() );
   Serial.println( root["vpot"].as<String>() );
   Serial.println( root["adcsum"].as<String>().toInt() );
+  Serial.println( (uint32_t)strtoul( root["spdifleft"].as<String>().c_str(), NULL, 16 ) );
+  Serial.println( (uint32_t)strtoul( root["spdifright"].as<String>().c_str(), NULL, 16 ) );
 
   Settings.addonid = root["aid"].as<String>().toInt();
   if( root["vpot"].as<String>() == "true" )
@@ -3048,11 +3140,14 @@ void handlePostConfigJson( AsyncWebServerRequest* request, uint8_t* data )
   else
     Settings.vpot = false;
   Settings.adcsum = root["adcsum"].as<String>().toInt();
+  Settings.spdifleft = (uint32_t)strtoul( root["spdifleft"].as<String>().c_str(), NULL, 16 );
+  Settings.spdifright = (uint32_t)strtoul( root["spdifright"].as<String>().c_str(), NULL, 16 );
 
   writeSettings();
 
   enableVolPot();
   changeChannelSummationADC();
+  setSpdifOutputRouting();
        
   request->send(200, "text/plain", "");  
 }
@@ -4045,6 +4140,7 @@ void setup()
     server.on( "/",          HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( 200, "text/html", fallback_html ); });
   server.on( "/fallback",  HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( 200, "text/html", fallback_html ); });
   server.on( "/dark.css",  HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( SPIFFS, "/dark.css", "text/css" ); });
+  server.on( "/aurora.js", HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( SPIFFS, "/aurora.js", "text/javascript" ); });
   server.on( "/input",     HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetInputJson(request); });
   server.on( "/hp",        HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetHpJson(request); });
   server.on( "/lshelv",    HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetLshelvJson(request); });
@@ -4209,6 +4305,11 @@ void setup()
   //--- Enable Volume Potentiometer
   //----------------------------------------------------------------------------
   enableVolPot();
+
+  //----------------------------------------------------------------------------
+  //--- Configure the SPDIF output routing
+  //----------------------------------------------------------------------------  
+  setSpdifOutputRouting();
 
   //----------------------------------------------------------------------------
   //--- Init Rotary Encoder Handling
