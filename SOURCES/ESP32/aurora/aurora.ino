@@ -1013,6 +1013,27 @@ void setup( void )
 
 }
 
+
+//==============================================================================
+/*! Send a simple HTTP 200 answer to client
+
+*/
+#define HTTP_200 (const char *)F("HTTP/1.1 200 OK\r\nContent-type:text/plain\r\n\r\n")
+
+void send200(WiFiClient &client, const char *message)
+{
+  String httpResponse;
+  httpResponse.reserve(128);
+  httpResponse += HTTP_200;
+  if (message == NULL) {
+    httpResponse += (const char *)F("ACK")
+  } else {
+    httpResponse += message;
+  }
+  httpResponse += "\r\n";
+  client.println( httpResponse );
+}
+
 //==============================================================================
 /*! Handle any HTTP request.
  *
@@ -1070,15 +1091,10 @@ void handleHttpRequest()
                   ADAU1452_WRITE_BLOCK( reg, val, 4 );         
 
                   sentBytes += 12;
-                } 
+                }
 
-                String httpResponse = "";
-                httpResponse += "HTTP/1.1 200 OK\r\n";
-                httpResponse += "Content-type:text/plain\r\n\r\n";
-                httpResponse += "ACK";
-                httpResponse += "\r\n";
-                client.println( httpResponse );
-          
+                send200(client, NULL);
+
                 waitForData = false;
                 wifiStatus = STATE_WIFI_IDLE;
                 client.stop();
@@ -1113,12 +1129,7 @@ void handleHttpRequest()
                 //Serial.println( receivedPostRequest.length() );
                 receivedPostRequest = "";
 
-                String httpResponse = "";
-                httpResponse += "HTTP/1.1 200 OK\r\n";
-                httpResponse += "Content-type:text/plain\r\n\r\n";
-                httpResponse += "ACK";
-                httpResponse += "\r\n";
-                client.println( httpResponse );
+                send200(client, NULL);
 
                 client.stop();
                 waitForData = false;
@@ -1154,13 +1165,7 @@ void handleHttpRequest()
                 //Serial.println( receivedPostRequest.length() );
                 receivedPostRequest = "";
 
-                String httpResponse = "";
-                httpResponse += "HTTP/1.1 200 OK\r\n";
-                httpResponse += "Content-type:text/plain\r\n\r\n";
-                httpResponse += "ACK";
-                httpResponse += "\r\n";
-                client.println( httpResponse );
-
+                send200(client, NULL);
                 Serial.println("<ACK>");
 
                 client.stop();
@@ -1198,13 +1203,7 @@ void handleHttpRequest()
                 Serial.println( receivedPostRequest.length() );
                 receivedPostRequest = "";
 
-                String httpResponse = "";
-                httpResponse += "HTTP/1.1 200 OK\r\n";
-                httpResponse += "Content-type:text/plain\r\n\r\n";
-                httpResponse += "ACK";
-                httpResponse += "\r\n";
-                client.println( httpResponse );
-
+                send200(client, NULL);
                 client.stop();
                 waitForData = false;
               }
@@ -1273,10 +1272,8 @@ void handleHttpRequest()
                   Serial.println( "[OK]" );
 
 
-                String httpResponse = "";
-                httpResponse += "HTTP/1.1 200 OK\r\n";
-                httpResponse += "Content-type:text/plain\r\n\r\n";
-                if( WiFi.status() == WL_CONNECTED )
+                String httpResponse;
+                if ( WiFi.status() == WL_CONNECTED )
                 {
                   httpResponse += "CONNECTED";
                   Serial.println( WiFi.localIP() );
@@ -1288,9 +1285,8 @@ void handleHttpRequest()
                 }
                 httpResponse += "?";
                 httpResponse += WiFi.localIP().toString();
-                httpResponse += "\r\n";
-                client.println( httpResponse );
-                
+                send200(client, httpResponse.c_str());
+
                 client.stop();
                 waitForData = false;
                 Serial.println( "OK" );
@@ -1316,12 +1312,7 @@ void handleHttpRequest()
 
                 saveSettings();
 
-                String httpResponse = "";
-                httpResponse += "HTTP/1.1 200 OK\r\n";
-                httpResponse += "Content-type:text/plain\r\n\r\n";
-                httpResponse += "ACK";
-                httpResponse += "\r\n";
-                client.println( httpResponse );
+                send200(client, NULL);
 
                 client.stop();
                 waitForData = false;
@@ -1347,19 +1338,14 @@ void handleHttpRequest()
 
                 saveSettings();
 
-                String httpResponse = "";
-                httpResponse += "HTTP/1.1 200 OK\r\n";
-                httpResponse += "Content-type:text/plain\r\n\r\n";
-                httpResponse += "ACK";
-                httpResponse += "\r\n";
-                client.println( httpResponse );
+                send200(client, NULL);
 
                 client.stop();
                 waitForData = false;
                 wifiStatus = STATE_WIFI_IDLE;
               }
             }
-            
+
             //-----------------------------------------------------------------
             //--- Receiving new preset selection
             //-----------------------------------------------------------------
@@ -1378,12 +1364,7 @@ void handleHttpRequest()
                 uploadDspParameter();
                 setupAddOn();
 
-                String httpResponse = "";
-                httpResponse += "HTTP/1.1 200 OK\r\n";
-                httpResponse += "Content-type:text/plain\r\n\r\n";
-                httpResponse += "ACK";
-                httpResponse += "\r\n";
-                client.println( httpResponse );
+                send200(client, NULL);
                 Serial.print( "[OK]" );
 
                 client.stop();
@@ -1421,12 +1402,7 @@ void handleHttpRequest()
                   Wire.write( data );
                   Wire.endTransmission( true );
 
-                  String httpResponse = "";
-                  httpResponse += "HTTP/1.1 200 OK\r\n";
-                  httpResponse += "Content-type:text/plain\r\n\r\n";
-                  httpResponse += "ACK";
-                  httpResponse += "\r\n";
-                  client.println( httpResponse );
+                  send200(client, NULL);
                   Serial.println( "[OK]" );
 
                   client.stop();
@@ -1505,22 +1481,12 @@ void handleHttpRequest()
 
                   if( !haveError )
                   {
-                    String httpResponse = "";
-                    httpResponse += "HTTP/1.1 200 OK\r\n";
-                    httpResponse += "Content-type:text/plain\r\n\r\n";
-                    httpResponse += "ACK";
-                    httpResponse += "\r\n";
-                    client.println( httpResponse );
+                    send200(client, NULL);
                     Serial.println( "[OK]" );
                   }
                   else
                   {
-                    String httpResponse = "";
-                    httpResponse += "HTTP/1.1 200 OK\r\n";
-                    httpResponse += "Content-type:text/plain\r\n\r\n";
-                    httpResponse += "ERR";
-                    httpResponse += "\r\n";
-                    client.println( httpResponse );
+                    send200(client, "ERR");
                   }
                   client.stop();
                   waitForData = false;
@@ -1559,12 +1525,7 @@ void handleHttpRequest()
 
                 saveSettings();
 
-                String httpResponse = "";
-                httpResponse += "HTTP/1.1 200 OK\r\n";
-                httpResponse += "Content-type:text/plain\r\n\r\n";
-                httpResponse += "ACK";
-                httpResponse += "\r\n";
-                client.println( httpResponse );
+                send200(client, NULL);
 
                 client.stop();
                 waitForData = false;
@@ -1598,12 +1559,7 @@ void handleHttpRequest()
             else if( currentLine.startsWith( GET_PID ) )
             {
               Serial.println( "GET /pid" );
-              String httpResponse = "";
-              httpResponse += "HTTP/1.1 200 OK\r\n";
-              httpResponse += "Content-type:text/plain\r\n\r\n";
-              httpResponse += String( Settings.pid );
-              httpResponse += "\r\n";
-              client.println( httpResponse );
+              send200(client, String( Settings.pid ).c_str());
               client.stop();
               currentLine = "";
               //cntrPackets++;
@@ -1688,12 +1644,7 @@ void handleHttpRequest()
                 }
               }
 
-              String httpResponse = "";
-              httpResponse += "HTTP/1.1 200 OK\r\n";
-              httpResponse += "Content-type:text/plain\r\n\r\n";
-              httpResponse += String( totalBytesReceived );
-              httpResponse += "\r\n";
-              client.println( httpResponse );
+              send200(client, String( totalBytesReceived ).c_str());
               client.stop();
               Serial.println( totalBytesReceived );
               wifiStatus = STATE_WIFI_IDLE;
@@ -1746,12 +1697,7 @@ void handleHttpRequest()
               Serial.println( "GET /finishdspparameter" );
               fileDspParams.flush();
               fileDspParams.close();
-              String httpResponse = "";
-              httpResponse += "HTTP/1.1 200 OK\r\n";
-              httpResponse += "Content-type:text/plain\r\n\r\n";
-              httpResponse += String( totalBytesReceived );
-              httpResponse += "\r\n";
-              client.println( httpResponse );
+              send200(client, String( totalBytesReceived ).c_str());
               client.stop();
               Serial.println( totalBytesReceived );
               wifiStatus = STATE_WIFI_IDLE;
@@ -1801,12 +1747,7 @@ void handleHttpRequest()
               Serial.println( "GET /finishuserparam" );
               fileUserParams.flush();
               fileUserParams.close();
-              String httpResponse = "";
-              httpResponse += "HTTP/1.1 200 OK\r\n";
-              httpResponse += "Content-type:text/plain\r\n\r\n";
-              httpResponse += String( totalBytesReceived );
-              httpResponse += "\r\n";
-              client.println( httpResponse );
+              send200(client, String( totalBytesReceived ).c_str());
               client.stop();
               Serial.println( totalBytesReceived );
               wifiStatus = STATE_WIFI_IDLE;
@@ -1820,12 +1761,7 @@ void handleHttpRequest()
             else if( currentLine.startsWith( GET_AID ) )
             {
               Serial.println( "GET /aid" );
-              String httpResponse = "";
-              httpResponse += "HTTP/1.1 200 OK\r\n";
-              httpResponse += "Content-type:text/plain\r\n\r\n";
-              httpResponse += String( Settings.addonid );
-              httpResponse += "\r\n";
-              client.println( httpResponse );
+              send200(client, String( Settings.addonid ).c_str());
               client.stop();
               currentLine = "";
               //cntrPackets++;
@@ -1837,12 +1773,7 @@ void handleHttpRequest()
             else if( currentLine.startsWith( GET_VERSION ) )
             {
               Serial.println( "GET /version" );
-              String httpResponse = "";
-              httpResponse += "HTTP/1.1 200 OK\r\n";
-              httpResponse += "Content-type:text/plain\r\n\r\n";
-              httpResponse += VERSION_STR;
-              httpResponse += "\r\n";
-              client.println( httpResponse );
+              send200(client, VERSION_STR);
               client.stop();
               currentLine = "";
               //cntrPackets++;
@@ -1854,12 +1785,7 @@ void handleHttpRequest()
             else if( currentLine.startsWith( GET_PVER ) )
             {
               Serial.println( "GET /pver" );
-              String httpResponse = "";
-              httpResponse += "HTTP/1.1 200 OK\r\n";
-              httpResponse += "Content-type:text/plain\r\n\r\n";
-              httpResponse += Settings.pversion;
-              httpResponse += "\r\n";
-              client.println( httpResponse );
+              send200(client, Settings.pversion.c_str());
               client.stop();
               currentLine = "";
               //cntrPackets++;
@@ -1895,19 +1821,14 @@ void handleHttpRequest()
             else if( currentLine.startsWith( GET_SIZEUSERPARAM ) )
             {
               Serial.println( "GET /sizeuserparam" );
-              String httpResponse = "";
-              httpResponse += "HTTP/1.1 200 OK\r\n";
-              httpResponse += "Content-type:text/plain\r\n\r\n";
               if( SPIFFS.exists( presetUsrparamFile[Settings.currentPreset] ) )
               {
                 fileUserParams = SPIFFS.open( presetUsrparamFile[Settings.currentPreset], "r" );
-                httpResponse += String( fileUserParams.size() );
+                send200(client, String( fileUserParams.size() ).c_str());
                 fileUserParams.close();
               }
               else
-                httpResponse += "0";
-              httpResponse += "\r\n";
-              client.println( httpResponse );
+                send200(client, "0");
               client.stop();
               wifiStatus = STATE_WIFI_IDLE;
               currentLine = "";
@@ -1920,9 +1841,7 @@ void handleHttpRequest()
             else if( currentLine.startsWith( GET_USERPARAM ) )
             {
               Serial.println( "GET /userparam" );
-              String httpResponse = "";
-              httpResponse += "HTTP/1.1 200 OK\r\n";
-              httpResponse += "Content-type:text/plain\r\n\r\n";
+              String httpResponse = HTTP_200;
               if( SPIFFS.exists( presetUsrparamFile[Settings.currentPreset] ) )
               {
                 fileUserParams = SPIFFS.open( presetUsrparamFile[Settings.currentPreset], "r" );
@@ -1972,22 +1891,17 @@ void handleHttpRequest()
             else if( currentLine.startsWith( GET_SIZEDSPFW ) )
             {
               Serial.println( "GET /sizedspfw" );
-              String httpResponse = "";
-              httpResponse += "HTTP/1.1 200 OK\r\n";
-              httpResponse += "Content-type:text/plain\r\n\r\n";
               if( SPIFFS.exists( "/dspfw.hex" ) )
               {
                 fileDspProgram = SPIFFS.open( "/dspfw.hex", "r" );
-                httpResponse += String( fileDspProgram.size() );
+                send200(client, String( fileDspProgram.size() ).c_str());
                 fileDspProgram.close();
               }
               else
               {
                 Serial.println( "[ERROR] dspfw.hex does not exist." );
-                httpResponse += "0";
+                send200(client, "0");
               }
-              httpResponse += "\r\n";
-              client.println( httpResponse );
               client.stop();
               wifiStatus = STATE_WIFI_IDLE;
               currentLine = "";
@@ -2000,9 +1914,7 @@ void handleHttpRequest()
             else if( currentLine.startsWith( GET_DSPFW ) )
             {
               Serial.println( "GET /dspfw" );
-              String httpResponse = "";
-              httpResponse += "HTTP/1.1 200 OK\r\n";
-              httpResponse += "Content-type:text/plain\r\n\r\n";
+              String httpResponse = HTTP_200;
               if( SPIFFS.exists( "/dspfw.hex" ) )
               {
                 fileDspProgram = SPIFFS.open( "/dspfw.hex", "r" );
@@ -2061,12 +1973,7 @@ void handleHttpRequest()
             else if( currentLine.startsWith( GET_PING ) )
             {
               Serial.println( "GET /ping" );
-              String httpResponse = "";
-              httpResponse += "HTTP/1.1 200 OK\r\n";
-              httpResponse += "Content-type:text/plain\r\n\r\n";
-              httpResponse += WiFi.localIP().toString();
-              httpResponse += "\r\n";
-              client.println( httpResponse );
+              send200(client, WiFi.localIP().toString().c_str());
               client.stop();
               wifiStatus = STATE_WIFI_IDLE;
               currentLine = "";
@@ -2092,12 +1999,7 @@ void handleHttpRequest()
             {
               Serial.println( "POST /savepreset" );
               saveSettings();
-              String httpResponse = "";
-              httpResponse += "HTTP/1.1 200 OK\r\n";
-              httpResponse += "Content-type:text/plain\r\n\r\n";
-              httpResponse += "ACK";
-              httpResponse += "\r\n";
-              client.println( httpResponse );
+              send200(client, NULL);
               client.stop();
               wifiStatus = STATE_WIFI_IDLE;
               currentLine = "";
@@ -2110,12 +2012,7 @@ void handleHttpRequest()
             else if( currentLine.startsWith( GET_CURRENTPRESET ) )
             {
               Serial.println( "GET /currentpreset" );
-              String httpResponse = "";
-              httpResponse += "HTTP/1.1 200 OK\r\n";
-              httpResponse += "Content-type:text/plain\r\n\r\n";
-              httpResponse += String( Settings.currentPreset );
-              httpResponse += "\r\n";
-              client.println( httpResponse );
+              send200(client, String( Settings.currentPreset ).c_str());
               client.stop();
               currentLine = "";
               //cntrPackets++;
