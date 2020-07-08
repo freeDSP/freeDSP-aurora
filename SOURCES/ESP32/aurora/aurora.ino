@@ -1955,8 +1955,8 @@ void handleHttpRequest()
                     client.print( httpResponse );
                     httpResponse = "";
                   }
+                  fileUserParams.close();
                 }
-                fileUserParams.close();
               }
               httpResponse += "\r\n";
               client.println( httpResponse );
@@ -2033,8 +2033,8 @@ void handleHttpRequest()
                     client.print( httpResponse );
                     httpResponse = "";
                   }
+                  fileDspProgram.close();
                 }
-                fileDspProgram.close();
               }
               httpResponse += "\r\n";
               client.println( httpResponse );
