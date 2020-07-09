@@ -1219,6 +1219,7 @@ void resetDAC( bool rst )
 void softMuteDAC( void )
 {
   AK4458_REGWRITE( AK4458_CONTROL2, 0b00100011 );
+  delay( 500 );
 }
 
 //==============================================================================
@@ -1997,7 +1998,6 @@ void handlePostInputJson( AsyncWebServerRequest* request, uint8_t* data )
   //Serial.println();
 
   softMuteDAC();
-  delay(500);
 
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
@@ -2058,7 +2058,6 @@ void handlePostHpJson( AsyncWebServerRequest* request, uint8_t* data )
   Serial.println( "POST /hp" );
 
   softMuteDAC();
-  delay(500);
 
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
@@ -2163,7 +2162,6 @@ void handlePostLshelvJson( AsyncWebServerRequest* request, uint8_t* data )
   //Serial.println();
 
   softMuteDAC();
-  delay(500);
 
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
@@ -2271,7 +2269,6 @@ void handlePostPeqJson( AsyncWebServerRequest* request, uint8_t* data )
   //Serial.println();
 
   softMuteDAC();
-  delay(500);
 
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
@@ -2379,7 +2376,6 @@ void handlePostHshelvJson( AsyncWebServerRequest* request, uint8_t* data )
   //Serial.println();
 
   softMuteDAC();
-  delay(500);
 
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
@@ -2487,7 +2483,6 @@ void handlePostLpJson( AsyncWebServerRequest* request, uint8_t* data )
   //Serial.println();
 
   softMuteDAC();
-  delay(500);
 
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
@@ -2597,7 +2592,6 @@ void handlePostPhaseJson( AsyncWebServerRequest* request, uint8_t* data )
   //Serial.println();
 
   softMuteDAC();
-  delay(500);
 
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
@@ -2716,7 +2710,6 @@ void handlePostDelayJson( AsyncWebServerRequest* request, uint8_t* data )
   //Serial.println();
 
   softMuteDAC();
-  delay(500);
 
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
@@ -2783,7 +2776,6 @@ void handlePostGainJson( AsyncWebServerRequest* request, uint8_t* data )
   //Serial.println();
 
   softMuteDAC();
-  delay(500);
 
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
@@ -2851,7 +2843,6 @@ void handlePostXoJson( AsyncWebServerRequest* request, uint8_t* data )
   //Serial.println();
 
   softMuteDAC();
-  delay(500);
 
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
@@ -3025,7 +3016,6 @@ void handlePostFirJson( AsyncWebServerRequest* request, uint8_t* data )
   //Serial.println();
 
   softMuteDAC();
-  delay(500);
 
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
@@ -3122,7 +3112,6 @@ void handlePostPresetJson( AsyncWebServerRequest* request, uint8_t* data )
     myDisplay.drawSwitchingPreset();
 
   softMuteDAC();
-  delay(500);
 
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
@@ -3201,7 +3190,6 @@ void handlePostStore( AsyncWebServerRequest* request, uint8_t* data )
   Serial.println( "POST /store" );
 
   softMuteDAC();
-  delay(500);
 
   String fileName = presetUsrparamFile[currentPreset];
 
@@ -3378,7 +3366,6 @@ void handlePostAddonConfigJson( AsyncWebServerRequest* request, uint8_t* data )
   //Serial.println();
 
   softMuteDAC();
-  delay(500);
 
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
@@ -3846,7 +3833,6 @@ void handleIrUpload( AsyncWebServerRequest* request, uint8_t* data, size_t len, 
   if( index + len >= total )
   {
     softMuteDAC();
-    delay(500);
 
     setFir( currentFirUploadIdx );
 
@@ -4478,7 +4464,6 @@ void loop()
         currentPreset = 0;
 
       softMuteDAC();
-      delay(500);
       initUserParams();
       uploadUserParams();
       updateAddOn();   
@@ -4509,7 +4494,6 @@ void loop()
         currentPreset--;
 
       softMuteDAC();
-      delay(500);
       initUserParams();
       uploadUserParams();
       updateAddOn();   
@@ -4551,7 +4535,6 @@ void loop()
         currentPreset--;
 
       softMuteDAC();
-      delay(500);
       initUserParams();
       uploadUserParams();
       updateAddOn();   
@@ -4568,7 +4551,6 @@ void loop()
         currentPreset = 0;
 
       softMuteDAC();
-      delay(500);
       initUserParams();
       uploadUserParams();
       updateAddOn();   
