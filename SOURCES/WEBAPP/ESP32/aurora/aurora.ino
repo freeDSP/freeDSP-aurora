@@ -3727,6 +3727,9 @@ void myWiFiTask(void *pvParameters)
   bool firstConnectAttempt = true;
   bool myWiFiFirstConnect = true;
   int cntrAuthFailure = 0;
+  const char* ssid = "AP-freeDSP-aurora";
+  IPAddress ip(192, 168, 5, 1);
+  IPAddress subnet(255, 255, 255, 0);
 
   WiFi.mode(WIFI_AP_STA);
   WiFi.setHostname( "freeDSP-aurora" );
@@ -3734,16 +3737,16 @@ void myWiFiTask(void *pvParameters)
   if( Settings.pwdap.length() > 0 )
   {
     Serial.println( "AP password protected" );
-    WiFi.softAP( "AP-freeDSP-aurora", Settings.pwdap.c_str() );
+    WiFi.softAP( ssid, Settings.pwdap.c_str() );
   }
   else
   {
     Serial.println( "AP open" );
-    WiFi.softAP( "AP-freeDSP-aurora" );
+    WiFi.softAP( ssid );
   }
   delay(100);
 
-  if( !WiFi.softAPConfig( IPAddress(192, 168, 5, 1), IPAddress(192, 168, 5, 1), IPAddress(255, 255, 255, 0) ) )
+  if( !WiFi.softAPConfig( ip, ip, subnet ) )
     Serial.println("AP Config Failed");
   
   // Start server
