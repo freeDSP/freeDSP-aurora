@@ -1,11 +1,11 @@
 ADAU145X Assembler, Analog Devices Inc.
 Version: 3.16.4,1747  (built 12/21/2017)
 
-##### Compile Started: Sunday, June 14, 2020 6:31:55 PM #####
+##### Compile Started: Thursday, July 9, 2020 5:57:20 PM #####
 ADAU145X Assembler, Analog Devices Inc.
 Version: 3.16.4,1747  (built 12/21/2017)
 
-##### Compile Started: Sunday, June 14, 2020 6:31:55 PM #####
+##### Compile Started: Thursday, July 9, 2020 5:57:20 PM #####
 ##### Compile succeeded:  0 errors, 0 warnings #####
 
 ##### Summary #####
@@ -137,7 +137,7 @@ Gain 7                        8         13        3       1       0
 Gain 5                        8         13        3       1       0
 Gain 6                        8         13        3       1       0
 Gain 8                        8         13        3       1       0
-Delay1                        8         11        4702    1       0
+Delay 1                       8         11        4702    1       0
 Delay 7                       8         11        4702    1       0
 Delay 5                       8         11        4702    1       0
 Delay 3                       8         11        4702    1       0

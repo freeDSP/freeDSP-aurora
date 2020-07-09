@@ -492,17 +492,17 @@
                 <Link pin="I_C916_A0_P3_in" dir="in" link="Link179" />
                 <Link pin="O_C916_A0_P1_out" dir="out" link="Link53" />
             </Algorithm>
-            <Algorithm name="monomuxSigma300ns54" friendlyname="Mono" cell="SPDIFmux_left.Nx_SPDIF_Left ">
+            <Algorithm name="monomuxSigma300ns54" friendlyname="Mono" cell="SpdifOutMux.Nx_SPDIF_Left ">
                 <Link pin="I_C1071_A0_P2_in" dir="in" link="Link178" />
                 <Link pin="I_C1071_A0_P3_in" dir="in" link="Link179" />
                 <Link pin="O_C1071_A0_P1_out" dir="out" link="Link2" />
             </Algorithm>
-            <Algorithm name="monomuxSigma300ns59" friendlyname="Mono" cell="SPDIFmux_left.Nx_SPDIF_Right ">
+            <Algorithm name="monomuxSigma300ns59" friendlyname="Mono" cell="SpdifOutMux.Nx_SPDIF_Right ">
                 <Link pin="I_C1555_A0_P2_in" dir="in" link="Link178" />
                 <Link pin="I_C1555_A0_P3_in" dir="in" link="Link179" />
                 <Link pin="O_C1555_A0_P1_out" dir="out" link="Link11" />
             </Algorithm>
-            <Algorithm name="monomuxSigma300ns53" friendlyname="Mono" cell="SPDIFmux_left.Nx_Exp_Left ">
+            <Algorithm name="monomuxSigma300ns53" friendlyname="Mono" cell="SpdifOutMux.Nx_Exp_Left ">
                 <Link pin="I_C1053_A0_P2_in" dir="in" link="Link180" />
                 <Link pin="I_C1053_A0_P3_in" dir="in" link="Link181" />
                 <Link pin="I_C1053_A0_P4_in" dir="in" link="Link182" />
@@ -513,7 +513,7 @@
                 <Link pin="I_C1053_A0_P9_in" dir="in" link="Link187" />
                 <Link pin="O_C1053_A0_P1_out" dir="out" link="Link4" />
             </Algorithm>
-            <Algorithm name="monomuxSigma300ns58" friendlyname="Mono" cell="SPDIFmux_left.Nx_Exp_Right ">
+            <Algorithm name="monomuxSigma300ns58" friendlyname="Mono" cell="SpdifOutMux.Nx_Exp_Right ">
                 <Link pin="I_C1545_A0_P2_in" dir="in" link="Link180" />
                 <Link pin="I_C1545_A0_P3_in" dir="in" link="Link181" />
                 <Link pin="I_C1545_A0_P4_in" dir="in" link="Link182" />
@@ -524,7 +524,7 @@
                 <Link pin="I_C1545_A0_P9_in" dir="in" link="Link187" />
                 <Link pin="O_C1545_A0_P1_out" dir="out" link="Link6" />
             </Algorithm>
-            <Algorithm name="monomuxSigma300ns52" friendlyname="Mono" cell="SPDIFmux_left.Nx_ESP32_Left ">
+            <Algorithm name="monomuxSigma300ns52" friendlyname="Mono" cell="SpdifOutMux.Nx_ESP32_Left ">
                 <Link pin="I_C945_A0_P2_in" dir="in" link="Link188" />
                 <Link pin="I_C945_A0_P3_in" dir="in" link="Link189" />
                 <Link pin="I_C945_A0_P4_in" dir="in" link="Link190" />
@@ -535,7 +535,7 @@
                 <Link pin="I_C945_A0_P9_in" dir="in" link="Link195" />
                 <Link pin="O_C945_A0_P1_out" dir="out" link="Link1" />
             </Algorithm>
-            <Algorithm name="monomuxSigma300ns57" friendlyname="Mono" cell="SPDIFmux_left.Nx_ESP32_Right ">
+            <Algorithm name="monomuxSigma300ns57" friendlyname="Mono" cell="SpdifOutMux.Nx_ESP32_Right ">
                 <Link pin="I_C1535_A0_P2_in" dir="in" link="Link188" />
                 <Link pin="I_C1535_A0_P3_in" dir="in" link="Link189" />
                 <Link pin="I_C1535_A0_P4_in" dir="in" link="Link190" />
@@ -546,7 +546,7 @@
                 <Link pin="I_C1535_A0_P9_in" dir="in" link="Link195" />
                 <Link pin="O_C1535_A0_P1_out" dir="out" link="Link7" />
             </Algorithm>
-            <Algorithm name="monomuxSigma300ns51" friendlyname="Mono" cell="SPDIFmux_left.Nx_UAC2_Left ">
+            <Algorithm name="monomuxSigma300ns51" friendlyname="Mono" cell="SpdifOutMux.Nx_UAC2_Left ">
                 <Link pin="I_C818_A0_P2_in" dir="in" link="Link196" />
                 <Link pin="I_C818_A0_P3_in" dir="in" link="Link197" />
                 <Link pin="I_C818_A0_P4_in" dir="in" link="Link198" />
@@ -557,7 +557,7 @@
                 <Link pin="I_C818_A0_P9_in" dir="in" link="Link203" />
                 <Link pin="O_C818_A0_P1_out" dir="out" link="Link3" />
             </Algorithm>
-            <Algorithm name="monomuxSigma300ns56" friendlyname="Mono" cell="SPDIFmux_left.Nx_UAC2_Right ">
+            <Algorithm name="monomuxSigma300ns56" friendlyname="Mono" cell="SpdifOutMux.Nx_UAC2_Right ">
                 <Link pin="I_C1525_A0_P2_in" dir="in" link="Link196" />
                 <Link pin="I_C1525_A0_P3_in" dir="in" link="Link197" />
                 <Link pin="I_C1525_A0_P4_in" dir="in" link="Link198" />
@@ -568,7 +568,7 @@
                 <Link pin="I_C1525_A0_P9_in" dir="in" link="Link203" />
                 <Link pin="O_C1525_A0_P1_out" dir="out" link="Link8" />
             </Algorithm>
-            <Algorithm name="monomuxSigma300ns50" friendlyname="Mono" cell="SPDIFmux_left.Nx_Analog_Left ">
+            <Algorithm name="monomuxSigma300ns50" friendlyname="Mono" cell="SpdifOutMux.Nx_Analog_Left ">
                 <Link pin="I_C650_A0_P2_in" dir="in" link="Link204" />
                 <Link pin="I_C650_A0_P3_in" dir="in" link="Link205" />
                 <Link pin="I_C650_A0_P4_in" dir="in" link="Link206" />
@@ -579,7 +579,7 @@
                 <Link pin="I_C650_A0_P9_in" dir="in" link="Link211" />
                 <Link pin="O_C650_A0_P1_out" dir="out" link="Link0" />
             </Algorithm>
-            <Algorithm name="monomuxSigma300ns61" friendlyname="Mono" cell="SPDIFmux_left.Nx_Analog_Right ">
+            <Algorithm name="monomuxSigma300ns61" friendlyname="Mono" cell="SpdifOutMux.Nx_Analog_Right ">
                 <Link pin="I_C1568_A0_P2_in" dir="in" link="Link204" />
                 <Link pin="I_C1568_A0_P3_in" dir="in" link="Link205" />
                 <Link pin="I_C1568_A0_P4_in" dir="in" link="Link206" />
@@ -1038,7 +1038,7 @@
                 <Link pin="I_C832_A0_P1_in" dir="in" link="Link141" />
                 <Link pin="O_C832_A0_P2_out" dir="out" link="Link159" />
             </Algorithm>
-            <Algorithm name="DelaySigma300Alg1" friendlyname="Growable Delay" cell="Delay1 ">
+            <Algorithm name="DelaySigma300Alg1" friendlyname="Growable Delay" cell="Delay 1 ">
                 <Link pin="I_C240_A0_P1_in" dir="in" link="Link65" />
                 <Link pin="O_C240_A0_P2_out" dir="out" link="Link66" />
             </Algorithm>
@@ -1163,7 +1163,7 @@
             <Algorithm name="ICOutADAU145X6" friendlyname="Output" cell="Output 8 ">
                 <Link pin="I_C824_A0_P1_in" dir="in" link="Link216" />
             </Algorithm>
-            <Algorithm name="monomuxSigma300ns63" friendlyname="Mono" cell="SPDIFmux_left.Nx_Out_Right ">
+            <Algorithm name="monomuxSigma300ns63" friendlyname="Mono" cell="SpdifOutMux.Nx_Out_Right ">
                 <Link pin="I_C616_A0_P2_in" dir="in" link="Link213" />
                 <Link pin="I_C616_A0_P3_in" dir="in" link="Link219" />
                 <Link pin="I_C616_A0_P4_in" dir="in" link="Link218" />
@@ -1174,7 +1174,7 @@
                 <Link pin="I_C616_A0_P9_in" dir="in" link="Link216" />
                 <Link pin="O_C616_A0_P1_out" dir="out" link="Link12" />
             </Algorithm>
-            <Algorithm name="monomuxSigma300ns62" friendlyname="Mono" cell="SPDIFmux_left.Nx_Out_Left ">
+            <Algorithm name="monomuxSigma300ns62" friendlyname="Mono" cell="SpdifOutMux.Nx_Out_Left ">
                 <Link pin="I_C484_A0_P2_in" dir="in" link="Link213" />
                 <Link pin="I_C484_A0_P3_in" dir="in" link="Link219" />
                 <Link pin="I_C484_A0_P4_in" dir="in" link="Link218" />
@@ -1185,7 +1185,7 @@
                 <Link pin="I_C484_A0_P9_in" dir="in" link="Link216" />
                 <Link pin="O_C484_A0_P1_out" dir="out" link="Link13" />
             </Algorithm>
-            <Algorithm name="monomuxSigma300ns55" friendlyname="Mono" cell="SPDIFmux_left.Nx_Left ">
+            <Algorithm name="monomuxSigma300ns55" friendlyname="Mono" cell="SpdifOutMux.Nx_Left ">
                 <Link pin="I_C1075_A0_P2_in" dir="in" link="Link0" />
                 <Link pin="I_C1075_A0_P3_in" dir="in" link="Link3" />
                 <Link pin="I_C1075_A0_P4_in" dir="in" link="Link1" />
@@ -1194,7 +1194,7 @@
                 <Link pin="I_C1075_A0_P7_in" dir="in" link="Link13" />
                 <Link pin="O_C1075_A0_P1_out" dir="out" link="Link5" />
             </Algorithm>
-            <Algorithm name="monomuxSigma300ns60" friendlyname="Mono" cell="SPDIFmux_left.Nx_Right ">
+            <Algorithm name="monomuxSigma300ns60" friendlyname="Mono" cell="SpdifOutMux.Nx_Right ">
                 <Link pin="I_C1559_A0_P2_in" dir="in" link="Link9" />
                 <Link pin="I_C1559_A0_P3_in" dir="in" link="Link8" />
                 <Link pin="I_C1559_A0_P4_in" dir="in" link="Link7" />
@@ -1203,10 +1203,10 @@
                 <Link pin="I_C1559_A0_P7_in" dir="in" link="Link12" />
                 <Link pin="O_C1559_A0_P1_out" dir="out" link="Link10" />
             </Algorithm>
-            <Algorithm name="ICSigma300SpdifOut1" friendlyname="SPDIF output" cell="SPDIFmux_left.SpdifOut_Left ">
+            <Algorithm name="ICSigma300SpdifOut1" friendlyname="SPDIF output" cell="SpdifOutMux.SpdifOut_Left ">
                 <Link pin="I_C1177_A0_P1_in" dir="in" link="Link5" />
             </Algorithm>
-            <Algorithm name="ICSigma300SpdifOut2" friendlyname="SPDIF output" cell="SPDIFmux_left.SpdifOut_Right ">
+            <Algorithm name="ICSigma300SpdifOut2" friendlyname="SPDIF output" cell="SpdifOutMux.SpdifOut_Right ">
                 <Link pin="I_C1566_A0_P1_in" dir="in" link="Link10" />
             </Algorithm>
         </Schematic>

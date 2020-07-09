@@ -1,4 +1,4 @@
-Cell Name         = SPDIFmux_left.Nx_Analog_Left
+Cell Name         = SpdifOutMux.Nx_Analog_Left
 Parameter Name    = monomuxSigma300ns50index
 Parameter Address = 20153
 Parameter Value   = 0
@@ -7,7 +7,7 @@ Parameter Data :
 
 
 
-Cell Name         = SPDIFmux_left.Nx_UAC2_Left
+Cell Name         = SpdifOutMux.Nx_UAC2_Left
 Parameter Name    = monomuxSigma300ns51index
 Parameter Address = 20151
 Parameter Value   = 0
@@ -16,7 +16,7 @@ Parameter Data :
 
 
 
-Cell Name         = SPDIFmux_left.Nx_ESP32_Left
+Cell Name         = SpdifOutMux.Nx_ESP32_Left
 Parameter Name    = monomuxSigma300ns52index
 Parameter Address = 20149
 Parameter Value   = 0
@@ -25,7 +25,7 @@ Parameter Data :
 
 
 
-Cell Name         = SPDIFmux_left.Nx_Exp_Left
+Cell Name         = SpdifOutMux.Nx_Exp_Left
 Parameter Name    = monomuxSigma300ns53index
 Parameter Address = 20147
 Parameter Value   = 0
@@ -34,7 +34,7 @@ Parameter Data :
 
 
 
-Cell Name         = SPDIFmux_left.Nx_SPDIF_Left
+Cell Name         = SpdifOutMux.Nx_SPDIF_Left
 Parameter Name    = monomuxSigma300ns54index
 Parameter Address = 20145
 Parameter Value   = 0
@@ -43,7 +43,7 @@ Parameter Data :
 
 
 
-Cell Name         = SPDIFmux_left.Nx_Left
+Cell Name         = SpdifOutMux.Nx_Left
 Parameter Name    = monomuxSigma300ns55index
 Parameter Address = 20165
 Parameter Value   = 0
@@ -52,7 +52,7 @@ Parameter Data :
 
 
 
-Cell Name         = SPDIFmux_left.Nx_UAC2_Right
+Cell Name         = SpdifOutMux.Nx_UAC2_Right
 Parameter Name    = monomuxSigma300ns56index
 Parameter Address = 20152
 Parameter Value   = 0
@@ -61,7 +61,7 @@ Parameter Data :
 
 
 
-Cell Name         = SPDIFmux_left.Nx_ESP32_Right
+Cell Name         = SpdifOutMux.Nx_ESP32_Right
 Parameter Name    = monomuxSigma300ns57index
 Parameter Address = 20150
 Parameter Value   = 0
@@ -70,7 +70,7 @@ Parameter Data :
 
 
 
-Cell Name         = SPDIFmux_left.Nx_Exp_Right
+Cell Name         = SpdifOutMux.Nx_Exp_Right
 Parameter Name    = monomuxSigma300ns58index
 Parameter Address = 20148
 Parameter Value   = 0
@@ -79,7 +79,7 @@ Parameter Data :
 
 
 
-Cell Name         = SPDIFmux_left.Nx_SPDIF_Right
+Cell Name         = SpdifOutMux.Nx_SPDIF_Right
 Parameter Name    = monomuxSigma300ns59index
 Parameter Address = 20146
 Parameter Value   = 0
@@ -88,7 +88,7 @@ Parameter Data :
 
 
 
-Cell Name         = SPDIFmux_left.Nx_Right
+Cell Name         = SpdifOutMux.Nx_Right
 Parameter Name    = monomuxSigma300ns60index
 Parameter Address = 20166
 Parameter Value   = 0
@@ -97,7 +97,7 @@ Parameter Data :
 
 
 
-Cell Name         = SPDIFmux_left.Nx_Analog_Right
+Cell Name         = SpdifOutMux.Nx_Analog_Right
 Parameter Name    = monomuxSigma300ns61index
 Parameter Address = 20154
 Parameter Value   = 0
@@ -106,7 +106,7 @@ Parameter Data :
 
 
 
-Cell Name         = SPDIFmux_left.Nx_Out_Left
+Cell Name         = SpdifOutMux.Nx_Out_Left
 Parameter Name    = monomuxSigma300ns62index
 Parameter Address = 20164
 Parameter Value   = 0
@@ -115,7 +115,7 @@ Parameter Data :
 
 
 
-Cell Name         = SPDIFmux_left.Nx_Out_Right
+Cell Name         = SpdifOutMux.Nx_Out_Right
 Parameter Name    = monomuxSigma300ns63index
 Parameter Address = 20163
 Parameter Value   = 0
@@ -1501,7 +1501,7 @@ Parameter Data :
 
 
 
-Cell Name         = Delay1
+Cell Name         = Delay 1
 Parameter Name    = DelaySigma300Alg1delay
 Parameter Address = 20040
 Parameter Value   = 0

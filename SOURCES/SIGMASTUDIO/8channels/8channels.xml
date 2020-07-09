@@ -402,7 +402,7 @@
             <Data>0x00, 0x00, </Data>
         </Register>
         <Module>
-            <CellName>SPDIFmux_left.Nx_Analog_Left</CellName>
+            <CellName>SpdifOutMux.Nx_Analog_Left</CellName>
             <Algorithm>
                 <AlgoName>ALG0</AlgoName>
                 <Description>Mono( 8 ) : OnOff[ True ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];</Description>
@@ -417,7 +417,7 @@
             </Algorithm>
         </Module>
         <Module>
-            <CellName>SPDIFmux_left.Nx_UAC2_Left</CellName>
+            <CellName>SpdifOutMux.Nx_UAC2_Left</CellName>
             <Algorithm>
                 <AlgoName>ALG0</AlgoName>
                 <Description>Mono( 8 ) : OnOff[ True ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];</Description>
@@ -432,7 +432,7 @@
             </Algorithm>
         </Module>
         <Module>
-            <CellName>SPDIFmux_left.Nx_ESP32_Left</CellName>
+            <CellName>SpdifOutMux.Nx_ESP32_Left</CellName>
             <Algorithm>
                 <AlgoName>ALG0</AlgoName>
                 <Description>Mono( 8 ) : OnOff[ True ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];</Description>
@@ -447,7 +447,7 @@
             </Algorithm>
         </Module>
         <Module>
-            <CellName>SPDIFmux_left.Nx_Exp_Left</CellName>
+            <CellName>SpdifOutMux.Nx_Exp_Left</CellName>
             <Algorithm>
                 <AlgoName>ALG0</AlgoName>
                 <Description>Mono( 8 ) : OnOff[ True ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];</Description>
@@ -462,7 +462,7 @@
             </Algorithm>
         </Module>
         <Module>
-            <CellName>SPDIFmux_left.Nx_SPDIF_Left</CellName>
+            <CellName>SpdifOutMux.Nx_SPDIF_Left</CellName>
             <Algorithm>
                 <AlgoName>ALG0</AlgoName>
                 <Description>Mono( 2 ) : OnOff[ True ];OnOff[ False ];</Description>
@@ -477,7 +477,7 @@
             </Algorithm>
         </Module>
         <Module>
-            <CellName>SPDIFmux_left.Nx_Left</CellName>
+            <CellName>SpdifOutMux.Nx_Left</CellName>
             <Algorithm>
                 <AlgoName>ALG0</AlgoName>
                 <Description>Mono( 6 ) : OnOff[ True ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];</Description>
@@ -492,7 +492,7 @@
             </Algorithm>
         </Module>
         <Module>
-            <CellName>SPDIFmux_left.Nx_UAC2_Right</CellName>
+            <CellName>SpdifOutMux.Nx_UAC2_Right</CellName>
             <Algorithm>
                 <AlgoName>ALG0</AlgoName>
                 <Description>Mono( 8 ) : OnOff[ True ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];</Description>
@@ -507,7 +507,7 @@
             </Algorithm>
         </Module>
         <Module>
-            <CellName>SPDIFmux_left.Nx_ESP32_Right</CellName>
+            <CellName>SpdifOutMux.Nx_ESP32_Right</CellName>
             <Algorithm>
                 <AlgoName>ALG0</AlgoName>
                 <Description>Mono( 8 ) : OnOff[ True ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];</Description>
@@ -522,7 +522,7 @@
             </Algorithm>
         </Module>
         <Module>
-            <CellName>SPDIFmux_left.Nx_Exp_Right</CellName>
+            <CellName>SpdifOutMux.Nx_Exp_Right</CellName>
             <Algorithm>
                 <AlgoName>ALG0</AlgoName>
                 <Description>Mono( 8 ) : OnOff[ True ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];</Description>
@@ -537,7 +537,7 @@
             </Algorithm>
         </Module>
         <Module>
-            <CellName>SPDIFmux_left.Nx_SPDIF_Right</CellName>
+            <CellName>SpdifOutMux.Nx_SPDIF_Right</CellName>
             <Algorithm>
                 <AlgoName>ALG0</AlgoName>
                 <Description>Mono( 2 ) : OnOff[ True ];OnOff[ False ];</Description>
@@ -552,7 +552,7 @@
             </Algorithm>
         </Module>
         <Module>
-            <CellName>SPDIFmux_left.Nx_Right</CellName>
+            <CellName>SpdifOutMux.Nx_Right</CellName>
             <Algorithm>
                 <AlgoName>ALG0</AlgoName>
                 <Description>Mono( 6 ) : OnOff[ True ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];</Description>
@@ -567,7 +567,7 @@
             </Algorithm>
         </Module>
         <Module>
-            <CellName>SPDIFmux_left.Nx_Analog_Right</CellName>
+            <CellName>SpdifOutMux.Nx_Analog_Right</CellName>
             <Algorithm>
                 <AlgoName>ALG0</AlgoName>
                 <Description>Mono( 8 ) : OnOff[ True ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];</Description>
@@ -582,7 +582,7 @@
             </Algorithm>
         </Module>
         <Module>
-            <CellName>SPDIFmux_left.Nx_Out_Left</CellName>
+            <CellName>SpdifOutMux.Nx_Out_Left</CellName>
             <Algorithm>
                 <AlgoName>ALG0</AlgoName>
                 <Description>Mono( 8 ) : OnOff[ True ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];</Description>
@@ -597,7 +597,7 @@
             </Algorithm>
         </Module>
         <Module>
-            <CellName>SPDIFmux_left.Nx_Out_Right</CellName>
+            <CellName>SpdifOutMux.Nx_Out_Right</CellName>
             <Algorithm>
                 <AlgoName>ALG0</AlgoName>
                 <Description>Mono( 8 ) : OnOff[ True ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];OnOff[ False ];</Description>
@@ -2256,7 +2256,7 @@
             </Algorithm>
         </Module>
         <Module>
-            <CellName>Delay1</CellName>
+            <CellName>Delay 1</CellName>
             <Algorithm>
                 <AlgoName>ALG0</AlgoName>
                 <Description>Growable Delay( 1 ) : DelayValue[ 0 ],Memory[ 0 ];</Description>
