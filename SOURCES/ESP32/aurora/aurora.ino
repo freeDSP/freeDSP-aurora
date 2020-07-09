@@ -786,6 +786,22 @@ void myWiFiTask(void *pvParameters)
 }
 
 //==============================================================================
+/*! Format SPIFFS and write default settings
+ *
+ */
+void formatAndDefaultSettings(void)
+{
+  bool formatted = SPIFFS.format();
+  if( formatted )
+  {
+    Serial.println( "Rewriting settings.ini" );
+    writeDefaultSettings();
+  }
+  else
+    Serial.println( "Error formatting" );
+}
+
+//==============================================================================
 /*! Arduino Setup
  *
  */
@@ -851,14 +867,7 @@ void setup( void )
     {
       Serial.println( "Settings.ini corrupted" );
       fileSettings.close();
-      bool formatted = SPIFFS.format();
-      if( formatted )
-      {
-        Serial.println( "Rewriting settings.ini" );
-        writeDefaultSettings();
-      }
-      else
-        Serial.println( "Error formatting" );
+      formatAndDefaultSettings();
     }  
     else
     {
@@ -873,14 +882,7 @@ void setup( void )
       if( Settings.version != VERSION_STR )
       {
         Serial.println( "New firmware, reformatting fs" );
-        bool formatted = SPIFFS.format();
-        if( formatted )
-        {
-          Serial.println( "Rewriting settings.ini" );
-          writeDefaultSettings();
-        }
-        else
-          Serial.println( "Error formatting" );
+        formatAndDefaultSettings();
       }
     }
   }
