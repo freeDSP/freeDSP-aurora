@@ -1,7 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file alias="binary_png">rc/binary.png</file>
-        <file alias="folder_open_png">rc/folder_open.png</file>
-        <file alias="ksim_cpu.png">rc/ksim_cpu.png</file>
-    </qresource>
-</RCC>
