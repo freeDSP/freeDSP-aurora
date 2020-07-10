@@ -59,8 +59,6 @@ struct tSettings
   bool vpot;
   String pwdap;
   int adcsum;
-  uint32_t spdifleft;
-  uint32_t spdifright;
 };
 
 tSettings Settings;
@@ -444,8 +442,8 @@ void initUserParams( void )
 
   masterVolume.val = -60.0;
 
-  spdifOutput.selectLeft = 0x00000000;
-  spdifOutput.selectRight = 0x00000000;
+  spdifOutput.selectionLeft = 0x00000000;
+  spdifOutput.selectionRight = 0x00000000;
 
 }
 
@@ -464,8 +462,6 @@ void readSettings( void )
     Settings.vpot = false;
     Settings.pwdap = "";
     Settings.adcsum = 0;
-    Settings.spdifleft = 0;
-    Settings.spdifright = 0;
     writeSettings();
 
     Serial.println( "[OK]" );
@@ -499,8 +495,6 @@ void readSettings( void )
       Settings.vpot = false;
       Settings.pwdap = "";
       Settings.adcsum = 0;
-      Settings.spdifleft = 0;
-      Settings.spdifright = 0;
       writeSettings();
     }
 
@@ -513,16 +507,12 @@ void readSettings( void )
       Settings.vpot = false;
     Settings.pwdap = jsonSettings["pwdap"].as<String>();
     Settings.adcsum = jsonSettings["adcsum"].as<String>().toInt();
-    Settings.spdifleft = jsonSettings["spdifleft"].as<String>().toInt();
-    Settings.spdifright = jsonSettings["spdifright"].as<String>().toInt();
 
     Serial.println( "[OK]" );
     Serial.println( "Device config" );
     Serial.print( "AID: " ); Serial.println( Settings.addonid );
     Serial.print( "Volume Poti: " ); Serial.println( Settings.vpot ); 
     Serial.print( "ADC Channel Sum: " );Serial.println( Settings.adcsum );
-    Serial.print( "SPDIF Output Left: " );Serial.println( Settings.spdifleft );
-    Serial.print( "SPDIF Output Right: " );Serial.println( Settings.spdifright );
     Serial.println( "[OK]" );
   }
   else
@@ -545,8 +535,6 @@ void writeSettings( void )
     jsonSettings["vpot"] = Settings.vpot;
     jsonSettings["pwdap"] = Settings.pwdap;
     jsonSettings["adcsum"] = Settings.adcsum;
-    jsonSettings["spdifleft"] = Settings.spdifleft;
-    jsonSettings["spdifright"] = Settings.spdifright;
 
     if( serializeJson( jsonSettings, fileSettings ) == 0 )
       Serial.println( "[ERROR] writeSettings(): Failed to write settings to file" );
@@ -691,8 +679,8 @@ void readPluginMeta( void )
     spdifOutputSelector.addrChnRight[ADDR_SPDIF] = static_cast<uint16_t>(jsonPluginMeta["spdifout"][6+ADDR_SPDIF]);
     spdifOutputSelector.addrChnRight[ADDR_OUT] = static_cast<uint16_t>(jsonPluginMeta["spdifout"][6+ADDR_OUT]);
 
-    spdifOutput.addrPortLeft = static_cast<uint16_t>(jsonPluginMeta["spdifout"][12]);
-    spdifOutput.addrPortRight = static_cast<uint16_t>(jsonPluginMeta["spdifout"][13]);
+    spdifOutputSelector.addrPortLeft = static_cast<uint16_t>(jsonPluginMeta["spdifout"][12]);
+    spdifOutputSelector.addrPortRight = static_cast<uint16_t>(jsonPluginMeta["spdifout"][13]);
   }
   else
   {
@@ -940,6 +928,11 @@ void uploadUserParams( void )
         Serial.println( "[ERROR] Reading masterVolume from " + presetUsrparamFile[currentPreset] );
       totalSize += len;
 
+      len = fileUserParams.read( (uint8_t*)&spdifOutput, sizeof(tSpdifOutput) );
+      if( len != sizeof(tSpdifOutput) )
+        Serial.println( "[ERROR] Reading spdifOutput from " + presetUsrparamFile[currentPreset] );
+      totalSize += len;
+
       Serial.println( "[OK]" );
       Serial.print( "Read " );
       Serial.print( totalSize );
@@ -1001,6 +994,9 @@ void uploadUserParams( void )
   Serial.print( "." );
 
   setMasterVolume();
+
+  setSpdifOutputRouting();
+
   Serial.println( "[OK]" );
   
 }
@@ -1230,10 +1226,10 @@ void softUnmuteDAC( void )
  */
 void setSpdifOutputRouting( void )
 {
-  uint32_t sel = (Settings.spdifleft >> 16) & 0x0000ffff;
-  uint16_t addrChn = spdifOutput.addrChnLeft[sel];
-  uint16_t addrPort = spdifOutput.addrPortLeft;
-  sel = Settings.spdifleft;
+  uint32_t sel = (spdifOutput.selectionLeft >> 16) & 0x0000ffff;
+  uint16_t addrChn = spdifOutputSelector.addrChnLeft[sel];
+  uint16_t addrPort = spdifOutputSelector.addrPortLeft;
+  sel = spdifOutput.selectionLeft;
   
   byte val[4];
   uint32_t intval = sel & 0x0000ffff;
@@ -1252,10 +1248,10 @@ void setSpdifOutputRouting( void )
   ADAU1452_WRITE_BLOCK( addrPort, val, 4 );
   Serial.print( uinttohexstring(addrPort) ); Serial.print( " " ); Serial.println(uinttohexstring(intval));
 
-  sel = (Settings.spdifright >> 16) & 0x0000ffff;
-  addrChn = spdifOutput.addrChnRight[sel];
-  addrPort = spdifOutput.addrPortRight;
-  sel = Settings.spdifright;
+  sel = (spdifOutput.selectionRight >> 16) & 0x0000ffff;
+  addrChn = spdifOutputSelector.addrChnRight[sel];
+  addrPort = spdifOutputSelector.addrPortRight;
+  sel = spdifOutput.selectionRight;
 
   intval = sel & 0x0000ffff;
   val[0] = (intval >> 24 ) & 0xFF;
@@ -1965,8 +1961,8 @@ void handleGetSpdifOutJson( AsyncWebServerRequest* request )
   AsyncJsonResponse* response = new AsyncJsonResponse();
   JsonVariant& jsonResponse = response->getRoot();
 
-  jsonResponse["spdifleft"] = uinttohexstring( Settings.spdifleft );
-  jsonResponse["spdifright"] = uinttohexstring( Settings.spdifright );
+  jsonResponse["spdifleft"] = uinttohexstring( spdifOutput.selectionLeft );
+  jsonResponse["spdifright"] = uinttohexstring( spdifOutput.selectionRight );
 
   response->setLength();
   request->send(response);
@@ -2048,10 +2044,6 @@ void setInput( const int idx )
 void handlePostHpJson( AsyncWebServerRequest* request, uint8_t* data )
 {
   Serial.println( "POST /hp" );
-  //Serial.println( "Body:");
-  //for(size_t i=0; i<len; i++)
-  //  Serial.write(data[i]);
-  //Serial.println();
 
   softMuteDAC();
   delay(500);
@@ -3310,7 +3302,7 @@ void handlePostStore( AsyncWebServerRequest* request, uint8_t* data )
     Serial.println( "[ERROR] Writing masterVolume to " + presetUsrparamFile[currentPreset] );
   totalSize += len;
 
-  size_t len = fileUserParams.write( (uint8_t*)&spdifOutput, sizeof(tSpdifOutput) );
+  len = fileUserParams.write( (uint8_t*)&spdifOutput, sizeof(tSpdifOutput) );
   if( len != sizeof(tSpdifOutput) )
     Serial.println( "[ERROR] Writing SPDIF out to " + presetUsrparamFile[currentPreset] );
   totalSize += len;
@@ -3495,8 +3487,8 @@ void handlePostSpdifOutJson( AsyncWebServerRequest* request, uint8_t* data )
   Serial.println( (uint32_t)strtoul( root["spdifleft"].as<String>().c_str(), NULL, 16 ) );
   Serial.println( (uint32_t)strtoul( root["spdifright"].as<String>().c_str(), NULL, 16 ) );
 
-  Settings.spdifleft = (uint32_t)strtoul( root["spdifleft"].as<String>().c_str(), NULL, 16 );
-  Settings.spdifright = (uint32_t)strtoul( root["spdifright"].as<String>().c_str(), NULL, 16 );
+  spdifOutput.selectionLeft = (uint32_t)strtoul( root["spdifleft"].as<String>().c_str(), NULL, 16 );
+  spdifOutput.selectionRight = (uint32_t)strtoul( root["spdifright"].as<String>().c_str(), NULL, 16 );
 
   setSpdifOutputRouting();
        
@@ -4381,11 +4373,6 @@ void setup()
   //--- Enable Volume Potentiometer
   //----------------------------------------------------------------------------
   enableVolPot();
-
-  //----------------------------------------------------------------------------
-  //--- Configure the SPDIF output routing
-  //----------------------------------------------------------------------------  
-  setSpdifOutputRouting();
 
   //----------------------------------------------------------------------------
   //--- Init Rotary Encoder Handling
