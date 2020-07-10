@@ -65,13 +65,14 @@ tSettings Settings;
 
 typedef uint8_t tFilterType;
 
-enum
+enum tMuxAddr
 {
   ADDR_ANALOG,
   ADDR_UAC,
   ADDR_EXP,
   ADDR_ESP,
-  ADDR_SPDIF
+  ADDR_SPDIF,
+  ADDR_OUT
 };
 
 struct tInput
@@ -165,6 +166,20 @@ struct tInputSelector
   uint16_t port[8];
 };
 
+struct tSpdifOutputSelector
+{
+  uint16_t addrChnLeft[6];
+  uint16_t addrPortLeft;
+  uint16_t addrChnRight[6];
+  uint16_t addrPortRight;
+};
+
+struct tSpdifOutput
+{
+  uint32_t selectionLeft;
+  uint32_t selectionRight;
+};
+
 tInput paramInputs[8];
 tHPLP paramHP[8];
 tShelving paramLshelv[8];
@@ -178,6 +193,8 @@ tCrossover paramCrossover[8];
 tFir paramFir[MAX_NUM_FIRS];
 tMasterVolume masterVolume = { 0x0000, -60.0 };
 tInputSelector inputSelector;
+tSpdifOutput spdifOutput;
+tSpdifOutputSelector spdifOutputSelector;
 
 int numInputs = 0;
 int numHPs = 0;
@@ -289,6 +306,26 @@ uint32_t convertTo824( double val )
       + ((static_cast<uint32_t>(fractpart * 16777216.0)) & 0x00ffffff);
 
   return ret;
+}
+
+//==============================================================================
+/*! Converts a uint32 to a hex string with leading 0x
+ *
+ * \param uintval Value to be converted
+ * \return Hex string
+ */
+String uinttohexstring( uint32_t uintval )
+{
+  String str = String("0x");
+  for( int ii = 0; ii < 4; ii++ )
+  {
+    uint8_t val = (uintval>>(24-ii*8)) & 0xFF;
+    if( val < 0x10 )
+      str = str + String( "0") + String( val, HEX );
+    else
+      str = str + String( val, HEX );
+  }
+  return str;
 }
 
 //==============================================================================
@@ -405,6 +442,9 @@ void initUserParams( void )
 
   masterVolume.val = -60.0;
 
+  spdifOutput.selectionLeft = 0x00000000;
+  spdifOutput.selectionRight = 0x00000000;
+
 }
 
 //==============================================================================
@@ -448,7 +488,7 @@ void readSettings( void )
 
     if( jsonSettings["version"].as<String>().startsWith( "1." ) )
     {
-      Serial.println( "Updateing from 1.x.x" );
+      Serial.println( "Updating from 1.x.x" );
       Settings.ssid = "";
       Settings.password = "";
       Settings.addonid = ADDON_CUSTOM;
@@ -470,7 +510,6 @@ void readSettings( void )
 
     Serial.println( "[OK]" );
     Serial.println( "Device config" );
-    //Serial.print( "PID: " ); Serial.println( Settings.pid );
     Serial.print( "AID: " ); Serial.println( Settings.addonid );
     Serial.print( "Volume Poti: " ); Serial.println( Settings.vpot ); 
     Serial.print( "ADC Channel Sum: " );Serial.println( Settings.adcsum );
@@ -478,9 +517,6 @@ void readSettings( void )
   }
   else
     Serial.println( "[ERROR] readSettings(): Opening settings.ini failed." );
-
-  
-
 }
 
 //==============================================================================
@@ -627,6 +663,24 @@ void readPluginMeta( void )
 
     masterVolume.addr = jsonPluginMeta["master"].as<String>().toInt();
     addrVPot = jsonPluginMeta["vpot"].as<String>().toInt();
+
+    //--- Read the addresses of the SPDIF output multiplexer
+    spdifOutputSelector.addrChnLeft[ADDR_ANALOG] = static_cast<uint16_t>(jsonPluginMeta["spdifout"][ADDR_ANALOG]);
+    spdifOutputSelector.addrChnLeft[ADDR_UAC] = static_cast<uint16_t>(jsonPluginMeta["spdifout"][ADDR_UAC]);
+    spdifOutputSelector.addrChnLeft[ADDR_EXP] = static_cast<uint16_t>(jsonPluginMeta["spdifout"][ADDR_EXP]);
+    spdifOutputSelector.addrChnLeft[ADDR_ESP] = static_cast<uint16_t>(jsonPluginMeta["spdifout"][ADDR_ESP]);
+    spdifOutputSelector.addrChnLeft[ADDR_SPDIF] = static_cast<uint16_t>(jsonPluginMeta["spdifout"][ADDR_SPDIF]);
+    spdifOutputSelector.addrChnLeft[ADDR_OUT] = static_cast<uint16_t>(jsonPluginMeta["spdifout"][ADDR_OUT]);
+
+    spdifOutputSelector.addrChnRight[ADDR_ANALOG] = static_cast<uint16_t>(jsonPluginMeta["spdifout"][6+ADDR_ANALOG]);
+    spdifOutputSelector.addrChnRight[ADDR_UAC] = static_cast<uint16_t>(jsonPluginMeta["spdifout"][6+ADDR_UAC]);
+    spdifOutputSelector.addrChnRight[ADDR_EXP] = static_cast<uint16_t>(jsonPluginMeta["spdifout"][6+ADDR_EXP]);
+    spdifOutputSelector.addrChnRight[ADDR_ESP] = static_cast<uint16_t>(jsonPluginMeta["spdifout"][6+ADDR_ESP]);
+    spdifOutputSelector.addrChnRight[ADDR_SPDIF] = static_cast<uint16_t>(jsonPluginMeta["spdifout"][6+ADDR_SPDIF]);
+    spdifOutputSelector.addrChnRight[ADDR_OUT] = static_cast<uint16_t>(jsonPluginMeta["spdifout"][6+ADDR_OUT]);
+
+    spdifOutputSelector.addrPortLeft = static_cast<uint16_t>(jsonPluginMeta["spdifout"][12]);
+    spdifOutputSelector.addrPortRight = static_cast<uint16_t>(jsonPluginMeta["spdifout"][13]);
   }
   else
   {
@@ -874,6 +928,11 @@ void uploadUserParams( void )
         Serial.println( "[ERROR] Reading masterVolume from " + presetUsrparamFile[currentPreset] );
       totalSize += len;
 
+      len = fileUserParams.read( (uint8_t*)&spdifOutput, sizeof(tSpdifOutput) );
+      if( len != sizeof(tSpdifOutput) )
+        Serial.println( "[ERROR] Reading spdifOutput from " + presetUsrparamFile[currentPreset] );
+      totalSize += len;
+
       Serial.println( "[OK]" );
       Serial.print( "Read " );
       Serial.print( totalSize );
@@ -935,6 +994,9 @@ void uploadUserParams( void )
   Serial.print( "." );
 
   setMasterVolume();
+
+  setSpdifOutputRouting();
+
   Serial.println( "[OK]" );
   
 }
@@ -1157,6 +1219,56 @@ void softMuteDAC( void )
 void softUnmuteDAC( void )
 {
   AK4458_REGWRITE( AK4458_CONTROL2, 0b00100010 );
+}
+
+//==============================================================================
+/*! Changes the routing for the SPDIF output
+ */
+void setSpdifOutputRouting( void )
+{
+  uint32_t sel = (spdifOutput.selectionLeft >> 16) & 0x0000ffff;
+  uint16_t addrChn = spdifOutputSelector.addrChnLeft[sel];
+  uint16_t addrPort = spdifOutputSelector.addrPortLeft;
+  sel = spdifOutput.selectionLeft;
+  
+  byte val[4];
+  uint32_t intval = sel & 0x0000ffff;
+  val[0] = (intval >> 24 ) & 0xFF;
+  val[1] = (intval >> 16 ) & 0xFF;
+  val[2] = (intval >> 8 ) & 0xFF;
+  val[3] =  intval & 0xFF;
+  ADAU1452_WRITE_BLOCK( addrChn, val, 4 );
+  Serial.print( uinttohexstring(addrChn) ); Serial.print( " " ); Serial.println(uinttohexstring(intval));
+
+  intval = (sel >> 16) & 0x0000ffff;
+  val[0] = (intval >> 24 ) & 0xFF;
+  val[1] = (intval >> 16 ) & 0xFF;
+  val[2] = (intval >> 8 ) & 0xFF;
+  val[3] =  intval & 0xFF;
+  ADAU1452_WRITE_BLOCK( addrPort, val, 4 );
+  Serial.print( uinttohexstring(addrPort) ); Serial.print( " " ); Serial.println(uinttohexstring(intval));
+
+  sel = (spdifOutput.selectionRight >> 16) & 0x0000ffff;
+  addrChn = spdifOutputSelector.addrChnRight[sel];
+  addrPort = spdifOutputSelector.addrPortRight;
+  sel = spdifOutput.selectionRight;
+
+  intval = sel & 0x0000ffff;
+  val[0] = (intval >> 24 ) & 0xFF;
+  val[1] = (intval >> 16 ) & 0xFF;
+  val[2] = (intval >> 8 ) & 0xFF;
+  val[3] =  intval & 0xFF;
+  ADAU1452_WRITE_BLOCK( addrChn, val, 4 );
+  Serial.print( uinttohexstring(addrChn) ); Serial.print( " " ); Serial.println(uinttohexstring(intval));
+
+  intval = (sel >> 16) & 0x0000ffff;
+  val[0] = (intval >> 24 ) & 0xFF;
+  val[1] = (intval >> 16 ) & 0xFF;
+  val[2] = (intval >> 8 ) & 0xFF;
+  val[3] =  intval & 0xFF;
+  ADAU1452_WRITE_BLOCK( addrPort, val, 4 );
+  Serial.print( uinttohexstring(addrPort) ); Serial.print( " " ); Serial.println(uinttohexstring(intval));
+
 }
 
 //==============================================================================
@@ -1839,6 +1951,24 @@ void handleGetAllInputsJson( AsyncWebServerRequest* request )
 }
 
 //==============================================================================
+/*! Handles the GET request for SPDIF output multiplexer
+ *
+ */
+void handleGetSpdifOutJson( AsyncWebServerRequest* request )
+{
+  Serial.println( "GET /spdifout" );
+
+  AsyncJsonResponse* response = new AsyncJsonResponse();
+  JsonVariant& jsonResponse = response->getRoot();
+
+  jsonResponse["spdifleft"] = uinttohexstring( spdifOutput.selectionLeft );
+  jsonResponse["spdifright"] = uinttohexstring( spdifOutput.selectionRight );
+
+  response->setLength();
+  request->send(response);
+}
+
+//==============================================================================
 /*! Handles the POST request for Input selection
  *
  */
@@ -1884,7 +2014,6 @@ void handlePostInputJson( AsyncWebServerRequest* request, uint8_t* data )
 /*! Sets a new input selection on DSP.
  *
  */
-//void setInput( const uint16_t addrChn, const uint16_t addrPort, const uint32_t sel )
 void setInput( const int idx )
 {
   uint32_t sel = (paramInputs[idx].sel >> 16) & 0x0000ffff;
@@ -1915,10 +2044,6 @@ void setInput( const int idx )
 void handlePostHpJson( AsyncWebServerRequest* request, uint8_t* data )
 {
   Serial.println( "POST /hp" );
-  //Serial.println( "Body:");
-  //for(size_t i=0; i<len; i++)
-  //  Serial.write(data[i]);
-  //Serial.println();
 
   softMuteDAC();
   delay(500);
@@ -3022,10 +3147,6 @@ void handlePostPresetJson( AsyncWebServerRequest* request, uint8_t* data )
 void handlePostConfigJson( AsyncWebServerRequest* request, uint8_t* data )
 {
   Serial.println( "POST /config" );
-  //Serial.println( "Body:");
-  //for(size_t i=0; i<len; i++)
-  //  Serial.write(data[i]);
-  //Serial.println();
 
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
@@ -3041,6 +3162,8 @@ void handlePostConfigJson( AsyncWebServerRequest* request, uint8_t* data )
   Serial.println( root["aid"].as<String>() );
   Serial.println( root["vpot"].as<String>() );
   Serial.println( root["adcsum"].as<String>().toInt() );
+  Serial.println( (uint32_t)strtoul( root["spdifleft"].as<String>().c_str(), NULL, 16 ) );
+  Serial.println( (uint32_t)strtoul( root["spdifright"].as<String>().c_str(), NULL, 16 ) );
 
   Settings.addonid = root["aid"].as<String>().toInt();
   if( root["vpot"].as<String>() == "true" )
@@ -3177,6 +3300,11 @@ void handlePostStore( AsyncWebServerRequest* request, uint8_t* data )
   size_t len = fileUserParams.write( (uint8_t*)&masterVolume, sizeof(tMasterVolume) );
   if( len != sizeof(tMasterVolume) )
     Serial.println( "[ERROR] Writing masterVolume to " + presetUsrparamFile[currentPreset] );
+  totalSize += len;
+
+  len = fileUserParams.write( (uint8_t*)&spdifOutput, sizeof(tSpdifOutput) );
+  if( len != sizeof(tSpdifOutput) )
+    Serial.println( "[ERROR] Writing SPDIF out to " + presetUsrparamFile[currentPreset] );
   totalSize += len;
 
   fileUserParams.flush();
@@ -3332,6 +3460,37 @@ void handlePostPasswordApJson( AsyncWebServerRequest* request, uint8_t* data )
   Settings.pwdap = root["pwdap"].as<String>();
 
   writeSettings();
+       
+  request->send(200, "text/plain", "");  
+}
+
+//==============================================================================
+/*! Handles the POST request for SPDIF output multiplexer 
+ *
+ */
+void handlePostSpdifOutJson( AsyncWebServerRequest* request, uint8_t* data )
+{
+  Serial.println( "POST /spdifout" );
+
+  DynamicJsonDocument jsonDoc(1024);
+  DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
+  if( err )
+  {
+    Serial.print( "[ERROR] handlePostConfigJson(): Deserialization failed. " );
+    Serial.println( err.c_str() );
+    request->send( 404, "text/plain", "" );
+    return;
+  }
+
+  JsonObject root = jsonDoc.as<JsonObject>();
+
+  Serial.println( (uint32_t)strtoul( root["spdifleft"].as<String>().c_str(), NULL, 16 ) );
+  Serial.println( (uint32_t)strtoul( root["spdifright"].as<String>().c_str(), NULL, 16 ) );
+
+  spdifOutput.selectionLeft = (uint32_t)strtoul( root["spdifleft"].as<String>().c_str(), NULL, 16 );
+  spdifOutput.selectionRight = (uint32_t)strtoul( root["spdifright"].as<String>().c_str(), NULL, 16 );
+
+  setSpdifOutputRouting();
        
   request->send(200, "text/plain", "");  
 }
@@ -4045,6 +4204,7 @@ void setup()
     server.on( "/",          HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( 200, "text/html", fallback_html ); });
   server.on( "/fallback",  HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( 200, "text/html", fallback_html ); });
   server.on( "/dark.css",  HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( SPIFFS, "/dark.css", "text/css" ); });
+  server.on( "/aurora.js", HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( SPIFFS, "/aurora.js", "text/javascript" ); });
   server.on( "/input",     HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetInputJson(request); });
   server.on( "/hp",        HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetHpJson(request); });
   server.on( "/lshelv",    HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetLshelvJson(request); });
@@ -4068,7 +4228,8 @@ void setup()
     Serial.println( "/preset.param" );
     request->send( SPIFFS, presetUsrparamFile[currentPreset], "application/octet-stream" ); 
   });
-  
+  server.on( "/spdifout",     HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetSpdifOutJson(request); });
+
   server.on( "/input", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
   {
     handlePostInputJson( request, data );
@@ -4153,7 +4314,10 @@ void setup()
   {
     handleIrUpload( request, data, len, index, total ); 
   });
-
+  server.on( "/spdifout", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
+  {
+    handlePostSpdifOutJson( request, data );
+  });
 
   //--- webOTA stuff ---
   server.on( "/webota", HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( 200, "text/html", webota_html ); });
