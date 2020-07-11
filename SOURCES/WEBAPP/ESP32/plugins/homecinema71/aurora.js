@@ -1,13 +1,12 @@
 
 function getConfig(){
-  fetch("/config").then (function (response) {
-    return response.json();
-  }).then (function (data) {  
+  fetch("/config").then (function (response) {return response.json();})
+  .then (function (data) {  
     document.getElementById("aid").value = data.aid;
     if(data.vpot==1) document.getElementById("vpot").checked=true;
     else document.getElementById("vpot").checked=false;
-    document.getElementById("adcsum").value=data.adcsum;
-  }).catch (function (error) {console.log(error);});
+    document.getElementById("adcsum").value=data.adcsum;})
+  .catch (function (error) {console.log(error);});
 }
 
 function sendConfig(){
@@ -17,13 +16,13 @@ function sendConfig(){
   data.adcsum=document.getElementById("adcsum").value;
   fetch("/config",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)})
   .then(function(result) {
-  hideAddon();
-  if(data.aid==0) document.getElementById("addon_none").style.display = "block";
-  else if(data.aid==1) document.getElementById("addon_a").style.display = "block";
-  else if(data.aid==2) document.getElementById("addon_b").style.display = "block";
-  else if(data.aid==3) document.getElementById("addon_c").style.display = "block";
-  else if(data.aid==4) document.getElementById("addon_d").style.display = "block";
-  }).catch (function(err){console.log(err);});
+    hideAddon();
+    if(data.aid==0) document.getElementById("addon_none").style.display = "block";
+    else if(data.aid==1) document.getElementById("addon_a").style.display = "block";
+    else if(data.aid==2) document.getElementById("addon_b").style.display = "block";
+    else if(data.aid==3) document.getElementById("addon_c").style.display = "block";
+    else if(data.aid==4) document.getElementById("addon_d").style.display = "block";})
+  .catch (function(err){console.log(err);});
 }
 
 function sendSpdifOutMux(){
@@ -163,4 +162,43 @@ function switchPreset(p){
   document.getElementById("pre2").style.backgroundColor = "#101010";
   document.getElementById("pre3").style.backgroundColor = "#101010";
   document.getElementById("pre"+p).style.backgroundColor = "#73EC6F";
+}
+
+function sendWifi(){
+  var data={};
+  data.ssid=document.getElementById("ssid").value;
+  data.pwd=document.getElementById("pwd").value;
+  fetch("/wifi",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)})
+  .then(function(response){
+    alert("Success! Your WiFi settings have been stored.");
+    return response;})
+  .catch(function(err){console.log(err);});
+}
+
+function sendPwdAP(){
+  var data={};
+  data.pwdap=document.getElementById("pwdap").value;
+  data.apname=document.getElementById("apname").value;
+  if((data.pwdap.length>7) || (data.pwdap.length==0)){
+  fetch("/pwdap",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)})
+  .then(function(response){
+    alert("Success! The configuration of the access point has been stored.");
+    return response;})
+  .catch(function(err){console.log(err);});
+  }
+  else {
+    alert("Please select a password with at least 8 characters.");
+  }
+}
+
+function configDev(){document.getElementById("configDev").style.display = "block";getConfig();}
+
+function configWifi(){document.getElementById("configWifi").style.display = "block";getWifiConfig();}
+
+function getWifiConfig(){
+  fetch("/wificonfig").then (function(response) {return response.json();})
+  .then(function(data) {
+    document.getElementById("ssid").value = data.ssid;
+    document.getElementById("apname").value = data.apname;})
+  .catch(function(error) {console.log(error);});
 }

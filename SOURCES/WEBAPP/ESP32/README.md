@@ -29,6 +29,18 @@ Installing the ArduinJSON library (if you haven't done yet)
 3. Select the version: 6.13.0 
 4. Click install.
 
+Installing the U8g2 library (if you haven't done yet)
+1. Open the Arduino Library Manager
+2. Search for U8g2
+3. Select the version: 2.27.6
+4. Click install.
+
+Installing the IRremote library (if you haven't done yet)
+1. Open the Arduino Library Manager
+2. Search for IRremote
+3. Select the version: 2.2.3
+4. Click install.
+
 
 Uploading Code and Files
 

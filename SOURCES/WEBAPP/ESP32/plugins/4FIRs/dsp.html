@@ -439,21 +439,31 @@
   </div>
 
   <div id="configWifi" class="modal">
-    <div class="modal-content">
+    <div class="modal-content" style="width:600px;">
       <table class="ptbl">
       <tr><td colspan="2" style="height:20px;padding-top:10px;">
       <table style="width:100%;">
       <tr><td class="headline">WiFi Config</td><td class="close" onclick="closeModal('configWifi')">&times;</td></tr>
       </table>
       </td></tr>
+      <tr><td>
+      <table style="width:100%;">
       <tr><td>SSID</td></tr>
       <tr><td><input type="text" id="ssid" style="width:95%;"></td></tr>
       <tr><td>Password</td></tr>
       <tr><td><input type="password" id="pwd" style="width:95%;"></td></tr>
       <tr><td><button class="send" onclick="sendWifi()">Store WiFi</button></td></tr>
+      </table>
+      </td>
+      <td>
+      <table style="width:100%;">
       <tr><td>Password Access Point</td></tr>
       <tr><td><input type="password" id="pwdap" style="width:95%;"></td></tr>
-      <tr><td><button class="send" onclick="sendPwdAP()">Store AP Password</button></td></tr>
+      <tr><td>Name Access Point</td></tr>
+      <tr><td><input type="text" id="apname" style="width:95%;"></td></tr>
+      <tr><td><button class="send" onclick="sendPwdAP()">Store AP Config</button></td></tr>
+      </table>
+      </td></tr>
       </table>
     </div>
   </div>
@@ -828,31 +838,6 @@
       var data = JSON.parse(response);
       for(ii in data.fc){document.getElementById(data.fc[ii].name).innerHTML=data.fc[ii].val;}
     }).catch(function(err){console.log(err);});
-  }
-  function configDev(){document.getElementById("configDev").style.display = "block";getConfig();}
-  function configWifi(){document.getElementById("configWifi").style.display = "block";}
-  function sendWifi(){
-    var data={};
-    data.ssid=document.getElementById("ssid").value;
-    data.pwd=document.getElementById("pwd").value;
-    fetch("/wifi",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)})
-    .then(function(response){
-      alert("Success! Your WiFi settings have been stored.");
-      return response;})
-    .catch(function(err){console.log(err);});
-  }
-  function sendPwdAP(){
-    var data={};
-    data.pwdap=document.getElementById("pwdap").value;
-    if((data.pwdap.length>7) || (data.pwdap.length==0)){
-    fetch("/pwdap",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)})
-    .then(function(response){
-      alert("Success! The password for the access point has been stored.");
-      return response;})
-    .catch(function(err){console.log(err);});
-    }else{
-      alert("Please select a password with at least 8 characters.");
-    }
   }
   function storePreset(){
     var data={};

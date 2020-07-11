@@ -58,6 +58,7 @@ struct tSettings
   int addonid;
   bool vpot;
   String pwdap;
+  String apname;
   int adcsum;
 };
 
@@ -452,16 +453,18 @@ void initUserParams( void )
  */
 void readSettings( void )
 {
+  Settings.ssid = "";
+  Settings.password = "";
+  Settings.addonid = ADDON_CUSTOM;
+  Settings.vpot = false;
+  Settings.pwdap = "";
+  Settings.apname = "AP-freeDSP-aurora";
+  Settings.adcsum = 0;
+
   if( !SPIFFS.exists( "/settings.ini" ) )
   {
     Serial.print( "Writing default settings.ini..." );
-
-    Settings.ssid = "";
-    Settings.password = "";
-    Settings.addonid = ADDON_CUSTOM;
-    Settings.vpot = false;
-    Settings.pwdap = "";
-    Settings.adcsum = 0;
+    
     writeSettings();
 
     Serial.println( "[OK]" );
@@ -489,12 +492,6 @@ void readSettings( void )
     if( jsonSettings["version"].as<String>().startsWith( "1." ) )
     {
       Serial.println( "Updating from 1.x.x" );
-      Settings.ssid = "";
-      Settings.password = "";
-      Settings.addonid = ADDON_CUSTOM;
-      Settings.vpot = false;
-      Settings.pwdap = "";
-      Settings.adcsum = 0;
       writeSettings();
     }
 
@@ -506,6 +503,8 @@ void readSettings( void )
     else
       Settings.vpot = false;
     Settings.pwdap = jsonSettings["pwdap"].as<String>();
+    if( !jsonSettings["apname"].isNull() )
+      Settings.apname = jsonSettings["apname"].as<String>();
     Settings.adcsum = jsonSettings["adcsum"].as<String>().toInt();
 
     Serial.println( "[OK]" );
@@ -534,6 +533,7 @@ void writeSettings( void )
     jsonSettings["aid"] = Settings.addonid;
     jsonSettings["vpot"] = Settings.vpot;
     jsonSettings["pwdap"] = Settings.pwdap;
+    jsonSettings["apname"] = Settings.apname;
     jsonSettings["adcsum"] = Settings.adcsum;
 
     if( serializeJson( jsonSettings, fileSettings ) == 0 )
@@ -1963,6 +1963,23 @@ void handleGetSpdifOutJson( AsyncWebServerRequest* request )
 
   jsonResponse["spdifleft"] = uinttohexstring( spdifOutput.selectionLeft );
   jsonResponse["spdifright"] = uinttohexstring( spdifOutput.selectionRight );
+
+  response->setLength();
+  request->send(response);
+}
+
+//==============================================================================
+/*! Handles the GET request for access point configuration
+ *
+ */
+void handleGetWifiConfigJson( AsyncWebServerRequest* request )
+{
+  Serial.println( "GET /wificonfig" );
+
+  AsyncJsonResponse* response = new AsyncJsonResponse();
+  JsonVariant& jsonResponse = response->getRoot();
+  jsonResponse["apname"] = Settings.apname;
+  jsonResponse["ssid"] = Settings.ssid;
 
   response->setLength();
   request->send(response);
@@ -3458,6 +3475,7 @@ void handlePostPasswordApJson( AsyncWebServerRequest* request, uint8_t* data )
   JsonObject root = jsonDoc.as<JsonObject>();
 
   Settings.pwdap = root["pwdap"].as<String>();
+  Settings.apname = root["apname"].as<String>();
 
   writeSettings();
        
@@ -3895,13 +3913,15 @@ void myWiFiTask(void *pvParameters)
   // Start access point
   if( Settings.pwdap.length() > 0 )
   {
-    Serial.println( "AP password protected" );
-    WiFi.softAP( ssid, Settings.pwdap.c_str() );
+    Serial.print( "AP password protected " );
+    Serial.println( Settings.apname );
+    WiFi.softAP( Settings.apname.c_str(), Settings.pwdap.c_str() );
   }
   else
   {
-    Serial.println( "AP open" );
-    WiFi.softAP( ssid );
+    Serial.print( "AP open: " );
+    Serial.println( Settings.apname );
+    WiFi.softAP( Settings.apname.c_str() );
   }
   delay(100);
 
@@ -4231,7 +4251,8 @@ void setup()
     Serial.println( "/preset.param" );
     request->send( SPIFFS, presetUsrparamFile[currentPreset], "application/octet-stream" ); 
   });
-  server.on( "/spdifout",     HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetSpdifOutJson(request); });
+  server.on( "/spdifout",   HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetSpdifOutJson(request); });
+  server.on( "/wificonfig", HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetWifiConfigJson(request); });
 
   server.on( "/input", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
   {
