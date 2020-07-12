@@ -60,6 +60,7 @@ struct tSettings
   String pwdap;
   String apname;
   int adcsum;
+  bool wifiOn;
 };
 
 tSettings Settings;
@@ -460,6 +461,7 @@ void readSettings( void )
   Settings.pwdap = "";
   Settings.apname = "AP-freeDSP-aurora";
   Settings.adcsum = 0;
+  Settings.wifiOn = true;
 
   if( !SPIFFS.exists( "/settings.ini" ) )
   {
@@ -506,6 +508,12 @@ void readSettings( void )
     if( !jsonSettings["apname"].isNull() )
       Settings.apname = jsonSettings["apname"].as<String>();
     Settings.adcsum = jsonSettings["adcsum"].as<String>().toInt();
+    // When updating from earlier version jsonSettings["wifion"] could return "null".
+    // Then it should use the default value
+    if( jsonSettings["wifion"].as<String>() == "true" )
+      Settings.wifiOn = true;
+    else if( jsonSettings["wifion"].as<String>() == "false" )
+      Settings.wifiOn = false;
 
     Serial.println( "[OK]" );
     Serial.println( "Device config" );
@@ -535,6 +543,7 @@ void writeSettings( void )
     jsonSettings["pwdap"] = Settings.pwdap;
     jsonSettings["apname"] = Settings.apname;
     jsonSettings["adcsum"] = Settings.adcsum;
+    jsonSettings["wifion"] = Settings.wifiOn;
 
     if( serializeJson( jsonSettings, fileSettings ) == 0 )
       Serial.println( "[ERROR] writeSettings(): Failed to write settings to file" );
@@ -3904,7 +3913,6 @@ void myWiFiTask(void *pvParameters)
   bool firstConnectAttempt = true;
   bool myWiFiFirstConnect = true;
   int cntrAuthFailure = 0;
-  const char* ssid = "AP-freeDSP-aurora";
   IPAddress ip(192, 168, 5, 1);
   IPAddress subnet(255, 255, 255, 0);
 
@@ -4077,10 +4085,19 @@ void updateUI( void )
  */
 void setup()
 {
+  bool changeWifiState = false;
+
   Serial.begin(115200);
   Serial.println( "AURORA Debug Log" );
   Serial.println( VERSION_STR );
 
+  //----------------------------------------------------------------------------
+  //--- Is user pressing the rotary encoder switch during boot?
+  //----------------------------------------------------------------------------
+  pinMode( ROTARYENCODER_PINSW, INPUT_PULLUP );
+  if( !digitalRead( ROTARYENCODER_PINSW ) )
+    changeWifiState = true;
+  
   //----------------------------------------------------------------------------
   //--- Configure I2C
   //----------------------------------------------------------------------------
@@ -4100,10 +4117,6 @@ void setup()
   }
   else
     haveDisplay = false;
-  
-  // wait until everything is stable
-  // might be a bit to defensive
-  delay( 2000 );
 
   //----------------------------------------------------------------------------
   //--- Init Display (if present)
@@ -4113,6 +4126,10 @@ void setup()
     myDisplay.begin();
     myDisplay.drawBootScreen();
   }
+
+  // wait until everything is stable
+  // might be a bit to defensive
+  delay( 2000 );
   
   //----------------------------------------------------------------------------
   //--- Configure DAC
@@ -4192,8 +4209,16 @@ void setup()
     file = root.openNextFile();
   }
 
+  //----------------------------------------------------------------------------
+  //--- Read settings file
+  //----------------------------------------------------------------------------
   readSettings();
   changeChannelSummationADC();
+  if( changeWifiState )
+  {
+    Settings.wifiOn = Settings.wifiOn ? false : true;
+    writeSettings();
+  }
 
   Serial.print( "Init user parameter......" );
   initUserParams();
@@ -4381,8 +4406,6 @@ void setup()
 
   });
 
-
-
 //  server.onNotFound([](AsyncWebServerRequest *request){
 //    Serial.println(request->url().c_str());
 //  });
@@ -4391,7 +4414,8 @@ void setup()
   //--- Configure ESP for WiFi access
   //----------------------------------------------------------------------------
   // Create a connection task with 8kB stack on core 0
-  xTaskCreatePinnedToCore(myWiFiTask, "myWiFiTask", 8192, NULL, 3, NULL, 0);
+  if( Settings.wifiOn )
+    xTaskCreatePinnedToCore(myWiFiTask, "myWiFiTask", 8192, NULL, 3, NULL, 0);
 
   //----------------------------------------------------------------------------
   //--- Enable Volume Potentiometer
@@ -4435,6 +4459,7 @@ void loop()
   if( rotaryEncoder.getSwitchValue() != lastREsw )
   {
     editMode++;
+    // we may have more then two modes in the future.
     if( editMode > 1 )
       editMode = 0; 
     delay( 300 );
