@@ -4,6 +4,7 @@
 <head>
 <title>AURORA DSP</title>
 <link rel="stylesheet" href="dark.css">
+<script type="text/javascript" src="aurora.js"></script>
 </head>
 
 <body onload="onLoad()">
@@ -17,7 +18,7 @@
       <li><label for="presetimp">Import Preset</label><input type="file" id="presetimp" style="display:none"/></li>
     </ul>
     <div style="position:absolute;bottom:30px;right:30px;">
-      <p class="info">GUI: v2.0.3</p>
+      <p class="info">GUI: v2.1.0</p>
       <p class="info" id="fw">FW: 0.0.0</p>
       <p class="info" id="ip">Local Wifi IP: 0.0.0.0</p>
       </div>
@@ -50,7 +51,68 @@
       </div> 
       <div class="hidden" id="addon_c"><h3>Control over the crowd</h3></div> 
       <div class="hidden" id="addon_d"><h3>Balanced life</h3></div> 
-    </td></tr> 
+    </td></tr>
+    <tr><td><h2> </h2></td></tr>
+    <tr><td><h2>S/P-DIF-Output</h2></td></tr>
+    <tr><td>Left Channel:</td></tr>
+    <tr><td><select id="spdifleft" onchange="sendSpdifOutMux()">
+    <option value="0x00000000">Analog 1</option>
+    <option value="0x00000001">Analog 2</option>
+    <option value="0x00000002">Analog 3</option>
+    <option value="0x00000003">Analog 4</option>
+    <option value="0x00000004">Analog 5</option>
+    <option value="0x00000005">Analog 6</option>
+    <option value="0x00000006">Analog 7</option>
+    <option value="0x00000007">Analog 8</option>
+    <option value="0x00010000">USB 1</option>
+    <option value="0x00010001">USB 2</option>
+    <option value="0x00010002">USB 3</option>
+    <option value="0x00010003">USB 4</option>
+    <option value="0x00010004">USB 5</option>
+    <option value="0x00010005">USB 6</option>
+    <option value="0x00010006">USB 7</option>
+    <option value="0x00010007">USB 8</option>
+    <option value="0x00040000">SPDIF In L</option>
+    <option value="0x00040001">SPDIF In R</option>
+    <option value="0x00050000">Output 1</option>
+    <option value="0x00050001">Output 2</option>
+    <option value="0x00050002">Output 3</option>
+    <option value="0x00050003">Output 4</option>
+    <option value="0x00050004">Output 5</option>
+    <option value="0x00050005">Output 6</option>
+    <option value="0x00050006">Output 7</option>
+    <option value="0x00050007">Output 8</option>
+    </select></td></tr>
+    <tr><td></td></tr>
+    <tr><td>Right Channel:</td></tr>
+    <tr><td><select id="spdifright" onchange="sendSpdifOutMux()">
+    <option value="0x00000000">Analog 1</option>
+    <option value="0x00000001">Analog 2</option>
+    <option value="0x00000002">Analog 3</option>
+    <option value="0x00000003">Analog 4</option>
+    <option value="0x00000004">Analog 5</option>
+    <option value="0x00000005">Analog 6</option>
+    <option value="0x00000006">Analog 7</option>
+    <option value="0x00000007">Analog 8</option>
+    <option value="0x00010000">USB 1</option>
+    <option value="0x00010001">USB 2</option>
+    <option value="0x00010002">USB 3</option>
+    <option value="0x00010003">USB 4</option>
+    <option value="0x00010004">USB 5</option>
+    <option value="0x00010005">USB 6</option>
+    <option value="0x00010006">USB 7</option>
+    <option value="0x00010007">USB 8</option>
+    <option value="0x00040000">SPDIF In L</option>
+    <option value="0x00040001">SPDIF In R</option>
+    <option value="0x00050000">Output 1</option>
+    <option value="0x00050001">Output 2</option>
+    <option value="0x00050002">Output 3</option>
+    <option value="0x00050003">Output 4</option>
+    <option value="0x00050004">Output 5</option>
+    <option value="0x00050005">Output 6</option>
+    <option value="0x00050006">Output 7</option>
+    <option value="0x00050007">Output 8</option>
+    </select></td></tr>
   </table>
   </td><td>
   <table style="border-spacing: 5px 10px;">
@@ -746,21 +808,31 @@
   </div>
 
   <div id="configWifi" class="modal">
-    <div class="modal-content">
+    <div class="modal-content" style="width:600px;">
       <table class="ptbl">
       <tr><td colspan="2" style="height:20px;padding-top:10px;">
       <table style="width:100%;">
       <tr><td class="headline">WiFi Config</td><td class="close" onclick="closeModal('configWifi')">&times;</td></tr>
       </table>
       </td></tr>
+      <tr><td>
+      <table style="width:100%;">
       <tr><td>SSID</td></tr>
       <tr><td><input type="text" id="ssid" style="width:95%;"></td></tr>
-      <tr><td>Password</td</tr>
+      <tr><td>Password</td></tr>
       <tr><td><input type="password" id="pwd" style="width:95%;"></td></tr>
       <tr><td><button class="send" onclick="sendWifi()">Store WiFi</button></td></tr>
-      <tr><td>Password Access Point</td</tr>
+      </table>
+      </td>
+      <td>
+      <table style="width:100%;">
+      <tr><td>Password Access Point</td></tr>
       <tr><td><input type="password" id="pwdap" style="width:95%;"></td></tr>
-      <tr><td><button class="send" onclick="sendPwdAP()">Store AP Password</button></td></tr>
+      <tr><td>Name Access Point</td></tr>
+      <tr><td><input type="text" id="apname" style="width:95%;"></td></tr>
+      <tr><td><button class="send" onclick="sendPwdAP()">Store AP Config</button></td></tr>
+      </table>
+      </td></tr>
       </table>
     </div>
   </div>
@@ -911,17 +983,6 @@
     }).catch (function (error) {console.log(error);
     });
   }
-  function getConfig(){
-    fetch("/config").then (function (response) {
-      return response.json();
-    }).then (function (data) {  
-      document.getElementById("aid").value = data.aid;
-      if(data.vpot==1) document.getElementById("vpot").checked=true;
-      else document.getElementById("vpot").checked=false;
-      document.getElementById("adcsum").value = data.adcsum;
-    }).catch (function (error) {console.log(error);
-    });
-  }
   function postInputJson(id,idx){
     var data={};
     var elem = document.getElementById(id);
@@ -1017,62 +1078,6 @@
     "Content-Type": "application/json"},
     body:JSON.stringify(data)}).catch(function(error){console.log(error);});
   }
-  function switchPreset(p){
-    var data={};
-    data.pre=p;
-    document.getElementById("msg").innerHTML="Switching preset, please wait...";
-    document.getElementById("plzw").style.display="block";
-    fetch("/preset",{method:"POST",headers:{
-    "Content-Type": "application/json"},
-    body:JSON.stringify(data)
-    }).then(function(response){return fetch("/addoncfg");
-    }).then(function(response){return response.json();
-    }).then(function(cfg){
-      if(document.getElementById("aid").value==2){
-      if(cfg.addcfg==0) document.getElementById("spdif_b").value="0x00";
-        else if(cfg.addcfg==1) document.getElementById("spdif_b").value="0x01";
-        else if(cfg.addcfg==2) document.getElementById("spdif_b").value="0x02";
-        else if(cfg.addcfg==3) document.getElementById("spdif_b").value="0x03";
-        else if(cfg.addcfg==4) document.getElementById("spdif_b").value="0x04";
-        else if(cfg.addcfg==5) document.getElementById("spdif_b").value="0x05";
-        else if(cfg.addcfg==6) document.getElementById("spdif_b").value="0x06";
-        else if(cfg.addcfg==7) document.getElementById("spdif_b").value="0x07";
-      }
-      return fetch("/allinputs");
-    }).then(function(response){return response.json();
-	  }).then(function(data){
-      document.getElementById("chn0").value=data.in0;
-      document.getElementById("chn1").value=data.in1;
-      document.getElementById("chn2").value=data.in2;
-      document.getElementById("chn3").value=data.in3;
-      document.getElementById("chn4").value=data.in4;
-      document.getElementById("chn5").value=data.in5;
-      document.getElementById("chn6").value=data.in6;
-      document.getElementById("chn7").value=data.in7;
-      return fetch("/allbyp");
-    }).then(function(response){
-      return response.text();
-	  }).then(function(response){
-      var data = JSON.parse(response);
-      for(ii in data.byp){
-        if(data.byp[ii].val) document.getElementById(data.byp[ii].name).style="border-bottom-color:red;";
-        else document.getElementById(data.byp[ii].name).style="";
-      }
-      return fetch("/allfc");
-    }).then(function(response){
-      return response.text();
-	  }).then(function(response){
-      var data = JSON.parse(response);
-      for(ii in data.fc){document.getElementById(data.fc[ii].name).innerHTML=data.fc[ii].val;}
-      getMVol();
-    }).then(function(response){document.getElementById("plzw").style.display="none";
-    }).catch(function(error){console.log(error);});
-    document.getElementById("pre0").style.backgroundColor = "#101010";
-    document.getElementById("pre1").style.backgroundColor = "#101010";
-    document.getElementById("pre2").style.backgroundColor = "#101010";
-    document.getElementById("pre3").style.backgroundColor = "#101010";
-    document.getElementById("pre"+p).style.backgroundColor = "#73EC6F";
-  }
   function sendParam(btp){postJson(btp).catch(function(error){console.log(error);});}
   function mute(){
     if(document.getElementById("mute").dataset.mute=="0")
@@ -1129,46 +1134,6 @@
       for(ii in data.fc){document.getElementById(data.fc[ii].name).innerHTML=data.fc[ii].val;}
     }).catch(function(err){console.log(err);});
   }
-  function configDev(){document.getElementById("configDev").style.display = "block";getConfig();}
-  function configWifi(){document.getElementById("configWifi").style.display = "block";}
-  function sendConfig(){
-    var data={};
-    data.aid=document.getElementById("aid").value;
-    data.vpot=document.getElementById("vpot").checked;
-    data.adcsum=document.getElementById("adcsum").value;
-    fetch("/config",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)})
-    .then(function(result) {
-    hideAddon();
-    if(data.aid==0) document.getElementById('addon_none').style.display = "block";
-    else if(data.aid==1) document.getElementById('addon_a').style.display = "block";
-    else if(data.aid==2) document.getElementById('addon_b').style.display = "block";
-    else if(data.aid==3) document.getElementById('addon_c').style.display = "block";
-    else if(data.aid==4) document.getElementById('addon_d').style.display = "block";
-    }).catch (function(err){console.log(err);});
-  }
-  function sendWifi(){
-    var data={};
-    data.ssid=document.getElementById("ssid").value;
-    data.pwd=document.getElementById("pwd").value;
-    fetch("/wifi",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)})
-    .then(function(response){
-      alert("Success! Your WiFi settings have been stored.");
-      return response;})
-    .catch(function(err){console.log(err);});
-  }
-  function sendPwdAP(){
-    var data={};
-    data.pwdap=document.getElementById("pwdap").value;
-    if((data.pwdap.length>7) || (data.pwdap.length==0)){
-    fetch("/pwdap",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)})
-    .then(function(response){
-      alert("Success! The password for the access point has been stored.");
-      return response;})
-    .catch(function(err){console.log(err);});
-    }else{
-      alert("Please select a password with at least 8 characters.");
-    }
-  }
   function storePreset(){
     var data={};
     document.getElementById("msg").innerHTML="Storing preset, please wait...";
@@ -1179,68 +1144,6 @@
       return response;})
     .then(function(response){document.getElementById("plzw").style.display="none";})
     .catch(function(err){console.log(err);});
-  }
-  function onLoad(){
-    hideAddon();
-    fetch("/config").then(function(response){
-      return response.json();
-    }).then(function(cfg){  
-      document.getElementById("fw").innerHTML="FW: "+cfg.fw;
-      document.getElementById("ip").innerHTML="Local WiFi IP: "+cfg.ip;
-      var p=cfg.pre;
-      document.getElementById("pre0").style.backgroundColor = "#101010";
-      document.getElementById("pre1").style.backgroundColor = "#101010";
-      document.getElementById("pre2").style.backgroundColor = "#101010";
-      document.getElementById("pre3").style.backgroundColor = "#101010";
-      document.getElementById("pre"+p).style.backgroundColor = "#73EC6F";
-      if(cfg.aid==0) document.getElementById('addon_none').style.display = "block";
-      else if(cfg.aid==1) document.getElementById('addon_a').style.display = "block";
-      else if(cfg.aid==2)
-      {
-        if(cfg.addcfg==0) document.getElementById("spdif_b").value="0x00";
-        else if(cfg.addcfg==1) document.getElementById("spdif_b").value="0x01";
-        else if(cfg.addcfg==2) document.getElementById("spdif_b").value="0x02";
-        else if(cfg.addcfg==3) document.getElementById("spdif_b").value="0x03";
-        else if(cfg.addcfg==4) document.getElementById("spdif_b").value="0x04";
-        else if(cfg.addcfg==5) document.getElementById("spdif_b").value="0x05";
-        else if(cfg.addcfg==6) document.getElementById("spdif_b").value="0x06";
-        else if(cfg.addcfg==7) document.getElementById("spdif_b").value="0x07";
-        document.getElementById('addon_b').style.display = "block";
-      }
-      else if(cfg.aid==3) document.getElementById('addon_c').style.display="block";
-      else if(cfg.aid==4) document.getElementById('addon_d').style.display="block";
-      return fetch("/allinputs");
-    }).then(function(response){
-      return response.json();
-	  }).then(function(data){
-      document.getElementById("chn0").value=data.in0;
-      document.getElementById("chn1").value=data.in1;
-      document.getElementById("chn2").value=data.in2;
-      document.getElementById("chn3").value=data.in3;
-      document.getElementById("chn4").value=data.in4;
-      document.getElementById("chn5").value=data.in5;
-      document.getElementById("chn6").value=data.in6;
-      document.getElementById("chn7").value=data.in7;
-      return fetch("/allbyp");
-    }).then(function(response){
-      return response.text();
-	  }).then(function(response){
-      var data = JSON.parse(response);
-      for(ii in data.byp){
-        if(data.byp[ii].val) document.getElementById(data.byp[ii].name).style="border-bottom-color:red;";
-        else document.getElementById(data.byp[ii].name).style="";
-      }
-      return fetch("/allfc");
-    }).then(function(response){
-      return response.text();
-	  }).then(function(response){
-      var data = JSON.parse(response);
-      for(ii in data.fc){
-        document.getElementById(data.fc[ii].name).innerHTML=data.fc[ii].val;
-      }
-      getMVol();
-    }).catch(function(err){console.log(err);
-    });
   }
   function hideAddon(){
     document.getElementById('addon_none').style.display = "none";
