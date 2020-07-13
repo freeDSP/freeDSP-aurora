@@ -1,11 +1,11 @@
 ADAU145X Assembler, Analog Devices Inc.
 Version: 3.16.4,1747  (built 12/21/2017)
 
-##### Compile Started: Monday, March 9, 2020 3:04:45 PM #####
+##### Compile Started: Monday, July 13, 2020 10:38:15 AM #####
 ADAU145X Assembler, Analog Devices Inc.
 Version: 3.16.4,1747  (built 12/21/2017)
 
-##### Compile Started: Monday, March 9, 2020 3:04:45 PM #####
+##### Compile Started: Monday, July 13, 2020 10:38:15 AM #####
 ##### Compile succeeded:  0 errors, 0 warnings #####
 
 ##### Summary #####
@@ -33,10 +33,10 @@ Param EQ 2                    28        29        50      45      0
 VolumePot                     16        27        0       6       0
 MasterVolume                  15        26        3       4       0
 Nx1-1_SPDIF                   20        20        4       4       0
-FIR4                          1031      18        4096    4096    0
-FIR3                          1031      18        4096    4096    0
-FIR1                          1031      18        4096    4096    0
-FIR2                          1031      18        4096    4096    0
+FIR 4                         1031      18        4096    4096    0
+FIR 3                         1031      18        4096    4096    0
+FIR 1                         1031      18        4096    4096    0
+FIR 2                         1031      18        4096    4096    0
 Input Expansion               16        16        0       8       0
 Input ESP32                   16        16        0       8       0
 Input ADC                     16        16        0       8       0
@@ -46,7 +46,7 @@ Gain 2                        8         13        3       1       0
 Gain 3                        8         13        3       1       0
 Gain 4                        8         13        3       1       0
 Delay 3                       8         11        1802    1       0
-Delay1                        8         11        1802    1       0
+Delay 1                       8         11        1802    1       0
 Delay 2                       7         9         1       1802    0
 Delay 4                       7         9         1       1802    0
 BypassVolPoti                 5         6         1       1       0

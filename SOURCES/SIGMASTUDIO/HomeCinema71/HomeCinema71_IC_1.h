@@ -1,7 +1,7 @@
 /*
  * File:           Z:\Documents\freeDSP\freeDSP-aurora\SOURCES\SIGMASTUDIO\HomeCinema71\HomeCinema71_IC_1.h
  *
- * Created:        Sunday, June 14, 2020 12:48:54 PM
+ * Created:        Monday, July 13, 2020 10:50:35 AM
  * Description:    HomeCinema71:IC 1 program data.
  *
  * This software is distributed in the hope that it will be useful,
@@ -23013,7 +23013,7 @@ ADI_REG_TYPE Param_Data_IC_1[PARAM_SIZE_IC_1] = {
 0x01, 0x00, 0x00, 0x00, 
 0x00, 0x00, 0x20, 0x8A, 
 0x01, 0x00, 0x00, 0x00, 
-0x00, 0x00, 0x00, 0x01, 
+0x00, 0x00, 0x00, 0x00, 
 0x00, 0x00, 0x00, 0x07, 
 0x00, 0x00, 0x00, 0x07, 
 0x00, 0x00, 0x00, 0x07, 

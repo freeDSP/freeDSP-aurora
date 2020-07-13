@@ -1,11 +1,11 @@
 ADAU145X Assembler, Analog Devices Inc.
 Version: 3.16.4,1747  (built 12/21/2017)
 
-##### Compile Started: Sunday, June 14, 2020 12:56:55 PM #####
+##### Compile Started: Monday, July 13, 2020 10:50:24 AM #####
 ADAU145X Assembler, Analog Devices Inc.
 Version: 3.16.4,1747  (built 12/21/2017)
 
-##### Compile Started: Sunday, June 14, 2020 12:56:55 PM #####
+##### Compile Started: Monday, July 13, 2020 10:50:24 AM #####
 ##### Compile succeeded:  0 errors, 0 warnings #####
 
 ##### Summary #####
@@ -38,56 +38,56 @@ Param EQ 3                    28        29        50      45      0
 Param EQ 2                    28        29        50      45      0
 Param EQ 1                    28        28        50      45      0
 NxM Linear1                   14        26        8       0       0
-LP5_4                         9         17        5       10      0
+XO_LP5_4                      9         17        5       10      0
 Phase 1                       9         17        5       10      0
 Phase 3                       9         17        5       10      0
 Phase 5                       9         17        5       10      0
-LP1_4                         9         17        5       10      0
-LP2_4                         9         17        5       10      0
-LP3_4                         9         17        5       10      0
+XO_LP1_4                      9         17        5       10      0
+XO_LP2_4                      9         17        5       10      0
+XO_LP3_4                      9         17        5       10      0
 LP8_4                         9         17        5       10      0
-LP6_4                         9         17        5       10      0
+XO_LP6_4                      9         17        5       10      0
 Phase 7                       9         17        5       10      0
-LP7_4                         9         17        5       10      0
-LP4_4                         9         17        5       10      0
-LP4_3                         9         17        5       9       0
-LP3_3                         9         17        5       9       0
-HP3_3                         9         17        5       9       0
-HP2_3                         9         17        5       9       0
-LP2_3                         9         17        5       9       0
-LP1_3                         9         17        5       9       0
-HP1_3                         9         17        5       9       0
+XO_LP7_4                      9         17        5       10      0
+XO_LP4_4                      9         17        5       10      0
+XO_LP4_3                      9         17        5       9       0
+XO_LP3_3                      9         17        5       9       0
+XO_HP3_3                      9         17        5       9       0
+XO_HP2_3                      9         17        5       9       0
+XO_LP2_3                      9         17        5       9       0
+XO_LP1_3                      9         17        5       9       0
+XO_HP1_3                      9         17        5       9       0
 LP8_3                         9         17        5       9       0
-HP3_2                         9         17        5       9       0
-LP5_2                         9         17        5       9       0
-LP6_2                         9         17        5       9       0
-HP4_3                         9         17        5       9       0
-LP4_2                         9         17        5       9       0
-HP5_2                         9         17        5       9       0
-LP7_2                         9         17        5       9       0
-HP7_2                         9         17        5       9       0
-HP6_2                         9         17        5       9       0
-LP7_3                         9         17        5       9       0
-LP5_3                         9         17        5       9       0
-HP5_4                         9         17        5       9       0
-HP6_4                         9         17        5       9       0
-HP4_4                         9         17        5       9       0
-HP3_4                         9         17        5       9       0
-HP2_4                         9         17        5       9       0
-HP1_4                         9         17        5       9       0
-LP3_2                         9         17        5       9       0
+XO_HP3_2                      9         17        5       9       0
+XO_LP5_2                      9         17        5       9       0
+XO_LP6_2                      9         17        5       9       0
+XO_HP4_3                      9         17        5       9       0
+XO_LP4_2                      9         17        5       9       0
+XO_HP5_2                      9         17        5       9       0
+XO_LP7_2                      9         17        5       9       0
+XO_HP7_2                      9         17        5       9       0
+XO_HP6_2                      9         17        5       9       0
+XO_LP7_3                      9         17        5       9       0
+XO_LP5_3                      9         17        5       9       0
+XO_HP5_4                      9         17        5       9       0
+XO_HP6_4                      9         17        5       9       0
+XO_HP4_4                      9         17        5       9       0
+XO_HP3_4                      9         17        5       9       0
+XO_HP2_4                      9         17        5       9       0
+XO_HP1_4                      9         17        5       9       0
+XO_LP3_2                      9         17        5       9       0
 Phase 6                       9         17        5       9       0
 Phase 4                       9         17        5       9       0
 Phase 2                       9         17        5       9       0
 Phase 8                       9         17        5       9       0
-LP6_3                         9         17        5       9       0
-HP7_4                         9         17        5       9       0
-HP6_3                         9         17        5       9       0
-HP7_3                         9         17        5       9       0
-HP5_3                         9         17        5       9       0
-LP2_2                         9         17        5       9       0
-HP4_2                         9         17        5       9       0
-LP1_2                         9         17        5       9       0
+XO_LP6_3                      9         17        5       9       0
+XO_HP7_4                      9         17        5       9       0
+XO_HP6_3                      9         17        5       9       0
+XO_HP7_3                      9         17        5       9       0
+XO_HP5_3                      9         17        5       9       0
+XO_LP2_2                      9         17        5       9       0
+XO_HP4_2                      9         17        5       9       0
+XO_LP1_2                      9         17        5       9       0
 High Shelv 1                  9         17        5       9       0
 High Shelv 2                  9         17        5       9       0
 High Shelv 3                  9         17        5       9       0
@@ -98,22 +98,22 @@ High Shelv 5                  9         17        5       9       0
 High Shelv 8                  9         17        5       9       0
 LP8_1                         9         17        5       9       0
 LP8_2                         9         17        5       9       0
-HP1_1                         9         17        5       9       0
-HP2_1                         9         17        5       9       0
-HP3_1                         9         17        5       9       0
-HP4_1                         9         17        5       9       0
-HP5_1                         9         17        5       9       0
-HP6_1                         9         17        5       9       0
-HP7_1                         9         17        5       9       0
-HP2_2                         9         17        5       9       0
-HP1_2                         9         17        5       9       0
-LP2_1                         9         17        5       6       0
-LP3_1                         9         17        5       6       0
-LP4_1                         9         17        5       6       0
-LP5_1                         9         17        5       6       0
-LP7_1                         9         17        5       6       0
-LP6_1                         9         17        5       6       0
-LP1_1                         9         17        5       6       0
+XO_HP1_1                      9         17        5       9       0
+XO_HP2_1                      9         17        5       9       0
+XO_HP3_1                      9         17        5       9       0
+XO_HP4_1                      9         17        5       9       0
+XO_HP5_1                      9         17        5       9       0
+XO_HP6_1                      9         17        5       9       0
+XO_HP7_1                      9         17        5       9       0
+XO_HP2_2                      9         17        5       9       0
+XO_HP1_2                      9         17        5       9       0
+XO_LP2_1                      9         17        5       6       0
+XO_LP3_1                      9         17        5       6       0
+XO_LP4_1                      9         17        5       6       0
+XO_LP5_1                      9         17        5       6       0
+XO_LP7_1                      9         17        5       6       0
+XO_LP6_1                      9         17        5       6       0
+XO_LP1_1                      9         17        5       6       0
 Low Shelv 2                   9         16        5       9       0
 Low Shelv 1                   9         16        5       9       0
 Low Shelv 4                   9         16        5       9       0
@@ -135,7 +135,7 @@ Gain 1                        8         13        3       1       0
 Gain 6                        8         13        3       1       0
 Gain 8                        8         13        3       1       0
 Delay 7                       8         11        4802    1       0
-Delay1                        8         11        4802    1       0
+Delay 1                       8         11        4802    1       0
 Delay 3                       8         11        4802    1       0
 Delay 5                       8         11        4802    1       0
 Delay 2                       7         9         1       4802    0

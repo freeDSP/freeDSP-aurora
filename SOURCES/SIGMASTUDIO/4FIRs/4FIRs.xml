@@ -985,7 +985,7 @@
             </Algorithm>
         </Module>
         <Module>
-            <CellName>FIR1</CellName>
+            <CellName>FIR 1</CellName>
             <Algorithm>
                 <AlgoName>ALG0</AlgoName>
                 <Description>FIR( 1 ) : Number_of_Coeffs[ 4096 ],FilterEnabled[ True ],Coefficients[ System.Double[] ];</Description>
@@ -999,7 +999,7 @@
             </Algorithm>
         </Module>
         <Module>
-            <CellName>FIR2</CellName>
+            <CellName>FIR 2</CellName>
             <Algorithm>
                 <AlgoName>ALG0</AlgoName>
                 <Description>FIR( 1 ) : Number_of_Coeffs[ 4096 ],FilterEnabled[ True ],Coefficients[ System.Double[] ];</Description>
@@ -1013,7 +1013,7 @@
             </Algorithm>
         </Module>
         <Module>
-            <CellName>FIR3</CellName>
+            <CellName>FIR 3</CellName>
             <Algorithm>
                 <AlgoName>ALG0</AlgoName>
                 <Description>FIR( 1 ) : Number_of_Coeffs[ 4096 ],FilterEnabled[ True ],Coefficients[ System.Double[] ];</Description>
@@ -1027,7 +1027,7 @@
             </Algorithm>
         </Module>
         <Module>
-            <CellName>FIR4</CellName>
+            <CellName>FIR 4</CellName>
             <Algorithm>
                 <AlgoName>ALG0</AlgoName>
                 <Description>FIR( 1 ) : Number_of_Coeffs[ 4096 ],FilterEnabled[ True ],Coefficients[ System.Double[] ];</Description>
@@ -2669,7 +2669,7 @@
             </Algorithm>
         </Module>
         <Module>
-            <CellName>Delay1</CellName>
+            <CellName>Delay 1</CellName>
             <Algorithm>
                 <AlgoName>ALG0</AlgoName>
                 <Description>Growable Delay( 1 ) : DelayValue[ 0 ],Memory[ 0 ];</Description>

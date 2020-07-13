@@ -1,7 +1,7 @@
 /*
  * File:           Z:\Documents\freeDSP\freeDSP-aurora\SOURCES\SIGMASTUDIO\4FIRs\4FIRs_IC_1_PARAM.h
  *
- * Created:        Monday, March 9, 2020 3:04:54 PM
+ * Created:        Monday, July 13, 2020 10:38:24 AM
  * Description:    4FIRs:IC 1 parameter RAM definitions.
  *
  * This software is distributed in the hope that it will be useful,
@@ -39,7 +39,7 @@
 #define MOD_SHIFT1_BITSHIFTADAU145XALG1SHIFTBITS_VALUE SIGMASTUDIOTYPE_INTEGER_CONVERT(14)
 #define MOD_SHIFT1_BITSHIFTADAU145XALG1SHIFTBITS_TYPE  SIGMASTUDIOTYPE_INTEGER
 
-/* Module FIR1 - FIR Filter*/
+/* Module FIR 1 - FIR Filter*/
 #define MOD_FIR1_COUNT                                 4096
 #define MOD_FIR1_DEVICE                                "IC1"
 #define MOD_FIR1_ALG0_FIRSIGMA300ALG1FIRCOEFF0_ADDR    3788
@@ -12331,7 +12331,7 @@
 #define MOD_FIR1_ALG0_FIRSIGMA300ALG1FIRCOEFF4095_VALUE SIGMASTUDIOTYPE_8_24_CONVERT(1)
 #define MOD_FIR1_ALG0_FIRSIGMA300ALG1FIRCOEFF4095_TYPE SIGMASTUDIOTYPE_8_24
 
-/* Module FIR2 - FIR Filter*/
+/* Module FIR 2 - FIR Filter*/
 #define MOD_FIR2_COUNT                                 4096
 #define MOD_FIR2_DEVICE                                "IC1"
 #define MOD_FIR2_ALG0_FIRSIGMA300ALG2FIRCOEFF0_ADDR    7884
@@ -24623,7 +24623,7 @@
 #define MOD_FIR2_ALG0_FIRSIGMA300ALG2FIRCOEFF4095_VALUE SIGMASTUDIOTYPE_8_24_CONVERT(1)
 #define MOD_FIR2_ALG0_FIRSIGMA300ALG2FIRCOEFF4095_TYPE SIGMASTUDIOTYPE_8_24
 
-/* Module FIR3 - FIR Filter*/
+/* Module FIR 3 - FIR Filter*/
 #define MOD_FIR3_COUNT                                 4096
 #define MOD_FIR3_DEVICE                                "IC1"
 #define MOD_FIR3_ALG0_FIRSIGMA300ALG3FIRCOEFF0_ADDR    11980
@@ -36915,7 +36915,7 @@
 #define MOD_FIR3_ALG0_FIRSIGMA300ALG3FIRCOEFF4095_VALUE SIGMASTUDIOTYPE_8_24_CONVERT(1)
 #define MOD_FIR3_ALG0_FIRSIGMA300ALG3FIRCOEFF4095_TYPE SIGMASTUDIOTYPE_8_24
 
-/* Module FIR4 - FIR Filter*/
+/* Module FIR 4 - FIR Filter*/
 #define MOD_FIR4_COUNT                                 4096
 #define MOD_FIR4_DEVICE                                "IC1"
 #define MOD_FIR4_ALG0_FIRSIGMA300ALG4FIRCOEFF0_ADDR    16076
@@ -49839,7 +49839,7 @@
 #define MOD_DELAY2_DELAYAMT_VALUE                      SIGMASTUDIOTYPE_INTEGER_CONVERT(0)
 #define MOD_DELAY2_DELAYAMT_TYPE                       SIGMASTUDIOTYPE_INTEGER
 
-/* Module Delay1 - Delay*/
+/* Module Delay 1 - Delay*/
 #define MOD_DELAY1_COUNT                               1
 #define MOD_DELAY1_DEVICE                              "IC1"
 #define MOD_DELAY1_DELAYAMT_ADDR                       20374

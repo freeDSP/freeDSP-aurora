@@ -19,10 +19,10 @@ class GrowingList(list):
 tree = ET.parse(str(sys.argv[1]))
 root = tree.getroot()
 
-hp = GrowingList()
-lshelv = GrowingList()
-hshelv = GrowingList()
-lp = GrowingList()
+#hp = GrowingList()
+#lshelv = GrowingList()
+#hshelv = GrowingList()
+#lp = GrowingList()
 
 numchn = 8
 
@@ -51,9 +51,25 @@ spdifoutmux_channel.append(GrowingList())
 spdifoutmux_channel.append(GrowingList())
 spdifoutmux_port = [0, 0]
 
+lshelv = []
+for ii in range(0,numchn):
+  lshelv.append(GrowingList())
+
+hshelv = []
+for ii in range(0,numchn):
+  hshelv.append(GrowingList())
+
 peq = []
 for ii in range(0,numchn):
   peq.append(GrowingList())
+
+hp = []
+for ii in range(0,numchn):
+  hp.append(GrowingList())
+
+lp = []
+for ii in range(0,numchn):
+  lp.append(GrowingList())
 
 phase = []
 for ii in range(0,numchn):
@@ -156,14 +172,17 @@ for module in root.findall('IC/Module'):
     idx = int(cellname.text.split('_',1)[0].split("HP")[1])-1
     subidx = int(cellname.text.split('_',1)[1])-1
     for modparam in module.findall('Algorithm/ModuleParameter'):
-      if "B2" in modparam.find('Name').text:
-        hp[(idx)*4+(subidx)] = int(modparam.find('Address').text)
+      modname = modparam.find('Name').text
+      if "B2" in modname:
+        hp[idx][subidx] = int(modparam.find('Address').text)
 
   elif cellname.text.startswith('Low Shelv'):
     idx = int(cellname.text.split(' ',2)[2])-1
     for modparam in module.findall('Algorithm/ModuleParameter'):
-      if "B2" in modparam.find('Name').text:
-        lshelv[idx] = int(modparam.find('Address').text)
+      modname = modparam.find('Name').text
+      if "B2" in modname:
+        subidx = int(modname.split('_',1)[1])-1
+        lshelv[idx][subidx] = int(modparam.find('Address').text)
 
   elif cellname.text.startswith('Param EQ'):
     idx = int(cellname.text.split(' ',2)[2])-1
@@ -176,15 +195,18 @@ for module in root.findall('IC/Module'):
   elif cellname.text.startswith('High Shelv'):
     idx = int(cellname.text.split(' ',2)[2])-1
     for modparam in module.findall('Algorithm/ModuleParameter'):
-      if "B2" in modparam.find('Name').text:
-        hshelv[idx] = int(modparam.find('Address').text)
+      modname = modparam.find('Name').text
+      if "B2" in modname:
+        subidx = int(modname.split('_',1)[1])-1
+        hshelv[idx][subidx] = int(modparam.find('Address').text)
 
   elif cellname.text.startswith('LP'):
     idx = int(cellname.text.split('_',1)[0].split("LP")[1])-1
     subidx = int(cellname.text.split('_',1)[1])-1
     for modparam in module.findall('Algorithm/ModuleParameter'):
-      if "B2" in modparam.find('Name').text:
-        lp[(idx)*4+(subidx)] = int(modparam.find('Address').text)
+      modname = modparam.find('Name').text
+      if "B2" in modname:
+        lp[idx][subidx] = int(modparam.find('Address').text)
 
   elif cellname.text.startswith('Phase'):
     idx = int(cellname.text.split(' ',1)[1])-1
@@ -207,6 +229,29 @@ for module in root.findall('IC/Module'):
       modname = modparam.find('Name').text
       if "target" in modname:
         gain[idx][0] = int(modparam.find('Address').text)
+
+  elif cellname.text.startswith('FIR'):
+    idx = int(cellname.text.split(' ',1)[1])-1
+    for modparam in module.findall('Algorithm/ModuleParameter'):
+      modname = modparam.find('Name').text
+      if "fircoeff" in modname:
+        fir[idx][0] = int(modparam.find('Address').text)
+
+  elif cellname.text.startswith('XO_LP'):
+    idx = int(cellname.text.split('_',2)[1].split("LP")[1])-1
+    subidx = int(cellname.text.split('_',2)[2])-1
+    for modparam in module.findall('Algorithm/ModuleParameter'):
+      modname = modparam.find('Name').text
+      if "B2" in modname:
+        xolp[idx][subidx] = int(modparam.find('Address').text)
+
+  elif cellname.text.startswith('XO_HP'):
+    idx = int(cellname.text.split('_',2)[1].split("HP")[1])-1
+    subidx = int(cellname.text.split('_',2)[2])-1
+    for modparam in module.findall('Algorithm/ModuleParameter'):
+      modname = modparam.find('Name').text
+      if "B2" in modname:
+        xohp[idx][subidx] = int(modparam.find('Address').text)
 
   elif cellname.text.startswith('BypassVolPoti'):
     modparam = module.find('Algorithm/ModuleParameter')
@@ -263,6 +308,34 @@ for m in range(0,len(spdifoutmux_channel)):
 spdifoutmux_channel_t.append(spdifoutmux_port[0])
 spdifoutmux_channel_t.append(spdifoutmux_port[1])
 
+lshelv_t = GrowingList()
+idx = 0
+for m in range(0,len(lshelv)):
+  for n in range(0,len(lshelv[m])):
+    lshelv_t[idx] = lshelv[m][n]
+    idx = idx+1
+
+hshelv_t = GrowingList()
+idx = 0
+for m in range(0,len(hshelv)):
+  for n in range(0,len(hshelv[m])):
+    hshelv_t[idx] = hshelv[m][n]
+    idx = idx+1
+
+hp_t = GrowingList()
+idx = 0
+for m in range(0,len(hp)):
+  for n in range(0,len(hp[m])):
+    hp_t[idx] = hp[m][n]
+    idx = idx+1
+
+lp_t = GrowingList()
+idx = 0
+for m in range(0,len(lp)):
+  for n in range(0,len(lp[m])):
+    lp_t[idx] = lp[m][n]
+    idx = idx+1
+
 peq_t = GrowingList()
 idx = 0
 for m in range(0,len(peq)):
@@ -312,16 +385,20 @@ for m in range(0,len(fir)):
     fir_t[idx] = fir[m][n]
     idx = idx+1
 
-nhp = len(hp)/4
-nlshelv = len(lshelv)
-nhshelv = len(hshelv)
-nlp = len(lp)/4
+nhp = len(hp_t)/4
+nlp = len(lp_t)/4
+nxolp = len(xolp_t)/4
+nxohp = len(xohp_t)/4
+nxo = nxohp
+if nxo != nxolp:
+  print('[ERROR] Counts of XO_LP and XO_HP do not match.' )
 
+nlshelv = len(lshelv_t)
+nhshelv = len(hshelv_t)
 npeq = len(peq_t)
 nphase = len(phase_t)
 ndly = len(dly_t)
 ngain = len(gain_t)
-nxo = len(xohp_t)
 nfir = len(fir_t)
 
 data = {"nchn":numchn,
@@ -342,10 +419,10 @@ data = {"nchn":numchn,
         "port":inputselect_port_t,
         "spdifout":spdifoutmux_channel_t,
         "hp":hp,
-        "lshelv":lshelv,
+        "lshelv":lshelv_t,
         "peq":peq_t,
-        "hshelv":hshelv,
-        "lp":lp,
+        "hshelv":hshelv_t,
+        "lp":lp_t,
         "phase":phase_t,
         "dly":dly_t,
         "gain":gain_t,

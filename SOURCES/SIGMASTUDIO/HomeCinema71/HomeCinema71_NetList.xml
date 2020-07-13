@@ -660,91 +660,91 @@
                 <Link pin="I_C799_A0_P1_in" dir="in" link="Link100" />
                 <Link pin="O_C799_A0_P2_out" dir="out" link="Link86" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg1" friendlyname="Multi-Channel - Double Precision" cell="HP1_1 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg1" friendlyname="Multi-Channel - Double Precision" cell="XO_HP1_1 ">
                 <Link pin="I_C168_A0_P1_in" dir="in" link="Link204" />
                 <Link pin="O_C168_A0_P2_out" dir="out" link="Link40" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg13" friendlyname="Multi-Channel - Double Precision" cell="HP2_1 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg13" friendlyname="Multi-Channel - Double Precision" cell="XO_HP2_1 ">
                 <Link pin="I_C259_A0_P1_in" dir="in" link="Link205" />
                 <Link pin="O_C259_A0_P2_out" dir="out" link="Link55" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg25" friendlyname="Multi-Channel - Double Precision" cell="HP3_1 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg25" friendlyname="Multi-Channel - Double Precision" cell="XO_HP3_1 ">
                 <Link pin="I_C327_A0_P1_in" dir="in" link="Link206" />
                 <Link pin="O_C327_A0_P2_out" dir="out" link="Link66" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg8" friendlyname="Multi-Channel - Double Precision" cell="LP1_1 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg8" friendlyname="Multi-Channel - Double Precision" cell="XO_LP1_1 ">
                 <Link pin="I_C215_A0_P1_in" dir="in" link="Link204" />
                 <Link pin="O_C215_A0_P2_out" dir="out" link="Link46" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg20" friendlyname="Multi-Channel - Double Precision" cell="LP2_1 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg20" friendlyname="Multi-Channel - Double Precision" cell="XO_LP2_1 ">
                 <Link pin="I_C280_A0_P1_in" dir="in" link="Link205" />
                 <Link pin="O_C280_A0_P2_out" dir="out" link="Link59" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg32" friendlyname="Multi-Channel - Double Precision" cell="LP3_1 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg32" friendlyname="Multi-Channel - Double Precision" cell="XO_LP3_1 ">
                 <Link pin="I_C348_A0_P1_in" dir="in" link="Link206" />
                 <Link pin="O_C348_A0_P2_out" dir="out" link="Link65" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg37" friendlyname="Multi-Channel - Double Precision" cell="HP4_1 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg37" friendlyname="Multi-Channel - Double Precision" cell="XO_HP4_1 ">
                 <Link pin="I_C395_A0_P1_in" dir="in" link="Link207" />
                 <Link pin="O_C395_A0_P2_out" dir="out" link="Link76" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg49" friendlyname="Multi-Channel - Double Precision" cell="HP5_1 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg49" friendlyname="Multi-Channel - Double Precision" cell="XO_HP5_1 ">
                 <Link pin="I_C684_A0_P1_in" dir="in" link="Link208" />
                 <Link pin="O_C684_A0_P2_out" dir="out" link="Link92" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg44" friendlyname="Multi-Channel - Double Precision" cell="LP4_1 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg44" friendlyname="Multi-Channel - Double Precision" cell="XO_LP4_1 ">
                 <Link pin="I_C416_A0_P1_in" dir="in" link="Link207" />
                 <Link pin="O_C416_A0_P2_out" dir="out" link="Link75" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg56" friendlyname="Multi-Channel - Double Precision" cell="LP5_1 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg56" friendlyname="Multi-Channel - Double Precision" cell="XO_LP5_1 ">
                 <Link pin="I_C705_A0_P1_in" dir="in" link="Link208" />
                 <Link pin="O_C705_A0_P2_out" dir="out" link="Link107" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg58" friendlyname="Multi-Channel - Double Precision" cell="HP6_1 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg58" friendlyname="Multi-Channel - Double Precision" cell="XO_HP6_1 ">
                 <Link pin="I_C711_A0_P1_in" dir="in" link="Link209" />
                 <Link pin="O_C711_A0_P2_out" dir="out" link="Link93" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg67" friendlyname="Multi-Channel - Double Precision" cell="HP7_1 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg67" friendlyname="Multi-Channel - Double Precision" cell="XO_HP7_1 ">
                 <Link pin="I_C738_A0_P1_in" dir="in" link="Link210" />
                 <Link pin="O_C738_A0_P2_out" dir="out" link="Link114" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg74" friendlyname="Multi-Channel - Double Precision" cell="LP7_1 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg74" friendlyname="Multi-Channel - Double Precision" cell="XO_LP7_1 ">
                 <Link pin="I_C759_A0_P1_in" dir="in" link="Link210" />
                 <Link pin="O_C759_A0_P2_out" dir="out" link="Link91" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg65" friendlyname="Multi-Channel - Double Precision" cell="LP6_1 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg65" friendlyname="Multi-Channel - Double Precision" cell="XO_LP6_1 ">
                 <Link pin="I_C732_A0_P1_in" dir="in" link="Link209" />
                 <Link pin="O_C732_A0_P2_out" dir="out" link="Link96" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg2" friendlyname="Multi-Channel - Double Precision" cell="HP1_2 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg2" friendlyname="Multi-Channel - Double Precision" cell="XO_HP1_2 ">
                 <Link pin="I_C182_A0_P1_in" dir="in" link="Link40" />
                 <Link pin="O_C182_A0_P2_out" dir="out" link="Link41" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg9" friendlyname="Multi-Channel - Double Precision" cell="LP1_2 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg9" friendlyname="Multi-Channel - Double Precision" cell="XO_LP1_2 ">
                 <Link pin="I_C218_A0_P1_in" dir="in" link="Link46" />
                 <Link pin="O_C218_A0_P2_out" dir="out" link="Link45" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg14" friendlyname="Multi-Channel - Double Precision" cell="HP2_2 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg14" friendlyname="Multi-Channel - Double Precision" cell="XO_HP2_2 ">
                 <Link pin="I_C262_A0_P1_in" dir="in" link="Link55" />
                 <Link pin="O_C262_A0_P2_out" dir="out" link="Link57" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg21" friendlyname="Multi-Channel - Double Precision" cell="LP2_2 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg21" friendlyname="Multi-Channel - Double Precision" cell="XO_LP2_2 ">
                 <Link pin="I_C283_A0_P1_in" dir="in" link="Link59" />
                 <Link pin="O_C283_A0_P2_out" dir="out" link="Link52" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg33" friendlyname="Multi-Channel - Double Precision" cell="LP3_2 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg33" friendlyname="Multi-Channel - Double Precision" cell="XO_LP3_2 ">
                 <Link pin="I_C351_A0_P1_in" dir="in" link="Link65" />
                 <Link pin="O_C351_A0_P2_out" dir="out" link="Link64" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg26" friendlyname="Multi-Channel - Double Precision" cell="HP3_2 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg26" friendlyname="Multi-Channel - Double Precision" cell="XO_HP3_2 ">
                 <Link pin="I_C330_A0_P1_in" dir="in" link="Link66" />
                 <Link pin="O_C330_A0_P2_out" dir="out" link="Link63" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg45" friendlyname="Multi-Channel - Double Precision" cell="LP4_2 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg45" friendlyname="Multi-Channel - Double Precision" cell="XO_LP4_2 ">
                 <Link pin="I_C419_A0_P1_in" dir="in" link="Link75" />
                 <Link pin="O_C419_A0_P2_out" dir="out" link="Link74" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg38" friendlyname="Multi-Channel - Double Precision" cell="HP4_2 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg38" friendlyname="Multi-Channel - Double Precision" cell="XO_HP4_2 ">
                 <Link pin="I_C398_A0_P1_in" dir="in" link="Link76" />
                 <Link pin="O_C398_A0_P2_out" dir="out" link="Link77" />
             </Algorithm>
@@ -752,59 +752,59 @@
                 <Link pin="I_C841_A0_P1_in" dir="in" link="Link86" />
                 <Link pin="O_C841_A0_P2_out" dir="out" link="Link83" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg75" friendlyname="Multi-Channel - Double Precision" cell="LP7_2 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg75" friendlyname="Multi-Channel - Double Precision" cell="XO_LP7_2 ">
                 <Link pin="I_C762_A0_P1_in" dir="in" link="Link91" />
                 <Link pin="O_C762_A0_P2_out" dir="out" link="Link112" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg50" friendlyname="Multi-Channel - Double Precision" cell="HP5_2 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg50" friendlyname="Multi-Channel - Double Precision" cell="XO_HP5_2 ">
                 <Link pin="I_C687_A0_P1_in" dir="in" link="Link92" />
                 <Link pin="O_C687_A0_P2_out" dir="out" link="Link87" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg59" friendlyname="Multi-Channel - Double Precision" cell="HP6_2 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg59" friendlyname="Multi-Channel - Double Precision" cell="XO_HP6_2 ">
                 <Link pin="I_C714_A0_P1_in" dir="in" link="Link93" />
                 <Link pin="O_C714_A0_P2_out" dir="out" link="Link111" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg66" friendlyname="Multi-Channel - Double Precision" cell="LP6_2 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg66" friendlyname="Multi-Channel - Double Precision" cell="XO_LP6_2 ">
                 <Link pin="I_C735_A0_P1_in" dir="in" link="Link96" />
                 <Link pin="O_C735_A0_P2_out" dir="out" link="Link117" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg57" friendlyname="Multi-Channel - Double Precision" cell="LP5_2 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg57" friendlyname="Multi-Channel - Double Precision" cell="XO_LP5_2 ">
                 <Link pin="I_C708_A0_P1_in" dir="in" link="Link107" />
                 <Link pin="O_C708_A0_P2_out" dir="out" link="Link95" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg68" friendlyname="Multi-Channel - Double Precision" cell="HP7_2 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg68" friendlyname="Multi-Channel - Double Precision" cell="XO_HP7_2 ">
                 <Link pin="I_C741_A0_P1_in" dir="in" link="Link114" />
                 <Link pin="O_C741_A0_P2_out" dir="out" link="Link106" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg3" friendlyname="Multi-Channel - Double Precision" cell="HP1_3 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg3" friendlyname="Multi-Channel - Double Precision" cell="XO_HP1_3 ">
                 <Link pin="I_C185_A0_P1_in" dir="in" link="Link41" />
                 <Link pin="O_C185_A0_P2_out" dir="out" link="Link42" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg10" friendlyname="Multi-Channel - Double Precision" cell="LP1_3 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg10" friendlyname="Multi-Channel - Double Precision" cell="XO_LP1_3 ">
                 <Link pin="I_C221_A0_P1_in" dir="in" link="Link45" />
                 <Link pin="O_C221_A0_P2_out" dir="out" link="Link47" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg22" friendlyname="Multi-Channel - Double Precision" cell="LP2_3 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg22" friendlyname="Multi-Channel - Double Precision" cell="XO_LP2_3 ">
                 <Link pin="I_C286_A0_P1_in" dir="in" link="Link52" />
                 <Link pin="O_C286_A0_P2_out" dir="out" link="Link50" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg15" friendlyname="Multi-Channel - Double Precision" cell="HP2_3 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg15" friendlyname="Multi-Channel - Double Precision" cell="XO_HP2_3 ">
                 <Link pin="I_C265_A0_P1_in" dir="in" link="Link57" />
                 <Link pin="O_C265_A0_P2_out" dir="out" link="Link51" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg27" friendlyname="Multi-Channel - Double Precision" cell="HP3_3 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg27" friendlyname="Multi-Channel - Double Precision" cell="XO_HP3_3 ">
                 <Link pin="I_C333_A0_P1_in" dir="in" link="Link63" />
                 <Link pin="O_C333_A0_P2_out" dir="out" link="Link60" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg34" friendlyname="Multi-Channel - Double Precision" cell="LP3_3 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg34" friendlyname="Multi-Channel - Double Precision" cell="XO_LP3_3 ">
                 <Link pin="I_C354_A0_P1_in" dir="in" link="Link64" />
                 <Link pin="O_C354_A0_P2_out" dir="out" link="Link68" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg46" friendlyname="Multi-Channel - Double Precision" cell="LP4_3 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg46" friendlyname="Multi-Channel - Double Precision" cell="XO_LP4_3 ">
                 <Link pin="I_C422_A0_P1_in" dir="in" link="Link74" />
                 <Link pin="O_C422_A0_P2_out" dir="out" link="Link71" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg39" friendlyname="Multi-Channel - Double Precision" cell="HP4_3 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg39" friendlyname="Multi-Channel - Double Precision" cell="XO_HP4_3 ">
                 <Link pin="I_C401_A0_P1_in" dir="in" link="Link77" />
                 <Link pin="O_C401_A0_P2_out" dir="out" link="Link79" />
             </Algorithm>
@@ -812,83 +812,83 @@
                 <Link pin="I_C844_A0_P1_in" dir="in" link="Link83" />
                 <Link pin="O_C844_A0_P2_out" dir="out" link="Link132" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg51" friendlyname="Multi-Channel - Double Precision" cell="HP5_3 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg51" friendlyname="Multi-Channel - Double Precision" cell="XO_HP5_3 ">
                 <Link pin="I_C690_A0_P1_in" dir="in" link="Link87" />
                 <Link pin="O_C690_A0_P2_out" dir="out" link="Link104" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg91" friendlyname="Multi-Channel - Double Precision" cell="LP5_3 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg91" friendlyname="Multi-Channel - Double Precision" cell="XO_LP5_3 ">
                 <Link pin="I_C860_A0_P1_in" dir="in" link="Link95" />
                 <Link pin="O_C860_A0_P2_out" dir="out" link="Link81" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg69" friendlyname="Multi-Channel - Double Precision" cell="HP7_3 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg69" friendlyname="Multi-Channel - Double Precision" cell="XO_HP7_3 ">
                 <Link pin="I_C744_A0_P1_in" dir="in" link="Link106" />
                 <Link pin="O_C744_A0_P2_out" dir="out" link="Link88" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg60" friendlyname="Multi-Channel - Double Precision" cell="HP6_3 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg60" friendlyname="Multi-Channel - Double Precision" cell="XO_HP6_3 ">
                 <Link pin="I_C717_A0_P1_in" dir="in" link="Link111" />
                 <Link pin="O_C717_A0_P2_out" dir="out" link="Link105" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg85" friendlyname="Multi-Channel - Double Precision" cell="LP7_3 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg85" friendlyname="Multi-Channel - Double Precision" cell="XO_LP7_3 ">
                 <Link pin="I_C826_A0_P1_in" dir="in" link="Link112" />
                 <Link pin="O_C826_A0_P2_out" dir="out" link="Link99" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg94" friendlyname="Multi-Channel - Double Precision" cell="LP6_3 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg94" friendlyname="Multi-Channel - Double Precision" cell="XO_LP6_3 ">
                 <Link pin="I_C875_A0_P1_in" dir="in" link="Link117" />
                 <Link pin="O_C875_A0_P2_out" dir="out" link="Link102" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg4" friendlyname="Multi-Channel - Double Precision" cell="HP1_4 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg4" friendlyname="Multi-Channel - Double Precision" cell="XO_HP1_4 ">
                 <Link pin="I_C188_A0_P1_in" dir="in" link="Link42" />
                 <Link pin="O_C188_A0_P2_out" dir="out" link="Link123" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg11" friendlyname="Multi-Channel - Double Precision" cell="LP1_4 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg11" friendlyname="Multi-Channel - Double Precision" cell="XO_LP1_4 ">
                 <Link pin="I_C224_A0_P1_in" dir="in" link="Link47" />
                 <Link pin="O_C224_A0_P2_out" dir="out" link="Link125" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg23" friendlyname="Multi-Channel - Double Precision" cell="LP2_4 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg23" friendlyname="Multi-Channel - Double Precision" cell="XO_LP2_4 ">
                 <Link pin="I_C289_A0_P1_in" dir="in" link="Link50" />
                 <Link pin="O_C289_A0_P2_out" dir="out" link="Link126" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg16" friendlyname="Multi-Channel - Double Precision" cell="HP2_4 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg16" friendlyname="Multi-Channel - Double Precision" cell="XO_HP2_4 ">
                 <Link pin="I_C268_A0_P1_in" dir="in" link="Link51" />
                 <Link pin="O_C268_A0_P2_out" dir="out" link="Link124" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg28" friendlyname="Multi-Channel - Double Precision" cell="HP3_4 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg28" friendlyname="Multi-Channel - Double Precision" cell="XO_HP3_4 ">
                 <Link pin="I_C336_A0_P1_in" dir="in" link="Link60" />
                 <Link pin="O_C336_A0_P2_out" dir="out" link="Link122" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg35" friendlyname="Multi-Channel - Double Precision" cell="LP3_4 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg35" friendlyname="Multi-Channel - Double Precision" cell="XO_LP3_4 ">
                 <Link pin="I_C357_A0_P1_in" dir="in" link="Link68" />
                 <Link pin="O_C357_A0_P2_out" dir="out" link="Link127" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg47" friendlyname="Multi-Channel - Double Precision" cell="LP4_4 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg47" friendlyname="Multi-Channel - Double Precision" cell="XO_LP4_4 ">
                 <Link pin="I_C425_A0_P1_in" dir="in" link="Link71" />
                 <Link pin="O_C425_A0_P2_out" dir="out" link="Link128" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg40" friendlyname="Multi-Channel - Double Precision" cell="HP4_4 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg40" friendlyname="Multi-Channel - Double Precision" cell="XO_HP4_4 ">
                 <Link pin="I_C404_A0_P1_in" dir="in" link="Link79" />
                 <Link pin="O_C404_A0_P2_out" dir="out" link="Link121" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg92" friendlyname="Multi-Channel - Double Precision" cell="LP5_4 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg92" friendlyname="Multi-Channel - Double Precision" cell="XO_LP5_4 ">
                 <Link pin="I_C863_A0_P1_in" dir="in" link="Link81" />
                 <Link pin="O_C863_A0_P2_out" dir="out" link="Link129" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg70" friendlyname="Multi-Channel - Double Precision" cell="HP7_4 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg70" friendlyname="Multi-Channel - Double Precision" cell="XO_HP7_4 ">
                 <Link pin="I_C747_A0_P1_in" dir="in" link="Link88" />
                 <Link pin="O_C747_A0_P2_out" dir="out" link="Link118" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg86" friendlyname="Multi-Channel - Double Precision" cell="LP7_4 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg86" friendlyname="Multi-Channel - Double Precision" cell="XO_LP7_4 ">
                 <Link pin="I_C829_A0_P1_in" dir="in" link="Link99" />
                 <Link pin="O_C829_A0_P2_out" dir="out" link="Link131" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg95" friendlyname="Multi-Channel - Double Precision" cell="LP6_4 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg95" friendlyname="Multi-Channel - Double Precision" cell="XO_LP6_4 ">
                 <Link pin="I_C878_A0_P1_in" dir="in" link="Link102" />
                 <Link pin="O_C878_A0_P2_out" dir="out" link="Link130" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg52" friendlyname="Multi-Channel - Double Precision" cell="HP5_4 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg52" friendlyname="Multi-Channel - Double Precision" cell="XO_HP5_4 ">
                 <Link pin="I_C693_A0_P1_in" dir="in" link="Link104" />
                 <Link pin="O_C693_A0_P2_out" dir="out" link="Link120" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg61" friendlyname="Multi-Channel - Double Precision" cell="HP6_4 ">
+            <Algorithm name="General2ndOrderDPSigma300Alg61" friendlyname="Multi-Channel - Double Precision" cell="XO_HP6_4 ">
                 <Link pin="I_C720_A0_P1_in" dir="in" link="Link105" />
                 <Link pin="O_C720_A0_P2_out" dir="out" link="Link119" />
             </Algorithm>
@@ -931,7 +931,7 @@
                 <Link pin="I_C292_A0_P1_in" dir="in" link="Link124" />
                 <Link pin="O_C292_A0_P2_out" dir="out" link="Link56" />
             </Algorithm>
-            <Algorithm name="DelaySigma300Alg1" friendlyname="Growable Delay" cell="Delay1 ">
+            <Algorithm name="DelaySigma300Alg1" friendlyname="Growable Delay" cell="Delay 1 ">
                 <Link pin="I_C240_A0_P1_in" dir="in" link="Link48" />
                 <Link pin="O_C240_A0_P2_out" dir="out" link="Link49" />
             </Algorithm>

@@ -328,19 +328,19 @@
                 <Link pin="I_C924_A0_P6_in" dir="in" link="Link19" />
                 <Link pin="O_C924_A0_P1_out" dir="out" link="Link85" />
             </Algorithm>
-            <Algorithm name="FIRSigma300Alg1" friendlyname="FIR" cell="FIR1 ">
+            <Algorithm name="FIRSigma300Alg1" friendlyname="FIR" cell="FIR 1 ">
                 <Link pin="I_C17_A0_P1_in" dir="in" link="Link85" />
                 <Link pin="O_C17_A0_P2_out" dir="out" link="Link36" />
             </Algorithm>
-            <Algorithm name="FIRSigma300Alg2" friendlyname="FIR" cell="FIR2 ">
+            <Algorithm name="FIRSigma300Alg2" friendlyname="FIR" cell="FIR 2 ">
                 <Link pin="I_C104_A0_P1_in" dir="in" link="Link84" />
                 <Link pin="O_C104_A0_P2_out" dir="out" link="Link37" />
             </Algorithm>
-            <Algorithm name="FIRSigma300Alg3" friendlyname="FIR" cell="FIR3 ">
+            <Algorithm name="FIRSigma300Alg3" friendlyname="FIR" cell="FIR 3 ">
                 <Link pin="I_C107_A0_P1_in" dir="in" link="Link83" />
                 <Link pin="O_C107_A0_P2_out" dir="out" link="Link39" />
             </Algorithm>
-            <Algorithm name="FIRSigma300Alg4" friendlyname="FIR" cell="FIR4 ">
+            <Algorithm name="FIRSigma300Alg4" friendlyname="FIR" cell="FIR 4 ">
                 <Link pin="I_C110_A0_P1_in" dir="in" link="Link82" />
                 <Link pin="O_C110_A0_P2_out" dir="out" link="Link38" />
             </Algorithm>
@@ -368,7 +368,7 @@
                 <Link pin="I_C142_A0_P1_in" dir="in" link="Link41" />
                 <Link pin="O_C142_A0_P2_out" dir="out" link="Link45" />
             </Algorithm>
-            <Algorithm name="DelaySigma300Alg1" friendlyname="Growable Delay" cell="Delay1 ">
+            <Algorithm name="DelaySigma300Alg1" friendlyname="Growable Delay" cell="Delay 1 ">
                 <Link pin="I_C136_A0_P1_in" dir="in" link="Link42" />
                 <Link pin="O_C136_A0_P2_out" dir="out" link="Link44" />
             </Algorithm>
