@@ -719,7 +719,6 @@ void uploadDspFirmware( void )
   uint32_t numBytesToRead = 0;
   byte byteReadMSB;
   byte byteReadLSB;
-  byte byteRead;
   uint16_t regaddr;
 
   if( fileDspProgram )
@@ -4385,7 +4384,6 @@ void setup()
         Update.printError(Serial);
     }
 
-    size_t written = 0;
     if( len > 0 )
     {
       if( Update.write( data, len ) != len )
