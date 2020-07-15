@@ -28,8 +28,10 @@ It supports various and convenient physical addons and multiple software plugins
 * One freeDSP expansion header
 * USB Audio Class 2 Bidirectional streaming with 8 channels in and 8 channels out, full-duplex. Works with ASIO driver under Windows 10 and driverless under macOS and Linux.
 * Realtime control software over WiFi or Bluetooth available under an open source license
+* THD DAC: -103dB @ 1kHz, 0dBfs, fs=48kHz
+* THD ADC: -101dB @ 1kHz, 0dBfs, fs=48kHz
+* Latency: 1.125ms (talkthrough ADC->DSP->DAC)
 * Board dimensions: 110mm x 110mm
-
 
 MAIN COORDINATOR: [dspverden](https://github.com/dspverden)
 
