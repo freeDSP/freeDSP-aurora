@@ -43,9 +43,7 @@ Branches:
 - *master* - this branch always holds the latest released revision
 - *develop* - this is the develop branch with new features. Please base your patches on this branch.
 
-[Web app build instructions](SOURCES/WEBAPP/ESP32/README.md)
-[Addons](ADDONS/README.md)
-[User Documentation](DOCUMENTATION/)
+[Web app build instructions](SOURCES/WEBAPP/ESP32/README.md) | [Addons](ADDONS/README.md) | [User Documentation](DOCUMENTATION/)
 
 
 ## License
