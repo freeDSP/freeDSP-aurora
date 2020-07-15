@@ -14,6 +14,8 @@ Perfect for an active loudspeaker
 - 1x USB
 - Volume potentiometer
 
+![Board](AddOnA/KICAD/AddOnA.png)
+
 ### Links
 
 * [Schematics and backplates v1.0.0](AddOnA%201.0.0/)
@@ -32,6 +34,9 @@ Pre-amp / 7.1-management without limits.
 - 1x USB in
 
 All digital inputs are up for multiplexing
+
+![Board A](AddOnB/KICAD/Board%20A/AddOnB-A1.png)
+![Board B](AddOnB/KICAD/Board%20B/AddOnB-B1.png)
 
 ### Links
 
@@ -58,6 +63,8 @@ All TOSlink can be used with ADAT or S/P-DIF.
 
 
 ## Add-On D: FIXME
+
+![Board A & B](AddOnD/AddOnD_A_B.png)
 
 ### Links
 
