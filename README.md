@@ -1,3 +1,5 @@
+![FreeDSP logo](https://github.com/freeDSP/WIKI-AND-GENERAL-TOPICS/raw/master/LOGOs/freeDSP/freeDSP%20LOGO/freeDSP_LOGO.png)
+
 # freeDSP aurora
 
 An open source and open hardware freeDSP board based on ADAU1452 with 8 analog I/O, S/P-DIF I/O, ADAT I/O, USB Audio, WiFi, Bluetooth.
