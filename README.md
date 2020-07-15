@@ -51,6 +51,7 @@ Branches:
 
 ## Links
 
+- [Buy Aurora board and addons](https://auverdion.de/)
 - [freeDSP](https://freedsp.github.io)
 - [Kickstarter campaign](https://www.kickstarter.com/projects/auverdion/freedsp-aurora-dsp)
 - [DIYAudio forum (english)](https://www.diyaudio.com/forums/digital-line-level/334055-freedsp-aurora-dsp-8-os-usb-audio-dif-adat-bluetooth-wifi-contro.html)
