@@ -1,7 +1,7 @@
 # Addons
 
 
-## Add-On A: The woodworker´s friend
+## Add-On A: The woodworker’s friend
 
 Perfect for an active loudspeaker 
 
@@ -13,6 +13,11 @@ Perfect for an active loudspeaker
 - 1x XLR Analog Out (connect a subwoofer)
 - 1x USB
 - Volume potentiometer
+
+### Links
+
+* [Schematics and backplates v1.0.0](AddOnA%201.0.0/)
+* [Schematics and backplates](AddOnA/)
 
 
 ## Add-On B: Down with developers
@@ -27,6 +32,10 @@ Pre-amp / 7.1-management without limits.
 - 1x USB in
 
 All digital inputs are up for multiplexing
+
+### Links
+
+* [Schematics and backplates](AddOnB/)
 
 
 ## Add-On C: For those who love to take control over the crowd
@@ -43,5 +52,13 @@ Loudspeaker management system for your next gig.
 
 All TOSlink can be used with ADAT or S/P-DIF.
 
+### Links
 
-## Add-On D
+* [Schematics and backplates](AddOnC/)
+
+
+## Add-On D: FIXME
+
+### Links
+
+* [Schematics and backplates](AddOnD/)
