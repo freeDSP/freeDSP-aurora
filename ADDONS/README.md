@@ -1,7 +1,7 @@
 # Addons
 
 
-## Add-On A: The woodworker´s friend
+## Add-On A: The woodworker´s friend
 
 Perfect for an active loudspeaker 
 
@@ -15,7 +15,7 @@ Perfect for an active loudspeaker
 - Volume potentiometer
 
 
-## Add-On B: Down with developers
+## Add-On B: Down with developers
 
 Pre-amp / 7.1-management without limits.
 
@@ -28,7 +28,8 @@ Pre-amp / 7.1-management without limits.
 
 All digital inputs are up for multiplexing
 
-## Add-On C: For those who love to take control over the crowd
+
+## Add-On C: For those who love to take control over the crowd
 
 Loudspeaker management system for your next gig.
 
@@ -41,3 +42,6 @@ Loudspeaker management system for your next gig.
 - 1x USB
 
 All TOSlink can be used with ADAT or S/P-DIF.
+
+
+## Add-On D
