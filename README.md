@@ -2,7 +2,7 @@
 
 # freeDSP aurora
 
-An open source and open hardware freeDSP board based on ADAU1452 with 8 analog I/O, S/P-DIF I/O, ADAT I/O, USB Audio, WiFi, Bluetooth.
+An open source and open hardware [freeDSP](https://freedsp.github.io) board based on ADAU1452 with 8 analog I/O, S/P-DIF I/O, ADAT I/O, USB Audio, WiFi, Bluetooth.
 
 It supports various and convenient physical addons and multiple software plugins, and is controlled by web interface.
 
@@ -57,3 +57,8 @@ Branches:
 - [DIYHifi forum (german, features)](https://www.diy-hifi-forum.eu/forum/showthread.php?18572-freeDSP-aurora-Der-Feature-Thread)
 - [DIYHifi forum (german, specs)](https://www.diy-hifi-forum.eu/forum/showthread.php?15019-Verst%E4rkermodul-mit-DSP-600W-1-4Kan%E4le-low-budget-high-quality&p=249786&viewfull=1#post249786)
 - [Youtube tutorials](https://www.youtube.com/channel/UCGmSGSIjvFPSlGyMbqJgFxw)
+- [ADAU1452 at Analog Devices](https://www.analog.com/en/products/adau1452.html)
+- [ESP32 at Espressif](https://www.espressif.com/en/products/socs/esp32/overview)
+- [XMOS XE216-512-TQ128 datasheet](https://www.xmos.com/file/xe216-512-tq128-datasheet)
+- [AKM 4458](https://www.akm.com/us/en/products/audio/audio-dac/ak4458vn/)
+- [AKM 5558](https://www.akm.com/us/en/products/audio/audio-adc/ak5558vn/)
