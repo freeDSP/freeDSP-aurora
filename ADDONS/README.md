@@ -62,7 +62,10 @@ All TOSlink can be used with ADAT or S/P-DIF.
 * [Schematics and backplates](AddOnC/)
 
 
-## Add-On D: FIXME
+## Add-On D: Balanced Life
+
+* 8x XLR analog input (balanced)
+* 8x XLR analog output (balanced)
 
 ![Board A & B](AddOnD/AddOnD_A_B.png)
 
