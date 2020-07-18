@@ -22,7 +22,7 @@
 
 #if HAVE_IRRECEIVER
 #include <IRremote.h>
-#endif 
+#endif
 
 #define VERSION_STR "v2.1.0"
 
@@ -229,7 +229,7 @@ AsyncWebServer server( 80 );
 
 //------------------------------------------------------------------------------
 //
-// Display Driver 
+// Display Driver
 //
 //------------------------------------------------------------------------------
 OLED128x64_SH1106 myDisplay;
@@ -238,7 +238,7 @@ bool needUpdateUI = false;
 
 //------------------------------------------------------------------------------
 //
-// Rotary Encoder 
+// Rotary Encoder
 //
 //------------------------------------------------------------------------------
 #if HAVE_ROTARYENCODER
@@ -248,33 +248,33 @@ long int lastREsw = 0;
 
 //------------------------------------------------------------------------------
 //
-// IR Receiver 
+// IR Receiver
 //
 //------------------------------------------------------------------------------
 #if HAVE_IRRECEIVER
 IRrecv irReceiver( IR_RECEIVER_PIN );
-#endif 
+#endif
 
 int editMode = 0;
 
 
 //==============================================================================
-/*! 
+/*!
  */
-void ADAU1452_WRITE_REGISTER( uint16_t reg, byte msb, byte lsb ) 
+void ADAU1452_WRITE_REGISTER( uint16_t reg, byte msb, byte lsb )
 {
   Wire.beginTransmission( DSP_ADDR );
   Wire.write( (byte)( (reg >> 8) & 0xFF ) );
   Wire.write( (byte)(  reg       & 0xFF ) );
   Wire.write( msb );
-  Wire.write( lsb ); 
+  Wire.write( lsb );
   Wire.endTransmission( true );
 }
 
 //==============================================================================
-/*! 
+/*!
  */
-void ADAU1452_WRITE_BLOCK( uint16_t regaddr, byte val[], uint16_t len ) 
+void ADAU1452_WRITE_BLOCK( uint16_t regaddr, byte val[], uint16_t len )
 {
   for( uint16_t ii = 0; ii < len; ii = ii + 4 )
   {
@@ -303,7 +303,7 @@ uint32_t convertTo824( double val )
 
   intpart = floor( val );
   fractpart = val - intpart;
-  
+
   ret = ((( static_cast<uint32_t>(static_cast<int8_t>(intpart)) ) << 24) & 0xff000000)
       + ((static_cast<uint32_t>(fractpart * 16777216.0)) & 0x00ffffff);
 
@@ -331,10 +331,10 @@ String uinttohexstring( uint32_t uintval )
 }
 
 //==============================================================================
-/*! 
+/*!
  */
-void AK4458_REGWRITE( byte reg, byte val ) 
-{ 
+void AK4458_REGWRITE( byte reg, byte val )
+{
   Wire.beginTransmission( AK4458_I2C_ADDR );
   Wire.write( reg );
   Wire.write( val );
@@ -342,10 +342,10 @@ void AK4458_REGWRITE( byte reg, byte val )
 }
 
 //==============================================================================
-/*! 
+/*!
  */
 void AK5558_REGWRITE( byte reg, byte val)
-{ 
+{
   Wire.beginTransmission( AK5558_I2C_ADDR );
   Wire.write( reg );
   Wire.write( val );
@@ -466,7 +466,7 @@ void readSettings( void )
   if( !SPIFFS.exists( "/settings.ini" ) )
   {
     Serial.print( "Writing default settings.ini..." );
-    
+
     writeSettings();
 
     Serial.println( "[OK]" );
@@ -518,7 +518,7 @@ void readSettings( void )
     Serial.println( "[OK]" );
     Serial.println( "Device config" );
     Serial.print( "AID: " ); Serial.println( Settings.addonid );
-    Serial.print( "Volume Poti: " ); Serial.println( Settings.vpot ); 
+    Serial.print( "Volume Poti: " ); Serial.println( Settings.vpot );
     Serial.print( "ADC Channel Sum: " );Serial.println( Settings.adcsum );
     Serial.println( "[OK]" );
   }
@@ -532,7 +532,7 @@ void readSettings( void )
 void writeSettings( void )
 {
   File fileSettings = SPIFFS.open( "/settings.ini", "w" );
-  
+
   if( fileSettings )
   {
     StaticJsonDocument<512> jsonSettings;
@@ -582,7 +582,7 @@ void readPluginMeta( void )
 
     JsonObject jsonPluginMeta = jsonDoc.as<JsonObject>();
 
-    currentPlugInName = jsonPluginMeta["name"].as<String>(); 
+    currentPlugInName = jsonPluginMeta["name"].as<String>();
     numInputs = jsonPluginMeta["nchn"].as<String>().toInt();
     numHPs = jsonPluginMeta["nhp"].as<String>().toInt();
     numLShelvs = jsonPluginMeta["nlshelv"].as<String>().toInt();
@@ -597,7 +597,7 @@ void readPluginMeta( void )
 
     for( int ii = 0; ii < numInputs; ii++ )
       inputSelector.analog[ii] = static_cast<uint16_t>(jsonPluginMeta["analog"][ii].as<String>().toInt());
-    
+
     for( int ii = 0; ii < numInputs; ii++ )
       inputSelector.spdif[ii] = static_cast<uint16_t>(jsonPluginMeta["spdif"][ii].as<String>().toInt());
 
@@ -606,7 +606,7 @@ void readPluginMeta( void )
 
     for( int ii = 0; ii < numInputs; ii++ )
       inputSelector.exp[ii] = static_cast<uint16_t>(jsonPluginMeta["exp"][ii].as<String>().toInt());
- 
+
     for( int ii = 0; ii < numInputs; ii++ )
       inputSelector.port[ii] = static_cast<uint16_t>(jsonPluginMeta["port"][ii].as<String>().toInt());
 
@@ -738,7 +738,7 @@ void uploadDspFirmware( void )
       numBytesToRead = (numBytesToRead << 8) + (uint32_t)byteRead;
 
       cntr += 4;
-      
+
       //Serial.print( "numBytesToRead " );
       //Serial.println( numBytesToRead );
 
@@ -750,7 +750,7 @@ void uploadDspFirmware( void )
         fileDspProgram.read( &byteRead, 1 );
         regaddr = ((uint16_t)byteRead) << 8;
         cntr++;
-        
+
         fileDspProgram.read( &byteRead, 1 );
         regaddr += byteRead;
         cntr++;
@@ -831,7 +831,7 @@ void uploadDspFirmware( void )
 void uploadUserParams( void )
 {
   String fileName = presetUsrparamFile[currentPreset];
- 
+
   //--- Read the preset file
   if( !SPIFFS.exists( fileName ) )
     Serial.println( "Preset " + fileName + " not written yet" );
@@ -1006,7 +1006,7 @@ void uploadUserParams( void )
   setSpdifOutputRouting();
 
   Serial.println( "[OK]" );
-  
+
 }
 
 //==============================================================================
@@ -1067,13 +1067,13 @@ void changeChannelSummationADC( void )
     AK5558_REGWRITE( AK5558_POWERMANAGEMENT2, 0b00000001 );
   // 8-to-4 mode
   else if( Settings.adcsum == 1 )
-    AK5558_REGWRITE( AK5558_POWERMANAGEMENT2, 0b00000101 );    
+    AK5558_REGWRITE( AK5558_POWERMANAGEMENT2, 0b00000101 );
   // 8-to-2 mode
   else if( Settings.adcsum == 2 )
     AK5558_REGWRITE( AK5558_POWERMANAGEMENT2, 0b00000011 );
   // 8-to-1 mode
   else if( Settings.adcsum == 3 )
-    AK5558_REGWRITE( AK5558_POWERMANAGEMENT2, 0b00000111 );   
+    AK5558_REGWRITE( AK5558_POWERMANAGEMENT2, 0b00000111 );
   // fallback to normal operation
   else
     AK5558_REGWRITE( AK5558_POWERMANAGEMENT2, 0b00000001 );
@@ -1238,7 +1238,7 @@ void setSpdifOutputRouting( void )
   uint16_t addrChn = spdifOutputSelector.addrChnLeft[sel];
   uint16_t addrPort = spdifOutputSelector.addrPortLeft;
   sel = spdifOutput.selectionLeft;
-  
+
   byte val[4];
   uint32_t intval = sel & 0x0000ffff;
   val[0] = (intval >> 24 ) & 0xFF;
@@ -1697,7 +1697,7 @@ String handleGetAllBypJson( void )
   for( int ii = 0; ii < numHPs; ii++ )
   {
     array += String("{\"name\":\"hp") + String(ii) + String("\",\"val\":");
-   
+
     if( paramHP[ii].bypass )
       array += String( "1}" );
     else
@@ -1708,7 +1708,7 @@ String handleGetAllBypJson( void )
   for( int ii = 0; ii < numLShelvs; ii++ )
   {
     array += String("{\"name\":\"ls") + String(ii) + String("\",\"val\":");
-   
+
     if( paramLshelv[ii].bypass )
       array += String( "1}" );
     else
@@ -1719,7 +1719,7 @@ String handleGetAllBypJson( void )
   for( int ii = 0; ii < numPEQs; ii++ )
   {
     array += String("{\"name\":\"peq") + String(ii) + String("\",\"val\":");
-   
+
     if( paramPeq[ii].bypass )
       array += String( "1}" );
     else
@@ -1730,7 +1730,7 @@ String handleGetAllBypJson( void )
   for( int ii = 0; ii < numHShelvs; ii++ )
   {
     array += String("{\"name\":\"hs") + String(ii) + String("\",\"val\":");
-   
+
     if( paramHshelv[ii].bypass )
       array += String( "1}" );
     else
@@ -1741,7 +1741,7 @@ String handleGetAllBypJson( void )
   for( int ii = 0; ii < numLPs; ii++ )
   {
     array += String("{\"name\":\"lp") + String(ii) + String("\",\"val\":");
-   
+
     if( paramLP[ii].bypass )
       array += String( "1}" );
     else
@@ -1752,7 +1752,7 @@ String handleGetAllBypJson( void )
   for( int ii = 0; ii < numPhases; ii++ )
   {
     array += String("{\"name\":\"ph") + String(ii) + String("\",\"val\":");
-   
+
     if( paramPhase[ii].bypass )
       array += String( "1}" );
     else
@@ -1763,7 +1763,7 @@ String handleGetAllBypJson( void )
   for( int ii = 0; ii < numDelays; ii++ )
   {
     array += String("{\"name\":\"dly") + String(ii) + String("\",\"val\":");
-   
+
     if( paramDelay[ii].bypass )
       array += String( "1}" );
     else
@@ -1774,7 +1774,7 @@ String handleGetAllBypJson( void )
   for( int ii = 0; ii < numGains; ii++ )
   {
     array += String("{\"name\":\"gn") + String(ii) + String("\",\"val\":");
-   
+
     if( paramGain[ii].mute )
       array += String( "1}" );
     else
@@ -1785,7 +1785,7 @@ String handleGetAllBypJson( void )
   for( int ii = 0; ii < numCrossovers; ii++ )
   {
     array += String("{\"name\":\"xo") + String(ii) + String("\",\"val\":");
-   
+
     if( paramCrossover[ii].lp_bypass || paramCrossover[ii].hp_bypass )
       array += String( "1}" );
     else
@@ -1796,7 +1796,7 @@ String handleGetAllBypJson( void )
   for( int ii = 0; ii < numFIRs; ii++ )
   {
     array += String("{\"name\":\"fir") + String(ii) + String("\",\"val\":");
-   
+
     if( paramFir[ii].bypass )
       array += String( "1}" );
     else
@@ -1807,7 +1807,7 @@ String handleGetAllBypJson( void )
 
   if( array.length() > 1 )
    array = array.substring( 0, array.length()-1 );
-  
+
   array += String( "]}" );
 
   return array;
@@ -1910,7 +1910,7 @@ String handleGetAllFcJson( void )
 
   if( array.length() > 1 )
    array = array.substring( 0, array.length()-1 );
-  
+
   array += String( "]}" );
 
   return array;
@@ -1930,7 +1930,7 @@ void handleGetAllInputsJson( AsyncWebServerRequest* request )
   String str;
   uint8_t val;
   String key[] = {"in0", "in1", "in2", "in3", "in4", "in5", "in6", "in7"};
-  
+
   for( int nn = 0; nn < 8; nn++ )
   {
     str = String("0x");
@@ -2016,8 +2016,8 @@ void handlePostInputJson( AsyncWebServerRequest* request, uint8_t* data )
   paramInputs[idx].sel = (uint32_t)strtoul( root["sel"].as<String>().c_str(), NULL, 16 );
 
   setInput( idx );
-       
-  request->send(200, "text/plain", "");  
+
+  request->send(200, "text/plain", "");
 
   softUnmuteDAC();
 }
@@ -2032,7 +2032,7 @@ void setInput( const int idx )
   uint16_t addrChn = paramInputs[idx].addrChn[sel];
   uint16_t addrPort = paramInputs[idx].addrPort;
   sel = paramInputs[idx].sel;
-  
+
   byte val[4];
   uint32_t intval = sel & 0x0000ffff;
   val[0] = (intval >> 24 ) & 0xFF;
@@ -2082,8 +2082,8 @@ void handlePostHpJson( AsyncWebServerRequest* request, uint8_t* data )
     paramHP[idx].bypass = true;
 
   setHighPass( idx );
-       
-  request->send(200, "text/plain", "");  
+
+  request->send(200, "text/plain", "");
 
   softUnmuteDAC();
 
@@ -2139,7 +2139,7 @@ void setHighPass( int idx )
       val[3] =  floatval & 0xFF;
       ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A2
       addr++;
-      
+
       floatval = convertTo824(a[ 3*ii + 1 ]);
       val[0] = (floatval >> 24 ) & 0xFF;
       val[1] = (floatval >> 16 ) & 0xFF;
@@ -2193,10 +2193,10 @@ void handlePostLshelvJson( AsyncWebServerRequest* request, uint8_t* data )
     paramLshelv[idx].bypass = true;
 
   setLowShelving( idx );
-       
-  request->send(200, "text/plain", ""); 
 
-  softUnmuteDAC(); 
+  request->send(200, "text/plain", "");
+
+  softUnmuteDAC();
 }
 
 //==============================================================================
@@ -2248,7 +2248,7 @@ void setLowShelving( int idx )
     val[3] =  floatval & 0xFF;
     ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A2
     addr++;
-    
+
     floatval = convertTo824(a[1]);
     val[0] = (floatval >> 24 ) & 0xFF;
     val[1] = (floatval >> 16 ) & 0xFF;
@@ -2302,7 +2302,7 @@ void handlePostPeqJson( AsyncWebServerRequest* request, uint8_t* data )
 
   setPEQ( idx );
 
-  request->send(200, "text/plain", "");  
+  request->send(200, "text/plain", "");
 
   softUnmuteDAC();
 }
@@ -2356,7 +2356,7 @@ void setPEQ( int idx )
     val[3] =  floatval & 0xFF;
     ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A2
     addr++;
-    
+
     floatval = convertTo824(a[1]);
     val[0] = (floatval >> 24 ) & 0xFF;
     val[1] = (floatval >> 16 ) & 0xFF;
@@ -2409,8 +2409,8 @@ void handlePostHshelvJson( AsyncWebServerRequest* request, uint8_t* data )
     paramHshelv[idx].bypass = true;
 
   setHighShelving( idx );
-       
-  request->send(200, "text/plain", "");  
+
+  request->send(200, "text/plain", "");
 
   softUnmuteDAC();
 }
@@ -2464,7 +2464,7 @@ void setHighShelving( int idx )
     val[3] =  floatval & 0xFF;
     ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A2
     addr++;
-    
+
     floatval = convertTo824(a[1]);
     val[0] = (floatval >> 24 ) & 0xFF;
     val[1] = (floatval >> 16 ) & 0xFF;
@@ -2517,9 +2517,9 @@ void handlePostLpJson( AsyncWebServerRequest* request, uint8_t* data )
 
   setLowPass( idx );
 
-  request->send(200, "text/plain", ""); 
+  request->send(200, "text/plain", "");
 
-  softUnmuteDAC(); 
+  softUnmuteDAC();
 }
 
 //==============================================================================
@@ -2572,7 +2572,7 @@ void setLowPass( int idx )
       val[3] =  floatval & 0xFF;
       ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A2
       addr++;
-      
+
       floatval = convertTo824(a[ 3*ii + 1 ]);
       val[0] = (floatval >> 24 ) & 0xFF;
       val[1] = (floatval >> 16 ) & 0xFF;
@@ -2632,7 +2632,7 @@ void handlePostPhaseJson( AsyncWebServerRequest* request, uint8_t* data )
 
   setPhase( idx );
 
-  request->send(200, "text/plain", "");  
+  request->send(200, "text/plain", "");
 
   softUnmuteDAC();
 }
@@ -2693,7 +2693,7 @@ void setPhase( int idx )
     val[3] =  floatval & 0xFF;
     ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A2
     addr++;
-    
+
     floatval = convertTo824(a[1]);
     val[0] = (floatval >> 24 ) & 0xFF;
     val[1] = (floatval >> 16 ) & 0xFF;
@@ -2739,10 +2739,10 @@ void handlePostDelayJson( AsyncWebServerRequest* request, uint8_t* data )
     paramDelay[idx].bypass = false;
   else
     paramDelay[idx].bypass = true;
-  
+
   setDelay( idx );
-      
-  request->send(200, "text/plain", "");  
+
+  request->send(200, "text/plain", "");
 
   softUnmuteDAC();
 }
@@ -2808,9 +2808,9 @@ void handlePostGainJson( AsyncWebServerRequest* request, uint8_t* data )
   else
     paramGain[idx].mute = true;
 
-  setGain( idx );  
-       
-  request->send(200, "text/plain", "");  
+  setGain( idx );
+
+  request->send(200, "text/plain", "");
 
   softUnmuteDAC();
 }
@@ -2828,7 +2828,7 @@ void setGain( int idx )
       float824val = convertTo824( 0.0 );
     else
       float824val = convertTo824( pow( 10.0, paramGain[idx].gain / 20.0 ) );
-    
+
     byte val[4];
     val[0] = (float824val >> 24 ) & 0xFF;
     val[1] = (float824val >> 16 ) & 0xFF;
@@ -2888,9 +2888,9 @@ void handlePostXoJson( AsyncWebServerRequest* request, uint8_t* data )
 
   setCrossover( idx );
 
-  request->send(200, "text/plain", ""); 
+  request->send(200, "text/plain", "");
 
-  softUnmuteDAC(); 
+  softUnmuteDAC();
 }
 
 //==============================================================================
@@ -2906,7 +2906,7 @@ void setCrossover( int idx )
     float b[12] = { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0 };
     byte val[4];
     uint32_t floatval;
-    
+
     if( !(paramCrossover[idx].lp_bypass) )
       AudioFilterFactory::makeLowPass( a, b, paramCrossover[idx].lp_typ, paramCrossover[idx].lp_fc, sampleRate );
 
@@ -2944,7 +2944,7 @@ void setCrossover( int idx )
       val[3] =  floatval & 0xFF;
       ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A2
       addr++;
-      
+
       floatval = convertTo824(a[ 3*ii + 1 ]);
       val[0] = (floatval >> 24 ) & 0xFF;
       val[1] = (floatval >> 16 ) & 0xFF;
@@ -2999,7 +2999,7 @@ void setCrossover( int idx )
       val[3] =  floatval & 0xFF;
       ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A2
       addr++;
-      
+
       floatval = convertTo824(a[ 3*ii + 1 ]);
       val[0] = (floatval >> 24 ) & 0xFF;
       val[1] = (floatval >> 16 ) & 0xFF;
@@ -3045,9 +3045,9 @@ void handlePostFirJson( AsyncWebServerRequest* request, uint8_t* data )
 
   setFir( idx );
 
-  request->send(200, "text/plain", ""); 
+  request->send(200, "text/plain", "");
 
-  softUnmuteDAC(); 
+  softUnmuteDAC();
 }
 
 //==============================================================================
@@ -3075,11 +3075,11 @@ void handlePostMasterVolumeJson( AsyncWebServerRequest* request, uint8_t* data )
   JsonObject root = jsonDoc.as<JsonObject>();
 
   masterVolume.val = root["vol"].as<String>().toFloat();
-  
-  setMasterVolume(); 
+
+  setMasterVolume();
   updateUI();
-    
-  request->send(200, "text/plain", "");  
+
+  request->send(200, "text/plain", "");
 }
 
 //==============================================================================
@@ -3100,8 +3100,8 @@ void setMasterVolume( void )
       val[1] = (rxval >> 16 ) & 0xFF;
       val[2] = (rxval >> 8 ) & 0xFF;
       val[3] = rxval & 0xFF;
-      ADAU1452_WRITE_BLOCK( reg, val, 4 ); 
-      
+      ADAU1452_WRITE_BLOCK( reg, val, 4 );
+
     }
   }
 }
@@ -3144,14 +3144,14 @@ void handlePostPresetJson( AsyncWebServerRequest* request, uint8_t* data )
   uploadUserParams();
 
   updateAddOn();
-     
+
   request->send(200, "text/plain", "");
 
   updateUI();
 
-  softUnmuteDAC();  
+  softUnmuteDAC();
 }
- 
+
 //==============================================================================
 /*! Handles the POST request for device configuration
  *
@@ -3188,8 +3188,8 @@ void handlePostConfigJson( AsyncWebServerRequest* request, uint8_t* data )
 
   enableVolPot();
   changeChannelSummationADC();
-       
-  request->send(200, "text/plain", "");  
+
+  request->send(200, "text/plain", "");
 }
 
 //==============================================================================
@@ -3360,7 +3360,7 @@ void handlePostStore( AsyncWebServerRequest* request, uint8_t* data )
   Serial.print( totalSize );
   Serial.println( "bytes" );
 
-  request->send(200, "text/plain", "");  
+  request->send(200, "text/plain", "");
 
   softUnmuteDAC();
 }
@@ -3408,7 +3408,7 @@ void handlePostAddonConfigJson( AsyncWebServerRequest* request, uint8_t* data )
     Wire.endTransmission( true );
   }
 
-  request->send(200, "text/plain", "");  
+  request->send(200, "text/plain", "");
 
   softUnmuteDAC();
 }
@@ -3441,8 +3441,8 @@ void handlePostWifiConfigJson( AsyncWebServerRequest* request, uint8_t* data )
   Settings.password = root["pwd"].as<String>();
 
   writeSettings();
-       
-  request->send(200, "text/plain", "");  
+
+  request->send(200, "text/plain", "");
 }
 
 //==============================================================================
@@ -3473,12 +3473,12 @@ void handlePostPasswordApJson( AsyncWebServerRequest* request, uint8_t* data )
   Settings.apname = root["apname"].as<String>();
 
   writeSettings();
-       
-  request->send(200, "text/plain", "");  
+
+  request->send(200, "text/plain", "");
 }
 
 //==============================================================================
-/*! Handles the POST request for SPDIF output multiplexer 
+/*! Handles the POST request for SPDIF output multiplexer
  *
  */
 void handlePostSpdifOutJson( AsyncWebServerRequest* request, uint8_t* data )
@@ -3504,8 +3504,8 @@ void handlePostSpdifOutJson( AsyncWebServerRequest* request, uint8_t* data )
   spdifOutput.selectionRight = (uint32_t)strtoul( root["spdifright"].as<String>().c_str(), NULL, 16 );
 
   setSpdifOutputRouting();
-       
-  request->send(200, "text/plain", "");  
+
+  request->send(200, "text/plain", "");
 }
 
 //==============================================================================
@@ -3564,8 +3564,8 @@ void setupAddOnA( void )
       val[2] = (data >> 8 ) & 0xFF;
       val[3] = data & 0xFF;
       for( int ii = 0; ii < numInputs; ii++ )
-        ADAU1452_WRITE_BLOCK( inputSelector.analog[ii],  val, 4 ); 
-      
+        ADAU1452_WRITE_BLOCK( inputSelector.analog[ii],  val, 4 );
+
       data = 0x00000000;
       val[0] = (data >> 24 ) & 0xFF;
       val[1] = (data >> 16 ) & 0xFF;
@@ -3588,7 +3588,7 @@ void setupAddOnA( void )
       val[2] = (data >> 8 ) & 0xFF;
       val[3] = data & 0xFF;
       for( int ii = 0; ii < 8; ii++ )
-        ADAU1452_WRITE_BLOCK( inputSelector.analog[ii],  val, 4 ); 
+        ADAU1452_WRITE_BLOCK( inputSelector.analog[ii],  val, 4 );
 
       data = 0x00000000;
       val[0] = (data >> 24 ) & 0xFF;
@@ -3612,7 +3612,7 @@ void setupAddOnA( void )
       val[2] = (data >> 8 ) & 0xFF;
       val[3] = data & 0xFF;
       for( int ii = 0; ii < 8; ii++ )
-        ADAU1452_WRITE_BLOCK( inputSelector.spdif[ii],  val, 4 ); 
+        ADAU1452_WRITE_BLOCK( inputSelector.spdif[ii],  val, 4 );
 
       data = 0x00000004;
       val[0] = (data >> 24 ) & 0xFF;
@@ -3636,7 +3636,7 @@ void setupAddOnA( void )
       val[2] = (data >> 8 ) & 0xFF;
       val[3] = data & 0xFF;
       for( int ii = 0; ii < 8; ii++ )
-        ADAU1452_WRITE_BLOCK( inputSelector.spdif[ii],  val, 4 ); 
+        ADAU1452_WRITE_BLOCK( inputSelector.spdif[ii],  val, 4 );
 
       data = 0x00000004;
       val[0] = (data >> 24 ) & 0xFF;
@@ -3660,7 +3660,7 @@ void setupAddOnA( void )
       val[2] = (data >> 8 ) & 0xFF;
       val[3] = data & 0xFF;
       for( int ii = 0; ii < 8; ii++ )
-        ADAU1452_WRITE_BLOCK( inputSelector.spdif[ii],  val, 4 ); 
+        ADAU1452_WRITE_BLOCK( inputSelector.spdif[ii],  val, 4 );
 
       data = 0x00000004;
       val[0] = (data >> 24 ) & 0xFF;
@@ -3684,7 +3684,7 @@ void setupAddOnA( void )
       val[2] = (data >> 8 ) & 0xFF;
       val[3] = data & 0xFF;
       for( int ii = 0; ii < 8; ii++ )
-        ADAU1452_WRITE_BLOCK( inputSelector.spdif[ii],  val, 4 ); 
+        ADAU1452_WRITE_BLOCK( inputSelector.spdif[ii],  val, 4 );
 
       data = 0x00000004;
       val[0] = (data >> 24 ) & 0xFF;
@@ -3794,9 +3794,9 @@ void handleFileUpload( AsyncWebServerRequest* request, uint8_t* data, size_t len
 
   if( written != len )
     Serial.println( "[ERROR] Writing file" );
-              
+
   Serial.print( "." );
-    
+
   if( index + len >= total )
   {
     fileUpload.flush();
@@ -3842,7 +3842,7 @@ void handleIrUpload( AsyncWebServerRequest* request, uint8_t* data, size_t len, 
     for( int kk = 0; kk < len; kk++ )
       ((uint8_t*)(paramFir[currentFirUploadIdx].ir))[index + kk] = data[kk];
   }
-    
+
   if( index + len >= total )
   {
     softMuteDAC();
@@ -3856,7 +3856,7 @@ void handleIrUpload( AsyncWebServerRequest* request, uint8_t* data, size_t len, 
     Serial.println( "[OK]" );
     Serial.println( index + len );
   }
-  
+
 }
 
 //==============================================================================
@@ -3890,7 +3890,7 @@ void setFir( int idx )
 }
 
 //==============================================================================
-/*! Wifi connection task 
+/*! Wifi connection task
  *
  */
 void myWiFiTask(void *pvParameters)
@@ -3921,7 +3921,7 @@ void myWiFiTask(void *pvParameters)
 
   if( !WiFi.softAPConfig( ip, ip, subnet ) )
     Serial.println("AP Config Failed");
-  
+
   // Start server
   server.begin();
 
@@ -3931,16 +3931,16 @@ void myWiFiTask(void *pvParameters)
     {
       state = WiFi.status();
       if( state != WL_CONNECTED )
-      {  
+      {
         //if (state == WL_NO_SHIELD)
         if( firstConnectAttempt )
         {
           firstConnectAttempt = false;
           Serial.print( "Connecting to " );
           Serial.println( Settings.ssid.c_str() );
-          WiFi.begin(Settings.ssid.c_str(), Settings.password.c_str());  
+          WiFi.begin(Settings.ssid.c_str(), Settings.password.c_str());
           cntrAuthFailure++;
-        } 
+        }
         else if( state == WL_IDLE_STATUS )
         {
           Serial.println( "Idle" );
@@ -3950,22 +3950,22 @@ void myWiFiTask(void *pvParameters)
           Serial.println( "No SSID available" );
         }
         else if( state == WL_CONNECTION_LOST )
-        {  
+        {
           Serial.println("WiFi connection lost");
           WiFi.disconnect(true);
           cntrAuthFailure++;
-        } 
+        }
         // else if( state == WL_SCAN_COMPLETED )
         else if( state == WL_CONNECT_FAILED )
-        {  
+        {
           Serial.println("WiFi connection failed");
           WiFi.disconnect(true);
           cntrAuthFailure++;
-        } 
+        }
         else if( state == WL_DISCONNECTED )
-        {  
+        {
           if (!myWiFiFirstConnect)
-          {  
+          {
             myWiFiFirstConnect = true;
             Serial.println( "WiFi disconnected" );
           }
@@ -3981,11 +3981,11 @@ void myWiFiTask(void *pvParameters)
           cntrAuthFailure++;
         }
         vTaskDelay (250); // Check again in about 250ms
-      } 
+      }
       else // We have connection
-      { 
+      {
         if( myWiFiFirstConnect ) // Report only once
-        {  
+        {
           myWiFiFirstConnect = false;
           cntrAuthFailure = 0;
           Serial.println( "Connected" );
@@ -4015,13 +4015,13 @@ void enableVolPot( void )
       vpot = 0x00000000;
     else
       vpot = 0x00000001;
-    
+
     byte val[4];
     val[0] = (vpot >> 24 ) & 0xFF;
     val[1] = (vpot >> 16 ) & 0xFF;
     val[2] = (vpot >> 8 ) & 0xFF;
     val[3] =  vpot & 0xFF;
-    ADAU1452_WRITE_BLOCK( addrVPot, val, 4 );  
+    ADAU1452_WRITE_BLOCK( addrVPot, val, 4 );
   }
 }
 
@@ -4060,7 +4060,7 @@ void updateUI( void )
         break;
       }
     }
-    
+
   }
 }
 
@@ -4083,7 +4083,7 @@ void setup()
   pinMode( ROTARYENCODER_PINSW, INPUT_PULLUP );
   if( !digitalRead( ROTARYENCODER_PINSW ) )
     changeWifiState = true;
-  
+
   //----------------------------------------------------------------------------
   //--- Configure I2C
   //----------------------------------------------------------------------------
@@ -4116,7 +4116,7 @@ void setup()
   // wait until everything is stable
   // might be a bit to defensive
   delay( 2000 );
-  
+
   //----------------------------------------------------------------------------
   //--- Configure DAC
   //----------------------------------------------------------------------------
@@ -4137,7 +4137,7 @@ void setup()
     Serial.println("An Error has occurred while mounting SPIFFS");
     return;
   }
-  
+
   //--- check for old stuff (version == 1.x.x)
   String fileName = "/dspfw.hex";
   if( SPIFFS.exists( fileName ) )
@@ -4239,7 +4239,7 @@ void setup()
   server.on( "/fallback",  HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( 200, "text/html", fallback_html ); });
   server.on( "/dark.css",  HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( SPIFFS, "/dark.css", "text/css" ); });
   server.on( "/aurora.js", HTTP_GET, [](AsyncWebServerRequest *request )
-  { 
+  {
     //request->send( SPIFFS, "/aurora.js", "text/javascript" );
     AsyncWebServerResponse* response = request->beginResponse(SPIFFS, "/aurora.js.gz", "text/javascript");
     response->addHeader( "Content-Encoding", "gzip" );
@@ -4264,9 +4264,9 @@ void setup()
   server.on( "/allbyp",    HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( 200, "text/plain", handleGetAllBypJson() ); });
   server.on( "/allfc",     HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( 200, "text/plain", handleGetAllFcJson() ); });
   server.on( "/preset.param", HTTP_GET, [](AsyncWebServerRequest *request )
-  { 
+  {
     Serial.println( "/preset.param" );
-    request->send( SPIFFS, presetUsrparamFile[currentPreset], "application/octet-stream" ); 
+    request->send( SPIFFS, presetUsrparamFile[currentPreset], "application/octet-stream" );
   });
   server.on( "/spdifout",   HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetSpdifOutJson(request); });
   server.on( "/wificonfig", HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetWifiConfigJson(request); });
@@ -4341,19 +4341,19 @@ void setup()
     handlePostPasswordApJson( request, data );
   });
   server.on( "/upload", HTTP_POST, [](AsyncWebServerRequest *request){
-    request->send(200, "text/plain", "OK"); 
+    request->send(200, "text/plain", "OK");
     //AsyncWebServerResponse *response = request->beginResponse(200, "text/plain", "OK");
     //response->addHeader("Connection", "close");
     //request->send(response);
   }, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
   {
-    handleFileUpload( request, data, len, index, total ); 
+    handleFileUpload( request, data, len, index, total );
   });
   server.on( "/fir", HTTP_POST, [](AsyncWebServerRequest *request){
-    request->send(200, "text/plain", "OK"); 
+    request->send(200, "text/plain", "OK");
   }, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
   {
-    handleIrUpload( request, data, len, index, total ); 
+    handleIrUpload( request, data, len, index, total );
   });
   server.on( "/spdifout", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
   {
@@ -4363,7 +4363,7 @@ void setup()
   //--- webOTA stuff ---
   server.on( "/webota", HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( 200, "text/html", webota_html ); });
   server.on( "/update", HTTP_POST, [](AsyncWebServerRequest *request){
-    request->send(200, "text/plain", "OK"); 
+    request->send(200, "text/plain", "OK");
     //AsyncWebServerResponse *response = request->beginResponse(200, "text/plain", "OK");
     //response->addHeader("Connection", "close");
     //request->send(response);
@@ -4382,16 +4382,16 @@ void setup()
       if( Update.write( data, len ) != len )
         Update.printError(Serial);
     }
-              
+
     Serial.print( "." );
-    
+
     if( index + len >= total )
     {
       if( Update.end(true) )
         Serial.printf( "Update Success: %u\nPlease reboot\n", total );
-      else 
+      else
         Update.printError( Serial );
-        
+
       Serial.setDebugOutput( false );
     }
 
@@ -4418,7 +4418,7 @@ void setup()
   //----------------------------------------------------------------------------
   #if HAVE_ROTARYENCODER
   lastREsw = rotaryEncoder.getSwitchValue();
-  lastREval = rotaryEncoder.getRotationValue(); 
+  lastREval = rotaryEncoder.getRotationValue();
   #endif
 
   //----------------------------------------------------------------------------
@@ -4431,20 +4431,20 @@ void setup()
   resetDAC( false );
 
   updateUI();
- 
+
   Serial.println( "Ready" );
 }
 
 //==============================================================================
 /*! Arduino Main Loop
  *
- */ 
+ */
 void loop()
 {
   TIMERG0.wdt_wprotect=TIMG_WDT_WKEY_VALUE;
   TIMERG0.wdt_feed=1;
   TIMERG0.wdt_wprotect=0;
-  
+
 
   #if HAVE_ROTARYENCODER
   if( rotaryEncoder.getSwitchValue() != lastREsw )
@@ -4452,10 +4452,10 @@ void loop()
     editMode++;
     // we may have more then two modes in the future.
     if( editMode > 1 )
-      editMode = 0; 
+      editMode = 0;
     delay( 300 );
     lastREsw = rotaryEncoder.getSwitchValue();
-    lastREval = rotaryEncoder.getRotationValue(); 
+    lastREval = rotaryEncoder.getRotationValue();
     needUpdateUI = true;
   }
   else if( rotaryEncoder.getRotationValue() > lastREval + 1 )
@@ -4466,7 +4466,7 @@ void loop()
       if( masterVolume.val > 0.f )
         masterVolume.val = 0.f;
       setMasterVolume();
-      lastREval = rotaryEncoder.getRotationValue(); 
+      lastREval = rotaryEncoder.getRotationValue();
       needUpdateUI = true;
     }
     else if( editMode == 1 )
@@ -4481,10 +4481,10 @@ void loop()
       delay(500);
       initUserParams();
       uploadUserParams();
-      updateAddOn();   
+      updateAddOn();
       softUnmuteDAC();
 
-      lastREval = rotaryEncoder.getRotationValue(); 
+      lastREval = rotaryEncoder.getRotationValue();
       needUpdateUI = true;
     }
   }
@@ -4496,7 +4496,7 @@ void loop()
       if( masterVolume.val <= -80.f )
         masterVolume.val = -80.f;
       setMasterVolume();
-      lastREval = rotaryEncoder.getRotationValue(); 
+      lastREval = rotaryEncoder.getRotationValue();
       needUpdateUI = true;
     }
     else if( editMode == 1 )
@@ -4512,10 +4512,10 @@ void loop()
       delay(500);
       initUserParams();
       uploadUserParams();
-      updateAddOn();   
+      updateAddOn();
       softUnmuteDAC();
 
-      lastREval = rotaryEncoder.getRotationValue(); 
+      lastREval = rotaryEncoder.getRotationValue();
       needUpdateUI = true;
     }
   }
@@ -4530,7 +4530,7 @@ void loop()
       masterVolume.val += 0.5f;
       if( masterVolume.val > 0.f )
         masterVolume.val = 0.f;
-      setMasterVolume(); 
+      setMasterVolume();
       needUpdateUI = true;
     }
     else if( irResults.value == APPLE_REMOTE_DOWN )
@@ -4554,7 +4554,7 @@ void loop()
       delay(500);
       initUserParams();
       uploadUserParams();
-      updateAddOn();   
+      updateAddOn();
       softUnmuteDAC();
 
       needUpdateUI = true;
@@ -4571,7 +4571,7 @@ void loop()
       delay(500);
       initUserParams();
       uploadUserParams();
-      updateAddOn();   
+      updateAddOn();
       softUnmuteDAC();
 
       needUpdateUI = true;
@@ -4587,5 +4587,5 @@ void loop()
     updateUI();
     needUpdateUI = false;
   }
-   
+
 }

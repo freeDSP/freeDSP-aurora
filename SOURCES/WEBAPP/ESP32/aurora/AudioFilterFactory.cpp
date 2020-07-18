@@ -109,7 +109,7 @@ void AudioFilterFactory::makeHighPass( float a[], float b[], const int design, c
   {
   case kBessel6:
     Omega = 2.0 * pi * fc / fs;
-    a1 = pow( 2.7, -Omega ); 
+    a1 = pow( 2.7, -Omega );
     b[0] = a1;
     b[1] = -a1;
     b[2] = 0.0;
@@ -161,7 +161,7 @@ void AudioFilterFactory::makeHighPass( float a[], float b[], const int design, c
     wn  = 2.0 / T * tan( Omega/2.0 );
 
     //--- Stage 1
-    a1 = pow( 2.7, -Omega ); 
+    a1 = pow( 2.7, -Omega );
     b[0] = a1;
     b[1] = -a1;
     b[2] = 0.0;
@@ -195,7 +195,7 @@ void AudioFilterFactory::makeHighPass( float a[], float b[], const int design, c
     b[ 3 + 0 ] = zb[0] / za[0];
     b[ 3 + 1 ] = zb[1] / za[0];
     b[ 3 + 2 ] = zb[2] / za[0];
-    a[ 3 + 0 ] = 1.0; 
+    a[ 3 + 0 ] = 1.0;
     a[ 3 + 1 ] = (-1.0)*za[1] / za[0];
     a[ 3 + 2 ] = (-1.0)*za[2] / za[0];
     break;
@@ -272,7 +272,7 @@ void AudioFilterFactory::makeHighPass( float a[], float b[], const int design, c
     T2 = T*T;
     Omega = 2.0 * pi * fc / fs;
     wn  = 2.0 / T * tan( Omega/2.0 );
-    
+
     a0 = 1.0000;  // bi
     a1 = 1.4142;  // ai
     a2 = 1.0;
@@ -308,9 +308,9 @@ void AudioFilterFactory::makeHighPass( float a[], float b[], const int design, c
     T2 = T*T;
     Omega = 2.0 * pi * fc / fs;
     wn  = 2.0/T * tan( Omega/2.0 );
-    
+
     //--- Stage 1
-    a1 = pow( 2.7, -Omega ); 
+    a1 = pow( 2.7, -Omega );
     b[0] = a1;
     b[1] = -a1;
     b[2] = 0.0;
@@ -354,7 +354,7 @@ void AudioFilterFactory::makeHighPass( float a[], float b[], const int design, c
     T2 = T*T;
     Omega = 2.0 * pi * fc / fs;
     wn  = 2.0/T * tan( Omega/2.0 );
-    
+
     //--- Stage 1
     a0 = 1.0000; // bi
     a1 = 1.8478; // ai
@@ -415,7 +415,7 @@ void AudioFilterFactory::makeHighPass( float a[], float b[], const int design, c
     a[ 3 + 1 ] = (-1.0)*za[1] / za[0];
     a[ 3 + 2 ] = (-1.0)*za[2] / za[0];
     break;
-  
+
   case kLinkwitzRiley12:
     w0 = 2.0 * pi * fc / fs;
     alpha = sin(w0) / (2.0 * 0.5);
@@ -592,7 +592,7 @@ void AudioFilterFactory::makeHighPass( float a[], float b[], const int design, c
     a[ 9 + 1 ] = a1;
     a[ 9 + 2 ] = a2;
     break;
-    
+
   };
 
 }
@@ -613,7 +613,7 @@ void AudioFilterFactory::makeLowPass( float a[], float b[], const int design, co
   {
   case kBessel6:
     Omega = 2.0 * pi * fc / fs;
-    a1 = pow( 2.7, -Omega ); 
+    a1 = pow( 2.7, -Omega );
     b[0] = 1.0 - a1;
     b[1] = 0.0;
     b[2] = 0.0;
@@ -627,7 +627,7 @@ void AudioFilterFactory::makeLowPass( float a[], float b[], const int design, co
     T = 1.0/fs;
     T2 = T*T;
     wn  = 2.0/T * tan( Omega/2.0 );
-    
+
     sa[0] = 0.6180 / (wn*wn);  // bi
     sa[1] = 1.3617 / wn;       // ai
     sa[2] = 1.0;
@@ -658,7 +658,7 @@ void AudioFilterFactory::makeLowPass( float a[], float b[], const int design, co
     wn  = 2.0/T * tan( Omega/2.0 );
 
     //--- Stage 1
-    a1 = pow( 2.7, -Omega ); 
+    a1 = pow( 2.7, -Omega );
     b[0] = 1.0 - a1;
     b[1] = 0.0;
     b[2] = 0.0;
@@ -742,13 +742,13 @@ void AudioFilterFactory::makeLowPass( float a[], float b[], const int design, co
     a[ 3 + 1 ] = (-1.0)*za[1] / za[0];
     a[ 3 + 2 ] = (-1.0)*za[2] / za[0];
     break;
-  
+
   case kButterworth12:
     Omega = 2.0 * pi * fc / fs;
     T = 1.0/fs;
     T2 = T*T;
     wn  = 2.0/T * tan( Omega/2.0 );
-    
+
     sa[0] = 1.0000 / (wn*wn);  // bi
     sa[1] = 1.4142 / wn;       // ai
     sa[2] = 1.0;
@@ -777,9 +777,9 @@ void AudioFilterFactory::makeLowPass( float a[], float b[], const int design, co
     T2 = T*T;
     Omega = 2.0 * pi * fc / fs;
     wn  = 2.0/T * tan( Omega/2.0 );
-    
+
     //--- Stage 1
-    a1 = pow( 2.7, -Omega ); 
+    a1 = pow( 2.7, -Omega );
     b[0] = 1.0 - a1;
     b[1] = 0.0;
     b[2] = 0.0;
