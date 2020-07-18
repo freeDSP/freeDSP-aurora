@@ -2005,7 +2005,7 @@ void handlePostInputJson( AsyncWebServerRequest* request, uint8_t* data )
   {
     Serial.print( "[ERROR] handlePostHpJson(): Deserialization failed. " );
     Serial.println( err.c_str() );
-    request->send( 404, "text/plain", "" );
+    request->send( 400, "text/plain", err.c_str() );
     softUnmuteDAC();
     return;
   }
@@ -2066,7 +2066,7 @@ void handlePostHpJson( AsyncWebServerRequest* request, uint8_t* data )
   {
     Serial.print( "[ERROR] handlePostHpJson(): Deserialization failed. " );
     Serial.println( err.c_str() );
-    request->send( 404, "text/plain", "" );
+    request->send( 400, "text/plain", err.c_str() );
     softUnmuteDAC();
     return;
   }
@@ -2171,7 +2171,7 @@ void handlePostLshelvJson( AsyncWebServerRequest* request, uint8_t* data )
   {
     Serial.print( "[ERROR] handlePostHpJson(): Deserialization failed. " );
     Serial.println( err.c_str() );
-    request->send( 404, "text/plain", "" );
+    request->send( 400, "text/plain", err.c_str() );
     softUnmuteDAC();
     return;
   }
@@ -2279,7 +2279,7 @@ void handlePostPeqJson( AsyncWebServerRequest* request, uint8_t* data )
   {
     Serial.print( "[ERROR] handlePostPeqJson(): Deserialization failed. " );
     Serial.println( err.c_str() );
-    request->send( 404, "text/plain", "" );
+    request->send( 400, "text/plain", err.c_str() );
     delay(250);
     softUnmuteDAC();
     return;
@@ -2387,7 +2387,7 @@ void handlePostHshelvJson( AsyncWebServerRequest* request, uint8_t* data )
   {
     Serial.print( "[ERROR] handlePostHpJson(): Deserialization failed. " );
     Serial.println( err.c_str() );
-    request->send( 404, "text/plain", "" );
+    request->send( 400, "text/plain", err.c_str() );
     softUnmuteDAC();
     return;
   }
@@ -2495,7 +2495,7 @@ void handlePostLpJson( AsyncWebServerRequest* request, uint8_t* data )
   {
     Serial.print( "[ERROR] handlePostLpJson(): Deserialization failed. " );
     Serial.println( err.c_str() );
-    request->send( 404, "text/plain", "" );
+    request->send( 400, "text/plain", err.c_str() );
     softUnmuteDAC();
     return;
   }
@@ -2605,7 +2605,7 @@ void handlePostPhaseJson( AsyncWebServerRequest* request, uint8_t* data )
   {
     Serial.print( "[ERROR] handlePostPhaseJson(): Deserialization failed. " );
     Serial.println( err.c_str() );
-    request->send( 404, "text/plain", "" );
+    request->send( 400, "text/plain", err.c_str() );
     softUnmuteDAC();
     return;
   }
@@ -2724,7 +2724,7 @@ void handlePostDelayJson( AsyncWebServerRequest* request, uint8_t* data )
   {
     Serial.print( "[ERROR] handlePostDelayJson(): Deserialization failed. " );
     Serial.println( err.c_str() );
-    request->send( 404, "text/plain", "" );
+    request->send( 400, "text/plain", err.c_str() );
     softUnmuteDAC();
     return;
   }
@@ -2791,7 +2791,7 @@ void handlePostGainJson( AsyncWebServerRequest* request, uint8_t* data )
   {
     Serial.print( "[ERROR] handlePostGainJson(): Deserialization failed. " );
     Serial.println( err.c_str() );
-    request->send( 404, "text/plain", "" );
+    request->send( 400, "text/plain", err.c_str() );
     softUnmuteDAC();
     return;
   }
@@ -2859,7 +2859,7 @@ void handlePostXoJson( AsyncWebServerRequest* request, uint8_t* data )
   {
     Serial.print( "[ERROR] handlePostXoJson(): Deserialization failed. " );
     Serial.println( err.c_str() );
-    request->send( 404, "text/plain", "" );
+    request->send( 400, "text/plain", err.c_str() );
     softUnmuteDAC();
     return;
   }
@@ -3033,7 +3033,7 @@ void handlePostFirJson( AsyncWebServerRequest* request, uint8_t* data )
   {
     Serial.print( "[ERROR] handlePostFirJson(): Deserialization failed. " );
     Serial.println( err.c_str() );
-    request->send( 404, "text/plain", "" );
+    request->send( 400, "text/plain", err.c_str() );
     softUnmuteDAC();
     return;
   }
@@ -3068,7 +3068,7 @@ void handlePostMasterVolumeJson( AsyncWebServerRequest* request, uint8_t* data )
   {
     Serial.print( "[ERROR] handlePostMasterVolumeJson(): Deserialization failed. " );
     Serial.println( err.c_str() );
-    request->send( 404, "text/plain", "" );
+    request->send( 400, "text/plain", err.c_str() );
     return;
   }
 
@@ -3130,7 +3130,7 @@ void handlePostPresetJson( AsyncWebServerRequest* request, uint8_t* data )
   {
     Serial.print( "[ERROR] handlePostPresetJson(): Deserialization failed. " );
     Serial.println( err.c_str() );
-    request->send( 404, "text/plain", "" );
+    request->send( 400, "text/plain", err.c_str() );
     softUnmuteDAC();
     return;
   }
@@ -3166,7 +3166,7 @@ void handlePostConfigJson( AsyncWebServerRequest* request, uint8_t* data )
   {
     Serial.print( "[ERROR] handlePostConfigJson(): Deserialization failed. " );
     Serial.println( err.c_str() );
-    request->send( 404, "text/plain", "" );
+    request->send( 400, "text/plain", err.c_str() );
     return;
   }
 
@@ -3386,7 +3386,7 @@ void handlePostAddonConfigJson( AsyncWebServerRequest* request, uint8_t* data )
   {
     Serial.print( "[ERROR] handlePostAddonConfig(): Deserialization failed. " );
     Serial.println( err.c_str() );
-    request->send( 404, "text/plain", "" );
+    request->send( 400, "text/plain", err.c_str() );
     softUnmuteDAC();
     return;
   }
@@ -3431,7 +3431,7 @@ void handlePostWifiConfigJson( AsyncWebServerRequest* request, uint8_t* data )
   {
     Serial.print( "[ERROR] handlePostWifiConfigJson(): Deserialization failed. " );
     Serial.println( err.c_str() );
-    request->send( 404, "text/plain", "" );
+    request->send( 400, "text/plain", err.c_str() );
     return;
   }
 
@@ -3463,7 +3463,7 @@ void handlePostPasswordApJson( AsyncWebServerRequest* request, uint8_t* data )
   {
     Serial.print( "[ERROR] handlePostPasswordApJson(): Deserialization failed. " );
     Serial.println( err.c_str() );
-    request->send( 404, "text/plain", "" );
+    request->send( 400, "text/plain", err.c_str() );
     return;
   }
 
@@ -3491,7 +3491,7 @@ void handlePostSpdifOutJson( AsyncWebServerRequest* request, uint8_t* data )
   {
     Serial.print( "[ERROR] handlePostConfigJson(): Deserialization failed. " );
     Serial.println( err.c_str() );
-    request->send( 404, "text/plain", "" );
+    request->send( 400, "text/plain", err.c_str() );
     return;
   }
 
