@@ -12,7 +12,7 @@ class OLED128x64_SH1106
 {
 public:
   void begin( void );
-  
+
   void clearBuffer( void );
   void sendBuffer(void );
 
@@ -21,7 +21,7 @@ public:
   void drawSwitchingPreset( void );
 
 private:
-  
+
 };
 
 #endif
