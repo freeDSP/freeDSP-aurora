@@ -1945,16 +1945,7 @@ void handleGetAllInputsJson( AsyncWebServerRequest* request )
     }
     jsonResponse[key[nn]] = str;
   }
-/*
-  Serial.println(jsonResponse["in0"].as<String>());
-  Serial.println(jsonResponse["in1"].as<String>());
-  Serial.println(jsonResponse["in2"].as<String>());
-  Serial.println(jsonResponse["in3"].as<String>());
-  Serial.println(jsonResponse["in4"].as<String>());
-  Serial.println(jsonResponse["in5"].as<String>());
-  Serial.println(jsonResponse["in6"].as<String>());
-  Serial.println(jsonResponse["in7"].as<String>());
-*/
+
   response->setLength();
   request->send(response);
 }
@@ -2021,10 +2012,6 @@ void handlePostInputJson( AsyncWebServerRequest* request, uint8_t* data )
   }
 
   JsonObject root = jsonDoc.as<JsonObject>();
-  //Serial.println( root["idx"].as<String>() );
-  //Serial.println( root["chn"].as<String>() );
-  //Serial.println( root["port"].as<String>() );
-  //Serial.println( root["sel"].as<String>() );
 
   int idx = root["idx"].as<String>().toInt();
   paramInputs[idx].sel = (uint32_t)strtoul( root["sel"].as<String>().c_str(), NULL, 16 );
@@ -4252,7 +4239,13 @@ void setup()
     server.on( "/",          HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( 200, "text/html", fallback_html ); });
   server.on( "/fallback",  HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( 200, "text/html", fallback_html ); });
   server.on( "/dark.css",  HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( SPIFFS, "/dark.css", "text/css" ); });
-  server.on( "/aurora.js", HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( SPIFFS, "/aurora.js", "text/javascript" ); });
+  server.on( "/aurora.js", HTTP_GET, [](AsyncWebServerRequest *request )
+  { 
+    //request->send( SPIFFS, "/aurora.js", "text/javascript" );
+    AsyncWebServerResponse* response = request->beginResponse(SPIFFS, "/aurora.js.gz", "text/javascript");
+    response->addHeader( "Content-Encoding", "gzip" );
+    request->send( response );
+  });
   server.on( "/input",     HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetInputJson(request); });
   server.on( "/hp",        HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetHpJson(request); });
   server.on( "/lshelv",    HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetLshelvJson(request); });
