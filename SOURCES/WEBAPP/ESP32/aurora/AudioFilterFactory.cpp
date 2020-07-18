@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <cmath>
 
 #include "AudioFilterFactory.h"
@@ -107,6 +108,10 @@ void AudioFilterFactory::makeHighPass( float a[], float b[], const int design, c
 
   switch( filterDesign )
   {
+  case kNumFilterDesigns:
+    /* this shouldn't occur */
+    assert(false);
+    break;
   case kBessel6:
     Omega = 2.0 * pi * fc / fs;
     a1 = pow( 2.7, -Omega ); 
@@ -611,6 +616,10 @@ void AudioFilterFactory::makeLowPass( float a[], float b[], const int design, co
 
   switch( filterDesign )
   {
+  case kNumFilterDesigns:
+    /* this shouldn't occur */
+    assert(false);
+    break;
   case kBessel6:
     Omega = 2.0 * pi * fc / fs;
     a1 = pow( 2.7, -Omega ); 
