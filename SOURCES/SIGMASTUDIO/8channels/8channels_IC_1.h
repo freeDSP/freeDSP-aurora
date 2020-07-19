@@ -1,7 +1,7 @@
 /*
  * File:           Z:\Documents\freeDSP\freeDSP-aurora\SOURCES\SIGMASTUDIO\8channels\8channels_IC_1.h
  *
- * Created:        Wednesday, July 8, 2020 10:09:36 PM
+ * Created:        Saturday, July 18, 2020 10:11:10 PM
  * Description:    8channels:IC 1 program data.
  *
  * This software is distributed in the hope that it will be useful,

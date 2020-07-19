@@ -1,7 +1,7 @@
 /*
  * File:           Z:\Documents\freeDSP\freeDSP-aurora\SOURCES\SIGMASTUDIO\HomeCinema71\HomeCinema71_IC_1_REG.h
  *
- * Created:        Monday, July 13, 2020 10:50:35 AM
+ * Created:        Saturday, July 18, 2020 9:57:03 PM
  * Description:    HomeCinema71:IC 1 control register definitions.
  *
  * This software is distributed in the hope that it will be useful,
@@ -2043,7 +2043,7 @@
 /* SPDIF_TX_EN  - Registers (IC 1) */
 #define REG_SPDIF_TX_EN_IC_1_ADDR                 0xF690
 #define REG_SPDIF_TX_EN_IC_1_BYTE                 2
-#define REG_SPDIF_TX_EN_IC_1_VALUE                0x0
+#define REG_SPDIF_TX_EN_IC_1_VALUE                0x1
 
 /* SPDIF_TX_CTRL  - Registers (IC 1) */
 #define REG_SPDIF_TX_CTRL_IC_1_ADDR               0xF691
@@ -6959,7 +6959,7 @@
 #define R403_SPDIF_RX_PB_RIGHT_11_SPDIF_RX_PB_RIGHT_IC_1_SHIFT 0
 
 /* SPDIF_TX_EN (IC 1) */
-#define R404_SPDIF_TX_EN_TXEN_IC_1                0x0    /* 0b	[0] */
+#define R404_SPDIF_TX_EN_TXEN_IC_1                0x1    /* 1b	[0] */
 #define R404_SPDIF_TX_EN_TXEN_IC_1_MASK           0x1
 #define R404_SPDIF_TX_EN_TXEN_IC_1_SHIFT          0
 

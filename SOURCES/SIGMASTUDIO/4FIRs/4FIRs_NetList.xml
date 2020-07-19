@@ -18,412 +18,559 @@
     <IC name=" IC 1 " type="ADAU1452">
         <Schematic>
             <Algorithm name="ICInputADAU145X1" friendlyname="ADAU145x Inputs 0-15" cell="Input ADC ">
-                <Link pin="O_C38_A0_P1_out" dir="out" link="Link55" />
-                <Link pin="O_C38_A0_P2_out" dir="out" link="Link64" />
-                <Link pin="O_C38_A0_P3_out" dir="out" link="Link76" />
-                <Link pin="O_C38_A0_P4_out" dir="out" link="Link57" />
-                <Link pin="O_C38_A0_P5_out" dir="out" link="Link68" />
-                <Link pin="O_C38_A0_P6_out" dir="out" link="Link50" />
-                <Link pin="O_C38_A0_P7_out" dir="out" link="Link72" />
-                <Link pin="O_C38_A0_P8_out" dir="out" link="Link65" />
+                <Link pin="O_C38_A0_P1_out" dir="out" link="Link77" />
+                <Link pin="O_C38_A0_P2_out" dir="out" link="Link82" />
+                <Link pin="O_C38_A0_P3_out" dir="out" link="Link58" />
+                <Link pin="O_C38_A0_P4_out" dir="out" link="Link75" />
+                <Link pin="O_C38_A0_P5_out" dir="out" link="Link65" />
+                <Link pin="O_C38_A0_P6_out" dir="out" link="Link76" />
+                <Link pin="O_C38_A0_P7_out" dir="out" link="Link81" />
+                <Link pin="O_C38_A0_P8_out" dir="out" link="Link78" />
             </Algorithm>
             <Algorithm name="ICInput3ADAU145X1" friendlyname="ADAU145x Inputs 32-39" cell="Input ESP32 ">
-                <Link pin="O_C80_A0_P1_out" dir="out" link="Link58" />
-                <Link pin="O_C80_A0_P2_out" dir="out" link="Link67" />
-                <Link pin="O_C80_A0_P3_out" dir="out" link="Link69" />
-                <Link pin="O_C80_A0_P4_out" dir="out" link="Link49" />
-                <Link pin="O_C80_A0_P5_out" dir="out" link="Link63" />
-                <Link pin="O_C80_A0_P6_out" dir="out" link="Link56" />
-                <Link pin="O_C80_A0_P7_out" dir="out" link="Link71" />
-                <Link pin="O_C80_A0_P8_out" dir="out" link="Link77" />
+                <Link pin="O_C80_A0_P1_out" dir="out" link="Link83" />
+                <Link pin="O_C80_A0_P2_out" dir="out" link="Link69" />
+                <Link pin="O_C80_A0_P3_out" dir="out" link="Link85" />
+                <Link pin="O_C80_A0_P4_out" dir="out" link="Link61" />
+                <Link pin="O_C80_A0_P5_out" dir="out" link="Link89" />
+                <Link pin="O_C80_A0_P6_out" dir="out" link="Link86" />
+                <Link pin="O_C80_A0_P7_out" dir="out" link="Link92" />
+                <Link pin="O_C80_A0_P8_out" dir="out" link="Link84" />
             </Algorithm>
             <Algorithm name="ICInput4ADAU145X1" friendlyname="ADAU145x Inputs 40-47" cell="Input Expansion ">
-                <Link pin="O_C89_A0_P1_out" dir="out" link="Link74" />
-                <Link pin="O_C89_A0_P2_out" dir="out" link="Link52" />
-                <Link pin="O_C89_A0_P3_out" dir="out" link="Link73" />
-                <Link pin="O_C89_A0_P4_out" dir="out" link="Link81" />
-                <Link pin="O_C89_A0_P5_out" dir="out" link="Link53" />
+                <Link pin="O_C89_A0_P1_out" dir="out" link="Link71" />
+                <Link pin="O_C89_A0_P2_out" dir="out" link="Link93" />
+                <Link pin="O_C89_A0_P3_out" dir="out" link="Link90" />
+                <Link pin="O_C89_A0_P4_out" dir="out" link="Link68" />
+                <Link pin="O_C89_A0_P5_out" dir="out" link="Link67" />
                 <Link pin="O_C89_A0_P6_out" dir="out" link="Link60" />
-                <Link pin="O_C89_A0_P7_out" dir="out" link="Link62" />
-                <Link pin="O_C89_A0_P8_out" dir="out" link="Link48" />
+                <Link pin="O_C89_A0_P7_out" dir="out" link="Link95" />
+                <Link pin="O_C89_A0_P8_out" dir="out" link="Link87" />
             </Algorithm>
             <Algorithm name="ICInput2ADAU145X1" friendlyname="ADAU145x Inputs 16-31" cell="Input UAC2 ">
-                <Link pin="O_C507_A0_P1_out" dir="out" link="Link79" />
-                <Link pin="O_C507_A0_P2_out" dir="out" link="Link59" />
-                <Link pin="O_C507_A0_P3_out" dir="out" link="Link54" />
-                <Link pin="O_C507_A0_P4_out" dir="out" link="Link70" />
-                <Link pin="O_C507_A0_P5_out" dir="out" link="Link75" />
-                <Link pin="O_C507_A0_P6_out" dir="out" link="Link78" />
-                <Link pin="O_C507_A0_P7_out" dir="out" link="Link80" />
-                <Link pin="O_C507_A0_P8_out" dir="out" link="Link66" />
+                <Link pin="O_C507_A0_P1_out" dir="out" link="Link88" />
+                <Link pin="O_C507_A0_P2_out" dir="out" link="Link73" />
+                <Link pin="O_C507_A0_P3_out" dir="out" link="Link72" />
+                <Link pin="O_C507_A0_P4_out" dir="out" link="Link74" />
+                <Link pin="O_C507_A0_P5_out" dir="out" link="Link62" />
+                <Link pin="O_C507_A0_P6_out" dir="out" link="Link64" />
+                <Link pin="O_C507_A0_P7_out" dir="out" link="Link63" />
+                <Link pin="O_C507_A0_P8_out" dir="out" link="Link80" />
             </Algorithm>
             <Algorithm name="AsrcInSigma300Alg1" friendlyname="From ASRC" cell="AsrcIn1 ">
-                <Link pin="O_C5862_A0_P1_out" dir="out" link="Link61" />
-                <Link pin="O_C5862_A0_P2_out" dir="out" link="Link51" />
+                <Link pin="O_C5862_A0_P1_out" dir="out" link="Link91" />
+                <Link pin="O_C5862_A0_P2_out" dir="out" link="Link70" />
             </Algorithm>
             <Algorithm name="RegReadAlg300ADCIn1" friendlyname="Auxiliary ADC Input" cell="ADC In1 ">
-                <Link pin="O_C18_A0_P1_out" dir="out" link="Link26" />
+                <Link pin="O_C18_A0_P1_out" dir="out" link="Link39" />
             </Algorithm>
             <Algorithm name="DCInpAlg145X1" friendlyname="DC-Input" cell="DC1 ">
-                <Link pin="O_C664_A0_P1_out" dir="out" link="Link33" />
+                <Link pin="O_C664_A0_P1_out" dir="out" link="Link43" />
+            </Algorithm>
+            <Algorithm name="DCInpAlg145X2" friendlyname="DC-Input" cell="DC1_2 ">
+                <Link pin="O_C1224_A0_P1_out" dir="out" link="Link59" />
             </Algorithm>
             <Algorithm name="BitShiftADAU145XAlg1" friendlyname="BitShift" cell="Shift1 ">
-                <Link pin="I_C489_A0_P1_in" dir="in" link="Link26" />
-                <Link pin="O_C489_A0_P2_out" dir="out" link="Link34" />
+                <Link pin="I_C489_A0_P1_in" dir="in" link="Link39" />
+                <Link pin="O_C489_A0_P2_out" dir="out" link="Link44" />
             </Algorithm>
             <Algorithm name="monomuxSigma300ns49" friendlyname="Mono" cell="BypassVolPoti ">
-                <Link pin="I_C674_A0_P2_in" dir="in" link="Link34" />
-                <Link pin="I_C674_A0_P3_in" dir="in" link="Link33" />
-                <Link pin="O_C674_A0_P1_out" dir="out" link="Link35" />
+                <Link pin="I_C674_A0_P2_in" dir="in" link="Link44" />
+                <Link pin="I_C674_A0_P3_in" dir="in" link="Link43" />
+                <Link pin="O_C674_A0_P1_out" dir="out" link="Link45" />
             </Algorithm>
             <Algorithm name="ICOutADAU145X5" friendlyname="Output" cell="Output_UAC1 ">
-                <Link pin="I_C23_A0_P1_in" dir="in" link="Link55" />
+                <Link pin="I_C23_A0_P1_in" dir="in" link="Link77" />
             </Algorithm>
             <Algorithm name="ICOutADAU145X6" friendlyname="Output" cell="Output_UAC2 ">
-                <Link pin="I_C25_A0_P1_in" dir="in" link="Link64" />
+                <Link pin="I_C25_A0_P1_in" dir="in" link="Link82" />
             </Algorithm>
             <Algorithm name="ICOutADAU145X7" friendlyname="Output" cell="Output_UAC3 ">
-                <Link pin="I_C31_A0_P1_in" dir="in" link="Link76" />
+                <Link pin="I_C31_A0_P1_in" dir="in" link="Link58" />
             </Algorithm>
             <Algorithm name="ICOutADAU145X8" friendlyname="Output" cell="Output_UAC4 ">
-                <Link pin="I_C41_A0_P1_in" dir="in" link="Link57" />
+                <Link pin="I_C41_A0_P1_in" dir="in" link="Link75" />
             </Algorithm>
             <Algorithm name="ICOutADAU145X9" friendlyname="Output" cell="Output_UAC5 ">
-                <Link pin="I_C154_A0_P1_in" dir="in" link="Link68" />
+                <Link pin="I_C154_A0_P1_in" dir="in" link="Link65" />
             </Algorithm>
             <Algorithm name="ICOutADAU145X10" friendlyname="Output" cell="Output_UAC6 ">
-                <Link pin="I_C162_A0_P1_in" dir="in" link="Link50" />
+                <Link pin="I_C162_A0_P1_in" dir="in" link="Link76" />
             </Algorithm>
             <Algorithm name="ICOutADAU145X11" friendlyname="Output" cell="Output_UAC7 ">
-                <Link pin="I_C169_A0_P1_in" dir="in" link="Link72" />
+                <Link pin="I_C169_A0_P1_in" dir="in" link="Link81" />
             </Algorithm>
             <Algorithm name="ICOutADAU145X12" friendlyname="Output" cell="Output_UAC8 ">
-                <Link pin="I_C178_A0_P1_in" dir="in" link="Link65" />
+                <Link pin="I_C178_A0_P1_in" dir="in" link="Link78" />
             </Algorithm>
             <Algorithm name="monomuxSigma300ns22" friendlyname="Mono" cell="InputSelect_4.Nx1-1_Exp ">
-                <Link pin="I_C4135_A0_P2_in" dir="in" link="Link74" />
-                <Link pin="I_C4135_A0_P3_in" dir="in" link="Link52" />
-                <Link pin="I_C4135_A0_P4_in" dir="in" link="Link73" />
-                <Link pin="I_C4135_A0_P5_in" dir="in" link="Link81" />
-                <Link pin="I_C4135_A0_P6_in" dir="in" link="Link53" />
+                <Link pin="I_C4135_A0_P2_in" dir="in" link="Link71" />
+                <Link pin="I_C4135_A0_P3_in" dir="in" link="Link93" />
+                <Link pin="I_C4135_A0_P4_in" dir="in" link="Link90" />
+                <Link pin="I_C4135_A0_P5_in" dir="in" link="Link68" />
+                <Link pin="I_C4135_A0_P6_in" dir="in" link="Link67" />
                 <Link pin="I_C4135_A0_P7_in" dir="in" link="Link60" />
-                <Link pin="I_C4135_A0_P8_in" dir="in" link="Link62" />
-                <Link pin="I_C4135_A0_P9_in" dir="in" link="Link48" />
-                <Link pin="O_C4135_A0_P1_out" dir="out" link="Link4" />
+                <Link pin="I_C4135_A0_P8_in" dir="in" link="Link95" />
+                <Link pin="I_C4135_A0_P9_in" dir="in" link="Link87" />
+                <Link pin="O_C4135_A0_P1_out" dir="out" link="Link18" />
             </Algorithm>
             <Algorithm name="monomuxSigma300ns21" friendlyname="Mono" cell="InputSelect_4.Nx1-1_ESP32 ">
-                <Link pin="I_C4093_A0_P2_in" dir="in" link="Link58" />
-                <Link pin="I_C4093_A0_P3_in" dir="in" link="Link67" />
-                <Link pin="I_C4093_A0_P4_in" dir="in" link="Link69" />
-                <Link pin="I_C4093_A0_P5_in" dir="in" link="Link49" />
-                <Link pin="I_C4093_A0_P6_in" dir="in" link="Link63" />
-                <Link pin="I_C4093_A0_P7_in" dir="in" link="Link56" />
-                <Link pin="I_C4093_A0_P8_in" dir="in" link="Link71" />
-                <Link pin="I_C4093_A0_P9_in" dir="in" link="Link77" />
-                <Link pin="O_C4093_A0_P1_out" dir="out" link="Link3" />
+                <Link pin="I_C4093_A0_P2_in" dir="in" link="Link83" />
+                <Link pin="I_C4093_A0_P3_in" dir="in" link="Link69" />
+                <Link pin="I_C4093_A0_P4_in" dir="in" link="Link85" />
+                <Link pin="I_C4093_A0_P5_in" dir="in" link="Link61" />
+                <Link pin="I_C4093_A0_P6_in" dir="in" link="Link89" />
+                <Link pin="I_C4093_A0_P7_in" dir="in" link="Link86" />
+                <Link pin="I_C4093_A0_P8_in" dir="in" link="Link92" />
+                <Link pin="I_C4093_A0_P9_in" dir="in" link="Link84" />
+                <Link pin="O_C4093_A0_P1_out" dir="out" link="Link17" />
             </Algorithm>
             <Algorithm name="monomuxSigma300ns19" friendlyname="Mono" cell="InputSelect_4.Nx1-1_Analog ">
-                <Link pin="I_C4009_A0_P2_in" dir="in" link="Link55" />
-                <Link pin="I_C4009_A0_P3_in" dir="in" link="Link64" />
-                <Link pin="I_C4009_A0_P4_in" dir="in" link="Link76" />
-                <Link pin="I_C4009_A0_P5_in" dir="in" link="Link57" />
-                <Link pin="I_C4009_A0_P6_in" dir="in" link="Link68" />
-                <Link pin="I_C4009_A0_P7_in" dir="in" link="Link50" />
-                <Link pin="I_C4009_A0_P8_in" dir="in" link="Link72" />
-                <Link pin="I_C4009_A0_P9_in" dir="in" link="Link65" />
-                <Link pin="O_C4009_A0_P1_out" dir="out" link="Link0" />
+                <Link pin="I_C4009_A0_P2_in" dir="in" link="Link77" />
+                <Link pin="I_C4009_A0_P3_in" dir="in" link="Link82" />
+                <Link pin="I_C4009_A0_P4_in" dir="in" link="Link58" />
+                <Link pin="I_C4009_A0_P5_in" dir="in" link="Link75" />
+                <Link pin="I_C4009_A0_P6_in" dir="in" link="Link65" />
+                <Link pin="I_C4009_A0_P7_in" dir="in" link="Link76" />
+                <Link pin="I_C4009_A0_P8_in" dir="in" link="Link81" />
+                <Link pin="I_C4009_A0_P9_in" dir="in" link="Link78" />
+                <Link pin="O_C4009_A0_P1_out" dir="out" link="Link14" />
             </Algorithm>
             <Algorithm name="monomuxSigma300ns23" friendlyname="Mono" cell="InputSelect_4.Nx1-1_SPDIF ">
-                <Link pin="I_C4153_A0_P2_in" dir="in" link="Link61" />
-                <Link pin="I_C4153_A0_P3_in" dir="in" link="Link51" />
-                <Link pin="O_C4153_A0_P1_out" dir="out" link="Link2" />
+                <Link pin="I_C4153_A0_P2_in" dir="in" link="Link91" />
+                <Link pin="I_C4153_A0_P3_in" dir="in" link="Link70" />
+                <Link pin="O_C4153_A0_P1_out" dir="out" link="Link16" />
             </Algorithm>
             <Algorithm name="monomuxSigma300ns20" friendlyname="Mono" cell="InputSelect_4.Nx1-1_UAC ">
-                <Link pin="I_C4051_A0_P2_in" dir="in" link="Link79" />
-                <Link pin="I_C4051_A0_P3_in" dir="in" link="Link59" />
-                <Link pin="I_C4051_A0_P4_in" dir="in" link="Link54" />
-                <Link pin="I_C4051_A0_P5_in" dir="in" link="Link70" />
-                <Link pin="I_C4051_A0_P6_in" dir="in" link="Link75" />
-                <Link pin="I_C4051_A0_P7_in" dir="in" link="Link78" />
-                <Link pin="I_C4051_A0_P8_in" dir="in" link="Link80" />
-                <Link pin="I_C4051_A0_P9_in" dir="in" link="Link66" />
-                <Link pin="O_C4051_A0_P1_out" dir="out" link="Link1" />
+                <Link pin="I_C4051_A0_P2_in" dir="in" link="Link88" />
+                <Link pin="I_C4051_A0_P3_in" dir="in" link="Link73" />
+                <Link pin="I_C4051_A0_P4_in" dir="in" link="Link72" />
+                <Link pin="I_C4051_A0_P5_in" dir="in" link="Link74" />
+                <Link pin="I_C4051_A0_P6_in" dir="in" link="Link62" />
+                <Link pin="I_C4051_A0_P7_in" dir="in" link="Link64" />
+                <Link pin="I_C4051_A0_P8_in" dir="in" link="Link63" />
+                <Link pin="I_C4051_A0_P9_in" dir="in" link="Link80" />
+                <Link pin="O_C4051_A0_P1_out" dir="out" link="Link15" />
             </Algorithm>
             <Algorithm name="monomuxSigma300ns15" friendlyname="Mono" cell="InputSelect_3.Nx1-1_ESP32 ">
-                <Link pin="I_C3803_A0_P2_in" dir="in" link="Link58" />
-                <Link pin="I_C3803_A0_P3_in" dir="in" link="Link67" />
-                <Link pin="I_C3803_A0_P4_in" dir="in" link="Link69" />
-                <Link pin="I_C3803_A0_P5_in" dir="in" link="Link49" />
-                <Link pin="I_C3803_A0_P6_in" dir="in" link="Link63" />
-                <Link pin="I_C3803_A0_P7_in" dir="in" link="Link56" />
-                <Link pin="I_C3803_A0_P8_in" dir="in" link="Link71" />
-                <Link pin="I_C3803_A0_P9_in" dir="in" link="Link77" />
-                <Link pin="O_C3803_A0_P1_out" dir="out" link="Link9" />
+                <Link pin="I_C3803_A0_P2_in" dir="in" link="Link83" />
+                <Link pin="I_C3803_A0_P3_in" dir="in" link="Link69" />
+                <Link pin="I_C3803_A0_P4_in" dir="in" link="Link85" />
+                <Link pin="I_C3803_A0_P5_in" dir="in" link="Link61" />
+                <Link pin="I_C3803_A0_P6_in" dir="in" link="Link89" />
+                <Link pin="I_C3803_A0_P7_in" dir="in" link="Link86" />
+                <Link pin="I_C3803_A0_P8_in" dir="in" link="Link92" />
+                <Link pin="I_C3803_A0_P9_in" dir="in" link="Link84" />
+                <Link pin="O_C3803_A0_P1_out" dir="out" link="Link23" />
             </Algorithm>
             <Algorithm name="monomuxSigma300ns7" friendlyname="Mono" cell="InputSelect_3.Nx1-1_Analog ">
-                <Link pin="I_C3719_A0_P2_in" dir="in" link="Link55" />
-                <Link pin="I_C3719_A0_P3_in" dir="in" link="Link64" />
-                <Link pin="I_C3719_A0_P4_in" dir="in" link="Link76" />
-                <Link pin="I_C3719_A0_P5_in" dir="in" link="Link57" />
-                <Link pin="I_C3719_A0_P6_in" dir="in" link="Link68" />
-                <Link pin="I_C3719_A0_P7_in" dir="in" link="Link50" />
-                <Link pin="I_C3719_A0_P8_in" dir="in" link="Link72" />
-                <Link pin="I_C3719_A0_P9_in" dir="in" link="Link65" />
-                <Link pin="O_C3719_A0_P1_out" dir="out" link="Link8" />
+                <Link pin="I_C3719_A0_P2_in" dir="in" link="Link77" />
+                <Link pin="I_C3719_A0_P3_in" dir="in" link="Link82" />
+                <Link pin="I_C3719_A0_P4_in" dir="in" link="Link58" />
+                <Link pin="I_C3719_A0_P5_in" dir="in" link="Link75" />
+                <Link pin="I_C3719_A0_P6_in" dir="in" link="Link65" />
+                <Link pin="I_C3719_A0_P7_in" dir="in" link="Link76" />
+                <Link pin="I_C3719_A0_P8_in" dir="in" link="Link81" />
+                <Link pin="I_C3719_A0_P9_in" dir="in" link="Link78" />
+                <Link pin="O_C3719_A0_P1_out" dir="out" link="Link22" />
             </Algorithm>
             <Algorithm name="monomuxSigma300ns17" friendlyname="Mono" cell="InputSelect_3.Nx1-1_SPDIF ">
-                <Link pin="I_C3863_A0_P2_in" dir="in" link="Link61" />
-                <Link pin="I_C3863_A0_P3_in" dir="in" link="Link51" />
-                <Link pin="O_C3863_A0_P1_out" dir="out" link="Link5" />
+                <Link pin="I_C3863_A0_P2_in" dir="in" link="Link91" />
+                <Link pin="I_C3863_A0_P3_in" dir="in" link="Link70" />
+                <Link pin="O_C3863_A0_P1_out" dir="out" link="Link19" />
             </Algorithm>
             <Algorithm name="monomuxSigma300ns16" friendlyname="Mono" cell="InputSelect_3.Nx1-1_Exp ">
-                <Link pin="I_C3845_A0_P2_in" dir="in" link="Link74" />
-                <Link pin="I_C3845_A0_P3_in" dir="in" link="Link52" />
-                <Link pin="I_C3845_A0_P4_in" dir="in" link="Link73" />
-                <Link pin="I_C3845_A0_P5_in" dir="in" link="Link81" />
-                <Link pin="I_C3845_A0_P6_in" dir="in" link="Link53" />
+                <Link pin="I_C3845_A0_P2_in" dir="in" link="Link71" />
+                <Link pin="I_C3845_A0_P3_in" dir="in" link="Link93" />
+                <Link pin="I_C3845_A0_P4_in" dir="in" link="Link90" />
+                <Link pin="I_C3845_A0_P5_in" dir="in" link="Link68" />
+                <Link pin="I_C3845_A0_P6_in" dir="in" link="Link67" />
                 <Link pin="I_C3845_A0_P7_in" dir="in" link="Link60" />
-                <Link pin="I_C3845_A0_P8_in" dir="in" link="Link62" />
-                <Link pin="I_C3845_A0_P9_in" dir="in" link="Link48" />
-                <Link pin="O_C3845_A0_P1_out" dir="out" link="Link7" />
+                <Link pin="I_C3845_A0_P8_in" dir="in" link="Link95" />
+                <Link pin="I_C3845_A0_P9_in" dir="in" link="Link87" />
+                <Link pin="O_C3845_A0_P1_out" dir="out" link="Link21" />
             </Algorithm>
             <Algorithm name="monomuxSigma300ns8" friendlyname="Mono" cell="InputSelect_3.Nx1-1_UAC ">
-                <Link pin="I_C3761_A0_P2_in" dir="in" link="Link79" />
-                <Link pin="I_C3761_A0_P3_in" dir="in" link="Link59" />
-                <Link pin="I_C3761_A0_P4_in" dir="in" link="Link54" />
-                <Link pin="I_C3761_A0_P5_in" dir="in" link="Link70" />
-                <Link pin="I_C3761_A0_P6_in" dir="in" link="Link75" />
-                <Link pin="I_C3761_A0_P7_in" dir="in" link="Link78" />
-                <Link pin="I_C3761_A0_P8_in" dir="in" link="Link80" />
-                <Link pin="I_C3761_A0_P9_in" dir="in" link="Link66" />
-                <Link pin="O_C3761_A0_P1_out" dir="out" link="Link6" />
+                <Link pin="I_C3761_A0_P2_in" dir="in" link="Link88" />
+                <Link pin="I_C3761_A0_P3_in" dir="in" link="Link73" />
+                <Link pin="I_C3761_A0_P4_in" dir="in" link="Link72" />
+                <Link pin="I_C3761_A0_P5_in" dir="in" link="Link74" />
+                <Link pin="I_C3761_A0_P6_in" dir="in" link="Link62" />
+                <Link pin="I_C3761_A0_P7_in" dir="in" link="Link64" />
+                <Link pin="I_C3761_A0_P8_in" dir="in" link="Link63" />
+                <Link pin="I_C3761_A0_P9_in" dir="in" link="Link80" />
+                <Link pin="O_C3761_A0_P1_out" dir="out" link="Link20" />
             </Algorithm>
             <Algorithm name="monomuxSigma300ns3" friendlyname="Mono" cell="InputSelect_2.Nx1-1_ESP32 ">
-                <Link pin="I_C3513_A0_P2_in" dir="in" link="Link58" />
-                <Link pin="I_C3513_A0_P3_in" dir="in" link="Link67" />
-                <Link pin="I_C3513_A0_P4_in" dir="in" link="Link69" />
-                <Link pin="I_C3513_A0_P5_in" dir="in" link="Link49" />
-                <Link pin="I_C3513_A0_P6_in" dir="in" link="Link63" />
-                <Link pin="I_C3513_A0_P7_in" dir="in" link="Link56" />
-                <Link pin="I_C3513_A0_P8_in" dir="in" link="Link71" />
-                <Link pin="I_C3513_A0_P9_in" dir="in" link="Link77" />
-                <Link pin="O_C3513_A0_P1_out" dir="out" link="Link12" />
+                <Link pin="I_C3513_A0_P2_in" dir="in" link="Link83" />
+                <Link pin="I_C3513_A0_P3_in" dir="in" link="Link69" />
+                <Link pin="I_C3513_A0_P4_in" dir="in" link="Link85" />
+                <Link pin="I_C3513_A0_P5_in" dir="in" link="Link61" />
+                <Link pin="I_C3513_A0_P6_in" dir="in" link="Link89" />
+                <Link pin="I_C3513_A0_P7_in" dir="in" link="Link86" />
+                <Link pin="I_C3513_A0_P8_in" dir="in" link="Link92" />
+                <Link pin="I_C3513_A0_P9_in" dir="in" link="Link84" />
+                <Link pin="O_C3513_A0_P1_out" dir="out" link="Link26" />
             </Algorithm>
             <Algorithm name="monomuxSigma300ns5" friendlyname="Mono" cell="InputSelect_2.Nx1-1_SPDIF ">
-                <Link pin="I_C3573_A0_P2_in" dir="in" link="Link61" />
-                <Link pin="I_C3573_A0_P3_in" dir="in" link="Link51" />
-                <Link pin="O_C3573_A0_P1_out" dir="out" link="Link14" />
+                <Link pin="I_C3573_A0_P2_in" dir="in" link="Link91" />
+                <Link pin="I_C3573_A0_P3_in" dir="in" link="Link70" />
+                <Link pin="O_C3573_A0_P1_out" dir="out" link="Link28" />
             </Algorithm>
             <Algorithm name="monomuxSigma300ns2" friendlyname="Mono" cell="InputSelect_2.Nx1-1_UAC ">
-                <Link pin="I_C3471_A0_P2_in" dir="in" link="Link79" />
-                <Link pin="I_C3471_A0_P3_in" dir="in" link="Link59" />
-                <Link pin="I_C3471_A0_P4_in" dir="in" link="Link54" />
-                <Link pin="I_C3471_A0_P5_in" dir="in" link="Link70" />
-                <Link pin="I_C3471_A0_P6_in" dir="in" link="Link75" />
-                <Link pin="I_C3471_A0_P7_in" dir="in" link="Link78" />
-                <Link pin="I_C3471_A0_P8_in" dir="in" link="Link80" />
-                <Link pin="I_C3471_A0_P9_in" dir="in" link="Link66" />
-                <Link pin="O_C3471_A0_P1_out" dir="out" link="Link13" />
+                <Link pin="I_C3471_A0_P2_in" dir="in" link="Link88" />
+                <Link pin="I_C3471_A0_P3_in" dir="in" link="Link73" />
+                <Link pin="I_C3471_A0_P4_in" dir="in" link="Link72" />
+                <Link pin="I_C3471_A0_P5_in" dir="in" link="Link74" />
+                <Link pin="I_C3471_A0_P6_in" dir="in" link="Link62" />
+                <Link pin="I_C3471_A0_P7_in" dir="in" link="Link64" />
+                <Link pin="I_C3471_A0_P8_in" dir="in" link="Link63" />
+                <Link pin="I_C3471_A0_P9_in" dir="in" link="Link80" />
+                <Link pin="O_C3471_A0_P1_out" dir="out" link="Link27" />
             </Algorithm>
             <Algorithm name="monomuxSigma300ns1" friendlyname="Mono" cell="InputSelect_2.Nx1-1_Analog ">
-                <Link pin="I_C3429_A0_P2_in" dir="in" link="Link55" />
-                <Link pin="I_C3429_A0_P3_in" dir="in" link="Link64" />
-                <Link pin="I_C3429_A0_P4_in" dir="in" link="Link76" />
-                <Link pin="I_C3429_A0_P5_in" dir="in" link="Link57" />
-                <Link pin="I_C3429_A0_P6_in" dir="in" link="Link68" />
-                <Link pin="I_C3429_A0_P7_in" dir="in" link="Link50" />
-                <Link pin="I_C3429_A0_P8_in" dir="in" link="Link72" />
-                <Link pin="I_C3429_A0_P9_in" dir="in" link="Link65" />
-                <Link pin="O_C3429_A0_P1_out" dir="out" link="Link11" />
+                <Link pin="I_C3429_A0_P2_in" dir="in" link="Link77" />
+                <Link pin="I_C3429_A0_P3_in" dir="in" link="Link82" />
+                <Link pin="I_C3429_A0_P4_in" dir="in" link="Link58" />
+                <Link pin="I_C3429_A0_P5_in" dir="in" link="Link75" />
+                <Link pin="I_C3429_A0_P6_in" dir="in" link="Link65" />
+                <Link pin="I_C3429_A0_P7_in" dir="in" link="Link76" />
+                <Link pin="I_C3429_A0_P8_in" dir="in" link="Link81" />
+                <Link pin="I_C3429_A0_P9_in" dir="in" link="Link78" />
+                <Link pin="O_C3429_A0_P1_out" dir="out" link="Link25" />
             </Algorithm>
             <Algorithm name="monomuxSigma300ns4" friendlyname="Mono" cell="InputSelect_2.Nx1-1_Exp ">
-                <Link pin="I_C3555_A0_P2_in" dir="in" link="Link74" />
-                <Link pin="I_C3555_A0_P3_in" dir="in" link="Link52" />
-                <Link pin="I_C3555_A0_P4_in" dir="in" link="Link73" />
-                <Link pin="I_C3555_A0_P5_in" dir="in" link="Link81" />
-                <Link pin="I_C3555_A0_P6_in" dir="in" link="Link53" />
+                <Link pin="I_C3555_A0_P2_in" dir="in" link="Link71" />
+                <Link pin="I_C3555_A0_P3_in" dir="in" link="Link93" />
+                <Link pin="I_C3555_A0_P4_in" dir="in" link="Link90" />
+                <Link pin="I_C3555_A0_P5_in" dir="in" link="Link68" />
+                <Link pin="I_C3555_A0_P6_in" dir="in" link="Link67" />
                 <Link pin="I_C3555_A0_P7_in" dir="in" link="Link60" />
-                <Link pin="I_C3555_A0_P8_in" dir="in" link="Link62" />
-                <Link pin="I_C3555_A0_P9_in" dir="in" link="Link48" />
-                <Link pin="O_C3555_A0_P1_out" dir="out" link="Link10" />
+                <Link pin="I_C3555_A0_P8_in" dir="in" link="Link95" />
+                <Link pin="I_C3555_A0_P9_in" dir="in" link="Link87" />
+                <Link pin="O_C3555_A0_P1_out" dir="out" link="Link24" />
             </Algorithm>
             <Algorithm name="monomuxSigma300ns9" friendlyname="Mono" cell="InputSelect_1.Nx1-1_Analog ">
-                <Link pin="I_C71_A0_P2_in" dir="in" link="Link55" />
-                <Link pin="I_C71_A0_P3_in" dir="in" link="Link64" />
-                <Link pin="I_C71_A0_P4_in" dir="in" link="Link76" />
-                <Link pin="I_C71_A0_P5_in" dir="in" link="Link57" />
-                <Link pin="I_C71_A0_P6_in" dir="in" link="Link68" />
-                <Link pin="I_C71_A0_P7_in" dir="in" link="Link50" />
-                <Link pin="I_C71_A0_P8_in" dir="in" link="Link72" />
-                <Link pin="I_C71_A0_P9_in" dir="in" link="Link65" />
-                <Link pin="O_C71_A0_P1_out" dir="out" link="Link15" />
+                <Link pin="I_C71_A0_P2_in" dir="in" link="Link77" />
+                <Link pin="I_C71_A0_P3_in" dir="in" link="Link82" />
+                <Link pin="I_C71_A0_P4_in" dir="in" link="Link58" />
+                <Link pin="I_C71_A0_P5_in" dir="in" link="Link75" />
+                <Link pin="I_C71_A0_P6_in" dir="in" link="Link65" />
+                <Link pin="I_C71_A0_P7_in" dir="in" link="Link76" />
+                <Link pin="I_C71_A0_P8_in" dir="in" link="Link81" />
+                <Link pin="I_C71_A0_P9_in" dir="in" link="Link78" />
+                <Link pin="O_C71_A0_P1_out" dir="out" link="Link29" />
             </Algorithm>
             <Algorithm name="monomuxSigma300ns10" friendlyname="Mono" cell="InputSelect_1.Nx1-1_UAC ">
-                <Link pin="I_C165_A0_P2_in" dir="in" link="Link79" />
-                <Link pin="I_C165_A0_P3_in" dir="in" link="Link59" />
-                <Link pin="I_C165_A0_P4_in" dir="in" link="Link54" />
-                <Link pin="I_C165_A0_P5_in" dir="in" link="Link70" />
-                <Link pin="I_C165_A0_P6_in" dir="in" link="Link75" />
-                <Link pin="I_C165_A0_P7_in" dir="in" link="Link78" />
-                <Link pin="I_C165_A0_P8_in" dir="in" link="Link80" />
-                <Link pin="I_C165_A0_P9_in" dir="in" link="Link66" />
-                <Link pin="O_C165_A0_P1_out" dir="out" link="Link16" />
+                <Link pin="I_C165_A0_P2_in" dir="in" link="Link88" />
+                <Link pin="I_C165_A0_P3_in" dir="in" link="Link73" />
+                <Link pin="I_C165_A0_P4_in" dir="in" link="Link72" />
+                <Link pin="I_C165_A0_P5_in" dir="in" link="Link74" />
+                <Link pin="I_C165_A0_P6_in" dir="in" link="Link62" />
+                <Link pin="I_C165_A0_P7_in" dir="in" link="Link64" />
+                <Link pin="I_C165_A0_P8_in" dir="in" link="Link63" />
+                <Link pin="I_C165_A0_P9_in" dir="in" link="Link80" />
+                <Link pin="O_C165_A0_P1_out" dir="out" link="Link30" />
             </Algorithm>
             <Algorithm name="monomuxSigma300ns11" friendlyname="Mono" cell="InputSelect_1.Nx1-1_ESP32 ">
-                <Link pin="I_C444_A0_P2_in" dir="in" link="Link58" />
-                <Link pin="I_C444_A0_P3_in" dir="in" link="Link67" />
-                <Link pin="I_C444_A0_P4_in" dir="in" link="Link69" />
-                <Link pin="I_C444_A0_P5_in" dir="in" link="Link49" />
-                <Link pin="I_C444_A0_P6_in" dir="in" link="Link63" />
-                <Link pin="I_C444_A0_P7_in" dir="in" link="Link56" />
-                <Link pin="I_C444_A0_P8_in" dir="in" link="Link71" />
-                <Link pin="I_C444_A0_P9_in" dir="in" link="Link77" />
-                <Link pin="O_C444_A0_P1_out" dir="out" link="Link17" />
+                <Link pin="I_C444_A0_P2_in" dir="in" link="Link83" />
+                <Link pin="I_C444_A0_P3_in" dir="in" link="Link69" />
+                <Link pin="I_C444_A0_P4_in" dir="in" link="Link85" />
+                <Link pin="I_C444_A0_P5_in" dir="in" link="Link61" />
+                <Link pin="I_C444_A0_P6_in" dir="in" link="Link89" />
+                <Link pin="I_C444_A0_P7_in" dir="in" link="Link86" />
+                <Link pin="I_C444_A0_P8_in" dir="in" link="Link92" />
+                <Link pin="I_C444_A0_P9_in" dir="in" link="Link84" />
+                <Link pin="O_C444_A0_P1_out" dir="out" link="Link31" />
             </Algorithm>
             <Algorithm name="monomuxSigma300ns12" friendlyname="Mono" cell="InputSelect_1.Nx1-1_Exp ">
-                <Link pin="I_C606_A0_P2_in" dir="in" link="Link74" />
-                <Link pin="I_C606_A0_P3_in" dir="in" link="Link52" />
-                <Link pin="I_C606_A0_P4_in" dir="in" link="Link73" />
-                <Link pin="I_C606_A0_P5_in" dir="in" link="Link81" />
-                <Link pin="I_C606_A0_P6_in" dir="in" link="Link53" />
+                <Link pin="I_C606_A0_P2_in" dir="in" link="Link71" />
+                <Link pin="I_C606_A0_P3_in" dir="in" link="Link93" />
+                <Link pin="I_C606_A0_P4_in" dir="in" link="Link90" />
+                <Link pin="I_C606_A0_P5_in" dir="in" link="Link68" />
+                <Link pin="I_C606_A0_P6_in" dir="in" link="Link67" />
                 <Link pin="I_C606_A0_P7_in" dir="in" link="Link60" />
-                <Link pin="I_C606_A0_P8_in" dir="in" link="Link62" />
-                <Link pin="I_C606_A0_P9_in" dir="in" link="Link48" />
-                <Link pin="O_C606_A0_P1_out" dir="out" link="Link18" />
+                <Link pin="I_C606_A0_P8_in" dir="in" link="Link95" />
+                <Link pin="I_C606_A0_P9_in" dir="in" link="Link87" />
+                <Link pin="O_C606_A0_P1_out" dir="out" link="Link32" />
             </Algorithm>
             <Algorithm name="monomuxSigma300ns13" friendlyname="Mono" cell="InputSelect_1.Nx1-1_SPDIF ">
-                <Link pin="I_C916_A0_P2_in" dir="in" link="Link61" />
-                <Link pin="I_C916_A0_P3_in" dir="in" link="Link51" />
-                <Link pin="O_C916_A0_P1_out" dir="out" link="Link19" />
+                <Link pin="I_C916_A0_P2_in" dir="in" link="Link91" />
+                <Link pin="I_C916_A0_P3_in" dir="in" link="Link70" />
+                <Link pin="O_C916_A0_P1_out" dir="out" link="Link33" />
+            </Algorithm>
+            <Algorithm name="monomuxSigma300ns25" friendlyname="Mono" cell="SpdifOutMux.Nx_Analog_Left ">
+                <Link pin="I_C243_A0_P2_in" dir="in" link="Link77" />
+                <Link pin="I_C243_A0_P3_in" dir="in" link="Link82" />
+                <Link pin="I_C243_A0_P4_in" dir="in" link="Link58" />
+                <Link pin="I_C243_A0_P5_in" dir="in" link="Link75" />
+                <Link pin="I_C243_A0_P6_in" dir="in" link="Link65" />
+                <Link pin="I_C243_A0_P7_in" dir="in" link="Link76" />
+                <Link pin="I_C243_A0_P8_in" dir="in" link="Link81" />
+                <Link pin="I_C243_A0_P9_in" dir="in" link="Link78" />
+                <Link pin="O_C243_A0_P1_out" dir="out" link="Link9" />
+            </Algorithm>
+            <Algorithm name="monomuxSigma300ns33" friendlyname="Mono" cell="SpdifOutMux.Nx_Exp_Right ">
+                <Link pin="I_C466_A0_P2_in" dir="in" link="Link71" />
+                <Link pin="I_C466_A0_P3_in" dir="in" link="Link93" />
+                <Link pin="I_C466_A0_P4_in" dir="in" link="Link90" />
+                <Link pin="I_C466_A0_P5_in" dir="in" link="Link68" />
+                <Link pin="I_C466_A0_P6_in" dir="in" link="Link67" />
+                <Link pin="I_C466_A0_P7_in" dir="in" link="Link60" />
+                <Link pin="I_C466_A0_P8_in" dir="in" link="Link95" />
+                <Link pin="I_C466_A0_P9_in" dir="in" link="Link87" />
+                <Link pin="O_C466_A0_P1_out" dir="out" link="Link0" />
+            </Algorithm>
+            <Algorithm name="monomuxSigma300ns27" friendlyname="Mono" cell="SpdifOutMux.Nx_ESP32_Left ">
+                <Link pin="I_C344_A0_P2_in" dir="in" link="Link83" />
+                <Link pin="I_C344_A0_P3_in" dir="in" link="Link69" />
+                <Link pin="I_C344_A0_P4_in" dir="in" link="Link85" />
+                <Link pin="I_C344_A0_P5_in" dir="in" link="Link61" />
+                <Link pin="I_C344_A0_P6_in" dir="in" link="Link89" />
+                <Link pin="I_C344_A0_P7_in" dir="in" link="Link86" />
+                <Link pin="I_C344_A0_P8_in" dir="in" link="Link92" />
+                <Link pin="I_C344_A0_P9_in" dir="in" link="Link84" />
+                <Link pin="O_C344_A0_P1_out" dir="out" link="Link8" />
+            </Algorithm>
+            <Algorithm name="monomuxSigma300ns32" friendlyname="Mono" cell="SpdifOutMux.Nx_ESP32_Right ">
+                <Link pin="I_C455_A0_P2_in" dir="in" link="Link83" />
+                <Link pin="I_C455_A0_P3_in" dir="in" link="Link69" />
+                <Link pin="I_C455_A0_P4_in" dir="in" link="Link85" />
+                <Link pin="I_C455_A0_P5_in" dir="in" link="Link61" />
+                <Link pin="I_C455_A0_P6_in" dir="in" link="Link89" />
+                <Link pin="I_C455_A0_P7_in" dir="in" link="Link86" />
+                <Link pin="I_C455_A0_P8_in" dir="in" link="Link92" />
+                <Link pin="I_C455_A0_P9_in" dir="in" link="Link84" />
+                <Link pin="O_C455_A0_P1_out" dir="out" link="Link1" />
+            </Algorithm>
+            <Algorithm name="monomuxSigma300ns26" friendlyname="Mono" cell="SpdifOutMux.Nx_UAC2_Left ">
+                <Link pin="I_C290_A0_P2_in" dir="in" link="Link88" />
+                <Link pin="I_C290_A0_P3_in" dir="in" link="Link73" />
+                <Link pin="I_C290_A0_P4_in" dir="in" link="Link72" />
+                <Link pin="I_C290_A0_P5_in" dir="in" link="Link74" />
+                <Link pin="I_C290_A0_P6_in" dir="in" link="Link62" />
+                <Link pin="I_C290_A0_P7_in" dir="in" link="Link64" />
+                <Link pin="I_C290_A0_P8_in" dir="in" link="Link63" />
+                <Link pin="I_C290_A0_P9_in" dir="in" link="Link80" />
+                <Link pin="O_C290_A0_P1_out" dir="out" link="Link10" />
+            </Algorithm>
+            <Algorithm name="monomuxSigma300ns31" friendlyname="Mono" cell="SpdifOutMux.Nx_UAC2_Right ">
+                <Link pin="I_C431_A0_P2_in" dir="in" link="Link88" />
+                <Link pin="I_C431_A0_P3_in" dir="in" link="Link73" />
+                <Link pin="I_C431_A0_P4_in" dir="in" link="Link72" />
+                <Link pin="I_C431_A0_P5_in" dir="in" link="Link74" />
+                <Link pin="I_C431_A0_P6_in" dir="in" link="Link62" />
+                <Link pin="I_C431_A0_P7_in" dir="in" link="Link64" />
+                <Link pin="I_C431_A0_P8_in" dir="in" link="Link63" />
+                <Link pin="I_C431_A0_P9_in" dir="in" link="Link80" />
+                <Link pin="O_C431_A0_P1_out" dir="out" link="Link13" />
+            </Algorithm>
+            <Algorithm name="monomuxSigma300ns36" friendlyname="Mono" cell="SpdifOutMux.Nx_Analog_Right ">
+                <Link pin="I_C529_A0_P2_in" dir="in" link="Link77" />
+                <Link pin="I_C529_A0_P3_in" dir="in" link="Link82" />
+                <Link pin="I_C529_A0_P4_in" dir="in" link="Link58" />
+                <Link pin="I_C529_A0_P5_in" dir="in" link="Link75" />
+                <Link pin="I_C529_A0_P6_in" dir="in" link="Link65" />
+                <Link pin="I_C529_A0_P7_in" dir="in" link="Link76" />
+                <Link pin="I_C529_A0_P8_in" dir="in" link="Link81" />
+                <Link pin="I_C529_A0_P9_in" dir="in" link="Link78" />
+                <Link pin="O_C529_A0_P1_out" dir="out" link="Link2" />
+            </Algorithm>
+            <Algorithm name="monomuxSigma300ns29" friendlyname="Mono" cell="SpdifOutMux.Nx_SPDIF_Left ">
+                <Link pin="I_C417_A0_P2_in" dir="in" link="Link91" />
+                <Link pin="I_C417_A0_P3_in" dir="in" link="Link70" />
+                <Link pin="O_C417_A0_P1_out" dir="out" link="Link3" />
+            </Algorithm>
+            <Algorithm name="monomuxSigma300ns28" friendlyname="Mono" cell="SpdifOutMux.Nx_Exp_Left ">
+                <Link pin="I_C399_A0_P2_in" dir="in" link="Link71" />
+                <Link pin="I_C399_A0_P3_in" dir="in" link="Link93" />
+                <Link pin="I_C399_A0_P4_in" dir="in" link="Link90" />
+                <Link pin="I_C399_A0_P5_in" dir="in" link="Link68" />
+                <Link pin="I_C399_A0_P6_in" dir="in" link="Link67" />
+                <Link pin="I_C399_A0_P7_in" dir="in" link="Link60" />
+                <Link pin="I_C399_A0_P8_in" dir="in" link="Link95" />
+                <Link pin="I_C399_A0_P9_in" dir="in" link="Link87" />
+                <Link pin="O_C399_A0_P1_out" dir="out" link="Link4" />
+            </Algorithm>
+            <Algorithm name="monomuxSigma300ns34" friendlyname="Mono" cell="SpdifOutMux.Nx_SPDIF_Right ">
+                <Link pin="I_C477_A0_P2_in" dir="in" link="Link91" />
+                <Link pin="I_C477_A0_P3_in" dir="in" link="Link70" />
+                <Link pin="O_C477_A0_P1_out" dir="out" link="Link5" />
             </Algorithm>
             <Algorithm name="monomuxSigma300ns24" friendlyname="Mono" cell="InputSelect_4.Nx1-1 ">
-                <Link pin="I_C4157_A0_P2_in" dir="in" link="Link0" />
-                <Link pin="I_C4157_A0_P3_in" dir="in" link="Link1" />
-                <Link pin="I_C4157_A0_P4_in" dir="in" link="Link3" />
-                <Link pin="I_C4157_A0_P5_in" dir="in" link="Link4" />
-                <Link pin="I_C4157_A0_P6_in" dir="in" link="Link2" />
-                <Link pin="O_C4157_A0_P1_out" dir="out" link="Link82" />
+                <Link pin="I_C4157_A0_P2_in" dir="in" link="Link14" />
+                <Link pin="I_C4157_A0_P3_in" dir="in" link="Link15" />
+                <Link pin="I_C4157_A0_P4_in" dir="in" link="Link17" />
+                <Link pin="I_C4157_A0_P5_in" dir="in" link="Link18" />
+                <Link pin="I_C4157_A0_P6_in" dir="in" link="Link16" />
+                <Link pin="O_C4157_A0_P1_out" dir="out" link="Link97" />
             </Algorithm>
             <Algorithm name="monomuxSigma300ns18" friendlyname="Mono" cell="InputSelect_3.Nx1-1 ">
-                <Link pin="I_C3867_A0_P2_in" dir="in" link="Link8" />
-                <Link pin="I_C3867_A0_P3_in" dir="in" link="Link6" />
-                <Link pin="I_C3867_A0_P4_in" dir="in" link="Link9" />
-                <Link pin="I_C3867_A0_P5_in" dir="in" link="Link7" />
-                <Link pin="I_C3867_A0_P6_in" dir="in" link="Link5" />
-                <Link pin="O_C3867_A0_P1_out" dir="out" link="Link83" />
+                <Link pin="I_C3867_A0_P2_in" dir="in" link="Link22" />
+                <Link pin="I_C3867_A0_P3_in" dir="in" link="Link20" />
+                <Link pin="I_C3867_A0_P4_in" dir="in" link="Link23" />
+                <Link pin="I_C3867_A0_P5_in" dir="in" link="Link21" />
+                <Link pin="I_C3867_A0_P6_in" dir="in" link="Link19" />
+                <Link pin="O_C3867_A0_P1_out" dir="out" link="Link98" />
             </Algorithm>
             <Algorithm name="monomuxSigma300ns6" friendlyname="Mono" cell="InputSelect_2.Nx1-1 ">
-                <Link pin="I_C3577_A0_P2_in" dir="in" link="Link11" />
-                <Link pin="I_C3577_A0_P3_in" dir="in" link="Link13" />
-                <Link pin="I_C3577_A0_P4_in" dir="in" link="Link12" />
-                <Link pin="I_C3577_A0_P5_in" dir="in" link="Link10" />
-                <Link pin="I_C3577_A0_P6_in" dir="in" link="Link14" />
-                <Link pin="O_C3577_A0_P1_out" dir="out" link="Link84" />
+                <Link pin="I_C3577_A0_P2_in" dir="in" link="Link25" />
+                <Link pin="I_C3577_A0_P3_in" dir="in" link="Link27" />
+                <Link pin="I_C3577_A0_P4_in" dir="in" link="Link26" />
+                <Link pin="I_C3577_A0_P5_in" dir="in" link="Link24" />
+                <Link pin="I_C3577_A0_P6_in" dir="in" link="Link28" />
+                <Link pin="O_C3577_A0_P1_out" dir="out" link="Link99" />
             </Algorithm>
             <Algorithm name="monomuxSigma300ns14" friendlyname="Mono" cell="InputSelect_1.Nx1-1 ">
-                <Link pin="I_C924_A0_P2_in" dir="in" link="Link15" />
-                <Link pin="I_C924_A0_P3_in" dir="in" link="Link16" />
-                <Link pin="I_C924_A0_P4_in" dir="in" link="Link17" />
-                <Link pin="I_C924_A0_P5_in" dir="in" link="Link18" />
-                <Link pin="I_C924_A0_P6_in" dir="in" link="Link19" />
-                <Link pin="O_C924_A0_P1_out" dir="out" link="Link85" />
+                <Link pin="I_C924_A0_P2_in" dir="in" link="Link29" />
+                <Link pin="I_C924_A0_P3_in" dir="in" link="Link30" />
+                <Link pin="I_C924_A0_P4_in" dir="in" link="Link31" />
+                <Link pin="I_C924_A0_P5_in" dir="in" link="Link32" />
+                <Link pin="I_C924_A0_P6_in" dir="in" link="Link33" />
+                <Link pin="O_C924_A0_P1_out" dir="out" link="Link100" />
             </Algorithm>
             <Algorithm name="FIRSigma300Alg1" friendlyname="FIR" cell="FIR 1 ">
-                <Link pin="I_C17_A0_P1_in" dir="in" link="Link85" />
-                <Link pin="O_C17_A0_P2_out" dir="out" link="Link36" />
+                <Link pin="I_C17_A0_P1_in" dir="in" link="Link100" />
+                <Link pin="O_C17_A0_P2_out" dir="out" link="Link46" />
             </Algorithm>
             <Algorithm name="FIRSigma300Alg2" friendlyname="FIR" cell="FIR 2 ">
-                <Link pin="I_C104_A0_P1_in" dir="in" link="Link84" />
-                <Link pin="O_C104_A0_P2_out" dir="out" link="Link37" />
+                <Link pin="I_C104_A0_P1_in" dir="in" link="Link99" />
+                <Link pin="O_C104_A0_P2_out" dir="out" link="Link47" />
             </Algorithm>
             <Algorithm name="FIRSigma300Alg3" friendlyname="FIR" cell="FIR 3 ">
-                <Link pin="I_C107_A0_P1_in" dir="in" link="Link83" />
-                <Link pin="O_C107_A0_P2_out" dir="out" link="Link39" />
+                <Link pin="I_C107_A0_P1_in" dir="in" link="Link98" />
+                <Link pin="O_C107_A0_P2_out" dir="out" link="Link49" />
             </Algorithm>
             <Algorithm name="FIRSigma300Alg4" friendlyname="FIR" cell="FIR 4 ">
-                <Link pin="I_C110_A0_P1_in" dir="in" link="Link82" />
-                <Link pin="O_C110_A0_P2_out" dir="out" link="Link38" />
+                <Link pin="I_C110_A0_P1_in" dir="in" link="Link97" />
+                <Link pin="O_C110_A0_P2_out" dir="out" link="Link48" />
             </Algorithm>
             <Algorithm name="General2ndOrderDPSigma300Alg1" friendlyname="Multi-Channel - Double Precision" cell="Param EQ 1 ">
-                <Link pin="I_C113_A0_P1_in" dir="in" link="Link36" />
-                <Link pin="O_C113_A0_P2_out" dir="out" link="Link42" />
+                <Link pin="I_C113_A0_P1_in" dir="in" link="Link46" />
+                <Link pin="O_C113_A0_P2_out" dir="out" link="Link52" />
             </Algorithm>
             <Algorithm name="General2ndOrderDPSigma300Alg2" friendlyname="Multi-Channel - Double Precision" cell="Param EQ 2 ">
-                <Link pin="I_C116_A0_P1_in" dir="in" link="Link37" />
-                <Link pin="O_C116_A0_P2_out" dir="out" link="Link41" />
+                <Link pin="I_C116_A0_P1_in" dir="in" link="Link47" />
+                <Link pin="O_C116_A0_P2_out" dir="out" link="Link51" />
             </Algorithm>
             <Algorithm name="General2ndOrderDPSigma300Alg4" friendlyname="Multi-Channel - Double Precision" cell="Param EQ 4 ">
-                <Link pin="I_C124_A0_P1_in" dir="in" link="Link38" />
-                <Link pin="O_C124_A0_P2_out" dir="out" link="Link40" />
+                <Link pin="I_C124_A0_P1_in" dir="in" link="Link48" />
+                <Link pin="O_C124_A0_P2_out" dir="out" link="Link50" />
             </Algorithm>
             <Algorithm name="General2ndOrderDPSigma300Alg3" friendlyname="Multi-Channel - Double Precision" cell="Param EQ 3 ">
-                <Link pin="I_C120_A0_P1_in" dir="in" link="Link39" />
-                <Link pin="O_C120_A0_P2_out" dir="out" link="Link43" />
+                <Link pin="I_C120_A0_P1_in" dir="in" link="Link49" />
+                <Link pin="O_C120_A0_P2_out" dir="out" link="Link53" />
             </Algorithm>
             <Algorithm name="DelaySigma300Alg4" friendlyname="Growable Delay" cell="Delay 4 ">
-                <Link pin="I_C148_A0_P1_in" dir="in" link="Link40" />
-                <Link pin="O_C148_A0_P2_out" dir="out" link="Link47" />
+                <Link pin="I_C148_A0_P1_in" dir="in" link="Link50" />
+                <Link pin="O_C148_A0_P2_out" dir="out" link="Link57" />
             </Algorithm>
             <Algorithm name="DelaySigma300Alg2" friendlyname="Growable Delay" cell="Delay 2 ">
-                <Link pin="I_C142_A0_P1_in" dir="in" link="Link41" />
-                <Link pin="O_C142_A0_P2_out" dir="out" link="Link45" />
+                <Link pin="I_C142_A0_P1_in" dir="in" link="Link51" />
+                <Link pin="O_C142_A0_P2_out" dir="out" link="Link55" />
             </Algorithm>
             <Algorithm name="DelaySigma300Alg1" friendlyname="Growable Delay" cell="Delay 1 ">
-                <Link pin="I_C136_A0_P1_in" dir="in" link="Link42" />
-                <Link pin="O_C136_A0_P2_out" dir="out" link="Link44" />
+                <Link pin="I_C136_A0_P1_in" dir="in" link="Link52" />
+                <Link pin="O_C136_A0_P2_out" dir="out" link="Link54" />
             </Algorithm>
             <Algorithm name="DelaySigma300Alg3" friendlyname="Growable Delay" cell="Delay 3 ">
-                <Link pin="I_C145_A0_P1_in" dir="in" link="Link43" />
-                <Link pin="O_C145_A0_P2_out" dir="out" link="Link46" />
+                <Link pin="I_C145_A0_P1_in" dir="in" link="Link53" />
+                <Link pin="O_C145_A0_P2_out" dir="out" link="Link56" />
             </Algorithm>
             <Algorithm name="HWGainADAU145XAlg2" friendlyname="Gain (HW slew)" cell="Gain 1 ">
-                <Link pin="I_C252_A0_P1_in" dir="in" link="Link44" />
-                <Link pin="O_C252_A0_P2_out" dir="out" link="Link23" />
+                <Link pin="I_C252_A0_P1_in" dir="in" link="Link54" />
+                <Link pin="O_C252_A0_P2_out" dir="out" link="Link37" />
             </Algorithm>
             <Algorithm name="HWGainADAU145XAlg1" friendlyname="Gain (HW slew)" cell="Gain 2 ">
-                <Link pin="I_C298_A0_P1_in" dir="in" link="Link45" />
-                <Link pin="O_C298_A0_P2_out" dir="out" link="Link22" />
+                <Link pin="I_C298_A0_P1_in" dir="in" link="Link55" />
+                <Link pin="O_C298_A0_P2_out" dir="out" link="Link36" />
             </Algorithm>
             <Algorithm name="HWGainADAU145XAlg3" friendlyname="Gain (HW slew)" cell="Gain 3 ">
-                <Link pin="I_C366_A0_P1_in" dir="in" link="Link46" />
-                <Link pin="O_C366_A0_P2_out" dir="out" link="Link21" />
+                <Link pin="I_C366_A0_P1_in" dir="in" link="Link56" />
+                <Link pin="O_C366_A0_P2_out" dir="out" link="Link35" />
             </Algorithm>
             <Algorithm name="HWGainADAU145XAlg4" friendlyname="Gain (HW slew)" cell="Gain 4 ">
-                <Link pin="I_C434_A0_P1_in" dir="in" link="Link47" />
-                <Link pin="O_C434_A0_P2_out" dir="out" link="Link20" />
+                <Link pin="I_C434_A0_P1_in" dir="in" link="Link57" />
+                <Link pin="O_C434_A0_P2_out" dir="out" link="Link34" />
             </Algorithm>
             <Algorithm name="HWGainADAU145XAlg9" friendlyname="Gain (HW slew)" cell="MasterVolume ">
-                <Link pin="I_C0_A0_P1_in" dir="in" link="Link23" />
-                <Link pin="I_C0_A0_P3_in" dir="in" link="Link22" />
-                <Link pin="I_C0_A0_P5_in" dir="in" link="Link21" />
-                <Link pin="I_C0_A0_P7_in" dir="in" link="Link20" />
-                <Link pin="O_C0_A0_P2_out" dir="out" link="Link25" />
-                <Link pin="O_C0_A0_P4_out" dir="out" link="Link27" />
-                <Link pin="O_C0_A0_P6_out" dir="out" link="Link28" />
-                <Link pin="O_C0_A0_P8_out" dir="out" link="Link29" />
+                <Link pin="I_C0_A0_P1_in" dir="in" link="Link37" />
+                <Link pin="I_C0_A0_P3_in" dir="in" link="Link36" />
+                <Link pin="I_C0_A0_P5_in" dir="in" link="Link35" />
+                <Link pin="I_C0_A0_P7_in" dir="in" link="Link34" />
+                <Link pin="O_C0_A0_P2_out" dir="out" link="Link38" />
+                <Link pin="O_C0_A0_P4_out" dir="out" link="Link40" />
+                <Link pin="O_C0_A0_P6_out" dir="out" link="Link41" />
+                <Link pin="O_C0_A0_P8_out" dir="out" link="Link42" />
             </Algorithm>
             <Algorithm name="ExternalGainAlgSlew145X1" friendlyname="Gain (HW slew)" cell="VolumePot ">
-                <Link pin="I_C479_A0_P1_in" dir="in" link="Link35" />
-                <Link pin="I_C479_A0_P2_in" dir="in" link="Link25" />
-                <Link pin="I_C479_A0_P4_in" dir="in" link="Link27" />
-                <Link pin="I_C479_A0_P6_in" dir="in" link="Link28" />
-                <Link pin="I_C479_A0_P8_in" dir="in" link="Link29" />
-                <Link pin="O_C479_A0_P3_out" dir="out" link="Link24" />
-                <Link pin="O_C479_A0_P5_out" dir="out" link="Link30" />
-                <Link pin="O_C479_A0_P7_out" dir="out" link="Link31" />
-                <Link pin="O_C479_A0_P9_out" dir="out" link="Link32" />
-            </Algorithm>
-            <Algorithm name="ICOutADAU145X1" friendlyname="Output" cell="Output 1 ">
-                <Link pin="I_C9_A0_P1_in" dir="in" link="Link24" />
-            </Algorithm>
-            <Algorithm name="ICOutADAU145X2" friendlyname="Output" cell="Output 2 ">
-                <Link pin="I_C11_A0_P1_in" dir="in" link="Link30" />
-            </Algorithm>
-            <Algorithm name="ICOutADAU145X3" friendlyname="Output" cell="Output 3 ">
-                <Link pin="I_C13_A0_P1_in" dir="in" link="Link31" />
+                <Link pin="I_C479_A0_P1_in" dir="in" link="Link45" />
+                <Link pin="I_C479_A0_P2_in" dir="in" link="Link38" />
+                <Link pin="I_C479_A0_P4_in" dir="in" link="Link40" />
+                <Link pin="I_C479_A0_P6_in" dir="in" link="Link41" />
+                <Link pin="I_C479_A0_P8_in" dir="in" link="Link42" />
+                <Link pin="O_C479_A0_P3_out" dir="out" link="Link96" />
+                <Link pin="O_C479_A0_P5_out" dir="out" link="Link94" />
+                <Link pin="O_C479_A0_P7_out" dir="out" link="Link66" />
+                <Link pin="O_C479_A0_P9_out" dir="out" link="Link79" />
             </Algorithm>
             <Algorithm name="ICOutADAU145X4" friendlyname="Output" cell="Output 4 ">
-                <Link pin="I_C15_A0_P1_in" dir="in" link="Link32" />
+                <Link pin="I_C15_A0_P1_in" dir="in" link="Link79" />
+            </Algorithm>
+            <Algorithm name="ICOutADAU145X3" friendlyname="Output" cell="Output 3 ">
+                <Link pin="I_C13_A0_P1_in" dir="in" link="Link66" />
+            </Algorithm>
+            <Algorithm name="ICOutADAU145X2" friendlyname="Output" cell="Output 2 ">
+                <Link pin="I_C11_A0_P1_in" dir="in" link="Link94" />
+            </Algorithm>
+            <Algorithm name="ICOutADAU145X1" friendlyname="Output" cell="Output 1 ">
+                <Link pin="I_C9_A0_P1_in" dir="in" link="Link96" />
+            </Algorithm>
+            <Algorithm name="monomuxSigma300ns37" friendlyname="Mono" cell="SpdifOutMux.Nx_Out_Left ">
+                <Link pin="I_C769_A0_P2_in" dir="in" link="Link96" />
+                <Link pin="I_C769_A0_P3_in" dir="in" link="Link94" />
+                <Link pin="I_C769_A0_P4_in" dir="in" link="Link66" />
+                <Link pin="I_C769_A0_P5_in" dir="in" link="Link79" />
+                <Link pin="I_C769_A0_P6_in" dir="in" link="Link59" />
+                <Link pin="I_C769_A0_P7_in" dir="in" link="Link59" />
+                <Link pin="I_C769_A0_P8_in" dir="in" link="Link59" />
+                <Link pin="I_C769_A0_P9_in" dir="in" link="Link59" />
+                <Link pin="O_C769_A0_P1_out" dir="out" link="Link11" />
+            </Algorithm>
+            <Algorithm name="monomuxSigma300ns38" friendlyname="Mono" cell="SpdifOutMux.Nx_Out_Right ">
+                <Link pin="I_C779_A0_P2_in" dir="in" link="Link96" />
+                <Link pin="I_C779_A0_P3_in" dir="in" link="Link94" />
+                <Link pin="I_C779_A0_P4_in" dir="in" link="Link66" />
+                <Link pin="I_C779_A0_P5_in" dir="in" link="Link79" />
+                <Link pin="I_C779_A0_P6_in" dir="in" link="Link59" />
+                <Link pin="I_C779_A0_P7_in" dir="in" link="Link59" />
+                <Link pin="I_C779_A0_P8_in" dir="in" link="Link59" />
+                <Link pin="I_C779_A0_P9_in" dir="in" link="Link59" />
+                <Link pin="O_C779_A0_P1_out" dir="out" link="Link6" />
+            </Algorithm>
+            <Algorithm name="monomuxSigma300ns35" friendlyname="Mono" cell="SpdifOutMux.Nx_Right ">
+                <Link pin="I_C486_A0_P2_in" dir="in" link="Link2" />
+                <Link pin="I_C486_A0_P3_in" dir="in" link="Link13" />
+                <Link pin="I_C486_A0_P4_in" dir="in" link="Link1" />
+                <Link pin="I_C486_A0_P5_in" dir="in" link="Link0" />
+                <Link pin="I_C486_A0_P6_in" dir="in" link="Link5" />
+                <Link pin="I_C486_A0_P7_in" dir="in" link="Link6" />
+                <Link pin="O_C486_A0_P1_out" dir="out" link="Link7" />
+            </Algorithm>
+            <Algorithm name="monomuxSigma300ns30" friendlyname="Mono" cell="SpdifOutMux.Nx_Left ">
+                <Link pin="I_C421_A0_P2_in" dir="in" link="Link9" />
+                <Link pin="I_C421_A0_P3_in" dir="in" link="Link10" />
+                <Link pin="I_C421_A0_P4_in" dir="in" link="Link8" />
+                <Link pin="I_C421_A0_P5_in" dir="in" link="Link4" />
+                <Link pin="I_C421_A0_P6_in" dir="in" link="Link3" />
+                <Link pin="I_C421_A0_P7_in" dir="in" link="Link11" />
+                <Link pin="O_C421_A0_P1_out" dir="out" link="Link12" />
+            </Algorithm>
+            <Algorithm name="ICSigma300SpdifOut2" friendlyname="SPDIF output" cell="SpdifOutMux.SpdifOut_Right ">
+                <Link pin="I_C502_A0_P1_in" dir="in" link="Link7" />
+            </Algorithm>
+            <Algorithm name="ICSigma300SpdifOut1" friendlyname="SPDIF output" cell="SpdifOutMux.SpdifOut_Left ">
+                <Link pin="I_C429_A0_P1_in" dir="in" link="Link12" />
             </Algorithm>
         </Schematic>
     </IC>
