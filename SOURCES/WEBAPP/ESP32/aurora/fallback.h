@@ -39,7 +39,7 @@ R"!^!(
         html = file;
       if(file.name=="plugin.ini")
         plugin = file;
-      if(file.name="aurora.js.gz")
+      if(file.name=="aurora.js.gz")
         aurorajs = file;
     }
     var prg=document.getElementById('prg');
