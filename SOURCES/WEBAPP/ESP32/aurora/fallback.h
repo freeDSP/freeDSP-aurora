@@ -29,7 +29,7 @@ R"!^!(
 <script>
   let picker = document.getElementById('picker');
   picker.addEventListener('change', e => {
-    var html,fw,css,plugin;
+    var html,fw,css,plugin,aurorajs;
     for(let file of Array.from(e.target.files)){
       if(file.name=="dark.css")
         css = file;
@@ -39,6 +39,8 @@ R"!^!(
         html = file;
       if(file.name=="plugin.ini")
         plugin = file;
+      if(file.name="aurora.js.gz")
+        aurorajs = file;
     }
     var prg=document.getElementById('prg');
 		prg.style.width="5%";
@@ -46,14 +48,17 @@ R"!^!(
 
     fetch("/upload?fname=dark.css",{method:'POST',headers:{},body:css})
     .then(function(response){
-      prg.style.width="25%";
+      prg.style.width="20%";
       return fetch("/upload?fname=dsp.fw",{method:'POST',headers:{},body:fw});})
     .then(function(response){
-      prg.style.width="50%";
+      prg.style.width="40%";
       return fetch("/upload?fname=dsp.html",{method:'POST',headers:{},body:html});})
     .then(function(response){
-      prg.style.width="75%";
+      prg.style.width="60%";
       return fetch("/upload?fname=plugin.ini",{method:'POST',headers:{},body:plugin});})
+    .then(function(response){
+      prg.style.width="80%";
+      return fetch("/upload?fname=aurora.js.gz",{method:'POST',headers:{},body:aurorajs});})
     .then(function(response){
       prg.style.width="100%";
       return response;})
