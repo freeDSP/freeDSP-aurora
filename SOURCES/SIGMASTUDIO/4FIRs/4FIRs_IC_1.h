@@ -1,7 +1,7 @@
 /*
  * File:           Z:\Documents\freeDSP\freeDSP-aurora\SOURCES\SIGMASTUDIO\4FIRs\4FIRs_IC_1.h
  *
- * Created:        Saturday, July 18, 2020 10:06:09 PM
+ * Created:        Monday, July 20, 2020 11:41:02 AM
  * Description:    4FIRs:IC 1 program data.
  *
  * This software is distributed in the hope that it will be useful,
@@ -21665,7 +21665,7 @@ ADI_REG_TYPE R40_SOUT_SOURCE15_IC_1_Default[REG_SOUT_SOURCE15_IC_1_BYTE] = {
 
 /* Register Default - IC 1.SPDIFTX_INPUT */
 ADI_REG_TYPE R41_SPDIFTX_INPUT_IC_1_Default[REG_SPDIFTX_INPUT_IC_1_BYTE] = {
-0x00, 0x02
+0x00, 0x01
 };
 
 /* Register Default - IC 1.SERIAL_BYTE_0_0 */
