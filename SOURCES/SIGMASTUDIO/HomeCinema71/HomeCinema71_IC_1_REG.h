@@ -1,7 +1,7 @@
 /*
  * File:           Z:\Documents\freeDSP\freeDSP-aurora\SOURCES\SIGMASTUDIO\HomeCinema71\HomeCinema71_IC_1_REG.h
  *
- * Created:        Friday, April 3, 2020 2:41:24 PM
+ * Created:        Monday, July 20, 2020 11:40:17 AM
  * Description:    HomeCinema71:IC 1 control register definitions.
  *
  * This software is distributed in the hope that it will be useful,
@@ -103,7 +103,7 @@
 /* POWER_ENABLE1  - Registers (IC 1) */
 #define REG_POWER_ENABLE1_IC_1_ADDR               0xF051
 #define REG_POWER_ENABLE1_IC_1_BYTE               2
-#define REG_POWER_ENABLE1_IC_1_VALUE              0x2
+#define REG_POWER_ENABLE1_IC_1_VALUE              0x7
 
 /* ASRC_INPUT0  - Registers (IC 1) */
 #define REG_ASRC_INPUT0_IC_1_ADDR                 0xF100
@@ -308,7 +308,7 @@
 /* SPDIFTX_INPUT  - Registers (IC 1) */
 #define REG_SPDIFTX_INPUT_IC_1_ADDR               0xF1C0
 #define REG_SPDIFTX_INPUT_IC_1_BYTE               2
-#define REG_SPDIFTX_INPUT_IC_1_VALUE              0x0
+#define REG_SPDIFTX_INPUT_IC_1_VALUE              0x1
 
 /* SERIAL_BYTE_0_0  - Registers (IC 1) */
 #define REG_SERIAL_BYTE_0_0_IC_1_ADDR             0xF200
@@ -2043,7 +2043,7 @@
 /* SPDIF_TX_EN  - Registers (IC 1) */
 #define REG_SPDIF_TX_EN_IC_1_ADDR                 0xF690
 #define REG_SPDIF_TX_EN_IC_1_BYTE                 2
-#define REG_SPDIF_TX_EN_IC_1_VALUE                0x0
+#define REG_SPDIF_TX_EN_IC_1_VALUE                0x1
 
 /* SPDIF_TX_CTRL  - Registers (IC 1) */
 #define REG_SPDIF_TX_CTRL_IC_1_ADDR               0xF691
@@ -2850,9 +2850,9 @@
 #define R15_POWER_ENABLE0_CLK_GEN3_PWR_IC_1_SHIFT 12
 
 /* POWER_ENABLE1 (IC 1) */
-#define R16_POWER_ENABLE1_ADC_PWR_IC_1            0x0    /* 0b	[0] */
+#define R16_POWER_ENABLE1_ADC_PWR_IC_1            0x1    /* 1b	[0] */
 #define R16_POWER_ENABLE1_RX_PWR_IC_1             0x1    /* 1b	[1] */
-#define R16_POWER_ENABLE1_TX_PWR_IC_1             0x0    /* 0b	[2] */
+#define R16_POWER_ENABLE1_TX_PWR_IC_1             0x1    /* 1b	[2] */
 #define R16_POWER_ENABLE1_PDM0_PWR_IC_1           0x0    /* 0b	[3] */
 #define R16_POWER_ENABLE1_PDM1_PWR_IC_1           0x0    /* 0b	[4] */
 #define R16_POWER_ENABLE1_ADC_PWR_IC_1_MASK       0x1
@@ -3163,7 +3163,7 @@
 #define R56_SOUT_SOURCE23_SOUT_ASRC_SELECT_IC_1_SHIFT 3
 
 /* SPDIFTX_INPUT (IC 1) */
-#define R57_SPDIFTX_INPUT_SPDIFTX_SOURCE_IC_1     0x0    /* 00b	[1:0] */
+#define R57_SPDIFTX_INPUT_SPDIFTX_SOURCE_IC_1     0x1    /* 01b	[1:0] */
 #define R57_SPDIFTX_INPUT_SPDIFTX_SOURCE_IC_1_MASK 0x3
 #define R57_SPDIFTX_INPUT_SPDIFTX_SOURCE_IC_1_SHIFT 0
 
@@ -6959,7 +6959,7 @@
 #define R403_SPDIF_RX_PB_RIGHT_11_SPDIF_RX_PB_RIGHT_IC_1_SHIFT 0
 
 /* SPDIF_TX_EN (IC 1) */
-#define R404_SPDIF_TX_EN_TXEN_IC_1                0x0    /* 0b	[0] */
+#define R404_SPDIF_TX_EN_TXEN_IC_1                0x1    /* 1b	[0] */
 #define R404_SPDIF_TX_EN_TXEN_IC_1_MASK           0x1
 #define R404_SPDIF_TX_EN_TXEN_IC_1_SHIFT          0
 

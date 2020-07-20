@@ -1,1 +1,0 @@
-../../SIGMASTUDIO/HomeCinema71/HomeCinema71_IC_1_PARAM.h

@@ -1,6 +1,7 @@
 {
     "files.associations": {
-        "__tuple": "cpp",
-        "array": "cpp"
+      "__tuple": "cpp",
+      "array": "cpp",
+      "algorithm": "cpp"
     }
 }

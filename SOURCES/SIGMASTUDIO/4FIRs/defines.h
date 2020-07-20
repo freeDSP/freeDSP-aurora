@@ -1,7 +1,7 @@
 /*
  * File:           defines.h
  *
- * Created:        Monday, March 9, 2020 3:04:54 PM
+ * Created:        Monday, July 20, 2020 11:41:02 AM
  * Description:    4FIRs IC default download data definitions.
  *
  * This software is distributed in the hope that it will be useful,
@@ -19,7 +19,7 @@
 #ifndef __DEFINES_H__
 #define __DEFINES_H__
 
-#define BufferSize_IC_1     	84910
+#define BufferSize_IC_1     	85870
 #define NumTransactions_IC_1	61
 
 

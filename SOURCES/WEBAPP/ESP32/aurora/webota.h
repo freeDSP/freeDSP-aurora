@@ -23,7 +23,7 @@ R"!^!(
 <script>
   let picker = document.getElementById('picker');
   picker.addEventListener('change', e => {
-    
+
     var files = e.target.files;
     var fw = files[0];
 
