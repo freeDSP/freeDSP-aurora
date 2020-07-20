@@ -1,7 +1,7 @@
 /*
  * File:           defines.h
  *
- * Created:        Saturday, July 18, 2020 10:06:09 PM
+ * Created:        Monday, July 20, 2020 11:41:02 AM
  * Description:    4FIRs IC default download data definitions.
  *
  * This software is distributed in the hope that it will be useful,

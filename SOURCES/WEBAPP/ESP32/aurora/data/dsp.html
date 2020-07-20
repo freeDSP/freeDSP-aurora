@@ -801,7 +801,7 @@
       <option value="3">8 to 1</option>
       </select>
       </td></tr>
-      <tr><td><input type="checkbox" id="vpot">Enable Volume Potentiometer</td>
+      <tr><td><input type="checkbox" id="vpot">Volume Potentiometer</td><td></td></tr>
       <tr><td colspan="2"><button class="send" onclick="sendConfig()">Store</button></td></tr>
       </table>
     </div>
@@ -873,7 +873,7 @@
           html = file;
         if(file.name=="plugin.ini")
           plugin = file;
-        if(file.name="aurora.gz")
+        if(file.name=="aurora.js.gz")
           aurorajs = file;
       }
       var prg=document.getElementById('prg');
@@ -891,7 +891,7 @@
         return fetch("/upload?fname=plugin.ini",{method:'POST',headers:{},body:plugin});})
       .then(function(response){
         prg.style.width="80%";
-        return fetch("/upload?fname=aurora.gz",{method:'POST',headers:{},body:aurorajs});})
+        return fetch("/upload?fname=aurora.js.gz",{method:'POST',headers:{},body:aurorajs});})
       .then(function(response){
         prg.style.width="100%";
         return response;})

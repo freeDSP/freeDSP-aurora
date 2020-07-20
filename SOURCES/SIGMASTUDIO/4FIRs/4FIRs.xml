@@ -285,7 +285,7 @@
             <Name>IC 1.SPDIFTX_INPUT</Name>
             <Address>61888</Address>
             <Size>2</Size>
-            <Data>0x00, 0x02, </Data>
+            <Data>0x00, 0x01, </Data>
         </Register>
         <Register>
             <Name>IC 1.SERIAL_BYTE_0_0</Name>

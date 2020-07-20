@@ -1,7 +1,7 @@
 /*
  * File:           Z:\Documents\freeDSP\freeDSP-aurora\SOURCES\SIGMASTUDIO\4FIRs\4FIRs_IC_1_REG.h
  *
- * Created:        Saturday, July 18, 2020 10:06:09 PM
+ * Created:        Monday, July 20, 2020 11:41:02 AM
  * Description:    4FIRs:IC 1 control register definitions.
  *
  * This software is distributed in the hope that it will be useful,
@@ -308,7 +308,7 @@
 /* SPDIFTX_INPUT  - Registers (IC 1) */
 #define REG_SPDIFTX_INPUT_IC_1_ADDR               0xF1C0
 #define REG_SPDIFTX_INPUT_IC_1_BYTE               2
-#define REG_SPDIFTX_INPUT_IC_1_VALUE              0x2
+#define REG_SPDIFTX_INPUT_IC_1_VALUE              0x1
 
 /* SERIAL_BYTE_0_0  - Registers (IC 1) */
 #define REG_SERIAL_BYTE_0_0_IC_1_ADDR             0xF200
@@ -3163,7 +3163,7 @@
 #define R56_SOUT_SOURCE23_SOUT_ASRC_SELECT_IC_1_SHIFT 3
 
 /* SPDIFTX_INPUT (IC 1) */
-#define R57_SPDIFTX_INPUT_SPDIFTX_SOURCE_IC_1     0x2    /* 10b	[1:0] */
+#define R57_SPDIFTX_INPUT_SPDIFTX_SOURCE_IC_1     0x1    /* 01b	[1:0] */
 #define R57_SPDIFTX_INPUT_SPDIFTX_SOURCE_IC_1_MASK 0x3
 #define R57_SPDIFTX_INPUT_SPDIFTX_SOURCE_IC_1_SHIFT 0
 
