@@ -64,6 +64,11 @@ void IRAM_ATTR isrRotaryEncoderSwitch()
 
 RotaryEncoder::RotaryEncoder( void )
 {
+
+}
+
+void RotaryEncoder::init( void )
+{
   value = 0;
   sw = 0;
   state = 2;

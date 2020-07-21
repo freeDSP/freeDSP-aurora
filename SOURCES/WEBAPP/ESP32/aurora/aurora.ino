@@ -227,6 +227,8 @@ String presetAddonCfgFile[MAX_NUM_PRESETS] = { "/addoncfg.001", "/addoncfg.002",
 
 AsyncWebServer server( 80 );
 
+bool changeWifiState = false;
+
 //------------------------------------------------------------------------------
 //
 // Display Driver
@@ -4043,19 +4045,27 @@ void updateUI( void )
  */
 void setup()
 {
-  bool changeWifiState = false;
-
   Serial.begin(115200);
   Serial.println( "AURORA Debug Log" );
   Serial.println( VERSION_STR );
 
   //----------------------------------------------------------------------------
+  //--- Init Rotary Encoder Handling
+  //----------------------------------------------------------------------------
+  #if HAVE_ROTARYENCODER
+  rotaryEncoder.init();
+  lastREsw = rotaryEncoder.getSwitchValue();
+  lastREval = rotaryEncoder.getRotationValue();
+  #endif
+
+  //----------------------------------------------------------------------------
   //--- Is user pressing the rotary encoder switch during boot?
   //----------------------------------------------------------------------------
-  pinMode( ROTARYENCODER_PINSW, INPUT_PULLUP );
+  //rotaryEncoder.init();
+  //pinMode( ROTARYENCODER_PINSW, INPUT_PULLUP );
   if( !digitalRead( ROTARYENCODER_PINSW ) )
     changeWifiState = true;
-
+  
   //----------------------------------------------------------------------------
   //--- Configure I2C
   //----------------------------------------------------------------------------
@@ -4174,13 +4184,15 @@ void setup()
   changeChannelSummationADC();
   if( changeWifiState )
   {
+    Serial.print( F("Changing WiFi status......") );
     Settings.wifiOn = Settings.wifiOn ? false : true;
     writeSettings();
+    Serial.println( F("[OK]") );
   }
 
-  Serial.print( "Init user parameter......" );
+  Serial.print( F("Init user parameter......") );
   initUserParams();
-  Serial.println( "[OK]" );
+  Serial.println( F("[OK]") );
   readPluginMeta();
 
   //----------------------------------------------------------------------------
@@ -4386,14 +4398,6 @@ void setup()
   enableVolPot();
 
   //----------------------------------------------------------------------------
-  //--- Init Rotary Encoder Handling
-  //----------------------------------------------------------------------------
-  #if HAVE_ROTARYENCODER
-  lastREsw = rotaryEncoder.getSwitchValue();
-  lastREval = rotaryEncoder.getRotationValue();
-  #endif
-
-  //----------------------------------------------------------------------------
   //--- Init IR Receiver
   //----------------------------------------------------------------------------
   #if HAVE_IRRECEIVER
@@ -4403,6 +4407,9 @@ void setup()
   resetDAC( false );
 
   updateUI();
+
+  lastREsw = rotaryEncoder.getSwitchValue();
+  lastREval = rotaryEncoder.getRotationValue();
 
   Serial.println( "Ready" );
 }
@@ -4421,14 +4428,19 @@ void loop()
   #if HAVE_ROTARYENCODER
   if( rotaryEncoder.getSwitchValue() != lastREsw )
   {
-    editMode++;
-    // we may have more then two modes in the future.
-    if( editMode > 1 )
-      editMode = 0;
-    delay( 300 );
+    if( changeWifiState )
+      changeWifiState = false;
+    else
+    {
+      editMode++;
+      // we may have more then two modes in the future.
+      if( editMode > 1 )
+        editMode = 0;
+      delay( 300 );
+      needUpdateUI = true;
+    }
     lastREsw = rotaryEncoder.getSwitchValue();
     lastREval = rotaryEncoder.getRotationValue();
-    needUpdateUI = true;
   }
   else if( rotaryEncoder.getRotationValue() > lastREval + 1 )
   {
