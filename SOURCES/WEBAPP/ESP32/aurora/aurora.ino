@@ -4225,7 +4225,7 @@ void setup()
   server.on( "/aurora.js", HTTP_GET, [](AsyncWebServerRequest *request )
   {
     //request->send( SPIFFS, "/aurora.js", "text/javascript" );
-    AsyncWebServerResponse* response = request->beginResponse(SPIFFS, "/aurora.js.gz", "text/javascript");
+    AsyncWebServerResponse* response = request->beginResponse(SPIFFS, "/aurora.jgz", "text/javascript");
     response->addHeader( "Content-Encoding", "gzip" );
     request->send( response );
   });

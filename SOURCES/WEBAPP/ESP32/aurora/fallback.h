@@ -39,7 +39,7 @@ R"!^!(
         html = file;
       if(file.name=="plugin.ini")
         plugin = file;
-      if(file.name=="aurora.js.gz")
+      if(file.name=="aurora.jgz")
         aurorajs = file;
     }
     var prg=document.getElementById('prg');
@@ -58,7 +58,7 @@ R"!^!(
       return fetch("/upload?fname=plugin.ini",{method:'POST',headers:{},body:plugin});})
     .then(function(response){
       prg.style.width="80%";
-      return fetch("/upload?fname=aurora.js.gz",{method:'POST',headers:{},body:aurorajs});})
+      return fetch("/upload?fname=aurora.jgz",{method:'POST',headers:{},body:aurorajs});})
     .then(function(response){
       prg.style.width="100%";
       return response;})
