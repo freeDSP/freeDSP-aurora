@@ -19,6 +19,8 @@ public:
 
   void setCurrentState( uint8_t s ) { state = s; }
 
+  void init( void );
+
 private:
   long int value;
   long int sw;
