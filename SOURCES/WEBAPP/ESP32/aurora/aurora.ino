@@ -24,7 +24,7 @@
 #include <IRremote.h>
 #endif
 
-#define VERSION_STR "v2.1.0"
+#define VERSION_STR "v2.1.1"
 
 #define MAX_NUM_INPUTS 8
 #define MAX_NUM_HPS 8
@@ -843,104 +843,195 @@ void uploadUserParams( void )
 
     if( fileUserParams )
     {
+      // IMPRTANT: don't copy the addresses, they may have changed by dsp firmware
+      // and are defined by meta data of plugin. Reading it from usrparam file may 
+      // go wrong after firmware update.
       Serial.print( "Uploading user parameters from " + fileName );
       uint32_t totalSize = 0;
       for( int ii = 0; ii < numInputs; ii++ )
       {
-        size_t len = fileUserParams.read( (uint8_t*)&(paramInputs[ii]), sizeof(tInput) );
+        tInput paramInputTemp;
+        size_t len = fileUserParams.read( (uint8_t*)&(paramInputTemp), sizeof(tInput) );
         if( len != sizeof(tInput) )
           Serial.println( "[ERROR] Reading inputs from " + presetUsrparamFile[currentPreset] );
+        else
+          paramInputs[ii].sel = paramInputTemp.sel;     
         totalSize += len;
       }
 
       for( int ii = 0; ii < numFIRs; ii++ )
       {
+        // save the old address
+        uint16_t addrTemp = paramFir[ii].addr;
         size_t len = fileUserParams.read( (uint8_t*)&(paramFir[ii]), sizeof(tFir) );
         if( len != sizeof(tFir) )
+        {
           Serial.println( "[ERROR] Reading FIR from " + presetUsrparamFile[currentPreset] );
+          for( int kk = 0; kk < MAX_LENGTH_IR; kk++ )
+            paramFir[ii].ir[kk] = 0.0;
+          paramFir[ii].ir[0] = 1.0;
+        }
+        else
+          paramFir[ii].addr = addrTemp;
         totalSize += len;
       }
 
       for( int ii = 0; ii < numHPs; ii++ )
       {
-        size_t len = fileUserParams.read( (uint8_t*)&(paramHP[ii]), sizeof(tHPLP) );
+        tHPLP paramHpTemp;
+        size_t len = fileUserParams.read( (uint8_t*)&(paramHpTemp), sizeof(tHPLP) );
         if( len != sizeof(tHPLP) )
           Serial.println( "[ERROR] Reading HPs from " + presetUsrparamFile[currentPreset] );
+        else
+        {
+          paramHP[ii].fc = paramHpTemp.fc;
+          paramHP[ii].typ = paramHpTemp.typ;
+          paramHP[ii].bypass = paramHpTemp.bypass;
+        }
         totalSize += len;
       }
 
       for( int ii = 0; ii < numLShelvs; ii++ )
       {
-        size_t len = fileUserParams.read( (uint8_t*)&(paramLshelv[ii]), sizeof(tShelving) );
+        tShelving paramLShelvTemp;
+        size_t len = fileUserParams.read( (uint8_t*)&(paramLShelvTemp), sizeof(tShelving) );
         if( len != sizeof(tShelving) )
           Serial.println( "[ERROR] Reading LShelvs from " + presetUsrparamFile[currentPreset] );
+        else
+        {
+          paramLshelv[ii].gain = paramLShelvTemp.gain;
+          paramLshelv[ii].fc = paramLShelvTemp.fc;
+          paramLshelv[ii].slope = paramLShelvTemp.slope;
+          paramLshelv[ii].bypass = paramLShelvTemp.bypass;
+        }
         totalSize += len;
       }
 
       for( int ii = 0; ii < numPEQs; ii++ )
       {
-        size_t len = fileUserParams.read( (uint8_t*)&(paramPeq[ii]), sizeof(tPeq) );
+        tPeq paramPeqTemp;
+        size_t len = fileUserParams.read( (uint8_t*)&(paramPeqTemp), sizeof(tPeq) );
         if( len != sizeof(tPeq) )
           Serial.println( "[ERROR] Reading PEQs from " + presetUsrparamFile[currentPreset] );
+        else
+        {
+          paramPeq[ii].gain = paramPeqTemp.gain;
+          paramPeq[ii].fc = paramPeqTemp.fc;
+          paramPeq[ii].Q = paramPeqTemp.Q;
+          paramPeq[ii].bypass = paramPeqTemp.bypass;
+        }
         totalSize += len;
       }
 
       for( int ii = 0; ii < numHShelvs; ii++ )
       {
-        size_t len = fileUserParams.read( (uint8_t*)&(paramHshelv[ii]), sizeof(tShelving) );
+        tShelving paramHShelvTemp;
+        size_t len = fileUserParams.read( (uint8_t*)&(paramHShelvTemp), sizeof(tShelving) );
         if( len != sizeof(tShelving) )
           Serial.println( "[ERROR] Reading HShelvs from " + presetUsrparamFile[currentPreset] );
+        else
+        {
+          paramHshelv[ii].gain = paramHShelvTemp.gain;
+          paramHshelv[ii].fc = paramHShelvTemp.fc;
+          paramHshelv[ii].slope = paramHShelvTemp.slope;
+          paramHshelv[ii].bypass = paramHShelvTemp.bypass;
+        }
         totalSize += len;
       }
 
       for( int ii = 0; ii < numCrossovers; ii++ )
       {
-        size_t len = fileUserParams.read( (uint8_t*)&(paramCrossover[ii]), sizeof(tCrossover) );
+        tCrossover paramCrossoverTemp;
+        size_t len = fileUserParams.read( (uint8_t*)&(paramCrossoverTemp), sizeof(tCrossover) );
         if( len != sizeof(tCrossover) )
           Serial.println( "[ERROR] Reading XO from " + presetUsrparamFile[currentPreset] );
+        else
+        {
+          paramCrossover[ii].hp_fc = paramCrossoverTemp.hp_fc;
+          paramCrossover[ii].hp_typ = paramCrossoverTemp.hp_typ;
+          paramCrossover[ii].hp_bypass = paramCrossoverTemp.hp_bypass;
+          paramCrossover[ii].lp_fc = paramCrossoverTemp.lp_fc;
+          paramCrossover[ii].lp_typ = paramCrossoverTemp.lp_typ;
+          paramCrossover[ii].lp_bypass = paramCrossoverTemp.lp_bypass;
+        }
         totalSize += len;
       }
 
       for( int ii = 0; ii < numLPs; ii++ )
       {
-        size_t len = fileUserParams.read( (uint8_t*)&(paramLP[ii]), sizeof(tHPLP) );
+        tHPLP paramLpTemp;
+        size_t len = fileUserParams.read( (uint8_t*)&(paramLpTemp), sizeof(tHPLP) );
         if( len != sizeof(tHPLP) )
           Serial.println( "[ERROR] Reading LPs from " + presetUsrparamFile[currentPreset] );
+        else
+        {
+          paramLP[ii].fc = paramLpTemp.fc;
+          paramLP[ii].typ = paramLpTemp.typ;
+          paramLP[ii].bypass = paramLpTemp.bypass;
+        }
         totalSize += len;
       }
 
       for( int ii = 0; ii < numPhases; ii++ )
       {
-        size_t len = fileUserParams.read( (uint8_t*)&(paramPhase[ii]), sizeof(tPhase) );
+        tPhase paramPhaseTemp;
+        size_t len = fileUserParams.read( (uint8_t*)&(paramPhaseTemp), sizeof(tPhase) );
         if( len != sizeof(tPhase) )
           Serial.println( "[ERROR] Reading Phases from " + presetUsrparamFile[currentPreset] );
+        else
+        {
+          paramPhase[ii].fc = paramPhaseTemp.fc;
+          paramPhase[ii].inv = paramPhaseTemp.inv;
+          paramPhase[ii].Q = paramPhaseTemp.Q;
+        }
         totalSize += len;
       }
 
       for( int ii = 0; ii < numDelays; ii++ )
       {
-        size_t len = fileUserParams.read( (uint8_t*)&(paramDelay[ii]), sizeof(tDelay) );
+        tDelay paramDelayTemp;
+        size_t len = fileUserParams.read( (uint8_t*)&(paramDelayTemp), sizeof(tDelay) );
         if( len != sizeof(tDelay) )
           Serial.println( "[ERROR] Reading Delays from " + presetUsrparamFile[currentPreset] );
+        else
+        {
+          paramDelay[ii].delay = paramDelayTemp.delay;
+          paramDelay[ii].bypass = paramDelayTemp.bypass;
+        }
         totalSize += len;
       }
 
       for( int ii = 0; ii < numGains; ii++ )
       {
-        size_t len = fileUserParams.read( (uint8_t*)&(paramGain[ii]), sizeof(tGain) );
+        tGain paramGainTemp;
+        size_t len = fileUserParams.read( (uint8_t*)&(paramGainTemp), sizeof(tGain) );
         if( len != sizeof(tGain) )
           Serial.println( "[ERROR] Reading Gains from " + presetUsrparamFile[currentPreset] );
+        else
+        {
+          paramGain[ii].gain = paramGainTemp.gain;
+          paramGain[ii].mute = paramGainTemp.mute;
+        }
         totalSize += len;
       }
 
-      size_t len = fileUserParams.read( (uint8_t*)&masterVolume, sizeof(tMasterVolume) );
+      tMasterVolume masterVolumeTemp;
+      size_t len = fileUserParams.read( (uint8_t*)&masterVolumeTemp, sizeof(tMasterVolume) );
       if( len != sizeof(tMasterVolume) )
         Serial.println( "[ERROR] Reading masterVolume from " + presetUsrparamFile[currentPreset] );
+      else
+        masterVolume.val = masterVolumeTemp.val;
       totalSize += len;
 
-      len = fileUserParams.read( (uint8_t*)&spdifOutput, sizeof(tSpdifOutput) );
+      tSpdifOutput spdifOutputTemp;
+      len = fileUserParams.read( (uint8_t*)&spdifOutputTemp, sizeof(tSpdifOutput) );
       if( len != sizeof(tSpdifOutput) )
         Serial.println( "[ERROR] Reading spdifOutput from " + presetUsrparamFile[currentPreset] );
+      else
+      {
+        spdifOutput.selectionLeft = spdifOutputTemp.selectionLeft;
+        spdifOutput.selectionRight = spdifOutputTemp.selectionRight;
+      }
       totalSize += len;
 
       Serial.println( "[OK]" );
@@ -1249,7 +1340,6 @@ void setSpdifOutputRouting( void )
   val[2] = (intval >> 8 ) & 0xFF;
   val[3] =  intval & 0xFF;
   ADAU1452_WRITE_BLOCK( addrChn, val, 4 );
-  Serial.print( uinttohexstring(addrChn) ); Serial.print( " " ); Serial.println(uinttohexstring(intval));
 
   intval = (sel >> 16) & 0x0000ffff;
   val[0] = (intval >> 24 ) & 0xFF;
@@ -1257,7 +1347,6 @@ void setSpdifOutputRouting( void )
   val[2] = (intval >> 8 ) & 0xFF;
   val[3] =  intval & 0xFF;
   ADAU1452_WRITE_BLOCK( addrPort, val, 4 );
-  Serial.print( uinttohexstring(addrPort) ); Serial.print( " " ); Serial.println(uinttohexstring(intval));
 
   sel = (spdifOutput.selectionRight >> 16) & 0x0000ffff;
   addrChn = spdifOutputSelector.addrChnRight[sel];
@@ -1270,7 +1359,6 @@ void setSpdifOutputRouting( void )
   val[2] = (intval >> 8 ) & 0xFF;
   val[3] =  intval & 0xFF;
   ADAU1452_WRITE_BLOCK( addrChn, val, 4 );
-  Serial.print( uinttohexstring(addrChn) ); Serial.print( " " ); Serial.println(uinttohexstring(intval));
 
   intval = (sel >> 16) & 0x0000ffff;
   val[0] = (intval >> 24 ) & 0xFF;
@@ -1278,7 +1366,6 @@ void setSpdifOutputRouting( void )
   val[2] = (intval >> 8 ) & 0xFF;
   val[3] =  intval & 0xFF;
   ADAU1452_WRITE_BLOCK( addrPort, val, 4 );
-  Serial.print( uinttohexstring(addrPort) ); Serial.print( " " ); Serial.println(uinttohexstring(intval));
 
 }
 
