@@ -1,9 +1,9 @@
 /*
- * ak5558.h
- *
- *  Created on: 04.10.2018
- *      Author: rkn
- */
+   ak5558.h
+
+    Created on: 04.10.2018
+        Author: rkn
+*/
 
 #ifndef AK5558_H_
 #define AK5558_H_

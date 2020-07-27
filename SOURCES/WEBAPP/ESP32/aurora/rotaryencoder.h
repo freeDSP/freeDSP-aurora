@@ -3,28 +3,40 @@
 
 class RotaryEncoder
 {
-public:
-  RotaryEncoder( void );
-  ~RotaryEncoder( void ) {}
+  public:
+    RotaryEncoder( void );
+    ~RotaryEncoder( void ) {}
 
-  long int getRotationValue( void ) { return value; }
+    long int getRotationValue( void ) {
+      return value;
+    }
 
-  void setRotationValue( long int val ) { value = val; }
+    void setRotationValue( long int val ) {
+      value = val;
+    }
 
-  long int getSwitchValue( void ) { return sw; }
+    long int getSwitchValue( void ) {
+      return sw;
+    }
 
-  void setSwitchValue( long int val ) { sw = val; }
+    void setSwitchValue( long int val ) {
+      sw = val;
+    }
 
-  uint8_t getCurrentState( void ) { return state; }
+    uint8_t getCurrentState( void ) {
+      return state;
+    }
 
-  void setCurrentState( uint8_t s ) { state = s; }
+    void setCurrentState( uint8_t s ) {
+      state = s;
+    }
 
-  void init( void );
+    void init( void );
 
-private:
-  long int value;
-  long int sw;
-  uint8_t state;
+  private:
+    long int value;
+    long int sw;
+    uint8_t state;
 };
 
 extern RotaryEncoder rotaryEncoder;

@@ -1,9 +1,9 @@
 /*
- * ak4458.h
- *
- *  Created on: 16.06.2018
- *      Author: rkn
- */
+   ak4458.h
+
+    Created on: 16.06.2018
+        Author: rkn
+*/
 
 #ifndef AK4458_H_
 #define AK4458_H_

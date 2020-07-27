@@ -13,12 +13,12 @@ void IRAM_ATTR isrRotaryEncoderAB( void )
 
   portENTER_CRITICAL_ISR( &gpioMux );
 
-  if( digitalRead( ROTARYENCODER_PINA ) )
+  if ( digitalRead( ROTARYENCODER_PINA ) )
     masked_state |= 0b00000100;
-  if( digitalRead( ROTARYENCODER_PINB ) )
+  if ( digitalRead( ROTARYENCODER_PINB ) )
     masked_state |= 0b00001000;
 
-  switch( masked_state )
+  switch ( masked_state )
   {
     case 0b00000000:
     case 0b00000101:
@@ -56,10 +56,10 @@ void IRAM_ATTR isrRotaryEncoderAB( void )
 
 void IRAM_ATTR isrRotaryEncoderSwitch()
 {
- portENTER_CRITICAL_ISR( &gpioMux );
- if( digitalRead( ROTARYENCODER_PINSW ) )
-   rotaryEncoder.setSwitchValue( rotaryEncoder.getSwitchValue() + 1 );
- portEXIT_CRITICAL_ISR( &gpioMux );
+  portENTER_CRITICAL_ISR( &gpioMux );
+  if ( digitalRead( ROTARYENCODER_PINSW ) )
+    rotaryEncoder.setSwitchValue( rotaryEncoder.getSwitchValue() + 1 );
+  portEXIT_CRITICAL_ISR( &gpioMux );
 }
 
 RotaryEncoder::RotaryEncoder( void )

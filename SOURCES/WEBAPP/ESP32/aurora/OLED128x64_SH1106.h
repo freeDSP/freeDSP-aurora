@@ -10,17 +10,17 @@
 
 class OLED128x64_SH1106
 {
-public:
-  void begin( void );
+  public:
+    void begin( void );
 
-  void clearBuffer( void );
-  void sendBuffer(void );
+    void clearBuffer( void );
+    void sendBuffer(void );
 
-  void drawBootScreen( void );
-  void drawUI( const char* plugin, const char* ip, const char* preset, float vol, int editMode = 0 );
-  void drawSwitchingPreset( void );
+    void drawBootScreen( void );
+    void drawUI( const char* plugin, const char* ip, const char* preset, float vol, int editMode = 0 );
+    void drawSwitchingPreset( void );
 
-private:
+  private:
 
 };
 

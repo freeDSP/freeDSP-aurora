@@ -1,5 +1,5 @@
 const char fallback_html[] = "<!DOCTYPE html>"
-R"!^!(
+                             R"!^!(
 <html>
 <head>
 <title>AURORA DSP</title>

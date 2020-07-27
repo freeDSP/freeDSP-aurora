@@ -58,7 +58,7 @@ void OLED128x64_SH1106::drawUI( const char* plugin, const char* ip, const char* 
 
   u8g2.setFont( u8g2_font_helvB18_tf );
   u8g2.drawStr( 13, 20, preset );
-  if( editMode == 1 )
+  if ( editMode == 1 )
   {
     u8g2.drawLine( 13, 44, 31, 44 );
     u8g2.drawLine( 13, 45, 31, 45 );
