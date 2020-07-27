@@ -56,7 +56,7 @@ The ESPAsyncWebServer library requires the AsyncTCP library to work. Follow the 
 4. Move the `Arduino-IRremote` folder to your Arduino IDE installation libraries folder
 
 
-## Install ESP32 boards (if you haven't done yet)
+## Install ESP32 boards (if you haven't done yet)
 
 Open ArduinoID `File > Preferences` dialog, and add following URL to Additional Cards setting:
  https://dl.espressif.com/dl/package_esp32_index.son
