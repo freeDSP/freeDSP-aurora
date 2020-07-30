@@ -1,11 +1,12 @@
 # How to build ESP32 firmware
 
+
 ## Installing ArduinoIDE
 
 Go to https://www.arduino.cc/en/Main/Software or use your preferred package manager to install ArduinoIDE.
 
 
-## Installing the ESPAsyncWebServer library (if you haven't done yet)
+## Installing the ESPAsyncWebServer library
 
 Follow the next steps to install the ESPAsyncWebServer library:
 
@@ -15,7 +16,7 @@ Follow the next steps to install the ESPAsyncWebServer library:
 4. Move the `ESPAsyncWebServer` folder to your Arduino IDE installation libraries folder.
 
 
-## Installing the Async TCP Library for ESP32 (if you haven't done yet)
+## Installing the Async TCP Library for ESP32
 
 The ESPAsyncWebServer library requires the AsyncTCP library to work. Follow the next steps to install that library:
 
@@ -25,7 +26,7 @@ The ESPAsyncWebServer library requires the AsyncTCP library to work. Follow the 
 4. Move the `AsyncTCPfolder` to your Arduino IDE installation libraries folder.
 
 
-## Installing the Arduino ESP32 Filesystem Uploader (if you haven't done yet)
+## Installing the Arduino ESP32 Filesystem Uploader
 
 1. Go to https://github.com/me-no-dev/arduino-esp32fs-plugin/releases/ and click the `ESP32FS-1.0.zip` file to download.
 2. Unzip the .zip folder and you should get `ESP32FS` folder
@@ -33,7 +34,7 @@ The ESPAsyncWebServer library requires the AsyncTCP library to work. Follow the 
 You should have a similar folder structure: `<home_dir>/Arduino-<version>/tools/ESP32FS/tool/esp32fs.jar`.
 
 
-## Installing the ArduinJSON library (if you haven't done yet)
+## Installing the ArduinJSON library
 
 1. Open the Arduino Library Manager
 2. Search for `ArduinoJson`
@@ -41,7 +42,7 @@ You should have a similar folder structure: `<home_dir>/Arduino-<version>/tools/
 4. Click Install.
 
 
-## Installing the U8g2 library (if you haven't done yet)
+## Installing the U8g2 library
 
 1. Open the Arduino Library Manager
 2. Search for `U8g2`
@@ -49,7 +50,7 @@ You should have a similar folder structure: `<home_dir>/Arduino-<version>/tools/
 4. Click Install.
 
 
-## Installing the IRremote Library (if you haven't done yet)
+## Installing the IRremote Library
 
 1. Download the IRremote library from https://github.com/dspverden/Arduino-IRremote/archive/master.zip.
 2. Unzip the .zip folder and you should get `Arduino-IRremote-master` folder.
@@ -57,7 +58,7 @@ You should have a similar folder structure: `<home_dir>/Arduino-<version>/tools/
 4. Move the `Arduino-IRremote` folder to your Arduino IDE installation libraries folder.
 
 
-## Installing ESP32 boards (if you haven't done yet)
+## Installing ESP32 boards
 
 Open ArduinoID `File > Preferences` dialog, and add following URL to Additional Cards setting:
 - https://dl.espressif.com/dl/package_esp32_index.son
