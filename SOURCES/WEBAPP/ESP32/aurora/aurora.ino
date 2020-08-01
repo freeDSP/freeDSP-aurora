@@ -1,8 +1,14 @@
-// these are only required for the espmake32 automagic library search
+/**
+ * Enable these when building with espmake32
+ * else the dependency scanner will fail to find the libs, breaking the final linking
+ * TODO fix this by using the espmake32 LIBS variable
+ */
+#if 0
 #include <FS.h>
 #include <WebServer.h>
 #include <AsyncTCP.h>
 #include <u8g2.h>
+#endif
 
 #include <Wire.h>
 #include <WiFi.h>
