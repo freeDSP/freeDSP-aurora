@@ -1,3 +1,9 @@
+// these are only required for the espmake32 automagic library search
+#include <FS.h>
+#include <WebServer.h>
+#include <AsyncTCP.h>
+#include <u8g2.h>
+
 #include <Wire.h>
 #include <WiFi.h>
 #include <ESPAsyncWebServer.h>
@@ -11,7 +17,6 @@
 #include "hwconfig.h"
 #include "AK4458.h"
 #include "AK5558.h"
-#include "AudioFilterFactory.h"
 #include "fallback.h"
 #include "webota.h"
 #include "OLED128x64_SH1106.h"
@@ -24,206 +29,22 @@
 #include <IRremote.h>
 #endif
 
-#define VERSION_STR "v2.1.1"
-
-#define MAX_NUM_INPUTS 8
-#define MAX_NUM_HPS 8
-#define MAX_NUM_LSHELVS 8
-#define MAX_NUM_PEQS 80
-#define MAX_NUM_HSHELVS 8
-#define MAX_NUM_LPS 8
-#define MAX_NUM_PHASES 8
-#define MAX_NUM_DELAYS 8
-#define MAX_NUM_GAINS 8
-#define MAX_NUM_CROSSOVER 8
-#define MAX_NUM_FIRS 4
-
-#define MAX_LENGTH_IR 4096
-
-#define MAX_NUM_PRESETS 4
-
-enum taddonid
-{
-  ADDON_CUSTOM = 0x00,
-  ADDON_A = 0x01,
-  ADDON_B = 0x02,
-  ADDON_C = 0x03,
-  ADDON_D = 0x04
-};
-
-struct tSettings
-{
-  String ssid;
-  String password;
-  int addonid;
-  bool vpot;
-  String pwdap;
-  String apname;
-  int adcsum;
-  bool wifiOn;
-};
-
-tSettings Settings;
-
-typedef uint8_t tFilterType;
-
-enum tMuxAddr
-{
-  ADDR_ANALOG,
-  ADDR_UAC,
-  ADDR_EXP,
-  ADDR_ESP,
-  ADDR_SPDIF,
-  ADDR_OUT
-};
-
-struct tInput
-{
-  uint16_t addrChn[5];
-  uint16_t addrPort;
-  uint32_t sel;
-};
-
-struct tHPLP
-{
-  uint16_t addr[4];
-  float fc;
-  tFilterType typ;
-  bool bypass;
-};
-
-struct tShelving
-{
-  uint16_t addr;
-  float gain;
-  float fc;
-  float slope;
-  bool bypass;
-};
-
-struct tPeq
-{
-  uint16_t addr;
-  float gain;
-  float fc;
-  float Q;
-  bool bypass;
-};
-
-struct tPhase
-{
-  uint16_t addr;
-  float fc;
-  float Q;
-  bool inv;
-  bool bypass;
-};
-
-struct tDelay
-{
-  uint16_t addr;
-  float delay;
-  bool bypass;
-};
-
-struct tGain
-{
-  uint16_t addr;
-  float gain;
-  bool mute;
-};
-
-struct tCrossover
-{
-  uint16_t hp_addr[4];
-  float hp_fc;
-  tFilterType hp_typ;
-  bool hp_bypass;
-
-  uint16_t lp_addr[4];
-  float lp_fc;
-  tFilterType lp_typ;
-  bool lp_bypass;
-};
-
-struct tFir
-{
-  uint16_t addr;
-  float ir[MAX_LENGTH_IR];
-  bool bypass;
-};
-
-struct tMasterVolume
-{
-  uint16_t addr;
-  float val;
-};
-
-struct tInputSelector
-{
-  uint16_t analog[8];
-  uint16_t spdif[8];
-  uint16_t uac[8];
-  uint16_t exp[8];
-  uint16_t port[8];
-};
-
-struct tSpdifOutputSelector
-{
-  uint16_t addrChnLeft[6];
-  uint16_t addrPortLeft;
-  uint16_t addrChnRight[6];
-  uint16_t addrPortRight;
-};
-
-struct tSpdifOutput
-{
-  uint32_t selectionLeft;
-  uint32_t selectionRight;
-};
-
-tInput paramInputs[8];
-tHPLP paramHP[8];
-tShelving paramLshelv[8];
-tPeq paramPeq[80];
-tShelving paramHshelv[8];
-tHPLP paramLP[8];
-tPhase paramPhase[8];
-tDelay paramDelay[8];
-tGain paramGain[8];
-tCrossover paramCrossover[8];
-tFir paramFir[MAX_NUM_FIRS];
-tMasterVolume masterVolume = { 0x0000, -60.0 };
-tInputSelector inputSelector;
-tSpdifOutput spdifOutput;
-tSpdifOutputSelector spdifOutputSelector;
-
-int numInputs = 0;
-int numHPs = 0;
-int numLShelvs = 0;
-int numPEQs = 0;
-int numHShelvs = 0;
-int numLPs = 0;
-int numPhases = 0;
-int numDelays = 0;
-int numGains = 0;
-int numCrossovers = 0;
-int numFIRs = 0;
+/**
+ * Routines which originally belonged to aurora.ino,
+ *  but have been moved to their own files
+ */
+#include "config.h"
+#include "json.h"
+#include "adau1452.h"
+#include "addons.h"
+#include "display.h"
+#include "settings.h"
 
 File fileDspProgram;
 File fileUpload;
 
-float sampleRate = 48000.0;
-
-uint8_t currentPreset = 0;
 uint8_t currentFirUploadIdx = 0;
-byte currentAddOnCfg[3];
 String currentPlugInName;
-
-uint16_t addrVPot = 0x0000;
-
-String presetUsrparamFile[MAX_NUM_PRESETS] = { "/usrparam.001", "/usrparam.002", "/usrparam.003", "/usrparam.004" };
-String presetAddonCfgFile[MAX_NUM_PRESETS] = { "/addoncfg.001", "/addoncfg.002", "/addoncfg.003", "/addoncfg.004" };
 
 AsyncWebServer server( 80 );
 
@@ -259,58 +80,6 @@ IRrecv irReceiver( IR_RECEIVER_PIN );
 
 int editMode = 0;
 
-
-//==============================================================================
-/*!
- */
-void ADAU1452_WRITE_REGISTER( uint16_t reg, byte msb, byte lsb )
-{
-  Wire.beginTransmission( DSP_ADDR );
-  Wire.write( (byte)( (reg >> 8) & 0xFF ) );
-  Wire.write( (byte)(  reg       & 0xFF ) );
-  Wire.write( msb );
-  Wire.write( lsb );
-  Wire.endTransmission( true );
-}
-
-//==============================================================================
-/*!
- */
-void ADAU1452_WRITE_BLOCK( uint16_t regaddr, byte val[], uint16_t len )
-{
-  for( uint16_t ii = 0; ii < len; ii = ii + 4 )
-  {
-    Wire.beginTransmission( DSP_ADDR );
-    Wire.write( (byte)( (regaddr >> 8) & 0xFF ) );
-    Wire.write( (byte)(  regaddr       & 0xFF ) );
-    Wire.write( (byte)( val[ii] & 0xFF ) );
-    Wire.write( (byte)( val[ii+1] & 0xFF ) );
-    Wire.write( (byte)( val[ii+2] & 0xFF ) );
-    Wire.write( (byte)( val[ii+3] & 0xFF ) );
-    Wire.endTransmission( true );
-  }
-}
-
-//==============================================================================
-/*!
- *
- */
-uint32_t convertTo824( double val )
-{
-  double fractpart, intpart;
-  uint32_t ret;
-
-  if( val < 0.0 )
-    val += 256.0;
-
-  intpart = floor( val );
-  fractpart = val - intpart;
-
-  ret = ((( static_cast<uint32_t>(static_cast<int8_t>(intpart)) ) << 24) & 0xff000000)
-      + ((static_cast<uint32_t>(fractpart * 16777216.0)) & 0x00ffffff);
-
-  return ret;
-}
 
 //==============================================================================
 /*! Converts a uint32 to a hex string with leading 0x
@@ -449,111 +218,6 @@ void initUserParams( void )
   spdifOutput.selectionLeft = 0x00000000;
   spdifOutput.selectionRight = 0x00000000;
 
-}
-
-//==============================================================================
-/*! Reads the device settings from JSON file.
- */
-void readSettings( void )
-{
-  Settings.ssid = "";
-  Settings.password = "";
-  Settings.addonid = ADDON_CUSTOM;
-  Settings.vpot = false;
-  Settings.pwdap = "";
-  Settings.apname = "AP-freeDSP-aurora";
-  Settings.adcsum = 0;
-  Settings.wifiOn = true;
-
-  if( !SPIFFS.exists( "/settings.ini" ) )
-  {
-    Serial.print( "Writing default settings.ini..." );
-
-    writeSettings();
-
-    Serial.println( "[OK]" );
-    return;
-  }
-
-  Serial.print( "Reading settings.ini..." );
-
-  File fileSettings = SPIFFS.open( "/settings.ini" );
-
-  if( fileSettings )
-  {
-    StaticJsonDocument<512> jsonDoc;
-    DeserializationError err = deserializeJson( jsonDoc, fileSettings );
-    if( err )
-    {
-      Serial.print( "[ERROR] readSettings(): Deserialization failed." );
-      Serial.println( err.c_str() );
-      return;
-    }
-    fileSettings.close();
-
-    JsonObject jsonSettings = jsonDoc.as<JsonObject>();
-
-    if( jsonSettings["version"].as<String>().startsWith( "1." ) )
-    {
-      Serial.println( "Updating from 1.x.x" );
-      writeSettings();
-    }
-
-    Settings.ssid = jsonSettings["ssid"].as<String>();
-    Settings.password = jsonSettings["pwd"].as<String>();
-    Settings.addonid = jsonSettings["aid"].as<String>().toInt();
-    if( jsonSettings["vpot"].as<String>() == "true" )
-      Settings.vpot = true;
-    else
-      Settings.vpot = false;
-    Settings.pwdap = jsonSettings["pwdap"].as<String>();
-    if( !jsonSettings["apname"].isNull() )
-      Settings.apname = jsonSettings["apname"].as<String>();
-    Settings.adcsum = jsonSettings["adcsum"].as<String>().toInt();
-    // When updating from earlier version jsonSettings["wifion"] could return "null".
-    // Then it should use the default value
-    if( jsonSettings["wifion"].as<String>() == "true" )
-      Settings.wifiOn = true;
-    else if( jsonSettings["wifion"].as<String>() == "false" )
-      Settings.wifiOn = false;
-
-    Serial.println( "[OK]" );
-    Serial.println( "Device config" );
-    Serial.print( "AID: " ); Serial.println( Settings.addonid );
-    Serial.print( "Volume Poti: " ); Serial.println( Settings.vpot );
-    Serial.print( "ADC Channel Sum: " );Serial.println( Settings.adcsum );
-    Serial.println( "[OK]" );
-  }
-  else
-    Serial.println( "[ERROR] readSettings(): Opening settings.ini failed." );
-}
-
-//==============================================================================
-/*! Write the device settings to JSON file.
- */
-void writeSettings( void )
-{
-  File fileSettings = SPIFFS.open( "/settings.ini", "w" );
-
-  if( fileSettings )
-  {
-    StaticJsonDocument<512> jsonSettings;
-    jsonSettings["ssid"] = Settings.ssid;
-    jsonSettings["pwd"] = Settings.password;
-    jsonSettings["aid"] = Settings.addonid;
-    jsonSettings["vpot"] = Settings.vpot;
-    jsonSettings["pwdap"] = Settings.pwdap;
-    jsonSettings["apname"] = Settings.apname;
-    jsonSettings["adcsum"] = Settings.adcsum;
-    jsonSettings["wifion"] = Settings.wifiOn;
-
-    if( serializeJson( jsonSettings, fileSettings ) == 0 )
-      Serial.println( "[ERROR] writeSettings(): Failed to write settings to file" );
-  }
-  else
-    Serial.println( "[ERROR] writeSettings(): Opening settings.ini failed." );
-
-  fileSettings.close();
 }
 
 //==============================================================================
@@ -1324,52 +988,6 @@ void softUnmuteDAC( void )
 }
 
 //==============================================================================
-/*! Changes the routing for the SPDIF output
- */
-void setSpdifOutputRouting( void )
-{
-  uint32_t sel = (spdifOutput.selectionLeft >> 16) & 0x0000ffff;
-  uint16_t addrChn = spdifOutputSelector.addrChnLeft[sel];
-  uint16_t addrPort = spdifOutputSelector.addrPortLeft;
-  sel = spdifOutput.selectionLeft;
-
-  byte val[4];
-  uint32_t intval = sel & 0x0000ffff;
-  val[0] = (intval >> 24 ) & 0xFF;
-  val[1] = (intval >> 16 ) & 0xFF;
-  val[2] = (intval >> 8 ) & 0xFF;
-  val[3] =  intval & 0xFF;
-  ADAU1452_WRITE_BLOCK( addrChn, val, 4 );
-
-  intval = (sel >> 16) & 0x0000ffff;
-  val[0] = (intval >> 24 ) & 0xFF;
-  val[1] = (intval >> 16 ) & 0xFF;
-  val[2] = (intval >> 8 ) & 0xFF;
-  val[3] =  intval & 0xFF;
-  ADAU1452_WRITE_BLOCK( addrPort, val, 4 );
-
-  sel = (spdifOutput.selectionRight >> 16) & 0x0000ffff;
-  addrChn = spdifOutputSelector.addrChnRight[sel];
-  addrPort = spdifOutputSelector.addrPortRight;
-  sel = spdifOutput.selectionRight;
-
-  intval = sel & 0x0000ffff;
-  val[0] = (intval >> 24 ) & 0xFF;
-  val[1] = (intval >> 16 ) & 0xFF;
-  val[2] = (intval >> 8 ) & 0xFF;
-  val[3] =  intval & 0xFF;
-  ADAU1452_WRITE_BLOCK( addrChn, val, 4 );
-
-  intval = (sel >> 16) & 0x0000ffff;
-  val[0] = (intval >> 24 ) & 0xFF;
-  val[1] = (intval >> 16 ) & 0xFF;
-  val[2] = (intval >> 8 ) & 0xFF;
-  val[3] =  intval & 0xFF;
-  ADAU1452_WRITE_BLOCK( addrPort, val, 4 );
-
-}
-
-//==============================================================================
 /*! Handles the GET request for Input selection
  *
  */
@@ -2111,33 +1729,6 @@ void handlePostInputJson( AsyncWebServerRequest* request, uint8_t* data )
 }
 
 //==============================================================================
-/*! Sets a new input selection on DSP.
- *
- */
-void setInput( const int idx )
-{
-  uint32_t sel = (paramInputs[idx].sel >> 16) & 0x0000ffff;
-  uint16_t addrChn = paramInputs[idx].addrChn[sel];
-  uint16_t addrPort = paramInputs[idx].addrPort;
-  sel = paramInputs[idx].sel;
-
-  byte val[4];
-  uint32_t intval = sel & 0x0000ffff;
-  val[0] = (intval >> 24 ) & 0xFF;
-  val[1] = (intval >> 16 ) & 0xFF;
-  val[2] = (intval >> 8 ) & 0xFF;
-  val[3] =  intval & 0xFF;
-  ADAU1452_WRITE_BLOCK( addrChn, val, 4 );
-
-  intval = (sel >> 16) & 0x0000ffff;
-  val[0] = (intval >> 24 ) & 0xFF;
-  val[1] = (intval >> 16 ) & 0xFF;
-  val[2] = (intval >> 8 ) & 0xFF;
-  val[3] =  intval & 0xFF;
-  ADAU1452_WRITE_BLOCK( addrPort, val, 4 );
-}
-
-//==============================================================================
 /*! Handles the POST request for High Pass parameter
  *
  */
@@ -2175,67 +1766,6 @@ void handlePostHpJson( AsyncWebServerRequest* request, uint8_t* data )
 
 }
 
-//==============================================================================
-/*! Sets the values for a highpass block on DSP.
- *
- */
-void setHighPass( int idx )
-{
-  if( (paramHP[idx].fc > 0.0) && (paramHP[idx].fc < 20000.0)
-      && (paramHP[idx].typ >= 0) && (paramHP[idx].typ < AudioFilterFactory::kNumFilterDesigns) )
-  {
-    float a[12] = { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0 };
-    float b[12] = { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0 };
-    byte val[4];
-    uint32_t floatval;
-    if( !(paramHP[idx].bypass) )
-      AudioFilterFactory::makeHighPass( a, b, paramHP[idx].typ, paramHP[idx].fc, sampleRate );
-
-    for( int ii = 0; ii < 4; ii++ )
-    {
-      uint16_t addr = paramHP[idx].addr[ii];
-      floatval = convertTo824(b[ 3*ii + 2 ]);
-      val[0] = (floatval >> 24 ) & 0xFF;
-      val[1] = (floatval >> 16 ) & 0xFF;
-      val[2] = (floatval >> 8 ) & 0xFF;
-      val[3] =  floatval & 0xFF;
-      ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B2
-      addr++;
-
-      floatval = convertTo824(b[ 3*ii + 1 ]);
-      val[0] = (floatval >> 24 ) & 0xFF;
-      val[1] = (floatval >> 16 ) & 0xFF;
-      val[2] = (floatval >> 8 ) & 0xFF;
-      val[3] =  floatval & 0xFF;
-      ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B1
-      addr++;
-
-      floatval = convertTo824(b[ 3*ii + 0 ]);
-      val[0] = (floatval >> 24 ) & 0xFF;
-      val[1] = (floatval >> 16 ) & 0xFF;
-      val[2] = (floatval >> 8 ) & 0xFF;
-      val[3] =  floatval & 0xFF;
-      ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B0
-      addr++;
-
-      floatval = convertTo824(a[ 3*ii + 2 ]);
-      val[0] = (floatval >> 24 ) & 0xFF;
-      val[1] = (floatval >> 16 ) & 0xFF;
-      val[2] = (floatval >> 8 ) & 0xFF;
-      val[3] =  floatval & 0xFF;
-      ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A2
-      addr++;
-
-      floatval = convertTo824(a[ 3*ii + 1 ]);
-      val[0] = (floatval >> 24 ) & 0xFF;
-      val[1] = (floatval >> 16 ) & 0xFF;
-      val[2] = (floatval >> 8 ) & 0xFF;
-      val[3] =  floatval & 0xFF;
-      ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A1
-      addr++;
-    }
-  }
-}
 //==============================================================================
 /*! Handles the POST request for Low Shelving parameter
  *
@@ -2283,64 +1813,6 @@ void handlePostLshelvJson( AsyncWebServerRequest* request, uint8_t* data )
   softUnmuteDAC();
 }
 
-//==============================================================================
-/*! Sets the values for a low shelving block on DSP.
- *
- */
-void setLowShelving( int idx )
-{
-  if( (paramLshelv[idx].fc > 0) && (paramLshelv[idx].fc < 20000)
-      && (paramLshelv[idx].gain >= -24.0) && (paramLshelv[idx].gain <= 24.0)
-      && (paramLshelv[idx].slope >= 0.1) && (paramLshelv[idx].slope <= 2.0) )
-  {
-    float a[3] = { 1.0, 0.0, 0.0 };
-    float b[3] = { 1.0, 0.0, 0.0 };
-    byte val[4];
-    uint32_t floatval;
-    if( !(paramLshelv[idx].bypass) )
-      AudioFilterFactory::makeLowShelv( a, b, paramLshelv[idx].gain, paramLshelv[idx].fc, paramLshelv[idx].slope, sampleRate );
-
-    uint16_t addr = paramLshelv[idx].addr;
-    floatval = convertTo824(b[2]);
-    val[0] = (floatval >> 24 ) & 0xFF;
-    val[1] = (floatval >> 16 ) & 0xFF;
-    val[2] = (floatval >> 8 ) & 0xFF;
-    val[3] =  floatval & 0xFF;
-    ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B2
-    addr++;
-
-    floatval = convertTo824(b[1]);
-    val[0] = (floatval >> 24 ) & 0xFF;
-    val[1] = (floatval >> 16 ) & 0xFF;
-    val[2] = (floatval >> 8 ) & 0xFF;
-    val[3] =  floatval & 0xFF;
-    ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B1
-    addr++;
-
-    floatval = convertTo824(b[0]);
-    val[0] = (floatval >> 24 ) & 0xFF;
-    val[1] = (floatval >> 16 ) & 0xFF;
-    val[2] = (floatval >> 8 ) & 0xFF;
-    val[3] =  floatval & 0xFF;
-    ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B0
-    addr++;
-
-    floatval = convertTo824(a[2]);
-    val[0] = (floatval >> 24 ) & 0xFF;
-    val[1] = (floatval >> 16 ) & 0xFF;
-    val[2] = (floatval >> 8 ) & 0xFF;
-    val[3] =  floatval & 0xFF;
-    ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A2
-    addr++;
-
-    floatval = convertTo824(a[1]);
-    val[0] = (floatval >> 24 ) & 0xFF;
-    val[1] = (floatval >> 16 ) & 0xFF;
-    val[2] = (floatval >> 8 ) & 0xFF;
-    val[3] =  floatval & 0xFF;
-    ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A1
-  }
-}
 
 //==============================================================================
 /*! Handles the POST request for PEQ parameter
@@ -2386,65 +1858,6 @@ void handlePostPeqJson( AsyncWebServerRequest* request, uint8_t* data )
   request->send(200, "text/plain", "");
 
   softUnmuteDAC();
-}
-
-//==============================================================================
-/*! Sets the values for a peq block on DSP.
- *
- */
-void setPEQ( int idx )
-{
-  if( (paramPeq[idx].fc > 0.0) && (paramPeq[idx].fc < 20000.0)
-    && (paramPeq[idx].gain >= -24.0) && (paramPeq[idx].gain <= 24.0)
-    && (paramPeq[idx].Q >= 0.1) && (paramPeq[idx].Q <= 100.0) )
-  {
-    float a[3] = { 1.0, 0.0, 0.0 };
-    float b[3] = { 1.0, 0.0, 0.0 };
-    byte val[4];
-    uint32_t floatval;
-    if( !(paramPeq[idx].bypass) )
-      AudioFilterFactory::makeParametricEQ( a, b, paramPeq[idx].gain, paramPeq[idx].fc, paramPeq[idx].Q, sampleRate );
-
-    uint32_t addr = paramPeq[idx].addr;
-    floatval = convertTo824(b[2]);
-    val[0] = (floatval >> 24 ) & 0xFF;
-    val[1] = (floatval >> 16 ) & 0xFF;
-    val[2] = (floatval >> 8 ) & 0xFF;
-    val[3] =  floatval & 0xFF;
-    ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B2
-    addr++;
-
-    floatval = convertTo824(b[1]);
-    val[0] = (floatval >> 24 ) & 0xFF;
-    val[1] = (floatval >> 16 ) & 0xFF;
-    val[2] = (floatval >> 8 ) & 0xFF;
-    val[3] =  floatval & 0xFF;
-    ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B1
-    addr++;
-
-    floatval = convertTo824(b[0]);
-    val[0] = (floatval >> 24 ) & 0xFF;
-    val[1] = (floatval >> 16 ) & 0xFF;
-    val[2] = (floatval >> 8 ) & 0xFF;
-    val[3] =  floatval & 0xFF;
-    ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B0
-    addr++;
-
-    floatval = convertTo824(a[2]);
-    val[0] = (floatval >> 24 ) & 0xFF;
-    val[1] = (floatval >> 16 ) & 0xFF;
-    val[2] = (floatval >> 8 ) & 0xFF;
-    val[3] =  floatval & 0xFF;
-    ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A2
-    addr++;
-
-    floatval = convertTo824(a[1]);
-    val[0] = (floatval >> 24 ) & 0xFF;
-    val[1] = (floatval >> 16 ) & 0xFF;
-    val[2] = (floatval >> 8 ) & 0xFF;
-    val[3] =  floatval & 0xFF;
-    ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A1
-  }
 }
 
 //==============================================================================
@@ -2495,65 +1908,6 @@ void handlePostHshelvJson( AsyncWebServerRequest* request, uint8_t* data )
 }
 
 //==============================================================================
-/*! Sets the values for a high shelving block on DSP.
- *
- */
-void setHighShelving( int idx )
-{
-  if( (paramHshelv[idx].fc > 0.0) && (paramHshelv[idx].fc < 20000.0)
-      && (paramHshelv[idx].gain >= -24.0) && (paramHshelv[idx].gain <= 24.0)
-      && (paramHshelv[idx].slope >= 0.1) && (paramHshelv[idx].slope <= 2.0) )
-  {
-    float a[3] = { 1.0, 0.0, 0.0 };
-    float b[3] = { 1.0, 0.0, 0.0 };
-    byte val[4];
-    uint32_t floatval;
-    if( !(paramHshelv[idx].bypass) )
-      AudioFilterFactory::makeHighShelv( a, b, paramHshelv[idx].gain, paramHshelv[idx].fc, paramHshelv[idx].slope, sampleRate );
-
-    uint16_t addr = paramHshelv[idx].addr;
-    floatval = convertTo824(b[2]);
-    val[0] = (floatval >> 24 ) & 0xFF;
-    val[1] = (floatval >> 16 ) & 0xFF;
-    val[2] = (floatval >> 8 ) & 0xFF;
-    val[3] =  floatval & 0xFF;
-    ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B2
-    addr++;
-
-    floatval = convertTo824(b[1]);
-    val[0] = (floatval >> 24 ) & 0xFF;
-    val[1] = (floatval >> 16 ) & 0xFF;
-    val[2] = (floatval >> 8 ) & 0xFF;
-    val[3] =  floatval & 0xFF;
-    ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B1
-    addr++;
-
-    floatval = convertTo824(b[0]);
-    val[0] = (floatval >> 24 ) & 0xFF;
-    val[1] = (floatval >> 16 ) & 0xFF;
-    val[2] = (floatval >> 8 ) & 0xFF;
-    val[3] =  floatval & 0xFF;
-    ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B0
-    addr++;
-
-    floatval = convertTo824(a[2]);
-    val[0] = (floatval >> 24 ) & 0xFF;
-    val[1] = (floatval >> 16 ) & 0xFF;
-    val[2] = (floatval >> 8 ) & 0xFF;
-    val[3] =  floatval & 0xFF;
-    ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A2
-    addr++;
-
-    floatval = convertTo824(a[1]);
-    val[0] = (floatval >> 24 ) & 0xFF;
-    val[1] = (floatval >> 16 ) & 0xFF;
-    val[2] = (floatval >> 8 ) & 0xFF;
-    val[3] =  floatval & 0xFF;
-    ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A1
-  }
-}
-
-//==============================================================================
 /*! Handles the POST request for Low Pass parameter
  *
  */
@@ -2599,67 +1953,6 @@ void handlePostLpJson( AsyncWebServerRequest* request, uint8_t* data )
   softUnmuteDAC();
 }
 
-//==============================================================================
-/*! Sets the values for a low pass block on DSP.
- *
- */
-void setLowPass( int idx )
-{
-  if( (paramLP[idx].fc > 0.0) && (paramLP[idx].fc < 20000.0)
-      && (paramLP[idx].typ >= 0) && (paramLP[idx].typ < AudioFilterFactory::kNumFilterDesigns) )
-  {
-    float a[12] = { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0 };
-    float b[12] = { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0 };
-    byte val[4];
-    uint32_t floatval;
-    if( !(paramLP[idx].bypass) )
-      AudioFilterFactory::makeLowPass( a, b, paramLP[idx].typ, paramLP[idx].fc, sampleRate );
-
-    for( int ii = 0; ii < 4; ii++ )
-    {
-      uint16_t addr = paramLP[idx].addr[ii];
-      floatval = convertTo824(b[ 3*ii + 2 ]);
-      val[0] = (floatval >> 24 ) & 0xFF;
-      val[1] = (floatval >> 16 ) & 0xFF;
-      val[2] = (floatval >> 8 ) & 0xFF;
-      val[3] =  floatval & 0xFF;
-      ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B2
-      addr++;
-
-      floatval = convertTo824(b[ 3*ii + 1 ]);
-      val[0] = (floatval >> 24 ) & 0xFF;
-      val[1] = (floatval >> 16 ) & 0xFF;
-      val[2] = (floatval >> 8 ) & 0xFF;
-      val[3] =  floatval & 0xFF;
-      ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B1
-      addr++;
-
-      floatval = convertTo824(b[ 3*ii + 0 ]);
-      val[0] = (floatval >> 24 ) & 0xFF;
-      val[1] = (floatval >> 16 ) & 0xFF;
-      val[2] = (floatval >> 8 ) & 0xFF;
-      val[3] =  floatval & 0xFF;
-      ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B0
-      addr++;
-
-      floatval = convertTo824(a[ 3*ii + 2 ]);
-      val[0] = (floatval >> 24 ) & 0xFF;
-      val[1] = (floatval >> 16 ) & 0xFF;
-      val[2] = (floatval >> 8 ) & 0xFF;
-      val[3] =  floatval & 0xFF;
-      ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A2
-      addr++;
-
-      floatval = convertTo824(a[ 3*ii + 1 ]);
-      val[0] = (floatval >> 24 ) & 0xFF;
-      val[1] = (floatval >> 16 ) & 0xFF;
-      val[2] = (floatval >> 8 ) & 0xFF;
-      val[3] =  floatval & 0xFF;
-      ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A1
-      addr++;
-    }
-  }
-}
 
 //==============================================================================
 /*! Handles the POST request for Phase parameter
@@ -2713,72 +2006,6 @@ void handlePostPhaseJson( AsyncWebServerRequest* request, uint8_t* data )
 }
 
 //==============================================================================
-/*! Sets the values for a phase block on DSP.
- *
- */
-void setPhase( int idx )
-{
-  if( (paramPhase[idx].fc > 0.0) && (paramPhase[idx].fc < 20000.0)
-    && (paramPhase[idx].Q >= 0.1) && (paramPhase[idx].Q <= 100.0) )
-  {
-    float a[3] = { 1.0, 0.0, 0.0 };
-    float b[3] = { 1.0, 0.0, 0.0 };
-    byte val[4];
-    uint32_t floatval;
-    if( !paramPhase[idx].bypass )
-      AudioFilterFactory::makeAllpass( a, b, paramPhase[idx].fc, paramPhase[idx].Q, sampleRate );
-
-    if( paramPhase[idx].inv == true )
-    {
-      Serial.println("Inverting");
-      b[0] *= -1.0;
-      b[1] *= -1.0;
-      b[2] *= -1.0;
-    }
-
-    uint16_t addr = paramPhase[idx].addr;
-    floatval = convertTo824(b[2]);
-    val[0] = (floatval >> 24 ) & 0xFF;
-    val[1] = (floatval >> 16 ) & 0xFF;
-    val[2] = (floatval >> 8 ) & 0xFF;
-    val[3] =  floatval & 0xFF;
-    ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B2
-    addr++;
-
-    floatval = convertTo824(b[1]);
-    val[0] = (floatval >> 24 ) & 0xFF;
-    val[1] = (floatval >> 16 ) & 0xFF;
-    val[2] = (floatval >> 8 ) & 0xFF;
-    val[3] =  floatval & 0xFF;
-    ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B1
-    addr++;
-
-    floatval = convertTo824(b[0]);
-    val[0] = (floatval >> 24 ) & 0xFF;
-    val[1] = (floatval >> 16 ) & 0xFF;
-    val[2] = (floatval >> 8 ) & 0xFF;
-    val[3] =  floatval & 0xFF;
-    ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B0
-    addr++;
-
-    floatval = convertTo824(a[2]);
-    val[0] = (floatval >> 24 ) & 0xFF;
-    val[1] = (floatval >> 16 ) & 0xFF;
-    val[2] = (floatval >> 8 ) & 0xFF;
-    val[3] =  floatval & 0xFF;
-    ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A2
-    addr++;
-
-    floatval = convertTo824(a[1]);
-    val[0] = (floatval >> 24 ) & 0xFF;
-    val[1] = (floatval >> 16 ) & 0xFF;
-    val[2] = (floatval >> 8 ) & 0xFF;
-    val[3] =  floatval & 0xFF;
-    ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A1
-  }
-}
-
-//==============================================================================
 /*! Handles the POST request for Delay parameter
  *
  */
@@ -2818,29 +2045,6 @@ void handlePostDelayJson( AsyncWebServerRequest* request, uint8_t* data )
   request->send(200, "text/plain", "");
 
   softUnmuteDAC();
-}
-
-//==============================================================================
-/*! Sets the values for a delay block on DSP.
- *
- */
-void setDelay( int idx )
-{
-  if( (paramDelay[idx].delay >= 0) && (paramDelay[idx].delay <= 100) )
-  {
-    float dly = paramDelay[idx].delay/1000.0 * sampleRate;
-    int32_t idly = static_cast<int32_t>(dly + 0.5);
-    if( paramDelay[idx].bypass )
-      idly = 0;
-
-    uint16_t addr = paramDelay[idx].addr;
-    byte val[4];
-    val[0] = (idly >> 24 ) & 0xFF;
-    val[1] = (idly >> 16 ) & 0xFF;
-    val[2] = (idly >> 8 ) & 0xFF;
-    val[3] =  idly & 0xFF;
-    ADAU1452_WRITE_BLOCK( addr, val, 4 );
-  }
 }
 
 //==============================================================================
@@ -2884,29 +2088,6 @@ void handlePostGainJson( AsyncWebServerRequest* request, uint8_t* data )
   request->send(200, "text/plain", "");
 
   softUnmuteDAC();
-}
-
-//==============================================================================
-/*! Sets the values for a gain block on DSP.
- *
- */
-void setGain( int idx )
-{
-  if( (paramGain[idx].gain >= -120.0) && (paramGain[idx].gain <= 0.0) )
-  {
-    uint32_t float824val;
-    if( paramGain[idx].mute )
-      float824val = convertTo824( 0.0 );
-    else
-      float824val = convertTo824( pow( 10.0, paramGain[idx].gain / 20.0 ) );
-
-    byte val[4];
-    val[0] = (float824val >> 24 ) & 0xFF;
-    val[1] = (float824val >> 16 ) & 0xFF;
-    val[2] = (float824val >> 8 ) & 0xFF;
-    val[3] = float824val & 0xFF;
-    ADAU1452_WRITE_BLOCK( paramGain[idx].addr, val, 4 );
-  }
 }
 
 //==============================================================================
@@ -2960,125 +2141,6 @@ void handlePostXoJson( AsyncWebServerRequest* request, uint8_t* data )
   request->send(200, "text/plain", "");
 
   softUnmuteDAC();
-}
-
-//==============================================================================
-/*! Sets the values for a crossover block on DSP.
- *
- */
-void setCrossover( int idx )
-{
-  if( (paramCrossover[idx].lp_fc > 0) && (paramCrossover[idx].lp_fc < 20000)
-      && (paramCrossover[idx].lp_typ >= 0) && (paramCrossover[idx].lp_typ < AudioFilterFactory::kNumFilterDesigns) )
-  {
-    float a[12] = { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0 };
-    float b[12] = { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0 };
-    byte val[4];
-    uint32_t floatval;
-
-    if( !(paramCrossover[idx].lp_bypass) )
-      AudioFilterFactory::makeLowPass( a, b, paramCrossover[idx].lp_typ, paramCrossover[idx].lp_fc, sampleRate );
-
-    for( int ii = 0; ii < 4; ii++ )
-    {
-      uint16_t addr = paramCrossover[idx].lp_addr[ii];
-      floatval = convertTo824(b[ 3*ii + 2 ]);
-      val[0] = (floatval >> 24 ) & 0xFF;
-      val[1] = (floatval >> 16 ) & 0xFF;
-      val[2] = (floatval >> 8 ) & 0xFF;
-      val[3] =  floatval & 0xFF;
-      ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B2
-      addr++;
-
-      floatval = convertTo824(b[ 3*ii + 1 ]);
-      val[0] = (floatval >> 24 ) & 0xFF;
-      val[1] = (floatval >> 16 ) & 0xFF;
-      val[2] = (floatval >> 8 ) & 0xFF;
-      val[3] =  floatval & 0xFF;
-      ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B1
-      addr++;
-
-      floatval = convertTo824(b[ 3*ii + 0 ]);
-      val[0] = (floatval >> 24 ) & 0xFF;
-      val[1] = (floatval >> 16 ) & 0xFF;
-      val[2] = (floatval >> 8 ) & 0xFF;
-      val[3] =  floatval & 0xFF;
-      ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B0
-      addr++;
-
-      floatval = convertTo824(a[ 3*ii + 2 ]);
-      val[0] = (floatval >> 24 ) & 0xFF;
-      val[1] = (floatval >> 16 ) & 0xFF;
-      val[2] = (floatval >> 8 ) & 0xFF;
-      val[3] =  floatval & 0xFF;
-      ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A2
-      addr++;
-
-      floatval = convertTo824(a[ 3*ii + 1 ]);
-      val[0] = (floatval >> 24 ) & 0xFF;
-      val[1] = (floatval >> 16 ) & 0xFF;
-      val[2] = (floatval >> 8 ) & 0xFF;
-      val[3] =  floatval & 0xFF;
-      ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A1
-      addr++;
-    }
-  }
-
-  if( (paramCrossover[idx].hp_fc > 0) && (paramCrossover[idx].hp_fc < 20000)
-    && (paramCrossover[idx].hp_typ >= 0) && (paramCrossover[idx].hp_typ < AudioFilterFactory::kNumFilterDesigns) )
-  {
-    float a[12] = { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0 };
-    float b[12] = { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0 };
-    byte val[4];
-    uint32_t floatval;
-    if( !(paramCrossover[idx].hp_bypass) )
-      AudioFilterFactory::makeHighPass( a, b, paramCrossover[idx].hp_typ, paramCrossover[idx].hp_fc, sampleRate );
-
-    for( int ii = 0; ii < 4; ii++ )
-    {
-      uint16_t addr = paramCrossover[idx].hp_addr[ii];
-      floatval = convertTo824(b[ 3*ii + 2 ]);
-      val[0] = (floatval >> 24 ) & 0xFF;
-      val[1] = (floatval >> 16 ) & 0xFF;
-      val[2] = (floatval >> 8 ) & 0xFF;
-      val[3] =  floatval & 0xFF;
-      ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B2
-      addr++;
-
-      floatval = convertTo824(b[ 3*ii + 1 ]);
-      val[0] = (floatval >> 24 ) & 0xFF;
-      val[1] = (floatval >> 16 ) & 0xFF;
-      val[2] = (floatval >> 8 ) & 0xFF;
-      val[3] =  floatval & 0xFF;
-      ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B1
-      addr++;
-
-      floatval = convertTo824(b[ 3*ii + 0 ]);
-      val[0] = (floatval >> 24 ) & 0xFF;
-      val[1] = (floatval >> 16 ) & 0xFF;
-      val[2] = (floatval >> 8 ) & 0xFF;
-      val[3] =  floatval & 0xFF;
-      ADAU1452_WRITE_BLOCK( addr, val, 4 );  // B0
-      addr++;
-
-      floatval = convertTo824(a[ 3*ii + 2 ]);
-      val[0] = (floatval >> 24 ) & 0xFF;
-      val[1] = (floatval >> 16 ) & 0xFF;
-      val[2] = (floatval >> 8 ) & 0xFF;
-      val[3] =  floatval & 0xFF;
-      ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A2
-      addr++;
-
-      floatval = convertTo824(a[ 3*ii + 1 ]);
-      val[0] = (floatval >> 24 ) & 0xFF;
-      val[1] = (floatval >> 16 ) & 0xFF;
-      val[2] = (floatval >> 8 ) & 0xFF;
-      val[3] =  floatval & 0xFF;
-      ADAU1452_WRITE_BLOCK( addr, val, 4 );  // A1
-      addr++;
-    }
-  }
-
 }
 
 //==============================================================================
@@ -3147,30 +2209,6 @@ void handlePostMasterVolumeJson( AsyncWebServerRequest* request, uint8_t* data )
   updateUI();
 
   request->send(200, "text/plain", "");
-}
-
-//==============================================================================
-/*! Sets the value for master volume on DSP.
- *
- */
-void setMasterVolume( void )
-{
-  if( masterVolume.addr != 0x0000 )
-  {
-    if( (masterVolume.val >= -120.0) && (masterVolume.val <= 0.0) )
-    {
-      uint16_t reg = masterVolume.addr;
-      uint32_t rxval = convertTo824( pow( 10.0, masterVolume.val / 20.0 ) );
-
-      byte val[4];
-      val[0] = (rxval >> 24 ) & 0xFF;
-      val[1] = (rxval >> 16 ) & 0xFF;
-      val[2] = (rxval >> 8 ) & 0xFF;
-      val[3] = rxval & 0xFF;
-      ADAU1452_WRITE_BLOCK( reg, val, 4 );
-
-    }
-  }
 }
 
 //==============================================================================
@@ -3571,232 +2609,6 @@ void handlePostSpdifOutJson( AsyncWebServerRequest* request, uint8_t* data )
 }
 
 //==============================================================================
-/*! Setup the AddOn
- *
- */
-void updateAddOn( void )
-{
-  switch( Settings.addonid )
-  {
-  case ADDON_A:
-    // Nothing to do
-    break;
-  case ADDON_B:
-    setupAddOnB();
-    break;
-  case ADDON_C:
-    // Nothing to do
-    break;
-  case ADDON_D:
-    // Nothing to do
-    break;
-  case ADDON_CUSTOM:
-    // Nothing to do
-    break;
-  }
-}
-
-//==============================================================================
-/*! Setup AddOn A
- *
- */
-void setupAddOnA( void )
-{
-  Wire.beginTransmission( ADDONA_SPDIFMUX_ADDR );
-  Wire.write( 0x03 );
-  Wire.write( 0xFF );
-  Wire.endTransmission( true );
-
-  Wire.beginTransmission( ADDONA_SPDIFMUX_ADDR );
-  Wire.write( 0x00 );
-  Wire.endTransmission();
-  Wire.requestFrom( ADDONA_SPDIFMUX_ADDR, 1 );
-  if( Wire.available() == 1 )
-  {
-    byte value = Wire.read();
-
-    // Analog RCA
-    if( (value == 0xfe) || (value == 0xff) )
-    {
-      Serial.println( "Analog RCA" );
-      uint32_t data = 0x00000004;
-      byte val[4];
-      val[0] = (data >> 24 ) & 0xFF;
-      val[1] = (data >> 16 ) & 0xFF;
-      val[2] = (data >> 8 ) & 0xFF;
-      val[3] = data & 0xFF;
-      for( int ii = 0; ii < numInputs; ii++ )
-        ADAU1452_WRITE_BLOCK( inputSelector.analog[ii],  val, 4 );
-
-      data = 0x00000000;
-      val[0] = (data >> 24 ) & 0xFF;
-      val[1] = (data >> 16 ) & 0xFF;
-      val[2] = (data >> 8 ) & 0xFF;
-      val[3] = data & 0xFF;
-      for( int ii = 0; ii < numInputs; ii++ )
-        ADAU1452_WRITE_BLOCK( inputSelector.port[ii], val, 4 );
-
-      for( int ii = 0; ii < numInputs; ii++ )
-        paramInputs[ii].sel = 0x00000004;
-    }
-    // Analog XLR
-    else if( value == 0xf7 )
-    {
-      Serial.println( "Analog XLR" );
-      uint32_t data = 0x00000000;
-      byte val[4];
-      val[0] = (data >> 24 ) & 0xFF;
-      val[1] = (data >> 16 ) & 0xFF;
-      val[2] = (data >> 8 ) & 0xFF;
-      val[3] = data & 0xFF;
-      for( int ii = 0; ii < 8; ii++ )
-        ADAU1452_WRITE_BLOCK( inputSelector.analog[ii],  val, 4 );
-
-      data = 0x00000000;
-      val[0] = (data >> 24 ) & 0xFF;
-      val[1] = (data >> 16 ) & 0xFF;
-      val[2] = (data >> 8 ) & 0xFF;
-      val[3] = data & 0xFF;
-      for( int ii = 0; ii < 8; ii++ )
-        ADAU1452_WRITE_BLOCK( inputSelector.port[ii], val, 4 );
-
-      for( int ii = 0; ii < numInputs; ii++ )
-        paramInputs[ii].sel = 0x00000000;
-    }
-    // Toslink left channel
-    else if( (value == 0xfa) || (value == 0xfb) )
-    {
-      Serial.println( "Toslink left channel" );
-      uint32_t data = 0x00000000;
-      byte val[4];
-      val[0] = (data >> 24 ) & 0xFF;
-      val[1] = (data >> 16 ) & 0xFF;
-      val[2] = (data >> 8 ) & 0xFF;
-      val[3] = data & 0xFF;
-      for( int ii = 0; ii < 8; ii++ )
-        ADAU1452_WRITE_BLOCK( inputSelector.spdif[ii],  val, 4 );
-
-      data = 0x00000004;
-      val[0] = (data >> 24 ) & 0xFF;
-      val[1] = (data >> 16 ) & 0xFF;
-      val[2] = (data >> 8 ) & 0xFF;
-      val[3] = data & 0xFF;
-      for( int ii = 0; ii < 8; ii++ )
-        ADAU1452_WRITE_BLOCK( inputSelector.port[ii], val, 4 );
-
-      for( int ii = 0; ii < numInputs; ii++ )
-        paramInputs[ii].sel = 0x00040000;
-    }
-    // Toslink right channel
-    else if( value == 0xf3 )
-    {
-      Serial.println( "Toslink right channel" );
-      uint32_t data = 0x00000001;
-      byte val[4];
-      val[0] = (data >> 24 ) & 0xFF;
-      val[1] = (data >> 16 ) & 0xFF;
-      val[2] = (data >> 8 ) & 0xFF;
-      val[3] = data & 0xFF;
-      for( int ii = 0; ii < 8; ii++ )
-        ADAU1452_WRITE_BLOCK( inputSelector.spdif[ii],  val, 4 );
-
-      data = 0x00000004;
-      val[0] = (data >> 24 ) & 0xFF;
-      val[1] = (data >> 16 ) & 0xFF;
-      val[2] = (data >> 8 ) & 0xFF;
-      val[3] = data & 0xFF;
-      for( int ii = 0; ii < 8; ii++ )
-        ADAU1452_WRITE_BLOCK( inputSelector.port[ii], val, 4 );
-
-      for( int ii = 0; ii < numInputs; ii++ )
-        paramInputs[ii].sel = 0x00040001;
-    }
-    // Digital RCA left
-    else if( (value == 0xfc) || (value == 0xfd) )
-    {
-      Serial.println( "Digital RCA left" );
-      uint32_t data = 0x00000000;
-      byte val[4];
-      val[0] = (data >> 24 ) & 0xFF;
-      val[1] = (data >> 16 ) & 0xFF;
-      val[2] = (data >> 8 ) & 0xFF;
-      val[3] = data & 0xFF;
-      for( int ii = 0; ii < 8; ii++ )
-        ADAU1452_WRITE_BLOCK( inputSelector.spdif[ii],  val, 4 );
-
-      data = 0x00000004;
-      val[0] = (data >> 24 ) & 0xFF;
-      val[1] = (data >> 16 ) & 0xFF;
-      val[2] = (data >> 8 ) & 0xFF;
-      val[3] = data & 0xFF;
-      for( int ii = 0; ii < 8; ii++ )
-        ADAU1452_WRITE_BLOCK( inputSelector.port[ii], val, 4 );
-
-      for( int ii = 0; ii < numInputs; ii++ )
-        paramInputs[ii].sel = 0x00040000;
-    }
-    // Digital RCA right
-    else if( value == 0xf5 )
-    {
-      Serial.println( "Digital RCA right" );
-      uint32_t data = 0x00000001;
-      byte val[4];
-      val[0] = (data >> 24 ) & 0xFF;
-      val[1] = (data >> 16 ) & 0xFF;
-      val[2] = (data >> 8 ) & 0xFF;
-      val[3] = data & 0xFF;
-      for( int ii = 0; ii < 8; ii++ )
-        ADAU1452_WRITE_BLOCK( inputSelector.spdif[ii],  val, 4 );
-
-      data = 0x00000004;
-      val[0] = (data >> 24 ) & 0xFF;
-      val[1] = (data >> 16 ) & 0xFF;
-      val[2] = (data >> 8 ) & 0xFF;
-      val[3] = data & 0xFF;
-      for( int ii = 0; ii < 8; ii++ )
-        ADAU1452_WRITE_BLOCK( inputSelector.port[ii], val, 4 );
-
-      for( int ii = 0; ii < numInputs; ii++ )
-        paramInputs[ii].sel = 0x00040001;
-    }
-  }
-}
-
-//==============================================================================
-/*! Setup AddOn B
- *
- */
-void setupAddOnB( void )
-{
-  Serial.print( "Init AddOn B......" );
-  Wire.beginTransmission( ADDONB_SPDIFMUX_ADDR );
-  Wire.write( 0x03 );
-  Wire.write( 0x00 );
-  Wire.endTransmission( true );
-
-  String fileName = presetAddonCfgFile[currentPreset];
-
-  File fileAddonConfig = SPIFFS.open( fileName );
-  if( !fileAddonConfig )
-    Serial.println( "[ERROR] Failed to open " + fileName );
-  else
-    Serial.println( "Opened " + fileName );
-
-  size_t len = fileAddonConfig.read( currentAddOnCfg, 3 );
-  if( len != 3 )
-    Serial.println( "[ERROR] Reading AddOn config " + fileName );
-
-  fileAddonConfig.close();
-
-  Wire.beginTransmission( currentAddOnCfg[0]>>1 ); //ADDONB_SPDIFMUX_ADDR
-  Wire.write( currentAddOnCfg[1] ); // regaddr
-  Wire.write( currentAddOnCfg[2] ); // data
-  Wire.endTransmission( true );
-
-  Serial.println( "[OK]" );
-}
-
-//==============================================================================
 /*! Handles a file upload
  *
  */
@@ -3921,36 +2733,6 @@ void handleIrUpload( AsyncWebServerRequest* request, uint8_t* data, size_t len, 
 }
 
 //==============================================================================
-/*! Sets the ir for a fir block on DSP.
- *
- */
-void setFir( int idx )
-{
-  byte val[4];
-  uint32_t floatval;
-
-  for( uint16_t kk = 0; kk < MAX_LENGTH_IR; kk++ )
-  {
-    uint16_t addr = paramFir[idx].addr + kk;
-    if( paramFir[idx].bypass )
-    {
-      if( kk == 0 )
-        floatval = convertTo824( 1.0 );
-      else
-        floatval = convertTo824( 0.0 );
-    }
-    else
-      floatval = convertTo824( paramFir[idx].ir[kk] );
-
-    val[0] = (floatval >> 24 ) & 0xFF;
-    val[1] = (floatval >> 16 ) & 0xFF;
-    val[2] = (floatval >> 8 ) & 0xFF;
-    val[3] =  floatval & 0xFF;
-    ADAU1452_WRITE_BLOCK( addr, val, 4 );
-  }
-}
-
-//==============================================================================
 /*! Wifi connection task
  *
  */
@@ -4060,29 +2842,6 @@ void myWiFiTask(void *pvParameters)
     }
     else
       vTaskDelay (5000);
-  }
-}
-
-//==============================================================================
-/*! Enables or disables the volume potentiometer
- *
- */
-void enableVolPot( void )
-{
-  if( addrVPot )
-  {
-    uint32_t vpot;
-    if( Settings.vpot == true )
-      vpot = 0x00000000;
-    else
-      vpot = 0x00000001;
-
-    byte val[4];
-    val[0] = (vpot >> 24 ) & 0xFF;
-    val[1] = (vpot >> 16 ) & 0xFF;
-    val[2] = (vpot >> 8 ) & 0xFF;
-    val[3] =  vpot & 0xFF;
-    ADAU1452_WRITE_BLOCK( addrVPot, val, 4 );
   }
 }
 
@@ -4285,10 +3044,7 @@ void setup()
   //----------------------------------------------------------------------------
   //--- Configure AddOn
   //----------------------------------------------------------------------------
-  if( Settings.addonid == ADDON_A )
-    setupAddOnA();
-  else if( Settings.addonid == ADDON_B )
-    setupAddOnB();
+  updateAddOn();
 
   //----------------------------------------------------------------------------
   //--- Upload program to DSP
