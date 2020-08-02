@@ -5,7 +5,7 @@
 #include "AudioFilterFactory.h"
 #include "hwconfig.h"
 #include "adau1452.h"
-#include "settings.h"
+#include "plugin.h"
 
 //==============================================================================
 /*!

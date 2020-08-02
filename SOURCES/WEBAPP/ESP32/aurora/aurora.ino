@@ -28,7 +28,7 @@
 #include "adau1452.h"
 #include "addons.h"
 #include "display.h"
-#include "settings.h"
+#include "plugin.h"
 #include "web.h"
 #include "display.h"
 

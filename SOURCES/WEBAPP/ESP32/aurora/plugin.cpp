@@ -2,7 +2,7 @@
 #include <ArduinoJson.h>
 #include <SPIFFS.h>
 
-#include "settings.h"
+#include "plugin.h"
 
 tSettings Settings;
 

@@ -2,7 +2,7 @@
 #include <WiFi.h>
 
 #include "display.h"
-#include "settings.h"
+#include "plugin.h"
 
 OLED128x64_SH1106 myDisplay;
 bool haveDisplay = true;

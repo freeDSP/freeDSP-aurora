@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-#include "settings.h"
+#include "plugin.h"
 #include "hwconfig.h"
 #include "AK5558.h"
 

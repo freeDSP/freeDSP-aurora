@@ -6,7 +6,7 @@
 #include <Update.h>
 #include <ArduinoJson.h>
 
-#include "settings.h"
+#include "plugin.h"
 #include "web.h"
 #include "webota.h"
 #include "fallback.h"

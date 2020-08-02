@@ -3,7 +3,7 @@
 #include <SPIFFS.h>
 
 #include "addons.h"
-#include "settings.h"
+#include "plugin.h"
 #include "json.h"
 #include "config.h"
 

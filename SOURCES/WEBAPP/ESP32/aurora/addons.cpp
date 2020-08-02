@@ -3,7 +3,7 @@
 #include <SPIFFS.h>
 
 #include "hwconfig.h"
-#include "settings.h"
+#include "plugin.h"
 #include "adau1452.h"
 #include "addons.h"
 
