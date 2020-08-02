@@ -4,7 +4,7 @@
 
 #include "addons.h"
 #include "plugin.h"
-#include "json.h"
+#include "settings.h"
 #include "config.h"
 
 //==============================================================================

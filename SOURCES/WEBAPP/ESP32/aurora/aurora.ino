@@ -24,7 +24,7 @@
  *  but have been moved to their own files
  */
 #include "config.h"
-#include "json.h"
+#include "settings.h"
 #include "adau1452.h"
 #include "addons.h"
 #include "display.h"

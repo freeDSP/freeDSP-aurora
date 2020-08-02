@@ -13,7 +13,7 @@
 #include "adau1452.h"
 #include "AK4458.h"
 #include "AK5558.h"
-#include "json.h"
+#include "settings.h"
 #include "addons.h"
 #include "display.h"
 
