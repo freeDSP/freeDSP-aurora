@@ -31,5 +31,24 @@
 #define AK4458_L4CHATT      (0x13)
 #define AK4458_R4CHATT      (0x14)
 
+/*!
+ */
+void AK4458_REGWRITE( byte reg, byte val );
+
+/*! Configure AK4458 DAC
+ */
+void configDAC( void );
+
+/*! Set DAC into reset.
+ */
+void resetDAC( bool rst );
+
+/*! Mute DAC
+ */
+void softMuteDAC( void );
+
+/*! Unmute DAC
+ */
+void softUnmuteDAC( void );
 
 #endif /* AK4458_H_ */
