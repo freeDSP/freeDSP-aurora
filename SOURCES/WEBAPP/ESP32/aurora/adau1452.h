@@ -67,4 +67,8 @@ void setPEQ( int idx );
  */
 void setSpdifOutputRouting( void );
 
+/*! Uploads the user parameters from ESP32 SPI flash to DSP.
+ */
+void uploadUserParams( void );
+
 #endif

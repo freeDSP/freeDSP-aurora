@@ -171,10 +171,23 @@ extern float sampleRate;
 
 extern uint16_t addrVPot;
 
+extern String currentPlugInName;
+
+/*! Inits the default values for filters etc.
+ */
+void initUserParams( void );
 extern String presetUsrparamFile[MAX_NUM_PRESETS];
 extern String presetAddonCfgFile[MAX_NUM_PRESETS];
 
 extern uint8_t currentPreset;
 
 extern byte currentAddOnCfg[3];
+
+/*! Reads the plugin meta data from JSON file.
+ */
+void readPluginMeta( void );
+
+/*! Inits the default values for filters etc.
+ */
+void initUserParams( void );
 #endif
