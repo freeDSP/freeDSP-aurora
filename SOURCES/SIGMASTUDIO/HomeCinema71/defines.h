@@ -1,7 +1,7 @@
 /*
  * File:           defines.h
  *
- * Created:        Monday, July 20, 2020 11:40:17 AM
+ * Created:        Thursday, August 13, 2020 4:35:47 PM
  * Description:    HomeCinema71 IC default download data definitions.
  *
  * This software is distributed in the hope that it will be useful,

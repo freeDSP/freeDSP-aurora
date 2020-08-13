@@ -1,7 +1,7 @@
 /*
  * File:           Z:\Documents\freeDSP\freeDSP-aurora\SOURCES\SIGMASTUDIO\4FIRs\4FIRs_IC_1_PARAM.h
  *
- * Created:        Monday, July 20, 2020 11:41:02 AM
+ * Created:        Thursday, August 13, 2020 4:30:08 PM
  * Description:    4FIRs:IC 1 parameter RAM definitions.
  *
  * This software is distributed in the hope that it will be useful,
