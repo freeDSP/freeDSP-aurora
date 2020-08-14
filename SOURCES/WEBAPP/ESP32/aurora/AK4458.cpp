@@ -165,5 +165,6 @@ void softMuteDAC( void )
 void softUnmuteDAC( void )
 {
   AK4458_REGWRITE( AK4458_CONTROL2, 0b00100010 );
+  delay( 250 );
 }
 
