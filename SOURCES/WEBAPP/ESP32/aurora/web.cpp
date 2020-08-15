@@ -1577,14 +1577,21 @@ void handlePostAddonConfigJson( AsyncWebServerRequest* request, uint8_t* data )
   {
     JsonObject root = jsonDoc.as<JsonObject>();
     int len = root["len"].as<String>().toInt();
+    Serial.println("json");
     for( int ii = 0; ii < len; ii++ )
       Serial.println( root["i2c"][ii].as<String>() );
 
-    currentAddOnCfg[0] = AK4118_I2C_ADDR;
-    currentAddOnCfg[1] = AK4118_IOCONTROL1;
+    //currentAddOnCfg[0] = AK4118_I2C_ADDR;
+    //currentAddOnCfg[1] = AK4118_IOCONTROL1;
+    currentAddOnCfg[0] = (uint8_t)strtoul( root["i2c"][0].as<String>().c_str(), NULL, 16 );
+    currentAddOnCfg[1] = (uint8_t)strtoul( root["i2c"][1].as<String>().c_str(), NULL, 16 );
     currentAddOnCfg[2] = (uint8_t)strtoul( root["i2c"][2].as<String>().c_str(), NULL, 16 );
+    Serial.println("currentAddOnCfg");
+    Serial.println((int)currentAddOnCfg[0], HEX);
+    Serial.println((int)currentAddOnCfg[1], HEX);
+    Serial.println((int)currentAddOnCfg[2], HEX);
 
-    AddOnC.write(AK4118_IOCONTROL1, currentAddOnCfg[2]);
+    AddOnC.write(currentAddOnCfg[1], currentAddOnCfg[2]);
   }
 
   request->send(200, "text/plain", "");
@@ -1818,7 +1825,9 @@ void setupWebserver (void)
   else
     server.on( "/",          HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( 200, "text/html", fallback_html ); });
   server.on( "/fallback",  HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( 200, "text/html", fallback_html ); });
+  // Request of dark.css is deprecated now.
   server.on( "/dark.css",  HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( SPIFFS, "/dark.css", "text/css" ); });
+  server.on( "/style.css",  HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( SPIFFS, "/style.css", "text/css" ); });
   server.on( "/aurora.js", HTTP_GET, [](AsyncWebServerRequest *request )
   {
     //request->send( SPIFFS, "/aurora.js", "text/javascript" );

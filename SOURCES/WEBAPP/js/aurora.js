@@ -228,7 +228,7 @@ function hideAddon(){
   document.getElementById('addon_none').style.display = "none";
   document.getElementById('addon_a').style.display = "none";
   document.getElementById('addon_b').style.display = "none";
-  //document.getElementById('addon_c').style.display = "none";
+  document.getElementById('addon_c').style.display = "none";
   document.getElementById('addon_d').style.display = "none";
 }
 
@@ -245,10 +245,17 @@ function storePreset(){
 }
 
 function changeSPDIF(id){
-  var data={};
-  data.len=3;
-  data.i2c=["0x82", "0x01", document.getElementById(id).value];
-  fetch("/addoncfg",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)});
+  if(id=="spdif_b"){
+    var data={};
+    data.len=3;
+    data.i2c=["0x82", "0x01", document.getElementById(id).value];
+    fetch("/addoncfg",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)});
+  }else if(id=="spdif_c"){
+    var data={};
+    data.len=3;
+    data.i2c=["0x26", "0x03", document.getElementById(id).value];
+    fetch("/addoncfg",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)});
+  }
 }
 
 function closeModal(id){
@@ -271,15 +278,10 @@ function closeModal(id){
 }
 
 function switchMute(){
-  if(document.getElementById("mute").dataset.mute=="1"){
-    document.getElementById("mute").style.backgroundColor="#FF0000";
-    document.getElementById("mute").style.borderColor="#FF0000";
-    document.getElementById("mute").style.color="#101010";
-  }else{
-    document.getElementById("mute").style.backgroundColor = "#101010";
-    document.getElementById("mute").style.borderColor="#808080";
-    document.getElementById("mute").style.color="#D0D0D0";
-  }
+  if(document.getElementById("mute").dataset.mute=="1")
+    document.getElementById("mute").className='bypass';
+  else
+    document.getElementById("mute").className='send';
 }
 
 function bypass(id){
@@ -291,15 +293,10 @@ function bypass(id){
 }
 
 function switchBypass(id){
-  if(document.getElementById(id).dataset.bypass=="1"){
-    document.getElementById(id).style.backgroundColor="#FF0000";
-    document.getElementById(id).style.borderColor="#FF0000";
-    document.getElementById(id).style.color="#101010";
-  }else{
-    document.getElementById(id).style.backgroundColor = "#101010";
-    document.getElementById(id).style.borderColor="#808080";
-    document.getElementById(id).style.color="#D0D0D0";
-  }
+  if(document.getElementById(id).dataset.bypass=="1")
+    document.getElementById(id).className='bypass';
+  else
+    document.getElementById(id).className='send';
 }
 
 function postMVol(){
