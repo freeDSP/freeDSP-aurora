@@ -16,6 +16,10 @@
 #include "settings.h"
 #include "addons.h"
 #include "display.h"
+#include "hwconfig.h"
+#include "ak4118.h"
+
+extern AK4118 AddOnC;
 
 AsyncWebServer server( 80 );
 uint8_t currentFirUploadIdx = 0;
@@ -412,10 +416,10 @@ void handleGetConfigJson( AsyncWebServerRequest* request )
   jsonResponse["ip"] = WiFi.localIP().toString();
   jsonResponse["pre"] = currentPreset;
 
-  if( Settings.addonid == ADDON_B )
-  {
+  if (Settings.addonid == ADDON_B)
     jsonResponse["addcfg"] = currentAddOnCfg[2];
-  }
+  else if (Settings.addonid == ADDON_C)
+    jsonResponse["addcfg"] = currentAddOnCfg[2];
   else
     jsonResponse["addcfg"] = 0;
 
@@ -436,10 +440,10 @@ void handleGetAddonConfigJson( AsyncWebServerRequest* request )
   AsyncJsonResponse* response = new AsyncJsonResponse();
   JsonVariant& jsonResponse = response->getRoot();
 
-  if( Settings.addonid == ADDON_B )
-  {
+  if (Settings.addonid == ADDON_B)
     jsonResponse["addcfg"] = currentAddOnCfg[2];
-  }
+  else if (Settings.addonid == ADDON_C)
+    jsonResponse["addcfg"] = currentAddOnCfg[2];
   else
     jsonResponse["addcfg"] = 0;
 
@@ -1502,11 +1506,18 @@ void handlePostStore( AsyncWebServerRequest* request, uint8_t* data )
 
   totalSize = 0;
 
-  if( Settings.addonid == ADDON_B )
+  if (Settings.addonid == ADDON_B)
   {
     size_t len = fileAddonConfig.write( currentAddOnCfg, 3 );
     if( len != 3 )
       Serial.println( "[ERROR] Writing AddOn config to " + fileName );
+    totalSize += len;
+  }
+  else if (Settings.addonid == ADDON_C)
+  {
+    size_t len = fileAddonConfig.write(currentAddOnCfg, 3);
+    if (len != 3)
+      Serial.println("[ERROR] Writing AddOn config to " + fileName);
     totalSize += len;
   }
 
@@ -1546,7 +1557,7 @@ void handlePostAddonConfigJson( AsyncWebServerRequest* request, uint8_t* data )
 
   softMuteDAC();
 
-  if( Settings.addonid == ADDON_B )
+  if (Settings.addonid == ADDON_B)
   {
     JsonObject root = jsonDoc.as<JsonObject>();
     int len = root["len"].as<String>().toInt();
@@ -1561,6 +1572,19 @@ void handlePostAddonConfigJson( AsyncWebServerRequest* request, uint8_t* data )
     Wire.write( currentAddOnCfg[1] ); // regaddr
     Wire.write( currentAddOnCfg[2] ); // data
     Wire.endTransmission( true );
+  }
+  else if (Settings.addonid == ADDON_C)
+  {
+    JsonObject root = jsonDoc.as<JsonObject>();
+    int len = root["len"].as<String>().toInt();
+    for( int ii = 0; ii < len; ii++ )
+      Serial.println( root["i2c"][ii].as<String>() );
+
+    currentAddOnCfg[0] = AK4118_I2C_ADDR;
+    currentAddOnCfg[1] = AK4118_IOCONTROL1;
+    currentAddOnCfg[2] = (uint8_t)strtoul( root["i2c"][2].as<String>().c_str(), NULL, 16 );
+
+    AddOnC.write(AK4118_IOCONTROL1, currentAddOnCfg[2]);
   }
 
   request->send(200, "text/plain", "");

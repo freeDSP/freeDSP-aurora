@@ -6,6 +6,9 @@
 #include "plugin.h"
 #include "adau1452.h"
 #include "addons.h"
+#include "ak4118.h"
+
+extern AK4118 AddOnC;
 
 //==============================================================================
 /*! Setup AddOn B
@@ -208,6 +211,74 @@ void setupAddOnA( void )
 }
 
 //==============================================================================
+/*! Setup AddOn C
+ *
+ */
+void setupAddOnC( void )
+{
+  Serial.print( "Init AddOn C......" );
+
+  //--- Reset AK4118
+  AddOnC.write(AK4118_CLK_PDN, 0b01000010);
+  delay(100);
+
+  /* CLK & Power Down Control
+   * bit[0]   : RSTN: Timing Reset & Register Initialize              :   1 Normal Operation
+   * bit[1]   : PWN: Power Down                                       :   1 Normal Operation
+   * bit[3:2] : OCKS1-0: Master Clock Frequency Select                :  10 X'tal = 512fs (default)
+   * bit[5:4] : CM1-0: Master Clock Operation Mode Select             :  00 Mode0 (default)
+   * bit[6]   : BCU: Block start & C/U Output Mode                    :   1 BOUT, COUT, UOUT enabled (default)
+   * bit[7]   : CS12: Channel Status Select                           :   0 Channel 1 (default)
+   */
+  AddOnC.write(AK4118_CLK_PDN, 0b01001011);
+
+  /* Format & De-emphasis Control
+   * bit[0]   : DFS: 96kHz De-emphasis Control                        :   0 (defaut)
+   * bit[2:1] : DEM1-0: 32, 44.1, 48kHz De-emphasis Control           :  01 (default)
+   * bit[3]   : DEAU: De-emphasis Auto Detect Enable                  :   1 Enable (default)
+   * bit[6:4] : DIF2-0: Audio Data Format Control                     : 100 Mode4 24bit LJ H/L Master BCK 64fs
+   * bit[7]   : MONO: Double sampling frequency mode enable           :   0 Stereo mode (default)
+   */
+  AddOnC.write(AK4118_FORMAT, 0b01001010);
+
+  /* Input/ Output Control 0
+   * bit[2:0] : OPS02-00: Output Through Data Select for TX0 pin      : 000 RX0 (defaut)
+   * bit[3]   : TX0E: TX0 Output Enable                               :   1 Enable (default) 
+   * bit[6:4] : OPS12-10: Output Through Data Select for TX1 pin      : 000 DAUX (default)
+   * bit[7]   : TX1E: TX1 Output Enable                               :   1 Enable (default)
+   */
+  AddOnC.write(AK4118_IOCONTROL0, 0b10001000);
+
+  /* Input/ Output Control 1
+   * bit[2:0] : IPS02-00: IPS2-0: Input Recovery Data Select          : 000 RX0 (defaut)
+   * bit[3]   : DIT: Through data/Transmit data select for TX1 pin    :   1 Transmit data (DAUX data) (default) 
+   * bit[4]   : TLR: Double sampling frequency mode channel select for DIT(stereo) : 0 L channel (default)
+   * bit[5]   : UDIT: U bit control for DIT                           :   0 U bit is fixed to “0” (default)
+   * bit[7:6] : EFH1-0: Interrupt 0 Pin Hold Count Select             :  01 1024 LRCK (default)
+   */
+  AddOnC.write(AK4118_IOCONTROL1, 0b01001000);
+
+  String fileName = presetAddonCfgFile[currentPreset];
+  File fileAddonConfig = SPIFFS.open( fileName );
+  if( !fileAddonConfig )
+    Serial.println( "[ERROR] Failed to open " + fileName );
+  else
+  {
+    Serial.println( "Opened " + fileName );
+
+    size_t len = fileAddonConfig.read( currentAddOnCfg, 3 );
+    if( len != 3 )
+      Serial.println( "[ERROR] Reading AddOn config " + fileName );
+
+    fileAddonConfig.close();
+
+    AddOnC.write( AK4118_IOCONTROL1, currentAddOnCfg[2] );
+  }
+
+  Serial.println( "[OK]" );
+}
+
+//==============================================================================
 /*! Setup the AddOn
  *
  */
@@ -222,7 +293,7 @@ void updateAddOn( void )
     setupAddOnB();
     break;
   case ADDON_C:
-    // Nothing to do
+    setupAddOnC();
     break;
   case ADDON_D:
     // Nothing to do

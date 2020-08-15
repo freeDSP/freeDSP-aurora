@@ -10,6 +10,7 @@
 #include "hwconfig.h"
 #include "AK4458.h"
 #include "AK5558.h"
+#include "ak4118.h"
 
 #if HAVE_ROTARYENCODER
 #include "rotaryencoder.h"
@@ -65,8 +66,15 @@ long int lastREsw = 0;
 //
 //------------------------------------------------------------------------------
 #if HAVE_IRRECEIVER
-IRrecv irReceiver( IR_RECEIVER_PIN );
+IRrecv irReceiver(IR_RECEIVER_PIN);
 #endif
+
+//------------------------------------------------------------------------------
+//
+// Drivers for AddOns
+//
+//------------------------------------------------------------------------------
+AK4118 AddOnC(AK4118_I2C_ADDR);
 
 //==============================================================================
 /*! Uploads the firmware from ESP32 SPI flash to DSP.
