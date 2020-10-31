@@ -19,11 +19,6 @@ class GrowingList(list):
 tree = ET.parse(str(sys.argv[1]))
 root = tree.getroot()
 
-#hp = GrowingList()
-#lshelv = GrowingList()
-#hshelv = GrowingList()
-#lp = GrowingList()
-
 numchn = 8
 
 inputselect_analog = []
@@ -418,7 +413,7 @@ data = {"nchn":numchn,
         "exp":inputselect_exp_t,
         "port":inputselect_port_t,
         "spdifout":spdifoutmux_channel_t,
-        "hp":hp,
+        "hp":hp_t,
         "lshelv":lshelv_t,
         "peq":peq_t,
         "hshelv":hshelv_t,
