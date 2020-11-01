@@ -694,7 +694,10 @@ void handleGetAllInputsJson( AsyncWebServerRequest* request )
   uint8_t val;
   String key[] = {"in0", "in1", "in2", "in3", "in4", "in5", "in6", "in7"};
 
-  for( int nn = 0; nn < 8; nn++ )
+  jsonResponse["num"] = numInputs;
+  Serial.println(numInputs);
+
+  for( int nn = 0; nn < numInputs; nn++ )
   {
     str = String("0x");
     for( int ii = 0; ii < 4; ii++ )

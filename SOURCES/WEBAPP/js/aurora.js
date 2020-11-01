@@ -92,13 +92,21 @@ function onLoad(){
     return fetch("/allinputs");
   }).then(function(response){return response.json();
   }).then(function(data){
+    if(data.num>0)
     document.getElementById("chn0").value=data.in0;
+    if(data.num>1)
     document.getElementById("chn1").value=data.in1;
+    if(data.num>2)
     document.getElementById("chn2").value=data.in2;
+    if(data.num>3)
     document.getElementById("chn3").value=data.in3;
+    if(data.num>4)
     document.getElementById("chn4").value=data.in4;
+    if(data.num>5)
     document.getElementById("chn5").value=data.in5;
+    if(data.num>6)
     document.getElementById("chn6").value=data.in6;
+    if(data.num>7)
     document.getElementById("chn7").value=data.in7;
     return fetch("/allbyp");
   }).then(function(response){
@@ -152,13 +160,21 @@ function switchPreset(p){
     return fetch("/allinputs");
   }).then(function(response){return response.json();
   }).then(function(data){
+    if(data.num>0)
     document.getElementById("chn0").value=data.in0;
+    if(data.num>1)
     document.getElementById("chn1").value=data.in1;
+    if(data.num>2)
     document.getElementById("chn2").value=data.in2;
+    if(data.num>3)
     document.getElementById("chn3").value=data.in3;
+    if(data.num>4)
     document.getElementById("chn4").value=data.in4;
+    if(data.num>5)
     document.getElementById("chn5").value=data.in5;
+    if(data.num>6)
     document.getElementById("chn6").value=data.in6;
+    if(data.num>7)
     document.getElementById("chn7").value=data.in7;
     return fetch("/allbyp");
   }).then(function(response){

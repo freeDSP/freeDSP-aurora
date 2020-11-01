@@ -2,13 +2,14 @@ import sys
 import xml.etree.ElementTree as ET
 import json
 import io
+import argparse
 
 try:
   to_unicode = unicode
 except NameError:
   to_unicode = str
 
-print(str(sys.argv[1]))
+#print(str(sys.argv[1]))
 
 class GrowingList(list):
     def __setitem__(self, index, value):
@@ -16,10 +17,27 @@ class GrowingList(list):
             self.extend([None]*(index + 1 - len(self)))
         list.__setitem__(self, index, value)
 
-tree = ET.parse(str(sys.argv[1]))
+numchn = 8
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--input", "-i", help="Parameter XML file in SigmaStudio project folder")
+parser.add_argument("--numchains", "-n", help="set number of dsp chains")
+
+# Read arguments from the command line
+args = parser.parse_args()
+
+# Check for --input
+if args.input:
+  tree = ET.parse(args.input)
+  print(args.input)
+# Check for --numchains
+if args.numchains:
+  print("Number of DSP chains: %s" % args.numchains)
+  numchn = int(args.numchains)
+
+#tree = ET.parse(str(sys.argv[1]))
 root = tree.getroot()
 
-numchn = 8
 
 inputselect_analog = []
 for ii in range(0,numchn):
