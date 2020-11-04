@@ -1202,19 +1202,15 @@ void handlePostXoJson( AsyncWebServerRequest* request, uint8_t* data )
 /*! Handles the POST request for a FIR impulse response
  *
  */
-void handlePostFirJson( AsyncWebServerRequest* request, uint8_t* data )
+void handlePostFirBypassJson( AsyncWebServerRequest* request, uint8_t* data )
 {
-  Serial.println( "POST /fir" );
-  //Serial.println( "Body:");
-  //for(size_t i=0; i<len; i++)
-  //  Serial.write(data[i]);
-  //Serial.println();
+  Serial.println( "POST /firbypass" );
 
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
   if( err )
   {
-    Serial.print( "[ERROR] handlePostFirJson(): Deserialization failed. " );
+    Serial.print( "[ERROR] handlePostFirBypassJson(): Deserialization failed. " );
     Serial.println( err.c_str() );
     request->send( 400, "text/plain", err.c_str() );
     return;
@@ -1226,6 +1222,13 @@ void handlePostFirJson( AsyncWebServerRequest* request, uint8_t* data )
   Serial.println( root["idx"].as<String>() );
 
   uint32_t idx = static_cast<uint32_t>(root["idx"].as<String>().toInt());
+  if( root["bypass"].as<String>().toInt() == 0 )
+    paramFir[idx].bypass = false;
+  else
+    paramFir[idx].bypass = true;
+
+  if(paramFir[idx].bypass)
+    Serial.println("Bypass");
 
   setFir( idx );
 
@@ -1748,7 +1751,7 @@ void handleFileUpload( AsyncWebServerRequest* request, uint8_t* data, size_t len
  */
 void handleIrUpload( AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
 {
-  if (!index)
+  if(!index)
   {
     Serial.println("POST /fir");
     if( request->hasParam( "idx" ) )
@@ -1769,7 +1772,9 @@ void handleIrUpload( AsyncWebServerRequest* request, uint8_t* data, size_t len, 
   if( len > 0 )
   {
     for( int kk = 0; kk < len; kk++ )
+    {
       ((uint8_t*)(paramFir[currentFirUploadIdx].ir))[index + kk] = data[kk];
+    }
   }
 
   if( index + len >= total )
@@ -1915,6 +1920,10 @@ void setupWebserver (void)
   server.on( "/spdifout", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
   {
     handlePostSpdifOutJson( request, data );
+  });
+  server.on( "/firbypass", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
+  {
+    handlePostFirBypassJson( request, data );
   });
 
   //--- webOTA stuff ---

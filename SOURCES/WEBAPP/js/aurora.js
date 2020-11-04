@@ -641,10 +641,22 @@ function postJson(btp){
         var fir = new Blob([taps], {type:'application/octet-binary'});
         return fetch("/fir?idx="+idx+"&bypass="+bypass,{method:'POST',headers:{},body:fir});
       }).then(function(response){
-        document.getElementById("wait").style.display = "none";
+        document.getElementById("plzw").style.display = "none";
         resolve(response);
       });
     }
+  }
+  else if(btp=="firbypass"){
+    document.getElementById("plzw").style.display="block";
+    data.idx=document.getElementById("fir").dataset.idx;
+    data.bypass=document.getElementById("fir_bypass").dataset.bypass;
+
+    return fetch("/firbypass",{method:"POST",headers:{
+      "Content-Type": "application/json"},
+      body:JSON.stringify(data)
+    }).then(function(response){
+      document.getElementById("plzw").style.display = "none";
+    });
   }
 }
 
