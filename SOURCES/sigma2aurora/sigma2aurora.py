@@ -20,20 +20,24 @@ class GrowingList(list):
 numchn = 8
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--input", "-i", help="Parameter XML file in SigmaStudio project folder")
-parser.add_argument("--numchains", "-n", help="set number of dsp chains")
+parser.add_argument("input", help="Parameter XML file in SigmaStudio project folder")
+parser.add_argument("numchains", help="Set number of dsp chains")
+parser.add_argument("plugin", help="Name of plugin")
 
 # Read arguments from the command line
 args = parser.parse_args()
 
 # Check for --input
 if args.input:
-  tree = ET.parse(args.input)
   print(args.input)
+  tree = ET.parse(args.input)
 # Check for --numchains
 if args.numchains:
   print("Number of DSP chains: %s" % args.numchains)
   numchn = int(args.numchains)
+if args.plugin:
+  print("Name of plugin: %s" % args.plugin)
+  nameplugin = args.plugin
 
 #tree = ET.parse(str(sys.argv[1]))
 root = tree.getroot()
@@ -414,7 +418,8 @@ ndly = len(dly_t)
 ngain = len(gain_t)
 nfir = len(fir_t)
 
-data = {"nchn":numchn,
+data = {"name":nameplugin,
+        "nchn":numchn,
         "nhp":nhp,
         "nlshelv":nlshelv,
         "npeq":npeq,

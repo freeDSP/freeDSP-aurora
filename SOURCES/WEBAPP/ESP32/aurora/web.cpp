@@ -1130,9 +1130,6 @@ void handlePostGainJson( AsyncWebServerRequest* request, uint8_t* data )
   softMuteDAC();
 
   JsonObject root = jsonDoc.as<JsonObject>();
-  Serial.println( root["idx"].as<String>() );
-  Serial.println( root["gain"].as<String>() );
-  Serial.println( root["mute"].as<String>() );
 
   uint32_t idx = static_cast<uint32_t>(root["idx"].as<String>().toInt());
   paramGain[idx].gain = root["gain"].as<String>().toFloat();

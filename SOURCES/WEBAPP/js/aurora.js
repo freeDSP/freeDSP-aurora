@@ -612,7 +612,6 @@ function postJson(btp){
     var bypass=document.getElementById("fir_bypass").dataset.bypass;
     var taps = new Float32Array(4096);
     for(var k=0;k<4096;k++) taps[k]=0;
-    taps[0]=1;
     document.getElementById("msg").innerHTML="Updating FIRs, please wait...";
     document.getElementById("plzw").style.display="block";
     if(document.getElementById("irfile").files.length>0){
@@ -638,6 +637,7 @@ function postJson(btp){
     else
     {
       return new Promise((resolve, reject) => {
+        taps[0]=1;
         var fir = new Blob([taps], {type:'application/octet-binary'});
         return fetch("/fir?idx="+idx+"&bypass="+bypass,{method:'POST',headers:{},body:fir});
       }).then(function(response){
