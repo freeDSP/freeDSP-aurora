@@ -60,10 +60,11 @@ You should have a similar folder structure: `<home_dir>/Arduino-<version>/tools/
 
 ## Installing ESP32 boards
 
-Open ArduinoID `File > Preferences` dialog, and add following URL to Additional Cards setting:
+1. Open ArduinoID `File > Preferences` dialog, and add following URL to Additional Cards setting:
 - https://dl.espressif.com/dl/package_esp32_index.json
 
-Then open `Tools > Card Types > Manage Cards` and select `ESP32 dev module`.
+2. Open `Tools > Card Types > Manage Cards` and install `ESP32 dev module`.
+3. Select `Tools > Card Types > ESP32 Arduino > ESP32 Dev Module` as card.
 
 Ensure Python2 is in your PATH (as `python`).
 
