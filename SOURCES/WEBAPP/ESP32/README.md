@@ -23,7 +23,7 @@ The ESPAsyncWebServer library requires the AsyncTCP library to work. Follow the 
 1. Download the AsyncTCP library from https://github.com/me-no-dev/AsyncTCP/archive/master.zip.  
 2. Unzip the .zip folder and you should get `AsyncTCP-master` folder.
 3. Rename your folder from `AsyncTCP-master` to `AsyncTCP`.
-4. Move the `AsyncTCPfolder` to your Arduino IDE installation libraries folder.
+4. Move the `AsyncTCP` folder to your Arduino IDE installation libraries folder.
 
 
 ## Installing the Arduino ESP32 Filesystem Uploader
