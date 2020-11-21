@@ -23,7 +23,7 @@ The ESPAsyncWebServer library requires the AsyncTCP library to work. Follow the 
 1. Download the AsyncTCP library from https://github.com/me-no-dev/AsyncTCP/archive/master.zip.  
 2. Unzip the .zip folder and you should get `AsyncTCP-master` folder.
 3. Rename your folder from `AsyncTCP-master` to `AsyncTCP`.
-4. Move the `AsyncTCPfolder` to your Arduino IDE installation libraries folder.
+4. Move the `AsyncTCP` folder to your Arduino IDE installation libraries folder.
 
 
 ## Installing the Arduino ESP32 Filesystem Uploader
@@ -60,10 +60,11 @@ You should have a similar folder structure: `<home_dir>/Arduino-<version>/tools/
 
 ## Installing ESP32 boards
 
-Open ArduinoID `File > Preferences` dialog, and add following URL to Additional Cards setting:
-- https://dl.espressif.com/dl/package_esp32_index.son
+1. Open ArduinoID `File > Preferences` dialog, and add following URL to Additional Cards setting:
+- https://dl.espressif.com/dl/package_esp32_index.json
 
-Then open `Tools > Card Types > Manage Cards` and select `ESP32 dev module`.
+2. Open `Tools > Card Types > Manage Cards` and install `ESP32 dev module`.
+3. Select `Tools > Card Types > ESP32 Arduino > ESP32 Dev Module` as card.
 
 Ensure Python2 is in your PATH (as `python`).
 
