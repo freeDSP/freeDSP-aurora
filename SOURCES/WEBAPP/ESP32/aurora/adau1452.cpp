@@ -899,6 +899,7 @@ void uploadUserParams( void )
           paramPhase[ii].fc = paramPhaseTemp.fc;
           paramPhase[ii].inv = paramPhaseTemp.inv;
           paramPhase[ii].Q = paramPhaseTemp.Q;
+          paramPhase[ii].bypass = paramPhaseTemp.bypass;
         }
         totalSize += len;
       }
