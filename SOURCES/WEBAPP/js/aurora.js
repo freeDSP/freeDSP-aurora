@@ -92,13 +92,21 @@ function onLoad(){
     return fetch("/allinputs");
   }).then(function(response){return response.json();
   }).then(function(data){
+    if(data.num>0)
     document.getElementById("chn0").value=data.in0;
+    if(data.num>1)
     document.getElementById("chn1").value=data.in1;
+    if(data.num>2)
     document.getElementById("chn2").value=data.in2;
+    if(data.num>3)
     document.getElementById("chn3").value=data.in3;
+    if(data.num>4)
     document.getElementById("chn4").value=data.in4;
+    if(data.num>5)
     document.getElementById("chn5").value=data.in5;
+    if(data.num>6)
     document.getElementById("chn6").value=data.in6;
+    if(data.num>7)
     document.getElementById("chn7").value=data.in7;
     return fetch("/allbyp");
   }).then(function(response){
@@ -152,13 +160,21 @@ function switchPreset(p){
     return fetch("/allinputs");
   }).then(function(response){return response.json();
   }).then(function(data){
+    if(data.num>0)
     document.getElementById("chn0").value=data.in0;
+    if(data.num>1)
     document.getElementById("chn1").value=data.in1;
+    if(data.num>2)
     document.getElementById("chn2").value=data.in2;
+    if(data.num>3)
     document.getElementById("chn3").value=data.in3;
+    if(data.num>4)
     document.getElementById("chn4").value=data.in4;
+    if(data.num>5)
     document.getElementById("chn5").value=data.in5;
+    if(data.num>6)
     document.getElementById("chn6").value=data.in6;
+    if(data.num>7)
     document.getElementById("chn7").value=data.in7;
     return fetch("/allbyp");
   }).then(function(response){
@@ -596,7 +612,6 @@ function postJson(btp){
     var bypass=document.getElementById("fir_bypass").dataset.bypass;
     var taps = new Float32Array(4096);
     for(var k=0;k<4096;k++) taps[k]=0;
-    taps[0]=1;
     document.getElementById("msg").innerHTML="Updating FIRs, please wait...";
     document.getElementById("plzw").style.display="block";
     if(document.getElementById("irfile").files.length>0){
@@ -622,13 +637,26 @@ function postJson(btp){
     else
     {
       return new Promise((resolve, reject) => {
+        taps[0]=1;
         var fir = new Blob([taps], {type:'application/octet-binary'});
         return fetch("/fir?idx="+idx+"&bypass="+bypass,{method:'POST',headers:{},body:fir});
       }).then(function(response){
-        document.getElementById("wait").style.display = "none";
+        document.getElementById("plzw").style.display = "none";
         resolve(response);
       });
     }
+  }
+  else if(btp=="firbypass"){
+    document.getElementById("plzw").style.display="block";
+    data.idx=document.getElementById("fir").dataset.idx;
+    data.bypass=document.getElementById("fir_bypass").dataset.bypass;
+
+    return fetch("/firbypass",{method:"POST",headers:{
+      "Content-Type": "application/json"},
+      body:JSON.stringify(data)
+    }).then(function(response){
+      document.getElementById("plzw").style.display = "none";
+    });
   }
 }
 

@@ -23,7 +23,7 @@ The ESPAsyncWebServer library requires the AsyncTCP library to work. Follow the 
 1. Download the AsyncTCP library from https://github.com/me-no-dev/AsyncTCP/archive/master.zip.  
 2. Unzip the .zip folder and you should get `AsyncTCP-master` folder.
 3. Rename your folder from `AsyncTCP-master` to `AsyncTCP`.
-4. Move the `AsyncTCPfolder` to your Arduino IDE installation libraries folder.
+4. Move the `AsyncTCP` folder to your Arduino IDE installation libraries folder.
 
 
 ## Installing the Arduino ESP32 Filesystem Uploader
@@ -60,10 +60,11 @@ You should have a similar folder structure: `<home_dir>/Arduino-<version>/tools/
 
 ## Installing ESP32 boards
 
-Open ArduinoID `File > Preferences` dialog, and add following URL to Additional Cards setting:
-- https://dl.espressif.com/dl/package_esp32_index.son
+1. Open ArduinoID `File > Preferences` dialog, and add following URL to Additional Cards setting:
+- https://dl.espressif.com/dl/package_esp32_index.json
 
-Then open `Tools > Card Types > Manage Cards` and select `ESP32 dev module`.
+2. Open `Tools > Card Types > Manage Cards` and install `ESP32 dev module`.
+3. Select `Tools > Card Types > ESP32 Arduino > ESP32 Dev Module` as card.
 
 Ensure Python2 is in your PATH (as `python`).
 
@@ -73,3 +74,15 @@ Ensure Python2 is in your PATH (as `python`).
 1. Open the file `aurora.ino` in your ArduinoIDE and click on Upload.
 2. After uploading the code, you need to upload the data files.
 3. Go to `Tools > ESP32 Data` Sketch Upload and wait for the files to be uploaded.
+
+
+## espmake32
+
+This is work in progres. **Only if** you are using [espmake32](https://github.com/plerup/makeEspArduino), you need to download the last libraries manually. **Else, skip this!**
+You'll find them here:
+
+1. [ArduinoJson](https://github.com/bblanchon/ArduinoJson/releases/download/v6.13.0/ArduinoJson-v6.13.0.zip)
+2. [u8g2](https://github.com/olikraus/u8g2/archive/master.zip), which does not offer proper releases. Let's hope master doesn't break anything.
+3. [IRremote](https://github.com/z3t0/Arduino-IRremote/archive/master.zip). However, while [this PR from dspverden](https://github.com/z3t0/Arduino-IRremote/pull/689) isn't merged, you'll probably prefer [dspverden's branch](https://github.com/dspverden/Arduino-IRremote/archive/master.zip).
+
+I did not yet test much of this.

@@ -2,13 +2,14 @@ import sys
 import xml.etree.ElementTree as ET
 import json
 import io
+import argparse
 
 try:
   to_unicode = unicode
 except NameError:
   to_unicode = str
 
-print(str(sys.argv[1]))
+#print(str(sys.argv[1]))
 
 class GrowingList(list):
     def __setitem__(self, index, value):
@@ -16,15 +17,31 @@ class GrowingList(list):
             self.extend([None]*(index + 1 - len(self)))
         list.__setitem__(self, index, value)
 
-tree = ET.parse(str(sys.argv[1]))
+numchn = 8
+
+parser = argparse.ArgumentParser()
+parser.add_argument("input", help="Parameter XML file in SigmaStudio project folder")
+parser.add_argument("numchains", help="Set number of dsp chains")
+parser.add_argument("plugin", help="Name of plugin")
+
+# Read arguments from the command line
+args = parser.parse_args()
+
+# Check for --input
+if args.input:
+  print(args.input)
+  tree = ET.parse(args.input)
+# Check for --numchains
+if args.numchains:
+  print("Number of DSP chains: %s" % args.numchains)
+  numchn = int(args.numchains)
+if args.plugin:
+  print("Name of plugin: %s" % args.plugin)
+  nameplugin = args.plugin
+
+#tree = ET.parse(str(sys.argv[1]))
 root = tree.getroot()
 
-#hp = GrowingList()
-#lshelv = GrowingList()
-#hshelv = GrowingList()
-#lp = GrowingList()
-
-numchn = 8
 
 inputselect_analog = []
 for ii in range(0,numchn):
@@ -401,7 +418,8 @@ ndly = len(dly_t)
 ngain = len(gain_t)
 nfir = len(fir_t)
 
-data = {"nchn":numchn,
+data = {"name":nameplugin,
+        "nchn":numchn,
         "nhp":nhp,
         "nlshelv":nlshelv,
         "npeq":npeq,
@@ -418,7 +436,7 @@ data = {"nchn":numchn,
         "exp":inputselect_exp_t,
         "port":inputselect_port_t,
         "spdifout":spdifoutmux_channel_t,
-        "hp":hp,
+        "hp":hp_t,
         "lshelv":lshelv_t,
         "peq":peq_t,
         "hshelv":hshelv_t,

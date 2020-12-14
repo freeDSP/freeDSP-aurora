@@ -18,4 +18,12 @@
 #define AK5558_TEST1                (0x06)
 #define AK5558_TEST2                (0x07)
 
+/*! Configure AK5558 ADC
+ */
+void configADC( void );
+
+/*! Change the channel summation of AK5558 ADC
+ */
+void changeChannelSummationADC( void );
+
 #endif /* AK5558_H_ */
