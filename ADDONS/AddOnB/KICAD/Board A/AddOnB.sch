@@ -1,14 +1,13 @@
 EESchema Schematic File Version 4
-LIBS:AddOnB-cache
-EELAYER 29 0
+EELAYER 30 0
 EELAYER END
 $Descr A3 16535 11693
 encoding utf-8
 Sheet 1 1
-Title ""
+Title "AddOn B Board A"
 Date ""
 Rev ""
-Comp ""
+Comp "auverdion"
 Comment1 ""
 Comment2 ""
 Comment3 ""
@@ -3940,7 +3939,7 @@ Wire Wire Line
 Text Label 9500 4200 2    39   ~ 0
 SPDIF_RX
 $Comp
-L Interface_Expansion:PCA9536D IC6
+L AddOnB-rescue:PCA9536D-Interface_Expansion IC6
 U 1 1 5CA2E908
 P 8250 3050
 F 0 "IC6" H 8200 3350 39  0000 R CNN
@@ -4183,4 +4182,14 @@ F 3 "" H 10850 6100 50  0001 C CNN
 	1    10850 6100
 	1    0    0    -1  
 $EndComp
+Text Notes 11750 2450 0    79   ~ 0
+Connect to X201 on Aurora mainboard\nand to X109 on \nXLR Input Board (Board B).\nDaisy chain X109 -> X114 -> X201\nor X114 -> X109 -> X201
+Text Notes 11750 3900 0    79   ~ 0
+Connect to X301 on Aurora mainboard.
+Text Notes 11550 5350 0    79   ~ 0
+Connect to X101 on Aurora mainboard.
+Text Notes 11550 6550 0    79   ~ 0
+Connect to X102 on Aurora mainboard.
+Text Notes 1200 7000 0    79   ~ 0
+Termination of cold Input.\nTurn on for the channels connected by RCA.\nDon’t connect an external signal to the XLRs \nfor these channels.
 $EndSCHEMATC

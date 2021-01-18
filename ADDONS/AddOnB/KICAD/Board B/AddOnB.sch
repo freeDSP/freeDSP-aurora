@@ -1,14 +1,13 @@
 EESchema Schematic File Version 4
-LIBS:AddOnB-cache
-EELAYER 29 0
+EELAYER 30 0
 EELAYER END
 $Descr A3 16535 11693
 encoding utf-8
 Sheet 1 1
-Title ""
+Title "Addon B Board B"
 Date ""
 Rev ""
-Comp ""
+Comp "auverdion"
 Comment1 ""
 Comment2 ""
 Comment3 ""
@@ -2193,4 +2192,6 @@ Wire Wire Line
 Connection ~ 4650 10400
 Wire Wire Line
 	4650 10400 4850 10400
+Text Notes 8300 5850 0    79   ~ 0
+Connect to X201 on Aurora mainboard\nand to X114 on Board A.\nDaisy chain X109 -> X114 -> X201\nor X114 -> X109 -> X201
 $EndSCHEMATC
