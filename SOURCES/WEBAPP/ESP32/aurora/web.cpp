@@ -16,6 +16,9 @@
 #include "settings.h"
 #include "addons.h"
 #include "display.h"
+#include "channelnames.h"
+
+extern String channelNames[16];
 
 AsyncWebServer server( 80 );
 uint8_t currentFirUploadIdx = 0;
@@ -1655,9 +1658,6 @@ void handlePostSpdifOutJson( AsyncWebServerRequest* request, uint8_t* data )
 
   JsonObject root = jsonDoc.as<JsonObject>();
 
-  Serial.println( (uint32_t)strtoul( root["spdifleft"].as<String>().c_str(), NULL, 16 ) );
-  Serial.println( (uint32_t)strtoul( root["spdifright"].as<String>().c_str(), NULL, 16 ) );
-
   spdifOutput.selectionLeft = (uint32_t)strtoul( root["spdifleft"].as<String>().c_str(), NULL, 16 );
   spdifOutput.selectionRight = (uint32_t)strtoul( root["spdifright"].as<String>().c_str(), NULL, 16 );
 
@@ -1792,6 +1792,60 @@ void handleIrUpload( AsyncWebServerRequest* request, uint8_t* data, size_t len, 
 
 }
 
+//==============================================================================
+/*! Handles the POST request for a new channel name
+ *
+ */
+void handlePostChannelNameJson(AsyncWebServerRequest* request, uint8_t* data)
+{
+  Serial.println( "POST /chname" );
+
+  DynamicJsonDocument jsonDoc(1024);
+  DeserializationError err = deserializeJson(jsonDoc, (const char*)data);
+  if( err )
+  {
+    Serial.print("[ERROR] handlePostChannelNameJson(): Deserialization failed.");
+    Serial.println(err.c_str());
+    request->send(400, "text/plain", err.c_str());
+    return;
+  }
+
+  JsonObject root = jsonDoc.as<JsonObject>();
+
+  Serial.println(root["id"].as<String>().c_str());
+  Serial.println(root["name"].as<String>().c_str());
+
+  String str = root["id"].as<String>();
+  Serial.println(str.substring(str.indexOf("_"), str.length()));
+
+  int chn = str.substring(str.indexOf("_") + 1, str.length()).toInt();
+  Serial.println(chn);
+  if(chn < NUMCHANNELNAMES)
+    channelNames[chn] = root["name"].as<String>().substring(0,16);
+
+  Serial.println(channelNames[chn]);
+
+  writeChannelNames();
+
+  request->send(200, "text/plain", "");
+}
+
+//==============================================================================
+/*! Handles the GET request for all channel names
+ *
+ */
+String handleGetAllChNamesJson( void )
+{
+  Serial.println( "GET /allchnames" );
+
+  // Build the JSON response manually. Via ArduinoJson it did not work somehow.
+  String array("{\"chnames\":[");
+  for(int ii = 0; ii < NUMCHANNELNAMES-1; ii++)
+    array += String("\"") + channelNames[ii] + String("\",");
+  array += String("\"") + channelNames[NUMCHANNELNAMES-1] + String("\"]}");
+  return array;
+}
+
 void setupWebserver (void)
 {
   if( SPIFFS.exists( "/dsp.html" ) )
@@ -1802,29 +1856,30 @@ void setupWebserver (void)
   server.on( "/dark.css",  HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( SPIFFS, "/dark.css", "text/css" ); });
   server.on( "/aurora.js", HTTP_GET, [](AsyncWebServerRequest *request )
   {
-    //request->send( SPIFFS, "/aurora.js", "text/javascript" );
-    AsyncWebServerResponse* response = request->beginResponse(SPIFFS, "/aurora.jgz", "text/javascript");
-    response->addHeader( "Content-Encoding", "gzip" );
-    request->send( response );
+    request->send( SPIFFS, "/aurora.js", "text/javascript" );
+    //AsyncWebServerResponse* response = request->beginResponse(SPIFFS, "/aurora.jgz", "text/javascript");
+    //response->addHeader( "Content-Encoding", "gzip" );
+    //request->send( response );
   });
-  server.on( "/input",     HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetInputJson(request); });
-  server.on( "/hp",        HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetHpJson(request); });
-  server.on( "/lshelv",    HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetLshelvJson(request); });
-  server.on( "/peq",       HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetPeqJson(request); });
-  server.on( "/hshelv",    HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetHshelvJson(request); });
-  server.on( "/lp",        HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetLpJson(request); });
-  server.on( "/phase",     HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetPhaseJson(request); });
-  server.on( "/delay",     HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetDelayJson(request); });
-  server.on( "/gain",      HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetGainJson(request); });
-  server.on( "/xo",        HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetXoJson(request); });
-  server.on( "/mvol",      HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetMasterVolumeJson(request); });
-  server.on( "/preset",    HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetPresetJson(request); });
-  server.on( "/config",    HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetConfigJson(request); });
-  server.on( "/allinputs", HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetAllInputsJson(request); });
-  server.on( "/addoncfg",  HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetAddonConfigJson(request); });
-  server.on( "/fir",       HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetFirJson(request); });
-  server.on( "/allbyp",    HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( 200, "text/plain", handleGetAllBypJson() ); });
-  server.on( "/allfc",     HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( 200, "text/plain", handleGetAllFcJson() ); });
+  server.on( "/input",        HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetInputJson(request); });
+  server.on( "/hp",           HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetHpJson(request); });
+  server.on( "/lshelv",       HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetLshelvJson(request); });
+  server.on( "/peq",          HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetPeqJson(request); });
+  server.on( "/hshelv",       HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetHshelvJson(request); });
+  server.on( "/lp",           HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetLpJson(request); });
+  server.on( "/phase",        HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetPhaseJson(request); });
+  server.on( "/delay",        HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetDelayJson(request); });
+  server.on( "/gain",         HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetGainJson(request); });
+  server.on( "/xo",           HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetXoJson(request); });
+  server.on( "/mvol",         HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetMasterVolumeJson(request); });
+  server.on( "/preset",       HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetPresetJson(request); });
+  server.on( "/config",       HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetConfigJson(request); });
+  server.on( "/allinputs",    HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetAllInputsJson(request); });
+  server.on( "/addoncfg",     HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetAddonConfigJson(request); });
+  server.on( "/fir",          HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetFirJson(request); });
+  server.on( "/allbyp",       HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( 200, "text/plain", handleGetAllBypJson() ); });
+  server.on( "/allfc",        HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( 200, "text/plain", handleGetAllFcJson() ); });
+  server.on( "/allchnames",   HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( 200, "text/plain", handleGetAllChNamesJson() ); });
   server.on( "/preset.param", HTTP_GET, [](AsyncWebServerRequest *request )
   {
     Serial.println( "/preset.param" );
@@ -1924,6 +1979,10 @@ void setupWebserver (void)
   server.on( "/firbypass", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
   {
     handlePostFirBypassJson( request, data );
+  });
+  server.on( "/chname", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
+  {
+    handlePostChannelNameJson(request, data);
   });
 
   //--- webOTA stuff ---

@@ -19,10 +19,6 @@
 #include <IRremote.h>
 #endif
 
-/**
- * Routines which originally belonged to aurora.ino,
- *  but have been moved to their own files
- */
 #include "config.h"
 #include "settings.h"
 #include "adau1452.h"
@@ -31,6 +27,7 @@
 #include "plugin.h"
 #include "web.h"
 #include "display.h"
+#include "channelnames.h"
 
 /**
  * These are required for the espmake32 automatic library resolver
@@ -460,6 +457,7 @@ void setup()
   initUserParams();
   Serial.println( F("[OK]") );
   readPluginMeta();
+  readChannelNames();
 
   //----------------------------------------------------------------------------
   //--- Configure AddOn

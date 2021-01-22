@@ -117,7 +117,7 @@
   </td><td>
   <table style="border-spacing: 5px 10px;">
     <tr>
-    <td class="rotate">
+    <td id="chnlbl_0" class="rotate" ondblclick="renameChannel('chnlbl_0')">
     Channel 1
     <td style="min-width:80px">
     <select id="chn0" onchange="postInputJson('chn0',0);">
@@ -174,14 +174,14 @@
     <button class="delay" id="dly0" onclick="openDelay(0);">Delay</button>
     </td><td>
     <button class="gain" id="gn0" onclick="openGain(0);">Gain</button>
-    </td><td style="min-width:60px">
+    </td><td style="min-width:60px" id="chnlbl_8" ondblclick="renameChannel('chnlbl_8')">
     OUT 1
     </td><td rowspan="8" style="max-width: 80px;">
       <input type="range" id="mvol" class="volslider" min="-80" max="0" onchange="postMVol()"/>  
       <div style="transform: translateY(240px);">Master<br>Volume</div>  
     </td></tr>
   
-    <tr><td class="rotate">
+    <tr><td id="chnlbl_1" class="rotate" ondblclick="renameChannel('chnlbl_1')">
     Channel 2
     </td><td>
     <select id="chn1" onchange="postInputJson('chn1',1);">
@@ -238,11 +238,11 @@
     <button class="delay" id="dly1" onclick="openDelay(1);">Delay</button>
     </td><td>
     <button class="gain" id="gn1" onclick="openGain(1);">Gain</button>
-    </td><td>
+    </td><td id="chnlbl_9" ondblclick="renameChannel('chnlbl_9')">
     OUT 2
     </td></tr>
   
-    <tr><td class="rotate">
+    <tr><td id="chnlbl_2" class="rotate" ondblclick="renameChannel('chnlbl_2')">
     Channel 3
     </td><td>
     <select id="chn2" onchange="postInputJson('chn2',2);">
@@ -299,11 +299,11 @@
     <button class="delay" id="dly2" onclick="openDelay(2);">Delay</button>
     </td><td>
     <button class="gain" id="gn2" onclick="openGain(2);">Gain</button>
-    </td><td>
+    </td><td id="chnlbl_10" ondblclick="renameChannel('chnlbl_10')">
     OUT 3
     </td></tr>
   
-    <tr><td class="rotate">
+    <tr><td id="chnlbl_3" class="rotate" ondblclick="renameChannel('chnlbl_3')">
     Channel 4
     </td><td>
     <select id="chn3" onchange="postInputJson('chn3',3);">
@@ -360,11 +360,11 @@
     <button class="delay" id="dly3" onclick="openDelay(3);">Delay</button>
     </td><td>
     <button class="gain" id="gn3" onclick="openGain(3);">Gain</button>
-    </td><td>
+    </td><td id="chnlbl_11" ondblclick="renameChannel('chnlbl_11')">
     OUT 4
     </td></tr>
   
-    <tr><td class="rotate">
+    <tr><td id="chnlbl_4" class="rotate" ondblclick="renameChannel('chnlbl_4')">
     Channel 5
     </td><td>
     <select id="chn4" onchange="postInputJson('chn4',4);">
@@ -421,11 +421,11 @@
     <button class="delay" id="dly4" onclick="openDelay(4);">Delay</button>
     </td><td>
     <button class="gain" id="gn4" onclick="openGain(4);">Gain</button>
-    </td><td>
+    </td><td id="chnlbl_12" ondblclick="renameChannel('chnlbl_12')">
     OUT 5
     </td></tr>
   
-    <tr><td class="rotate">
+    <tr><td id="chnlbl_5" class="rotate" ondblclick="renameChannel('chnlbl_5')">
     Channel 6
     </td><td>
     <select id="chn5" onchange="postInputJson('chn5',5);">
@@ -482,11 +482,11 @@
     <button class="delay" id="dly5" onclick="openDelay(5);">Delay</button>
     </td><td>
     <button class="gain" id="gn5" onclick="openGain(5);">Gain</button>
-    </td><td>
+    </td><td id="chnlbl_13" ondblclick="renameChannel('chnlbl_13')">
     OUT 6
     </td></tr>
   
-    <tr><td class="rotate">
+    <tr><td id="chnlbl_6" class="rotate" ondblclick="renameChannel('chnlbl_6')">
     Channel 7
     </td><td>
     <select id="chn6" onchange="postInputJson('chn6',6);">
@@ -543,11 +543,11 @@
     <button class="delay" id="dly6" onclick="openDelay(6);">Delay</button>
     </td><td>
     <button class="gain" id="gn6" onclick="openGain(6);">Gain</button>
-    </td><td>
+    </td><td id="chnlbl_14" ondblclick="renameChannel('chnlbl_14')">
     OUT 7
     </td></tr>
   
-    <tr><td class="rotate">
+    <tr><td id="chnlbl_7" class="rotate" ondblclick="renameChannel('chnlbl_7')">
     Channel 8
     </td><td>
     <select id="chn7" onchange="postInputJson('chn7',7);">
@@ -604,7 +604,7 @@
     <button class="delay" id="dly7" onclick="openDelay(7);">Delay</button>
     </td><td>
     <button class="gain" id="gn7" onclick="openGain(7);">Gain</button>
-    </td><td>
+    </td><td id="chnlbl_15" ondblclick="renameChannel('chnlbl_15')">
     OUT 8
   </td></tr>
   </table>
@@ -859,6 +859,23 @@
       <h2 id="msg">Please wait...</h2>
     </div>
   </div>
+
+  <div id="dialogRename" class="modal" data-parent="0" data-idx="0">
+    <div class="modal-content" style="width:500px; height:200px;">
+      <table class="ptbl">
+      <tr><td colspan="2" style="height:20px;padding-top:10px;">
+      <table style="width:100%;">
+      <tr><td class="headline" id="dialogTitle">Rename Channel</td><td class="close" onclick="closeModal('dialogRename')">&times;</td></tr>
+      </table>
+      </td></tr>
+      <tr><td colspan="2"><input type="text" id="userinput" style="width:95%;"></td></tr>
+      <tr><td colspan="2"><button class="send" onclick="postChannelName()">OK</button></td></tr>
+      </table>
+    </div>
+  </div>
+
+
+
 
   <script>
     let picker = document.getElementById('picker');
