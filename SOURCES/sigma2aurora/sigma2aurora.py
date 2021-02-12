@@ -3,13 +3,14 @@ import xml.etree.ElementTree as ET
 import json
 import io
 import argparse
+import os
+import struct
+import shutil
 
 try:
   to_unicode = unicode
 except NameError:
   to_unicode = str
-
-#print(str(sys.argv[1]))
 
 class GrowingList(list):
     def __setitem__(self, index, value):
@@ -20,7 +21,7 @@ class GrowingList(list):
 numchn = 8
 
 parser = argparse.ArgumentParser()
-parser.add_argument("input", help="Parameter XML file in SigmaStudio project folder")
+parser.add_argument("input", help="SigmaStudio project file")
 parser.add_argument("numchains", help="Set number of dsp chains")
 parser.add_argument("plugin", help="Name of plugin")
 
@@ -29,8 +30,8 @@ args = parser.parse_args()
 
 # Check for --input
 if args.input:
-  print(args.input)
-  tree = ET.parse(args.input)
+  print("SigmaStudio project file: %s" % args.input)
+  path_sigmastudioproject = args.input
 # Check for --numchains
 if args.numchains:
   print("Number of DSP chains: %s" % args.numchains)
@@ -39,9 +40,61 @@ if args.plugin:
   print("Name of plugin: %s" % args.plugin)
   nameplugin = args.plugin
 
-#tree = ET.parse(str(sys.argv[1]))
-root = tree.getroot()
+split_path = path_sigmastudioproject.rsplit("\\",1)
+filename = os.path.basename(split_path[0])
+projectname = filename.split(".")[0]
+projectdir = os.path.dirname(path_sigmastudioproject)
 
+#--- Read TxBuffer file
+print("Reading " + projectdir + "/TxBuffer_IC_1.dat")
+if not os.path.exists(projectdir + "/TxBuffer_IC_1.dat"):
+  print("Could not find file TxBuffer_IC_1.dat in project directory")
+  exit()
+txbuffer = bytearray()
+with open(projectdir + "/TxBuffer_IC_1.dat") as fp:
+  line = fp.readline()
+  while line:
+    strlst = line.split(",")
+    for ii in range(0, len(strlst)):
+      str_ = strlst[ii].strip()
+      if str_.startswith('0x'):
+        txbuffer += bytearray.fromhex(str_[2:])
+    line = fp.readline()
+
+#--- Read NumBytes file
+print("Reading " + projectdir + "/NumBytes_IC_1.dat")
+if not os.path.exists(projectdir + "/NumBytes_IC_1.dat"):
+  print("Could not find file NumBytes_IC_1.dat in project directory")
+  exit()
+numbytes = []
+with open(projectdir + "/NumBytes_IC_1.dat") as fp:
+  line = fp.readline()
+  while line:
+    strlst = line.split(",")
+    numbytes.append(int(strlst[0].strip()))
+    line = fp.readline()
+
+#--- Create output directory
+try:
+  os.mkdir(projectname)
+except OSError:
+  print("Creation of output directory %s failed" % projectname)
+
+#--- Write dsp.fw
+print("Writing DSP firmware")
+with open(projectname + "/dsp.fw", 'wb') as file:
+  idx = 0
+  for ii in range(0, len(numbytes)):
+    file.write(bytearray(struct.pack("!I", numbytes[ii])))
+    for nn in range(0,numbytes[ii]):
+      file.write(bytearray(struct.pack("!B", txbuffer[idx])))
+      idx = idx + 1
+    
+#--- Reading project xml file
+print("Reading " + projectdir + "/" + projectname + ".xml")
+
+tree = ET.parse(projectdir + "/" + projectname + ".xml")
+root = tree.getroot()
 
 inputselect_analog = []
 for ii in range(0,numchn):
@@ -418,6 +471,8 @@ ndly = len(dly_t)
 ngain = len(gain_t)
 nfir = len(fir_t)
 
+#--- Write plugin.ini
+print("Writing plugin.ini")
 data = {"name":nameplugin,
         "nchn":numchn,
         "nhp":nhp,
@@ -450,8 +505,28 @@ data = {"name":nameplugin,
         "vpot":vpot,
         "master":mastervol }
 
-with io.open('plugin.ini', 'w', encoding='utf8') as outfile:
-    str_ = json.dumps(data,
-                      indent=0, sort_keys=False,
-                      separators=(',', ': '), ensure_ascii=False)
-    outfile.write(to_unicode(str_))
+with io.open(projectname + "/plugin.ini", 'w', encoding='utf8') as outfile:
+  str_ = json.dumps(data,
+                    indent=0, sort_keys=False,
+                    separators=(',', ': '), ensure_ascii=False)
+  outfile.write(to_unicode(str_))
+
+#--- Writing chnames.txt
+print("Writing chnames.txt")
+with open(projectname + "/chnames.txt", 'w') as file:
+  for ii in range(0,numchn):
+    file.write("Channel " + str(ii + 1) + "\n")
+  for ii in range(0,numchn):
+    file.write("Out " + str(ii + 1) + "\n")
+
+#--- Copy aurora.jgz
+print("Copying aurora.jgz")
+shutil.copy2("../WEBAPP/js/aurora.jgz", "./" + projectname + "/aurora.jgz")
+
+#--- Copy stylesheet
+print("Copying dark.css")
+shutil.copy2("../WEBAPP/css/dark.css", "./" + projectname + "/dark.css")
+
+#--- Copy GUI template
+print("Copying dsp.html")
+shutil.copy2("../WEBAPP/template/dsp.html", "./" + projectname + "/dsp.html")
