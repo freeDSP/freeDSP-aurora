@@ -662,3 +662,20 @@ function postJson(btp){
 
 function openPlugin(){document.getElementById("plugin").style.display = "block";}
 
+function renameChannel(parent){
+  document.getElementById("dialogRename").style.display = "block";
+  document.getElementById("dialogRename").dataset.parent = parent;
+}
+
+function postChannelName(){
+  var data={};
+  data.id=document.getElementById("dialogRename").dataset.parent;
+  data.name=document.getElementById("userinput").value.substring(0,16);
+  return fetch("/chname",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)
+  }).then(function(response){
+    labelId=document.getElementById("dialogRename").dataset.parent;
+    document.getElementById(labelId).innerHTML=data.name;
+    document.getElementById("dialogRename").style.display = "none";
+  });
+}
+

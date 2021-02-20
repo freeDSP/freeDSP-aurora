@@ -104,8 +104,9 @@ struct tCrossover
 struct tFir
 {
   uint16_t addr;
-  float ir[MAX_LENGTH_IR];
+  uint16_t numCoeffs;
   bool bypass;
+  float* ir;
 };
 
 struct tMasterVolume
@@ -173,9 +174,6 @@ extern uint16_t addrVPot;
 
 extern String currentPlugInName;
 
-/*! Inits the default values for filters etc.
- */
-void initUserParams( void );
 extern String presetUsrparamFile[MAX_NUM_PRESETS];
 extern String presetAddonCfgFile[MAX_NUM_PRESETS];
 

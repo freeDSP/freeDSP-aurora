@@ -233,7 +233,7 @@ void setFir( int idx )
   byte val[4];
   uint32_t floatval;
 
-  for( uint16_t kk = 0; kk < MAX_LENGTH_IR; kk++ )
+  for( uint16_t kk = 0; kk <paramFir[idx].numCoeffs; kk++ )
   {
     uint16_t addr = paramFir[idx].addr + kk;
     if( paramFir[idx].bypass )
@@ -252,6 +252,7 @@ void setFir( int idx )
     val[3] =  floatval & 0xFF;
     ADAU1452_WRITE_BLOCK( addr, val, 4 );
   }
+  
 }
 
 //==============================================================================
@@ -778,8 +779,8 @@ void uploadUserParams( void )
       for( int ii = 0; ii < numFIRs; ii++ )
       {
         // save the old address
-        uint16_t addrTemp = paramFir[ii].addr;
-        size_t len = fileUserParams.read( (uint8_t*)&(paramFir[ii]), sizeof(tFir) );
+        // uint16_t addrTemp = paramFir[ii].addr;
+        /*size_t len = fileUserParams.read( (uint8_t*)&(paramFir[ii]), sizeof(tFir) );
         if( len != sizeof(tFir) )
         {
           Serial.println( "[ERROR] Reading FIR from " + presetUsrparamFile[currentPreset] );
@@ -789,6 +790,20 @@ void uploadUserParams( void )
         }
         else
           paramFir[ii].addr = addrTemp;
+        totalSize += len;
+        */
+
+        size_t len = fileUserParams.read((uint8_t*)&(paramFir[ii].addr), sizeof(uint16_t));
+        len += fileUserParams.read((uint8_t*)&(paramFir[ii].numCoeffs), sizeof(uint16_t));
+        len += fileUserParams.read((uint8_t*)&(paramFir[ii].bypass), sizeof(bool));
+        if(len != (2 * sizeof(uint16_t) + sizeof(bool)))
+          Serial.println( "[ERROR] Reading FIR from " + presetUsrparamFile[currentPreset] );
+        else
+        {
+          len = fileUserParams.read((uint8_t*)(paramFir[ii].ir), sizeof(float) * paramFir[ii].numCoeffs);
+          if(len != sizeof(float) * paramFir[ii].numCoeffs)
+            Serial.println( "[ERROR] Reading FIR IR from " + presetUsrparamFile[currentPreset] );
+        }
         totalSize += len;
       }
 

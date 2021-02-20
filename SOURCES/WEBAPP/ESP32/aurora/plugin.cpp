@@ -47,6 +47,8 @@ uint8_t currentPreset = 0;
 
 byte currentAddOnCfg[3];
 
+float memIR[SIZE_IR_MEMORY];
+
 //==============================================================================
 /*! Reads the plugin meta data from JSON file.
  */
@@ -160,8 +162,16 @@ void readPluginMeta( void )
       paramCrossover[ii].lp_addr[3] = static_cast<uint16_t>(jsonPluginMeta["xolp"][3+ii*4]);
     }
 
-    for( int ii = 0; ii < numFIRs; ii++ )
+    int idx = 0;
+    for(int ii = 0; ii < numFIRs; ii++)
+    {
       paramFir[ii].addr = static_cast<uint16_t>(jsonPluginMeta["fir"][ii]);
+      paramFir[ii].numCoeffs = static_cast<uint16_t>(jsonPluginMeta["firlen"][ii]);
+      paramFir[ii].ir = &(memIR[idx]);
+      idx += paramFir[ii].numCoeffs;
+      if(idx > SIZE_IR_MEMORY)
+        Serial.println("[ERROR] Not enough IR memory.");
+    }
 
     masterVolume.addr = jsonPluginMeta["master"].as<String>().toInt();
     addrVPot = jsonPluginMeta["vpot"].as<String>().toInt();
@@ -206,11 +216,14 @@ void initUserParams( void )
 
   for( int ii = 0; ii < MAX_NUM_FIRS; ii++ )
   {
-    paramFir[ii].bypass = false;
-    for( int kk = 0; kk < MAX_LENGTH_IR; kk++ )
-      paramFir[ii].ir[kk] = 0.0;
-    paramFir[ii].ir[0] = 1.0;
+    paramFir[ii].bypass = true;
+    //for( int kk = 0; kk < MAX_LENGTH_IR; kk++ )
+    //  paramFir[ii].ir[kk] = 0.0;
+    //paramFir[ii].ir[0] = 1.0;
   }
+  for(int nn = 0; nn < SIZE_IR_MEMORY; nn++)
+    memIR[nn] = 0.0f;
+
 
   for( int ii = 0; ii < MAX_NUM_HPS; ii++ )
   {
