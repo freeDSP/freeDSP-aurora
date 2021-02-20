@@ -587,6 +587,9 @@ String handleGetAllFcJson( void )
 {
   Serial.println( "GET /allfc" );
 
+  if(!numHPs && !numLShelvs && !numPEQs && !numHShelvs && !numLPs && !numPhases && !numDelays && !numGains)
+    return String("{\"fc\":[]}");
+
   // Build the JSON response manually. Via ArduinoJson it did not work somehow.
   String array( "{\"fc\":[" );
   for( int ii = 0; ii < numHPs; ii++ )
@@ -1394,9 +1397,22 @@ void handlePostStore( AsyncWebServerRequest* request, uint8_t* data )
 
   for( int ii = 0; ii < numFIRs; ii++ )
   {
-    size_t len = fileUserParams.write( (uint8_t*)&(paramFir[ii]), sizeof(tFir) );
-    if( len != sizeof(tFir) )
+    //size_t len = fileUserParams.write( (uint8_t*)&(paramFir[ii]), sizeof(tFir) );
+    //if( len != sizeof(tFir) )
+    //  Serial.println( "[ERROR] Writing FIRs to " + presetUsrparamFile[currentPreset] );
+    //totalSize += len;
+
+    size_t len = fileUserParams.write((uint8_t*)&(paramFir[ii].addr), sizeof(uint16_t));
+    len += fileUserParams.write((uint8_t*)&(paramFir[ii].numCoeffs), sizeof(uint16_t));
+    len += fileUserParams.write((uint8_t*)&(paramFir[ii].bypass), sizeof(bool));
+    if(len != (2 * sizeof(uint16_t) + sizeof(bool)))
       Serial.println( "[ERROR] Writing FIRs to " + presetUsrparamFile[currentPreset] );
+    else
+    {
+      len = fileUserParams.write((uint8_t*)(paramFir[ii].ir), sizeof(float) * paramFir[ii].numCoeffs);
+      if(len != sizeof(float) * paramFir[ii].numCoeffs)
+        Serial.println( "[ERROR] Reading FIR IR from " + presetUsrparamFile[currentPreset] );
+    }
     totalSize += len;
   }
 
@@ -1773,7 +1789,8 @@ void handleIrUpload( AsyncWebServerRequest* request, uint8_t* data, size_t len, 
   {
     for( int kk = 0; kk < len; kk++ )
     {
-      ((uint8_t*)(paramFir[currentFirUploadIdx].ir))[index + kk] = data[kk];
+      if(index + kk < sizeof(float) * paramFir[currentFirUploadIdx].numCoeffs)
+        ((uint8_t*)(paramFir[currentFirUploadIdx].ir))[index + kk] = data[kk];
     }
   }
 
@@ -1787,7 +1804,6 @@ void handleIrUpload( AsyncWebServerRequest* request, uint8_t* data, size_t len, 
     softUnmuteDAC();
 
     Serial.println( "[OK]" );
-    Serial.println( index + len );
   }
 
 }

@@ -13,9 +13,10 @@
 #define MAX_NUM_DELAYS 8
 #define MAX_NUM_GAINS 8
 #define MAX_NUM_CROSSOVER 8
-#define MAX_NUM_FIRS 4
+#define MAX_NUM_FIRS 8
 
 #define MAX_LENGTH_IR 4096
+#define SIZE_IR_MEMORY 16384
 
 #define MAX_NUM_PRESETS 4
 
