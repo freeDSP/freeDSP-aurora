@@ -165,6 +165,10 @@ fir = []
 for ii in range(0,numchn):
   fir.append(GrowingList())
 
+firlen = []
+for ii in range(0,numchn):
+  firlen.append(GrowingList())
+
 for module in root.findall('IC/Module'):
   cellname = module.find('CellName')
 
@@ -306,6 +310,7 @@ for module in root.findall('IC/Module'):
       modname = modparam.find('Name').text
       if "fircoeff" in modname:
         fir[idx][0] = int(modparam.find('Address').text)
+        firlen[idx][0] = int(modparam.find('Size').text) / 4
 
   elif cellname.text.startswith('XO_LP'):
     idx = int(cellname.text.split('_',2)[1].split("LP")[1])-1
@@ -455,6 +460,13 @@ for m in range(0,len(fir)):
     fir_t[idx] = fir[m][n]
     idx = idx+1
 
+firlen_t = GrowingList()
+idx = 0
+for m in range(0,len(firlen)):
+  for n in range(0,len(firlen[m])):
+    firlen_t[idx] = firlen[m][n]
+    idx = idx+1
+
 nhp = len(hp_t)/4
 nlp = len(lp_t)/4
 nxolp = len(xolp_t)/4
@@ -502,6 +514,7 @@ data = {"name":nameplugin,
         "xohp":xohp_t,
         "xolp":xolp_t,
         "fir":fir_t,
+        "firlen":firlen_t,
         "vpot":vpot,
         "master":mastervol }
 
