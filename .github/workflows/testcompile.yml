@@ -1,0 +1,57 @@
+# Test compilation of WEBAPP/ESP32
+# (c) Laurent Monin 2020
+#
+name: TestCompileWebApp
+on:
+  push:
+    branches: [ master, develop ]
+    paths:
+    - '**.ino'
+    - '**.cpp'
+    - '**.h'
+    - '**testcompile.yml'
+  pull_request:
+    branches: [ master, develop ]
+    paths:
+    - '**.ino'
+    - '**.cpp'
+    - '**.h'
+    - '**testcompile.yml'
+jobs:
+  build:
+    name: Test compiling aurora for ESP32
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: Checkout ESPAsyncWebServer library
+        uses: actions/checkout@v2
+        with:
+          repository: me-no-dev/ESPAsyncWebServer
+          ref: master
+          path: CustomLibrary_ESPAsyncWebServer
+
+      - name: Checkout AsyncTCP library
+        uses: actions/checkout@v2
+        with:
+          repository: me-no-dev/AsyncTCP
+          ref: master
+          path: CustomLibrary_AsyncTCP
+
+#      - name: Checkout patched IRremote library
+#        uses: actions/checkout@v2
+#        with:
+#          repository: dspverden/Arduino-IRremote
+#          ref: master
+#          path: CustomLibrary_IRremote
+
+      - name: Compile webapp aurora
+        uses: ArminJo/arduino-test-compile@v2.6.0
+        with:
+          sketch-names: aurora.ino
+          sketch-names-find-start: SOURCES/WEBAPP/ESP32/aurora/
+          arduino-board-fqbn: esp32:esp32:esp32
+          platform-url: https://dl.espressif.com/dl/package_esp32_index.json
+          required-libraries: ArduinoJson@6.13.0,U8g2@2.27.6,IRremote@2.6.1
+          build-properties: '{ "All": "-Wno-unused-value"}'
