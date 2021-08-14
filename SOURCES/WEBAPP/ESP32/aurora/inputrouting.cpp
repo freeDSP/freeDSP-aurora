@@ -4,15 +4,63 @@
 #include <ArduinoJson.h>
 
 #include "config.h"
+#include "hwconfig.h"
+#include "plugin.h"
+#include "adau1452.h"
+#include "AK4458.h"
 
 static const int kNumSourceNames = 8;
-const char* sourceNames[kNumSourceNames] = {"CD-A:", "Blueray:", "Phono:", "Aux:", "USB:", "SPDIF coax:", "SPDIF optical:", "Streaming:"};
+const char* sourceNames[kNumSourceNames] = {"CD-A:", "Blueray:", "Phono:", "Aux:", "USB:", "Streaming:", "SPDIF coax:", "SPDIF optical:"};
 
 //! TODO Make this dynamic depending on plugin
 static const int kNumVirtualInputs = 2;
 
-int sourceRouting[kNumSourceNames][kNumVirtualInputs] = {{0, 1}, {2, 3}, {4, 5}, {6, 7}, {8, 9}, {16, 17}, {24, 25}, {32, 33}};
+int sourceRouting[kNumSourceNames][kNumVirtualInputs] = {{0, 1}, {2, 3}, {4, 5}, {6, 7}, {8, 9}, {16, 17}, {18, 19}, {26, 27}};
 
+uint32_t inputSelectionCmd[34] = {
+  0x00000000, // Analog 1
+  0x00000001, // Analog 2
+  0x00000002, // Analog 3
+  0x00000003, // Analog 4
+  0x00000004, // Analog 5
+  0x00000005, // Analog 6
+  0x00000006, // Analog 7
+  0x00000007, // Analog 8
+  0x00010000, // USB 1
+  0x00010001, // USB 2
+  0x00010002, // USB 3
+  0x00010003, // USB 4
+  0x00010004, // USB 5
+  0x00010005, // USB 6
+  0x00010006, // USB 7
+  0x00010007, // USB 8
+  0x00020000, // Expansion 1
+  0x00020001, // Expansion 2
+  /*0x00020002, // Expansion 3
+  0x00020003, // Expansion 4
+  0x00020004, // Expansion 5
+  0x00020005, // Expansion 6
+  0x00020006, // Expansion 7
+  0x00020007, // Expansion 8*/
+  0x00040000, // SPDIF Coax 1 Left
+  0x00040001, // SPDIF Coax 1 Right
+  0x00040000, // SPDIF Coax 2 Left
+  0x00040001, // SPDIF Coax 2 Right
+  0x00040000, // SPDIF Coax 3 Left
+  0x00040001, // SPDIF Coax 3 Right
+  0x00040000, // SPDIF Coax 4 Left
+  0x00040001, // SPDIF Coax 4 Right
+  0x00040000, // SPDIF Optical 1 Left
+  0x00040001, // SPDIF Optical 1 Right
+  0x00040000, // SPDIF Optical 2 Left
+  0x00040001, // SPDIF Optical 2 Right
+  0x00040000, // SPDIF Optical 3 Left
+  0x00040001, // SPDIF Optical 3 Right
+  0x00040000, // SPDIF Optical 4 Left
+  0x00040001  // SPDIF Optical 4 Right
+};
+
+int currentVirtualInput = 0;
 
 //==============================================================================
 /*! Builds the HTML page for the input routing by source names.
@@ -104,9 +152,9 @@ String handleGetInputRoutingJson(void)
 
   ret += String("\"options\":[\"Analog 1\", \"Analog 2\", \"Analog 3\", \"Analog 4\", \"Analog 5\", \"Analog 6\", \"Analog 7\", \"Analog 8\",");
   ret += String("\"USB 1\", \"USB 2\", \"USB 3\", \"USB 4\", \"USB 5\", \"USB 6\", \"USB 7\", \"USB 8\",");
+  ret += String("\"Expansion 1\", \"Expansion 2\",");
   ret += String("\"SPDIF Coax 1 Left\", \"SPDIF Coax 1 Right\", \"SPDIF Coax 2 Left\", \"SPDIF Coax 2 Right\", \"SPDIF Coax 3 Left\", \"SPDIF Coax 3 Right\", \"SPDIF Coax 4 Left\", \"SPDIF Coax 4 Right\",");
-  ret += String("\"SPDIF Optical 1 Left\", \"SPDIF Optical 1 Right\", \"SPDIF Optical 2 Left\", \"SPDIF Optical 2 Right\", \"SPDIF Optical 3 Left\", \"SPDIF Optical 3 Right\", \"SPDIF Optical 4 Left\", \"SPDIF Optical 4 Right\",");
-  ret += String("\"Expansion 1\", \"Expansion 2\"");
+  ret += String("\"SPDIF Optical 1 Left\", \"SPDIF Optical 1 Right\", \"SPDIF Optical 2 Left\", \"SPDIF Optical 2 Right\", \"SPDIF Optical 3 Left\", \"SPDIF Optical 3 Right\", \"SPDIF Optical 4 Left\", \"SPDIF Optical 4 Right\"");
   ret += String("]");
   ret += String("}");
 
@@ -147,4 +195,98 @@ void handlePostInputRoutingJson(AsyncWebServerRequest* request, uint8_t* data)
   }
 
   request->send(200, "text/plain", "");
+}
+
+//==============================================================================
+/*! Handles the GET request for virtual input selection
+ *
+ */
+void handleGetVirtualInputJson(AsyncWebServerRequest* request)
+{
+  #if DEBUG_PRINT
+  Serial.println( "GET /vinput" );
+  #endif
+
+  AsyncJsonResponse* response = new AsyncJsonResponse();
+
+  JsonVariant& jsonResponse = response->getRoot();
+  jsonResponse["sel"] = currentVirtualInput;
+
+  response->setLength();
+  request->send(response);
+}
+
+//==============================================================================
+/*! Handles the POST request for virtual input selection
+ *
+ */
+void handlePostVirtualInputJson(AsyncWebServerRequest* request, uint8_t* data)
+{
+  #if DEBUG_PRINT
+  Serial.println( "POST /vinput" );
+  #endif
+
+  DynamicJsonDocument jsonDoc(1024);
+  DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
+  if( err )
+  {
+    #if DEBUG_PRINT || ERROR_PRINT 
+    Serial.print( "[ERROR] handlePostHpJson(): Deserialization failed. " );
+    Serial.println( err.c_str() );
+    #endif
+    request->send( 400, "text/plain", err.c_str() );
+    return;
+  }
+
+  softMuteDAC();
+  JsonObject root = jsonDoc.as<JsonObject>();
+  currentVirtualInput = (uint32_t)strtoul(root["sel"].as<String>().c_str(), NULL, 10);
+  for(int nn = 0; nn < kNumVirtualInputs; nn++)
+  {
+    paramInputs[nn].sel = inputSelectionCmd[sourceRouting[currentVirtualInput][nn]];
+    setInput(nn);
+
+    // if spdif was select, change multiplexer on addon B, too
+    if(paramInputs[nn].sel & 0xffff0000 == 0x00040000)
+    {
+      Serial.println("Change SPDIFmux");
+      Wire.beginTransmission(ADDONB_SPDIFMUX_ADDR);
+      Wire.write(0x01);
+      if(sourceRouting[currentVirtualInput][nn] == 18) // SPDIF Coax 1 Left
+        Wire.write(0x04);
+      else if(sourceRouting[currentVirtualInput][nn] == 19) // SPDIF Coax 1 Right
+        Wire.write(0x04);
+      else if(sourceRouting[currentVirtualInput][nn] == 20) // SPDIF Coax 2 Left
+        Wire.write(0x05);
+      else if(sourceRouting[currentVirtualInput][nn] == 21) // SPDIF Coax 2 Right
+        Wire.write(0x05);
+      else if(sourceRouting[currentVirtualInput][nn] == 22) // SPDIF Coax 3 Left
+        Wire.write(0x06);
+      else if(sourceRouting[currentVirtualInput][nn] == 23) // SPDIF Coax 3 Right
+        Wire.write(0x06);
+      else if(sourceRouting[currentVirtualInput][nn] == 24) // SPDIF Coax 4 Left
+        Wire.write(0x07);
+      else if(sourceRouting[currentVirtualInput][nn] == 25) // SPDIF Coax 4 Right
+        Wire.write(0x07);
+      else if(sourceRouting[currentVirtualInput][nn] == 26) // SPDIF Optical 1 Left
+        Wire.write(0x00);
+      else if(sourceRouting[currentVirtualInput][nn] == 27) // SPDIF Optical 1 Right
+        Wire.write(0x00);
+      else if(sourceRouting[currentVirtualInput][nn] == 28) // SPDIF Optical 2 Left
+        Wire.write(0x01);
+      else if(sourceRouting[currentVirtualInput][nn] == 29) // SPDIF Optical 2 Right
+        Wire.write(0x01);
+      else if(sourceRouting[currentVirtualInput][nn] == 30) // SPDIF Optical 3 Left
+        Wire.write(0x02);
+      else if(sourceRouting[currentVirtualInput][nn] == 31) // SPDIF Optical 3 Right
+        Wire.write(0x02);
+      else if(sourceRouting[currentVirtualInput][nn] == 32) // SPDIF Optical 4 Left
+        Wire.write(0x03);
+      else if(sourceRouting[currentVirtualInput][nn] == 33) // SPDIF Optical 4 Right
+        Wire.write(0x03);
+      Wire.endTransmission(true);
+    }
+  }  
+  request->send(200, "text/plain", "");
+  softUnmuteDAC();
 }

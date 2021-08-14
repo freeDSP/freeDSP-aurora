@@ -1904,9 +1904,9 @@ void setupWebserver (void)
   server.on( "/allinputs",    HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetAllInputsJson(request); });
   server.on( "/addoncfg",     HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetAddonConfigJson(request); });
   server.on( "/fir",          HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetFirJson(request); });
-  server.on( "/allbyp",       HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( 200, "text/plain", handleGetAllBypJson() ); });
-  server.on( "/allfc",        HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( 200, "text/plain", handleGetAllFcJson() ); });
-  server.on( "/allchnames",   HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( 200, "text/plain", handleGetAllChNamesJson() ); });
+  server.on( "/allbyp",       HTTP_GET, [](AsyncWebServerRequest *request ) { request->send(200, "text/plain", handleGetAllBypJson()); });
+  server.on( "/allfc",        HTTP_GET, [](AsyncWebServerRequest *request ) { request->send(200, "text/plain", handleGetAllFcJson()); });
+  server.on( "/allchnames",   HTTP_GET, [](AsyncWebServerRequest *request ) { request->send(200, "text/plain", handleGetAllChNamesJson()); });
   server.on( "/preset.param", HTTP_GET, [](AsyncWebServerRequest *request )
   {
     Serial.println( "/preset.param" );
@@ -1914,7 +1914,8 @@ void setupWebserver (void)
   });
   server.on( "/spdifout",     HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetSpdifOutJson(request); });
   server.on( "/wificonfig",   HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetWifiConfigJson(request); });
-  server.on( "/inputrouting", HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( 200, "text/plain", handleGetInputRoutingJson() );  /*handleGetInputRoutingJson(request);*/ });
+  server.on( "/inputrouting", HTTP_GET, [](AsyncWebServerRequest *request ) { request->send(200, "text/plain", handleGetInputRoutingJson()); });
+  server.on( "/vinput",       HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetVirtualInputJson(request); });
 
   server.on( "/input", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
   {
@@ -2015,6 +2016,10 @@ void setupWebserver (void)
   server.on( "/inputrouting", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total)
   {
     handlePostInputRoutingJson(request, data);
+  });
+  server.on( "/vinput", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total)
+  {
+    handlePostVirtualInputJson(request, data);
   });
 
   //--- webOTA stuff ---

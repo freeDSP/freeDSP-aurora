@@ -19,4 +19,16 @@ String handleGetInputRoutingJson(void/*AsyncWebServerRequest* request*/);
  */
 void handlePostInputRoutingJson(AsyncWebServerRequest* request, uint8_t* data);
 
+//==============================================================================
+/*! Handles the GET request for virtual input selection
+ *
+ */
+void handleGetVirtualInputJson(AsyncWebServerRequest* request);
+
+//==============================================================================
+/*! Handles the POST request for virtual input selection
+ *
+ */
+void handlePostVirtualInputJson(AsyncWebServerRequest* request, uint8_t* data);
+
 #endif
