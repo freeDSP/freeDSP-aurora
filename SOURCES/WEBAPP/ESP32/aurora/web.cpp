@@ -17,6 +17,7 @@
 #include "addons.h"
 #include "display.h"
 #include "channelnames.h"
+#include "inputrouting.h"
 
 extern String channelNames[16];
 
@@ -1871,12 +1872,22 @@ void setupWebserver (void)
   server.on( "/fallback",  HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( 200, "text/html", fallback_html ); });
   server.on( "/dark.css",  HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( SPIFFS, "/dark.css", "text/css" ); });
   server.on( "/aurora.js", HTTP_GET, [](AsyncWebServerRequest *request )
-  {
-    request->send( SPIFFS, "/aurora.js", "text/javascript" );
-    //AsyncWebServerResponse* response = request->beginResponse(SPIFFS, "/aurora.jgz", "text/javascript");
-    //response->addHeader( "Content-Encoding", "gzip" );
-    //request->send( response );
+  { 
+    if(SPIFFS.exists("/aurora.js"))
+    {
+      // if an uncompressed javascript file exist, return it
+      // this is usefull for quicker debugging
+      request->send( SPIFFS, "/aurora.js", "text/javascript" );
+    }
+    else
+    {
+      // return the compressed file which should be the default for release
+      AsyncWebServerResponse* response = request->beginResponse(SPIFFS, "/aurora.jgz", "text/javascript");
+      response->addHeader( "Content-Encoding", "gzip" );
+      request->send( response );
+    }
   });
+  server.on( "/routing.html", HTTP_GET, [](AsyncWebServerRequest *request ) { Serial.println("/routing.html"); request->send( 200, "text/html", createInputRoutingPage(2).c_str() ); });
   server.on( "/input",        HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetInputJson(request); });
   server.on( "/hp",           HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetHpJson(request); });
   server.on( "/lshelv",       HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetLshelvJson(request); });
@@ -1893,16 +1904,18 @@ void setupWebserver (void)
   server.on( "/allinputs",    HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetAllInputsJson(request); });
   server.on( "/addoncfg",     HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetAddonConfigJson(request); });
   server.on( "/fir",          HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetFirJson(request); });
-  server.on( "/allbyp",       HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( 200, "text/plain", handleGetAllBypJson() ); });
-  server.on( "/allfc",        HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( 200, "text/plain", handleGetAllFcJson() ); });
-  server.on( "/allchnames",   HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( 200, "text/plain", handleGetAllChNamesJson() ); });
+  server.on( "/allbyp",       HTTP_GET, [](AsyncWebServerRequest *request ) { request->send(200, "text/plain", handleGetAllBypJson()); });
+  server.on( "/allfc",        HTTP_GET, [](AsyncWebServerRequest *request ) { request->send(200, "text/plain", handleGetAllFcJson()); });
+  server.on( "/allchnames",   HTTP_GET, [](AsyncWebServerRequest *request ) { request->send(200, "text/plain", handleGetAllChNamesJson()); });
   server.on( "/preset.param", HTTP_GET, [](AsyncWebServerRequest *request )
   {
     Serial.println( "/preset.param" );
     request->send( SPIFFS, presetUsrparamFile[currentPreset], "application/octet-stream" );
   });
-  server.on( "/spdifout",   HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetSpdifOutJson(request); });
-  server.on( "/wificonfig", HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetWifiConfigJson(request); });
+  server.on( "/spdifout",     HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetSpdifOutJson(request); });
+  server.on( "/wificonfig",   HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetWifiConfigJson(request); });
+  server.on( "/inputrouting", HTTP_GET, [](AsyncWebServerRequest *request ) { request->send(200, "text/plain", handleGetInputRoutingJson()); });
+  server.on( "/vinput",       HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetVirtualInputJson(request); });
 
   server.on( "/input", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
   {
@@ -1988,17 +2001,25 @@ void setupWebserver (void)
   {
     handleIrUpload( request, data, len, index, total );
   });
-  server.on( "/spdifout", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
+  server.on( "/spdifout", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total)
   {
-    handlePostSpdifOutJson( request, data );
+    handlePostSpdifOutJson(request, data);
   });
-  server.on( "/firbypass", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
+  server.on( "/firbypass", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total)
   {
-    handlePostFirBypassJson( request, data );
+    handlePostFirBypassJson(request, data);
   });
-  server.on( "/chname", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
+  server.on( "/chname", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total)
   {
     handlePostChannelNameJson(request, data);
+  });
+  server.on( "/inputrouting", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total)
+  {
+    handlePostInputRoutingJson(request, data);
+  });
+  server.on( "/vinput", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total)
+  {
+    handlePostVirtualInputJson(request, data);
   });
 
   //--- webOTA stuff ---

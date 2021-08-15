@@ -28,6 +28,7 @@
 #include "web.h"
 #include "display.h"
 #include "channelnames.h"
+#include "inputrouting.h"
 
 /**
  * These are required for the espmake32 automatic library resolver
@@ -447,16 +448,29 @@ void setup()
   changeChannelSummationADC();
   if( changeWifiState )
   {
-    Serial.print( F("Changing WiFi status......") );
+    Serial.print(F("Changing WiFi status......"));
     Settings.wifiOn = Settings.wifiOn ? false : true;
     writeSettings();
-    Serial.println( F("[OK]") );
+    Serial.println(F("[OK]"));
   }
 
   Serial.print( F("Init user parameter......") );
   initUserParams();
   Serial.println( F("[OK]") );
   readPluginMeta();
+
+  //----------------------------------------------------------------------------
+  //--- Read virtual input channel routing (only if supported by plugin)
+  //----------------------------------------------------------------------------
+  if(currentPlugInName == String(F("stereoforever")))
+  {
+    if(!SPIFFS.exists("/vinputs.txt"))
+      // if file does not exist, write it with defautl values
+      writeVirtualInputRouting();
+    else
+      readVirtualInputRouting();
+  }
+
   readChannelNames();
 
   //----------------------------------------------------------------------------

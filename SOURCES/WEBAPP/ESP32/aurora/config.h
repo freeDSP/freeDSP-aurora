@@ -1,7 +1,7 @@
 #ifndef CONFIG_H_
 #define CONFIG_H_
 
-#define VERSION_STR "v2.2.0"
+#define VERSION_STR "v2.2.0-alpha.1"
 
 #define MAX_NUM_INPUTS 8
 #define MAX_NUM_HPS 8
@@ -19,5 +19,8 @@
 #define SIZE_IR_MEMORY 16384
 
 #define MAX_NUM_PRESETS 4
+
+#define DEBUG_PRINT (1)
+#define ERROR_PRINT (1)
 
 #endif
