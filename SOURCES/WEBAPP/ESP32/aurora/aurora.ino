@@ -468,7 +468,6 @@ void setup()
       // if file does not exist, write it with defautl values
       writeVirtualInputRouting();
     else
-    //if(SPIFFS.exists("/vinputs.txt"))
       readVirtualInputRouting();
   }
 
@@ -482,12 +481,12 @@ void setup()
   //----------------------------------------------------------------------------
   //--- Upload program to DSP
   //----------------------------------------------------------------------------
-  //uploadDspFirmware();
+  uploadDspFirmware();
 
   //----------------------------------------------------------------------------
   //--- Upload user parameters to DSP
   //----------------------------------------------------------------------------
-  //uploadUserParams();
+  uploadUserParams();
 
   //----------------------------------------------------------------------------
   //--- Configure Webserver

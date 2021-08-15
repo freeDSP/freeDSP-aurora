@@ -190,6 +190,7 @@ void handlePostInputRoutingJson(AsyncWebServerRequest* request, uint8_t* data)
 
   for(int mm = 0; mm < kNumSourceNames; mm++)
   {
+    sourceNames[mm] = root["sourceNames"][mm].as<String>().substring(0, 16);
     for(int nn = 0; nn < kNumVirtualInputs; nn++)
     {
       if((mm < root["select"].size()) && (nn < root["select"][mm].size()))
