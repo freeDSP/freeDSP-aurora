@@ -31,4 +31,22 @@ void handleGetVirtualInputJson(AsyncWebServerRequest* request);
  */
 void handlePostVirtualInputJson(AsyncWebServerRequest* request, uint8_t* data);
 
+//==============================================================================
+/*! Saves the current assignment virtual <-> physical input
+ *
+ */
+bool writeVirtualInputRouting(void);
+
+//==============================================================================
+/*! Reads the saved assignment virtual <-> physical input from file
+ *
+ */
+bool readVirtualInputRouting(void);
+
+//==============================================================================
+/*! Sets the virtual input routing for current selection
+ *
+ */
+void setVirtualInput(void);
+
 #endif

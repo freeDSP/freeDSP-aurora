@@ -2,6 +2,7 @@
 #include <ESPAsyncWebServer.h>
 #include <AsyncJson.h>
 #include <ArduinoJson.h>
+#include <SPIFFS.h>
 
 #include "config.h"
 #include "hwconfig.h"
@@ -9,8 +10,10 @@
 #include "adau1452.h"
 #include "AK4458.h"
 
+#include "inputrouting.h"
+
 static const int kNumSourceNames = 8;
-const char* sourceNames[kNumSourceNames] = {"CD-A:", "Blueray:", "Phono:", "Aux:", "USB:", "Streaming:", "SPDIF coax:", "SPDIF optical:"};
+String sourceNames[kNumSourceNames] = {"CD-A:", "Blueray:", "Phono:", "Aux:", "USB:", "Streaming:", "SPDIF coax:", "SPDIF optical:"};
 
 //! TODO Make this dynamic depending on plugin
 static const int kNumVirtualInputs = 2;
@@ -194,6 +197,9 @@ void handlePostInputRoutingJson(AsyncWebServerRequest* request, uint8_t* data)
     }
   }
 
+  writeVirtualInputRouting();
+  setVirtualInput();
+
   request->send(200, "text/plain", "");
 }
 
@@ -241,12 +247,105 @@ void handlePostVirtualInputJson(AsyncWebServerRequest* request, uint8_t* data)
   softMuteDAC();
   JsonObject root = jsonDoc.as<JsonObject>();
   currentVirtualInput = (uint32_t)strtoul(root["sel"].as<String>().c_str(), NULL, 10);
+  setVirtualInput(); 
+  request->send(200, "text/plain", "");
+  softUnmuteDAC();
+}
+
+//==============================================================================
+/*! Saves the current assignment virtual <-> physical input to file
+ *
+ */
+bool writeVirtualInputRouting(void)
+{
+  #if DEBUG_PRINT
+  Serial.print(F("Writing virtual input routing..."));
+  #endif
+
+  File file = SPIFFS.open("/vinputs.txt", FILE_WRITE);
+ 
+  if(!file)
+  {
+    #if DEBUG_PRINT || ERROR_PRINT 
+    Serial.println(F("[ERROR] writeVirtualInputRouting(): Open vinputs.txt failed."));
+    #endif
+    return false;
+  }
+
+  for(int ii = 0; ii < kNumSourceNames; ii++)
+    file.print(sourceNames[ii] + String("\n"));
+
+  for(int mm = 0; mm < kNumSourceNames; mm++)
+  {
+    for(int nn = 0; nn < kNumVirtualInputs; nn++)
+      file.print(String(sourceRouting[mm][nn]) + String("\n"));
+  }
+
+  file.close();
+  #if DEBUG_PRINT
+  Serial.println(F("[OK]"));
+  #endif
+  return true;
+}
+
+//==============================================================================
+/*! Reads the saved assignment virtual <-> physical input from file
+ *
+ */
+bool readVirtualInputRouting(void)
+{
+  #if DEBUG_PRINT
+  Serial.print(F("Reading virtual input routing..."));
+  #endif
+
+  File file = SPIFFS.open("/vinputs.txt", FILE_READ);
+ 
+  if(!file)
+  {
+    #if DEBUG_PRINT || ERROR_PRINT 
+    Serial.println(F("[ERROR] readVirtualInputRouting(): Open vinput.txt failed."));
+    #endif
+    return false;
+  }
+
+  int ii = 0;
+  if(file.available())
+  {
+    for(int ii = 0; ii < kNumSourceNames; ii++)
+    {
+      String str = file.readStringUntil('\n');
+      sourceNames[ii] = str;
+    }
+    for(int mm = 0; mm < kNumSourceNames; mm++)
+    {
+      for(int nn = 0; nn < kNumVirtualInputs; nn++)
+      {
+        String str = file.readStringUntil('\n');
+        sourceRouting[mm][nn] = (uint32_t)strtoul(str.c_str(), NULL, 10);
+      }
+    }
+  }
+
+  file.close();
+  #if DEBUG_PRINT
+  Serial.println(F("[OK]"));
+  #endif
+  return true;
+}
+
+//==============================================================================
+/*! Sets the virtual input routing for current selection
+ *
+ */
+void setVirtualInput(void)
+{
   for(int nn = 0; nn < kNumVirtualInputs; nn++)
   {
     paramInputs[nn].sel = inputSelectionCmd[sourceRouting[currentVirtualInput][nn]];
     setInput(nn);
 
     // if spdif was select, change multiplexer on addon B, too
+    //! TODO Support other addons
     if(paramInputs[nn].sel & 0xffff0000 == 0x00040000)
     {
       Serial.println("Change SPDIFmux");
@@ -286,7 +385,5 @@ void handlePostVirtualInputJson(AsyncWebServerRequest* request, uint8_t* data)
         Wire.write(0x03);
       Wire.endTransmission(true);
     }
-  }  
-  request->send(200, "text/plain", "");
-  softUnmuteDAC();
+  } 
 }
