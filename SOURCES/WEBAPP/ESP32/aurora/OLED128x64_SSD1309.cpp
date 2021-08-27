@@ -13,13 +13,14 @@ U8G2_SSD1309_128X64_NONAME0_F_HW_I2C u8g2_ssd1309( U8G2_R0, /* clock=*/ I2C_SCL_
 
 void OLED128x64_SSD1309::begin( void )
 {
-  //u8g2.setBusClock(100000);
+  u8g2_ssd1309.setBusClock(100000);
   u8g2_ssd1309.begin();
   u8g2_ssd1309.setFont(u8g2_font_6x10_tf);
   u8g2_ssd1309.setFontRefHeightExtendedText();
   u8g2_ssd1309.setDrawColor(1);
   u8g2_ssd1309.setFontPosTop();
   u8g2_ssd1309.setFontDirection(0);
+
 }
 
 void OLED128x64_SSD1309::clearBuffer( void )

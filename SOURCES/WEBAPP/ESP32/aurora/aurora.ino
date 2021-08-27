@@ -205,7 +205,7 @@ void uploadDspFirmware( void )
  */
 void updateUI( void )
 {
-  if( haveDisplay )
+  if(haveDisplay)
   {
     String ip;
     if( WiFi.status() != WL_CONNECTED )
@@ -213,7 +213,7 @@ void updateUI( void )
     else
       ip = WiFi.localIP().toString();
 
-    if( (editMode == 0) || (editMode == 1) )
+    if( (editMode == 0) || (editMode == 1) || (editMode == 2) )
     {
       switch( currentPreset )
       {
@@ -594,15 +594,24 @@ void loop()
   #if HAVE_ROTARYENCODER
   if( rotaryEncoder.getSwitchValue() != lastREsw )
   {
-    if( changeWifiState )
+    if(changeWifiState)
       changeWifiState = false;
     else
     {
       editMode++;
-      // we may have more then two modes in the future.
-      if( editMode > 1 )
-        editMode = 0;
-      delay( 300 );
+      if(currentPlugInName == String(F("stereoforever")))
+      {
+        if(editMode > 2)
+          editMode = 0;
+      }
+      else
+      {
+        // we may have more then two modes in the future.
+        if(editMode > 1)
+          editMode = 0;
+      }
+      
+      delay(300);
       needUpdateUI = true;
     }
     lastREsw = rotaryEncoder.getSwitchValue();
@@ -610,7 +619,7 @@ void loop()
   }
   else if( rotaryEncoder.getRotationValue() > lastREval + 1 )
   {
-    if( editMode == 0 )
+    if(editMode == 0)
     {
       masterVolume.val += 0.5f;
       if( masterVolume.val > 0.f )
@@ -635,6 +644,18 @@ void loop()
 
       lastREval = rotaryEncoder.getRotationValue();
       needUpdateUI = true;
+    }
+    else if(editMode == 2)
+    {
+      if(currentPlugInName == String(F("stereoforever")))
+      {
+        incrementVirtualInput();
+        softMuteDAC();
+        updateUI();
+        softUnmuteDAC();
+        lastREval = rotaryEncoder.getRotationValue();
+        needUpdateUI = true;
+      }
     }
   }
   else if( rotaryEncoder.getRotationValue() < lastREval - 1 )
@@ -665,6 +686,18 @@ void loop()
 
       lastREval = rotaryEncoder.getRotationValue();
       needUpdateUI = true;
+    }
+    else if(editMode == 2)
+    {
+      if(currentPlugInName == String(F("stereoforever")))
+      {
+        decrementVirtualInput();
+        softMuteDAC();
+        updateUI();
+        softUnmuteDAC();
+        lastREval = rotaryEncoder.getRotationValue();
+        needUpdateUI = true;
+      }
     }
   }
   #endif
