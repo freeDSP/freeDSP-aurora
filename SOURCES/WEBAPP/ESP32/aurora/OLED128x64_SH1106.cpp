@@ -4,8 +4,6 @@
 #include <Wire.h>
 #endif
 
-//#include "u8g2_esp32_hal.h"
-
 #include "hwconfig.h"
 #include "OLED128x64_SH1106.h"
 

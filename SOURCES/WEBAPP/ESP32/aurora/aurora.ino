@@ -49,6 +49,15 @@ bool changeWifiState = false;
 
 //------------------------------------------------------------------------------
 //
+// Display
+//
+//------------------------------------------------------------------------------
+#if HAVE_DISPLAY
+Display myDisplay;
+#endif
+
+//------------------------------------------------------------------------------
+//
 // Rotary Encoder
 //
 //------------------------------------------------------------------------------
@@ -188,6 +197,47 @@ void uploadDspFirmware( void )
   else
     Serial.println( "\n[ERROR] Failed to open file dsp.fw" );
 }
+
+#if HAVE_DISPLAY
+//==============================================================================
+/*! Updates the user interface on the display
+ *
+ */
+void updateUI( void )
+{
+  if( haveDisplay )
+  {
+    String ip;
+    if( WiFi.status() != WL_CONNECTED )
+      ip = "Not Connected";
+    else
+      ip = WiFi.localIP().toString();
+
+    if( (editMode == 0) || (editMode == 1) )
+    {
+      switch( currentPreset )
+      {
+      case 0:
+        myDisplay.drawUI( currentPlugInName.c_str(), ip.c_str(), "A", masterVolume.val, editMode );
+        break;
+      case 1:
+        myDisplay.drawUI( currentPlugInName.c_str(), ip.c_str(), "B", masterVolume.val, editMode );
+        break;
+      case 2:
+        myDisplay.drawUI( currentPlugInName.c_str(), ip.c_str(), "C", masterVolume.val, editMode );
+        break;
+      case 3:
+        myDisplay.drawUI( currentPlugInName.c_str(), ip.c_str(), "D", masterVolume.val, editMode );
+        break;
+      default:
+        myDisplay.drawUI( currentPlugInName.c_str(), ip.c_str(), "A", masterVolume.val, editMode );
+        break;
+      }
+    }
+
+  }
+}
+#endif
 
 //==============================================================================
 /*! Wifi connection task
@@ -340,24 +390,32 @@ void setup()
   //----------------------------------------------------------------------------
   //--- Scan for I2C display connected?
   //----------------------------------------------------------------------------
-  Wire.beginTransmission( SH1106_I2C_ADDR );
-  uint8_t ec = Wire.endTransmission( true );
-  if( ec == 0 )
+  #if HAVE_DISPLAY
+  haveDisplay = false;
+  Wire.beginTransmission(SSD1309_I2C_ADDR);
+  if(Wire.endTransmission(true) == 0)
   {
-    Serial.println( "Detected SH1106 display" );
+    Serial.println("Detected SSD1309 display");
+    myDisplay.begin(&SSD1309);
     haveDisplay = true;
   }
-  else
-    haveDisplay = false;
+  if(!haveDisplay)
+  {
+    Wire.beginTransmission( SH1106_I2C_ADDR );
+    if(Wire.endTransmission(true) == 0)
+    {
+      Serial.println("Detected SH1106 display");
+      myDisplay.begin(&SH1106);
+      haveDisplay = true;
+    }
+  }
 
   //----------------------------------------------------------------------------
   //--- Init Display (if present)
   //----------------------------------------------------------------------------
-  if( haveDisplay )
-  {
-    myDisplay.begin();
+  if(haveDisplay)
     myDisplay.drawBootScreen();
-  }
+  #endif
 
   // wait until everything is stable
   // might be a bit to defensive

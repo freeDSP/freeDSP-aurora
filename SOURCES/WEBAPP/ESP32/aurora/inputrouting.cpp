@@ -13,7 +13,7 @@
 #include "inputrouting.h"
 
 static const int kNumSourceNames = 8;
-String sourceNames[kNumSourceNames] = {"CD-A:", "Blueray:", "Phono:", "Aux:", "USB:", "Streaming:", "SPDIF coax:", "SPDIF optical:"};
+String sourceNames[kNumSourceNames] = {"CD-A", "Blueray", "Phono", "Aux", "USB", "Streaming", "SPDIF coax", "SPDIF optical"};
 
 //! TODO Make this dynamic depending on plugin
 static const int kNumVirtualInputs = 2;
@@ -387,4 +387,13 @@ void setVirtualInput(void)
       Wire.endTransmission(true);
     }
   } 
+}
+
+//==============================================================================
+/*! Sets the virtual input routing for current selection
+ *
+ */
+String getCurrentVirtualInputName(void)
+{
+  return sourceNames[currentVirtualInput];
 }

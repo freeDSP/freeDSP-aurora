@@ -18,8 +18,14 @@
 #include "display.h"
 #include "channelnames.h"
 #include "inputrouting.h"
+#include "hwconfig.h"
 
 extern String channelNames[16];
+
+#if HAVE_DISPLAY
+extern void updateUI(void);
+extern Display myDisplay;
+#endif
 
 AsyncWebServer server( 80 );
 uint8_t currentFirUploadIdx = 0;
