@@ -1,9 +1,9 @@
-#ifndef OLED128x64_SH1106_H_
-#define OLED128x64_SH1106_H_
+#ifndef OLED128x64_SSD1309_H_
+#define OLED128x64_SSD1309_H_
 
 #include "displaydriver.h"
 
-class OLED128x64_SH1106 : public DisplayDriver
+class OLED128x64_SSD1309 : public DisplayDriver
 {
 public:
   virtual void begin(void);
@@ -18,7 +18,7 @@ public:
   virtual void drawSwitchingPreset(void);
 
 private:
-
+  
 };
 
 #endif

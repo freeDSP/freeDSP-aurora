@@ -4,8 +4,6 @@
 #include <Wire.h>
 #endif
 
-//#include "u8g2_esp32_hal.h"
-
 #include "hwconfig.h"
 #include "OLED128x64_SH1106.h"
 
@@ -20,6 +18,11 @@ void OLED128x64_SH1106::begin( void )
   u8g2.setDrawColor(1);
   u8g2.setFontPosTop();
   u8g2.setFontDirection(0);
+}
+
+void OLED128x64_SH1106::setI2CAddress(uint8_t addr)
+{
+  u8g2_SetI2CAddress(u8g2.getU8g2(), addr);
 }
 
 void OLED128x64_SH1106::clearBuffer( void )

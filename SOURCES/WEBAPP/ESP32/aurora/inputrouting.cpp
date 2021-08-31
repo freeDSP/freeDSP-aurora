@@ -9,11 +9,14 @@
 #include "plugin.h"
 #include "adau1452.h"
 #include "AK4458.h"
+#include "display.h"
 
 #include "inputrouting.h"
 
+//extern void updateUI(void);
+
 static const int kNumSourceNames = 8;
-String sourceNames[kNumSourceNames] = {"CD-A:", "Blueray:", "Phono:", "Aux:", "USB:", "Streaming:", "SPDIF coax:", "SPDIF optical:"};
+String sourceNames[kNumSourceNames] = {"CD-A", "Blueray", "Phono", "Aux", "USB", "Streaming", "SPDIF coax", "SPDIF optical"};
 
 //! TODO Make this dynamic depending on plugin
 static const int kNumVirtualInputs = 2;
@@ -174,6 +177,8 @@ void handlePostInputRoutingJson(AsyncWebServerRequest* request, uint8_t* data)
   Serial.println( "POST /inputrouting" );
   #endif
 
+  softMuteDAC();
+
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson(jsonDoc, (const char*)data);
   if(err)
@@ -202,6 +207,8 @@ void handlePostInputRoutingJson(AsyncWebServerRequest* request, uint8_t* data)
   setVirtualInput();
 
   request->send(200, "text/plain", "");
+  needUpdateUI = true;
+  softUnmuteDAC();
 }
 
 //==============================================================================
@@ -250,6 +257,7 @@ void handlePostVirtualInputJson(AsyncWebServerRequest* request, uint8_t* data)
   currentVirtualInput = (uint32_t)strtoul(root["sel"].as<String>().c_str(), NULL, 10);
   setVirtualInput(); 
   request->send(200, "text/plain", "");
+  needUpdateUI = true;
   softUnmuteDAC();
 }
 
@@ -387,4 +395,35 @@ void setVirtualInput(void)
       Wire.endTransmission(true);
     }
   } 
+}
+
+//==============================================================================
+/*! Returns the name of the currently selected virtual input
+ *
+ */
+String getCurrentVirtualInputName(void)
+{
+  return sourceNames[currentVirtualInput];
+}
+
+//==============================================================================
+/*! Selects the next virtual input by incrementing
+ *
+ */
+void incrementVirtualInput(void)
+{
+  currentVirtualInput++;
+  if(currentVirtualInput >= kNumSourceNames)
+    currentVirtualInput = 0;
+}
+
+//==============================================================================
+/*! Selects the next virtual input by decrementing
+ *
+ */
+void decrementVirtualInput(void)
+{
+  currentVirtualInput--;
+  if(currentVirtualInput < 0)
+    currentVirtualInput = kNumSourceNames - 1;
 }

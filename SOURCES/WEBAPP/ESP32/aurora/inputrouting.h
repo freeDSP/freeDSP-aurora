@@ -49,4 +49,16 @@ bool readVirtualInputRouting(void);
  */
 void setVirtualInput(void);
 
+//==============================================================================
+/*! Selects the next virtual input by incrementing
+ *
+ */
+void incrementVirtualInput(void);
+
+//==============================================================================
+/*! Selects the next virtual input by decrementing
+ *
+ */
+void decrementVirtualInput(void);
+
 #endif
