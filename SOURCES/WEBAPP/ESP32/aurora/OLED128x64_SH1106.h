@@ -8,6 +8,8 @@ class OLED128x64_SH1106 : public DisplayDriver
 public:
   virtual void begin(void);
 
+  void setI2CAddress(uint8_t addr);
+
   void clearBuffer(void);
   void sendBuffer(void);
 

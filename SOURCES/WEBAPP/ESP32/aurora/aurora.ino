@@ -396,12 +396,13 @@ void setup()
   if(Wire.endTransmission(true) == 0)
   {
     Serial.println("Detected SSD1309 display");
+    SSD1309.setI2CAddress(SSD1309_I2C_ADDR<<1);
     myDisplay.begin(&SSD1309);
     haveDisplay = true;
   }
   if(!haveDisplay)
   {
-    Wire.beginTransmission( SH1106_I2C_ADDR );
+    Wire.beginTransmission(SH1106_I2C_ADDR);
     if(Wire.endTransmission(true) == 0)
     {
       Serial.println("Detected SH1106 display");
