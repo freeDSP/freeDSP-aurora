@@ -18,6 +18,46 @@ class GrowingList(list):
             self.extend([None]*(index + 1 - len(self)))
         list.__setitem__(self, index, value)
 
+class ParamHp:
+  name = ""
+  def __init__(self):
+    self.addr = [-1, -1, -1, -1]
+
+class ParamLp:
+  name = ""
+  def __init__(self):
+    self.addr = [-1, -1, -1, -1]
+
+class ParamShelv:
+  name = ""
+  addr = -1
+
+class ParamPeq:
+  name = ""
+  addr = -1
+
+class ParamPeqBank:
+  name = ""
+  def __init__(self):
+    self.addr = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+
+class ParamPhase:
+  name = ""
+  addr = -1
+
+class ParamDelay:
+  name = ""
+  addr = -1
+
+class ParamGain:
+  name = ""
+  addr = -1
+
+class ParamFir:
+  name = ""
+  addr = -1
+  len = 0
+
 numchn = 8
 
 parser = argparse.ArgumentParser()
@@ -76,7 +116,8 @@ with open(projectdir + "/NumBytes_IC_1.dat") as fp:
 
 #--- Create output directory
 try:
-  os.mkdir(projectname)
+  if os.path.exists(projectname) != True:
+    os.mkdir(projectname)
 except OSError:
   print("Creation of output directory %s failed" % projectname)
 
@@ -122,52 +163,17 @@ spdifoutmux_channel.append(GrowingList())
 spdifoutmux_port = [0, 0]
 
 lshelv = []
-for ii in range(0,numchn):
-  lshelv.append(GrowingList())
-
 hshelv = []
-for ii in range(0,numchn):
-  hshelv.append(GrowingList())
-
 peq = []
-for ii in range(0,numchn):
-  peq.append(GrowingList())
-
+peqbank = []
 hp = []
-for ii in range(0,numchn):
-  hp.append(GrowingList())
-
 lp = []
-for ii in range(0,numchn):
-  lp.append(GrowingList())
-
 phase = []
-for ii in range(0,numchn):
-  phase.append(GrowingList())
-
 dly = []
-for ii in range(0,numchn):
-  dly.append(GrowingList())
-
 gain = []
-for ii in range(0,numchn):
-  gain.append(GrowingList())
-
 xohp = []
-for ii in range(0,numchn):
-  xohp.append(GrowingList())
-
 xolp = []
-for ii in range(0,numchn):
-  xolp.append(GrowingList())
-
 fir = []
-for ii in range(0,numchn):
-  fir.append(GrowingList())
-
-firlen = []
-for ii in range(0,numchn):
-  firlen.append(GrowingList())
 
 for module in root.findall('IC/Module'):
   cellname = module.find('CellName')
@@ -242,91 +248,163 @@ for module in root.findall('IC/Module'):
       elif "Right" in strlist[1]:
         spdifoutmux_port[1] = int(modparam.find('Address').text)
 
-  elif cellname.text.startswith('HP'):
-    idx = int(cellname.text.split('_',1)[0].split("HP")[1])-1
-    subidx = int(cellname.text.split('_',1)[1])-1
+  # --- HP blocks
+  elif cellname.text.lower().startswith('plugin.hp'):
+    name = cellname.text.split(':',1)[0]
+    idx = -1
+    nn = int(cellname.text.split(':',1)[1]) - 1
+    for m in range(0,len(hp)):
+      if hp[m].name == name:
+        idx = m
+    if idx == -1:
+      newHp = ParamHp()
+      hp.append(newHp)
+      idx = len(hp) - 1
+    hp[idx].name = name
     for modparam in module.findall('Algorithm/ModuleParameter'):
       modname = modparam.find('Name').text
       if "B2" in modname:
-        hp[idx][subidx] = int(modparam.find('Address').text)
+        hp[idx].addr[nn] = int(modparam.find('Address').text)
 
-  elif cellname.text.startswith('Low Shelv'):
-    idx = int(cellname.text.split(' ',2)[2])-1
+  # --- LP blocks
+  elif cellname.text.lower().startswith('plugin.lp'):
+    name = cellname.text.split(':',1)[0]
+    idx = -1
+    nn = int(cellname.text.split(':',1)[1]) - 1
+    for m in range(0,len(lp)):
+      if lp[m].name == name:
+        idx = m
+    if idx == -1:
+      newLp = ParamLp()
+      lp.append(newLp)
+      idx = len(lp) - 1
+    lp[idx].name = name
     for modparam in module.findall('Algorithm/ModuleParameter'):
       modname = modparam.find('Name').text
       if "B2" in modname:
-        subidx = int(modname.split('_',1)[1])-1
-        lshelv[idx][subidx] = int(modparam.find('Address').text)
+        lp[idx].addr[nn] = int(modparam.find('Address').text)
 
-  elif cellname.text.startswith('Param EQ'):
-    idx = int(cellname.text.split(' ',2)[2])-1
+  # --- LowShelv blocks 
+  elif cellname.text.lower().startswith('plugin.lowshelv'):
     for modparam in module.findall('Algorithm/ModuleParameter'):
       modname = modparam.find('Name').text
       if "B2" in modname:
-        subidx = int(modname.split('_',1)[1])-1
-        peq[idx][subidx] = int(modparam.find('Address').text)
+        newLShelv = ParamShelv()
+        newLShelv.addr = int(modparam.find('Address').text)
+        newLShelv.name = cellname.text
+        lshelv.append(newLShelv)
 
-  elif cellname.text.startswith('High Shelv'):
-    idx = int(cellname.text.split(' ',2)[2])-1
+  # --- HighShelv blocks
+  elif cellname.text.lower().startswith('plugin.highshelv'):
     for modparam in module.findall('Algorithm/ModuleParameter'):
       modname = modparam.find('Name').text
       if "B2" in modname:
-        subidx = int(modname.split('_',1)[1])-1
-        hshelv[idx][subidx] = int(modparam.find('Address').text)
-
-  elif cellname.text.startswith('LP'):
-    idx = int(cellname.text.split('_',1)[0].split("LP")[1])-1
-    subidx = int(cellname.text.split('_',1)[1])-1
+        newHShelv = ParamShelv()
+        newHShelv.addr = int(modparam.find('Address').text)
+        newHShelv.name = cellname.text
+        hshelv.append(newHShelv)
+  
+  # --- PEQ banks
+  elif cellname.text.lower().startswith('plugin.peqbank'):
+    newPeqBank = ParamPeqBank()
+    newPeqBank.name = cellname.text
+    idx = 0
     for modparam in module.findall('Algorithm/ModuleParameter'):
       modname = modparam.find('Name').text
       if "B2" in modname:
-        lp[idx][subidx] = int(modparam.find('Address').text)
+        if idx < 10:
+          newPeqBank.addr[idx] = int(modparam.find('Address').text)
+        else:
+          print("[ERROR] Not more then 8 PEQs per bank allowed.")
+        idx = idx + 1
+    peqbank.append(newPeqBank)
 
-  elif cellname.text.startswith('Phase'):
-    idx = int(cellname.text.split(' ',1)[1])-1
+  # --- PEQ blocks
+  elif cellname.text.lower().startswith('plugin.peq'):
     for modparam in module.findall('Algorithm/ModuleParameter'):
       modname = modparam.find('Name').text
       if "B2" in modname:
-        subidx = int(modname.split('_',1)[1])-1
-        phase[idx][subidx] = int(modparam.find('Address').text)
+        newPeq = ParamPeq()
+        newPeq.addr = int(modparam.find('Address').text)
+        newPeq.name = cellname.text
+        peq.append(newPeq)
 
-  elif cellname.text.startswith('Delay'):
-    idx = int(cellname.text.split(' ',1)[1])-1
+  # --- Phase blocks
+  elif cellname.text.lower().startswith('plugin.phase'):
+    for modparam in module.findall('Algorithm/ModuleParameter'):
+      modname = modparam.find('Name').text
+      if "B2" in modname:
+        newPhase = ParamPhase()
+        newPhase.addr = int(modparam.find('Address').text)
+        newPhase.name = cellname.text
+        phase.append(newPhase)
+
+  # --- Delay blocks
+  elif cellname.text.lower().startswith('plugin.delay'):
     for modparam in module.findall('Algorithm/ModuleParameter'):
       modname = modparam.find('Name').text
       if "delay" in modname:
-        dly[idx][0] = int(modparam.find('Address').text)
+        newDelay = ParamDelay()
+        newDelay.addr = int(modparam.find('Address').text)
+        newDelay.name = cellname.text
+        dly.append(newDelay)
 
-  elif cellname.text.startswith('Gain'):
-    idx = int(cellname.text.split(' ',1)[1])-1
+  # --- Gain blocks
+  elif cellname.text.lower().startswith('plugin.gain'):
     for modparam in module.findall('Algorithm/ModuleParameter'):
       modname = modparam.find('Name').text
       if "target" in modname:
-        gain[idx][0] = int(modparam.find('Address').text)
+        newGain = ParamGain()
+        newGain.addr = int(modparam.find('Address').text)
+        newGain.name = cellname.text
+        gain.append(newGain)
 
-  elif cellname.text.startswith('FIR'):
-    idx = int(cellname.text.split(' ',1)[1])-1
+  # --- FIR blocks
+  elif cellname.text.lower().startswith('plugin.fir'):
     for modparam in module.findall('Algorithm/ModuleParameter'):
       modname = modparam.find('Name').text
       if "fircoeff" in modname:
-        fir[idx][0] = int(modparam.find('Address').text)
-        firlen[idx][0] = int(modparam.find('Size').text) / 4
+        newFir = ParamFir()
+        newFir.addr = int(modparam.find('Address').text)
+        newFir.len = int(modparam.find('Size').text) / 4
+        newFir.name = cellname.text
+        fir.append(newFir)
 
-  elif cellname.text.startswith('XO_LP'):
-    idx = int(cellname.text.split('_',2)[1].split("LP")[1])-1
-    subidx = int(cellname.text.split('_',2)[2])-1
+  # --- XO-HP blocks
+  elif cellname.text.lower().startswith('plugin.xohp'):
+    name = cellname.text.split(':',1)[0]
+    idx = -1
+    nn = int(cellname.text.split(':',1)[1]) - 1
+    for m in range(0,len(xohp)):
+      if xohp[m].name == name:
+        idx = m
+    if idx == -1:
+      newXoHp = ParamHp()
+      xohp.append(newXoHp)
+      idx = len(xohp) - 1
+    xohp[idx].name = name
     for modparam in module.findall('Algorithm/ModuleParameter'):
       modname = modparam.find('Name').text
       if "B2" in modname:
-        xolp[idx][subidx] = int(modparam.find('Address').text)
+        xohp[idx].addr[nn] = int(modparam.find('Address').text)
 
-  elif cellname.text.startswith('XO_HP'):
-    idx = int(cellname.text.split('_',2)[1].split("HP")[1])-1
-    subidx = int(cellname.text.split('_',2)[2])-1
+  # --- XO-LP blocks
+  elif cellname.text.lower().startswith('plugin.xolp'):
+    name = cellname.text.split(':',1)[0]
+    idx = -1
+    nn = int(cellname.text.split(':',1)[1]) - 1
+    for m in range(0,len(xolp)):
+      if xolp[m].name == name:
+        idx = m
+    if idx == -1:
+      newXoLp = ParamLp()
+      xolp.append(newXoLp)
+      idx = len(xolp) - 1
+    xolp[idx].name = name
     for modparam in module.findall('Algorithm/ModuleParameter'):
       modname = modparam.find('Name').text
       if "B2" in modname:
-        xohp[idx][subidx] = int(modparam.find('Address').text)
+        xolp[idx].addr[nn] = int(modparam.find('Address').text)
 
   elif cellname.text.startswith('BypassVolPoti'):
     modparam = module.find('Algorithm/ModuleParameter')
@@ -338,6 +416,8 @@ for module in root.findall('IC/Module'):
       if "target" in modname:
         mastervol = int(modparam.find('Address').text)
 
+  elif cellname.text.lower().startswith('plugin.'):
+    print("[WARNING] Unkown dsp block in plugin: " + cellname.text)
 
 inputselect_analog_t = GrowingList()
 idx = 0
@@ -383,88 +463,85 @@ for m in range(0,len(spdifoutmux_channel)):
 spdifoutmux_channel_t.append(spdifoutmux_port[0])
 spdifoutmux_channel_t.append(spdifoutmux_port[1])
 
-lshelv_t = GrowingList()
-idx = 0
-for m in range(0,len(lshelv)):
-  for n in range(0,len(lshelv[m])):
-    lshelv_t[idx] = lshelv[m][n]
-    idx = idx+1
 
-hshelv_t = GrowingList()
-idx = 0
-for m in range(0,len(hshelv)):
-  for n in range(0,len(hshelv[m])):
-    hshelv_t[idx] = hshelv[m][n]
-    idx = idx+1
-
+# HP addresses
 hp_t = GrowingList()
 idx = 0
 for m in range(0,len(hp)):
-  for n in range(0,len(hp[m])):
-    hp_t[idx] = hp[m][n]
-    idx = idx+1
+  for n in range(0, 4):
+    if hp[m].addr[n] != -1:
+      hp_t[idx] = hp[m].addr[n]
+      idx = idx+1
 
+# LP addresses
 lp_t = GrowingList()
 idx = 0
 for m in range(0,len(lp)):
-  for n in range(0,len(lp[m])):
-    lp_t[idx] = lp[m][n]
-    idx = idx+1
+  for n in range(0, 4):
+    if lp[m].addr[n] != -1:
+      lp_t[idx] = lp[m].addr[n]
+      idx = idx+1
 
+# LowShelv addresses
+lshelv_t = GrowingList()
+for m in range(0,len(lshelv)):
+  lshelv_t[m] = lshelv[m].addr
+
+# HighShelv addresses
+hshelv_t = GrowingList()
+for m in range(0,len(hshelv)):
+  hshelv_t[m] = hshelv[m].addr
+
+# PEQ bank addresses
 peq_t = GrowingList()
 idx = 0
+for m in range(0,len(peqbank)):
+  for n in range(0, len(peqbank[m].addr)):
+    if peqbank[m].addr[n] != -1:
+      peq_t[idx] = peqbank[m].addr[n]
+      idx = idx+1
+
+# PEQ addresses
+# peq_t = GrowingList()
 for m in range(0,len(peq)):
-  for n in range(0,len(peq[m])):
-    peq_t[idx] = peq[m][n]
-    idx = idx+1
+  peq_t[m] = peq[m].addr
 
+# Phase addresses
 phase_t = GrowingList()
-idx = 0
 for m in range(0,len(phase)):
-  for n in range(0,len(phase[m])):
-    phase_t[idx] = phase[m][n]
-    idx = idx+1
+  phase_t[m] = phase[m].addr
 
+# Delay addresses
 dly_t = GrowingList()
-idx = 0
 for m in range(0,len(dly)):
-  for n in range(0,len(dly[m])):
-    dly_t[idx] = dly[m][n]
-    idx = idx+1
+  dly_t[m] = dly[m].addr
 
+# Gain address
 gain_t = GrowingList()
-idx = 0
 for m in range(0,len(gain)):
-  for n in range(0,len(gain[m])):
-    gain_t[idx] = gain[m][n]
-    idx = idx+1
+  gain_t[m] = gain[m].addr
 
+# FIR addresses + lengths
+fir_t = GrowingList()
+firlen_t = GrowingList()
+for m in range(0,len(fir)):
+  fir_t[m] = fir[m].addr
+  firlen_t[m] = fir[m].len
+
+# XO-HP addresses
 xohp_t = GrowingList()
 idx = 0
 for m in range(0,len(xohp)):
-  for n in range(0,len(xohp[m])):
-    xohp_t[idx] = xohp[m][n]
+  for n in range(0, 4):
+    xohp_t[idx] = xohp[m].addr[n]
     idx = idx+1
 
+# XO-LP addresses
 xolp_t = GrowingList()
 idx = 0
 for m in range(0,len(xolp)):
-  for n in range(0,len(xolp[m])):
-    xolp_t[idx] = xolp[m][n]
-    idx = idx+1
-
-fir_t = GrowingList()
-idx = 0
-for m in range(0,len(fir)):
-  for n in range(0,len(fir[m])):
-    fir_t[idx] = fir[m][n]
-    idx = idx+1
-
-firlen_t = GrowingList()
-idx = 0
-for m in range(0,len(firlen)):
-  for n in range(0,len(firlen[m])):
-    firlen_t[idx] = firlen[m][n]
+  for n in range(0, 4):
+    xolp_t[idx] = xolp[m].addr[n]
     idx = idx+1
 
 nhp = len(hp_t)/4
@@ -485,6 +562,7 @@ nfir = len(fir_t)
 
 #--- Write plugin.ini
 print("Writing plugin.ini")
+print("[TODO] Check max. number of blocks");
 data = {"name":nameplugin,
         "nchn":numchn,
         "nhp":nhp,
