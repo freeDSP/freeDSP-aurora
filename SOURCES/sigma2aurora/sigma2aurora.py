@@ -65,11 +65,10 @@ class ParamXO:
     self.hpaddr = [-1, -1, -1, -1]
     self.lpaddr = [-1, -1, -1, -1]
 
-numchn = 8
+ninputs = 0
 
 parser = argparse.ArgumentParser()
 parser.add_argument("input", help="SigmaStudio project file")
-parser.add_argument("numchains", help="Set number of dsp chains")
 parser.add_argument("plugin", help="Name of plugin")
 parser.add_argument('--gui', help="Path to html gui", type=str)
 
@@ -80,16 +79,9 @@ args = parser.parse_args()
 if args.input:
   print("SigmaStudio project file: %s" % args.input)
   path_sigmastudioproject = args.input
-# Check for --numchains
-if args.numchains:
-  print("Number of DSP chains: %s" % args.numchains)
-  numchn = int(args.numchains)
 if args.plugin:
   print("Name of plugin: %s" % args.plugin)
   nameplugin = args.plugin
-# Check for --gui
-#if args.gui:
-#  print(args.gui)
 
 split_path = path_sigmastudioproject.rsplit("\\",1)
 filename = os.path.basename(split_path[0])
@@ -148,26 +140,6 @@ print("Reading " + projectdir + "/" + projectname + ".xml")
 tree = ET.parse(projectdir + "/" + projectname + ".xml")
 root = tree.getroot()
 
-inputselect_analog = []
-for ii in range(0,numchn):
-  inputselect_analog.append(GrowingList())
-
-inputselect_spdif = []
-for ii in range(0,numchn):
-  inputselect_spdif.append(GrowingList())
-
-inputselect_uac2 = []
-for ii in range(0,numchn):
-  inputselect_uac2.append(GrowingList())
-
-inputselect_exp = []
-for ii in range(0,numchn):
-  inputselect_exp.append(GrowingList())
-
-inputselect_port = []
-for ii in range(0,numchn):
-  inputselect_port.append(GrowingList())
-
 spdifoutmux_channel = []
 spdifoutmux_channel.append(GrowingList())
 spdifoutmux_channel.append(GrowingList())
@@ -185,6 +157,36 @@ gain = []
 xohp = []
 xolp = []
 fir = []
+
+# --- Count inputs
+for module in root.findall('IC/Module'):
+  cellname = module.find('CellName')
+
+  if cellname.text.startswith('InputSelect'):
+    strlist = cellname.text.split('_',2)
+    if len(strlist) > 2:
+      if "Analog" in strlist[2]:
+        ninputs = ninputs + 1
+
+inputselect_analog = []
+for ii in range(0,ninputs):
+  inputselect_analog.append(GrowingList())
+
+inputselect_spdif = []
+for ii in range(0,ninputs):
+  inputselect_spdif.append(GrowingList())
+
+inputselect_uac2 = []
+for ii in range(0,ninputs):
+  inputselect_uac2.append(GrowingList())
+
+inputselect_exp = []
+for ii in range(0,ninputs):
+  inputselect_exp.append(GrowingList())
+
+inputselect_port = []
+for ii in range(0,ninputs):
+  inputselect_port.append(GrowingList())
 
 for module in root.findall('IC/Module'):
   cellname = module.find('CellName')
@@ -577,7 +579,7 @@ nfir = len(fir_t)
 print("Writing plugin.ini")
 print("[TODO] Check max. number of blocks");
 data = {"name":nameplugin,
-        "nchn":numchn,
+        "ninputs":ninputs,
         "nhp":nhp,
         "nlshelv":nlshelv,
         "npeq":npeq,
@@ -618,9 +620,9 @@ with io.open(projectname + "/plugin.ini", 'w', encoding='utf8') as outfile:
 #--- Writing chnames.txt
 print("Writing chnames.txt")
 with open(projectname + "/chnames.txt", 'w') as file:
-  for ii in range(0,numchn):
+  for ii in range(0,ninputs):
     file.write("Channel " + str(ii + 1) + "\n")
-  for ii in range(0,numchn):
+  for ii in range(0,ninputs):
     file.write("Out " + str(ii + 1) + "\n")
 
 #--- Copy aurora.jgz
