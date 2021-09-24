@@ -58,12 +58,20 @@ class ParamFir:
   addr = -1
   len = 0
 
+class ParamXO:
+  hpname = ""
+  lpname = ""
+  def __init__(self):
+    self.hpaddr = [-1, -1, -1, -1]
+    self.lpaddr = [-1, -1, -1, -1]
+
 numchn = 8
 
 parser = argparse.ArgumentParser()
 parser.add_argument("input", help="SigmaStudio project file")
 parser.add_argument("numchains", help="Set number of dsp chains")
 parser.add_argument("plugin", help="Name of plugin")
+parser.add_argument('--gui', help="Path to html gui", type=str)
 
 # Read arguments from the command line
 args = parser.parse_args()
@@ -79,6 +87,9 @@ if args.numchains:
 if args.plugin:
   print("Name of plugin: %s" % args.plugin)
   nameplugin = args.plugin
+# Check for --gui
+#if args.gui:
+#  print(args.gui)
 
 split_path = path_sigmastudioproject.rsplit("\\",1)
 filename = os.path.basename(split_path[0])
@@ -372,39 +383,41 @@ for module in root.findall('IC/Module'):
 
   # --- XO-HP blocks
   elif cellname.text.lower().startswith('plugin.xohp'):
-    name = cellname.text.split(':',1)[0]
-    idx = -1
-    nn = int(cellname.text.split(':',1)[1]) - 1
-    for m in range(0,len(xohp)):
-      if xohp[m].name == name:
-        idx = m
-    if idx == -1:
-      newXoHp = ParamHp()
-      xohp.append(newXoHp)
-      idx = len(xohp) - 1
-    xohp[idx].name = name
-    for modparam in module.findall('Algorithm/ModuleParameter'):
-      modname = modparam.find('Name').text
-      if "B2" in modname:
-        xohp[idx].addr[nn] = int(modparam.find('Address').text)
+    print("[TODO] XO-HP not implemented")
+    #name = cellname.text.split(':',1)[0]
+    #idx = -1
+    #nn = int(cellname.text.split(':',1)[1]) - 1
+    #for m in range(0,len(xohp)):
+    #  if xohp[m].name == name:
+    #    idx = m
+    #if idx == -1:
+    #  newXoHp = ParamHp()
+    #  xohp.append(newXoHp)
+    #  idx = len(xohp) - 1
+    #xohp[idx].name = name
+    #for modparam in module.findall('Algorithm/ModuleParameter'):
+    #  modname = modparam.find('Name').text
+    #  if "B2" in modname:
+    #    xohp[idx].addr[nn] = int(modparam.find('Address').text)
 
   # --- XO-LP blocks
   elif cellname.text.lower().startswith('plugin.xolp'):
-    name = cellname.text.split(':',1)[0]
-    idx = -1
-    nn = int(cellname.text.split(':',1)[1]) - 1
-    for m in range(0,len(xolp)):
-      if xolp[m].name == name:
-        idx = m
-    if idx == -1:
-      newXoLp = ParamLp()
-      xolp.append(newXoLp)
-      idx = len(xolp) - 1
-    xolp[idx].name = name
-    for modparam in module.findall('Algorithm/ModuleParameter'):
-      modname = modparam.find('Name').text
-      if "B2" in modname:
-        xolp[idx].addr[nn] = int(modparam.find('Address').text)
+    print("[TODO] XO-LP not implemented")
+    #name = cellname.text.split(':',1)[0]
+    #idx = -1
+    #nn = int(cellname.text.split(':',1)[1]) - 1
+    #for m in range(0,len(xolp)):
+    #  if xolp[m].name == name:
+    #    idx = m
+    #if idx == -1:
+    #  newXoLp = ParamLp()
+    #  xolp.append(newXoLp)
+    #  idx = len(xolp) - 1
+    #xolp[idx].name = name
+    #for modparam in module.findall('Algorithm/ModuleParameter'):
+    #  modname = modparam.find('Name').text
+    #  if "B2" in modname:
+    #    xolp[idx].addr[nn] = int(modparam.find('Address').text)
 
   elif cellname.text.startswith('BypassVolPoti'):
     modparam = module.find('Algorithm/ModuleParameter')
@@ -504,7 +517,7 @@ for m in range(0,len(peqbank)):
 # PEQ addresses
 # peq_t = GrowingList()
 for m in range(0,len(peq)):
-  peq_t[m] = peq[m].addr
+  peq_t[len(peqbank) + m] = peq[m].addr
 
 # Phase addresses
 phase_t = GrowingList()
@@ -618,6 +631,63 @@ shutil.copy2("../WEBAPP/js/aurora.jgz", "./" + projectname + "/aurora.jgz")
 print("Copying dark.css")
 shutil.copy2("../WEBAPP/css/dark.css", "./" + projectname + "/dark.css")
 
-#--- Copy GUI template
-print("Copying dsp.html")
-shutil.copy2("../WEBAPP/template/dsp.html", "./" + projectname + "/dsp.html")
+if args.gui:
+  #--- Copy custom GUI html
+  print("Copying custom dsp.html")
+  print(args.gui)
+
+  with open(args.gui, 'r') as f:
+    dsphtml = str(f.read())
+
+    #--- replace LP names
+    for m in range(0,len(lp)):
+      dsphtml = dsphtml.replace("openLP('" + lp[m].name.split('.',1)[1] + "')", "openLP(" + str(m) + ")")
+
+    #--- replace HP names
+    for m in range(0,len(hp)):
+      dsphtml = dsphtml.replace("openHP('" + hp[m].name.split('.',1)[1] + "')", "openHP(" + str(m) + ")")
+
+    # --- LowShelv blocks 
+    for m in range(0,len(lshelv)):
+      dsphtml = dsphtml.replace("openLShelv('" + lshelv[m].name.split('.',1)[1] + "')", "openLShelv(" + str(m) + ")")
+
+    # --- HighShelv blocks
+    for m in range(0,len(hshelv)):
+      dsphtml = dsphtml.replace("openHShelv('" + hshelv[m].name.split('.',1)[1] + "')", "openHShelv(" + str(m) + ")")
+
+    # --- PEQ banks
+    for m in range(0,len(peqbank)):
+      dsphtml = dsphtml.replace("openPeqBank('" + peqbank[m].name.split('.',1)[1] + "')", "openPeqBank(" + str(m) + ")")
+
+    # --- PEQ blocks
+    for m in range(0,len(peq)):
+      dsphtml = dsphtml.replace("openPEQ('" + peq[m].name.split('.',1)[1] + "')", "openPEQ(" + str(len(peqbank) + m) + ")")
+    
+    # --- Phase blocks
+    for m in range(0,len(phase)):
+      dsphtml = dsphtml.replace("openPhase('" + phase[m].name.split('.',1)[1] + "')", "openPhase(" + str(m) + ")")
+
+    # --- Delay blocks
+    for m in range(0,len(dly)):
+      dsphtml = dsphtml.replace("openDelay('" + dly[m].name.split('.',1)[1] + "')", "openDelay(" + str(m) + ")")
+
+    # --- Gain blocks
+    for m in range(0,len(gain)):
+      dsphtml = dsphtml.replace("openGain('" + gain[m].name.split('.',1)[1] + "')", "openGain(" + str(m) + ")")
+
+    # --- FIR blocks
+    for m in range(0,len(fir)):
+      dsphtml = dsphtml.replace("openFIR('" + fir[m].name.split('.',1)[1] + "')", "openFIR(" + str(m) + ")")
+
+    # --- XO-HP blocks
+    print("[TODO] Correct handling of XO blocks")
+
+    # --- XO-LP blocks
+  
+  with open("./" + projectname + "/dsp.html", "w") as f1:
+    f1.write(dsphtml)
+
+else:
+  #--- Copy GUI template
+  print("Copying template dsp.html")
+  shutil.copy2("../WEBAPP/template/dsp.html", "./" + projectname + "/dsp.html")
