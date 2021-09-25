@@ -575,9 +575,29 @@ ndly = len(dly_t)
 ngain = len(gain_t)
 nfir = len(fir_t)
 
+if nlp > 16:
+  print("[ERROR] Number of low pass blocks exceeds the limit of 16")
+if nhp > 16:
+  print("[ERROR] Number of high pass blocks exceeds the limit of 16")
+if nlshelv > 16:
+  print("[ERROR] Number of low shelving blocks exceeds the limit of 16")
+if nhshelv > 16:
+  print("[ERROR] Number of high shelving blocks exceeds the limit of 16")
+if npeq > 160:
+  print("[ERROR] Number of peq blocks exceeds the limit of 160")
+if nphase > 16:
+  print("[ERROR] Number of phase blocks exceeds the limit of 16")
+if ndly > 16:
+  print("[ERROR] Number of delay blocks exceeds the limit of 16")
+if ngain > 16:
+  print("[ERROR] Number of gain blocks exceeds the limit of 16")
+if nfir > 8:
+  print("[ERROR] Number of FIR blocks exceeds the limit of 8")
+if nxo > 16:
+  print("[ERROR] Number of crossover blocks exceeds the limit of 16")
+
 #--- Write plugin.ini
 print("Writing plugin.ini")
-print("[TODO] Check max. number of blocks");
 data = {"name":nameplugin,
         "ninputs":ninputs,
         "nhp":nhp,

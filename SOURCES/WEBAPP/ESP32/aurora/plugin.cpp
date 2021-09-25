@@ -6,16 +6,16 @@
 
 tSettings Settings;
 
-tInput paramInputs[8];
-tHPLP paramHP[8];
-tShelving paramLshelv[8];
-tPeq paramPeq[80];
-tShelving paramHshelv[8];
-tHPLP paramLP[8];
-tPhase paramPhase[8];
-tDelay paramDelay[8];
-tGain paramGain[8];
-tCrossover paramCrossover[8];
+tInput paramInputs[MAX_NUM_INPUTS];
+tHPLP paramHP[MAX_NUM_HPS];
+tShelving paramLshelv[MAX_NUM_LSHELVS];
+tPeq paramPeq[MAX_NUM_PEQS];
+tShelving paramHshelv[MAX_NUM_HSHELVS];
+tHPLP paramLP[MAX_NUM_LPS];
+tPhase paramPhase[MAX_NUM_PHASES];
+tDelay paramDelay[MAX_NUM_DELAYS];
+tGain paramGain[MAX_NUM_GAINS];
+tCrossover paramCrossover[MAX_NUM_CROSSOVER];
 tFir paramFir[MAX_NUM_FIRS];
 tMasterVolume masterVolume = { 0x0000, -60.0 };
 tInputSelector inputSelector;
@@ -78,7 +78,7 @@ void readPluginMeta( void )
     JsonObject jsonPluginMeta = jsonDoc.as<JsonObject>();
 
     currentPlugInName = jsonPluginMeta["name"].as<String>();
-    numInputs = jsonPluginMeta["nchn"].as<String>().toInt();
+    numInputs = jsonPluginMeta["ninputs"].as<String>().toInt();
     numHPs = jsonPluginMeta["nhp"].as<String>().toInt();
     numLShelvs = jsonPluginMeta["nlshelv"].as<String>().toInt();
     numPEQs = jsonPluginMeta["npeq"].as<String>().toInt();
