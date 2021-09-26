@@ -642,8 +642,12 @@ print("Writing chnames.txt")
 with open(projectname + "/chnames.txt", 'w') as file:
   for ii in range(0,ninputs):
     file.write("Channel " + str(ii + 1) + "\n")
-  for ii in range(0,ninputs):
+  for ii in range(0,noutputs):
     file.write("Out " + str(ii + 1) + "\n")
+  file.write("Preset A\n")
+  file.write("Preset B\n")
+  file.write("Preset C\n")
+  file.write("Preset D\n")
 
 #--- Copy aurora.jgz
 print("Copying aurora.jgz")
