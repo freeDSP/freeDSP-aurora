@@ -4,6 +4,7 @@
 #define VERSION_STR "v2.2.0-alpha.1"
 
 #define MAX_NUM_INPUTS 8
+#define MAX_NUM_OUTPUTS 8
 #define MAX_NUM_HPS 8
 #define MAX_NUM_LSHELVS 8
 #define MAX_NUM_PEQS 80
@@ -14,6 +15,9 @@
 #define MAX_NUM_GAINS 8
 #define MAX_NUM_CROSSOVER 8
 #define MAX_NUM_FIRS 8
+
+#define NUMCHANNELNAMES (MAX_NUM_INPUTS + MAX_NUM_OUTPUTS)
+#define NUMPRESETS 4
 
 #define MAX_LENGTH_IR 4096
 #define SIZE_IR_MEMORY 16384

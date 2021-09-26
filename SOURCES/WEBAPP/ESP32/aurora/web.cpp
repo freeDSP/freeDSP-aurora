@@ -708,7 +708,6 @@ void handleGetAllInputsJson( AsyncWebServerRequest* request )
   String key[] = {"in0", "in1", "in2", "in3", "in4", "in5", "in6", "in7"};
 
   jsonResponse["num"] = numInputs;
-  Serial.println(numInputs);
 
   for( int nn = 0; nn < numInputs; nn++ )
   {
@@ -1814,7 +1813,7 @@ void handleIrUpload( AsyncWebServerRequest* request, uint8_t* data, size_t len, 
   }
 
 }
-
+#if 0
 //==============================================================================
 /*! Handles the POST request for a new channel name
  *
@@ -1853,6 +1852,7 @@ void handlePostChannelNameJson(AsyncWebServerRequest* request, uint8_t* data)
   request->send(200, "text/plain", "");
 }
 
+
 //==============================================================================
 /*! Handles the GET request for all channel names
  *
@@ -1866,6 +1866,82 @@ String handleGetAllChNamesJson( void )
   for(int ii = 0; ii < NUMCHANNELNAMES-1; ii++)
     array += String("\"") + channelNames[ii] + String("\",");
   array += String("\"") + channelNames[NUMCHANNELNAMES-1] + String("\"]}");
+  return array;
+}
+#endif
+
+//==============================================================================
+/*! Handles the POST request for names
+ *
+ */
+void handlePostNamesJson(AsyncWebServerRequest* request, uint8_t* data)
+{
+  Serial.println("POST /chname");
+
+  DynamicJsonDocument jsonDoc(1024);
+  DeserializationError err = deserializeJson(jsonDoc, (const char*)data);
+  if( err )
+  {
+    Serial.print("[ERROR] handlePostNamesJson(): Deserialization failed.");
+    Serial.println(err.c_str());
+    request->send(400, "text/plain", err.c_str());
+    return;
+  }
+
+  JsonObject root = jsonDoc.as<JsonObject>();
+
+  for(int ii = 0; ii < root["inputs"].size(); ii++)
+  {
+    if(ii < NUMCHANNELNAMES)
+      channelNames[ii] = root["inputs"][ii].as<String>().substring(0,16);
+  }
+  for(int ii = 0; ii < root["outputs"].size(); ii++)
+  {
+    if(root["inputs"].size() + ii < NUMCHANNELNAMES)
+      channelNames[root["inputs"].size() + ii] = root["outputs"][ii].as<String>().substring(0,16);
+  }
+  for(int ii = 0; ii < root["presets"].size(); ii++)
+  {
+    if(ii < NUMPRESETS)
+      presetNames[ii] = root["presets"][ii].as<String>().substring(0,16);
+  }
+  writeChannelNames();
+
+  request->send(200, "text/plain", "");
+}
+
+//==============================================================================
+/*! Handles the GET request for all names
+ *
+ */
+String handleGetAllNamesJson( void )
+{
+  Serial.println( "GET /allnames" );
+
+  // Build the JSON response manually. Via ArduinoJson it did not work somehow.
+  String array("{");
+  array += String("\"inputs\":[");
+  if(numInputs > 0)
+  {
+    for(int ii = 0; ii < numInputs-1; ii++)
+      array += String("\"") + channelNames[ii] + String("\",");
+    array += String("\"") + channelNames[numInputs-1];
+  }
+  array += String("\"],");
+  array += String("\"outputs\":[");
+  if(numOutputs > 0)
+  {
+    for(int ii = 0; ii < numOutputs-1; ii++)
+      array += String("\"") + channelNames[numInputs + ii] + String("\",");
+    array += String("\"") + channelNames[numInputs + numOutputs - 1];
+  }
+  array += String("\"],");
+  array += String("\"presets\":[");
+  for(int ii = 0; ii < NUMPRESETS-1; ii++)
+    array += String("\"") + presetNames[ii] + String("\",");
+  array += String("\"") + presetNames[NUMPRESETS - 1];
+  array += String("\"]");
+  array += String("}");
   return array;
 }
 
@@ -1894,6 +1970,7 @@ void setupWebserver (void)
     }
   });
   server.on( "/routing.html", HTTP_GET, [](AsyncWebServerRequest *request ) { Serial.println("/routing.html"); request->send( 200, "text/html", createInputRoutingPage(2).c_str() ); });
+  server.on( "/chnames.html", HTTP_GET, [](AsyncWebServerRequest *request ) { Serial.println("/chanmes.html"); request->send( 200, "text/html", createChannelNamesPage().c_str() ); });
   server.on( "/input",        HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetInputJson(request); });
   server.on( "/hp",           HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetHpJson(request); });
   server.on( "/lshelv",       HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetLshelvJson(request); });
@@ -1912,7 +1989,7 @@ void setupWebserver (void)
   server.on( "/fir",          HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetFirJson(request); });
   server.on( "/allbyp",       HTTP_GET, [](AsyncWebServerRequest *request ) { request->send(200, "text/plain", handleGetAllBypJson()); });
   server.on( "/allfc",        HTTP_GET, [](AsyncWebServerRequest *request ) { request->send(200, "text/plain", handleGetAllFcJson()); });
-  server.on( "/allchnames",   HTTP_GET, [](AsyncWebServerRequest *request ) { request->send(200, "text/plain", handleGetAllChNamesJson()); });
+  server.on( "/allnames",     HTTP_GET, [](AsyncWebServerRequest *request ) { request->send(200, "text/plain", handleGetAllNamesJson()); });
   server.on( "/preset.param", HTTP_GET, [](AsyncWebServerRequest *request )
   {
     Serial.println( "/preset.param" );
@@ -2015,9 +2092,9 @@ void setupWebserver (void)
   {
     handlePostFirBypassJson(request, data);
   });
-  server.on( "/chname", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total)
+  server.on( "/chnames", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total)
   {
-    handlePostChannelNameJson(request, data);
+    handlePostNamesJson(request, data);
   });
   server.on( "/inputrouting", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total)
   {

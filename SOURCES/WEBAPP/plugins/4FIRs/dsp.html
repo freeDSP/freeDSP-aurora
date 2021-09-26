@@ -117,7 +117,7 @@
   </td><td>
   <table style="border-spacing: 5px 10px;">
     <tr>
-    <td class="rotate">
+    <td id="input0" class="rotate">
     Channel 1
     <td style="min-width:80px">
     <select id="chn0" onchange="postInputJson('chn0',0);">
@@ -166,14 +166,14 @@
     <button class="delay" id="dly0" onclick="openDelay(0);">Delay</button>
     </td><td>
     <button class="gain" id="gn0" onclick="openGain(0);">Gain</button>
-    </td><td style="min-width:60px">
+    </td><td style="min-width:60px" id="output0">
     OUT 1
     </td><td rowspan="8" style="max-width: 80px;">
       <input type="range" id="mvol" class="volslider" min="-80" max="0" onchange="postMVol()"/>  
       <div style="transform: translateY(240px);">Master<br>Volume</div>  
     </td></tr>
   
-    <tr><td class="rotate">
+    <tr><td id="input1" class="rotate">
     Channel 2
     </td><td>
     <select id="chn1" onchange="postInputJson('chn1',1);">
@@ -222,11 +222,11 @@
     <button class="delay" id="dly1" onclick="openDelay(1);">Delay</button>
     </td><td>
     <button class="gain" id="gn1" onclick="openGain(1);">Gain</button>
-    </td><td>
+    </td><td id="output1">
     OUT 2
     </td></tr>
   
-    <tr><td class="rotate">
+    <tr><td id="input2" class="rotate">
     Channel 3
     </td><td>
     <select id="chn2" onchange="postInputJson('chn2',2);">
@@ -275,11 +275,11 @@
     <button class="delay" id="dly2" onclick="openDelay(2);">Delay</button>
     </td><td>
     <button class="gain" id="gn2" onclick="openGain(2);">Gain</button>
-    </td><td>
+    </td><td id="output2">
     OUT 3
     </td></tr>
   
-    <tr><td class="rotate">
+    <tr><td id="input3" class="rotate">
     Channel 4
     </td><td>
     <select id="chn3" onchange="postInputJson('chn3',3);">
@@ -328,7 +328,7 @@
     <button class="delay" id="dly3" onclick="openDelay(3);">Delay</button>
     </td><td>
     <button class="gain" id="gn3" onclick="openGain(3);">Gain</button>
-    </td><td>
+    </td><td id="output3">
     OUT 4
     </td></tr>
     <tr><td><div style="height: 50px;"></div></td></tr>

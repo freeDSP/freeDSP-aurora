@@ -157,6 +157,7 @@ extern tSpdifOutput spdifOutput;
 extern tSpdifOutputSelector spdifOutputSelector;
 
 extern int numInputs;
+extern int numOutputs;
 extern int numHPs;
 extern int numLShelvs;
 extern int numPEQs;

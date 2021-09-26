@@ -3,6 +3,11 @@
       "__tuple": "cpp",
       "array": "cpp",
       "algorithm": "cpp",
-      "sstream": "cpp"
+      "sstream": "cpp",
+      "iterator": "cpp",
+      "string": "cpp",
+      "string_view": "cpp",
+      "vector": "cpp",
+      "stdexcept": "cpp"
     }
 }

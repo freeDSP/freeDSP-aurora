@@ -126,13 +126,14 @@ function onLoad(){
       document.getElementById(data.fc[ii].name).innerHTML=data.fc[ii].val;
     }
     getMVol();
-    return fetch("/allchnames");
+    return fetch("/allnames");
   }).then(function(response){
     return response.text();
   }).then(function(response){
     var data = JSON.parse(response);
-    console.log(data);
-    for(ii in data.chnames){document.getElementById("chnlbl_"+ii).innerHTML=data.chnames[ii];}
+    for(ii in data.inputs){document.getElementById("input"+ii).innerHTML=data.inputs[ii];}
+    for(ii in data.outputs){document.getElementById("output"+ii).innerHTML=data.outputs[ii];}
+    for(ii in data.presets){document.getElementById("pre"+ii).innerHTML=data.presets[ii];}
   }).catch(function(err){console.log(err);
   });
 }
@@ -669,20 +670,22 @@ function postJson(btp){
 
 function openPlugin(){document.getElementById("plugin").style.display = "block";}
 
-function renameChannel(parent){
-  document.getElementById("dialogRename").style.display = "block";
-  document.getElementById("dialogRename").dataset.parent = parent;
+function onStoreNames() {
+  var data = {};
+  data.inputs = [];
+  data.outputs = [];
+  data.presets = [];
+  var numchannels = document.getElementById('audioinputs').dataset.numchannels;
+  for(var ii = 0; ii < numchannels; ii++)
+    data.inputs.push(document.getElementById('input' + ii).value);
+  numchannels = document.getElementById('audiooutputs').dataset.numchannels;
+  for(var ii = 0; ii < numchannels; ii++)
+    data.outputs.push(document.getElementById('output' + ii).value);
+  var numpresets = document.getElementById('presets').dataset.numpresets;
+  for(var ii = 0; ii < numpresets; ii++)
+    data.presets.push(document.getElementById('preset' + ii).value);
+   
+  fetch("/chnames",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)})
+    .then(function(){window.location.href='/'})
+    .catch(function(error){console.log(error);});
 }
-
-function postChannelName(){
-  var data={};
-  data.id=document.getElementById("dialogRename").dataset.parent;
-  data.name=document.getElementById("userinput").value.substring(0,16);
-  return fetch("/chname",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)
-  }).then(function(response){
-    labelId=document.getElementById("dialogRename").dataset.parent;
-    document.getElementById(labelId).innerHTML=data.name;
-    document.getElementById("dialogRename").style.display = "none";
-  });
-}
-

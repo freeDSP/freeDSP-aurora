@@ -1,3 +1,25 @@
+// Store the exported function in a global property referenced by a string:
+window['getConfig'] = getConfig;
+window['sendConfig'] = sendConfig;
+window['sendSpdifOutMux'] = sendSpdifOutMux;
+window['onLoad'] = onLoad;
+window['switchPreset'] = switchPreset;
+window['sendWifi'] = sendWifi;
+window['sendPwdAP'] = sendPwdAP;
+window['configDev'] = configDev;
+window['configWifi'] = configWifi;
+window['getWifiConfig'] = getWifiConfig;
+window['hideAddon'] = hideAddon;
+window['storePreset'] = storePreset;
+window['changeSPDIF'] = changeSPDIF;
+window['closeModal'] = closeModal;
+window['switchMute'] = switchMute;
+window['bypass'] = bypass;
+window['switchBypass'] = switchBypass;
+window['postMVol'] = postMVol;
+window['sendParam'] = sendParam;
+window['mute'] = mute;
+
 function getConfig(){
   fetch("/config").then (function (response) {return response.json();})
   .then (function (data) {  
@@ -104,13 +126,14 @@ function onLoad(){
       document.getElementById(data.fc[ii].name).innerHTML=data.fc[ii].val;
     }
     getMVol();
-    return fetch("/allchnames");
+    return fetch("/allnames");
   }).then(function(response){
     return response.text();
   }).then(function(response){
     var data = JSON.parse(response);
-    console.log(data);
-    for(ii in data.chnames){document.getElementById("chnlbl_"+ii).innerHTML=data.chnames[ii];}
+    for(ii in data.inputs){document.getElementById("input"+ii).innerHTML=data.inputs[ii];}
+    for(ii in data.outputs){document.getElementById("output"+ii).innerHTML=data.outputs[ii];}
+    for(ii in data.presets){document.getElementById("pre"+ii).innerHTML=data.presets[ii];}
   }).catch(function(err){console.log(err);
   });
 }
@@ -361,21 +384,6 @@ function openLShelv(idx){
 
 function openPEQ(idx){
   document.getElementById("peq").style.display = "block";
-  fetch("/peq?idx="+idx).then (function (response) {
-    return response.json();
-  }).then (function (data){
-    document.getElementById("peq").dataset.idx=idx;
-    document.getElementById("peq_v").value=data.gain;
-    document.getElementById("peq_fc").value=data.fc;
-    document.getElementById("peq_q").value=data.Q;
-    document.getElementById("peq_bypass").dataset.bypass=data.bypass;
-    switchBypass("peq_bypass");
-  }).catch (function (error){console.log(error);
-  });
-}
-
-function openPeqBank(idx){
-  document.getElementById("peqbank").style.display = "block";
   fetch("/peq?idx="+idx).then (function (response) {
     return response.json();
   }).then (function (data){
@@ -662,104 +670,22 @@ function postJson(btp){
 
 function openPlugin(){document.getElementById("plugin").style.display = "block";}
 
-function renameChannel(parent){
-  document.getElementById("dialogRename").style.display = "block";
-  document.getElementById("dialogRename").dataset.parent = parent;
-}
-
-function postChannelName(){
-  var data={};
-  data.id=document.getElementById("dialogRename").dataset.parent;
-  data.name=document.getElementById("userinput").value.substring(0,16);
-  return fetch("/chname",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)
-  }).then(function(response){
-    labelId=document.getElementById("dialogRename").dataset.parent;
-    document.getElementById(labelId).innerHTML=data.name;
-    document.getElementById("dialogRename").style.display = "none";
-  });
-}
-
-function onLoadInputRouting() {
-  fetch("/inputrouting").then(function(response) {
-    return response.json();
-  }).then(function (data) {  
-    var tbl = document.getElementById('inputrouting');
-    tbl.dataset.numsources = data["numSourceNames"];
-    tbl.dataset.numvirtualinputs = data["numInputs"];
-    var id = 0;
-    for(var mm = 0; mm < data["numSourceNames"]; mm++) {
-      var tr = document.createElement('tr');
-      var td = document.createElement('td');
-      td.style.textAlign = 'left';
-      var input = document.createElement("input");
-      input.setAttribute('type', 'text');
-      input.value = data["sourceNames"][mm];
-      input.id = 'name_'+mm;
-      td.appendChild(input);
-      tr.appendChild(td);
-      for(var nn = 0; nn < data["numInputs"]; nn++) {
-        var td = document.createElement('td');
-        td.style = 'min-width:80px';
-        var sel = document.createElement('select');
-        sel.id = 'sel_'+mm+'_'+nn;
-        for(var ii = 0; ii < data["options"].length; ii++) {
-          var opt = document.createElement('option');
-          opt.value = ii;
-          opt.text = data["options"][ii];
-          sel.appendChild(opt);
-        }
-        sel.value = data["select"][mm][nn];
-        id++;
-        td.appendChild(sel);
-        tr.appendChild(td);
-      }
-      tbl.appendChild(tr);
-    }
-  }).catch (function (error) {console.log(error);
-  });
-}
-
-function onStoreInputRouting(){
+function onStoreNames() {
   var data = {};
-  var numSources = document.getElementById('inputrouting').dataset.numsources;
-  var numVirtualInputs = document.getElementById('inputrouting').dataset.numvirtualinputs;
-  data.select = [];
-  data.sourceNames = [];
-  for(var mm = 0; mm < numSources; mm++){
-    data.sourceNames[mm] = document.getElementById('name_'+mm).value;
-    data.select[mm] = [];
-  }
-  for(var mm = 0; mm < numSources; mm++){
-    for(var nn = 0; nn < numVirtualInputs; nn++) data.select[mm][nn] = document.getElementById('sel_'+mm+'_'+nn).value;
-  }
-  fetch("/inputrouting",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)})
-  .then(function(){window.location.href='/'})
-  .catch(function(error){console.log(error);});
+  data.inputs = [];
+  data.outputs = [];
+  data.presets = [];
+  var numchannels = document.getElementById('audioinputs').dataset.numchannels;
+  for(var ii = 0; ii < numchannels; ii++)
+    data.inputs.push(document.getElementById('input' + ii).value);
+  numchannels = document.getElementById('audiooutputs').dataset.numchannels;
+  for(var ii = 0; ii < numchannels; ii++)
+    data.outputs.push(document.getElementById('output' + ii).value);
+  var numpresets = document.getElementById('presets').dataset.numpresets;
+  for(var ii = 0; ii < numpresets; ii++)
+    data.presets.push(document.getElementById('preset' + ii).value);
+   
+  fetch("/chnames",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)})
+    .then(function(){window.location.href='/'})
+    .catch(function(error){console.log(error);});
 }
-
-function selectVirtualInput(){
-  var data = {};
-  data.sel = document.getElementById('vinput').value;
-  fetch("/vinput",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)})
-  .catch(function(error){console.log(error);});
-}
-
-function getVirtualInputSelection(){
-  fetch("/inputrouting").then(function(response){return response.json();
-  }).then(function(data){ 
-    var sel = document.getElementById("vinput");
-    var len = sel.options.length;
-    for(var ii = len-1; ii >= 0; ii--) sel.options[ii] = null;
-    for(var mm = 0; mm < data["numSourceNames"]; mm++) {
-      var opt = document.createElement('option');
-      opt.value = mm;
-      opt.text = data["sourceNames"][mm];
-      sel.appendChild(opt);
-    }
-    return fetch("/vinput");
-  }).then(function(response){return response.json();
-  }).then(function(data){document.getElementById('vinput').value=data.sel;
-  }).catch(function(error){console.log(error);
-  });  
-}
-

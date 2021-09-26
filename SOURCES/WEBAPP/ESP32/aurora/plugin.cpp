@@ -23,6 +23,7 @@ tSpdifOutput spdifOutput;
 tSpdifOutputSelector spdifOutputSelector;
 
 int numInputs = 0;
+int numOutputs = 0;
 int numHPs = 0;
 int numLShelvs = 0;
 int numPEQs = 0;
@@ -78,7 +79,8 @@ void readPluginMeta( void )
     JsonObject jsonPluginMeta = jsonDoc.as<JsonObject>();
 
     currentPlugInName = jsonPluginMeta["name"].as<String>();
-    numInputs = jsonPluginMeta["nchn"].as<String>().toInt();
+    numInputs = jsonPluginMeta["ninputs"].as<String>().toInt();
+    numOutputs = jsonPluginMeta["noutputs"].as<String>().toInt();
     numHPs = jsonPluginMeta["nhp"].as<String>().toInt();
     numLShelvs = jsonPluginMeta["nlshelv"].as<String>().toInt();
     numPEQs = jsonPluginMeta["npeq"].as<String>().toInt();
