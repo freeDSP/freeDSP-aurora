@@ -174,6 +174,7 @@ extern float sampleRate;
 extern uint16_t addrVPot;
 
 extern String currentPlugInName;
+extern String pluginVersion;
 
 extern String presetUsrparamFile[MAX_NUM_PRESETS];
 extern String presetAddonCfgFile[MAX_NUM_PRESETS];

@@ -19,8 +19,7 @@
 #include "channelnames.h"
 #include "inputrouting.h"
 #include "hwconfig.h"
-
-extern String channelNames[16];
+#include "plugin.h"
 
 #if HAVE_DISPLAY
 extern void updateUI(void);
@@ -419,6 +418,7 @@ void handleGetConfigJson( AsyncWebServerRequest* request )
   jsonResponse["aid"] = Settings.addonid;
   jsonResponse["vpot"] = Settings.vpot;
   jsonResponse["fw"] = VERSION_STR;
+  jsonResponse["plugin"] = pluginVersion; 
   jsonResponse["ip"] = WiFi.localIP().toString();
   jsonResponse["pre"] = currentPreset;
 
@@ -1813,62 +1813,7 @@ void handleIrUpload( AsyncWebServerRequest* request, uint8_t* data, size_t len, 
   }
 
 }
-#if 0
-//==============================================================================
-/*! Handles the POST request for a new channel name
- *
- */
-void handlePostChannelNameJson(AsyncWebServerRequest* request, uint8_t* data)
-{
-  Serial.println( "POST /chname" );
 
-  DynamicJsonDocument jsonDoc(1024);
-  DeserializationError err = deserializeJson(jsonDoc, (const char*)data);
-  if( err )
-  {
-    Serial.print("[ERROR] handlePostChannelNameJson(): Deserialization failed.");
-    Serial.println(err.c_str());
-    request->send(400, "text/plain", err.c_str());
-    return;
-  }
-
-  JsonObject root = jsonDoc.as<JsonObject>();
-
-  Serial.println(root["id"].as<String>().c_str());
-  Serial.println(root["name"].as<String>().c_str());
-
-  String str = root["id"].as<String>();
-  Serial.println(str.substring(str.indexOf("_"), str.length()));
-
-  int chn = str.substring(str.indexOf("_") + 1, str.length()).toInt();
-  Serial.println(chn);
-  if(chn < NUMCHANNELNAMES)
-    channelNames[chn] = root["name"].as<String>().substring(0,16);
-
-  Serial.println(channelNames[chn]);
-
-  writeChannelNames();
-
-  request->send(200, "text/plain", "");
-}
-
-
-//==============================================================================
-/*! Handles the GET request for all channel names
- *
- */
-String handleGetAllChNamesJson( void )
-{
-  Serial.println( "GET /allchnames" );
-
-  // Build the JSON response manually. Via ArduinoJson it did not work somehow.
-  String array("{\"chnames\":[");
-  for(int ii = 0; ii < NUMCHANNELNAMES-1; ii++)
-    array += String("\"") + channelNames[ii] + String("\",");
-  array += String("\"") + channelNames[NUMCHANNELNAMES-1] + String("\"]}");
-  return array;
-}
-#endif
 
 //==============================================================================
 /*! Handles the POST request for names

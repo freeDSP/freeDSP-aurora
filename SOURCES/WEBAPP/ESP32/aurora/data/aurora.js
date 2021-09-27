@@ -60,6 +60,8 @@ function onLoad(){
     return response.json();
   }).then(function(cfg){  
     document.getElementById("fw").innerHTML="FW: "+cfg.fw;
+    document.getElementById("plugin").innerHTML="Plugin: "+cfg.plugin;
+    if(!(cfg.fw == cfg.plugin)) alert("Plugin does not match firmware version. Please upload an updated plugin.");
     document.getElementById("ip").innerHTML="Local WiFi IP: "+cfg.ip;
     var p=cfg.pre;
     document.getElementById("pre0").style.backgroundColor = "#101010";

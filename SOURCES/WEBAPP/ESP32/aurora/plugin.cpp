@@ -40,6 +40,7 @@ float sampleRate = 48000.0;
 uint16_t addrVPot = 0x0000;
 
 String currentPlugInName;
+String pluginVersion = "0.0.0";
 
 String presetUsrparamFile[MAX_NUM_PRESETS] = { "/usrparam.001", "/usrparam.002", "/usrparam.003", "/usrparam.004" };
 String presetAddonCfgFile[MAX_NUM_PRESETS] = { "/addoncfg.001", "/addoncfg.002", "/addoncfg.003", "/addoncfg.004" };
@@ -79,6 +80,7 @@ void readPluginMeta( void )
     JsonObject jsonPluginMeta = jsonDoc.as<JsonObject>();
 
     currentPlugInName = jsonPluginMeta["name"].as<String>();
+    pluginVersion = jsonPluginMeta["version"].as<String>();
     numInputs = jsonPluginMeta["ninputs"].as<String>().toInt();
     numOutputs = jsonPluginMeta["noutputs"].as<String>().toInt();
     numHPs = jsonPluginMeta["nhp"].as<String>().toInt();
