@@ -66,22 +66,28 @@ class ParamXO:
     self.lpaddr = [-1, -1, -1, -1]
 
 ninputs = 0
+noutputs = 8
 
 parser = argparse.ArgumentParser()
 parser.add_argument("input", help="SigmaStudio project file")
 parser.add_argument("plugin", help="Name of plugin")
-parser.add_argument('--gui', help="Path to html gui", type=str)
+parser.add_argument("--gui", help="Path to html gui", type=str)
+parser.add_argument("--version", help="Version of plugin", type=str)
 
 # Read arguments from the command line
 args = parser.parse_args()
 
-# Check for --input
+# Check arguments
 if args.input:
   print("SigmaStudio project file: %s" % args.input)
   path_sigmastudioproject = args.input
 if args.plugin:
   print("Name of plugin: %s" % args.plugin)
   nameplugin = args.plugin
+if args.version:
+  version = args.version
+else:
+  version = "0.0.0"
 
 split_path = path_sigmastudioproject.rsplit("\\",1)
 filename = os.path.basename(split_path[0])
@@ -157,6 +163,7 @@ gain = []
 xohp = []
 xolp = []
 fir = []
+
 
 # --- Count inputs
 for module in root.findall('IC/Module'):
@@ -629,7 +636,8 @@ data = {"name":nameplugin,
         "fir":fir_t,
         "firlen":firlen_t,
         "vpot":vpot,
-        "master":mastervol }
+        "master":mastervol,
+        "version":version }
 
 with io.open(projectname + "/plugin.ini", 'w', encoding='utf8') as outfile:
   str_ = json.dumps(data,
