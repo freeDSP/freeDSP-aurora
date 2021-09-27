@@ -620,8 +620,8 @@ function postJson(btp){
   else if(btp=="fir"){
     var idx=document.getElementById("fir").dataset.idx;
     var bypass=document.getElementById("fir_bypass").dataset.bypass;
-    var taps = new Float32Array(4096);
-    for(var k=0;k<4096;k++) taps[k]=0;
+    var taps = new Float32Array(20000);
+    for(var k=0;k<20000;k++) taps[k]=0;
     document.getElementById("msg").innerHTML="Updating FIRs, please wait...";
     document.getElementById("plzw").style.display="block";
     if(document.getElementById("irfile").files.length>0){
@@ -630,7 +630,7 @@ function postJson(btp){
         readFirFile(file).then(function(result){
           var lines = result.split('\n');
           for(var ll=0; ll<lines.length; ll++){
-            if(ll<4096){
+            if(ll<20000){
               val = parseFloat(lines[ll]);
               if(!isNaN(val)){taps[ll]=val;}
             }
