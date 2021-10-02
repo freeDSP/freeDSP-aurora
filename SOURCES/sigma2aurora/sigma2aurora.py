@@ -65,9 +65,6 @@ class ParamXO:
     self.hpaddr = [-1, -1, -1, -1]
     self.lpaddr = [-1, -1, -1, -1]
 
-ninputs = 0
-noutputs = 8
-
 parser = argparse.ArgumentParser()
 parser.add_argument("input", help="SigmaStudio project file")
 parser.add_argument("plugin", help="Name of plugin")
@@ -140,11 +137,7 @@ with open(projectname + "/dsp.fw", 'wb') as file:
       file.write(bytearray(struct.pack("!B", txbuffer[idx])))
       idx = idx + 1
     
-#--- Reading project xml file
-print("Reading " + projectdir + "/" + projectname + ".xml")
 
-tree = ET.parse(projectdir + "/" + projectname + ".xml")
-root = tree.getroot()
 
 spdifoutmux_channel = []
 spdifoutmux_channel.append(GrowingList())
@@ -165,6 +158,23 @@ xohp = []
 xolp = []
 fir = []
 
+#--- Reading project xml file
+print("Reading " + projectdir + "/" + projectname + "_NetList.xml")
+tree = ET.parse(projectdir + "/" + projectname + "_NetList.xml")
+root = tree.getroot()
+
+# --- Count outputs
+noutputs = 0
+for algo in root.findall('IC/Schematic/Algorithm'):
+  cell = algo.get('cell')
+  if cell.startswith("Output "):
+    noutputs = noutputs + 1
+
+#--- Reading project xml file
+ninputs = 0
+print("Reading " + projectdir + "/" + projectname + ".xml")
+tree = ET.parse(projectdir + "/" + projectname + ".xml")
+root = tree.getroot()
 
 # --- Count inputs
 for module in root.findall('IC/Module'):
@@ -595,7 +605,7 @@ if nhshelv > 16:
   print("[ERROR] Number of high shelving blocks exceeds the limit of 16")
 if npeq > 160:
   print("[ERROR] Number of peq blocks exceeds the limit of 160")
-if npeqbank > 16:
+if npeqbank > 160:
   print("[ERROR] Number of peqbank blocks exceeds the limit of 16")
 if nphase > 16:
   print("[ERROR] Number of phase blocks exceeds the limit of 16")
@@ -612,6 +622,7 @@ if nxo > 16:
 print("Writing plugin.ini")
 data = {"name":nameplugin,
         "ninputs":ninputs,
+        "noutputs":noutputs,
         "nhp":nhp,
         "nlshelv":nlshelv,
         "npeq":npeq,
