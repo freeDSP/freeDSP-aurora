@@ -155,6 +155,7 @@ lshelv = []
 hshelv = []
 peq = []
 peqbank = []
+peqband = []
 hp = []
 lp = []
 phase = []
@@ -338,6 +339,7 @@ for module in root.findall('IC/Module'):
           print("[ERROR] Not more then 8 PEQs per bank allowed.")
         idx = idx + 1
     peqbank.append(newPeqBank)
+    peqband.append(len(newPeqBank.addr))
 
   # --- PEQ blocks
   elif cellname.text.lower().startswith('plugin.peq'):
@@ -515,18 +517,18 @@ for m in range(0,len(hshelv)):
   hshelv_t[m] = hshelv[m].addr
 
 # PEQ bank addresses
-peq_t = GrowingList()
+peqbank_t = GrowingList()
 idx = 0
 for m in range(0,len(peqbank)):
   for n in range(0, len(peqbank[m].addr)):
     if peqbank[m].addr[n] != -1:
-      peq_t[idx] = peqbank[m].addr[n]
+      peqbank_t[idx] = peqbank[m].addr[n]
       idx = idx+1
 
 # PEQ addresses
-# peq_t = GrowingList()
+peq_t = GrowingList()
 for m in range(0,len(peq)):
-  peq_t[len(peqbank) + m] = peq[m].addr
+  peq_t[m] = peq[m].addr
 
 # Phase addresses
 phase_t = GrowingList()
@@ -577,6 +579,7 @@ if nxo != nxolp:
 nlshelv = len(lshelv_t)
 nhshelv = len(hshelv_t)
 npeq = len(peq_t)
+npeqbank = len(peqbank_t)
 nphase = len(phase_t)
 ndly = len(dly_t)
 ngain = len(gain_t)
@@ -592,6 +595,8 @@ if nhshelv > 16:
   print("[ERROR] Number of high shelving blocks exceeds the limit of 16")
 if npeq > 160:
   print("[ERROR] Number of peq blocks exceeds the limit of 160")
+if npeqbank > 16:
+  print("[ERROR] Number of peqbank blocks exceeds the limit of 16")
 if nphase > 16:
   print("[ERROR] Number of phase blocks exceeds the limit of 16")
 if ndly > 16:
@@ -610,6 +615,7 @@ data = {"name":nameplugin,
         "nhp":nhp,
         "nlshelv":nlshelv,
         "npeq":npeq,
+        "npeqbank":npeqbank,
         "nhshelv":nhshelv,
         "nphase":nphase,
         "nlp":nlp,
@@ -626,6 +632,8 @@ data = {"name":nameplugin,
         "hp":hp_t,
         "lshelv":lshelv_t,
         "peq":peq_t,
+        "peqbank":peqbank_t,
+        "peqband":peqband,
         "hshelv":hshelv_t,
         "lp":lp_t,
         "phase":phase_t,
