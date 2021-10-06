@@ -65,6 +65,16 @@ struct tPeq
   bool bypass;
 };
 
+struct tPeqBank
+{
+  uint16_t addr[MAX_BANDS_PER_PEQBANK];
+  float gain[MAX_BANDS_PER_PEQBANK];
+  float fc[MAX_BANDS_PER_PEQBANK];
+  float Q[MAX_BANDS_PER_PEQBANK];
+  bool bypass[MAX_BANDS_PER_PEQBANK];
+  uint16_t numBands;
+};
+
 struct tPhase
 {
   uint16_t addr;
@@ -140,16 +150,17 @@ struct tSpdifOutput
 
 extern tSettings Settings;
 
-extern tInput paramInputs[8];
-extern tHPLP paramHP[8];
-extern tShelving paramLshelv[8];
-extern tPeq paramPeq[80];
-extern tShelving paramHshelv[8];
-extern tHPLP paramLP[8];
-extern tPhase paramPhase[8];
-extern tDelay paramDelay[8];
-extern tGain paramGain[8];
-extern tCrossover paramCrossover[8];
+extern tInput paramInputs[MAX_NUM_INPUTS];
+extern tHPLP paramHP[MAX_NUM_HPS];
+extern tShelving paramLshelv[MAX_NUM_LSHELVS];
+extern tPeq paramPeq[MAX_NUM_PEQS];
+extern tPeqBank paramPeqBank[MAX_NUM_PEQBANKS];
+extern tShelving paramHshelv[MAX_NUM_HSHELVS];
+extern tHPLP paramLP[MAX_NUM_LPS];
+extern tPhase paramPhase[MAX_NUM_PHASES];
+extern tDelay paramDelay[MAX_NUM_DELAYS];
+extern tGain paramGain[MAX_NUM_GAINS];
+extern tCrossover paramCrossover[MAX_NUM_CROSSOVER];
 extern tFir paramFir[MAX_NUM_FIRS];
 extern tMasterVolume masterVolume;
 extern tInputSelector inputSelector;
@@ -168,6 +179,7 @@ extern int numDelays;
 extern int numGains;
 extern int numCrossovers;
 extern int numFIRs;
+extern int numPeqBanks;
 
 extern float sampleRate;
 

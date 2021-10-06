@@ -38,12 +38,12 @@ File fileUpload;
  */
 String uinttohexstring( uint32_t uintval )
 {
-  String str = String("0x");
+  String str = String(F("0x"));
   for( int ii = 0; ii < 4; ii++ )
   {
     uint8_t val = (uintval>>(24-ii*8)) & 0xFF;
     if( val < 0x10 )
-      str = str + String( "0") + String( val, HEX );
+      str = str + String(F("0")) + String( val, HEX );
     else
       str = str + String( val, HEX );
   }
@@ -57,7 +57,9 @@ String uinttohexstring( uint32_t uintval )
  */
 void handleGetInputJson( AsyncWebServerRequest* request )
 {
-  Serial.println( "GET /input" );
+  #if DEBUG_PRINT
+  Serial.println(F("GET /input"));
+  #endif
 
   AsyncJsonResponse* response = new AsyncJsonResponse();
 
@@ -81,7 +83,9 @@ void handleGetInputJson( AsyncWebServerRequest* request )
  */
 void handleGetHpJson( AsyncWebServerRequest* request )
 {
-  Serial.println( "GET /hp" );
+  #if DEBUG_PRINT
+  Serial.println(F("GET /hp"));
+  #endif
 
   AsyncJsonResponse* response = new AsyncJsonResponse();
 
@@ -98,7 +102,7 @@ void handleGetHpJson( AsyncWebServerRequest* request )
       jsonResponse["bypass"] = String( "0" );
   }
   else
-    Serial.println( "[ERROR] handleGetHpJson(): No id param" );
+    Serial.println(F("[ERROR] handleGetHpJson(): No id param"));
 
   response->setLength();
   request->send(response);
@@ -110,7 +114,9 @@ void handleGetHpJson( AsyncWebServerRequest* request )
  */
 void handleGetLshelvJson( AsyncWebServerRequest* request )
 {
-  Serial.println( "GET /lshelv" );
+  #if DEBUG_PRINT
+  Serial.println(F("GET /lshelv"));
+  #endif
 
   AsyncJsonResponse* response = new AsyncJsonResponse();
 
@@ -128,7 +134,7 @@ void handleGetLshelvJson( AsyncWebServerRequest* request )
       jsonResponse["bypass"] = String( "0" );
   }
   else
-    Serial.println( "[ERROR] handleGetLshelvJson(): No id param" );
+    Serial.println(F("[ERROR] handleGetLshelvJson(): No id param"));
 
   response->setLength();
   request->send(response);
@@ -140,11 +146,13 @@ void handleGetLshelvJson( AsyncWebServerRequest* request )
  */
 void handleGetPeqJson( AsyncWebServerRequest* request )
 {
-  Serial.println( "GET /peq" );
+  #if DEBUG_PRINT
+  Serial.println(F("GET /peq"));
+  #endif
 
   AsyncJsonResponse* response = new AsyncJsonResponse();
 
-  if( request->hasParam( "idx" ) )
+  if(request->hasParam("idx"))
   {
     AsyncWebParameter* idx = request->getParam(0);
     int offset = idx->value().toInt();
@@ -153,15 +161,80 @@ void handleGetPeqJson( AsyncWebServerRequest* request )
     jsonResponse["fc"] = paramPeq[offset].fc;
     jsonResponse["Q"] = paramPeq[offset].Q;
     if( paramPeq[offset].bypass )
-      jsonResponse["bypass"] = String( "1" );
+      jsonResponse["bypass"] = String(F("1"));
     else
-      jsonResponse["bypass"] = String( "0" );
+      jsonResponse["bypass"] = String(F("0"));
   }
   else
-    Serial.println( "[ERROR] handleGetPeqJson(): No id param" );
+    Serial.println(F("[ERROR] handleGetPeqJson(): No id param"));
 
   response->setLength();
   request->send(response);
+}
+
+//==============================================================================
+/*! Handles the GET request for PeqBank parameter
+ *
+ */
+void handleGetPeqBankJson( AsyncWebServerRequest* request )
+{
+  #if DEBUG_PRINT
+  Serial.println(F("GET /peqbank"));
+  #endif
+
+  if(request->hasParam("idx"))
+  {
+    AsyncWebParameter* idx = request->getParam(0);
+    int offset = idx->value().toInt();
+    int numBands = paramPeqBank[offset].numBands;
+    Serial.println(offset);
+    Serial.println(numBands);
+
+    // Build the JSON response manually. Via ArduinoJson it did not work somehow.
+    String array("{");
+    if(paramPeqBank[offset].numBands > 0)
+    {
+      array += String(F("\"fc\":["));
+      for(int ii = 0; ii < numBands - 1; ii++)
+        array += String(F("\"")) + String(paramPeqBank[offset].fc[ii]) + String(F("\","));
+      array += String(F("\"")) + String(paramPeqBank[offset].fc[numBands - 1]);
+      array += String(F("\"],"));
+
+      array += String(F("\"Q\":["));
+      for(int ii = 0; ii < numBands - 1; ii++)
+        array += String(F("\"")) + String(paramPeqBank[offset].Q[ii]) + String(F("\","));
+      array += String(F("\"")) + String(paramPeqBank[offset].Q[numBands - 1]);
+      array += String(F("\"],"));
+
+      array += String(F("\"V0\":["));
+      for(int ii = 0; ii < numBands - 1; ii++)
+        array += String(F("\"")) + String(paramPeqBank[offset].gain[ii]) + String(F("\","));
+      array += String(F("\"")) + String(paramPeqBank[offset].gain[numBands - 1]);
+      array += String(F("\"],"));
+
+      array += String(F("\"bypass\":["));
+      for(int ii = 0; ii < numBands - 1; ii++)
+      {
+        if(paramPeqBank[offset].bypass[ii])
+          array += String(F("\"1\","));
+        else
+          array += String(F("\"0\","));
+      }
+      if(paramPeqBank[offset].bypass[numBands - 1])
+        array += String(F("\"1\""));
+      else
+        array += String(F("\"0\""));
+      array += String(F("]"));
+    }
+    array += String("}");
+    Serial.println(array);
+    request->send(200, F("text/plain"), array);
+  }
+  else
+  {
+    Serial.println(F("[ERROR] handleGetPeqBankJson(): No id param"));
+    request->send(400, F("text/plain"), F("Error params"));
+  }
 }
 
 //==============================================================================
@@ -170,11 +243,13 @@ void handleGetPeqJson( AsyncWebServerRequest* request )
  */
 void handleGetHshelvJson( AsyncWebServerRequest* request )
 {
-  Serial.println( "GET /hshelv" );
+  #if DEBUG_PRINT
+  Serial.println(F("GET /hshelv"));
+  #endif
 
   AsyncJsonResponse* response = new AsyncJsonResponse();
 
-  if( request->hasParam( "idx" ) )
+  if(request->hasParam("idx"))
   {
     AsyncWebParameter* idx = request->getParam(0);
     int offset = idx->value().toInt();
@@ -188,7 +263,7 @@ void handleGetHshelvJson( AsyncWebServerRequest* request )
       jsonResponse["bypass"] = String( "0" );
   }
   else
-    Serial.println( "[ERROR] handleGetHshelvJson(): No id param" );
+    Serial.println(F("[ERROR] handleGetHshelvJson(): No id param"));
 
   response->setLength();
   request->send(response);
@@ -200,11 +275,13 @@ void handleGetHshelvJson( AsyncWebServerRequest* request )
  */
 void handleGetLpJson( AsyncWebServerRequest* request )
 {
-  Serial.println( "GET /lp" );
+  #if DEBUG_PRINT
+  Serial.println(F("GET /lp"));
+  #endif
 
   AsyncJsonResponse* response = new AsyncJsonResponse();
 
-  if( request->hasParam( "idx" ) )
+  if(request->hasParam("idx"))
   {
     AsyncWebParameter* idx = request->getParam(0);
     int offset = idx->value().toInt();
@@ -217,7 +294,7 @@ void handleGetLpJson( AsyncWebServerRequest* request )
       jsonResponse["bypass"] = String( "0" );
   }
   else
-    Serial.println( "[ERROR] handleGetLpJson(): No id param" );
+    Serial.println(F("[ERROR] handleGetLpJson(): No id param"));
 
   response->setLength();
   request->send(response);
@@ -229,11 +306,13 @@ void handleGetLpJson( AsyncWebServerRequest* request )
  */
 void handleGetPhaseJson( AsyncWebServerRequest* request )
 {
-  Serial.println( "GET /phase" );
+  #if DEBUG_PRINT
+  Serial.println(F("GET /phase"));
+  #endif
 
   AsyncJsonResponse* response = new AsyncJsonResponse();
 
-  if( request->hasParam( "idx" ) )
+  if(request->hasParam("idx"))
   {
     AsyncWebParameter* idx = request->getParam(0);
     int offset = idx->value().toInt();
@@ -241,17 +320,17 @@ void handleGetPhaseJson( AsyncWebServerRequest* request )
     jsonResponse["Q"] = paramPhase[offset].Q;
     jsonResponse["fc"] = paramPhase[offset].fc;
     if( paramPhase[offset].inv )
-      jsonResponse["inv"] = String( "1" );
+      jsonResponse["inv"] = String(F("1"));
     else
-      jsonResponse["inv"] = String( "0" );
+      jsonResponse["inv"] = String(F("0"));
 
     if( paramPhase[offset].bypass )
-      jsonResponse["bypass"] = String( "1" );
+      jsonResponse["bypass"] = String(F("1"));
     else
-      jsonResponse["bypass"] = String( "0" );
+      jsonResponse["bypass"] = String(F("0"));
   }
   else
-    Serial.println( "[ERROR] handleGetPhaseJson(): No id param" );
+    Serial.println(F("[ERROR] handleGetPhaseJson(): No id param"));
 
   response->setLength();
   request->send(response);
@@ -263,23 +342,25 @@ void handleGetPhaseJson( AsyncWebServerRequest* request )
  */
 void handleGetDelayJson( AsyncWebServerRequest* request )
 {
-  Serial.println( "GET /delay" );
+  #if DEBUG_PRINT
+  Serial.println(F("GET /delay"));
+  #endif
 
   AsyncJsonResponse* response = new AsyncJsonResponse();
 
-  if( request->hasParam( "idx" ) )
+  if(request->hasParam("idx"))
   {
     AsyncWebParameter* idx = request->getParam(0);
     int offset = idx->value().toInt();
     JsonVariant& jsonResponse = response->getRoot();
     jsonResponse["dly"] = paramDelay[offset].delay;
     if( paramDelay[offset].bypass )
-      jsonResponse["bypass"] = String( "1" );
+      jsonResponse["bypass"] = String(F("1"));
     else
-      jsonResponse["bypass"] = String( "0" );
+      jsonResponse["bypass"] = String(F("0"));
   }
   else
-    Serial.println( "[ERROR] handleGetDelayJson(): No id param" );
+    Serial.println(F("[ERROR] handleGetDelayJson(): No id param"));
 
   response->setLength();
   request->send(response);
@@ -291,23 +372,25 @@ void handleGetDelayJson( AsyncWebServerRequest* request )
  */
 void handleGetGainJson( AsyncWebServerRequest* request )
 {
-  Serial.println( "GET /gain" );
+  #if DEBUG_PRINT
+  Serial.println(F("GET /gain"));
+  #endif
 
   AsyncJsonResponse* response = new AsyncJsonResponse();
 
-  if( request->hasParam( "idx" ) )
+  if(request->hasParam("idx"))
   {
     AsyncWebParameter* idx = request->getParam(0);
     int offset = idx->value().toInt();
     JsonVariant& jsonResponse = response->getRoot();
     jsonResponse["gain"] = paramGain[offset].gain;
     if( paramGain[offset].mute == true )
-      jsonResponse["mute"] = String( "1" );
+      jsonResponse["mute"] = String(F("1"));
     else
-      jsonResponse["mute"] = String( "0" );
+      jsonResponse["mute"] = String(F("0"));
   }
   else
-    Serial.println( "[ERROR] handleGetGainJson(): No id param" );
+    Serial.println(F("[ERROR] handleGetGainJson(): No id param"));
 
   response->setLength();
   request->send(response);
@@ -319,11 +402,13 @@ void handleGetGainJson( AsyncWebServerRequest* request )
  */
 void handleGetXoJson( AsyncWebServerRequest* request )
 {
-  Serial.println( "GET /xo" );
+  #if DEBUG_PRINT
+  Serial.println(F("GET /xo"));
+  #endif
 
   AsyncJsonResponse* response = new AsyncJsonResponse();
 
-  if( request->hasParam( "idx" ) )
+  if(request->hasParam("idx"))
   {
     AsyncWebParameter* idx = request->getParam(0);
     int offset = idx->value().toInt();
@@ -331,18 +416,18 @@ void handleGetXoJson( AsyncWebServerRequest* request )
     jsonResponse["lp_typ"] = paramCrossover[offset].lp_typ;
     jsonResponse["lp_fc"] = paramCrossover[offset].lp_fc;
     if( paramCrossover[offset].lp_bypass )
-      jsonResponse["lp_bypass"] = String( "1" );
+      jsonResponse["lp_bypass"] = String(F("1"));
     else
-      jsonResponse["lp_bypass"] = String( "0" );
+      jsonResponse["lp_bypass"] = String(F("0"));
     jsonResponse["hp_typ"] = paramCrossover[offset].hp_typ;
     jsonResponse["hp_fc"] = paramCrossover[offset].hp_fc;
     if( paramCrossover[offset].hp_bypass )
-      jsonResponse["hp_bypass"] = String( "1" );
+      jsonResponse["hp_bypass"] = String(F("1"));
     else
-      jsonResponse["hp_bypass"] = String( "0" );
+      jsonResponse["hp_bypass"] = String(F("0"));
   }
   else
-    Serial.println( "[ERROR] handleGetXoJson(): No id param" );
+    Serial.println(F("[ERROR] handleGetXoJson(): No id param"));
 
   response->setLength();
   request->send(response);
@@ -354,23 +439,25 @@ void handleGetXoJson( AsyncWebServerRequest* request )
  */
 void handleGetFirJson( AsyncWebServerRequest* request )
 {
-  Serial.println( "GET /fir" );
+  #if DEBUG_PRINT
+  Serial.println(F("GET /fir"));
+  #endif
 
   AsyncJsonResponse* response = new AsyncJsonResponse();
 
-  if( request->hasParam( "idx" ) )
+  if(request->hasParam("idx"))
   {
     AsyncWebParameter* idx = request->getParam(0);
     int offset = idx->value().toInt();
     JsonVariant& jsonResponse = response->getRoot();
 
     if( paramFir[offset].bypass )
-      jsonResponse["bypass"] = String( "1" );
+      jsonResponse["bypass"] = String(F("1"));
     else
-      jsonResponse["bypass"] = String( "0" );
+      jsonResponse["bypass"] = String(F("0"));
   }
   else
-    Serial.println( "[ERROR] handleGetFirJson(): No id param" );
+    Serial.println(F("[ERROR] handleGetFirJson(): No id param"));
 
   response->setLength();
   request->send(response);
@@ -382,7 +469,9 @@ void handleGetFirJson( AsyncWebServerRequest* request )
  */
 void handleGetMasterVolumeJson( AsyncWebServerRequest* request )
 {
-  Serial.println( "GET /mvol" );
+  #if DEBUG_PRINT
+  Serial.println(F("GET /mvol"));
+  #endif
   AsyncJsonResponse* response = new AsyncJsonResponse();
   JsonVariant& jsonResponse = response->getRoot();
   jsonResponse["vol"] = masterVolume.val;
@@ -396,8 +485,9 @@ void handleGetMasterVolumeJson( AsyncWebServerRequest* request )
  */
 void handleGetPresetJson( AsyncWebServerRequest* request )
 {
-  Serial.println( "GET /preset" );
-
+  #if DEBUG_PRINT
+  Serial.println(F("GET /preset"));
+  #endif
   AsyncJsonResponse* response = new AsyncJsonResponse();
   JsonVariant& jsonResponse = response->getRoot();
   jsonResponse["pre"] = currentPreset;
@@ -411,8 +501,9 @@ void handleGetPresetJson( AsyncWebServerRequest* request )
  */
 void handleGetConfigJson( AsyncWebServerRequest* request )
 {
-  Serial.println( "GET /config" );
-
+  #if DEBUG_PRINT
+  Serial.println(F("GET /config"));
+  #endif
   AsyncJsonResponse* response = new AsyncJsonResponse();
   JsonVariant& jsonResponse = response->getRoot();
   jsonResponse["aid"] = Settings.addonid;
@@ -441,7 +532,9 @@ void handleGetConfigJson( AsyncWebServerRequest* request )
  */
 void handleGetAddonConfigJson( AsyncWebServerRequest* request )
 {
-  Serial.println( "GET /addoncfg" );
+  #if DEBUG_PRINT
+  Serial.println(F("GET /addoncfg"));
+  #endif
 
   AsyncJsonResponse* response = new AsyncJsonResponse();
   JsonVariant& jsonResponse = response->getRoot();
@@ -463,7 +556,9 @@ void handleGetAddonConfigJson( AsyncWebServerRequest* request )
  */
 String handleGetAllBypJson( void )
 {
-  Serial.println( "GET /allbyp" );
+  #if DEBUG_PRINT
+  Serial.println(F("GET /allbyp"));
+  #endif
 
   // Build the JSON response manually. Via ArduinoJson it did not work somehow.
   String array( "{\"byp\":[" );
@@ -483,6 +578,24 @@ String handleGetAllBypJson( void )
     array += String("{\"name\":\"ls") + String(ii) + String("\",\"val\":");
 
     if( paramLshelv[ii].bypass )
+      array += String( "1}" );
+    else
+      array += String( "0}" );
+
+    array += String( "," );
+  }
+  for( int ii = 0; ii < numPeqBanks; ii++ )
+  {
+    array += String("{\"name\":\"peqbank") + String(ii) + String("\",\"val\":");
+    bool haveBypass = false;
+
+    for(int nn = 0; nn < paramPeqBank[ii].numBands; nn++)
+    {
+      if(paramPeqBank[ii].bypass[nn])
+        haveBypass = true;
+    }
+
+    if(haveBypass)
       array += String( "1}" );
     else
       array += String( "0}" );
@@ -592,7 +705,9 @@ String handleGetAllBypJson( void )
  */
 String handleGetAllFcJson( void )
 {
-  Serial.println( "GET /allfc" );
+  #if DEBUG_PRINT
+  Serial.println(F("GET /allfc"));
+  #endif
 
   if(!numHPs && !numLShelvs && !numPEQs && !numHShelvs && !numLPs && !numPhases && !numDelays && !numGains)
     return String("{\"fc\":[]}");
@@ -698,7 +813,9 @@ String handleGetAllFcJson( void )
  */
 void handleGetAllInputsJson( AsyncWebServerRequest* request )
 {
-  Serial.println( "GET /allinputs" );
+  #if DEBUG_PRINT
+  Serial.println(F("GET /allinputs"));
+  #endif
 
   AsyncJsonResponse* response = new AsyncJsonResponse();
   JsonVariant& jsonResponse = response->getRoot();
@@ -707,7 +824,10 @@ void handleGetAllInputsJson( AsyncWebServerRequest* request )
   uint8_t val;
   String key[] = {"in0", "in1", "in2", "in3", "in4", "in5", "in6", "in7"};
 
-  jsonResponse["num"] = numInputs;
+  if(currentPlugInName == String(F("stereoforever")))
+    jsonResponse["num"] = 0;
+  else
+    jsonResponse["num"] = numInputs;
 
   for( int nn = 0; nn < numInputs; nn++ )
   {
@@ -733,7 +853,9 @@ void handleGetAllInputsJson( AsyncWebServerRequest* request )
  */
 void handleGetSpdifOutJson( AsyncWebServerRequest* request )
 {
-  Serial.println( "GET /spdifout" );
+  #if DEBUG_PRINT
+  Serial.println(F("GET /spdifout"));
+  #endif
 
   AsyncJsonResponse* response = new AsyncJsonResponse();
   JsonVariant& jsonResponse = response->getRoot();
@@ -751,7 +873,9 @@ void handleGetSpdifOutJson( AsyncWebServerRequest* request )
  */
 void handleGetWifiConfigJson( AsyncWebServerRequest* request )
 {
-  Serial.println( "GET /wificonfig" );
+  #if DEBUG_PRINT
+  Serial.println(F("GET /wificonfig"));
+  #endif
 
   AsyncJsonResponse* response = new AsyncJsonResponse();
   JsonVariant& jsonResponse = response->getRoot();
@@ -768,17 +892,15 @@ void handleGetWifiConfigJson( AsyncWebServerRequest* request )
  */
 void handlePostInputJson( AsyncWebServerRequest* request, uint8_t* data )
 {
-  Serial.println( "POST /input" );
-  //Serial.println( "Body:");
-  //for(size_t i=0; i<len; i++)
-  //  Serial.write(data[i]);
-  //Serial.println();
+  #if DEBUG_PRINT
+  Serial.println(F("POST /input"));
+  #endif
 
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
   if( err )
   {
-    Serial.print( "[ERROR] handlePostHpJson(): Deserialization failed. " );
+    Serial.print(F("[ERROR] handlePostHpJson(): Deserialization failed. "));
     Serial.println( err.c_str() );
     request->send( 400, "text/plain", err.c_str() );
     return;
@@ -804,13 +926,15 @@ void handlePostInputJson( AsyncWebServerRequest* request, uint8_t* data )
  */
 void handlePostHpJson( AsyncWebServerRequest* request, uint8_t* data )
 {
-  Serial.println( "POST /hp" );
+  #if DEBUG_PRINT
+  Serial.println(F("POST /hp"));
+  #endif
 
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
   if( err )
   {
-    Serial.print( "[ERROR] handlePostHpJson(): Deserialization failed. " );
+    Serial.print(F("[ERROR] handlePostHpJson(): Deserialization failed. "));
     Serial.println( err.c_str() );
     request->send( 400, "text/plain", err.c_str() );
     return;
@@ -842,17 +966,15 @@ void handlePostHpJson( AsyncWebServerRequest* request, uint8_t* data )
  */
 void handlePostLshelvJson( AsyncWebServerRequest* request, uint8_t* data )
 {
-  Serial.println( "POST /lshelv" );
-  //Serial.println( "Body:");
-  //for(size_t i=0; i<len; i++)
-  //  Serial.write(data[i]);
-  //Serial.println();
+  #if DEBUG_PRINT
+  Serial.println(F("POST /lshelv"));
+  #endif
 
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
   if( err )
   {
-    Serial.print( "[ERROR] handlePostHpJson(): Deserialization failed. " );
+    Serial.print(F("[ERROR] handlePostHpJson(): Deserialization failed. "));
     Serial.println( err.c_str() );
     request->send( 400, "text/plain", err.c_str() );
     return;
@@ -861,11 +983,6 @@ void handlePostLshelvJson( AsyncWebServerRequest* request, uint8_t* data )
   softMuteDAC();
 
   JsonObject root = jsonDoc.as<JsonObject>();
-  Serial.println( root["idx"].as<String>() );
-  Serial.println( root["addr"].as<String>() );
-  Serial.println( root["gain"].as<String>() );
-  Serial.println( root["fc"].as<String>() );
-  Serial.println( root["slope"].as<String>() );
 
   uint32_t idx = static_cast<uint32_t>(root["idx"].as<String>().toInt());
   paramLshelv[idx].gain = root["gain"].as<String>().toFloat();
@@ -883,24 +1000,21 @@ void handlePostLshelvJson( AsyncWebServerRequest* request, uint8_t* data )
   softUnmuteDAC();
 }
 
-
 //==============================================================================
 /*! Handles the POST request for PEQ parameter
  *
  */
 void handlePostPeqJson( AsyncWebServerRequest* request, uint8_t* data )
 {
-  Serial.println( "POST /peq" );
-  //Serial.println( "Body:");
-  //for(size_t i=0; i<len; i++)
-  //  Serial.write(data[i]);
-  //Serial.println();
+  #if DEBUG_PRINT
+  Serial.println(F("POST /peq"));
+  #endif
 
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
   if( err )
   {
-    Serial.print( "[ERROR] handlePostPeqJson(): Deserialization failed. " );
+    Serial.print(F("[ERROR] handlePostPeqJson(): Deserialization failed. "));
     Serial.println( err.c_str() );
     request->send( 400, "text/plain", err.c_str() );
     return;
@@ -909,10 +1023,6 @@ void handlePostPeqJson( AsyncWebServerRequest* request, uint8_t* data )
   softMuteDAC();
 
   JsonObject root = jsonDoc.as<JsonObject>();
-  Serial.println( root["idx"].as<String>() );
-  Serial.println( root["gain"].as<String>() );
-  Serial.println( root["fc"].as<String>() );
-  Serial.println( root["Q"].as<String>() );
 
   uint32_t idx = static_cast<uint32_t>(root["idx"].as<String>().toInt());
   paramPeq[idx].gain = root["gain"].as<String>().toFloat();
@@ -931,22 +1041,63 @@ void handlePostPeqJson( AsyncWebServerRequest* request, uint8_t* data )
 }
 
 //==============================================================================
-/*! Handles the POST request for High Shelving parameter
+/*! Handles the POST request for Peqbank parameter
  *
  */
-void handlePostHshelvJson( AsyncWebServerRequest* request, uint8_t* data )
+void handlePostPeqbankJson( AsyncWebServerRequest* request, uint8_t* data )
 {
-  Serial.println( "POST /hshelv" );
-  //Serial.println( "Body:");
-  //for(size_t i=0; i<len; i++)
-  //  Serial.write(data[i]);
-  //Serial.println();
+  #if DEBUG_PRINT
+  Serial.println(F("POST /peqbank"));
+  #endif
 
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
   if( err )
   {
-    Serial.print( "[ERROR] handlePostHpJson(): Deserialization failed. " );
+    Serial.print(F("[ERROR] handlePostPeqbankJson(): Deserialization failed. "));
+    Serial.println(err.c_str());
+    request->send(400, "text/plain", err.c_str());
+    return;
+  }
+
+  softMuteDAC();
+
+  JsonObject root = jsonDoc.as<JsonObject>();
+
+  uint32_t idx = static_cast<uint32_t>(root["idx"].as<String>().toInt());
+  paramPeqBank[idx].numBands = static_cast<uint32_t>(root["numbands"].as<String>().toInt());
+  for(int nn = 0; nn < paramPeqBank[idx].numBands; nn++)
+  {
+    paramPeqBank[idx].gain[nn] = root["V0"][nn].as<String>().toFloat();
+    paramPeqBank[idx].fc[nn] = root["fc"][nn].as<String>().toFloat();
+    paramPeqBank[idx].Q[nn] = root["Q"][nn].as<String>().toFloat();
+    if(root["bypass"][nn].as<String>().toInt() == 0)
+      paramPeqBank[idx].bypass[nn] = false;
+    else
+      paramPeqBank[idx].bypass[nn] = true;
+  }
+  setPeqBank(idx);
+
+  request->send(200, "text/plain", "");
+
+  softUnmuteDAC();
+}
+
+//==============================================================================
+/*! Handles the POST request for High Shelving parameter
+ *
+ */
+void handlePostHshelvJson( AsyncWebServerRequest* request, uint8_t* data )
+{
+  #if DEBUG_PRINT
+  Serial.println(F("POST /hshelv"));
+  #endif
+
+  DynamicJsonDocument jsonDoc(1024);
+  DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
+  if( err )
+  {
+    Serial.print(F("[ERROR] handlePostHpJson(): Deserialization failed. "));
     Serial.println( err.c_str() );
     request->send( 400, "text/plain", err.c_str() );
     return;
@@ -955,11 +1106,6 @@ void handlePostHshelvJson( AsyncWebServerRequest* request, uint8_t* data )
   softMuteDAC();
 
   JsonObject root = jsonDoc.as<JsonObject>();
-  Serial.println( root["idx"].as<String>() );
-  Serial.println( root["addr"].as<String>() );
-  Serial.println( root["gain"].as<String>() );
-  Serial.println( root["fc"].as<String>() );
-  Serial.println( root["slope"].as<String>() );
 
   uint32_t idx = static_cast<uint32_t>(root["idx"].as<String>().toInt());
   paramHshelv[idx].gain = root["gain"].as<String>().toFloat();
@@ -983,17 +1129,15 @@ void handlePostHshelvJson( AsyncWebServerRequest* request, uint8_t* data )
  */
 void handlePostLpJson( AsyncWebServerRequest* request, uint8_t* data )
 {
-  Serial.println( "POST /lp" );
-  //Serial.println( "Body:");
-  //for(size_t i=0; i<len; i++)
-  //  Serial.write(data[i]);
-  //Serial.println();
+  #if DEBUG_PRINT
+  Serial.println(F("POST /lp"));
+  #endif
 
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
   if( err )
   {
-    Serial.print( "[ERROR] handlePostLpJson(): Deserialization failed. " );
+    Serial.print(F("[ERROR] handlePostLpJson(): Deserialization failed. "));
     Serial.println( err.c_str() );
     request->send( 400, "text/plain", err.c_str() );
     return;
@@ -1002,11 +1146,6 @@ void handlePostLpJson( AsyncWebServerRequest* request, uint8_t* data )
   softMuteDAC();
 
   JsonObject root = jsonDoc.as<JsonObject>();
-  Serial.println( root["idx"].as<String>() );
-  Serial.println( root["addr"].as<String>() );
-  Serial.println( root["fc"].as<String>() );
-  Serial.println( root["typ"].as<String>() );
-  Serial.println( root["bypass"].as<String>() );
 
   uint32_t idx = static_cast<uint32_t>(root["idx"].as<String>().toInt());
   paramLP[idx].fc = root["fc"].as<String>().toFloat();
@@ -1030,17 +1169,15 @@ void handlePostLpJson( AsyncWebServerRequest* request, uint8_t* data )
  */
 void handlePostPhaseJson( AsyncWebServerRequest* request, uint8_t* data )
 {
-  Serial.println( "POST /phase" );
-  //Serial.println( "Body:");
-  //for(size_t i=0; i<len; i++)
-  //  Serial.write(data[i]);
-  //Serial.println();
+  #if DEBUG_PRINT
+  Serial.println(F("POST /phase"));
+  #endif
 
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
   if( err )
   {
-    Serial.print( "[ERROR] handlePostPhaseJson(): Deserialization failed. " );
+    Serial.print(F("[ERROR] handlePostPhaseJson(): Deserialization failed. "));
     Serial.println( err.c_str() );
     request->send( 400, "text/plain", err.c_str() );
     return;
@@ -1049,11 +1186,6 @@ void handlePostPhaseJson( AsyncWebServerRequest* request, uint8_t* data )
   softMuteDAC();
 
   JsonObject root = jsonDoc.as<JsonObject>();
-  Serial.println( root["idx"].as<String>() );
-  Serial.println( root["fc"].as<String>() );
-  Serial.println( root["Q"].as<String>() );
-  Serial.println( root["inv"].as<String>() );
-  Serial.println( root["bypass"].as<String>() );
 
   uint32_t idx = static_cast<uint32_t>(root["idx"].as<String>().toInt());
   paramPhase[idx].fc = root["fc"].as<String>().toFloat();
@@ -1081,17 +1213,15 @@ void handlePostPhaseJson( AsyncWebServerRequest* request, uint8_t* data )
  */
 void handlePostDelayJson( AsyncWebServerRequest* request, uint8_t* data )
 {
-  Serial.println( "POST /delay" );
-  //Serial.println( "Body:");
-  //for(size_t i=0; i<len; i++)
-  //  Serial.write(data[i]);
-  //Serial.println();
+  #if DEBUG_PRINT
+  Serial.println(F("POST /delay"));
+  #endif
 
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
   if( err )
   {
-    Serial.print( "[ERROR] handlePostDelayJson(): Deserialization failed. " );
+    Serial.print(F("[ERROR] handlePostDelayJson(): Deserialization failed. "));
     Serial.println( err.c_str() );
     request->send( 400, "text/plain", err.c_str() );
     return;
@@ -1123,17 +1253,15 @@ void handlePostDelayJson( AsyncWebServerRequest* request, uint8_t* data )
  */
 void handlePostGainJson( AsyncWebServerRequest* request, uint8_t* data )
 {
-  Serial.println( "POST /gain" );
-  //Serial.println( "Body:");
-  //for(size_t i=0; i<len; i++)
-  //  Serial.write(data[i]);
-  //Serial.println();
+  #if DEBUG_PRINT
+  Serial.println(F("POST /gain"));
+  #endif
 
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
   if( err )
   {
-    Serial.print( "[ERROR] handlePostGainJson(): Deserialization failed. " );
+    Serial.print(F("[ERROR] handlePostGainJson(): Deserialization failed. "));
     Serial.println( err.c_str() );
     request->send( 400, "text/plain", err.c_str() );
     return;
@@ -1163,17 +1291,15 @@ void handlePostGainJson( AsyncWebServerRequest* request, uint8_t* data )
  */
 void handlePostXoJson( AsyncWebServerRequest* request, uint8_t* data )
 {
-  Serial.println( "POST /xo" );
-  //Serial.println( "Body:");
-  //for(size_t i=0; i<len; i++)
-  //  Serial.write(data[i]);
-  //Serial.println();
+  #if DEBUG_PRINT
+  Serial.println(F("POST /xo"));
+  #endif
 
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
   if( err )
   {
-    Serial.print( "[ERROR] handlePostXoJson(): Deserialization failed. " );
+    Serial.print(F("[ERROR] handlePostXoJson(): Deserialization failed. "));
     Serial.println( err.c_str() );
     request->send( 400, "text/plain", err.c_str() );
     return;
@@ -1216,13 +1342,15 @@ void handlePostXoJson( AsyncWebServerRequest* request, uint8_t* data )
  */
 void handlePostFirBypassJson( AsyncWebServerRequest* request, uint8_t* data )
 {
-  Serial.println( "POST /firbypass" );
+  #if DEBUG_PRINT
+  Serial.println(F("POST /firbypass"));
+  #endif
 
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
   if( err )
   {
-    Serial.print( "[ERROR] handlePostFirBypassJson(): Deserialization failed. " );
+    Serial.print(F("[ERROR] handlePostFirBypassJson(): Deserialization failed. "));
     Serial.println( err.c_str() );
     request->send( 400, "text/plain", err.c_str() );
     return;
@@ -1255,17 +1383,15 @@ void handlePostFirBypassJson( AsyncWebServerRequest* request, uint8_t* data )
  */
 void handlePostMasterVolumeJson( AsyncWebServerRequest* request, uint8_t* data )
 {
-  Serial.println( "POST /mvol" );
-  //Serial.println( "Body:");
-  //for(size_t i=0; i<len; i++)
-  //  Serial.write(data[i]);
-  //Serial.println();
+  #if DEBUG_PRINT
+  Serial.println(F("POST /mvol"));
+  #endif
 
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
   if( err )
   {
-    Serial.print( "[ERROR] handlePostMasterVolumeJson(): Deserialization failed. " );
+    Serial.print(F("[ERROR] handlePostMasterVolumeJson(): Deserialization failed. "));
     Serial.println( err.c_str() );
     request->send( 400, "text/plain", err.c_str() );
     return;
@@ -1287,11 +1413,9 @@ void handlePostMasterVolumeJson( AsyncWebServerRequest* request, uint8_t* data )
  */
 void handlePostPresetJson( AsyncWebServerRequest* request, uint8_t* data )
 {
-  Serial.println( "POST /preset" );
-  //Serial.println( "Body:");
-  //for(size_t i=0; i<len; i++)
-  //  Serial.write(data[i]);
-  //Serial.println();
+  #if DEBUG_PRINT
+  Serial.println(F("POST /preset"));
+  #endif
 
   if( haveDisplay )
     myDisplay.drawSwitchingPreset();
@@ -1300,9 +1424,9 @@ void handlePostPresetJson( AsyncWebServerRequest* request, uint8_t* data )
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
   if( err )
   {
-    Serial.print( "[ERROR] handlePostPresetJson(): Deserialization failed. " );
-    Serial.println( err.c_str() );
-    request->send( 400, "text/plain", err.c_str() );
+    Serial.print(F("[ERROR] handlePostPresetJson(): Deserialization failed. "));
+    Serial.println(err.c_str());
+    request->send(400, "text/plain", err.c_str());
     return;
   }
 
@@ -1331,24 +1455,21 @@ void handlePostPresetJson( AsyncWebServerRequest* request, uint8_t* data )
  */
 void handlePostConfigJson( AsyncWebServerRequest* request, uint8_t* data )
 {
-  Serial.println( "POST /config" );
+  #if DEBUG_PRINT
+  Serial.println(F("POST /config"));
+  #endif
 
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
   if( err )
   {
-    Serial.print( "[ERROR] handlePostConfigJson(): Deserialization failed. " );
+    Serial.print(F("[ERROR] handlePostConfigJson(): Deserialization failed. "));
     Serial.println( err.c_str() );
     request->send( 400, "text/plain", err.c_str() );
     return;
   }
 
   JsonObject root = jsonDoc.as<JsonObject>();
-  Serial.println( root["aid"].as<String>() );
-  Serial.println( root["vpot"].as<String>() );
-  Serial.println( root["adcsum"].as<String>().toInt() );
-  Serial.println( (uint32_t)strtoul( root["spdifleft"].as<String>().c_str(), NULL, 16 ) );
-  Serial.println( (uint32_t)strtoul( root["spdifright"].as<String>().c_str(), NULL, 16 ) );
 
   Settings.addonid = root["aid"].as<String>().toInt();
   if( root["vpot"].as<String>() == "true" )
@@ -1371,7 +1492,9 @@ void handlePostConfigJson( AsyncWebServerRequest* request, uint8_t* data )
  */
 void handlePostStore( AsyncWebServerRequest* request, uint8_t* data )
 {
-  Serial.println( "POST /store" );
+  #if DEBUG_PRINT
+  Serial.println(F("POST /store"));
+  #endif
 
   softMuteDAC();
 
@@ -1403,11 +1526,6 @@ void handlePostStore( AsyncWebServerRequest* request, uint8_t* data )
 
   for( int ii = 0; ii < numFIRs; ii++ )
   {
-    //size_t len = fileUserParams.write( (uint8_t*)&(paramFir[ii]), sizeof(tFir) );
-    //if( len != sizeof(tFir) )
-    //  Serial.println( "[ERROR] Writing FIRs to " + presetUsrparamFile[currentPreset] );
-    //totalSize += len;
-
     size_t len = fileUserParams.write((uint8_t*)&(paramFir[ii].addr), sizeof(uint16_t));
     len += fileUserParams.write((uint8_t*)&(paramFir[ii].numCoeffs), sizeof(uint16_t));
     len += fileUserParams.write((uint8_t*)&(paramFir[ii].bypass), sizeof(bool));
@@ -1504,12 +1622,27 @@ void handlePostStore( AsyncWebServerRequest* request, uint8_t* data )
     Serial.println( "[ERROR] Writing SPDIF out to " + presetUsrparamFile[currentPreset] );
   totalSize += len;
 
+  for(int ii = 0; ii < numPeqBanks; ii++)
+  {
+    size_t len = fileUserParams.write((uint8_t*)&(paramPeqBank[ii].numBands), sizeof(uint16_t));
+    len += fileUserParams.write((uint8_t*)(paramPeqBank[ii].gain), sizeof(float) * MAX_BANDS_PER_PEQBANK);
+    len += fileUserParams.write((uint8_t*)(paramPeqBank[ii].fc), sizeof(float) * MAX_BANDS_PER_PEQBANK);
+    len += fileUserParams.write((uint8_t*)(paramPeqBank[ii].Q), sizeof(float) * MAX_BANDS_PER_PEQBANK);
+    len += fileUserParams.write((uint8_t*)(paramPeqBank[ii].bypass), sizeof(bool) * MAX_BANDS_PER_PEQBANK);
+    if(len != sizeof(uint16_t) + 3 * sizeof(float) * MAX_BANDS_PER_PEQBANK + sizeof(bool) * MAX_BANDS_PER_PEQBANK)
+    {  
+      Serial.print(F("[ERROR] Writing Peqbank to "));
+      Serial.println(presetUsrparamFile[currentPreset]);
+    }
+    totalSize += len;
+  }
+
   fileUserParams.flush();
   fileUserParams.close();
 
-  Serial.print( "Wrote " );
+  Serial.print(F("Wrote "));
   Serial.print( totalSize );
-  Serial.println( "bytes" );
+  Serial.println(F("bytes"));
 
   fileName = presetAddonCfgFile[currentPreset];
 
@@ -1541,9 +1674,9 @@ void handlePostStore( AsyncWebServerRequest* request, uint8_t* data )
   fileAddonConfig.flush();
   fileAddonConfig.close();
 
-  Serial.print( "Wrote " );
+  Serial.print(F("Wrote "));
   Serial.print( totalSize );
-  Serial.println( "bytes" );
+  Serial.println(F("bytes"));
 
   request->send(200, "text/plain", "");
 
@@ -1556,17 +1689,15 @@ void handlePostStore( AsyncWebServerRequest* request, uint8_t* data )
  */
 void handlePostAddonConfigJson( AsyncWebServerRequest* request, uint8_t* data )
 {
-  Serial.println( "POST /addoncfg" );
-  //Serial.println( "Body:");
-  //for(size_t i=0; i<len; i++)
-  //  Serial.write(data[i]);
-  //Serial.println();
+  #if DEBUG_PRINT
+  Serial.println(F("POST /addoncfg"));
+  #endif
 
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
   if( err )
   {
-    Serial.print( "[ERROR] handlePostAddonConfig(): Deserialization failed. " );
+    Serial.print(F("[ERROR] handlePostAddonConfig(): Deserialization failed. "));
     Serial.println( err.c_str() );
     request->send( 400, "text/plain", err.c_str() );
     return;
@@ -1602,17 +1733,15 @@ void handlePostAddonConfigJson( AsyncWebServerRequest* request, uint8_t* data )
  */
 void handlePostWifiConfigJson( AsyncWebServerRequest* request, uint8_t* data )
 {
-  Serial.println( "POST /wifi" );
-  //Serial.println( "Body:");
-  //for(size_t i=0; i<len; i++)
-  //  Serial.write(data[i]);
-  //Serial.println();
+  #if DEBUG_PRINT
+  Serial.println(F("POST /wifi"));
+  #endif
 
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
   if( err )
   {
-    Serial.print( "[ERROR] handlePostWifiConfigJson(): Deserialization failed. " );
+    Serial.print(F("[ERROR] handlePostWifiConfigJson(): Deserialization failed. "));
     Serial.println( err.c_str() );
     request->send( 400, "text/plain", err.c_str() );
     return;
@@ -1634,17 +1763,15 @@ void handlePostWifiConfigJson( AsyncWebServerRequest* request, uint8_t* data )
  */
 void handlePostPasswordApJson( AsyncWebServerRequest* request, uint8_t* data )
 {
-  Serial.println( "POST /pwdap" );
-  //Serial.println( "Body:");
-  //for(size_t i=0; i<len; i++)
-  //  Serial.write(data[i]);
-  //Serial.println();
+  #if DEBUG_PRINT
+  Serial.println(F("POST /pwdap"));
+  #endif
 
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
   if( err )
   {
-    Serial.print( "[ERROR] handlePostPasswordApJson(): Deserialization failed. " );
+    Serial.print(F("[ERROR] handlePostPasswordApJson(): Deserialization failed. "));
     Serial.println( err.c_str() );
     request->send( 400, "text/plain", err.c_str() );
     return;
@@ -1666,13 +1793,15 @@ void handlePostPasswordApJson( AsyncWebServerRequest* request, uint8_t* data )
  */
 void handlePostSpdifOutJson( AsyncWebServerRequest* request, uint8_t* data )
 {
-  Serial.println( "POST /spdifout" );
+  #if DEBUG_PRINT
+  Serial.println(F("POST /spdifout"));
+  #endif
 
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
   if( err )
   {
-    Serial.print( "[ERROR] handlePostConfigJson(): Deserialization failed. " );
+    Serial.print(F("[ERROR] handlePostConfigJson(): Deserialization failed. "));
     Serial.println( err.c_str() );
     request->send( 400, "text/plain", err.c_str() );
     return;
@@ -1696,7 +1825,9 @@ void handleFileUpload( AsyncWebServerRequest* request, uint8_t* data, size_t len
 {
   if (!index)
   {
-    Serial.println("POST /upload");
+    #if DEBUG_PRINT
+    Serial.println(F("POST /upload"));
+    #endif
 
     if( request->hasParam( "fname" ) )
     {
@@ -1775,13 +1906,15 @@ void handleIrUpload( AsyncWebServerRequest* request, uint8_t* data, size_t len, 
 {
   if(!index)
   {
-    Serial.println("POST /fir");
+    #if DEBUG_PRINT
+    Serial.println(F("POST /fir"));
+    #endif
     if( request->hasParam( "idx" ) )
     {
       AsyncWebParameter* idx = request->getParam(0);
       currentFirUploadIdx = idx->value().toInt();
     }
-    if( request->hasParam( "bypass" ) )
+    if(request->hasParam("bypass"))
     {
       AsyncWebParameter* bypass = request->getParam(1);
       if( bypass->value().toInt() )
@@ -1809,7 +1942,7 @@ void handleIrUpload( AsyncWebServerRequest* request, uint8_t* data, size_t len, 
     delay(250);
     softUnmuteDAC();
 
-    Serial.println( "[OK]" );
+    Serial.println(F("[OK]"));
   }
 
 }
@@ -1821,13 +1954,15 @@ void handleIrUpload( AsyncWebServerRequest* request, uint8_t* data, size_t len, 
  */
 void handlePostNamesJson(AsyncWebServerRequest* request, uint8_t* data)
 {
-  Serial.println("POST /chname");
+  #if DEBUG_PRINT
+  Serial.println(F("POST /chname"));
+  #endif
 
   DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson(jsonDoc, (const char*)data);
   if( err )
   {
-    Serial.print("[ERROR] handlePostNamesJson(): Deserialization failed.");
+    Serial.print(F("[ERROR] handlePostNamesJson(): Deserialization failed."));
     Serial.println(err.c_str());
     request->send(400, "text/plain", err.c_str());
     return;
@@ -1861,7 +1996,9 @@ void handlePostNamesJson(AsyncWebServerRequest* request, uint8_t* data)
  */
 String handleGetAllNamesJson( void )
 {
-  Serial.println( "GET /allnames" );
+  #if DEBUG_PRINT
+  Serial.println(F("GET /allnames"));
+  #endif
 
   // Build the JSON response manually. Via ArduinoJson it did not work somehow.
   String array("{");
@@ -1920,6 +2057,7 @@ void setupWebserver (void)
   server.on( "/hp",           HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetHpJson(request); });
   server.on( "/lshelv",       HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetLshelvJson(request); });
   server.on( "/peq",          HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetPeqJson(request); });
+  server.on( "/peqbank",      HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetPeqBankJson(request); });
   server.on( "/hshelv",       HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetHshelvJson(request); });
   server.on( "/lp",           HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetLpJson(request); });
   server.on( "/phase",        HTTP_GET, [](AsyncWebServerRequest *request ) { handleGetPhaseJson(request); });
@@ -1960,6 +2098,10 @@ void setupWebserver (void)
   server.on( "/peq", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
   {
     handlePostPeqJson( request, data );
+  });
+  server.on( "/peqbank", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
+  {
+    handlePostPeqbankJson( request, data );
   });
   server.on( "/hshelv", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
   {

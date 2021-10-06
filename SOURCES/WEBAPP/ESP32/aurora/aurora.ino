@@ -80,26 +80,26 @@ IRrecv irReceiver( IR_RECEIVER_PIN );
  */
 void uploadDspFirmware( void )
 {
-  Serial.print( "Init dsp......" );
+  Serial.print(F("Init dsp......"));
 
-  if( !SPIFFS.exists( "/dsp.fw" ) )
+  if(!SPIFFS.exists(F("/dsp.fw")))
   {
-    Serial.println( "File does not exist yet" );
+    Serial.println(F("File does not exist yet"));
     return;
   }
 
-  fileDspProgram = SPIFFS.open( "/dsp.fw" );
+  fileDspProgram = SPIFFS.open(F("/dsp.fw"));
 
   uint32_t numBytesToRead = 0;
   byte byteReadMSB;
   byte byteReadLSB;
   uint16_t regaddr;
 
-  if( fileDspProgram )
+  if(fileDspProgram)
   {
     size_t len = fileDspProgram.size();
     int cntr = 0;
-    while( cntr < len )
+    while(cntr < len)
     {
       uint8_t byteRead;
       fileDspProgram.read( &byteRead, 1 );
@@ -113,89 +113,69 @@ void uploadDspFirmware( void )
 
       cntr += 4;
 
-      //Serial.print( "numBytesToRead " );
-      //Serial.println( numBytesToRead );
-
       //------------------------------------------------------------------------
       //--- Send register address and value
       //------------------------------------------------------------------------
-      if( numBytesToRead > 0 )
+      if(numBytesToRead > 0)
       {
-        fileDspProgram.read( &byteRead, 1 );
+        fileDspProgram.read(&byteRead, 1);
         regaddr = ((uint16_t)byteRead) << 8;
         cntr++;
 
-        fileDspProgram.read( &byteRead, 1 );
+        fileDspProgram.read(&byteRead, 1);
         regaddr += byteRead;
         cntr++;
 
-        if( numBytesToRead == 4 )
+        if(numBytesToRead == 4)
         {
-          fileDspProgram.read( &byteReadMSB, 1 );
+          fileDspProgram.read(&byteReadMSB, 1);
           cntr++;
-          fileDspProgram.read( &byteReadLSB, 1 );
+          fileDspProgram.read(&byteReadLSB, 1);
           cntr++;
 
-          if( regaddr == 0x0000 )
-            delay( 500 );
+          if(regaddr == 0x0000)
+            delay(500);
           else
           {
-            ADAU1452_WRITE_REGISTER( regaddr, byteReadMSB, byteReadLSB );
-            if( cntr % 4096 == 0 )
-              Serial.print( "." );
-            /*if( cntr < 1000 )
-            {
-              Serial.print( cntr );
-              Serial.print( " ");
-              Serial.print(regaddr, HEX);
-              Serial.print(" ");
-              Serial.print( byteReadMSB, HEX );
-              Serial.println( byteReadLSB, HEX );
-            }*/
+            ADAU1452_WRITE_REGISTER(regaddr, byteReadMSB, byteReadLSB);
+            if(cntr % 4096 == 0)
+              Serial.print(F("."));
           }
         }
-        else if( numBytesToRead > 4 )
+        else if(numBytesToRead > 4)
         {
           uint16_t addr = regaddr;
           byte val[4];
 
-          for( uint32_t ii = 0; ii < numBytesToRead - 2; ii = ii + 4 )
+          for(uint32_t ii = 0; ii < numBytesToRead - 2; ii = ii + 4)
           {
-            fileDspProgram.read( &(val[0]), 1 );
-            fileDspProgram.read( &(val[1]), 1 );
-            fileDspProgram.read( &(val[2]), 1 );
-            fileDspProgram.read( &(val[3]), 1 );
+            fileDspProgram.read(&(val[0]), 1);
+            fileDspProgram.read(&(val[1]), 1);
+            fileDspProgram.read(&(val[2]), 1);
+            fileDspProgram.read(&(val[3]), 1);
             cntr += 4;
-            ADAU1452_WRITE_BLOCK( addr, val, 4 );
-            if( cntr % 4096 == 0 )
-              Serial.print( "." );
-            /*if( cntr < 1000 )
-            {
-              Serial.print( cntr );
-              Serial.print( " ");
-              Serial.print(addr, HEX);
-              Serial.print(" ");
-              Serial.println(*(uint32_t*)val, HEX );
-            }*/
+            ADAU1452_WRITE_BLOCK(addr, val, 4);
+            if(cntr % 4096 == 0)
+              Serial.print(F("."));
             addr++;
           }
         }
         else
         {
-          Serial.print( "[ERROR] Bad number of bytes: " );
-          Serial.println( numBytesToRead );
+          Serial.print(F("[ERROR] Bad number of bytes: "));
+          Serial.println(numBytesToRead);
         }
       }
     }
     int file_size = fileDspProgram.size();
 
     fileDspProgram.close();
-    Serial.println( "[OK]" );
-    Serial.print( "File size: " );
-    Serial.println( file_size );
+    Serial.println(F("[OK]"));
+    Serial.print(F("File size: "));
+    Serial.println(file_size);
   }
   else
-    Serial.println( "\n[ERROR] Failed to open file dsp.fw" );
+    Serial.println(F("\n[ERROR] Failed to open file dsp.fw"));
 }
 
 #if HAVE_DISPLAY
@@ -253,73 +233,73 @@ void myWiFiTask(void *pvParameters)
   IPAddress subnet(255, 255, 255, 0);
 
   WiFi.mode(WIFI_AP_STA);
-  WiFi.setHostname( "freeDSP-aurora" );
+  WiFi.setHostname("freeDSP-aurora");
   // Start access point
   if( Settings.pwdap.length() > 0 )
   {
-    Serial.print( "AP password protected " );
-    Serial.println( Settings.apname );
-    WiFi.softAP( Settings.apname.c_str(), Settings.pwdap.c_str() );
+    Serial.print(F("AP password protected "));
+    Serial.println(Settings.apname);
+    WiFi.softAP(Settings.apname.c_str(), Settings.pwdap.c_str());
   }
   else
   {
-    Serial.print( "AP open: " );
-    Serial.println( Settings.apname );
-    WiFi.softAP( Settings.apname.c_str() );
+    Serial.print(F("AP open: "));
+    Serial.println(Settings.apname);
+    WiFi.softAP(Settings.apname.c_str());
   }
   delay(100);
 
-  if( !WiFi.softAPConfig( ip, ip, subnet ) )
-    Serial.println("AP Config Failed");
+  if(!WiFi.softAPConfig(ip, ip, subnet))
+    Serial.println(F("AP Config Failed"));
 
   // Start server
   server.begin();
 
-  while (true)
+  while(true)
   {
-    if( (Settings.ssid.length() > 0) &&  (cntrAuthFailure < 10) )
+    if((Settings.ssid.length() > 0) &&  (cntrAuthFailure < 10))
     {
       state = WiFi.status();
-      if( state != WL_CONNECTED )
+      if(state != WL_CONNECTED)
       {
         //if (state == WL_NO_SHIELD)
-        if( firstConnectAttempt )
+        if(firstConnectAttempt)
         {
           firstConnectAttempt = false;
-          Serial.print( "Connecting to " );
-          Serial.println( Settings.ssid.c_str() );
+          Serial.print(F("Connecting to "));
+          Serial.println(Settings.ssid.c_str());
           WiFi.begin(Settings.ssid.c_str(), Settings.password.c_str());
           cntrAuthFailure++;
         }
-        else if( state == WL_IDLE_STATUS )
+        else if(state == WL_IDLE_STATUS)
         {
-          Serial.println( "Idle" );
+          Serial.println(F("Idle"));
         }
-        else if( state == WL_NO_SSID_AVAIL )
+        else if(state == WL_NO_SSID_AVAIL)
         {
-          Serial.println( "No SSID available" );
+          Serial.println(F("No SSID available"));
         }
-        else if( state == WL_CONNECTION_LOST )
+        else if(state == WL_CONNECTION_LOST)
         {
-          Serial.println("WiFi connection lost");
+          Serial.println(F("WiFi connection lost"));
           WiFi.disconnect(true);
           cntrAuthFailure++;
         }
         // else if( state == WL_SCAN_COMPLETED )
-        else if( state == WL_CONNECT_FAILED )
+        else if(state == WL_CONNECT_FAILED)
         {
-          Serial.println("WiFi connection failed");
+          Serial.println(F("WiFi connection failed"));
           WiFi.disconnect(true);
           cntrAuthFailure++;
         }
-        else if( state == WL_DISCONNECTED )
+        else if(state == WL_DISCONNECTED)
         {
-          if (!myWiFiFirstConnect)
+          if(!myWiFiFirstConnect)
           {
             myWiFiFirstConnect = true;
-            Serial.println( "WiFi disconnected" );
+            Serial.println(F("WiFi disconnected"));
           }
-          Serial.println("No Connection -> Wifi Reset");
+          Serial.println(F("No Connection -> Wifi Reset"));
           WiFi.persistent(false);
           WiFi.disconnect();
           WiFi.mode(WIFI_OFF);
@@ -334,21 +314,21 @@ void myWiFiTask(void *pvParameters)
       }
       else // We have connection
       {
-        if( myWiFiFirstConnect ) // Report only once
+        if(myWiFiFirstConnect) // Report only once
         {
           myWiFiFirstConnect = false;
           cntrAuthFailure = 0;
-          Serial.println( "Connected" );
-          Serial.print( "IP address: " );
-          Serial.println( WiFi.localIP() );
-          Serial.println( WiFi.getHostname() );
+          Serial.println(F("Connected"));
+          Serial.print(F("IP address: "));
+          Serial.println(WiFi.localIP());
+          Serial.println(WiFi.getHostname());
           needUpdateUI = true;
         }
-        vTaskDelay (5000); // Check again in about 5s
+        vTaskDelay(5000); // Check again in about 5s
       }
     }
     else
-      vTaskDelay (5000);
+      vTaskDelay(5000);
   }
 }
 
@@ -360,7 +340,7 @@ void myWiFiTask(void *pvParameters)
 void setup()
 {
   Serial.begin(115200);
-  Serial.println( "AURORA Debug Log" );
+  Serial.println(F("AURORA Debug Log"));
   Serial.println( VERSION_STR );
 
   //----------------------------------------------------------------------------
@@ -395,7 +375,7 @@ void setup()
   Wire.beginTransmission(SSD1309_I2C_ADDR);
   if(Wire.endTransmission(true) == 0)
   {
-    Serial.println("Detected SSD1309 display");
+    Serial.println(F("Detected SSD1309 display"));
     SSD1309.setI2CAddress(SSD1309_I2C_ADDR<<1);
     myDisplay.begin(&SSD1309);
     haveDisplay = true;
@@ -405,7 +385,7 @@ void setup()
     Wire.beginTransmission(SH1106_I2C_ADDR);
     if(Wire.endTransmission(true) == 0)
     {
-      Serial.println("Detected SH1106 display");
+      Serial.println(F("Detected SH1106 display"));
       myDisplay.begin(&SH1106);
       haveDisplay = true;
     }
@@ -425,78 +405,78 @@ void setup()
   //----------------------------------------------------------------------------
   //--- Configure DAC
   //----------------------------------------------------------------------------
-  Serial.println( "Config DAC" );
+  Serial.println(F("Config DAC"));
   configDAC();
 
   //----------------------------------------------------------------------------
   //--- Configure ADC
   //----------------------------------------------------------------------------
-  Serial.println( "Config ADC" );
+  Serial.println(F("Config ADC"));
   configADC();
 
   //----------------------------------------------------------------------------
   //--- Start SPIFFS
   //----------------------------------------------------------------------------
-  if( !SPIFFS.begin( true ) )
+  if(!SPIFFS.begin(true))
   {
-    Serial.println("An Error has occurred while mounting SPIFFS");
+    Serial.println(F("An Error has occurred while mounting SPIFFS"));
     return;
   }
 
   //--- check for old stuff (version == 1.x.x)
   String fileName = "/dspfw.hex";
-  if( SPIFFS.exists( fileName ) )
+  if(SPIFFS.exists(fileName))
   {
-    if( SPIFFS.remove( fileName ) )
-      Serial.println( fileName + " deleted." );
+    if( SPIFFS.remove(fileName))
+      Serial.println(fileName + " deleted.");
     else
-      Serial.println( "[ERROR] Deleting " + fileName );
+      Serial.println("[ERROR] Deleting " + fileName );
   }
   fileName = "/dspparam.001";
-  if( SPIFFS.exists( fileName ) )
+  if(SPIFFS.exists(fileName))
   {
-    if( SPIFFS.remove( fileName ) )
-      Serial.println( fileName + " deleted." );
+    if(SPIFFS.remove(fileName))
+      Serial.println(fileName + " deleted.");
     else
-      Serial.println( "[ERROR] Deleting " + fileName );
+      Serial.println("[ERROR] Deleting " + fileName);
   }
   fileName = "/dspparam.002";
-  if( SPIFFS.exists( fileName ) )
+  if(SPIFFS.exists(fileName))
   {
-    if( SPIFFS.remove( fileName ) )
-      Serial.println( fileName + " deleted." );
+    if(SPIFFS.remove(fileName))
+      Serial.println(fileName + F(" deleted."));
     else
-      Serial.println( "[ERROR] Deleting " + fileName );
+      Serial.println("[ERROR] Deleting " + fileName);
   }
   fileName = "/dspparam.003";
-  if( SPIFFS.exists( fileName ) )
+  if(SPIFFS.exists(fileName))
   {
-    if( SPIFFS.remove( fileName ) )
-      Serial.println( fileName + " deleted." );
+    if(SPIFFS.remove(fileName))
+      Serial.println(fileName + " deleted.");
     else
-      Serial.println( "[ERROR] Deleting " + fileName );
+      Serial.println("[ERROR] Deleting " + fileName);
   }
   fileName = "/dspparam.004";
-  if( SPIFFS.exists( fileName ) )
+  if(SPIFFS.exists(fileName))
   {
-    if( SPIFFS.remove( fileName ) )
-      Serial.println( fileName + " deleted." );
+    if(SPIFFS.remove(fileName))
+      Serial.println(fileName + F(" deleted."));
     else
-      Serial.println( "[ERROR] Deleting " + fileName );
+      Serial.println("[ERROR] Deleting " + fileName);
   }
 
-  Serial.print( "Free disk space: " );
+  Serial.print(F("Free disk space: "));
   Serial.print( (SPIFFS.totalBytes() - SPIFFS.usedBytes()) / 1024 );
-  Serial.println( "KiB" );
+  Serial.println(F("KiB"));
 
   File root = SPIFFS.open("/");
   File file = root.openNextFile();
   while(file)
   {
-    Serial.print( file.name() );
-    Serial.print( " " );
-    Serial.print( file.size() );
-    Serial.println( " Bytes" );
+    Serial.print(file.name());
+    Serial.print(F(" "));
+    Serial.print(file.size());
+    Serial.println(F(" Bytes"));
     file = root.openNextFile();
   }
 
@@ -513,9 +493,9 @@ void setup()
     Serial.println(F("[OK]"));
   }
 
-  Serial.print( F("Init user parameter......") );
+  Serial.print(F("Init user parameter......"));
   initUserParams();
-  Serial.println( F("[OK]") );
+  Serial.println(F("[OK]"));
   readPluginMeta();
 
   //----------------------------------------------------------------------------
@@ -523,7 +503,7 @@ void setup()
   //----------------------------------------------------------------------------
   if(currentPlugInName == String(F("stereoforever")))
   {
-    if(!SPIFFS.exists("/vinputs.txt"))
+    if(!SPIFFS.exists(F("/vinputs.txt")))
       // if file does not exist, write it with defautl values
       writeVirtualInputRouting();
     else
@@ -571,14 +551,14 @@ void setup()
   irReceiver.enableIRIn();
   #endif
 
-  resetDAC( false );
+  resetDAC(false);
 
   updateUI();
 
   lastREsw = rotaryEncoder.getSwitchValue();
   lastREval = rotaryEncoder.getRotationValue();
 
-  Serial.println( "Ready" );
+  Serial.println(F("Ready"));
 }
 
 //==============================================================================

@@ -6,16 +6,17 @@
 
 tSettings Settings;
 
-tInput paramInputs[8];
-tHPLP paramHP[8];
-tShelving paramLshelv[8];
-tPeq paramPeq[80];
-tShelving paramHshelv[8];
-tHPLP paramLP[8];
-tPhase paramPhase[8];
-tDelay paramDelay[8];
-tGain paramGain[8];
-tCrossover paramCrossover[8];
+tInput paramInputs[MAX_NUM_INPUTS];
+tHPLP paramHP[MAX_NUM_HPS];
+tShelving paramLshelv[MAX_NUM_LSHELVS];
+tPeq paramPeq[MAX_NUM_PEQS];
+tPeqBank paramPeqBank[MAX_NUM_PEQBANKS];
+tShelving paramHshelv[MAX_NUM_HSHELVS];
+tHPLP paramLP[MAX_NUM_LPS];
+tPhase paramPhase[MAX_NUM_PHASES];
+tDelay paramDelay[MAX_NUM_DELAYS];
+tGain paramGain[MAX_NUM_GAINS];
+tCrossover paramCrossover[MAX_NUM_CROSSOVER];
 tFir paramFir[MAX_NUM_FIRS];
 tMasterVolume masterVolume = { 0x0000, -60.0 };
 tInputSelector inputSelector;
@@ -34,6 +35,7 @@ int numDelays = 0;
 int numGains = 0;
 int numCrossovers = 0;
 int numFIRs = 0;
+int numPeqBanks = 0;
 
 float sampleRate = 48000.0;
 
@@ -93,6 +95,7 @@ void readPluginMeta( void )
     numGains = jsonPluginMeta["ngain"].as<String>().toInt();
     numCrossovers = jsonPluginMeta["nxo"].as<String>().toInt();
     numFIRs = jsonPluginMeta["nfir"].as<String>().toInt();
+    numPeqBanks = jsonPluginMeta["npeqbank"].as<String>().toInt();
 
     for( int ii = 0; ii < numInputs; ii++ )
       inputSelector.analog[ii] = static_cast<uint16_t>(jsonPluginMeta["analog"][ii].as<String>().toInt());
@@ -132,7 +135,18 @@ void readPluginMeta( void )
 
     for( int ii = 0; ii < numPEQs; ii++ )
       paramPeq[ii].addr = static_cast<uint16_t>(jsonPluginMeta["peq"][ii]);
-
+    
+    int peqoffset = 0;
+    for( int ii = 0; ii < numPeqBanks; ii++ )
+    {
+      paramPeqBank[ii].numBands = static_cast<uint16_t>(jsonPluginMeta["peqbands"][ii]);
+      for(int nn = 0; nn < paramPeqBank[ii].numBands; nn++)
+      {
+        paramPeqBank[ii].addr[nn] = static_cast<uint16_t>(jsonPluginMeta["peqbank"][peqoffset]);
+        peqoffset++;
+      }
+    }
+      
     for( int ii = 0; ii < numHShelvs; ii++ )
       paramHshelv[ii].addr = static_cast<uint16_t>(jsonPluginMeta["hshelv"][ii]);
 
@@ -253,6 +267,18 @@ void initUserParams( void )
       paramPeq[ii + nn].Q = 0.707;
       paramPeq[ii].bypass = false;
     }
+  }
+
+  for( int ii = 0; ii < MAX_NUM_PEQBANKS; ii++ )
+  {
+    for( int nn = 0; nn < MAX_BANDS_PER_PEQBANK; nn++ )
+    {
+      paramPeqBank[ii].gain[nn] = 0.0;
+      paramPeqBank[ii].fc[nn] = static_cast<float>( (nn+1)*1000 );
+      paramPeqBank[ii].Q[nn] = 0.707;
+      paramPeqBank[ii].bypass[nn] = false;
+    }
+    paramPeqBank[ii].numBands = MAX_BANDS_PER_PEQBANK;
   }
 
   for( int ii = 0; ii < MAX_NUM_HSHELVS; ii++ )

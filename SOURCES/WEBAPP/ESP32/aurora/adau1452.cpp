@@ -631,6 +631,68 @@ void setPEQ( int idx )
   }
 }
 
+//==============================================================================
+/*! Sets the values for a peq bank on DSP.
+ *
+ */
+void setPeqBank(int idx)
+{
+  for(uint32_t nn = 0; nn < paramPeqBank[idx].numBands; nn++)
+  {
+    if( (paramPeqBank[idx].fc[nn] > 0.0) && (paramPeqBank[idx].fc[nn] < 20000.0)
+      && (paramPeqBank[idx].gain[nn] >= -24.0) && (paramPeqBank[idx].gain[nn] <= 24.0)
+      && (paramPeqBank[idx].Q[nn] >= 0.1) && (paramPeqBank[idx].Q[nn] <= 100.0) )
+    {
+      float a[3] = { 1.0, 0.0, 0.0 };
+      float b[3] = { 1.0, 0.0, 0.0 };
+      byte val[4];
+      uint32_t floatval;
+      if(!(paramPeqBank[idx].bypass[nn]))
+        AudioFilterFactory::makeParametricEQ(a, b, paramPeqBank[idx].gain[nn], paramPeqBank[idx].fc[nn], paramPeqBank[idx].Q[nn], sampleRate);
+
+      uint32_t addr = paramPeqBank[idx].addr[nn];
+      floatval = convertTo824(b[2]);
+      val[0] = (floatval >> 24 ) & 0xFF;
+      val[1] = (floatval >> 16 ) & 0xFF;
+      val[2] = (floatval >> 8 ) & 0xFF;
+      val[3] =  floatval & 0xFF;
+      ADAU1452_WRITE_BLOCK(addr, val, 4);  // B2
+      addr++;
+
+      floatval = convertTo824(b[1]);
+      val[0] = (floatval >> 24 ) & 0xFF;
+      val[1] = (floatval >> 16 ) & 0xFF;
+      val[2] = (floatval >> 8 ) & 0xFF;
+      val[3] =  floatval & 0xFF;
+      ADAU1452_WRITE_BLOCK(addr, val, 4);  // B1
+      addr++;
+
+      floatval = convertTo824(b[0]);
+      val[0] = (floatval >> 24 ) & 0xFF;
+      val[1] = (floatval >> 16 ) & 0xFF;
+      val[2] = (floatval >> 8 ) & 0xFF;
+      val[3] =  floatval & 0xFF;
+      ADAU1452_WRITE_BLOCK(addr, val, 4);  // B0
+      addr++;
+
+      floatval = convertTo824(a[2]);
+      val[0] = (floatval >> 24 ) & 0xFF;
+      val[1] = (floatval >> 16 ) & 0xFF;
+      val[2] = (floatval >> 8 ) & 0xFF;
+      val[3] =  floatval & 0xFF;
+      ADAU1452_WRITE_BLOCK(addr, val, 4);  // A2
+      addr++;
+
+      floatval = convertTo824(a[1]);
+      val[0] = (floatval >> 24 ) & 0xFF;
+      val[1] = (floatval >> 16 ) & 0xFF;
+      val[2] = (floatval >> 8 ) & 0xFF;
+      val[3] =  floatval & 0xFF;
+      ADAU1452_WRITE_BLOCK(addr, val, 4);  // A1
+    }
+  }
+}
+
 
 //==============================================================================
 /*! Sets the values for a phase block on DSP.
@@ -966,13 +1028,40 @@ void uploadUserParams( void )
       }
       totalSize += len;
 
-      Serial.println( "[OK]" );
-      Serial.print( "Read " );
-      Serial.print( totalSize );
-      Serial.println( "bytes" );
+      for(int ii = 0; ii < numPeqBanks; ii++)
+      {
+        tPeqBank paramPeqBankTemp;
+        size_t len = fileUserParams.read((uint8_t*)&(paramPeqBankTemp.numBands), sizeof(uint16_t));
+        len += fileUserParams.read((uint8_t*)(paramPeqBankTemp.gain), sizeof(float) * MAX_BANDS_PER_PEQBANK);
+        len += fileUserParams.read((uint8_t*)(paramPeqBankTemp.fc), sizeof(float) * MAX_BANDS_PER_PEQBANK);
+        len += fileUserParams.read((uint8_t*)(paramPeqBankTemp.Q), sizeof(float) * MAX_BANDS_PER_PEQBANK);
+        len += fileUserParams.read((uint8_t*)(paramPeqBankTemp.bypass), sizeof(bool) * MAX_BANDS_PER_PEQBANK);
+        if(len != sizeof(uint16_t) + 3 * sizeof(float) * MAX_BANDS_PER_PEQBANK + sizeof(bool) * MAX_BANDS_PER_PEQBANK)
+        {  
+          Serial.print(F("[ERROR] Reading Peqbank from "));
+          Serial.println(presetUsrparamFile[currentPreset]);
+        }
+        else
+        {
+          paramPeqBank[ii].numBands = paramPeqBankTemp.numBands;
+          for(int nn = 0; nn < paramPeqBank[ii].numBands; nn++)
+          {
+            paramPeqBank[ii].gain[nn] = paramPeqBankTemp.gain[nn];
+            paramPeqBank[ii].fc[nn] = paramPeqBankTemp.fc[nn];
+            paramPeqBank[ii].Q[nn] = paramPeqBankTemp.Q[nn];
+            paramPeqBank[ii].bypass[nn] = paramPeqBankTemp.bypass[nn];
+          }
+        }
+        totalSize += len;
+      }
+
+      Serial.println(F("[OK]"));
+      Serial.print(F("Read "));
+      Serial.print(totalSize);
+      Serial.println(F("bytes"));
     }
     else
-      Serial.println( "[ERROR] uploadUserParams(): Reading preset file failed." );
+      Serial.println(F("[ERROR] uploadUserParams(): Reading preset file failed."));
 
     fileUserParams.close();
 
