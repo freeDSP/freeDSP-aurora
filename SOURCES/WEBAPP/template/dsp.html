@@ -117,7 +117,7 @@
   </td><td>
   <table style="border-spacing: 5px 10px;">
     <tr>
-    <td id="chnlbl_0" class="rotate" ondblclick="renameChannel('chnlbl_0')">
+    <td id="input0" class="rotate">
     Channel 1
     <td style="min-width:80px">
     <select id="chn0" onchange="postInputJson('chn0',0);">
@@ -140,13 +140,13 @@
       <option value="0x00040000">SPDIF L</option>
       <option value="0x00040001">SPDIF R</option>
     </select></td>
-    <td style="min-width:60px" id="chnlbl_8" ondblclick="renameChannel('chnlbl_8')">OUT 1</td>
+    <td style="min-width:60px" id="output0">OUT 1</td>
     <td rowspan="8" style="max-width: 80px;">
       <input type="range" id="mvol" class="volslider" min="-80" max="0" onchange="postMVol()"/>  
       <div style="transform: translateY(240px);">Master<br>Volume</div>  
     </td></tr>
   
-    <tr><td id="chnlbl_1" class="rotate" ondblclick="renameChannel('chnlbl_1')">
+    <tr><td id="input1" class="rotate">
     Channel 2
     </td><td>
     <select id="chn1" onchange="postInputJson('chn1',1);">
@@ -169,10 +169,10 @@
       <option value="0x00040000">SPDIF L</option>
       <option value="0x00040001">SPDIF R</option>
     </select></td>
-    <td id="chnlbl_9" ondblclick="renameChannel('chnlbl_9')">OUT 2</td>
+    <td id="output1">OUT 2</td>
     </tr>
   
-    <tr><td id="chnlbl_2" class="rotate" ondblclick="renameChannel('chnlbl_2')">
+    <tr><td id="input2" class="rotate">
     Channel 3
     </td><td>
     <select id="chn2" onchange="postInputJson('chn2',2);">
@@ -195,10 +195,10 @@
       <option value="0x00040000">SPDIF L</option>
       <option value="0x00040001">SPDIF R</option>
     </select></td>
-    <td id="chnlbl_10" ondblclick="renameChannel('chnlbl_10')">OUT 3</td>
+    <td id="output2">OUT 3</td>
     </tr>
   
-    <tr><td id="chnlbl_3" class="rotate" ondblclick="renameChannel('chnlbl_3')">
+    <tr><td id="input3" class="rotate">
     Channel 4
     </td><td>
     <select id="chn3" onchange="postInputJson('chn3',3);">
@@ -221,10 +221,10 @@
       <option value="0x00040000">SPDIF L</option>
       <option value="0x00040001">SPDIF R</option>
     </select></td>
-    <td id="chnlbl_11" ondblclick="renameChannel('chnlbl_11')">OUT 4</td>
+    <td id="output3">OUT 4</td>
     </tr>
   
-    <tr><td id="chnlbl_4" class="rotate" ondblclick="renameChannel('chnlbl_4')">
+    <tr><td id="input4" class="rotate">
     Channel 5
     </td><td>
     <select id="chn4" onchange="postInputJson('chn4',4);">
@@ -247,10 +247,10 @@
       <option value="0x00040000">SPDIF L</option>
       <option value="0x00040001">SPDIF R</option>
     </select></td>
-    <td id="chnlbl_12" ondblclick="renameChannel('chnlbl_12')">OUT 5</td>
+    <td id="output4">OUT 5</td>
     </tr>
   
-    <tr><td id="chnlbl_5" class="rotate" ondblclick="renameChannel('chnlbl_5')">
+    <tr><td id="input5" class="rotate">
     Channel 6
     </td><td>
     <select id="chn5" onchange="postInputJson('chn5',5);">
@@ -273,10 +273,10 @@
       <option value="0x00040000">SPDIF L</option>
       <option value="0x00040001">SPDIF R</option>
     </select></td>
-    <td id="chnlbl_13" ondblclick="renameChannel('chnlbl_13')">OUT 6</td>
+    <td id="output5">OUT 6</td>
     </tr>
   
-    <tr><td id="chnlbl_6" class="rotate" ondblclick="renameChannel('chnlbl_6')">
+    <tr><td id="input6" class="rotate">
     Channel 7
     </td><td>
     <select id="chn6" onchange="postInputJson('chn6',6);">
@@ -299,10 +299,10 @@
       <option value="0x00040000">SPDIF L</option>
       <option value="0x00040001">SPDIF R</option>
     </select></td>
-    <td id="chnlbl_14" ondblclick="renameChannel('chnlbl_14')">OUT 7</td>
+    <td id="output6">OUT 7</td>
     </tr>
   
-    <tr><td id="chnlbl_7" class="rotate" ondblclick="renameChannel('chnlbl_7')">
+    <tr><td id="input7" class="rotate">
     Channel 8
     </td><td>
     <select id="chn7" onchange="postInputJson('chn7',7);">
@@ -325,7 +325,7 @@
       <option value="0x00040000">SPDIF L</option>
       <option value="0x00040001">SPDIF R</option>
     </select></td>
-    <td id="chnlbl_15" ondblclick="renameChannel('chnlbl_15')">OUT 8</td>
+    <td id="output7">OUT 8</td>
     </tr>
   </table>
   </td></tr>
@@ -401,6 +401,33 @@
       <tr><td colspan="2"><button class="send" id="peq_bypass" onclick="bypass('peq_bypass');sendParam('peq');" data-bypass="0">Bypass</button></td></tr>
       <tr><td colspan="2"><button class="send" onclick="sendParam('peq')">Send</button></td></tr>
       </table>
+    </div>
+  </div>
+
+  <div id="peqbank" class="modal">
+    <div id="peqbank-dialog-content" class="modal-content d_peq">
+      <table class="ptbl">
+      <tr><td style="height:20px;padding-top:10px;">
+      <table style="width:100%;">
+      <tr><td id="peqbank-title" class="headline">Title</td><td class="close" onclick="closeModal('peqbank')">&times;</td></tr>
+      </table></td></tr>
+      <tr><td>
+      <table class="ptbl" id='peqbank-userinput' data-numbands="0">
+      </table>
+      </td></tr>
+
+      <tr><td>
+      <table style="width:100%;">
+        <tr>
+          <!--<td style="padding: 10px;"><button class="modal-send" id="peq-import" onclick="document.getElementById('fileImportRew').click();">Import REW</button></td>
+          <td style="padding: 10px;"><button class="modal-send" id="peq-bypass" data-bypass="0">Bypass</button></td>-->
+          <td style="padding: 10px;"><button class="send" id="peqbank-send">Send</button></td>
+        </tr>
+      </table>
+      </td></tr>
+
+      </table>
+      <!-- <input id="fileImportRew" type="file" style="display:none;" onchange="importREW(this.files[0])"/> -->
     </div>
   </div>
   
