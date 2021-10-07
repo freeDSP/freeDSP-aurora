@@ -838,12 +838,12 @@
     </div>
   </div>
 
-  <div id="plugin" class="modal">
+  <div id="pluginupload" class="modal">
     <div class="modal-content" style="width:600px;">
       <table class="ptbl">
       <tr><td colspan="2" style="height:20px;padding-top:10px;">
       <table style="width:100%;">
-      <tr><td class="headline">Upload Plugin</td><td class="close" onclick="closeModal('plugin')">&times;</td></tr>
+      <tr><td class="headline">Upload Plugin</td><td class="close" onclick="closeModal('pluginupload')">&times;</td></tr>
       </table>
       </td></tr>
       <tr><td>Please select the folder of the plugin.</td></tr>
@@ -864,7 +864,7 @@
   <script>
     let picker = document.getElementById('picker');
     picker.addEventListener('change', e => {
-      var html,fw,css,plugin,aurorajs;
+      var html,fw,css,plugin,aurorajs,chnames;
       for(let file of Array.from(e.target.files)){
         if(file.name=="dark.css")
           css = file;
@@ -876,6 +876,8 @@
           plugin = file;
         if(file.name=="aurora.jgz")
           aurorajs = file;
+        if(file.name=="chnames.txt")
+          chnames = file;
       }
       var prg=document.getElementById('prg');
       prg.style.width="5%";
@@ -893,6 +895,9 @@
       .then(function(response){
         prg.style.width="80%";
         return fetch("/upload?fname=aurora.jgz",{method:'POST',headers:{},body:aurorajs});})
+      .then(function(response){
+        prg.style.width="90%";
+        return fetch("/upload?fname=chnames.txt",{method:'POST',headers:{},body:chnames});})
       .then(function(response){
         prg.style.width="100%";
         return response;})

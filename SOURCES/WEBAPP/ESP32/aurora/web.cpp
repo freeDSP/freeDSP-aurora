@@ -1829,6 +1829,20 @@ void handleFileUpload( AsyncWebServerRequest* request, uint8_t* data, size_t len
     Serial.println(F("POST /upload"));
     #endif
 
+    // format filesystem first if required by request
+    if(request->hasParam("format"))
+    {
+      AsyncWebParameter* format = request->getParam(1);
+      if(format->value().toInt() == 1)
+      {
+        bool formatted = SPIFFS.format();
+        if(formatted)
+          Serial.println(F("Success formatting"));
+        else
+          Serial.println(F("[ERROR] Failed while formatting"));
+      }
+    }
+
     if( request->hasParam( "fname" ) )
     {
       AsyncWebParameter* fname = request->getParam(0);
@@ -2201,10 +2215,15 @@ void setupWebserver (void)
     //request->send(response);
   }, NULL, [](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total )
   {
-    if (!index)
+    if(!index)
     {
-      Serial.println("POST /update");
-      Serial.setDebugOutput( true );
+      Serial.println(F("POST /update"));
+      bool formatted = SPIFFS.format();
+      if(formatted)
+        Serial.println(F("Success formatting"));
+      else
+        Serial.println(F("[ERROR] Failed while formatting"));
+      Serial.setDebugOutput(true);
       if( !Update.begin() )
         Update.printError(Serial);
     }

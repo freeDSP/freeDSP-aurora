@@ -400,7 +400,7 @@ void setup()
 
   // wait until everything is stable
   // might be a bit to defensive
-  delay( 2000 );
+  delay(2000);
 
   //----------------------------------------------------------------------------
   //--- Configure DAC

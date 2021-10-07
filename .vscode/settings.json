@@ -8,6 +8,13 @@
       "string": "cpp",
       "string_view": "cpp",
       "vector": "cpp",
-      "stdexcept": "cpp"
+      "stdexcept": "cpp",
+      "ostream": "cpp",
+      "chrono": "cpp",
+      "__bit_reference": "cpp",
+      "__hash_table": "cpp",
+      "__split_buffer": "cpp",
+      "initializer_list": "cpp",
+      "unordered_map": "cpp"
     }
 }
