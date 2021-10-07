@@ -342,6 +342,10 @@ void setup()
   Serial.begin(115200);
   Serial.println(F("AURORA Debug Log"));
   Serial.println( VERSION_STR );
+  #if DEBUG_PRINT
+  Serial.print("Heap: ");
+  Serial.println(xPortGetFreeHeapSize());
+  #endif
 
   //----------------------------------------------------------------------------
   //--- Init Rotary Encoder Handling
@@ -557,6 +561,11 @@ void setup()
 
   lastREsw = rotaryEncoder.getSwitchValue();
   lastREval = rotaryEncoder.getRotationValue();
+
+  #if DEBUG_PRINT
+  Serial.print("Heap: ");
+  Serial.println(xPortGetFreeHeapSize());
+  #endif
 
   Serial.println(F("Ready"));
 }

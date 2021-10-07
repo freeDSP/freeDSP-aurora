@@ -56,6 +56,7 @@ void readChannelNames(void)
 
   file.close();
 }
+  
 
 //==============================================================================
 /*! Creates a page for editing the channel names

@@ -13,7 +13,7 @@
 
 #include "inputrouting.h"
 
-//extern void updateUI(void);
+StaticJsonDocument<2048> jsonDoc;
 
 static const int kNumSourceNames = 8;
 String sourceNames[kNumSourceNames] = {"CD-A", "Blueray", "Phono", "Aux", "USB", "Streaming", "SPDIF coax", "SPDIF optical"};
@@ -179,7 +179,7 @@ void handlePostInputRoutingJson(AsyncWebServerRequest* request, uint8_t* data)
 
   softMuteDAC();
 
-  DynamicJsonDocument jsonDoc(1024);
+  //DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson(jsonDoc, (const char*)data);
   if(err)
   {
@@ -240,7 +240,7 @@ void handlePostVirtualInputJson(AsyncWebServerRequest* request, uint8_t* data)
   Serial.println( "POST /vinput" );
   #endif
 
-  DynamicJsonDocument jsonDoc(1024);
+  //DynamicJsonDocument jsonDoc(1024);
   DeserializationError err = deserializeJson( jsonDoc, (const char*)data );
   if( err )
   {
