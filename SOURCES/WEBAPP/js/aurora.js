@@ -788,7 +788,7 @@ function postJson(btp){
   }
 }
 
-function openPlugin(){document.getElementById("plugin").style.display = "block";}
+function openPlugin(){document.getElementById("pluginupload").style.display = "block";}
 
 function onStoreNames() {
   var data = {};
