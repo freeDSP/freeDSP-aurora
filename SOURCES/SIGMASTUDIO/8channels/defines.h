@@ -1,7 +1,7 @@
 /*
  * File:           defines.h
  *
- * Created:        Thursday, August 13, 2020 4:24:55 PM
+ * Created:        Saturday, October 9, 2021 9:47:44 PM
  * Description:    8channels IC default download data definitions.
  *
  * This software is distributed in the hope that it will be useful,
@@ -14,13 +14,13 @@
  * are intended for resale to audio product end users. This software
  * may not be distributed whole or in any part to third parties.
  *
- * Copyright ©2020 Analog Devices, Inc. All rights reserved.
+ * Copyright ©2021 Analog Devices, Inc. All rights reserved.
  */
 #ifndef __DEFINES_H__
 #define __DEFINES_H__
 
-#define BufferSize_IC_1     	91930
-#define NumTransactions_IC_1	61
+#define BufferSize_IC_1     	91926
+#define NumTransactions_IC_1	60
 
 
 #endif
