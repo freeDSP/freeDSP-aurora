@@ -404,41 +404,51 @@ for module in root.findall('IC/Module'):
 
   # --- XO-HP blocks
   elif cellname.text.lower().startswith('plugin.xohp'):
-    print("[TODO] XO-HP not implemented")
-    #name = cellname.text.split(':',1)[0]
-    #idx = -1
-    #nn = int(cellname.text.split(':',1)[1]) - 1
-    #for m in range(0,len(xohp)):
-    #  if xohp[m].name == name:
-    #    idx = m
-    #if idx == -1:
-    #  newXoHp = ParamHp()
-    #  xohp.append(newXoHp)
-    #  idx = len(xohp) - 1
-    #xohp[idx].name = name
-    #for modparam in module.findall('Algorithm/ModuleParameter'):
-    #  modname = modparam.find('Name').text
-    #  if "B2" in modname:
-    #    xohp[idx].addr[nn] = int(modparam.find('Address').text)
+    searchlpname = cellname.text.lower().replace('plugin.xohp', 'plugin.xolp')
+    # Search the corresponding LP block
+    foundlp = False
+    for modulelp in root.findall('IC/Module'):
+      cellnamelp = modulelp.find('CellName')
+      if cellnamelp.text.lower().startswith(searchlpname):
+        foundlp = True
+        name = cellnamelp.text.split(':',1)[0]
+        idx = -1
+        nn = int(cellnamelp.text.split(':',1)[1]) - 1
+        for m in range(0,len(xolp)):
+          if xolp[m].name == name:
+            idx = m 
+        if idx == -1:
+          newLp = ParamLp()
+          xolp.append(newLp)
+          idx = len(xolp) - 1
+        xolp[idx].name = name
+        for modparamlp in modulelp.findall('Algorithm/ModuleParameter'):
+          modnamelp = modparamlp.find('Name').text
+          if "B2" in modnamelp:
+            xolp[idx].addr[nn] = int(modparamlp.find('Address').text)
+    if(foundlp):
+      name = cellname.text.split(':',1)[0]
+      idx = -1
+      nn = int(cellname.text.split(':',1)[1]) - 1
+      for m in range(0,len(xohp)):
+        if xohp[m].name == name:
+          idx = m
+      if idx == -1:
+        newHp = ParamHp()
+        xohp.append(newHp)
+        idx = len(xohp) - 1
+      xohp[idx].name = name
+      for modparam in module.findall('Algorithm/ModuleParameter'):
+        modname = modparam.find('Name').text
+        if "B2" in modname:
+          xohp[idx].addr[nn] = int(modparam.find('Address').text)
+    else:
+      print("[ERROR] Could not find matching lp block for " + cellname.text)
 
   # --- XO-LP blocks
   elif cellname.text.lower().startswith('plugin.xolp'):
-    print("[TODO] XO-LP not implemented")
-    #name = cellname.text.split(':',1)[0]
-    #idx = -1
-    #nn = int(cellname.text.split(':',1)[1]) - 1
-    #for m in range(0,len(xolp)):
-    #  if xolp[m].name == name:
-    #    idx = m
-    #if idx == -1:
-    #  newXoLp = ParamLp()
-    #  xolp.append(newXoLp)
-    #  idx = len(xolp) - 1
-    #xolp[idx].name = name
-    #for modparam in module.findall('Algorithm/ModuleParameter'):
-    #  modname = modparam.find('Name').text
-    #  if "B2" in modname:
-    #    xolp[idx].addr[nn] = int(modparam.find('Address').text)
+    # Do nothing, handled by plugin.xohp
+    pass
 
   elif cellname.text.startswith('BypassVolPoti'):
     modparam = module.find('Algorithm/ModuleParameter')
@@ -736,10 +746,12 @@ if args.gui:
       dsphtml = dsphtml.replace("id=\"" + fir[m].name.split('.',1)[1] + "\"", "id=fir" + str(m) + " onclick=\"openFIR(" + str(m) + ");\"")
 
     # --- XO-HP blocks
-    print("[TODO] Correct handling of XO blocks")
+    for m in range(0,len(xohp)):
+      dsphtml = dsphtml.replace("id=\"" + xohp[m].name.split('.',1)[1] + "\"", "id=xo" + str(m) + " onclick=\"openXO(" + str(m) + ");\"")
 
     # --- XO-LP blocks
-  
+    # Handled by xohp
+
   with open("./" + projectname + "/dsp.html", "w") as f1:
     f1.write(dsphtml)
 
