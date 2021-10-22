@@ -55,3 +55,12 @@ jobs:
           platform-url: https://dl.espressif.com/dl/package_esp32_index.json
           required-libraries: ArduinoJson@6.13.0,U8g2@2.27.6,IRremote@2.6.1
           build-properties: '{ "All": "-Wno-unused-value -Wno-parentheses"}'
+          set-build-path: true
+
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v2
+        with:
+          name: aurora.ino.bin
+          path: ${{ github.workspace }}/SOURCES/WEBAPP/ESP32/aurora/build/aurora.ino.bin
+          if-no-files-found: error
+          retention-days: 5
