@@ -1,7 +1,7 @@
 /*
  * File:           defines.h
  *
- * Created:        Monday, July 20, 2020 11:29:55 AM
+ * Created:        Thursday, August 13, 2020 4:24:55 PM
  * Description:    8channels IC default download data definitions.
  *
  * This software is distributed in the hope that it will be useful,

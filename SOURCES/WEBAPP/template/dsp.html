@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
+<head>
+<title>AURORA DSP</title>
+<link rel="stylesheet" href="dark.css">
+<script type="text/javascript" src="aurora.js"></script>
+</head>
+
+<body onload="onLoad()">
+	<nav>
+		<ul>
+			<li><a onclick="configDev()">Config Device</a></li>
+      <li><a onclick="configWifi()">Config Wifi</a></li>
+      <li><a onclick="openPlugin()">Upload Plugin</a></li>
+      <li><a onclick="storePreset()">Store Preset</a></li>
+      <li><a href="preset.param" download>Export Preset</a></li>
+      <li><label for="presetimp">Import Preset</label><input type="file" id="presetimp" style="display:none"/></li>
+      <li><a href="chnames.html">Change Names</a></li>
+    </ul>
+    <div style="position:absolute;bottom:30px;right:30px;">
+      <p class="info" id="plugin">GUI: v2.2.0</p>
+      <p class="info" id="fw">FW: 0.0.0</p>
+      <p class="info" id="ip">Local Wifi IP: 0.0.0.0</p>
+      </div>
+	</nav>
+	
+	<div>
+  <table>
+  <tr><td colspan="2"><center>
+  <table style="border-bottom:1px solid;"><tr><td><h1>Aurora DSP</h1></td></tr></table>  
+  </center></td></tr>
+  <tr><td colspan="2"><h2>Custom Plugin Template</h2></td></tr>
+  <tr><td valign=top style="border-right: 1px solid #808080; min-width:200px; max-width:200px;">
+  <table align="center" style="padding:10px">
+    <tr><td><h2>AddOn</h2></td></tr>
+    <tr><td>
+      <div class="hidden" id="addon_none"><h3>None or custom</h3></div> 
+      <div class="hidden" id="addon_a"><h3>The woodworker's friend</h3></div> 
+      <div class="hidden" id="addon_b"><h3>Down with developers</h3>
+      <br>S/P-DIF Input:<br><br>
+      <select id="spdif_b" onchange="changeSPDIF('spdif_b')">
+      <option value="0x04">Coax 1</option>
+      <option value="0x05">Coax 2</option>
+      <option value="0x06">Coax 3</option>
+      <option value="0x07">Coax 4</option>
+      <option value="0x00">Optical 1</option>
+      <option value="0x01">Optical 2</option>
+      <option value="0x02">Optical 3</option>
+      <option value="0x03">Optical 4</option>
+      </select>
+      </div> 
+      <div class="hidden" id="addon_c"><h3>Control over the crowd</h3></div> 
+      <div class="hidden" id="addon_d"><h3>Balanced life</h3></div> 
+    </td></tr>
+    <tr><td><h2> </h2></td></tr>
+    <tr><td><h2>S/P-DIF-Output</h2></td></tr>
+    <tr><td>Left Channel:</td></tr>
+    <tr><td><select id="spdifleft" onchange="sendSpdifOutMux()">
+    <option value="0x00000000">Analog 1</option>
+    <option value="0x00000001">Analog 2</option>
+    <option value="0x00000002">Analog 3</option>
+    <option value="0x00000003">Analog 4</option>
+    <option value="0x00000004">Analog 5</option>
+    <option value="0x00000005">Analog 6</option>
+    <option value="0x00000006">Analog 7</option>
+    <option value="0x00000007">Analog 8</option>
+    <option value="0x00010000">USB 1</option>
+    <option value="0x00010001">USB 2</option>
+    <option value="0x00010002">USB 3</option>
+    <option value="0x00010003">USB 4</option>
+    <option value="0x00010004">USB 5</option>
+    <option value="0x00010005">USB 6</option>
+    <option value="0x00010006">USB 7</option>
+    <option value="0x00010007">USB 8</option>
+    <option value="0x00040000">SPDIF In L</option>
+    <option value="0x00040001">SPDIF In R</option>
+    <option value="0x00050000">Output 1</option>
+    <option value="0x00050001">Output 2</option>
+    <option value="0x00050002">Output 3</option>
+    <option value="0x00050003">Output 4</option>
+    <option value="0x00050004">Output 5</option>
+    <option value="0x00050005">Output 6</option>
+    <option value="0x00050006">Output 7</option>
+    <option value="0x00050007">Output 8</option>
+    </select></td></tr>
+    <tr><td></td></tr>
+    <tr><td>Right Channel:</td></tr>
+    <tr><td><select id="spdifright" onchange="sendSpdifOutMux()">
+    <option value="0x00000000">Analog 1</option>
+    <option value="0x00000001">Analog 2</option>
+    <option value="0x00000002">Analog 3</option>
+    <option value="0x00000003">Analog 4</option>
+    <option value="0x00000004">Analog 5</option>
+    <option value="0x00000005">Analog 6</option>
+    <option value="0x00000006">Analog 7</option>
+    <option value="0x00000007">Analog 8</option>
+    <option value="0x00010000">USB 1</option>
+    <option value="0x00010001">USB 2</option>
+    <option value="0x00010002">USB 3</option>
+    <option value="0x00010003">USB 4</option>
+    <option value="0x00010004">USB 5</option>
+    <option value="0x00010005">USB 6</option>
+    <option value="0x00010006">USB 7</option>
+    <option value="0x00010007">USB 8</option>
+    <option value="0x00040000">SPDIF In L</option>
+    <option value="0x00040001">SPDIF In R</option>
+    <option value="0x00050000">Output 1</option>
+    <option value="0x00050001">Output 2</option>
+    <option value="0x00050002">Output 3</option>
+    <option value="0x00050003">Output 4</option>
+    <option value="0x00050004">Output 5</option>
+    <option value="0x00050005">Output 6</option>
+    <option value="0x00050006">Output 7</option>
+    <option value="0x00050007">Output 8</option>
+    </select></td></tr>
+  </table>
+  </td><td>
+  <table style="border-spacing: 5px 10px;">
+    <tr>
+    <td id="input0" class="rotate">
+    Channel 1
+    <td style="min-width:80px">
+    <select id="chn0" onchange="postInputJson('chn0',0);">
+      <option value="0x00000000">Analog 1</option>
+      <option value="0x00000001">Analog 2</option>
+      <option value="0x00000002">Analog 3</option>
+      <option value="0x00000003">Analog 4</option>
+      <option value="0x00000004">Analog 5</option>
+      <option value="0x00000005">Analog 6</option>
+      <option value="0x00000006">Analog 7</option>
+      <option value="0x00000007">Analog 8</option>
+      <option value="0x00010000">USB 1</option>
+      <option value="0x00010001">USB 2</option>
+      <option value="0x00010002">USB 3</option>
+      <option value="0x00010003">USB 4</option>
+      <option value="0x00010004">USB 5</option>
+      <option value="0x00010005">USB 6</option>
+      <option value="0x00010006">USB 7</option>
+      <option value="0x00010007">USB 8</option>
+      <option value="0x00040000">SPDIF L</option>
+      <option value="0x00040001">SPDIF R</option>
+    </select></td>
+    <td style="min-width:60px" id="output0">OUT 1</td>
+    <td rowspan="8" style="max-width: 80px;">
+      <input type="range" id="mvol" class="volslider" min="-80" max="0" onchange="postMVol()"/>  
+      <div style="transform: translateY(240px);">Master<br>Volume</div>  
+    </td></tr>
+  
+    <tr><td id="input1" class="rotate">
+    Channel 2
+    </td><td>
+    <select id="chn1" onchange="postInputJson('chn1',1);">
+      <option value="0x00000000">Analog 1</option>
+      <option value="0x00000001">Analog 2</option>
+      <option value="0x00000002">Analog 3</option>
+      <option value="0x00000003">Analog 4</option>
+      <option value="0x00000004">Analog 5</option>
+      <option value="0x00000005">Analog 6</option>
+      <option value="0x00000006">Analog 7</option>
+      <option value="0x00000007">Analog 8</option>
+      <option value="0x00010000">USB 1</option>
+      <option value="0x00010001">USB 2</option>
+      <option value="0x00010002">USB 3</option>
+      <option value="0x00010003">USB 4</option>
+      <option value="0x00010004">USB 5</option>
+      <option value="0x00010005">USB 6</option>
+      <option value="0x00010006">USB 7</option>
+      <option value="0x00010007">USB 8</option>
+      <option value="0x00040000">SPDIF L</option>
+      <option value="0x00040001">SPDIF R</option>
+    </select></td>
+    <td id="output1">OUT 2</td>
+    </tr>
+  
+    <tr><td id="input2" class="rotate">
+    Channel 3
+    </td><td>
+    <select id="chn2" onchange="postInputJson('chn2',2);">
+      <option value="0x00000000">Analog 1</option>
+      <option value="0x00000001">Analog 2</option>
+      <option value="0x00000002">Analog 3</option>
+      <option value="0x00000003">Analog 4</option>
+      <option value="0x00000004">Analog 5</option>
+      <option value="0x00000005">Analog 6</option>
+      <option value="0x00000006">Analog 7</option>
+      <option value="0x00000007">Analog 8</option>
+      <option value="0x00010000">USB 1</option>
+      <option value="0x00010001">USB 2</option>
+      <option value="0x00010002">USB 3</option>
+      <option value="0x00010003">USB 4</option>
+      <option value="0x00010004">USB 5</option>
+      <option value="0x00010005">USB 6</option>
+      <option value="0x00010006">USB 7</option>
+      <option value="0x00010007">USB 8</option>
+      <option value="0x00040000">SPDIF L</option>
+      <option value="0x00040001">SPDIF R</option>
+    </select></td>
+    <td id="output2">OUT 3</td>
+    </tr>
+  
+    <tr><td id="input3" class="rotate">
+    Channel 4
+    </td><td>
+    <select id="chn3" onchange="postInputJson('chn3',3);">
+      <option value="0x00000000">Analog 1</option>
+      <option value="0x00000001">Analog 2</option>
+      <option value="0x00000002">Analog 3</option>
+      <option value="0x00000003">Analog 4</option>
+      <option value="0x00000004">Analog 5</option>
+      <option value="0x00000005">Analog 6</option>
+      <option value="0x00000006">Analog 7</option>
+      <option value="0x00000007">Analog 8</option>
+      <option value="0x00010000">USB 1</option>
+      <option value="0x00010001">USB 2</option>
+      <option value="0x00010002">USB 3</option>
+      <option value="0x00010003">USB 4</option>
+      <option value="0x00010004">USB 5</option>
+      <option value="0x00010005">USB 6</option>
+      <option value="0x00010006">USB 7</option>
+      <option value="0x00010007">USB 8</option>
+      <option value="0x00040000">SPDIF L</option>
+      <option value="0x00040001">SPDIF R</option>
+    </select></td>
+    <td id="output3">OUT 4</td>
+    </tr>
+  
+    <tr><td id="input4" class="rotate">
+    Channel 5
+    </td><td>
+    <select id="chn4" onchange="postInputJson('chn4',4);">
+      <option value="0x00000000">Analog 1</option>
+      <option value="0x00000001">Analog 2</option>
+      <option value="0x00000002">Analog 3</option>
+      <option value="0x00000003">Analog 4</option>
+      <option value="0x00000004">Analog 5</option>
+      <option value="0x00000005">Analog 6</option>
+      <option value="0x00000006">Analog 7</option>
+      <option value="0x00000007">Analog 8</option>
+      <option value="0x00010000">USB 1</option>
+      <option value="0x00010001">USB 2</option>
+      <option value="0x00010002">USB 3</option>
+      <option value="0x00010003">USB 4</option>
+      <option value="0x00010004">USB 5</option>
+      <option value="0x00010005">USB 6</option>
+      <option value="0x00010006">USB 7</option>
+      <option value="0x00010007">USB 8</option>
+      <option value="0x00040000">SPDIF L</option>
+      <option value="0x00040001">SPDIF R</option>
+    </select></td>
+    <td id="output4">OUT 5</td>
+    </tr>
+  
+    <tr><td id="input5" class="rotate">
+    Channel 6
+    </td><td>
+    <select id="chn5" onchange="postInputJson('chn5',5);">
+      <option value="0x00000000">Analog 1</option>
+      <option value="0x00000001">Analog 2</option>
+      <option value="0x00000002">Analog 3</option>
+      <option value="0x00000003">Analog 4</option>
+      <option value="0x00000004">Analog 5</option>
+      <option value="0x00000005">Analog 6</option>
+      <option value="0x00000006">Analog 7</option>
+      <option value="0x00000007">Analog 8</option>
+      <option value="0x00010000">USB 1</option>
+      <option value="0x00010001">USB 2</option>
+      <option value="0x00010002">USB 3</option>
+      <option value="0x00010003">USB 4</option>
+      <option value="0x00010004">USB 5</option>
+      <option value="0x00010005">USB 6</option>
+      <option value="0x00010006">USB 7</option>
+      <option value="0x00010007">USB 8</option>
+      <option value="0x00040000">SPDIF L</option>
+      <option value="0x00040001">SPDIF R</option>
+    </select></td>
+    <td id="output5">OUT 6</td>
+    </tr>
+  
+    <tr><td id="input6" class="rotate">
+    Channel 7
+    </td><td>
+    <select id="chn6" onchange="postInputJson('chn6',6);">
+      <option value="0x00000000">Analog 1</option>
+      <option value="0x00000001">Analog 2</option>
+      <option value="0x00000002">Analog 3</option>
+      <option value="0x00000003">Analog 4</option>
+      <option value="0x00000004">Analog 5</option>
+      <option value="0x00000005">Analog 6</option>
+      <option value="0x00000006">Analog 7</option>
+      <option value="0x00000007">Analog 8</option>
+      <option value="0x00010000">USB 1</option>
+      <option value="0x00010001">USB 2</option>
+      <option value="0x00010002">USB 3</option>
+      <option value="0x00010003">USB 4</option>
+      <option value="0x00010004">USB 5</option>
+      <option value="0x00010005">USB 6</option>
+      <option value="0x00010006">USB 7</option>
+      <option value="0x00010007">USB 8</option>
+      <option value="0x00040000">SPDIF L</option>
+      <option value="0x00040001">SPDIF R</option>
+    </select></td>
+    <td id="output6">OUT 7</td>
+    </tr>
+  
+    <tr><td id="input7" class="rotate">
+    Channel 8
+    </td><td>
+    <select id="chn7" onchange="postInputJson('chn7',7);">
+      <option value="0x00000000">Analog 1</option>
+      <option value="0x00000001">Analog 2</option>
+      <option value="0x00000002">Analog 3</option>
+      <option value="0x00000003">Analog 4</option>
+      <option value="0x00000004">Analog 5</option>
+      <option value="0x00000005">Analog 6</option>
+      <option value="0x00000006">Analog 7</option>
+      <option value="0x00000007">Analog 8</option>
+      <option value="0x00010000">USB 1</option>
+      <option value="0x00010001">USB 2</option>
+      <option value="0x00010002">USB 3</option>
+      <option value="0x00010003">USB 4</option>
+      <option value="0x00010004">USB 5</option>
+      <option value="0x00010005">USB 6</option>
+      <option value="0x00010006">USB 7</option>
+      <option value="0x00010007">USB 8</option>
+      <option value="0x00040000">SPDIF L</option>
+      <option value="0x00040001">SPDIF R</option>
+    </select></td>
+    <td id="output7">OUT 8</td>
+    </tr>
+  </table>
+  </td></tr>
+  <tr><td colspan="2"><center>
+  <table><tr><td><button class="prebtn" id="pre0" onclick="switchPreset(0)">Preset A</button></td>
+  <td><button class="prebtn" id="pre1" onclick="switchPreset(1)">Preset B</button></td>
+  <td><button class="prebtn" id="pre2" onclick="switchPreset(2)">Preset C</button></td>
+  <td><button class="prebtn" id="pre3" onclick="switchPreset(3)">Preset D</button></td></tr></table>
+  </center></td></tr>
+  </table>
+  </div>
+
+  <div id="highPass" class="modal" data-idx="0">
+    <div class="modal-content d_hp">
+      <table class="ptbl">
+      <tr><td colspan="2" style="height:20px;padding-top:10px;">
+      <table style="width:100%;">
+      <tr>
+        <td class="headline">High Pass</td><td class="close" onclick="closeModal('highPass')">&times;</td>
+      </tr>
+      </table>
+      </td></tr>
+      <tr><td colspan="2">
+        <select id="hp_typ">
+          <option value="0">Bes 6</option>
+          <option value="1">Bes 12</option>
+          <option value="2">Bes 18</option>
+          <option value="3">Bes 24</option>
+          <option value="4">But 12</option>
+          <option value="5">But 18</option>
+          <option value="6">But 24</option>
+          <option value="7">LR 12</option>
+          <option value="8">LR 24</option>
+          <option value="9">LR 36</option>
+          <option value="10">LR 48</option>
+        </select>
+      </td></tr>
+      <tr><td><input type="number" id="hp_fc" style="width:95%;" step="any" min="1" max="20000"></td><td style="text-align:left;width:10%;">Hz</td></tr>
+      <tr><td colspan="2"><button class="send" id="hp_bypass" onclick="bypass('hp_bypass');sendParam('hp');" data-bypass="0">Bypass</button></td></tr>
+      <tr><td colspan="2"><button class="send" onclick="sendParam('hp')">Send</button></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="lowShelv" class="modal" data-idx="0">
+    <div class="modal-content d_shlv">
+      <table class="ptbl">
+      <tr><td colspan="2" style="height:20px;padding-top:10px;">
+      <table style="width:100%;">
+      <tr><td class="headline">Low Shelving</td><td class="close" onclick="closeModal('lowShelv')">&times;</td></tr>
+      </table>
+      </td></tr>
+      <tr><td><input type="number" id="ls_v" style="width:95%;" step="any" min="-24" max="24"></td><td style="text-align:left;width:10%;">dB</td></tr>
+      <tr><td><input type="number" id="ls_fc" style="width:95%;" step="any" min="1" max="20000"></td><td style="text-align:left;width:10%;">Hz</td></tr>
+      <tr><td><input type="number" id="ls_s" style="width:95%;" step="0.01" min="0.1" max="2"></td><td style="text-align:left;width:10%;">S</td></tr>
+      <tr><td colspan="2"><button class="send" id="ls_bypass" onclick="bypass('ls_bypass');sendParam('lshelv');" data-bypass="0">Bypass</button></td></tr>
+      <tr><td colspan="2"><button class="send" onclick="sendParam('lshelv')">Send</button></td></tr>
+      </table>
+    </div>
+  </div>
+  
+  <div id="peq" class="modal" data-idx="0">
+    <div class="modal-content d_peq">
+      <table class="ptbl">
+      <tr><td colspan="2" style="height:20px;padding-top:10px;">
+      <table style="width:100%;">
+      <tr><td class="headline">Parametric EQ</td><td class="close" onclick="closeModal('peq')">&times;</td></tr>
+      </table>
+      </td></tr>
+      <tr><td><input type="number" id="peq_v" style="width:95%;" step="any" min="-24" max="24"></td><td style="text-align:left;width:10%;">dB</td></tr>
+      <tr><td><input type="number" id="peq_fc" style="width:95%;" step="any" min="1" max="20000"></td><td style="text-align:left;width:10%;">Hz</td></tr>
+      <tr><td><input type="number" id="peq_q" style="width:95%;" step="any" min="0.1" max="100"></td><td style="text-align:left;width:10%;">Q</td></tr>
+      <tr><td colspan="2"><button class="send" id="peq_bypass" onclick="bypass('peq_bypass');sendParam('peq');" data-bypass="0">Bypass</button></td></tr>
+      <tr><td colspan="2"><button class="send" onclick="sendParam('peq')">Send</button></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="peqbank" class="modal">
+    <div id="peqbank-dialog-content" class="modal-content d_peq">
+      <table class="ptbl">
+      <tr><td style="height:20px;padding-top:10px;">
+      <table style="width:100%;">
+      <tr><td id="peqbank-title" class="headline">Title</td><td class="close" onclick="closeModal('peqbank')">&times;</td></tr>
+      </table></td></tr>
+      <tr><td>
+      <table class="ptbl" id='peqbank-userinput' data-numbands="0">
+      </table>
+      </td></tr>
+
+      <tr><td>
+      <table style="width:100%;">
+        <tr>
+          <!--<td style="padding: 10px;"><button class="modal-send" id="peq-import" onclick="document.getElementById('fileImportRew').click();">Import REW</button></td>
+          <td style="padding: 10px;"><button class="modal-send" id="peq-bypass" data-bypass="0">Bypass</button></td>-->
+          <td style="padding: 10px;"><button class="send" id="peqbank-send">Send</button></td>
+        </tr>
+      </table>
+      </td></tr>
+
+      </table>
+      <!-- <input id="fileImportRew" type="file" style="display:none;" onchange="importREW(this.files[0])"/> -->
+    </div>
+  </div>
+  
+  <div id="highShelv" class="modal" data-idx="0">
+    <div class="modal-content d_shlv">
+      <table class="ptbl">
+      <tr><td colspan="2" style="height:20px;padding-top:10px;">
+      <table style="width:100%;">
+      <tr><td class="headline">High Shelving</td><td class="close" onclick="closeModal('highShelv')">&times;</td></tr>
+      </table>
+      </td></tr>
+      <tr><td><input type="number" id="hs_v" style="width:95%;" step="any" min="-24" max="24"></td><td style="text-align:left;width:10%;">dB</td></tr>
+      <tr><td><input type="number" id="hs_fc" style="width:95%;" step="any" min="1" max="20000"></td><td style="text-align:left;width:10%;">Hz</td></tr>
+      <tr><td><input type="number" id="hs_s" style="width:95%;" step="0.01" min="0.1" max="2"></td><td style="text-align:left;width:10%;">S</td></tr>
+      <tr><td colspan="2"><button class="send" id="hs_bypass" onclick="bypass('hs_bypass');sendParam('hshelv');" data-bypass="0">Bypass</button></td></tr>
+      <tr><td colspan="2"><button class="send" onclick="sendParam('hshelv')">Send</button></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="lowPass" class="modal" data-idx="0">
+    <div class="modal-content d_hp">
+      <table class="ptbl">
+      <tr><td colspan="2" style="height:20px;padding-top:10px;">
+      <table style="width:100%;">
+      <tr><td class="headline">Low Pass</td><td class="close" onclick="closeModal('lowPass')">&times;</td></tr>
+      </table>
+      </td></tr>
+      <tr><td colspan="2">
+        <select id="lp_typ">
+          <option value="0">Bes 6</option>
+          <option value="1">Bes 12</option>
+          <option value="2">Bes 18</option>
+          <option value="3">Bes 24</option>
+          <option value="4">But 12</option>
+          <option value="5">But 18</option>
+          <option value="6">But 24</option>
+          <option value="7">LR 12</option>
+          <option value="8">LR 24</option>
+          <option value="9">LR 36</option>
+          <option value="10">LR 48</option>
+        </select>
+      </td></tr>
+      <tr><td><input type="number" id="lp_fc" style="width:95%;" step="any" min="1" max="20000"></td><td style="text-align:left;width:10%;">Hz</td></tr>
+      <tr><td colspan="2"><button class="send" id="lp_bypass" onclick="bypass('lp_bypass');sendParam('lp');" data-bypass="0">Bypass</button></td></tr>
+      <tr><td colspan="2"><button class="send" onclick="sendParam('lp')">Send</button></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="phase" class="modal" data-idx="0">
+    <div class="modal-content d_phase">
+      <table class="ptbl">
+      <tr><td colspan="2" style="height:20px;padding-top:10px;">
+      <table style="width:100%;">
+      <tr><td class="headline">Phase</td><td class="close" onclick="closeModal('phase')">&times;</td></tr>
+      </table>
+      </td></tr>
+      <tr><td><input type="number" id="ph_fc" style="width:95%;" step="any" min="1" max="20000"></td><td style="text-align:left;width:10%;">Hz</td></tr>
+      <tr><td><input type="number" id="ph_q" style="width:95%;" step="any" min="0.1" max="100"></td><td style="text-align:left;width:10%;">Q</td></tr>
+      <tr><td colspan="2"><input type="checkbox" id="ph_inv">Invert</td></tr>
+      <tr><td colspan="2"><button class="send" id="ph_bypass" onclick="bypass('ph_bypass');sendParam('phase');" data-bypass="0">Bypass</button></td></tr>
+      <tr><td colspan="2"><button class="send" onclick="sendParam('phase')">Send</button></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="delay" class="modal" data-idx="0">
+    <div class="modal-content d_delay">
+      <table class="ptbl">
+      <tr><td colspan="2" style="height:20px;padding-top:10px;">
+      <table style="width:100%;">
+      <tr><td class="headline">Delay</td><td class="close" onclick="closeModal('delay')">&times;</td></tr>
+      </table>
+      </td></tr>
+      <tr><td><input type="number" id="delayval" style="width:95%;" step="any" min="0" max="100"></td><td style="text-align:left;width:10%;">ms</td></tr>
+      <tr><td colspan="2"><button class="send" id="delay_bypass" onclick="bypass('delay_bypass');sendParam('delay');" data-bypass="0">Bypass</button></td></tr>
+      <tr><td colspan="2"><button class="send" onclick="sendParam('delay')">Send</button></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="gain" class="modal" data-idx="0">
+    <div class="modal-content d_gain">
+      <table class="ptbl">
+      <tr><td colspan="2" style="height:20px;padding-top:10px;">
+      <table style="width:100%;">
+      <tr><td class="headline">Gain</td><td class="close" onclick="closeModal('gain')">&times;</td></tr>
+      </table>
+      </td></tr>
+      <tr><td><input type="number" id="gainval" style="width:95%;" step="any" min="-120" max="0"></td><td style="text-align:left;width:10%;">dB</td></tr>
+      <tr><td colspan="2"><button class="send" id="mute" onclick="mute()" data-mute="0">Mute</button></td></tr>
+      <tr><td colspan="2"><button class="send" onclick="sendParam('gain')">Send</button></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="configDev" class="modal">
+    <div class="modal-content" style="width:600px;">
+      <table class="ptbl">
+      <tr><td colspan="2" style="height:20px;padding-top:10px;">
+      <table style="width:100%;">
+      <tr><td class="headline">Device Config</td><td class="close" onclick="closeModal('configDev')">&times;</td></tr>
+      </table>
+      </td></tr>
+      <tr><td>AddOn</td><td>ADC Channel Summation</td></tr>
+      <tr style="vertical-align:top;"><td><select id="aid">
+      <option value="0">None or custom</option>
+      <option value="1">A The woodworker's friend</option>
+      <option value="2">B Down with developers</option>
+      <!--<option value="3">C Control over the crowd</option>-->
+      <option value="4">D Balanced life</option>
+      </select></td>
+      <td><select id="adcsum">
+      <option value="0">None</option>
+      <option value="1">8 to 4</option>
+      <option value="2">8 to 2</option>
+      <option value="3">8 to 1</option>
+      </select>
+      </td></tr>
+      <tr><td><input type="checkbox" id="vpot">Volume Potentiometer</td><td></td></tr>
+      <tr><td colspan="2"><button class="send" onclick="sendConfig()">Store</button></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="configWifi" class="modal">
+    <div class="modal-content" style="width:600px;">
+      <table class="ptbl">
+      <tr><td colspan="2" style="height:20px;padding-top:10px;">
+      <table style="width:100%;">
+      <tr><td class="headline">WiFi Config</td><td class="close" onclick="closeModal('configWifi')">&times;</td></tr>
+      </table>
+      </td></tr>
+      <tr><td>
+      <table style="width:100%;">
+      <tr><td>SSID</td></tr>
+      <tr><td><input type="text" id="ssid" style="width:95%;"></td></tr>
+      <tr><td>Password</td></tr>
+      <tr><td><input type="password" id="pwd" style="width:95%;"></td></tr>
+      <tr><td><button class="send" onclick="sendWifi()">Store WiFi</button></td></tr>
+      </table>
+      </td>
+      <td>
+      <table style="width:100%;">
+      <tr><td>Password Access Point</td></tr>
+      <tr><td><input type="password" id="pwdap" style="width:95%;"></td></tr>
+      <tr><td>Name Access Point</td></tr>
+      <tr><td><input type="text" id="apname" style="width:95%;"></td></tr>
+      <tr><td><button class="send" onclick="sendPwdAP()">Store AP Config</button></td></tr>
+      </table>
+      </td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="pluginupload" class="modal">
+    <div class="modal-content" style="width:600px;">
+      <table class="ptbl">
+      <tr><td colspan="2" style="height:20px;padding-top:10px;">
+      <table style="width:100%;">
+      <tr><td class="headline">Upload Plugin</td><td class="close" onclick="closeModal('pluginupload')">&times;</td></tr>
+      </table>
+      </td></tr>
+      <tr><td>Please select the folder of the plugin.</td></tr>
+      <tr><td><input type="file" id="picker" name="fileList" webkitdirectory mozdirectory multiple width="95%"></td></tr>
+      <tr><td><div id="wait" style="display:none;">Please wait while uploading.</div></td></tr>
+      <tr><td><div id="prg" style="border: 1px solid #73EC6F; background: #73EC6F; height:2px; width:0%;"></div></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="plzw" class="modal" style="z-index:100;">
+    <div class="modal-content" style="width:50%">
+      <h2><br></h2>
+      <h2 id="msg">Please wait...</h2>
+    </div>
+  </div>
+
+  <script>
+    let picker = document.getElementById('picker');
+    picker.addEventListener('change', e => {
+      var html,fw,css,plugin,aurorajs,chnames;
+      for(let file of Array.from(e.target.files)){
+        if(file.name=="dark.css")
+          css = file;
+        if(file.name=="dsp.fw")
+          fw = file;
+        if(file.name=="dsp.html")
+          html = file;
+        if(file.name=="plugin.ini")
+          plugin = file;
+        if(file.name=="aurora.jgz")
+          aurorajs = file;
+        if(file.name=="chnames.txt")
+          chnames = file;
+      }
+      var prg=document.getElementById('prg');
+      prg.style.width="5%";
+      document.getElementById("wait").style.display="block";
+      fetch("/upload?fname=dark.css",{method:'POST',headers:{},body:css})
+      .then(function(response){
+        prg.style.width="20%";
+        return fetch("/upload?fname=dsp.fw",{method:'POST',headers:{},body:fw});})
+      .then(function(response){
+        prg.style.width="40%";
+        return fetch("/upload?fname=dsp.html",{method:'POST',headers:{},body:html});})
+      .then(function(response){
+        prg.style.width="60%";
+        return fetch("/upload?fname=plugin.ini",{method:'POST',headers:{},body:plugin});})
+      .then(function(response){
+        prg.style.width="80%";
+        return fetch("/upload?fname=aurora.jgz",{method:'POST',headers:{},body:aurorajs});})
+      .then(function(response){
+        prg.style.width="90%";
+        return fetch("/upload?fname=chnames.txt",{method:'POST',headers:{},body:chnames});})
+      .then(function(response){
+        prg.style.width="100%";
+        return response;})
+      .then(function(response){
+        alert("Success! Your plugin has been installed. Please reboot your DSP and reconnect to it.");
+        document.getElementById("wait").style.display="none";
+        return response;})
+      .catch(function(err){alert( "Uploading your plugin failed: "+err);});
+    });
+    let preimport = document.getElementById("presetimp");
+    preimport.addEventListener('change', e => {
+      let file = e.target.files[0];
+      var p=0;
+      fetch("/config").then(function(response){
+        return response.json();
+      }).then(function(cfg){
+        var fname = file.name;
+        p=cfg.pre;
+        if(p==0) fname="usrparam.001";
+        else if(p==1) fname="usrparam.002";
+        else if(p==2) fname="usrparam.003";
+        else if(p==3) fname="usrparam.004";
+        return fetch("/upload?fname="+fname,{method:'POST',headers:{},body:file});
+      }).then(function(response){alert("Super! Successfully uploaded your preset.");switchPreset(p);
+      }).catch(function(err){alert( "Uploading your preset failed: "+err);});
+    });
+  </script>
+</body>
+</html>

@@ -2,13 +2,15 @@ import sys
 import xml.etree.ElementTree as ET
 import json
 import io
+import argparse
+import os
+import struct
+import shutil
 
 try:
   to_unicode = unicode
 except NameError:
   to_unicode = str
-
-print(str(sys.argv[1]))
 
 class GrowingList(list):
     def __setitem__(self, index, value):
@@ -16,35 +18,126 @@ class GrowingList(list):
             self.extend([None]*(index + 1 - len(self)))
         list.__setitem__(self, index, value)
 
-tree = ET.parse(str(sys.argv[1]))
-root = tree.getroot()
+class ParamHp:
+  name = ""
+  def __init__(self):
+    self.addr = [-1, -1, -1, -1]
 
-#hp = GrowingList()
-#lshelv = GrowingList()
-#hshelv = GrowingList()
-#lp = GrowingList()
+class ParamLp:
+  name = ""
+  def __init__(self):
+    self.addr = [-1, -1, -1, -1]
 
-numchn = 8
+class ParamShelv:
+  name = ""
+  addr = -1
 
-inputselect_analog = []
-for ii in range(0,numchn):
-  inputselect_analog.append(GrowingList())
+class ParamPeq:
+  name = ""
+  addr = -1
 
-inputselect_spdif = []
-for ii in range(0,numchn):
-  inputselect_spdif.append(GrowingList())
+class ParamPeqBank:
+  name = ""
+  def __init__(self):
+    self.addr = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
 
-inputselect_uac2 = []
-for ii in range(0,numchn):
-  inputselect_uac2.append(GrowingList())
+class ParamPhase:
+  name = ""
+  addr = -1
 
-inputselect_exp = []
-for ii in range(0,numchn):
-  inputselect_exp.append(GrowingList())
+class ParamDelay:
+  name = ""
+  addr = -1
 
-inputselect_port = []
-for ii in range(0,numchn):
-  inputselect_port.append(GrowingList())
+class ParamGain:
+  name = ""
+  addr = -1
+
+class ParamFir:
+  name = ""
+  addr = -1
+  len = 0
+
+class ParamXO:
+  hpname = ""
+  lpname = ""
+  def __init__(self):
+    self.hpaddr = [-1, -1, -1, -1]
+    self.lpaddr = [-1, -1, -1, -1]
+
+parser = argparse.ArgumentParser()
+parser.add_argument("input", help="SigmaStudio project file")
+parser.add_argument("plugin", help="Name of plugin")
+parser.add_argument("--gui", help="Path to html gui", type=str)
+parser.add_argument("--version", help="Version of plugin", type=str)
+
+# Read arguments from the command line
+args = parser.parse_args()
+
+# Check arguments
+if args.input:
+  print("SigmaStudio project file: %s" % args.input)
+  path_sigmastudioproject = args.input
+if args.plugin:
+  print("Name of plugin: %s" % args.plugin)
+  nameplugin = args.plugin
+if args.version:
+  version = args.version
+else:
+  version = "0.0.0"
+
+split_path = path_sigmastudioproject.rsplit("\\",1)
+filename = os.path.basename(split_path[0])
+projectname = filename.split(".")[0]
+projectdir = os.path.dirname(path_sigmastudioproject)
+
+#--- Read TxBuffer file
+print("Reading " + projectdir + "/TxBuffer_IC_1.dat")
+if not os.path.exists(projectdir + "/TxBuffer_IC_1.dat"):
+  print("Could not find file TxBuffer_IC_1.dat in project directory")
+  exit()
+txbuffer = bytearray()
+with open(projectdir + "/TxBuffer_IC_1.dat") as fp:
+  line = fp.readline()
+  while line:
+    strlst = line.split(",")
+    for ii in range(0, len(strlst)):
+      str_ = strlst[ii].strip()
+      if str_.startswith('0x'):
+        txbuffer += bytearray.fromhex(str_[2:])
+    line = fp.readline()
+
+#--- Read NumBytes file
+print("Reading " + projectdir + "/NumBytes_IC_1.dat")
+if not os.path.exists(projectdir + "/NumBytes_IC_1.dat"):
+  print("Could not find file NumBytes_IC_1.dat in project directory")
+  exit()
+numbytes = []
+with open(projectdir + "/NumBytes_IC_1.dat") as fp:
+  line = fp.readline()
+  while line:
+    strlst = line.split(",")
+    numbytes.append(int(strlst[0].strip()))
+    line = fp.readline()
+
+#--- Create output directory
+try:
+  if os.path.exists(projectname) != True:
+    os.mkdir(projectname)
+except OSError:
+  print("Creation of output directory %s failed" % projectname)
+
+#--- Write dsp.fw
+print("Writing DSP firmware")
+with open(projectname + "/dsp.fw", 'wb') as file:
+  idx = 0
+  for ii in range(0, len(numbytes)):
+    file.write(bytearray(struct.pack("!I", numbytes[ii])))
+    for nn in range(0,numbytes[ii]):
+      file.write(bytearray(struct.pack("!B", txbuffer[idx])))
+      idx = idx + 1
+    
+
 
 spdifoutmux_channel = []
 spdifoutmux_channel.append(GrowingList())
@@ -52,48 +145,66 @@ spdifoutmux_channel.append(GrowingList())
 spdifoutmux_port = [0, 0]
 
 lshelv = []
-for ii in range(0,numchn):
-  lshelv.append(GrowingList())
-
 hshelv = []
-for ii in range(0,numchn):
-  hshelv.append(GrowingList())
-
 peq = []
-for ii in range(0,numchn):
-  peq.append(GrowingList())
-
+peqbank = []
+peqband = []
 hp = []
-for ii in range(0,numchn):
-  hp.append(GrowingList())
-
 lp = []
-for ii in range(0,numchn):
-  lp.append(GrowingList())
-
 phase = []
-for ii in range(0,numchn):
-  phase.append(GrowingList())
-
 dly = []
-for ii in range(0,numchn):
-  dly.append(GrowingList())
-
 gain = []
-for ii in range(0,numchn):
-  gain.append(GrowingList())
-
 xohp = []
-for ii in range(0,numchn):
-  xohp.append(GrowingList())
-
 xolp = []
-for ii in range(0,numchn):
-  xolp.append(GrowingList())
-
 fir = []
-for ii in range(0,numchn):
-  fir.append(GrowingList())
+
+#--- Reading project xml file
+print("Reading " + projectdir + "/" + projectname + "_NetList.xml")
+tree = ET.parse(projectdir + "/" + projectname + "_NetList.xml")
+root = tree.getroot()
+
+# --- Count outputs
+noutputs = 0
+for algo in root.findall('IC/Schematic/Algorithm'):
+  cell = algo.get('cell')
+  if cell.startswith("Output "):
+    noutputs = noutputs + 1
+
+#--- Reading project xml file
+ninputs = 0
+print("Reading " + projectdir + "/" + projectname + ".xml")
+tree = ET.parse(projectdir + "/" + projectname + ".xml")
+root = tree.getroot()
+
+# --- Count inputs
+for module in root.findall('IC/Module'):
+  cellname = module.find('CellName')
+
+  if cellname.text.startswith('InputSelect'):
+    strlist = cellname.text.split('_',2)
+    if len(strlist) > 2:
+      if "Analog" in strlist[2]:
+        ninputs = ninputs + 1
+
+inputselect_analog = []
+for ii in range(0,ninputs):
+  inputselect_analog.append(GrowingList())
+
+inputselect_spdif = []
+for ii in range(0,ninputs):
+  inputselect_spdif.append(GrowingList())
+
+inputselect_uac2 = []
+for ii in range(0,ninputs):
+  inputselect_uac2.append(GrowingList())
+
+inputselect_exp = []
+for ii in range(0,ninputs):
+  inputselect_exp.append(GrowingList())
+
+inputselect_port = []
+for ii in range(0,ninputs):
+  inputselect_port.append(GrowingList())
 
 for module in root.findall('IC/Module'):
   cellname = module.find('CellName')
@@ -168,90 +279,176 @@ for module in root.findall('IC/Module'):
       elif "Right" in strlist[1]:
         spdifoutmux_port[1] = int(modparam.find('Address').text)
 
-  elif cellname.text.startswith('HP'):
-    idx = int(cellname.text.split('_',1)[0].split("HP")[1])-1
-    subidx = int(cellname.text.split('_',1)[1])-1
+  # --- HP blocks
+  elif cellname.text.lower().startswith('plugin.hp'):
+    name = cellname.text.split(':',1)[0]
+    idx = -1
+    nn = int(cellname.text.split(':',1)[1]) - 1
+    for m in range(0,len(hp)):
+      if hp[m].name == name:
+        idx = m
+    if idx == -1:
+      newHp = ParamHp()
+      hp.append(newHp)
+      idx = len(hp) - 1
+    hp[idx].name = name
     for modparam in module.findall('Algorithm/ModuleParameter'):
       modname = modparam.find('Name').text
       if "B2" in modname:
-        hp[idx][subidx] = int(modparam.find('Address').text)
+        hp[idx].addr[nn] = int(modparam.find('Address').text)
 
-  elif cellname.text.startswith('Low Shelv'):
-    idx = int(cellname.text.split(' ',2)[2])-1
+  # --- LP blocks
+  elif cellname.text.lower().startswith('plugin.lp'):
+    name = cellname.text.split(':',1)[0]
+    idx = -1
+    nn = int(cellname.text.split(':',1)[1]) - 1
+    for m in range(0,len(lp)):
+      if lp[m].name == name:
+        idx = m
+    if idx == -1:
+      newLp = ParamLp()
+      lp.append(newLp)
+      idx = len(lp) - 1
+    lp[idx].name = name
     for modparam in module.findall('Algorithm/ModuleParameter'):
       modname = modparam.find('Name').text
       if "B2" in modname:
-        subidx = int(modname.split('_',1)[1])-1
-        lshelv[idx][subidx] = int(modparam.find('Address').text)
+        lp[idx].addr[nn] = int(modparam.find('Address').text)
 
-  elif cellname.text.startswith('Param EQ'):
-    idx = int(cellname.text.split(' ',2)[2])-1
+  # --- LowShelv blocks 
+  elif cellname.text.lower().startswith('plugin.lowshelv'):
     for modparam in module.findall('Algorithm/ModuleParameter'):
       modname = modparam.find('Name').text
       if "B2" in modname:
-        subidx = int(modname.split('_',1)[1])-1
-        peq[idx][subidx] = int(modparam.find('Address').text)
+        newLShelv = ParamShelv()
+        newLShelv.addr = int(modparam.find('Address').text)
+        newLShelv.name = cellname.text
+        lshelv.append(newLShelv)
 
-  elif cellname.text.startswith('High Shelv'):
-    idx = int(cellname.text.split(' ',2)[2])-1
+  # --- HighShelv blocks
+  elif cellname.text.lower().startswith('plugin.highshelv'):
     for modparam in module.findall('Algorithm/ModuleParameter'):
       modname = modparam.find('Name').text
       if "B2" in modname:
-        subidx = int(modname.split('_',1)[1])-1
-        hshelv[idx][subidx] = int(modparam.find('Address').text)
-
-  elif cellname.text.startswith('LP'):
-    idx = int(cellname.text.split('_',1)[0].split("LP")[1])-1
-    subidx = int(cellname.text.split('_',1)[1])-1
+        newHShelv = ParamShelv()
+        newHShelv.addr = int(modparam.find('Address').text)
+        newHShelv.name = cellname.text
+        hshelv.append(newHShelv)
+  
+  # --- PEQ banks
+  elif cellname.text.lower().startswith('plugin.peqbank'):
+    newPeqBank = ParamPeqBank()
+    newPeqBank.name = cellname.text
+    idx = 0
     for modparam in module.findall('Algorithm/ModuleParameter'):
       modname = modparam.find('Name').text
       if "B2" in modname:
-        lp[idx][subidx] = int(modparam.find('Address').text)
+        if idx < 10:
+          newPeqBank.addr[idx] = int(modparam.find('Address').text)
+        else:
+          print("[ERROR] Not more then 8 PEQs per bank allowed.")
+        idx = idx + 1
+    peqbank.append(newPeqBank)
+    peqband.append(len(newPeqBank.addr))
 
-  elif cellname.text.startswith('Phase'):
-    idx = int(cellname.text.split(' ',1)[1])-1
+  # --- PEQ blocks
+  elif cellname.text.lower().startswith('plugin.peq'):
     for modparam in module.findall('Algorithm/ModuleParameter'):
       modname = modparam.find('Name').text
       if "B2" in modname:
-        subidx = int(modname.split('_',1)[1])-1
-        phase[idx][subidx] = int(modparam.find('Address').text)
+        newPeq = ParamPeq()
+        newPeq.addr = int(modparam.find('Address').text)
+        newPeq.name = cellname.text
+        peq.append(newPeq)
 
-  elif cellname.text.startswith('Delay'):
-    idx = int(cellname.text.split(' ',1)[1])-1
+  # --- Phase blocks
+  elif cellname.text.lower().startswith('plugin.phase'):
+    for modparam in module.findall('Algorithm/ModuleParameter'):
+      modname = modparam.find('Name').text
+      if "B2" in modname:
+        newPhase = ParamPhase()
+        newPhase.addr = int(modparam.find('Address').text)
+        newPhase.name = cellname.text
+        phase.append(newPhase)
+
+  # --- Delay blocks
+  elif cellname.text.lower().startswith('plugin.delay'):
     for modparam in module.findall('Algorithm/ModuleParameter'):
       modname = modparam.find('Name').text
       if "delay" in modname:
-        dly[idx][0] = int(modparam.find('Address').text)
+        newDelay = ParamDelay()
+        newDelay.addr = int(modparam.find('Address').text)
+        newDelay.name = cellname.text
+        dly.append(newDelay)
 
-  elif cellname.text.startswith('Gain'):
-    idx = int(cellname.text.split(' ',1)[1])-1
+  # --- Gain blocks
+  elif cellname.text.lower().startswith('plugin.gain'):
     for modparam in module.findall('Algorithm/ModuleParameter'):
       modname = modparam.find('Name').text
       if "target" in modname:
-        gain[idx][0] = int(modparam.find('Address').text)
+        newGain = ParamGain()
+        newGain.addr = int(modparam.find('Address').text)
+        newGain.name = cellname.text
+        gain.append(newGain)
 
-  elif cellname.text.startswith('FIR'):
-    idx = int(cellname.text.split(' ',1)[1])-1
+  # --- FIR blocks
+  elif cellname.text.lower().startswith('plugin.fir'):
     for modparam in module.findall('Algorithm/ModuleParameter'):
       modname = modparam.find('Name').text
       if "fircoeff" in modname:
-        fir[idx][0] = int(modparam.find('Address').text)
+        newFir = ParamFir()
+        newFir.addr = int(modparam.find('Address').text)
+        newFir.len = int(modparam.find('Size').text) / 4
+        newFir.name = cellname.text
+        fir.append(newFir)
 
-  elif cellname.text.startswith('XO_LP'):
-    idx = int(cellname.text.split('_',2)[1].split("LP")[1])-1
-    subidx = int(cellname.text.split('_',2)[2])-1
-    for modparam in module.findall('Algorithm/ModuleParameter'):
-      modname = modparam.find('Name').text
-      if "B2" in modname:
-        xolp[idx][subidx] = int(modparam.find('Address').text)
+  # --- XO-HP blocks
+  elif cellname.text.lower().startswith('plugin.xohp'):
+    searchlpname = cellname.text.lower().replace('plugin.xohp', 'plugin.xolp')
+    # Search the corresponding LP block
+    foundlp = False
+    for modulelp in root.findall('IC/Module'):
+      cellnamelp = modulelp.find('CellName')
+      if cellnamelp.text.lower().startswith(searchlpname):
+        foundlp = True
+        name = cellnamelp.text.split(':',1)[0]
+        idx = -1
+        nn = int(cellnamelp.text.split(':',1)[1]) - 1
+        for m in range(0,len(xolp)):
+          if xolp[m].name == name:
+            idx = m 
+        if idx == -1:
+          newLp = ParamLp()
+          xolp.append(newLp)
+          idx = len(xolp) - 1
+        xolp[idx].name = name
+        for modparamlp in modulelp.findall('Algorithm/ModuleParameter'):
+          modnamelp = modparamlp.find('Name').text
+          if "B2" in modnamelp:
+            xolp[idx].addr[nn] = int(modparamlp.find('Address').text)
+    if(foundlp):
+      name = cellname.text.split(':',1)[0]
+      idx = -1
+      nn = int(cellname.text.split(':',1)[1]) - 1
+      for m in range(0,len(xohp)):
+        if xohp[m].name == name:
+          idx = m
+      if idx == -1:
+        newHp = ParamHp()
+        xohp.append(newHp)
+        idx = len(xohp) - 1
+      xohp[idx].name = name
+      for modparam in module.findall('Algorithm/ModuleParameter'):
+        modname = modparam.find('Name').text
+        if "B2" in modname:
+          xohp[idx].addr[nn] = int(modparam.find('Address').text)
+    else:
+      print("[ERROR] Could not find matching lp block for " + cellname.text)
 
-  elif cellname.text.startswith('XO_HP'):
-    idx = int(cellname.text.split('_',2)[1].split("HP")[1])-1
-    subidx = int(cellname.text.split('_',2)[2])-1
-    for modparam in module.findall('Algorithm/ModuleParameter'):
-      modname = modparam.find('Name').text
-      if "B2" in modname:
-        xohp[idx][subidx] = int(modparam.find('Address').text)
+  # --- XO-LP blocks
+  elif cellname.text.lower().startswith('plugin.xolp'):
+    # Do nothing, handled by plugin.xohp
+    pass
 
   elif cellname.text.startswith('BypassVolPoti'):
     modparam = module.find('Algorithm/ModuleParameter')
@@ -263,6 +460,8 @@ for module in root.findall('IC/Module'):
       if "target" in modname:
         mastervol = int(modparam.find('Address').text)
 
+  elif cellname.text.lower().startswith('plugin.'):
+    print("[WARNING] Unkown dsp block in plugin: " + cellname.text)
 
 inputselect_analog_t = GrowingList()
 idx = 0
@@ -308,81 +507,85 @@ for m in range(0,len(spdifoutmux_channel)):
 spdifoutmux_channel_t.append(spdifoutmux_port[0])
 spdifoutmux_channel_t.append(spdifoutmux_port[1])
 
-lshelv_t = GrowingList()
-idx = 0
-for m in range(0,len(lshelv)):
-  for n in range(0,len(lshelv[m])):
-    lshelv_t[idx] = lshelv[m][n]
-    idx = idx+1
 
-hshelv_t = GrowingList()
-idx = 0
-for m in range(0,len(hshelv)):
-  for n in range(0,len(hshelv[m])):
-    hshelv_t[idx] = hshelv[m][n]
-    idx = idx+1
-
+# HP addresses
 hp_t = GrowingList()
 idx = 0
 for m in range(0,len(hp)):
-  for n in range(0,len(hp[m])):
-    hp_t[idx] = hp[m][n]
-    idx = idx+1
+  for n in range(0, 4):
+    if hp[m].addr[n] != -1:
+      hp_t[idx] = hp[m].addr[n]
+      idx = idx+1
 
+# LP addresses
 lp_t = GrowingList()
 idx = 0
 for m in range(0,len(lp)):
-  for n in range(0,len(lp[m])):
-    lp_t[idx] = lp[m][n]
-    idx = idx+1
+  for n in range(0, 4):
+    if lp[m].addr[n] != -1:
+      lp_t[idx] = lp[m].addr[n]
+      idx = idx+1
 
+# LowShelv addresses
+lshelv_t = GrowingList()
+for m in range(0,len(lshelv)):
+  lshelv_t[m] = lshelv[m].addr
+
+# HighShelv addresses
+hshelv_t = GrowingList()
+for m in range(0,len(hshelv)):
+  hshelv_t[m] = hshelv[m].addr
+
+# PEQ bank addresses
+peqbank_t = GrowingList()
+idx = 0
+for m in range(0,len(peqbank)):
+  for n in range(0, len(peqbank[m].addr)):
+    if peqbank[m].addr[n] != -1:
+      peqbank_t[idx] = peqbank[m].addr[n]
+      idx = idx+1
+
+# PEQ addresses
 peq_t = GrowingList()
-idx = 0
 for m in range(0,len(peq)):
-  for n in range(0,len(peq[m])):
-    peq_t[idx] = peq[m][n]
-    idx = idx+1
+  peq_t[m] = peq[m].addr
 
+# Phase addresses
 phase_t = GrowingList()
-idx = 0
 for m in range(0,len(phase)):
-  for n in range(0,len(phase[m])):
-    phase_t[idx] = phase[m][n]
-    idx = idx+1
+  phase_t[m] = phase[m].addr
 
+# Delay addresses
 dly_t = GrowingList()
-idx = 0
 for m in range(0,len(dly)):
-  for n in range(0,len(dly[m])):
-    dly_t[idx] = dly[m][n]
-    idx = idx+1
+  dly_t[m] = dly[m].addr
 
+# Gain address
 gain_t = GrowingList()
-idx = 0
 for m in range(0,len(gain)):
-  for n in range(0,len(gain[m])):
-    gain_t[idx] = gain[m][n]
-    idx = idx+1
+  gain_t[m] = gain[m].addr
 
+# FIR addresses + lengths
+fir_t = GrowingList()
+firlen_t = GrowingList()
+for m in range(0,len(fir)):
+  fir_t[m] = fir[m].addr
+  firlen_t[m] = fir[m].len
+
+# XO-HP addresses
 xohp_t = GrowingList()
 idx = 0
 for m in range(0,len(xohp)):
-  for n in range(0,len(xohp[m])):
-    xohp_t[idx] = xohp[m][n]
+  for n in range(0, 4):
+    xohp_t[idx] = xohp[m].addr[n]
     idx = idx+1
 
+# XO-LP addresses
 xolp_t = GrowingList()
 idx = 0
 for m in range(0,len(xolp)):
-  for n in range(0,len(xolp[m])):
-    xolp_t[idx] = xolp[m][n]
-    idx = idx+1
-
-fir_t = GrowingList()
-idx = 0
-for m in range(0,len(fir)):
-  for n in range(0,len(fir[m])):
-    fir_t[idx] = fir[m][n]
+  for n in range(0, 4):
+    xolp_t[idx] = xolp[m].addr[n]
     idx = idx+1
 
 nhp = len(hp_t)/4
@@ -396,15 +599,44 @@ if nxo != nxolp:
 nlshelv = len(lshelv_t)
 nhshelv = len(hshelv_t)
 npeq = len(peq_t)
+npeqbank = len(peqbank_t)
 nphase = len(phase_t)
 ndly = len(dly_t)
 ngain = len(gain_t)
 nfir = len(fir_t)
 
-data = {"nchn":numchn,
+if nlp > 16:
+  print("[ERROR] Number of low pass blocks exceeds the limit of 16")
+if nhp > 16:
+  print("[ERROR] Number of high pass blocks exceeds the limit of 16")
+if nlshelv > 16:
+  print("[ERROR] Number of low shelving blocks exceeds the limit of 16")
+if nhshelv > 16:
+  print("[ERROR] Number of high shelving blocks exceeds the limit of 16")
+if npeq > 160:
+  print("[ERROR] Number of peq blocks exceeds the limit of 160")
+if npeqbank > 160:
+  print("[ERROR] Number of peqbank blocks exceeds the limit of 16")
+if nphase > 16:
+  print("[ERROR] Number of phase blocks exceeds the limit of 16")
+if ndly > 16:
+  print("[ERROR] Number of delay blocks exceeds the limit of 16")
+if ngain > 16:
+  print("[ERROR] Number of gain blocks exceeds the limit of 16")
+if nfir > 8:
+  print("[ERROR] Number of FIR blocks exceeds the limit of 8")
+if nxo > 16:
+  print("[ERROR] Number of crossover blocks exceeds the limit of 16")
+
+#--- Write plugin.ini
+print("Writing plugin.ini")
+data = {"name":nameplugin,
+        "ninputs":ninputs,
+        "noutputs":noutputs,
         "nhp":nhp,
         "nlshelv":nlshelv,
         "npeq":npeq,
+        "npeqbank":npeqbank,
         "nhshelv":nhshelv,
         "nphase":nphase,
         "nlp":nlp,
@@ -418,9 +650,11 @@ data = {"nchn":numchn,
         "exp":inputselect_exp_t,
         "port":inputselect_port_t,
         "spdifout":spdifoutmux_channel_t,
-        "hp":hp,
+        "hp":hp_t,
         "lshelv":lshelv_t,
         "peq":peq_t,
+        "peqbank":peqbank_t,
+        "peqband":peqband,
         "hshelv":hshelv_t,
         "lp":lp_t,
         "phase":phase_t,
@@ -429,11 +663,99 @@ data = {"nchn":numchn,
         "xohp":xohp_t,
         "xolp":xolp_t,
         "fir":fir_t,
+        "firlen":firlen_t,
         "vpot":vpot,
-        "master":mastervol }
+        "master":mastervol,
+        "version":version }
 
-with io.open('plugin.ini', 'w', encoding='utf8') as outfile:
-    str_ = json.dumps(data,
-                      indent=0, sort_keys=False,
-                      separators=(',', ': '), ensure_ascii=False)
-    outfile.write(to_unicode(str_))
+with io.open(projectname + "/plugin.ini", 'w', encoding='utf8') as outfile:
+  str_ = json.dumps(data,
+                    indent=0, sort_keys=False,
+                    separators=(',', ': '), ensure_ascii=False)
+  outfile.write(to_unicode(str_))
+
+#--- Writing chnames.txt
+print("Writing chnames.txt")
+with open(projectname + "/chnames.txt", 'w') as file:
+  for ii in range(0,ninputs):
+    file.write("Channel " + str(ii + 1) + "\n")
+  for ii in range(0,noutputs):
+    file.write("Out " + str(ii + 1) + "\n")
+  file.write("Preset A\n")
+  file.write("Preset B\n")
+  file.write("Preset C\n")
+  file.write("Preset D\n")
+
+#--- Copy aurora.jgz
+print("Copying aurora.jgz")
+shutil.copy2("../WEBAPP/js/aurora.jgz", "./" + projectname + "/aurora.jgz")
+
+#--- Copy stylesheet
+print("Copying dark.css")
+shutil.copy2("../WEBAPP/css/dark.css", "./" + projectname + "/dark.css")
+
+#------------------------------------------------------------------------------
+# GUI creation
+#------------------------------------------------------------------------------
+if args.gui:
+  #--- Copy custom GUI html
+  print("Copying custom dsp.html")
+  print(args.gui)
+
+  with open(args.gui, 'r') as f:
+    dsphtml = str(f.read())
+
+    #--- replace LP names
+    for m in range(0,len(lp)):
+      dsphtml = dsphtml.replace("id=\"" + lp[m].name.split('.',1)[1] + "\"", "id=lp" + str(m) + " onclick=\"openLP(" + str(m) + ");\"")
+
+    #--- replace HP names
+    for m in range(0,len(hp)):
+      dsphtml = dsphtml.replace("id=\"" + hp[m].name.split('.',1)[1] + "\"", "id=hp" + str(m) + " onclick=\"openHP(" + str(m) + ");\"")
+
+    # --- LowShelv blocks 
+    for m in range(0,len(lshelv)):
+      dsphtml = dsphtml.replace("id=\"" + lshelv[m].name.split('.',1)[1] + "\"", "id=ls" + str(m) + " onclick=\"openLShelv(" + str(m) + ");\"")
+
+    # --- HighShelv blocks
+    for m in range(0,len(hshelv)):
+      dsphtml = dsphtml.replace("id=\"" + hshelv[m].name.split('.',1)[1] + "\"", "id=hs" + str(m) + " onclick=\"openHShelv(" + str(m) + ");\"")
+
+    # --- PEQ banks
+    for m in range(0,len(peqbank)):
+      dsphtml = dsphtml.replace("id=\"" + peqbank[m].name.split('.',1)[1] + "\"", "id=peqbank" + str(m) + " onclick=\"openPeqBank(" + str(m) + ");\"")
+
+    # --- PEQ blocks
+    for m in range(0,len(peq)):
+      dsphtml = dsphtml.replace("id=\"" + peq[m].name.split('.',1)[1] + "\"", "id=peq" + str(m) + " onclick=\"openPEQ(" + str(m) + ");\"")
+    
+    # --- Phase blocks
+    for m in range(0,len(phase)):
+      dsphtml = dsphtml.replace("id=\"" + phase[m].name.split('.',1)[1] + "\"", "id=ph" + str(m) + " onclick=\"openPhase(" + str(m) + ");\"")
+
+    # --- Delay blocks
+    for m in range(0,len(dly)):
+      dsphtml = dsphtml.replace("id=\"" + dly[m].name.split('.',1)[1] + "\"", "id=dly" + str(m) + " onclick=\"openDelay(" + str(m) + ");\"")
+
+    # --- Gain blocks
+    for m in range(0,len(gain)):
+      dsphtml = dsphtml.replace("id=\"" + gain[m].name.split('.',1)[1] + "\"", "id=gn" + str(m) + " onclick=\"openGain(" + str(m) + ");\"")
+
+    # --- FIR blocks
+    for m in range(0,len(fir)):
+      dsphtml = dsphtml.replace("id=\"" + fir[m].name.split('.',1)[1] + "\"", "id=fir" + str(m) + " onclick=\"openFIR(" + str(m) + ");\"")
+
+    # --- XO-HP blocks
+    for m in range(0,len(xohp)):
+      dsphtml = dsphtml.replace("id=\"" + xohp[m].name.split('.',1)[1] + "\"", "id=xo" + str(m) + " onclick=\"openXO(" + str(m) + ");\"")
+
+    # --- XO-LP blocks
+    # Handled by xohp
+
+  with open("./" + projectname + "/dsp.html", "w") as f1:
+    f1.write(dsphtml)
+
+else:
+  #--- Copy GUI template
+  print("Copying template dsp.html")
+  shutil.copy2("../WEBAPP/template/dsp.html", "./" + projectname + "/dsp.html")
