@@ -206,6 +206,8 @@ inputselect_port = []
 for ii in range(0,ninputs):
   inputselect_port.append(GrowingList())
 
+npeqbank = 0
+
 for module in root.findall('IC/Module'):
   cellname = module.find('CellName')
 
@@ -346,10 +348,11 @@ for module in root.findall('IC/Module'):
         if idx < 10:
           newPeqBank.addr[idx] = int(modparam.find('Address').text)
         else:
-          print("[ERROR] Not more then 8 PEQs per bank allowed.")
+          print("[ERROR] Not more then 10 PEQs per bank allowed.")
         idx = idx + 1
     peqbank.append(newPeqBank)
     peqband.append(len(newPeqBank.addr))
+    npeqbank = npeqbank + 1
 
   # --- PEQ blocks
   elif cellname.text.lower().startswith('plugin.peq'):
@@ -599,7 +602,7 @@ if nxo != nxolp:
 nlshelv = len(lshelv_t)
 nhshelv = len(hshelv_t)
 npeq = len(peq_t)
-npeqbank = len(peqbank_t)
+#npeqbank = len(peqbank_t)
 nphase = len(phase_t)
 ndly = len(dly_t)
 ngain = len(gain_t)
