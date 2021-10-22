@@ -54,4 +54,4 @@ jobs:
           arduino-board-fqbn: esp32:esp32:esp32
           platform-url: https://dl.espressif.com/dl/package_esp32_index.json
           required-libraries: ArduinoJson@6.13.0,U8g2@2.27.6,IRremote@2.6.1
-          build-properties: '{ "All": "-Wno-unused-value"}'
+          build-properties: '{ "All": "-Wno-unused-value -Wno-parentheses"}'
