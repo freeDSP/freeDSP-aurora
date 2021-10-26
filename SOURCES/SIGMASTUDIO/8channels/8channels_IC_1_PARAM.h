@@ -1,7 +1,7 @@
 /*
  * File:           C:\freeDSP-aurora\SOURCES\SIGMASTUDIO\8channels\8channels_IC_1_PARAM.h
  *
- * Created:        Saturday, October 9, 2021 9:47:44 PM
+ * Created:        Tuesday, October 26, 2021 5:35:25 PM
  * Description:    8channels:IC 1 parameter RAM definitions.
  *
  * This software is distributed in the hope that it will be useful,

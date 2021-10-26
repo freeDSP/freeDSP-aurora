@@ -1,7 +1,7 @@
 /*
  * File:           defines.h
  *
- * Created:        Thursday, August 13, 2020 4:30:08 PM
+ * Created:        Tuesday, October 26, 2021 5:33:31 PM
  * Description:    4FIRs IC default download data definitions.
  *
  * This software is distributed in the hope that it will be useful,
@@ -14,13 +14,13 @@
  * are intended for resale to audio product end users. This software
  * may not be distributed whole or in any part to third parties.
  *
- * Copyright ©2020 Analog Devices, Inc. All rights reserved.
+ * Copyright ©2021 Analog Devices, Inc. All rights reserved.
  */
 #ifndef __DEFINES_H__
 #define __DEFINES_H__
 
-#define BufferSize_IC_1     	85870
-#define NumTransactions_IC_1	61
+#define BufferSize_IC_1     	86546
+#define NumTransactions_IC_1	60
 
 
 #endif

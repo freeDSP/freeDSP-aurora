@@ -1,7 +1,7 @@
 /*
- * File:           Z:\Documents\freeDSP\freeDSP-aurora\SOURCES\SIGMASTUDIO\4FIRs\4FIRs_IC_1_REG.h
+ * File:           C:\freeDSP-aurora\SOURCES\SIGMASTUDIO\4FIRs\4FIRs_IC_1_REG.h
  *
- * Created:        Thursday, August 13, 2020 4:30:08 PM
+ * Created:        Tuesday, October 26, 2021 5:33:31 PM
  * Description:    4FIRs:IC 1 control register definitions.
  *
  * This software is distributed in the hope that it will be useful,
@@ -14,7 +14,7 @@
  * are intended for resale to audio product end users. This software
  * may not be distributed whole or in any part to third parties.
  *
- * Copyright ©2020 Analog Devices, Inc. All rights reserved.
+ * Copyright ©2021 Analog Devices, Inc. All rights reserved.
  */
 #ifndef __4FIRS_IC_1_REG_H__
 #define __4FIRS_IC_1_REG_H__
@@ -343,7 +343,7 @@
 /* SERIAL_BYTE_3_0  - Registers (IC 1) */
 #define REG_SERIAL_BYTE_3_0_IC_1_ADDR             0xF20C
 #define REG_SERIAL_BYTE_3_0_IC_1_BYTE             2
-#define REG_SERIAL_BYTE_3_0_IC_1_VALUE            0x93CA
+#define REG_SERIAL_BYTE_3_0_IC_1_VALUE            0x6F80
 
 /* SERIAL_BYTE_3_1  - Registers (IC 1) */
 #define REG_SERIAL_BYTE_3_1_IC_1_ADDR             0xF20D
@@ -3279,14 +3279,14 @@
 #define R63_SERIAL_BYTE_2_1_TRISTATE_IC_1_SHIFT   5
 
 /* SERIAL_BYTE_3_0 (IC 1) */
-#define R64_SERIAL_BYTE_3_0_TDM_MODE_IC_1         0x2    /* 010b	[2:0] */
-#define R64_SERIAL_BYTE_3_0_DATA_FMT_IC_1         0x1    /* 01b	[4:3] */
-#define R64_SERIAL_BYTE_3_0_WORD_LEN_IC_1         0x2    /* 10b	[6:5] */
+#define R64_SERIAL_BYTE_3_0_TDM_MODE_IC_1         0x0    /* 000b	[2:0] */
+#define R64_SERIAL_BYTE_3_0_DATA_FMT_IC_1         0x0    /* 00b	[4:3] */
+#define R64_SERIAL_BYTE_3_0_WORD_LEN_IC_1         0x0    /* 00b	[6:5] */
 #define R64_SERIAL_BYTE_3_0_BCLK_POL_IC_1         0x1    /* 1b	[7] */
 #define R64_SERIAL_BYTE_3_0_LRCLK_POL_IC_1        0x1    /* 1b	[8] */
 #define R64_SERIAL_BYTE_3_0_LRCLK_MODE_IC_1       0x1    /* 1b	[9] */
-#define R64_SERIAL_BYTE_3_0_BCLK_SRC_IC_1         0x4    /* 100b	[12:10] */
-#define R64_SERIAL_BYTE_3_0_LRCLK_SRC_IC_1        0x4    /* 100b	[15:13] */
+#define R64_SERIAL_BYTE_3_0_BCLK_SRC_IC_1         0x3    /* 011b	[12:10] */
+#define R64_SERIAL_BYTE_3_0_LRCLK_SRC_IC_1        0x3    /* 011b	[15:13] */
 #define R64_SERIAL_BYTE_3_0_TDM_MODE_IC_1_MASK    0x7
 #define R64_SERIAL_BYTE_3_0_TDM_MODE_IC_1_SHIFT   0
 #define R64_SERIAL_BYTE_3_0_DATA_FMT_IC_1_MASK    0x18
