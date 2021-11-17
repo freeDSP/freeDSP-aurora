@@ -1,11 +1,11 @@
 ADAU145X Assembler, Analog Devices Inc.
 Version: 4.6.0,1809  (built 12/23/2020)
 
-##### Compile Started: Tuesday, October 26, 2021 5:35:16 PM #####
+##### Compile Started: Tuesday, November 16, 2021 3:55:21 PM #####
 ADAU145X Assembler, Analog Devices Inc.
 Version: 4.6.0,1809  (built 12/23/2020)
 
-##### Compile Started: Tuesday, October 26, 2021 5:35:16 PM #####
+##### Compile Started: Tuesday, November 16, 2021 3:55:21 PM #####
 ##### Compile succeeded:  0 errors, 0 warnings #####
 
 ##### Summary #####
@@ -24,7 +24,7 @@ VolumePot                     26        45        0       10      0
 MasterVolume                  25        44        3       8       0
 FRAMEWORK                     58        39        19      0       0
 PeqBank1                      28        29        50      45      0
-PegBank2                      28        29        50      45      0
+PeqBank2                      28        29        50      45      0
 PeqBank6                      28        29        50      45      0
 PeqBank3                      28        29        50      45      0
 PeqBank5                      28        29        50      45      0

@@ -2637,7 +2637,7 @@
             </Algorithm>
         </Module>
         <Module>
-            <CellName>Plugin.PegBank2</CellName>
+            <CellName>Plugin.PeqBank2</CellName>
             <Algorithm>
                 <AlgoName>ALG0</AlgoName>
                 <DetailedName>General2ndOrderDPSigma300Alg18</DetailedName>

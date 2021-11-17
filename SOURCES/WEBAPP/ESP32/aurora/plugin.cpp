@@ -139,7 +139,7 @@ void readPluginMeta( void )
     int peqoffset = 0;
     for( int ii = 0; ii < numPeqBanks; ii++ )
     {
-      paramPeqBank[ii].numBands = static_cast<uint16_t>(jsonPluginMeta["peqbands"][ii]);
+      paramPeqBank[ii].numBands = static_cast<uint16_t>(jsonPluginMeta["peqband"][ii]);
       for(int nn = 0; nn < paramPeqBank[ii].numBands; nn++)
       {
         paramPeqBank[ii].addr[nn] = static_cast<uint16_t>(jsonPluginMeta["peqbank"][peqoffset]);

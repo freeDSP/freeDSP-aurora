@@ -818,7 +818,7 @@
                 <Link pin="I_C57_A0_P1_in" dir="in" link="Link55" />
                 <Link pin="O_C57_A0_P2_out" dir="out" link="Link115" />
             </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg18" friendlyname="Multi-Channel - Double Precision " cell="Plugin.PegBank2 " location="{X=1430, Y=-58.52225} " Growth="1 " GrowthB="1">
+            <Algorithm name="General2ndOrderDPSigma300Alg18" friendlyname="Multi-Channel - Double Precision " cell="Plugin.PeqBank2 " location="{X=1430, Y=-58.52225} " Growth="1 " GrowthB="1">
                 <Link pin="I_C98_A0_P1_in" dir="in" link="Link78" />
                 <Link pin="O_C98_A0_P2_out" dir="out" link="Link104" />
             </Algorithm>

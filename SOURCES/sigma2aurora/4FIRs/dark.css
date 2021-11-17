@@ -82,7 +82,7 @@ input[type=range].range {
 input[type=text]{
   height: 20px;
   background-color: #101010;
-  border: 1px solid #D0D0D0;
+  border: 1px solid #808080;
   border-radius: 2px;
   color: #FFFFFF;
 }
@@ -332,3 +332,11 @@ height:60px;
   font-size: 12px;
   text-align:center;
  }
+
+ .cfgbtn{
+  width:160px;
+  height:50px;
+  border: 1px solid #73EC6F;
+  border-radius: 2px;
+  color: #F0F0F0;
+}

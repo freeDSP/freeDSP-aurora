@@ -750,7 +750,8 @@ if args.gui:
 
     # --- XO-HP blocks
     for m in range(0,len(xohp)):
-      dsphtml = dsphtml.replace("id=\"" + xohp[m].name.split('.',1)[1] + "\"", "id=xo" + str(m) + " onclick=\"openXO(" + str(m) + ");\"")
+      print(xohp[m].name.split('.',1)[1].replace("HP",""))
+      dsphtml = dsphtml.replace("id=\"" + xohp[m].name.split('.',1)[1].replace("HP","") + "\"", "id=xo" + str(m) + " onclick=\"openXO(" + str(m) + ");\"")
 
     # --- XO-LP blocks
     # Handled by xohp
