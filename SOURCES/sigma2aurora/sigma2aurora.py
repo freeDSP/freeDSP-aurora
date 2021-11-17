@@ -677,18 +677,6 @@ with io.open(projectname + "/plugin.ini", 'w', encoding='utf8') as outfile:
                     separators=(',', ': '), ensure_ascii=False)
   outfile.write(to_unicode(str_))
 
-#--- Writing chnames.txt
-print("Writing chnames.txt")
-with open(projectname + "/chnames.txt", 'w') as file:
-  for ii in range(0,ninputs):
-    file.write("Channel " + str(ii + 1) + "\n")
-  for ii in range(0,noutputs):
-    file.write("Out " + str(ii + 1) + "\n")
-  file.write("Preset A\n")
-  file.write("Preset B\n")
-  file.write("Preset C\n")
-  file.write("Preset D\n")
-
 #--- Copy aurora.jgz
 print("Copying aurora.jgz")
 shutil.copy2("../WEBAPP/js/aurora.jgz", "./" + projectname + "/aurora.jgz")
@@ -759,7 +747,34 @@ if args.gui:
   with open("./" + projectname + "/dsp.html", "w") as f1:
     f1.write(dsphtml)
 
+  if os.path.isfile(args.gui.replace("dsp.html", "chnames.txt")):
+    print("Copying custom chnames.txt")
+    print(args.gui.replace("dsp.html", "chnames.txt"))
+    shutil.copy2(args.gui.replace("dsp.html", "chnames.txt"), "./" + projectname + "/chnames.txt")
+  else:
+    print("Writing default chnames.txt")
+    with open(projectname + "/chnames.txt", 'w') as file:
+      for ii in range(0,ninputs):
+        file.write("Channel " + str(ii + 1) + "\n")
+      for ii in range(0,noutputs):
+        file.write("Out " + str(ii + 1) + "\n")
+      file.write("Preset A\n")
+      file.write("Preset B\n")
+      file.write("Preset C\n")
+      file.write("Preset D\n")
+
 else:
   #--- Copy GUI template
   print("Copying template dsp.html")
-  shutil.copy2("../WEBAPP/template/dsp.html", "./" + projectname + "/dsp.html")
+  shutil.copy2("../WEBAPP/plugins/template/dsp.html", "./" + projectname + "/dsp.html")
+  #--- Writing chnames.txt
+  print("Writing default chnames.txt")
+  with open(projectname + "/chnames.txt", 'w') as file:
+    for ii in range(0,ninputs):
+      file.write("Channel " + str(ii + 1) + "\n")
+    for ii in range(0,noutputs):
+      file.write("Out " + str(ii + 1) + "\n")
+    file.write("Preset A\n")
+    file.write("Preset B\n")
+    file.write("Preset C\n")
+    file.write("Preset D\n")
