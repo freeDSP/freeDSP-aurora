@@ -1,7 +1,7 @@
 /*
  * File:           C:\freeDSP-aurora\SOURCES\SIGMASTUDIO\4FIRs\4FIRs_IC_1_REG.h
  *
- * Created:        Tuesday, October 26, 2021 5:33:31 PM
+ * Created:        Thursday, November 18, 2021 12:35:22 PM
  * Description:    4FIRs:IC 1 control register definitions.
  *
  * This software is distributed in the hope that it will be useful,

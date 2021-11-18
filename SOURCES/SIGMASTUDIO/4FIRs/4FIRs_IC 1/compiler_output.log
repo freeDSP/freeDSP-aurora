@@ -1,19 +1,19 @@
 ADAU145X Assembler, Analog Devices Inc.
 Version: 4.6.0,1809  (built 12/23/2020)
 
-##### Compile Started: Tuesday, October 26, 2021 5:33:26 PM #####
+##### Compile Started: Thursday, November 18, 2021 12:35:10 PM #####
 ADAU145X Assembler, Analog Devices Inc.
 Version: 4.6.0,1809  (built 12/23/2020)
 
-##### Compile Started: Tuesday, October 26, 2021 5:33:26 PM #####
+##### Compile Started: Thursday, November 18, 2021 12:35:10 PM #####
 ##### Compile succeeded:  0 errors, 0 warnings #####
 
 ##### Summary #####
-DM0 RAM used:       20457    (of 20480)
-DM1 RAM used:       20058    (of 20480)
+DM0 RAM used:       20285    (of 20480)
+DM1 RAM used:       20034    (of 20480)
 PM  RAM used(Data): 00000    (of 8192)
-PM  RAM used(Inst): 01113    (of 8192) 816 instructions (32bit: 519  64bit: 297)
-Total PM used:      01113    (of 8192)
+PM  RAM used(Inst): 00897    (of 8192) 648 instructions (32bit: 399  64bit: 249)
+Total PM used:      00897    (of 8192)
 
 --------------------------------------------------------------------------------------
 STREAM                        Inst      Inst      DM0     DM1     PM
@@ -22,114 +22,86 @@ Instance                      (cycles)  (size)
 STACK                          -         -        16      0       0       
 VolumePot                     26        45        0       10      0
 FRAMEWORK                     58        39        19      0       0
-PeqBank3                      24        29        40      38      0
 PeqBank1                      24        29        40      38      0
+PeqBank3                      24        29        40      38      0
 PeqBank4                      24        29        40      37      0
 PeqBank2                      24        29        40      37      0
 MasterVolume                  15        26        3       4       0
-FIR1                          1031      18        4096    4096    0
+FIR2                          1031      18        4096    4096    0
 FIR3                          1031      18        4096    4096    0
 FIR4                          1031      18        4096    4096    0
-FIR2                          1031      18        4096    4096    0
-Input ADC                     16        16        0       8       0
+FIR1                          1031      18        4096    4096    0
 Input ESP32                   16        16        0       8       0
 Input Expansion               16        16        0       8       0
 Input UAC2                    16        16        0       8       0
-Gain1                         8         13        3       1       0
-Gain4                         8         13        3       1       0
-Gain2                         8         13        3       1       0
+Input ADC                     16        16        0       8       0
 Gain3                         8         13        3       1       0
+Gain2                         8         13        3       1       0
+Gain4                         8         13        3       1       0
+Gain1                         8         13        3       1       0
 Delay3                        8         11        1702    1       0
 Delay1                        8         11        1702    1       0
-Nx_Exp_Right                  7         10        9       1       0
 Nx_Out_Left                   7         10        9       1       0
+Nx_Out_Right                  7         10        9       1       0
+Nx_ESP32_Left                 7         10        9       1       0
+Nx_UAC2_Right                 7         10        9       1       0
+Nx_Exp_Right                  7         10        9       1       0
 Nx_Analog_Right               7         10        9       1       0
 Nx_ESP32_Right                7         10        9       1       0
 Nx_UAC2_Left                  7         10        9       1       0
-Nx_ESP32_Left                 7         10        9       1       0
 Nx_Exp_Left                   7         10        9       1       0
-Nx_UAC2_Right                 7         10        9       1       0
-Nx_Out_Right                  7         10        9       1       0
 Nx_Analog_Left                7         10        9       1       0
-Nx_Left                       7         10        7       1       0
 Nx_Right                      7         10        7       1       0
-Nx1-1_5                       7         10        6       1       0
-Nx1-1_7                       7         10        6       1       0
-Nx1-1_6                       7         10        6       1       0
-Nx1-1_8                       7         10        6       1       0
-Nx1-1_4                       7         10        6       0       0
-Nx1-1_3                       7         10        6       0       0
-Nx1-1_2                       7         10        6       0       0
+Nx_Left                       7         10        7       1       0
 Nx1-1                         7         10        6       0       0
-Nx1-1_Exp_2                   7         9         9       1       0
-Nx1-1_UAC                     7         9         9       1       0
-Nx1-1_Analog                  7         9         9       1       0
-Nx1-1_Exp                     7         9         9       1       0
+Nx1-1_2                       7         10        6       0       0
+Nx1-1_3                       7         10        6       0       0
+Nx1-1_4                       7         10        6       0       0
 Nx1-1_UAC_2                   7         9         9       1       0
-Nx1-1_ESP32_2                 7         9         9       1       0
-Nx1-1_Analog_2                7         9         9       1       0
-Nx1-1_ESP32                   7         9         9       1       0
-Nx1-1_UAC_3                   7         9         9       1       0
-Nx1-1_UAC_8                   7         9         9       1       0
-Nx1-1_Analog_8                7         9         9       1       0
-Nx1-1_Exp_8                   7         9         9       1       0
-Nx1-1_Analog_7                7         9         9       1       0
-Nx1-1_Exp_7                   7         9         9       1       0
-Nx1-1_UAC_7                   7         9         9       1       0
-Nx1-1_ESP32_7                 7         9         9       1       0
-Nx1-1_UAC_6                   7         9         9       1       0
-Nx1-1_ESP32_6                 7         9         9       1       0
-Nx1-1_Exp_6                   7         9         9       1       0
-Nx1-1_Analog_6                7         9         9       1       0
-Nx1-1_ESP32_5                 7         9         9       1       0
-Nx1-1_Exp_5                   7         9         9       1       0
-Nx1-1_ESP32_8                 7         9         9       1       0
-Nx1-1_Analog_5                7         9         9       1       0
-Nx1-1_UAC_5                   7         9         9       1       0
 Nx1-1_UAC_4                   7         9         9       1       0
-Nx1-1_ESP32_4                 7         9         9       1       0
+Nx1-1_ESP32_2                 7         9         9       1       0
 Nx1-1_Exp_4                   7         9         9       1       0
 Nx1-1_Analog_4                7         9         9       1       0
-Nx1-1_Analog_3                7         9         9       1       0
 Nx1-1_Exp_3                   7         9         9       1       0
 Nx1-1_ESP32_3                 7         9         9       1       0
-Delay2                        7         9         1       1702    0
+Nx1-1_ESP32_4                 7         9         9       1       0
+Nx1-1_ESP32                   7         9         9       1       0
+Nx1-1_UAC_3                   7         9         9       1       0
+Nx1-1_Analog_2                7         9         9       1       0
+Nx1-1_Exp_2                   7         9         9       1       0
+Nx1-1_Analog_3                7         9         9       1       0
+Nx1-1_Exp                     7         9         9       1       0
+Nx1-1_UAC                     7         9         9       1       0
+Nx1-1_Analog                  7         9         9       1       0
 Delay4                        7         9         1       1702    0
+Delay2                        7         9         1       1702    0
+BypassVolPoti                 5         6         1       1       0
 Nx_SPDIF_Right                5         6         1       1       0
 Nx_SPDIF_Left                 5         6         1       1       0
-BypassVolPoti                 5         6         1       1       0
-Nx1-1_SPDIF_5                 5         5         1       1       0
 Nx1-1_SPDIF_2                 5         5         1       1       0
-Nx1-1_SPDIF_8                 5         5         1       1       0
 Nx1-1_SPDIF_4                 5         5         1       1       0
-Nx1-1_SPDIF_7                 5         5         1       1       0
-Nx1-1_SPDIF                   5         5         1       1       0
-Nx1-1_SPDIF_6                 5         5         1       1       0
 Nx1-1_SPDIF_3                 5         5         1       1       0
+Nx1-1_SPDIF                   5         5         1       1       0
 Shift1                        4         4         1       1       0
 ADC In1                       4         4         0       1       0
 AsrcIn1                       3         3         0       2       0
-Output 8                      2         3         0       0       0
-Output 7                      2         3         0       0       0
-Output 6                      2         3         0       0       0
-Output 5                      2         3         0       0       0
 Output 4                      2         3         0       0       0
 Output 3                      2         3         0       0       0
-SpdifOut_Right                2         3         0       0       0
-Output 1                      2         3         0       0       0
-SpdifOut_Left                 2         3         0       0       0
 Output 2                      2         3         0       0       0
+Output 1                      2         3         0       0       0
+SpdifOut_Right                2         3         0       0       0
+SpdifOut_Left                 2         3         0       0       0
 DC1                           2         2         1       1       0
-Output_UAC3                   2         2         0       0       0
 Output_UAC5                   2         2         0       0       0
 Output_UAC7                   2         2         0       0       0
 Output_UAC4                   2         2         0       0       0
 Output_UAC8                   2         2         0       0       0
-Output_UAC2                   2         2         0       0       0
-Output_UAC6                   2         2         0       0       0
 Output_UAC1                   2         2         0       0       0
+Output_UAC2                   2         2         0       0       0
+Output_UAC3                   2         2         0       0       0
+Output_UAC6                   2         2         0       0       0
 --------------------------------------------------------------------------------------
-Total                         4913      1059      20453   20054   0
+Total                         4745      843       20281   20030   0
 --------------------------------------------------------------------------------------
-(% Fs=48.0kHz)                80%       13%       100%    98%     0%
+(% Fs=48.0kHz)                78%       11%       100%    98%     0%
 
