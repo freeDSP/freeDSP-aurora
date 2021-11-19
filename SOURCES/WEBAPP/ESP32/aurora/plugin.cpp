@@ -135,18 +135,18 @@ void readPluginMeta( void )
 
     for( int ii = 0; ii < numPEQs; ii++ )
       paramPeq[ii].addr = static_cast<uint16_t>(jsonPluginMeta["peq"][ii]);
-    
+
     int peqoffset = 0;
     for( int ii = 0; ii < numPeqBanks; ii++ )
     {
-      paramPeqBank[ii].numBands = static_cast<uint16_t>(jsonPluginMeta["peqbands"][ii]);
+      paramPeqBank[ii].numBands = static_cast<uint16_t>(jsonPluginMeta["peqband"][ii]);
       for(int nn = 0; nn < paramPeqBank[ii].numBands; nn++)
       {
         paramPeqBank[ii].addr[nn] = static_cast<uint16_t>(jsonPluginMeta["peqbank"][peqoffset]);
         peqoffset++;
       }
     }
-      
+     
     for( int ii = 0; ii < numHShelvs; ii++ )
       paramHshelv[ii].addr = static_cast<uint16_t>(jsonPluginMeta["hshelv"][ii]);
 
@@ -220,6 +220,7 @@ void readPluginMeta( void )
 
     spdifOutputSelector.addrPortLeft = static_cast<uint16_t>(jsonPluginMeta["spdifout"][12]);
     spdifOutputSelector.addrPortRight = static_cast<uint16_t>(jsonPluginMeta["spdifout"][13]);
+
   }
   else
   {

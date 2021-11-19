@@ -526,6 +526,97 @@
     </div>
   </div>
 
+  <div id="peqbank" class="modal">
+    <div id="peqbank-dialog-content" class="modal-content d_peq">
+      <table class="ptbl">
+      <tr><td style="height:20px;padding-top:10px;">
+      <table style="width:100%;">
+      <tr><td id="peqbank-title" class="headline">Title</td><td class="close" onclick="closeModal('peqbank')">&times;</td></tr>
+      </table></td></tr>
+      <tr><td>
+      <table class="ptbl" id='peqbank-userinput' data-numbands="0">
+      </table>
+      </td></tr>
+
+      <tr><td>
+      <table style="width:100%;">
+        <tr>
+          <!--<td style="padding: 10px;"><button class="modal-send" id="peq-import" onclick="document.getElementById('fileImportRew').click();">Import REW</button></td>
+          <td style="padding: 10px;"><button class="modal-send" id="peq-bypass" data-bypass="0">Bypass</button></td>-->
+          <td style="padding: 10px;"><button class="send" id="peqbank-send">Send</button></td>
+        </tr>
+      </table>
+      </td></tr>
+
+      </table>
+      <!-- <input id="fileImportRew" type="file" style="display:none;" onchange="importREW(this.files[0])"/> -->
+    </div>
+  </div>
+
+  <div id="crossOver" class="modal" data-idx="0">
+    <div class="modal-content d_hp" style="width:600px;">
+      <table class="ptbl">
+      <tr><td colspan="4" style="height:20px;padding-top:10px;">
+      <table style="width:100%;">
+      <tr><td class="headline">Crossover</td><td class="close" onclick="closeModal('crossOver')">&times;</td></tr>
+      </table>
+      </td></tr>
+      <tr><td colspan="2">Lowpass</td><td colspan="2">Highpass</td></tr>
+      <tr><td colspan="2">
+        <select id="xo_lp_typ">
+          <option value="0">Bes 6</option>
+          <option value="1">Bes 12</option>
+          <option value="2">Bes 18</option>
+          <option value="3">Bes 24</option>
+          <option value="4">But 12</option>
+          <option value="5">But 18</option>
+          <option value="6">But 24</option>
+          <option value="7">LR 12</option>
+          <option value="8">LR 24</option>
+          <option value="9">LR 36</option>
+          <option value="10">LR 48</option>
+        </select>
+      </td>
+      <td colspan="2">
+        <select id="xo_hp_typ">
+          <option value="0">Bes 6</option>
+          <option value="1">Bes 12</option>
+          <option value="2">Bes 18</option>
+          <option value="3">Bes 24</option>
+          <option value="4">But 12</option>
+          <option value="5">But 18</option>
+          <option value="6">But 24</option>
+          <option value="7">LR 12</option>
+          <option value="8">LR 24</option>
+          <option value="9">LR 36</option>
+          <option value="10">LR 48</option>
+        </select>
+      </td></tr>
+      <tr><td><input type="number" id="xo_lp_fc" style="width:95%;" step="any" min="1" max="20000"></td><td style="text-align:left;width:10%;">Hz</td>
+          <td><input type="number" id="xo_hp_fc" style="width:95%;" step="any" min="1" max="20000"></td><td style="text-align:left;width:10%;">Hz</td></tr>
+      <tr><td colspan="2"><button class="send" id="xo_lp_bypass" onclick="bypass('xo_lp_bypass');sendParam('xo');" data-bypass="0">Bypass</button></td>
+          <td colspan="2"><button class="send" id="xo_hp_bypass" onclick="bypass('xo_hp_bypass');sendParam('xo');" data-bypass="0">Bypass</button></td></tr>
+      <tr><td colspan="4"><button class="send" onclick="sendParam('xo')">Send</button></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="fir" class="modal" data-idx="0">
+    <div class="modal-content d_fir">
+      <table class="ptbl">
+      <tr><td colspan="2" style="height:20px;padding-top:10px;">
+      <table style="width:100%;">
+      <tr><td class="headline">FIR</td><td class="close" onclick="closeModal('fir')">&times;</td></tr>
+      </table>
+      </td></tr>
+      <tr><td>Impulse Response:</td></tr>
+      <tr><td><input type="file" id="irfile" width="95%"></td></tr>
+      <tr><td colspan="2"><button class="send" id="fir_bypass" onclick="bypass('fir_bypass');sendParam('firbypass');" data-bypass="0">Bypass</button></td></tr>
+      <tr><td colspan="2"><button class="send" onclick="sendParam('fir')">Send</button></td></tr>
+      </table>
+    </div>
+  </div>
+
   <div id="configDev" class="modal">
     <div class="modal-content" style="width:600px;">
       <table class="ptbl">

@@ -206,6 +206,8 @@ inputselect_port = []
 for ii in range(0,ninputs):
   inputselect_port.append(GrowingList())
 
+npeqbank = 0
+
 for module in root.findall('IC/Module'):
   cellname = module.find('CellName')
 
@@ -346,10 +348,11 @@ for module in root.findall('IC/Module'):
         if idx < 10:
           newPeqBank.addr[idx] = int(modparam.find('Address').text)
         else:
-          print("[ERROR] Not more then 8 PEQs per bank allowed.")
+          print("[ERROR] Not more then 10 PEQs per bank allowed.")
         idx = idx + 1
     peqbank.append(newPeqBank)
     peqband.append(len(newPeqBank.addr))
+    npeqbank = npeqbank + 1
 
   # --- PEQ blocks
   elif cellname.text.lower().startswith('plugin.peq'):
@@ -599,7 +602,7 @@ if nxo != nxolp:
 nlshelv = len(lshelv_t)
 nhshelv = len(hshelv_t)
 npeq = len(peq_t)
-npeqbank = len(peqbank_t)
+#npeqbank = len(peqbank_t)
 nphase = len(phase_t)
 ndly = len(dly_t)
 ngain = len(gain_t)
@@ -674,18 +677,6 @@ with io.open(projectname + "/plugin.ini", 'w', encoding='utf8') as outfile:
                     separators=(',', ': '), ensure_ascii=False)
   outfile.write(to_unicode(str_))
 
-#--- Writing chnames.txt
-print("Writing chnames.txt")
-with open(projectname + "/chnames.txt", 'w') as file:
-  for ii in range(0,ninputs):
-    file.write("Channel " + str(ii + 1) + "\n")
-  for ii in range(0,noutputs):
-    file.write("Out " + str(ii + 1) + "\n")
-  file.write("Preset A\n")
-  file.write("Preset B\n")
-  file.write("Preset C\n")
-  file.write("Preset D\n")
-
 #--- Copy aurora.jgz
 print("Copying aurora.jgz")
 shutil.copy2("../WEBAPP/js/aurora.jgz", "./" + projectname + "/aurora.jgz")
@@ -747,7 +738,8 @@ if args.gui:
 
     # --- XO-HP blocks
     for m in range(0,len(xohp)):
-      dsphtml = dsphtml.replace("id=\"" + xohp[m].name.split('.',1)[1] + "\"", "id=xo" + str(m) + " onclick=\"openXO(" + str(m) + ");\"")
+      print(xohp[m].name.split('.',1)[1].replace("HP",""))
+      dsphtml = dsphtml.replace("id=\"" + xohp[m].name.split('.',1)[1].replace("HP","") + "\"", "id=xo" + str(m) + " onclick=\"openXO(" + str(m) + ");\"")
 
     # --- XO-LP blocks
     # Handled by xohp
@@ -755,7 +747,34 @@ if args.gui:
   with open("./" + projectname + "/dsp.html", "w") as f1:
     f1.write(dsphtml)
 
+  if os.path.isfile(args.gui.replace("dsp.html", "chnames.txt")):
+    print("Copying custom chnames.txt")
+    print(args.gui.replace("dsp.html", "chnames.txt"))
+    shutil.copy2(args.gui.replace("dsp.html", "chnames.txt"), "./" + projectname + "/chnames.txt")
+  else:
+    print("Writing default chnames.txt")
+    with open(projectname + "/chnames.txt", 'w') as file:
+      for ii in range(0,ninputs):
+        file.write("Channel " + str(ii + 1) + "\n")
+      for ii in range(0,noutputs):
+        file.write("Out " + str(ii + 1) + "\n")
+      file.write("Preset A\n")
+      file.write("Preset B\n")
+      file.write("Preset C\n")
+      file.write("Preset D\n")
+
 else:
   #--- Copy GUI template
   print("Copying template dsp.html")
-  shutil.copy2("../WEBAPP/template/dsp.html", "./" + projectname + "/dsp.html")
+  shutil.copy2("../WEBAPP/plugins/template/dsp.html", "./" + projectname + "/dsp.html")
+  #--- Writing chnames.txt
+  print("Writing default chnames.txt")
+  with open(projectname + "/chnames.txt", 'w') as file:
+    for ii in range(0,ninputs):
+      file.write("Channel " + str(ii + 1) + "\n")
+    for ii in range(0,noutputs):
+      file.write("Out " + str(ii + 1) + "\n")
+    file.write("Preset A\n")
+    file.write("Preset B\n")
+    file.write("Preset C\n")
+    file.write("Preset D\n")
