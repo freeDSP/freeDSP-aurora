@@ -60,6 +60,8 @@ function onLoad(){
     return response.json();
   }).then(function(cfg){  
     document.getElementById("fw").innerHTML="FW: "+cfg.fw;
+    document.getElementById("plugin").innerHTML="Plugin: "+cfg.plugin;
+    if(!(cfg.fw == cfg.plugin)) alert("Plugin does not match firmware version. Please upload an updated plugin.");
     document.getElementById("ip").innerHTML="Local WiFi IP: "+cfg.ip;
     var p=cfg.pre;
     document.getElementById("pre0").style.backgroundColor = "#101010";
@@ -126,6 +128,14 @@ function onLoad(){
       document.getElementById(data.fc[ii].name).innerHTML=data.fc[ii].val;
     }
     getMVol();
+    return fetch("/allnames");
+  }).then(function(response){
+    return response.text();
+  }).then(function(response){
+    var data = JSON.parse(response);
+    for(ii in data.inputs){document.getElementById("input"+ii).innerHTML=data.inputs[ii];}
+    for(ii in data.outputs){document.getElementById("output"+ii).innerHTML=data.outputs[ii];}
+    for(ii in data.presets){document.getElementById("pre"+ii).innerHTML=data.presets[ii];}
   }).catch(function(err){console.log(err);
   });
 }
@@ -269,6 +279,11 @@ function changeSPDIF(id){
 
 function closeModal(id){
   document.getElementById(id).style.display = "none";
+  if(id == 'peqbank') {
+    while(document.getElementById('peqbank-userinput').children.length > 0)
+      document.getElementById('peqbank-userinput').children[0].remove();
+      document.getElementById('peqbank-dialog-content').style.width = '300px';
+  }
   fetch("/allbyp")
   .then(function(response){
     return response.text();
@@ -387,6 +402,119 @@ function openPEQ(idx){
     switchBypass("peq_bypass");
   }).catch (function (error){console.log(error);
   });
+}
+
+function openPeqBank(idx,len){
+  fetch("/peqbank?idx="+idx).then (function (response) {
+    return response.json();
+  }).then (function(data) {
+    document.getElementById('peqbank-dialog-content').style.width = 200 * data["fc"].length + 'px';
+    var userinput = document.getElementById('peqbank-userinput');
+    userinput.dataset.numbands = data["fc"].length;
+    var tr = document.createElement('tr');
+    for(var ii = 0; ii < data["fc"].length; ii++) {
+      var td = document.createElement('td');
+      td.innerHTML = ii + 1;
+      td.colSpan = 3;
+      tr.appendChild(td);
+    }
+    userinput.appendChild(tr);
+    tr = document.createElement('tr');
+    for(var ii = 0; ii < data["fc"].length; ii++) {
+      var td = document.createElement('td');
+      td.style.textAlign = 'right';
+      td.style.width = '20px';
+      td.innerHTML = 'fc';
+      tr.appendChild(td);
+      td = document.createElement('td');
+      td.style.maxWidth = '120px';
+      td.innerHTML = '<input type="number" id="peq_fc_' + ii + '" style="width:90%;" value="' + data["fc"][ii] + '" step="any" min="0" max="24000">';
+      tr.appendChild(td);
+      td = document.createElement('td');
+      td.style.textAlign = 'left';
+      td.style.width = '20px';
+      td.innerHTML = 'Hz';
+      tr.appendChild(td);
+    }
+    userinput.appendChild(tr);
+    tr = document.createElement('tr');
+    for(var ii = 0; ii < data["Q"].length; ii++) {
+      var td = document.createElement('td');
+      td.style.textAlign = 'right';
+      td.style.width = '20px';
+      td.id = "label_"+ii;
+      td.innerHTML = 'Q';
+      tr.appendChild(td);
+      td = document.createElement('td');
+      td.style.maxWidth = '120px';
+      td.innerHTML = '<input type="number" id="peq_q_' + ii + '" style="width:90%;" value="' + data["Q"][ii] + '" step="any" min="0.1" max="100">';
+      tr.appendChild(td);
+      td = document.createElement('td');
+      td.style.textAlign = 'left';
+      td.style.width = '20px';
+      td.innerHTML = '';
+      tr.appendChild(td);
+    }
+    userinput.appendChild(tr);
+    tr = document.createElement('tr');
+    for(var ii = 0; ii < data["V0"].length; ii++) {
+      var td = document.createElement('td');
+      td.style.textAlign = 'right';
+      td.style.width = '20px';
+      td.innerHTML = 'V0';
+      tr.appendChild(td);
+      td = document.createElement('td');
+      td.style.maxWidth = '120px';
+      td.innerHTML = '<input type="number" id="peq_v0_' + ii + '" style="width:90%;" value="' + data["V0"][ii] + '" step="any" min="-100" max="100">';
+      tr.appendChild(td);
+      td = document.createElement('td');
+      td.style.textAlign = 'left';
+      td.style.width = '20px';
+      td.innerHTML = 'dB';
+      tr.appendChild(td);
+    }
+    userinput.appendChild(tr);
+    tr = document.createElement('tr');
+    for(var ii = 0; ii < data["bypass"].length; ii++) {
+      var td = document.createElement('td');
+      tr.appendChild(td);
+      td = document.createElement('td');
+      td.innerHTML = "<button class=\"send\" id='peq_bypass_" + ii + "' onclick=\"bypass('peq_bypass_" + ii + "')\" data-bypass=\"0\">Bypass</button>";
+      tr.appendChild(td);
+      td = document.createElement('td');
+      tr.appendChild(td);
+    }
+    userinput.appendChild(tr);
+    for(var ii = 0; ii < data["bypass"].length; ii++) {
+      document.getElementById("peq_bypass_" + ii).dataset.bypass=data["bypass"][ii];
+      switchBypass("peq_bypass_" + ii);
+    }
+    document.getElementById('peqbank-send').onclick = function(){setPeqBank(idx)};
+    document.getElementById('peqbank-dialog-content').className = 'modal-content d_peq';
+    document.getElementById('peqbank-title').innerHTML = 'Parametric EQ';
+    document.getElementById('peqbank').style.display = 'block';
+  }).catch (function (error){console.log(error);});
+}
+
+
+function setPeqBank(idx){
+  var data = {};
+  data.idx = idx;
+  data.fc = [];
+  data.Q = [];
+  data.V0 = [];
+  data.bypass = [];
+
+  var numbands = document.getElementById('peqbank-userinput').dataset.numbands;
+  for(var ii = 0; ii < numbands; ii++) {
+    data.fc.push(parseFloat(document.getElementById('peq_fc_' + ii).value));
+    data.Q.push(parseFloat(document.getElementById('peq_q_' + ii).value));
+    data.V0.push(parseFloat(document.getElementById('peq_v0_' + ii).value));
+    data.bypass.push(document.getElementById('peq_bypass_' + ii).dataset.bypass);
+  }
+  data.numbands = numbands;
+  fetch("/peqbank",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)})
+  .catch(function(err){console.log(err);});
 }
 
 function openHShelv(idx){
@@ -610,8 +738,8 @@ function postJson(btp){
   else if(btp=="fir"){
     var idx=document.getElementById("fir").dataset.idx;
     var bypass=document.getElementById("fir_bypass").dataset.bypass;
-    var taps = new Float32Array(4096);
-    for(var k=0;k<4096;k++) taps[k]=0;
+    var taps = new Float32Array(20000);
+    for(var k=0;k<20000;k++) taps[k]=0;
     document.getElementById("msg").innerHTML="Updating FIRs, please wait...";
     document.getElementById("plzw").style.display="block";
     if(document.getElementById("irfile").files.length>0){
@@ -620,7 +748,7 @@ function postJson(btp){
         readFirFile(file).then(function(result){
           var lines = result.split('\n');
           for(var ll=0; ll<lines.length; ll++){
-            if(ll<4096){
+            if(ll<20000){
               val = parseFloat(lines[ll]);
               if(!isNaN(val)){taps[ll]=val;}
             }
@@ -660,22 +788,108 @@ function postJson(btp){
   }
 }
 
-function openPlugin(){document.getElementById("plugin").style.display = "block";}
+function openPlugin(){document.getElementById("pluginupload").style.display = "block";}
 
-function renameChannel(parent){
-  document.getElementById("dialogRename").style.display = "block";
-  document.getElementById("dialogRename").dataset.parent = parent;
+function onStoreNames() {
+  var data = {};
+  data.inputs = [];
+  data.outputs = [];
+  data.presets = [];
+  var numchannels = document.getElementById('audioinputs').dataset.numchannels;
+  for(var ii = 0; ii < numchannels; ii++)
+    data.inputs.push(document.getElementById('input' + ii).value);
+  numchannels = document.getElementById('audiooutputs').dataset.numchannels;
+  for(var ii = 0; ii < numchannels; ii++)
+    data.outputs.push(document.getElementById('output' + ii).value);
+  var numpresets = document.getElementById('presets').dataset.numpresets;
+  for(var ii = 0; ii < numpresets; ii++)
+    data.presets.push(document.getElementById('preset' + ii).value);
+   
+  fetch("/chnames",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)})
+    .then(function(){window.location.href='/'})
+    .catch(function(error){console.log(error);});
 }
 
-function postChannelName(){
-  var data={};
-  data.id=document.getElementById("dialogRename").dataset.parent;
-  data.name=document.getElementById("userinput").value.substring(0,16);
-  return fetch("/chname",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)
-  }).then(function(response){
-    labelId=document.getElementById("dialogRename").dataset.parent;
-    document.getElementById(labelId).innerHTML=data.name;
-    document.getElementById("dialogRename").style.display = "none";
+function onLoadInputRouting() {
+  fetch("/inputrouting").then(function(response) {
+    return response.json();
+  }).then(function (data) {  
+    var tbl = document.getElementById('inputrouting');
+    tbl.dataset.numsources = data["numSourceNames"];
+    tbl.dataset.numvirtualinputs = data["numInputs"];
+    var id = 0;
+    for(var mm = 0; mm < data["numSourceNames"]; mm++) {
+      var tr = document.createElement('tr');
+      var td = document.createElement('td');
+      td.style.textAlign = 'left';
+      var input = document.createElement("input");
+      input.setAttribute('type', 'text');
+      input.value = data["sourceNames"][mm];
+      input.id = 'name_'+mm;
+      td.appendChild(input);
+      tr.appendChild(td);
+      for(var nn = 0; nn < data["numInputs"]; nn++) {
+        var td = document.createElement('td');
+        td.style = 'min-width:80px';
+        var sel = document.createElement('select');
+        sel.id = 'sel_'+mm+'_'+nn;
+        for(var ii = 0; ii < data["options"].length; ii++) {
+          var opt = document.createElement('option');
+          opt.value = ii;
+          opt.text = data["options"][ii];
+          sel.appendChild(opt);
+        }
+        sel.value = data["select"][mm][nn];
+        id++;
+        td.appendChild(sel);
+        tr.appendChild(td);
+      }
+      tbl.appendChild(tr);
+    }
+  }).catch (function (error) {console.log(error);
   });
 }
 
+function onStoreInputRouting(){
+  var data = {};
+  var numSources = document.getElementById('inputrouting').dataset.numsources;
+  var numVirtualInputs = document.getElementById('inputrouting').dataset.numvirtualinputs;
+  data.select = [];
+  data.sourceNames = [];
+  for(var mm = 0; mm < numSources; mm++){
+    data.sourceNames[mm] = document.getElementById('name_'+mm).value;
+    data.select[mm] = [];
+  }
+  for(var mm = 0; mm < numSources; mm++){
+    for(var nn = 0; nn < numVirtualInputs; nn++) data.select[mm][nn] = document.getElementById('sel_'+mm+'_'+nn).value;
+  }
+  fetch("/inputrouting",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)})
+  .then(function(){window.location.href='/'})
+  .catch(function(error){console.log(error);});
+}
+
+function selectVirtualInput(){
+  var data = {};
+  data.sel = document.getElementById('vinput').value;
+  fetch("/vinput",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)})
+  .catch(function(error){console.log(error);});
+}
+
+function getVirtualInputSelection(){
+  fetch("/inputrouting").then(function(response){return response.json();
+  }).then(function(data){ 
+    var sel = document.getElementById("vinput");
+    var len = sel.options.length;
+    for(var ii = len-1; ii >= 0; ii--) sel.options[ii] = null;
+    for(var mm = 0; mm < data["numSourceNames"]; mm++) {
+      var opt = document.createElement('option');
+      opt.value = mm;
+      opt.text = data["sourceNames"][mm];
+      sel.appendChild(opt);
+    }
+    return fetch("/vinput");
+  }).then(function(response){return response.json();
+  }).then(function(data){document.getElementById('vinput').value=data.sel;
+  }).catch(function(error){console.log(error);
+  });  
+}

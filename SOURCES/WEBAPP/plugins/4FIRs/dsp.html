@@ -16,9 +16,10 @@
       <li><a onclick="storePreset()">Store Preset</a></li>
       <li><a href="preset.param" download>Export Preset</a></li>
       <li><label for="presetimp">Import Preset</label><input type="file" id="presetimp" style="display:none"/></li>
+      <li><a href="chnames.html">Change Names</a></li>
     </ul>
     <div style="position:absolute;bottom:30px;right:30px;">
-      <p class="info">GUI: v2.1.4</p>
+      <p class="info" id="plugin">Plugin: v0.0.0</p>
       <p class="info" id="fw">FW: 0.0.0</p>
       <p class="info" id="ip">Local Wifi IP: 0.0.0.0</p>
       </div>
@@ -117,7 +118,7 @@
   </td><td>
   <table style="border-spacing: 5px 10px;">
     <tr>
-    <td class="rotate">
+    <td id="input0" class="rotate">
     Channel 1
     <td style="min-width:80px">
     <select id="chn0" onchange="postInputJson('chn0',0);">
@@ -141,39 +142,21 @@
       <option value="0x00040001">SPDIF R</option>
     </select>
     </td><td>
-    <button class="fir" id="fir0" onclick="openFIR(0);">FIR</button>
+    <button class="fir" id="FIR1">FIR</button>
     </td><td>
-    <button class="peq" id="peq0" onclick="openPEQ(0);">PEQ</button>
+    <button class="peq" id="PeqBank1">PEQs</button>
     </td><td>
-    <button class="peq" id="peq1" onclick="openPEQ(1);">PEQ</button>
+    <button class="delay" id="Delay1">Delay</button>
     </td><td>
-    <button class="peq" id="peq2" onclick="openPEQ(2);">PEQ</button>
-    </td><td>
-    <button class="peq" id="peq3" onclick="openPEQ(3);">PEQ</button>
-    </td><td>
-    <button class="peq" id="peq4" onclick="openPEQ(4);">PEQ</button>
-    </td><td>
-    <button class="peq" id="peq5" onclick="openPEQ(5);">PEQ</button>
-    </td><td>
-    <button class="peq" id="peq6" onclick="openPEQ(6);">PEQ</button>
-    </td><td>
-    <button class="peq" id="peq7" onclick="openPEQ(7);">PEQ</button>
-    </td><td>
-    <button class="peq" id="peq8" onclick="openPEQ(8);">PEQ</button>
-    </td><td>
-    <button class="peq" id="peq9" onclick="openPEQ(9);">PEQ</button>
-    </td><td>
-    <button class="delay" id="dly0" onclick="openDelay(0);">Delay</button>
-    </td><td>
-    <button class="gain" id="gn0" onclick="openGain(0);">Gain</button>
-    </td><td style="min-width:60px">
+    <button class="gain" id="Gain1">Gain</button>
+    </td><td style="min-width:60px" id="output0">
     OUT 1
     </td><td rowspan="8" style="max-width: 80px;">
       <input type="range" id="mvol" class="volslider" min="-80" max="0" onchange="postMVol()"/>  
       <div style="transform: translateY(240px);">Master<br>Volume</div>  
     </td></tr>
   
-    <tr><td class="rotate">
+    <tr><td id="input1" class="rotate">
     Channel 2
     </td><td>
     <select id="chn1" onchange="postInputJson('chn1',1);">
@@ -197,36 +180,18 @@
       <option value="0x00040001">SPDIF R</option>
     </select>
     </td><td>
-    <button class="fir" id="fir1" onclick="openFIR(1);">FIR</button>
+    <button class="fir" id="FIR2">FIR</button>
     </td><td>
-    <button class="peq" id="peq10" onclick="openPEQ(10);">PEQ</button>
+    <button class="peq" id="PeqBank2">PEQs</button>
     </td><td>
-    <button class="peq" id="peq11" onclick="openPEQ(11);">PEQ</button>
+    <button class="delay" id="Delay2">Delay</button>
     </td><td>
-    <button class="peq" id="peq12" onclick="openPEQ(12);">PEQ</button>
-    </td><td>
-    <button class="peq" id="peq13" onclick="openPEQ(13);">PEQ</button>
-    </td><td>
-    <button class="peq" id="peq14" onclick="openPEQ(14);">PEQ</button>
-    </td><td>
-    <button class="peq" id="peq15" onclick="openPEQ(15);">PEQ</button>
-    </td><td>
-    <button class="peq" id="peq16" onclick="openPEQ(16);">PEQ</button>
-    </td><td>
-    <button class="peq" id="peq17" onclick="openPEQ(17);">PEQ</button>
-    </td><td>
-    <button class="peq" id="peq18" onclick="openPEQ(18);">PEQ</button>
-    </td><td>
-    <button class="peq" id="peq19" onclick="openPEQ(19);">PEQ</button>
-    </td><td>
-    <button class="delay" id="dly1" onclick="openDelay(1);">Delay</button>
-    </td><td>
-    <button class="gain" id="gn1" onclick="openGain(1);">Gain</button>
-    </td><td>
+    <button class="gain" id="Gain2">Gain</button>
+    </td><td id="output1">
     OUT 2
     </td></tr>
   
-    <tr><td class="rotate">
+    <tr><td id="input2" class="rotate">
     Channel 3
     </td><td>
     <select id="chn2" onchange="postInputJson('chn2',2);">
@@ -250,36 +215,18 @@
       <option value="0x00040001">SPDIF R</option>
     </select>
     </td><td>
-    <button class="fir" id="fir2" onclick="openFIR(2);">FIR</button>
+    <button class="fir" id="FIR3">FIR</button>
     </td><td>
-    <button class="peq" id="peq20" onclick="openPEQ(20);">PEQ</button>
+    <button class="peq" id="PeqBank3">PEQs</button>
     </td><td>
-    <button class="peq" id="peq21" onclick="openPEQ(21);">PEQ</button>
+    <button class="delay" id="Delay3">Delay</button>
     </td><td>
-    <button class="peq" id="peq22" onclick="openPEQ(22);">PEQ</button>
-    </td><td>
-    <button class="peq" id="peq23" onclick="openPEQ(23);">PEQ</button>
-    </td><td>
-    <button class="peq" id="peq24" onclick="openPEQ(24);">PEQ</button>
-    </td><td>
-    <button class="peq" id="peq25" onclick="openPEQ(25);">PEQ</button>
-    </td><td>
-    <button class="peq" id="peq26" onclick="openPEQ(26);">PEQ</button>
-    </td><td>
-    <button class="peq" id="peq27" onclick="openPEQ(27);">PEQ</button>
-    </td><td>
-    <button class="peq" id="peq28" onclick="openPEQ(28);">PEQ</button>
-    </td><td>
-    <button class="peq" id="peq29" onclick="openPEQ(29);">PEQ</button>
-    </td><td>
-    <button class="delay" id="dly2" onclick="openDelay(2);">Delay</button>
-    </td><td>
-    <button class="gain" id="gn2" onclick="openGain(2);">Gain</button>
-    </td><td>
+    <button class="gain" id="Gain3">Gain</button>
+    </td><td id="output2">
     OUT 3
     </td></tr>
   
-    <tr><td class="rotate">
+    <tr><td id="input3" class="rotate">
     Channel 4
     </td><td>
     <select id="chn3" onchange="postInputJson('chn3',3);">
@@ -303,32 +250,14 @@
       <option value="0x00040001">SPDIF R</option>
     </select>
     </td><td>
-    <button class="fir" id="fir3" onclick="openFIR(3);">FIR</button>
+    <button class="fir" id="FIR4">FIR</button>
     </td><td>
-    <button class="peq" id="peq30" onclick="openPEQ(30);">PEQ</button>
+    <button class="peq" id="PeqBank4">PEQs</button>
     </td><td>
-    <button class="peq" id="peq31" onclick="openPEQ(31);">PEQ</button>
+    <button class="delay" id="Delay4">Delay</button>
     </td><td>
-    <button class="peq" id="peq32" onclick="openPEQ(32);">PEQ</button>
-    </td><td>
-    <button class="peq" id="peq33" onclick="openPEQ(33);">PEQ</button>
-    </td><td>
-    <button class="peq" id="peq34" onclick="openPEQ(34);">PEQ</button>
-    </td><td>
-    <button class="peq" id="peq35" onclick="openPEQ(35);">PEQ</button>
-    </td><td>
-    <button class="peq" id="peq36" onclick="openPEQ(36);">PEQ</button>
-    </td><td>
-    <button class="peq" id="peq37" onclick="openPEQ(37);">PEQ</button>
-    </td><td>
-    <button class="peq" id="peq38" onclick="openPEQ(38);">PEQ</button>
-    </td><td>
-    <button class="peq" id="peq39" onclick="openPEQ(39);">PEQ</button>
-    </td><td>
-    <button class="delay" id="dly3" onclick="openDelay(3);">Delay</button>
-    </td><td>
-    <button class="gain" id="gn3" onclick="openGain(3);">Gain</button>
-    </td><td>
+    <button class="gain" id="Gain4">Gain</button>
+    </td><td id="output3">
     OUT 4
     </td></tr>
     <tr><td><div style="height: 50px;"></div></td></tr>
@@ -438,6 +367,26 @@
     </div>
   </div>
 
+  <div id="peqbank" class="modal">
+    <div id="peqbank-dialog-content" class="modal-content d_peq">
+      <table class="ptbl">
+      <tr><td style="height:20px;padding-top:10px;">
+      <table style="width:100%;">
+      <tr><td id="peqbank-title" class="headline">Title</td><td class="close" onclick="closeModal('peqbank')">&times;</td></tr>
+      </table></td></tr>
+      <tr><td>
+      <table class="ptbl" id='peqbank-userinput' data-numbands="0">
+      </table>
+      </td></tr>
+      <tr><td>
+      <table style="width:100%;">
+        <tr><td style="padding: 10px;"><button class="send" id="peqbank-send">Send</button></td></tr>
+      </table>
+      </td></tr>
+      </table>
+    </div>
+  </div>
+
   <div id="configWifi" class="modal">
     <div class="modal-content" style="width:600px;">
       <table class="ptbl">
@@ -468,12 +417,12 @@
     </div>
   </div>
 
-  <div id="plugin" class="modal">
+  <div id="pluginupload" class="modal">
     <div class="modal-content" style="width:600px;">
       <table class="ptbl">
       <tr><td colspan="2" style="height:20px;padding-top:10px;">
       <table style="width:100%;">
-      <tr><td class="headline">Upload Plugin</td><td class="close" onclick="closeModal('plugin')">&times;</td></tr>
+      <tr><td class="headline">Upload Plugin</td><td class="close" onclick="closeModal('pluginupload')">&times;</td></tr>
       </table>
       </td></tr>
       <tr><td>Please select the folder of the plugin.</td></tr>
@@ -494,7 +443,7 @@
   <script>
     let picker = document.getElementById('picker');
     picker.addEventListener('change', e => {
-      var html,fw,css,plugin,aurorajs;
+      var html,fw,css,plugin,aurorajs,chnames;
       for(let file of Array.from(e.target.files)){
         if(file.name=="dark.css")
           css = file;
@@ -506,6 +455,8 @@
           plugin = file;
         if(file.name=="aurora.jgz")
           aurorajs = file;
+        if(file.name=="chnames.txt")
+          chnames = file;
       }
       var prg=document.getElementById('prg');
       prg.style.width="5%";
@@ -523,6 +474,9 @@
       .then(function(response){
         prg.style.width="80%";
         return fetch("/upload?fname=aurora.jgz",{method:'POST',headers:{},body:aurorajs});})
+      .then(function(response){
+        prg.style.width="90%";
+        return fetch("/upload?fname=chnames.txt",{method:'POST',headers:{},body:chnames});})
       .then(function(response){
         prg.style.width="100%";
         return response;})

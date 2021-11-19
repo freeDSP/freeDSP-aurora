@@ -63,6 +63,10 @@ void setHighShelving( int idx );
  */
 void setPEQ( int idx );
 
+/*! Sets the values for a peq bank on DSP.
+ */
+void setPeqBank(int idx);
+
 /*! Changes the routing for the SPDIF output
  */
 void setSpdifOutputRouting( void );
