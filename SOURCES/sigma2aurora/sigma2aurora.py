@@ -239,25 +239,23 @@ for module in root.findall('IC/Module'):
             if "Analog" in strlist[2]:
                 idx = int(strlist[1].split('.', 1)[0])
                 modparam = module.find('Algorithm/ModuleParameter')
-                inputselect_analog[idx -
-                                   1][0] = int(modparam.find('Address').text)
+                inputselect_analog[idx - 1][0] = intaddr(modparam)
             elif "SPDIF" in strlist[2]:
                 idx = int(strlist[1].split('.', 1)[0])
                 modparam = module.find('Algorithm/ModuleParameter')
-                inputselect_spdif[idx -
-                                  1][0] = int(modparam.find('Address').text)
+                inputselect_spdif[idx - 1][0] = intaddr(modparam)
             elif "UAC" in strlist[2]:
                 idx = int(strlist[1].split('.', 1)[0])
                 modparam = module.find('Algorithm/ModuleParameter')
-                inputselect_uac2[idx-1][0] = int(modparam.find('Address').text)
+                inputselect_uac2[idx-1][0] = intaddr(modparam)
             elif "Exp" in strlist[2]:
                 idx = int(strlist[1].split('.', 1)[0])
                 modparam = module.find('Algorithm/ModuleParameter')
-                inputselect_exp[idx-1][0] = int(modparam.find('Address').text)
+                inputselect_exp[idx-1][0] = intaddr(modparam)
             elif "Mux" in strlist[2]:
                 idx = int(strlist[1].split('.', 1)[0])
                 modparam = module.find('Algorithm/ModuleParameter')
-                inputselect_port[idx-1][0] = int(modparam.find('Address').text)
+                inputselect_port[idx-1][0] = intaddr(modparam)
 
     elif cellname.text.startswith('SpdifOutMux'):
         strlist = cellname.text.split('_')
