@@ -140,7 +140,7 @@ with open(numbytes_path) as fp:
 
 # --- Create output directory
 try:
-    if os.path.exists(projectname) != True:
+    if not os.path.exists(projectname):
         os.mkdir(projectname)
 except OSError:
     print("Creation of output directory %s failed" % projectname)
