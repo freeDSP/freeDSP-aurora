@@ -230,10 +230,10 @@ for module in root.findall('IC/Module'):
         idx = int(strlist[1].split('.',1)[0])
         modparam = module.find('Algorithm/ModuleParameter')
         inputselect_exp[idx-1][0] = int(modparam.find('Address').text)
-    elif len(strlist) > 1:
-      idx = int(strlist[1].split('.',1)[0])
-      modparam = module.find('Algorithm/ModuleParameter')
-      inputselect_port[idx-1][0] = int(modparam.find('Address').text)
+      elif "Mux" in strlist[2]:
+        idx = int(strlist[1].split('.',1)[0])
+        modparam = module.find('Algorithm/ModuleParameter')
+        inputselect_port[idx-1][0] = int(modparam.find('Address').text)
 
   elif cellname.text.startswith('SpdifOutMux'):
     strlist = cellname.text.split('_')

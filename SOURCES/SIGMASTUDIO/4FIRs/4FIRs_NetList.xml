@@ -100,7 +100,7 @@
             <Algorithm name="ICOutADAU145X14" friendlyname="Output " cell="Output_UAC6 " location="{X=323, Y=2514.876} " Growth="1 " GrowthB="0">
                 <Link pin="I_C502_A0_P1_in" dir="in" link="Link55" />
             </Algorithm>
-            <Algorithm name="monomuxSigma300ns20" friendlyname="Mono " cell="InputSelect_4.Nx1-1_UAC_4 " location="{X=225, Y=402.5} " Growth="8 " GrowthB="0">
+            <Algorithm name="monomuxSigma300ns20" friendlyname="Mono " cell="InputSelect_4.Nx1-1_UAC " location="{X=225, Y=402.5} " Growth="8 " GrowthB="0">
                 <Link pin="I_C2285_A0_P2_in" dir="in" link="Link69" />
                 <Link pin="I_C2285_A0_P3_in" dir="in" link="Link53" />
                 <Link pin="I_C2285_A0_P4_in" dir="in" link="Link82" />
@@ -111,7 +111,7 @@
                 <Link pin="I_C2285_A0_P9_in" dir="in" link="Link81" />
                 <Link pin="O_C2285_A0_P1_out" dir="out" link="Link15" />
             </Algorithm>
-            <Algorithm name="monomuxSigma300ns21" friendlyname="Mono " cell="InputSelect_4.Nx1-1_ESP32_4 " location="{X=225, Y=708.5} " Growth="8 " GrowthB="0">
+            <Algorithm name="monomuxSigma300ns21" friendlyname="Mono " cell="InputSelect_4.Nx1-1_ESP32 " location="{X=225, Y=708.5} " Growth="8 " GrowthB="0">
                 <Link pin="I_C2327_A0_P2_in" dir="in" link="Link73" />
                 <Link pin="I_C2327_A0_P3_in" dir="in" link="Link67" />
                 <Link pin="I_C2327_A0_P4_in" dir="in" link="Link87" />
@@ -122,7 +122,7 @@
                 <Link pin="I_C2327_A0_P9_in" dir="in" link="Link54" />
                 <Link pin="O_C2327_A0_P1_out" dir="out" link="Link18" />
             </Algorithm>
-            <Algorithm name="monomuxSigma300ns22" friendlyname="Mono " cell="InputSelect_4.Nx1-1_Exp_4 " location="{X=225, Y=1020.5} " Growth="8 " GrowthB="0">
+            <Algorithm name="monomuxSigma300ns22" friendlyname="Mono " cell="InputSelect_4.Nx1-1_Exp " location="{X=225, Y=1020.5} " Growth="8 " GrowthB="0">
                 <Link pin="I_C2369_A0_P2_in" dir="in" link="Link88" />
                 <Link pin="I_C2369_A0_P3_in" dir="in" link="Link74" />
                 <Link pin="I_C2369_A0_P4_in" dir="in" link="Link78" />
@@ -133,7 +133,7 @@
                 <Link pin="I_C2369_A0_P9_in" dir="in" link="Link75" />
                 <Link pin="O_C2369_A0_P1_out" dir="out" link="Link16" />
             </Algorithm>
-            <Algorithm name="monomuxSigma300ns19" friendlyname="Mono " cell="InputSelect_4.Nx1-1_Analog_4 " location="{X=225, Y=96.5} " Growth="8 " GrowthB="0">
+            <Algorithm name="monomuxSigma300ns19" friendlyname="Mono " cell="InputSelect_4.Nx1-1_Analog " location="{X=225, Y=96.5} " Growth="8 " GrowthB="0">
                 <Link pin="I_C2243_A0_P2_in" dir="in" link="Link77" />
                 <Link pin="I_C2243_A0_P3_in" dir="in" link="Link66" />
                 <Link pin="I_C2243_A0_P4_in" dir="in" link="Link68" />
@@ -144,12 +144,12 @@
                 <Link pin="I_C2243_A0_P9_in" dir="in" link="Link62" />
                 <Link pin="O_C2243_A0_P1_out" dir="out" link="Link14" />
             </Algorithm>
-            <Algorithm name="monomuxSigma300ns23" friendlyname="Mono " cell="InputSelect_4.Nx1-1_SPDIF_4 " location="{X=224, Y=1272.889} " Growth="2 " GrowthB="0">
+            <Algorithm name="monomuxSigma300ns23" friendlyname="Mono " cell="InputSelect_4.Nx1-1_SPDIF " location="{X=224, Y=1272.889} " Growth="2 " GrowthB="0">
                 <Link pin="I_C2387_A0_P2_in" dir="in" link="Link61" />
                 <Link pin="I_C2387_A0_P3_in" dir="in" link="Link57" />
                 <Link pin="O_C2387_A0_P1_out" dir="out" link="Link17" />
             </Algorithm>
-            <Algorithm name="monomuxSigma300ns16" friendlyname="Mono " cell="InputSelect_3.Nx1-1_Exp_3 " location="{X=225, Y=1020.5} " Growth="8 " GrowthB="0">
+            <Algorithm name="monomuxSigma300ns16" friendlyname="Mono " cell="InputSelect_3.Nx1-1_Exp " location="{X=225, Y=1020.5} " Growth="8 " GrowthB="0">
                 <Link pin="I_C2063_A0_P2_in" dir="in" link="Link88" />
                 <Link pin="I_C2063_A0_P3_in" dir="in" link="Link74" />
                 <Link pin="I_C2063_A0_P4_in" dir="in" link="Link78" />
@@ -160,7 +160,7 @@
                 <Link pin="I_C2063_A0_P9_in" dir="in" link="Link75" />
                 <Link pin="O_C2063_A0_P1_out" dir="out" link="Link22" />
             </Algorithm>
-            <Algorithm name="monomuxSigma300ns15" friendlyname="Mono " cell="InputSelect_3.Nx1-1_ESP32_3 " location="{X=225, Y=708.5} " Growth="8 " GrowthB="0">
+            <Algorithm name="monomuxSigma300ns15" friendlyname="Mono " cell="InputSelect_3.Nx1-1_ESP32 " location="{X=225, Y=708.5} " Growth="8 " GrowthB="0">
                 <Link pin="I_C2021_A0_P2_in" dir="in" link="Link73" />
                 <Link pin="I_C2021_A0_P3_in" dir="in" link="Link67" />
                 <Link pin="I_C2021_A0_P4_in" dir="in" link="Link87" />
@@ -171,7 +171,7 @@
                 <Link pin="I_C2021_A0_P9_in" dir="in" link="Link54" />
                 <Link pin="O_C2021_A0_P1_out" dir="out" link="Link23" />
             </Algorithm>
-            <Algorithm name="monomuxSigma300ns13" friendlyname="Mono " cell="InputSelect_3.Nx1-1_Analog_3 " location="{X=225, Y=96.5} " Growth="8 " GrowthB="0">
+            <Algorithm name="monomuxSigma300ns13" friendlyname="Mono " cell="InputSelect_3.Nx1-1_Analog " location="{X=225, Y=96.5} " Growth="8 " GrowthB="0">
                 <Link pin="I_C1932_A0_P2_in" dir="in" link="Link77" />
                 <Link pin="I_C1932_A0_P3_in" dir="in" link="Link66" />
                 <Link pin="I_C1932_A0_P4_in" dir="in" link="Link68" />
@@ -182,7 +182,7 @@
                 <Link pin="I_C1932_A0_P9_in" dir="in" link="Link62" />
                 <Link pin="O_C1932_A0_P1_out" dir="out" link="Link19" />
             </Algorithm>
-            <Algorithm name="monomuxSigma300ns14" friendlyname="Mono " cell="InputSelect_3.Nx1-1_UAC_3 " location="{X=225, Y=402.5} " Growth="8 " GrowthB="0">
+            <Algorithm name="monomuxSigma300ns14" friendlyname="Mono " cell="InputSelect_3.Nx1-1_UAC " location="{X=225, Y=402.5} " Growth="8 " GrowthB="0">
                 <Link pin="I_C1979_A0_P2_in" dir="in" link="Link69" />
                 <Link pin="I_C1979_A0_P3_in" dir="in" link="Link53" />
                 <Link pin="I_C1979_A0_P4_in" dir="in" link="Link82" />
@@ -193,12 +193,12 @@
                 <Link pin="I_C1979_A0_P9_in" dir="in" link="Link81" />
                 <Link pin="O_C1979_A0_P1_out" dir="out" link="Link21" />
             </Algorithm>
-            <Algorithm name="monomuxSigma300ns17" friendlyname="Mono " cell="InputSelect_3.Nx1-1_SPDIF_3 " location="{X=224, Y=1272.889} " Growth="2 " GrowthB="0">
+            <Algorithm name="monomuxSigma300ns17" friendlyname="Mono " cell="InputSelect_3.Nx1-1_SPDIF " location="{X=224, Y=1272.889} " Growth="2 " GrowthB="0">
                 <Link pin="I_C2081_A0_P2_in" dir="in" link="Link61" />
                 <Link pin="I_C2081_A0_P3_in" dir="in" link="Link57" />
                 <Link pin="O_C2081_A0_P1_out" dir="out" link="Link20" />
             </Algorithm>
-            <Algorithm name="monomuxSigma300ns7" friendlyname="Mono " cell="InputSelect_2.Nx1-1_Analog_2 " location="{X=225, Y=96.5} " Growth="8 " GrowthB="0">
+            <Algorithm name="monomuxSigma300ns7" friendlyname="Mono " cell="InputSelect_2.Nx1-1_Analog " location="{X=225, Y=96.5} " Growth="8 " GrowthB="0">
                 <Link pin="I_C1156_A0_P2_in" dir="in" link="Link77" />
                 <Link pin="I_C1156_A0_P3_in" dir="in" link="Link66" />
                 <Link pin="I_C1156_A0_P4_in" dir="in" link="Link68" />
@@ -209,7 +209,7 @@
                 <Link pin="I_C1156_A0_P9_in" dir="in" link="Link62" />
                 <Link pin="O_C1156_A0_P1_out" dir="out" link="Link28" />
             </Algorithm>
-            <Algorithm name="monomuxSigma300ns10" friendlyname="Mono " cell="InputSelect_2.Nx1-1_Exp_2 " location="{X=225, Y=1020.5} " Growth="8 " GrowthB="0">
+            <Algorithm name="monomuxSigma300ns10" friendlyname="Mono " cell="InputSelect_2.Nx1-1_Exp " location="{X=225, Y=1020.5} " Growth="8 " GrowthB="0">
                 <Link pin="I_C1578_A0_P2_in" dir="in" link="Link88" />
                 <Link pin="I_C1578_A0_P3_in" dir="in" link="Link74" />
                 <Link pin="I_C1578_A0_P4_in" dir="in" link="Link78" />
@@ -220,7 +220,7 @@
                 <Link pin="I_C1578_A0_P9_in" dir="in" link="Link75" />
                 <Link pin="O_C1578_A0_P1_out" dir="out" link="Link24" />
             </Algorithm>
-            <Algorithm name="monomuxSigma300ns9" friendlyname="Mono " cell="InputSelect_2.Nx1-1_ESP32_2 " location="{X=225, Y=708.5} " Growth="8 " GrowthB="0">
+            <Algorithm name="monomuxSigma300ns9" friendlyname="Mono " cell="InputSelect_2.Nx1-1_ESP32 " location="{X=225, Y=708.5} " Growth="8 " GrowthB="0">
                 <Link pin="I_C1462_A0_P2_in" dir="in" link="Link73" />
                 <Link pin="I_C1462_A0_P3_in" dir="in" link="Link67" />
                 <Link pin="I_C1462_A0_P4_in" dir="in" link="Link87" />
@@ -231,7 +231,7 @@
                 <Link pin="I_C1462_A0_P9_in" dir="in" link="Link54" />
                 <Link pin="O_C1462_A0_P1_out" dir="out" link="Link27" />
             </Algorithm>
-            <Algorithm name="monomuxSigma300ns8" friendlyname="Mono " cell="InputSelect_2.Nx1-1_UAC_2 " location="{X=225, Y=402.5} " Growth="8 " GrowthB="0">
+            <Algorithm name="monomuxSigma300ns8" friendlyname="Mono " cell="InputSelect_2.Nx1-1_UAC " location="{X=225, Y=402.5} " Growth="8 " GrowthB="0">
                 <Link pin="I_C1366_A0_P2_in" dir="in" link="Link69" />
                 <Link pin="I_C1366_A0_P3_in" dir="in" link="Link53" />
                 <Link pin="I_C1366_A0_P4_in" dir="in" link="Link82" />
@@ -242,7 +242,7 @@
                 <Link pin="I_C1366_A0_P9_in" dir="in" link="Link81" />
                 <Link pin="O_C1366_A0_P1_out" dir="out" link="Link26" />
             </Algorithm>
-            <Algorithm name="monomuxSigma300ns11" friendlyname="Mono " cell="InputSelect_2.Nx1-1_SPDIF_2 " location="{X=224, Y=1272.889} " Growth="2 " GrowthB="0">
+            <Algorithm name="monomuxSigma300ns11" friendlyname="Mono " cell="InputSelect_2.Nx1-1_SPDIF " location="{X=224, Y=1272.889} " Growth="2 " GrowthB="0">
                 <Link pin="I_C1614_A0_P2_in" dir="in" link="Link61" />
                 <Link pin="I_C1614_A0_P3_in" dir="in" link="Link57" />
                 <Link pin="O_C1614_A0_P1_out" dir="out" link="Link25" />
@@ -394,7 +394,7 @@
                 <Link pin="I_C3989_A0_P9_in" dir="in" link="Link54" />
                 <Link pin="O_C3989_A0_P1_out" dir="out" link="Link11" />
             </Algorithm>
-            <Algorithm name="monomuxSigma300ns24" friendlyname="Mono " cell="InputSelect_4.Nx1-1_4 " location="{X=433, Y=176.1111} " Growth="5 " GrowthB="0">
+            <Algorithm name="monomuxSigma300ns24" friendlyname="Mono " cell="InputSelect_4.Nx1-1_Mux " location="{X=433, Y=176.1111} " Growth="5 " GrowthB="0">
                 <Link pin="I_C2391_A0_P2_in" dir="in" link="Link14" />
                 <Link pin="I_C2391_A0_P3_in" dir="in" link="Link15" />
                 <Link pin="I_C2391_A0_P4_in" dir="in" link="Link18" />
@@ -402,7 +402,7 @@
                 <Link pin="I_C2391_A0_P6_in" dir="in" link="Link17" />
                 <Link pin="O_C2391_A0_P1_out" dir="out" link="Link92" />
             </Algorithm>
-            <Algorithm name="monomuxSigma300ns18" friendlyname="Mono " cell="InputSelect_3.Nx1-1_3 " location="{X=433, Y=176.1111} " Growth="5 " GrowthB="0">
+            <Algorithm name="monomuxSigma300ns18" friendlyname="Mono " cell="InputSelect_3.Nx1-1_Mux " location="{X=433, Y=176.1111} " Growth="5 " GrowthB="0">
                 <Link pin="I_C2085_A0_P2_in" dir="in" link="Link19" />
                 <Link pin="I_C2085_A0_P3_in" dir="in" link="Link21" />
                 <Link pin="I_C2085_A0_P4_in" dir="in" link="Link23" />
@@ -410,7 +410,7 @@
                 <Link pin="I_C2085_A0_P6_in" dir="in" link="Link20" />
                 <Link pin="O_C2085_A0_P1_out" dir="out" link="Link93" />
             </Algorithm>
-            <Algorithm name="monomuxSigma300ns12" friendlyname="Mono " cell="InputSelect_2.Nx1-1_2 " location="{X=433, Y=176.1111} " Growth="5 " GrowthB="0">
+            <Algorithm name="monomuxSigma300ns12" friendlyname="Mono " cell="InputSelect_2.Nx1-1_Mux " location="{X=433, Y=176.1111} " Growth="5 " GrowthB="0">
                 <Link pin="I_C1627_A0_P2_in" dir="in" link="Link28" />
                 <Link pin="I_C1627_A0_P3_in" dir="in" link="Link26" />
                 <Link pin="I_C1627_A0_P4_in" dir="in" link="Link27" />
@@ -418,7 +418,7 @@
                 <Link pin="I_C1627_A0_P6_in" dir="in" link="Link25" />
                 <Link pin="O_C1627_A0_P1_out" dir="out" link="Link94" />
             </Algorithm>
-            <Algorithm name="monomuxSigma300ns6" friendlyname="Mono " cell="InputSelect_1.Nx1-1 " location="{X=433, Y=176.1111} " Growth="5 " GrowthB="0">
+            <Algorithm name="monomuxSigma300ns6" friendlyname="Mono " cell="InputSelect_1.Nx1-1_Mux " location="{X=433, Y=176.1111} " Growth="5 " GrowthB="0">
                 <Link pin="I_C876_A0_P2_in" dir="in" link="Link29" />
                 <Link pin="I_C876_A0_P3_in" dir="in" link="Link30" />
                 <Link pin="I_C876_A0_P4_in" dir="in" link="Link31" />

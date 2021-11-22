@@ -1,11 +1,11 @@
 ADAU145X Assembler, Analog Devices Inc.
 Version: 4.6.0,1809  (built 12/23/2020)
 
-##### Compile Started: Tuesday, November 16, 2021 3:55:21 PM #####
+##### Compile Started: Monday, November 22, 2021 7:59:09 PM #####
 ADAU145X Assembler, Analog Devices Inc.
 Version: 4.6.0,1809  (built 12/23/2020)
 
-##### Compile Started: Tuesday, November 16, 2021 3:55:21 PM #####
+##### Compile Started: Monday, November 22, 2021 7:59:09 PM #####
 ##### Compile succeeded:  0 errors, 0 warnings #####
 
 ##### Summary #####
@@ -20,33 +20,78 @@ STREAM                        Inst      Inst      DM0     DM1     PM
 Instance                      (cycles)  (size)    
 --------------------------------------------------------------------------------------
 STACK                          -         -        16      0       0       
+Nx1-1_ESP32                   56        72        72      8       0
+Nx1-1_Exp                     56        72        72      8       0
+Nx1-1_Analog                  56        72        72      8       0
+Nx1-1_UAC                     56        72        72      8       0
+Nx1-1_Mux                     56        72        48      0       0
 VolumePot                     26        45        0       10      0
 MasterVolume                  25        44        3       8       0
+Nx1-1_SPDIF                   40        40        8       8       0
 FRAMEWORK                     58        39        19      0       0
-PeqBank1                      28        29        50      45      0
-PeqBank2                      28        29        50      45      0
-PeqBank6                      28        29        50      45      0
-PeqBank3                      28        29        50      45      0
-PeqBank5                      28        29        50      45      0
-PeqBank8                      28        29        50      45      0
-PeqBank7                      28        29        50      45      0
 PeqBank4                      28        29        50      45      0
-Phase7                        9         17        5       10      0
-Phase1                        9         17        5       10      0
+PeqBank7                      28        29        50      45      0
+PeqBank5                      28        29        50      45      0
+PeqBank3                      28        29        50      45      0
+PeqBank6                      28        29        50      45      0
+PeqBank2                      28        29        50      45      0
+PeqBank1                      28        29        50      45      0
+PeqBank8                      28        29        50      45      0
 Phase3                        9         17        5       10      0
+Phase1                        9         17        5       10      0
 Phase5                        9         17        5       10      0
-LowShelv1                     9         17        5       9       0
-HighShelv8                    9         17        5       9       0
-HighShelv4                    9         17        5       9       0
+Phase7                        9         17        5       10      0
+HighShelv7                    9         17        5       9       0
+LP3:2                         9         17        5       9       0
+LP4:2                         9         17        5       9       0
+LP8:2                         9         17        5       9       0
+LP1:1                         9         17        5       9       0
+LP3:1                         9         17        5       9       0
+LP4:1                         9         17        5       9       0
+LP5:1                         9         17        5       9       0
+LP8:1                         9         17        5       9       0
+LP6:1                         9         17        5       9       0
+LP2:1                         9         17        5       9       0
+HighShelv5                    9         17        5       9       0
+LP5:2                         9         17        5       9       0
+HighShelv1                    9         17        5       9       0
+HighShelv2                    9         17        5       9       0
+HighShelv6                    9         17        5       9       0
 HighShelv3                    9         17        5       9       0
+HighShelv4                    9         17        5       9       0
 LowShelv6                     9         17        5       9       0
 LowShelv5                     9         17        5       9       0
 LowShelv7                     9         17        5       9       0
+LP7:1                         9         17        5       9       0
+LP7:2                         9         17        5       9       0
+LP6:2                         9         17        5       9       0
+LP2:2                         9         17        5       9       0
+Phase2                        9         17        5       9       0
+Phase6                        9         17        5       9       0
+Phase8                        9         17        5       9       0
+Phase4                        9         17        5       9       0
+LP5:4                         9         17        5       9       0
+LP2:4                         9         17        5       9       0
+LP1:4                         9         17        5       9       0
+LP7:4                         9         17        5       9       0
+LP3:4                         9         17        5       9       0
+LP8:4                         9         17        5       9       0
+LP4:4                         9         17        5       9       0
+LP6:4                         9         17        5       9       0
+LP6:3                         9         17        5       9       0
+LP8:3                         9         17        5       9       0
+LP3:3                         9         17        5       9       0
+LP7:3                         9         17        5       9       0
+LP1:3                         9         17        5       9       0
+LP2:3                         9         17        5       9       0
+LP4:3                         9         17        5       9       0
+LP5:3                         9         17        5       9       0
 LowShelv2                     9         17        5       9       0
+LP1:2                         9         17        5       9       0
 LowShelv8                     9         17        5       9       0
+HighShelv8                    9         17        5       9       0
 LowShelv4                     9         17        5       9       0
-HP1:4                         9         17        5       9       0
-HP8:4                         9         17        5       9       0
+HP1:2                         9         17        5       9       0
 HP8:2                         9         17        5       9       0
 HP7:2                         9         17        5       9       0
 HP4:2                         9         17        5       9       0
@@ -58,172 +103,85 @@ HP7:3                         9         17        5       9       0
 HP2:3                         9         17        5       9       0
 HP8:3                         9         17        5       9       0
 HP3:3                         9         17        5       9       0
+HP3:2                         9         17        5       9       0
 HP4:4                         9         17        5       9       0
+HP5:4                         9         17        5       9       0
 HP2:4                         9         17        5       9       0
 HP6:4                         9         17        5       9       0
-HP3:4                         9         17        5       9       0
-HighShelv6                    9         17        5       9       0
-HP7:4                         9         17        5       9       0
 LowShelv3                     9         17        5       9       0
-HighShelv2                    9         17        5       9       0
-HighShelv7                    9         17        5       9       0
-HighShelv5                    9         17        5       9       0
-LP7:3                         9         17        5       9       0
-LP3:3                         9         17        5       9       0
-LP8:3                         9         17        5       9       0
-LP6:3                         9         17        5       9       0
-LP6:4                         9         17        5       9       0
-LP4:4                         9         17        5       9       0
-LP8:4                         9         17        5       9       0
-LP1:3                         9         17        5       9       0
-LP3:4                         9         17        5       9       0
-LP1:4                         9         17        5       9       0
-LP2:4                         9         17        5       9       0
-LP5:4                         9         17        5       9       0
-Phase4                        9         17        5       9       0
-Phase8                        9         17        5       9       0
-Phase6                        9         17        5       9       0
-Phase2                        9         17        5       9       0
-LP7:4                         9         17        5       9       0
-LP2:3                         9         17        5       9       0
-LP4:3                         9         17        5       9       0
-LP5:3                         9         17        5       9       0
-HP1:2                         9         17        5       9       0
-LP7:1                         9         17        5       9       0
-LP2:1                         9         17        5       9       0
-LP6:1                         9         17        5       9       0
-LP8:1                         9         17        5       9       0
-LP5:1                         9         17        5       9       0
-LP4:1                         9         17        5       9       0
-LP3:1                         9         17        5       9       0
-LP1:1                         9         17        5       9       0
-LP8:2                         9         17        5       9       0
-LP4:2                         9         17        5       9       0
-LP3:2                         9         17        5       9       0
-LP5:2                         9         17        5       9       0
-LP7:2                         9         17        5       9       0
-LP1:2                         9         17        5       9       0
-LP2:2                         9         17        5       9       0
-LP6:2                         9         17        5       9       0
-HighShelv1                    9         17        5       9       0
+HP8:4                         9         17        5       9       0
+HP7:4                         9         17        5       9       0
 HP2:2                         9         17        5       9       0
-HP5:4                         9         17        5       9       0
-HP3:2                         9         17        5       9       0
+LowShelv1                     9         17        5       9       0
 HP6:2                         9         17        5       9       0
-HP5:2                         9         16        5       9       0
-HP8:1                         9         16        5       9       0
+HP1:4                         9         17        5       9       0
+HP3:4                         9         17        5       9       0
 HP7:1                         9         16        5       9       0
-HP6:1                         9         16        5       9       0
-HP5:1                         9         16        5       9       0
-HP4:1                         9         16        5       9       0
+HP8:1                         9         16        5       9       0
 HP3:1                         9         16        5       9       0
 HP2:1                         9         16        5       9       0
 HP1:1                         9         16        5       9       0
+HP5:2                         9         16        5       9       0
+HP6:1                         9         16        5       9       0
+HP4:1                         9         16        5       9       0
+HP5:1                         9         16        5       9       0
 Input ADC                     16        16        0       8       0
 Input ESP32                   16        16        0       8       0
-Input UAC2                    16        16        0       8       0
 Input Expansion               16        16        0       8       0
-Gain1                         8         13        3       1       0
-Gain2                         8         13        3       1       0
-Gain3                         8         13        3       1       0
-Gain6                         8         13        3       1       0
+Input UAC2                    16        16        0       8       0
+Gain5                         8         13        3       1       0
 Gain4                         8         13        3       1       0
 Gain7                         8         13        3       1       0
-Gain5                         8         13        3       1       0
+Gain6                         8         13        3       1       0
 Gain8                         8         13        3       1       0
-Delay7                        8         11        4702    1       0
-Delay1                        8         11        4702    1       0
+Gain1                         8         13        3       1       0
+Gain3                         8         13        3       1       0
+Gain2                         8         13        3       1       0
 Delay5                        8         11        4702    1       0
+Delay1                        8         11        4702    1       0
+Delay7                        8         11        4702    1       0
 Delay3                        8         11        4702    1       0
+Nx_Out_Right                  7         10        9       1       0
 Nx_Exp_Left                   7         10        9       1       0
-Nx_ESP32_Right                7         10        9       1       0
 Nx_UAC2_Left                  7         10        9       1       0
+Nx_ESP32_Right                7         10        9       1       0
+Nx_ESP32_Left                 7         10        9       1       0
+Nx_Analog_Left                7         10        9       1       0
+Nx_UAC2_Right                 7         10        9       1       0
 Nx_Analog_Right               7         10        9       1       0
 Nx_Exp_Right                  7         10        9       1       0
-Nx_UAC2_Right                 7         10        9       1       0
-Nx_ESP32_Left                 7         10        9       1       0
 Nx_Out_Left                   7         10        9       1       0
-Nx_Out_Right                  7         10        9       1       0
-Nx_Analog_Left                7         10        9       1       0
 Nx_Left                       7         10        7       1       0
 Nx_Right                      7         10        7       1       0
-Nx1-1_Analog_6                7         9         9       1       0
-Nx1-1_Exp_6                   7         9         9       1       0
-Nx1-1_UAC_6                   7         9         9       1       0
-Nx1-1_ESP32_7                 7         9         9       1       0
-Nx1-1_UAC_7                   7         9         9       1       0
-Nx1-1_Exp_8                   7         9         9       1       0
-Nx1-1_Analog_7                7         9         9       1       0
-Nx1-1_ESP32_8                 7         9         9       1       0
-Nx1-1_Analog_8                7         9         9       1       0
-Nx1-1_UAC_8                   7         9         9       1       0
-Nx1-1_ESP32_5                 7         9         9       1       0
-Nx1-1_Exp_7                   7         9         9       1       0
-Nx1-1_Exp_5                   7         9         9       1       0
-Nx1-1_ESP32_6                 7         9         9       1       0
-Nx1-1_Analog_5                7         9         9       1       0
-Nx1-1_UAC                     7         9         9       1       0
-Nx1-1_Analog                  7         9         9       1       0
-Nx1-1_Exp                     7         9         9       1       0
-Nx1-1_UAC_2                   7         9         9       1       0
-Nx1-1_ESP32_2                 7         9         9       1       0
-Nx1-1_Exp_2                   7         9         9       1       0
-Nx1-1_Analog_2                7         9         9       1       0
-Nx1-1_UAC_3                   7         9         9       1       0
-Nx1-1_Analog_3                7         9         9       1       0
-Nx1-1_ESP32                   7         9         9       1       0
-Nx1-1_Exp_3                   7         9         9       1       0
-Nx1-1_ESP32_3                 7         9         9       1       0
-Nx1-1_UAC_4                   7         9         9       1       0
-Nx1-1_ESP32_4                 7         9         9       1       0
-Nx1-1_Exp_4                   7         9         9       1       0
-Nx1-1_UAC_5                   7         9         9       1       0
-Nx1-1_Analog_4                7         9         9       1       0
-Nx1-1_7                       7         9         6       0       0
-Nx1-1                         7         9         6       0       0
-Nx1-1_2                       7         9         6       0       0
-Nx1-1_3                       7         9         6       0       0
-Nx1-1_4                       7         9         6       0       0
-Nx1-1_5                       7         9         6       0       0
-Nx1-1_6                       7         9         6       0       0
-Nx1-1_8                       7         9         6       0       0
 Delay2                        7         9         1       4702    0
+Delay6                        7         9         1       4702    0
 Delay8                        7         9         1       4702    0
 Delay4                        7         9         1       4702    0
-Delay6                        7         9         1       4702    0
 Nx_SPDIF_Right                5         6         1       1       0
-BypassVolPoti                 5         6         1       1       0
 Nx_SPDIF_Left                 5         6         1       1       0
-Nx1-1_SPDIF_8                 5         5         1       1       0
-Nx1-1_SPDIF                   5         5         1       1       0
-Nx1-1_SPDIF_4                 5         5         1       1       0
-Nx1-1_SPDIF_5                 5         5         1       1       0
-Nx1-1_SPDIF_2                 5         5         1       1       0
-Nx1-1_SPDIF_3                 5         5         1       1       0
-Nx1-1_SPDIF_7                 5         5         1       1       0
-Nx1-1_SPDIF_6                 5         5         1       1       0
+BypassVolPoti                 5         6         1       1       0
 Shift1                        4         4         1       1       0
 ADC In1                       4         4         0       1       0
 AsrcIn1                       3         3         0       2       0
-Output 4                      2         3         0       0       0
-Output 6                      2         3         0       0       0
-Output 7                      2         3         0       0       0
 Output 8                      2         3         0       0       0
-SpdifOut_Left                 2         3         0       0       0
+Output 7                      2         3         0       0       0
+Output 6                      2         3         0       0       0
+Output 4                      2         3         0       0       0
 Output 5                      2         3         0       0       0
 Output 3                      2         3         0       0       0
 SpdifOut_Right                2         3         0       0       0
 Output 1                      2         3         0       0       0
+SpdifOut_Left                 2         3         0       0       0
 Output 2                      2         3         0       0       0
 DC1                           2         2         1       1       0
-Output_UAC6                   2         2         0       0       0
+Output_UAC2                   2         2         0       0       0
 Output_UAC3                   2         2         0       0       0
 Output_UAC5                   2         2         0       0       0
 Output_UAC7                   2         2         0       0       0
 Output_UAC4                   2         2         0       0       0
 Output_UAC8                   2         2         0       0       0
 Output_UAC1                   2         2         0       0       0
-Output_UAC2                   2         2         0       0       0
+Output_UAC6                   2         2         0       0       0
 --------------------------------------------------------------------------------------
 Total                         1781      2692      20167   20086   0
 --------------------------------------------------------------------------------------

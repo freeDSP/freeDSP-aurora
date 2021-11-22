@@ -1,11 +1,11 @@
 ADAU145X Assembler, Analog Devices Inc.
 Version: 4.6.0,1809  (built 12/23/2020)
 
-##### Compile Started: Thursday, November 18, 2021 12:35:10 PM #####
+##### Compile Started: Monday, November 22, 2021 7:38:01 PM #####
 ADAU145X Assembler, Analog Devices Inc.
 Version: 4.6.0,1809  (built 12/23/2020)
 
-##### Compile Started: Thursday, November 18, 2021 12:35:10 PM #####
+##### Compile Started: Monday, November 22, 2021 7:38:01 PM #####
 ##### Compile succeeded:  0 errors, 0 warnings #####
 
 ##### Summary #####
@@ -21,85 +21,67 @@ Instance                      (cycles)  (size)
 --------------------------------------------------------------------------------------
 STACK                          -         -        16      0       0       
 VolumePot                     26        45        0       10      0
+Nx1-1_Mux                     28        40        24      0       0
 FRAMEWORK                     58        39        19      0       0
-PeqBank1                      24        29        40      38      0
+Nx1-1_Analog                  28        36        36      4       0
+Nx1-1_ESP32                   28        36        36      4       0
+Nx1-1_UAC                     28        36        36      4       0
+Nx1-1_Exp                     28        36        36      4       0
 PeqBank3                      24        29        40      38      0
-PeqBank4                      24        29        40      37      0
+PeqBank1                      24        29        40      38      0
 PeqBank2                      24        29        40      37      0
+PeqBank4                      24        29        40      37      0
 MasterVolume                  15        26        3       4       0
+Nx1-1_SPDIF                   20        20        4       4       0
 FIR2                          1031      18        4096    4096    0
 FIR3                          1031      18        4096    4096    0
 FIR4                          1031      18        4096    4096    0
 FIR1                          1031      18        4096    4096    0
 Input ESP32                   16        16        0       8       0
+Input ADC                     16        16        0       8       0
 Input Expansion               16        16        0       8       0
 Input UAC2                    16        16        0       8       0
-Input ADC                     16        16        0       8       0
-Gain3                         8         13        3       1       0
-Gain2                         8         13        3       1       0
 Gain4                         8         13        3       1       0
+Gain2                         8         13        3       1       0
+Gain3                         8         13        3       1       0
 Gain1                         8         13        3       1       0
-Delay3                        8         11        1702    1       0
 Delay1                        8         11        1702    1       0
-Nx_Out_Left                   7         10        9       1       0
-Nx_Out_Right                  7         10        9       1       0
+Delay3                        8         11        1702    1       0
 Nx_ESP32_Left                 7         10        9       1       0
 Nx_UAC2_Right                 7         10        9       1       0
-Nx_Exp_Right                  7         10        9       1       0
+Nx_Exp_Left                   7         10        9       1       0
 Nx_Analog_Right               7         10        9       1       0
 Nx_ESP32_Right                7         10        9       1       0
 Nx_UAC2_Left                  7         10        9       1       0
-Nx_Exp_Left                   7         10        9       1       0
 Nx_Analog_Left                7         10        9       1       0
+Nx_Out_Left                   7         10        9       1       0
+Nx_Exp_Right                  7         10        9       1       0
+Nx_Out_Right                  7         10        9       1       0
 Nx_Right                      7         10        7       1       0
 Nx_Left                       7         10        7       1       0
-Nx1-1                         7         10        6       0       0
-Nx1-1_2                       7         10        6       0       0
-Nx1-1_3                       7         10        6       0       0
-Nx1-1_4                       7         10        6       0       0
-Nx1-1_UAC_2                   7         9         9       1       0
-Nx1-1_UAC_4                   7         9         9       1       0
-Nx1-1_ESP32_2                 7         9         9       1       0
-Nx1-1_Exp_4                   7         9         9       1       0
-Nx1-1_Analog_4                7         9         9       1       0
-Nx1-1_Exp_3                   7         9         9       1       0
-Nx1-1_ESP32_3                 7         9         9       1       0
-Nx1-1_ESP32_4                 7         9         9       1       0
-Nx1-1_ESP32                   7         9         9       1       0
-Nx1-1_UAC_3                   7         9         9       1       0
-Nx1-1_Analog_2                7         9         9       1       0
-Nx1-1_Exp_2                   7         9         9       1       0
-Nx1-1_Analog_3                7         9         9       1       0
-Nx1-1_Exp                     7         9         9       1       0
-Nx1-1_UAC                     7         9         9       1       0
-Nx1-1_Analog                  7         9         9       1       0
 Delay4                        7         9         1       1702    0
 Delay2                        7         9         1       1702    0
-BypassVolPoti                 5         6         1       1       0
 Nx_SPDIF_Right                5         6         1       1       0
 Nx_SPDIF_Left                 5         6         1       1       0
-Nx1-1_SPDIF_2                 5         5         1       1       0
-Nx1-1_SPDIF_4                 5         5         1       1       0
-Nx1-1_SPDIF_3                 5         5         1       1       0
-Nx1-1_SPDIF                   5         5         1       1       0
+BypassVolPoti                 5         6         1       1       0
 Shift1                        4         4         1       1       0
 ADC In1                       4         4         0       1       0
 AsrcIn1                       3         3         0       2       0
+Output 1                      2         3         0       0       0
 Output 4                      2         3         0       0       0
 Output 3                      2         3         0       0       0
 Output 2                      2         3         0       0       0
-Output 1                      2         3         0       0       0
 SpdifOut_Right                2         3         0       0       0
 SpdifOut_Left                 2         3         0       0       0
 DC1                           2         2         1       1       0
+Output_UAC6                   2         2         0       0       0
+Output_UAC3                   2         2         0       0       0
 Output_UAC5                   2         2         0       0       0
 Output_UAC7                   2         2         0       0       0
 Output_UAC4                   2         2         0       0       0
 Output_UAC8                   2         2         0       0       0
 Output_UAC1                   2         2         0       0       0
 Output_UAC2                   2         2         0       0       0
-Output_UAC3                   2         2         0       0       0
-Output_UAC6                   2         2         0       0       0
 --------------------------------------------------------------------------------------
 Total                         4745      843       20281   20030   0
 --------------------------------------------------------------------------------------

@@ -677,7 +677,7 @@
             </Algorithm>
         </Module>
         <Module>
-            <CellName>InputSelect_4.Nx1-1_Analog_4</CellName>
+            <CellName>InputSelect_4.Nx1-1_Analog</CellName>
             <Algorithm>
                 <AlgoName>ALG0</AlgoName>
                 <DetailedName>monomuxSigma300ns19</DetailedName>
@@ -693,7 +693,7 @@
             </Algorithm>
         </Module>
         <Module>
-            <CellName>InputSelect_4.Nx1-1_UAC_4</CellName>
+            <CellName>InputSelect_4.Nx1-1_UAC</CellName>
             <Algorithm>
                 <AlgoName>ALG0</AlgoName>
                 <DetailedName>monomuxSigma300ns20</DetailedName>
@@ -709,7 +709,7 @@
             </Algorithm>
         </Module>
         <Module>
-            <CellName>InputSelect_4.Nx1-1_ESP32_4</CellName>
+            <CellName>InputSelect_4.Nx1-1_ESP32</CellName>
             <Algorithm>
                 <AlgoName>ALG0</AlgoName>
                 <DetailedName>monomuxSigma300ns21</DetailedName>
@@ -725,7 +725,7 @@
             </Algorithm>
         </Module>
         <Module>
-            <CellName>InputSelect_4.Nx1-1_Exp_4</CellName>
+            <CellName>InputSelect_4.Nx1-1_Exp</CellName>
             <Algorithm>
                 <AlgoName>ALG0</AlgoName>
                 <DetailedName>monomuxSigma300ns22</DetailedName>
@@ -741,7 +741,7 @@
             </Algorithm>
         </Module>
         <Module>
-            <CellName>InputSelect_4.Nx1-1_SPDIF_4</CellName>
+            <CellName>InputSelect_4.Nx1-1_SPDIF</CellName>
             <Algorithm>
                 <AlgoName>ALG0</AlgoName>
                 <DetailedName>monomuxSigma300ns23</DetailedName>
@@ -757,7 +757,7 @@
             </Algorithm>
         </Module>
         <Module>
-            <CellName>InputSelect_4.Nx1-1_4</CellName>
+            <CellName>InputSelect_4.Nx1-1_Mux</CellName>
             <Algorithm>
                 <AlgoName>ALG0</AlgoName>
                 <DetailedName>monomuxSigma300ns24</DetailedName>
@@ -773,7 +773,7 @@
             </Algorithm>
         </Module>
         <Module>
-            <CellName>InputSelect_3.Nx1-1_Analog_3</CellName>
+            <CellName>InputSelect_3.Nx1-1_Analog</CellName>
             <Algorithm>
                 <AlgoName>ALG0</AlgoName>
                 <DetailedName>monomuxSigma300ns13</DetailedName>
@@ -789,7 +789,7 @@
             </Algorithm>
         </Module>
         <Module>
-            <CellName>InputSelect_3.Nx1-1_UAC_3</CellName>
+            <CellName>InputSelect_3.Nx1-1_UAC</CellName>
             <Algorithm>
                 <AlgoName>ALG0</AlgoName>
                 <DetailedName>monomuxSigma300ns14</DetailedName>
@@ -805,7 +805,7 @@
             </Algorithm>
         </Module>
         <Module>
-            <CellName>InputSelect_3.Nx1-1_ESP32_3</CellName>
+            <CellName>InputSelect_3.Nx1-1_ESP32</CellName>
             <Algorithm>
                 <AlgoName>ALG0</AlgoName>
                 <DetailedName>monomuxSigma300ns15</DetailedName>
@@ -821,7 +821,7 @@
             </Algorithm>
         </Module>
         <Module>
-            <CellName>InputSelect_3.Nx1-1_Exp_3</CellName>
+            <CellName>InputSelect_3.Nx1-1_Exp</CellName>
             <Algorithm>
                 <AlgoName>ALG0</AlgoName>
                 <DetailedName>monomuxSigma300ns16</DetailedName>
@@ -837,7 +837,7 @@
             </Algorithm>
         </Module>
         <Module>
-            <CellName>InputSelect_3.Nx1-1_SPDIF_3</CellName>
+            <CellName>InputSelect_3.Nx1-1_SPDIF</CellName>
             <Algorithm>
                 <AlgoName>ALG0</AlgoName>
                 <DetailedName>monomuxSigma300ns17</DetailedName>
@@ -853,7 +853,7 @@
             </Algorithm>
         </Module>
         <Module>
-            <CellName>InputSelect_3.Nx1-1_3</CellName>
+            <CellName>InputSelect_3.Nx1-1_Mux</CellName>
             <Algorithm>
                 <AlgoName>ALG0</AlgoName>
                 <DetailedName>monomuxSigma300ns18</DetailedName>
@@ -869,7 +869,7 @@
             </Algorithm>
         </Module>
         <Module>
-            <CellName>InputSelect_2.Nx1-1_Analog_2</CellName>
+            <CellName>InputSelect_2.Nx1-1_Analog</CellName>
             <Algorithm>
                 <AlgoName>ALG0</AlgoName>
                 <DetailedName>monomuxSigma300ns7</DetailedName>
@@ -885,7 +885,7 @@
             </Algorithm>
         </Module>
         <Module>
-            <CellName>InputSelect_2.Nx1-1_UAC_2</CellName>
+            <CellName>InputSelect_2.Nx1-1_UAC</CellName>
             <Algorithm>
                 <AlgoName>ALG0</AlgoName>
                 <DetailedName>monomuxSigma300ns8</DetailedName>
@@ -901,7 +901,7 @@
             </Algorithm>
         </Module>
         <Module>
-            <CellName>InputSelect_2.Nx1-1_ESP32_2</CellName>
+            <CellName>InputSelect_2.Nx1-1_ESP32</CellName>
             <Algorithm>
                 <AlgoName>ALG0</AlgoName>
                 <DetailedName>monomuxSigma300ns9</DetailedName>
@@ -917,7 +917,7 @@
             </Algorithm>
         </Module>
         <Module>
-            <CellName>InputSelect_2.Nx1-1_Exp_2</CellName>
+            <CellName>InputSelect_2.Nx1-1_Exp</CellName>
             <Algorithm>
                 <AlgoName>ALG0</AlgoName>
                 <DetailedName>monomuxSigma300ns10</DetailedName>
@@ -933,7 +933,7 @@
             </Algorithm>
         </Module>
         <Module>
-            <CellName>InputSelect_2.Nx1-1_SPDIF_2</CellName>
+            <CellName>InputSelect_2.Nx1-1_SPDIF</CellName>
             <Algorithm>
                 <AlgoName>ALG0</AlgoName>
                 <DetailedName>monomuxSigma300ns11</DetailedName>
@@ -949,7 +949,7 @@
             </Algorithm>
         </Module>
         <Module>
-            <CellName>InputSelect_2.Nx1-1_2</CellName>
+            <CellName>InputSelect_2.Nx1-1_Mux</CellName>
             <Algorithm>
                 <AlgoName>ALG0</AlgoName>
                 <DetailedName>monomuxSigma300ns12</DetailedName>
@@ -1045,7 +1045,7 @@
             </Algorithm>
         </Module>
         <Module>
-            <CellName>InputSelect_1.Nx1-1</CellName>
+            <CellName>InputSelect_1.Nx1-1_Mux</CellName>
             <Algorithm>
                 <AlgoName>ALG0</AlgoName>
                 <DetailedName>monomuxSigma300ns6</DetailedName>
