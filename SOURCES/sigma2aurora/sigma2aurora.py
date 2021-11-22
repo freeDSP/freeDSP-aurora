@@ -263,51 +263,39 @@ for module in root.findall('IC/Module'):
             if "Analog" in strlist[1]:
                 modparam = module.find('Algorithm/ModuleParameter')
                 if "Left" in strlist[2]:
-                    spdifoutmux_channel[0][0] = int(
-                        modparam.find('Address').text)
+                    spdifoutmux_channel[0][0] = intaddr(modparam)
                 elif "Right" in strlist[2]:
-                    spdifoutmux_channel[1][0] = int(
-                        modparam.find('Address').text)
+                    spdifoutmux_channel[1][0] = intaddr(modparam)
             elif "UAC2" in strlist[1]:
                 modparam = module.find('Algorithm/ModuleParameter')
                 if "Left" in strlist[2]:
-                    spdifoutmux_channel[0][1] = int(
-                        modparam.find('Address').text)
+                    spdifoutmux_channel[0][1] = intaddr(modparam)
                 elif "Right" in strlist[2]:
-                    spdifoutmux_channel[1][1] = int(
-                        modparam.find('Address').text)
+                    spdifoutmux_channel[1][1] = intaddr(modparam)
             elif "Exp" in strlist[1]:
                 modparam = module.find('Algorithm/ModuleParameter')
                 if "Left" in strlist[2]:
-                    spdifoutmux_channel[0][2] = int(
-                        modparam.find('Address').text)
+                    spdifoutmux_channel[0][2] = intaddr(modparam)
                 elif "Right" in strlist[2]:
-                    spdifoutmux_channel[1][2] = int(
-                        modparam.find('Address').text)
+                    spdifoutmux_channel[1][2] = intaddr(modparam)
             elif "ESP32" in strlist[1]:
                 modparam = module.find('Algorithm/ModuleParameter')
                 if "Left" in strlist[2]:
-                    spdifoutmux_channel[0][3] = int(
-                        modparam.find('Address').text)
+                    spdifoutmux_channel[0][3] = intaddr(modparam)
                 elif "Right" in strlist[2]:
-                    spdifoutmux_channel[1][3] = int(
-                        modparam.find('Address').text)
+                    spdifoutmux_channel[1][3] = intaddr(modparam)
             elif "SPDIF" in strlist[1]:
                 modparam = module.find('Algorithm/ModuleParameter')
                 if "Left" in strlist[2]:
-                    spdifoutmux_channel[0][4] = int(
-                        modparam.find('Address').text)
+                    spdifoutmux_channel[0][4] = intaddr(modparam)
                 elif "Right" in strlist[2]:
-                    spdifoutmux_channel[1][4] = int(
-                        modparam.find('Address').text)
+                    spdifoutmux_channel[1][4] = intaddr(modparam)
             elif "Out" in strlist[1]:
                 modparam = module.find('Algorithm/ModuleParameter')
                 if "Left" in strlist[2]:
-                    spdifoutmux_channel[0][5] = int(
-                        modparam.find('Address').text)
+                    spdifoutmux_channel[0][5] = intaddr(modparam)
                 elif "Right" in strlist[2]:
-                    spdifoutmux_channel[1][5] = int(
-                        modparam.find('Address').text)
+                    spdifoutmux_channel[1][5] = intaddr(modparam)
         else:
             modparam = module.find('Algorithm/ModuleParameter')
             if "Left" in strlist[1]:
