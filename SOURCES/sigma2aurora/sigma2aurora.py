@@ -731,6 +731,8 @@ shutil.copy2(darkcss_src_path, darkcss_dst_path)
 # ------------------------------------------------------------------------------
 # GUI creation
 # ------------------------------------------------------------------------------
+chnames_txt_path = os.join(project_path, "chnames.txt")
+
 if args.gui:
     # --- Copy custom GUI html
     print("Copying custom dsp.html")
@@ -802,33 +804,20 @@ if args.gui:
     with open(dsp_html_path, "w") as f1:
         f1.write(dsphtml)
 
-    if os.path.isfile(args.gui.replace("dsp.html", "chnames.txt")):
-        print("Copying custom chnames.txt")
-        print(args.gui.replace("dsp.html", "chnames.txt"))
-        shutil.copy2(args.gui.replace("dsp.html", "chnames.txt"),
-                     os.join(project_path, "chnames.txt"))
-    else:
-        print("Writing default chnames.txt")
-        chnames_txt_path = os.join(project_path, "chnames.txt")
-        with open(chnames_txt_path, 'w') as file:
-            for ii in range(0, ninputs):
-                file.write("Channel " + str(ii + 1) + "\n")
-            for ii in range(0, noutputs):
-                file.write("Out " + str(ii + 1) + "\n")
-            file.write("Preset A\n")
-            file.write("Preset B\n")
-            file.write("Preset C\n")
-            file.write("Preset D\n")
-
+    custom_chnames_path = args.gui.replace("dsp.html", "chnames.txt")
+    if os.path.isfile(custom_chnames_path):
+        print("Copying custom chnames.txt from " + custom_chnames_path)
+        shutil.copy2(custom_chnames_path, chnames_txt_path)
 else:
     # --- Copy GUI template
     print("Copying template dsp.html")
     template_dsp_html_path = os.path.join(webapp_path, 'plugins', 'template', 'dsp.html')
     project_dsp_html_path = os.path.join(project_path, 'dsp.html')
     shutil.copy2(template_dsp_html_path, project_dsp_html_path)
+
+if not os.path.isfile(chnames_txt_path):
     # --- Writing chnames.txt
     print("Writing default chnames.txt")
-    chnames_txt_path = os.join(project_path, "chnames.txt")
     with open(chnames_txt_path, 'w') as file:
         for ii in range(0, ninputs):
             file.write("Channel " + str(ii + 1) + "\n")
