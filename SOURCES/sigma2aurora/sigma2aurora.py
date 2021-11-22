@@ -225,6 +225,11 @@ for ii in range(0, ninputs):
 
 npeqbank = 0
 
+
+def intaddr(node):
+    return int(node.find('Address').text)
+
+
 for module in root.findall('IC/Module'):
     cellname = module.find('CellName')
 
