@@ -299,9 +299,9 @@ for module in root.findall('IC/Module'):
         else:
             modparam = module.find('Algorithm/ModuleParameter')
             if "Left" in strlist[1]:
-                spdifoutmux_port[0] = int(modparam.find('Address').text)
+                spdifoutmux_port[0] = intaddr(modparam)
             elif "Right" in strlist[1]:
-                spdifoutmux_port[1] = int(modparam.find('Address').text)
+                spdifoutmux_port[1] = intaddr(modparam)
 
     # --- HP blocks
     elif cellname.text.lower().startswith('plugin.hp'):
@@ -319,7 +319,7 @@ for module in root.findall('IC/Module'):
         for modparam in module.findall('Algorithm/ModuleParameter'):
             modname = modparam.find('Name').text
             if "B2" in modname:
-                hp[idx].addr[nn] = int(modparam.find('Address').text)
+                hp[idx].addr[nn] = intaddr(modparam)
 
     # --- LP blocks
     elif cellname.text.lower().startswith('plugin.lp'):
@@ -337,7 +337,7 @@ for module in root.findall('IC/Module'):
         for modparam in module.findall('Algorithm/ModuleParameter'):
             modname = modparam.find('Name').text
             if "B2" in modname:
-                lp[idx].addr[nn] = int(modparam.find('Address').text)
+                lp[idx].addr[nn] = intaddr(modparam)
 
     # --- LowShelv blocks
     elif cellname.text.lower().startswith('plugin.lowshelv'):
@@ -345,7 +345,7 @@ for module in root.findall('IC/Module'):
             modname = modparam.find('Name').text
             if "B2" in modname:
                 newLShelv = ParamShelv()
-                newLShelv.addr = int(modparam.find('Address').text)
+                newLShelv.addr = intaddr(modparam)
                 newLShelv.name = cellname.text
                 lshelv.append(newLShelv)
 
@@ -355,7 +355,7 @@ for module in root.findall('IC/Module'):
             modname = modparam.find('Name').text
             if "B2" in modname:
                 newHShelv = ParamShelv()
-                newHShelv.addr = int(modparam.find('Address').text)
+                newHShelv.addr = intaddr(modparam)
                 newHShelv.name = cellname.text
                 hshelv.append(newHShelv)
 
@@ -368,7 +368,7 @@ for module in root.findall('IC/Module'):
             modname = modparam.find('Name').text
             if "B2" in modname:
                 if idx < 10:
-                    newPeqBank.addr[idx] = int(modparam.find('Address').text)
+                    newPeqBank.addr[idx] = intaddr(modparam)
                 else:
                     print("[ERROR] Not more then 10 PEQs per bank allowed.")
                 idx = idx + 1
@@ -382,7 +382,7 @@ for module in root.findall('IC/Module'):
             modname = modparam.find('Name').text
             if "B2" in modname:
                 newPeq = ParamPeq()
-                newPeq.addr = int(modparam.find('Address').text)
+                newPeq.addr = intaddr(modparam)
                 newPeq.name = cellname.text
                 peq.append(newPeq)
 
@@ -392,7 +392,7 @@ for module in root.findall('IC/Module'):
             modname = modparam.find('Name').text
             if "B2" in modname:
                 newPhase = ParamPhase()
-                newPhase.addr = int(modparam.find('Address').text)
+                newPhase.addr = intaddr(modparam)
                 newPhase.name = cellname.text
                 phase.append(newPhase)
 
@@ -402,7 +402,7 @@ for module in root.findall('IC/Module'):
             modname = modparam.find('Name').text
             if "delay" in modname:
                 newDelay = ParamDelay()
-                newDelay.addr = int(modparam.find('Address').text)
+                newDelay.addr = intaddr(modparam)
                 newDelay.name = cellname.text
                 dly.append(newDelay)
 
@@ -412,7 +412,7 @@ for module in root.findall('IC/Module'):
             modname = modparam.find('Name').text
             if "target" in modname:
                 newGain = ParamGain()
-                newGain.addr = int(modparam.find('Address').text)
+                newGain.addr = intaddr(modparam)
                 newGain.name = cellname.text
                 gain.append(newGain)
 
@@ -422,7 +422,7 @@ for module in root.findall('IC/Module'):
             modname = modparam.find('Name').text
             if "fircoeff" in modname:
                 newFir = ParamFir()
-                newFir.addr = int(modparam.find('Address').text)
+                newFir.addr = intaddr(modparam)
                 newFir.len = int(modparam.find('Size').text) / 4
                 newFir.name = cellname.text
                 fir.append(newFir)
@@ -450,9 +450,8 @@ for module in root.findall('IC/Module'):
                 for modparamlp in modulelp.findall('Algorithm/ModuleParameter'):
                     modnamelp = modparamlp.find('Name').text
                     if "B2" in modnamelp:
-                        xolp[idx].addr[nn] = int(
-                            modparamlp.find('Address').text)
-        if(foundlp):
+                        xolp[idx].addr[nn] = intaddr(modparamlp)
+        if foundlp:
             name = cellname.text.split(':', 1)[0]
             idx = -1
             nn = int(cellname.text.split(':', 1)[1]) - 1
@@ -467,7 +466,7 @@ for module in root.findall('IC/Module'):
             for modparam in module.findall('Algorithm/ModuleParameter'):
                 modname = modparam.find('Name').text
                 if "B2" in modname:
-                    xohp[idx].addr[nn] = int(modparam.find('Address').text)
+                    xohp[idx].addr[nn] = intaddr(modparam)
         else:
             print("[ERROR] Could not find matching lp block for " + cellname.text)
 
@@ -478,13 +477,13 @@ for module in root.findall('IC/Module'):
 
     elif cellname.text.startswith('BypassVolPoti'):
         modparam = module.find('Algorithm/ModuleParameter')
-        vpot = int(modparam.find('Address').text)
+        vpot = intaddr(modparam)
 
     elif cellname.text.startswith('MasterVolume'):
         for modparam in module.findall('Algorithm/ModuleParameter'):
             modname = modparam.find('Name').text
             if "target" in modname:
-                mastervol = int(modparam.find('Address').text)
+                mastervol = intaddr(modparam)
 
     elif cellname.text.lower().startswith('plugin.'):
         print("[WARNING] Unkown dsp block in plugin: " + cellname.text)
