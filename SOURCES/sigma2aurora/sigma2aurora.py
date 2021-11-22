@@ -108,12 +108,13 @@ projectname = filename.split(".")[0]
 projectdir = os.path.dirname(path_sigmastudioproject)
 
 # --- Read TxBuffer file
-print("Reading " + projectdir + "/TxBuffer_IC_1.dat")
-if not os.path.exists(projectdir + "/TxBuffer_IC_1.dat"):
+txbuffer_path = os.path.join(projectdir, "TxBuffer_IC_1.dat")
+print("Reading " + txbuffer_path)
+if not os.path.exists(txbuffer_path):
     print("Could not find file TxBuffer_IC_1.dat in project directory")
     exit()
 txbuffer = bytearray()
-with open(projectdir + "/TxBuffer_IC_1.dat") as fp:
+with open(txbuffer_path) as fp:
     line = fp.readline()
     while line:
         strlst = line.split(",")
@@ -124,12 +125,13 @@ with open(projectdir + "/TxBuffer_IC_1.dat") as fp:
         line = fp.readline()
 
 # --- Read NumBytes file
-print("Reading " + projectdir + "/NumBytes_IC_1.dat")
-if not os.path.exists(projectdir + "/NumBytes_IC_1.dat"):
+numbytes_path = os.path.join(projectdir, "NumBytes_IC_1.dat")
+print("Reading " + numbytes_path)
+if not os.path.exists(numbytes_path):
     print("Could not find file NumBytes_IC_1.dat in project directory")
     exit()
 numbytes = []
-with open(projectdir + "/NumBytes_IC_1.dat") as fp:
+with open(numbytes_path) as fp:
     line = fp.readline()
     while line:
         strlst = line.split(",")
@@ -145,7 +147,8 @@ except OSError:
 
 # --- Write dsp.fw
 print("Writing DSP firmware")
-with open(projectname + "/dsp.fw", 'wb') as file:
+dspfw_path = os.path.join(projectname, 'dsp.fw')
+with open(dspfw_path, 'wb') as file:
     idx = 0
     for ii in range(0, len(numbytes)):
         file.write(bytearray(struct.pack("!I", numbytes[ii])))
@@ -174,8 +177,9 @@ xolp = []
 fir = []
 
 # --- Reading project xml file
-print("Reading " + projectdir + "/" + projectname + "_NetList.xml")
-tree = ET.parse(projectdir + "/" + projectname + "_NetList.xml")
+netlist_xml_path = os.path.join(projectdir, projectname + "_NetList.xml")
+print("Reading " + netlist_xml_path)
+tree = ET.parse(netlist_xml_path)
 root = tree.getroot()
 
 # --- Count outputs
@@ -187,8 +191,9 @@ for algo in root.findall('IC/Schematic/Algorithm'):
 
 # --- Reading project xml file
 ninputs = 0
-print("Reading " + projectdir + "/" + projectname + ".xml")
-tree = ET.parse(projectdir + "/" + projectname + ".xml")
+projectxml_path = os.path.join(projectdir, projectname + ".xml")
+print("Reading " + projectxml_path)
+tree = ET.parse(projectxml_path)
 root = tree.getroot()
 
 # --- Count inputs
@@ -663,57 +668,68 @@ if nxo > 16:
 
 # --- Write plugin.ini
 print("Writing plugin.ini")
-data = {"name": nameplugin,
-        "ninputs": ninputs,
-        "noutputs": noutputs,
-        "nhp": nhp,
-        "nlshelv": nlshelv,
-        "npeq": npeq,
-        "npeqbank": npeqbank,
-        "nhshelv": nhshelv,
-        "nphase": nphase,
-        "nlp": nlp,
-        "ndly": ndly,
-        "ngain": ngain,
-        "nxo": nxo,
-        "nfir": nfir,
-        "analog": inputselect_analog_t,
-        "spdif": inputselect_spdif_t,
-        "uac": inputselect_uac2_t,
-        "exp": inputselect_exp_t,
-        "port": inputselect_port_t,
-        "spdifout": spdifoutmux_channel_t,
-        "hp": hp_t,
-        "lshelv": lshelv_t,
-        "peq": peq_t,
-        "peqbank": peqbank_t,
-        "peqband": peqband,
-        "hshelv": hshelv_t,
-        "lp": lp_t,
-        "phase": phase_t,
-        "dly": dly_t,
-        "gain": gain_t,
-        "xohp": xohp_t,
-        "xolp": xolp_t,
-        "fir": fir_t,
-        "firlen": firlen_t,
-        "vpot": vpot,
-        "master": mastervol,
-        "version": version}
+data = {
+    "name": nameplugin,
+    "ninputs": ninputs,
+    "noutputs": noutputs,
+    "nhp": nhp,
+    "nlshelv": nlshelv,
+    "npeq": npeq,
+    "npeqbank": npeqbank,
+    "nhshelv": nhshelv,
+    "nphase": nphase,
+    "nlp": nlp,
+    "ndly": ndly,
+    "ngain": ngain,
+    "nxo": nxo,
+    "nfir": nfir,
+    "analog": inputselect_analog_t,
+    "spdif": inputselect_spdif_t,
+    "uac": inputselect_uac2_t,
+    "exp": inputselect_exp_t,
+    "port": inputselect_port_t,
+    "spdifout": spdifoutmux_channel_t,
+    "hp": hp_t,
+    "lshelv": lshelv_t,
+    "peq": peq_t,
+    "peqbank": peqbank_t,
+    "peqband": peqband,
+    "hshelv": hshelv_t,
+    "lp": lp_t,
+    "phase": phase_t,
+    "dly": dly_t,
+    "gain": gain_t,
+    "xohp": xohp_t,
+    "xolp": xolp_t,
+    "fir": fir_t,
+    "firlen": firlen_t,
+    "vpot": vpot,
+    "master": mastervol,
+    "version": version,
+}
 
-with io.open(projectname + "/plugin.ini", 'w', encoding='utf8') as outfile:
+plugin_ini_path = os.path.join(projectname, "plugin.ini")
+with io.open(plugin_ini_path, 'w', encoding='utf8') as outfile:
     str_ = json.dumps(data,
                       indent=0, sort_keys=False,
                       separators=(',', ': '), ensure_ascii=False)
     outfile.write(to_unicode(str_))
 
+
+webapp_path = os.path.join('..', 'WEBAPP')
+project_path = os.path.join('.', projectname)
+
 # --- Copy aurora.jgz
 print("Copying aurora.jgz")
-shutil.copy2("../WEBAPP/js/aurora.jgz", "./" + projectname + "/aurora.jgz")
+aurora_jgz_src_path = os.path.join(webapp_path, 'js', 'aurora.jgz')
+aurora_jgz_dst_path = os.path.join(project_path, 'aurora.jgz')
+shutil.copy2(aurora_jgz_src_path, aurora_jgz_dst_path)
 
 # --- Copy stylesheet
 print("Copying dark.css")
-shutil.copy2("../WEBAPP/css/dark.css", "./" + projectname + "/dark.css")
+darkcss_src_path = os.path.join(webapp_path, 'css', 'dark.css')
+darkcss_dst_path = os.path.join(project_path, 'dark.css')
+shutil.copy2(darkcss_src_path, darkcss_dst_path)
 
 # ------------------------------------------------------------------------------
 # GUI creation
@@ -785,17 +801,19 @@ if args.gui:
         # --- XO-LP blocks
         # Handled by xohp
 
-    with open("./" + projectname + "/dsp.html", "w") as f1:
+    dsp_html_path = os.join(project_path, 'dsp.html')
+    with open(dsp_html_path, "w") as f1:
         f1.write(dsphtml)
 
     if os.path.isfile(args.gui.replace("dsp.html", "chnames.txt")):
         print("Copying custom chnames.txt")
         print(args.gui.replace("dsp.html", "chnames.txt"))
         shutil.copy2(args.gui.replace("dsp.html", "chnames.txt"),
-                     "./" + projectname + "/chnames.txt")
+                     os.join(project_path, "chnames.txt"))
     else:
         print("Writing default chnames.txt")
-        with open(projectname + "/chnames.txt", 'w') as file:
+        chnames_txt_path = os.join(project_path, "chnames.txt")
+        with open(chnames_txt_path, 'w') as file:
             for ii in range(0, ninputs):
                 file.write("Channel " + str(ii + 1) + "\n")
             for ii in range(0, noutputs):
@@ -808,11 +826,13 @@ if args.gui:
 else:
     # --- Copy GUI template
     print("Copying template dsp.html")
-    shutil.copy2("../WEBAPP/plugins/template/dsp.html",
-                 "./" + projectname + "/dsp.html")
+    template_dsp_html_path = os.path.join(webapp_path, 'plugins', 'template', 'dsp.html')
+    project_dsp_html_path = os.path.join(project_path, 'dsp.html')
+    shutil.copy2(template_dsp_html_path, project_dsp_html_path)
     # --- Writing chnames.txt
     print("Writing default chnames.txt")
-    with open(projectname + "/chnames.txt", 'w') as file:
+    chnames_txt_path = os.join(project_path, "chnames.txt")
+    with open(chnames_txt_path, 'w') as file:
         for ii in range(0, ninputs):
             file.write("Channel " + str(ii + 1) + "\n")
         for ii in range(0, noutputs):
