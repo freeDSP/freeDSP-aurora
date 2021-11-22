@@ -101,9 +101,7 @@ if args.version:
 else:
     version = "0.0.0"
 
-split_path = path_sigmastudioproject.rsplit("\\", 1)
-filename = os.path.basename(split_path[0])
-projectname = filename.split(".")[0]
+projectname = os.path.splitext(os.path.basename(path_sigmastudioproject))[0]
 projectdir = os.path.dirname(path_sigmastudioproject)
 
 # --- Read TxBuffer file
