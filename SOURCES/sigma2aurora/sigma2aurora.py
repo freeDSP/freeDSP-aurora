@@ -722,6 +722,7 @@ shutil.copy2(darkcss_src_path, darkcss_dst_path)
 # GUI creation
 # ------------------------------------------------------------------------------
 chnames_txt_path = os.path.join(project_path, "chnames.txt")
+chnames_txt_created = False
 
 if args.gui:
     # --- Copy custom GUI html
@@ -819,6 +820,7 @@ if args.gui:
     if os.path.isfile(custom_chnames_path):
         print("Copying custom chnames.txt from " + custom_chnames_path)
         shutil.copy2(custom_chnames_path, chnames_txt_path)
+        chnames_txt_created = True
 else:
     # --- Copy GUI template
     print("Copying template dsp.html")
@@ -826,7 +828,7 @@ else:
     project_dsp_html_path = os.path.join(project_path, 'dsp.html')
     shutil.copy2(template_dsp_html_path, project_dsp_html_path)
 
-if not os.path.isfile(chnames_txt_path):
+if not chnames_txt_created:
     # --- Writing chnames.txt
     print("Writing default chnames.txt")
     with open(chnames_txt_path, 'w') as file:
