@@ -613,10 +613,10 @@ for m in range(0, len(xolp)):
         xolp_t[idx] = xolp[m].addr[n]
         idx = idx+1
 
-nhp = len(hp_t)/4
-nlp = len(lp_t)/4
-nxolp = len(xolp_t)/4
-nxohp = len(xohp_t)/4
+nhp = int(len(hp_t)/4)
+nlp = int(len(lp_t)/4)
+nxolp = int(len(xolp_t)/4)
+nxohp = int(len(xohp_t)/4)
 nxo = nxohp
 if nxo != nxolp:
     print('[ERROR] Counts of XO_LP and XO_HP do not match.')
@@ -811,7 +811,7 @@ if args.gui:
         # --- XO-LP blocks
         # Handled by xohp
 
-    dsp_html_path = os.join(project_path, 'dsp.html')
+    dsp_html_path = os.path.join(project_path, 'dsp.html')
     with open(dsp_html_path, "w") as f1:
         f1.write(dsphtml)
 
