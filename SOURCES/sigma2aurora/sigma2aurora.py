@@ -721,7 +721,7 @@ shutil.copy2(darkcss_src_path, darkcss_dst_path)
 # ------------------------------------------------------------------------------
 # GUI creation
 # ------------------------------------------------------------------------------
-chnames_txt_path = os.join(project_path, "chnames.txt")
+chnames_txt_path = os.path.join(project_path, "chnames.txt")
 
 if args.gui:
     # --- Copy custom GUI html
