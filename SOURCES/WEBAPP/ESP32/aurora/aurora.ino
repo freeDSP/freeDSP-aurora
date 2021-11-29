@@ -77,6 +77,7 @@ long int lastREsw = 0;
 //------------------------------------------------------------------------------
 #if HAVE_IRRECEIVER
 IRrecv irReceiver(IR_RECEIVER_PIN);
+unsigned int irPrevious = 0x0;
 #endif
 
 //==============================================================================
@@ -628,6 +629,14 @@ void loop() {
 #if HAVE_IRRECEIVER
     decode_results irResults;
     if (irReceiver.decode(&irResults)) {
+        // Serial.println(irResults.value, HEX);
+
+        // If the IR repeat code is sent (the user is long-pressing a button), the previous IR code will be written
+        // to the current IR value.
+        if (irResults.value == REMOTE_REPEAT_CODE) {
+            irResults.value = irPrevious;
+        }
+
         if (irResults.value == APPLE_REMOTE_UP) {
             masterVolume.val += 0.5f;
             if (masterVolume.val > 0.f)
@@ -670,7 +679,8 @@ void loop() {
 
             needUpdateUI = true;
         }
-        Serial.println(irResults.value, HEX);
+
+        irPrevious = irResults.value;
         irReceiver.resume();
     }
 #endif
