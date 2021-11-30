@@ -570,6 +570,50 @@ void setup()
 }
 
 //==============================================================================
+/*! Helpers
+ *
+ */
+
+void update_preset(void) {
+  softMuteDAC();
+  initUserParams();
+  uploadUserParams();
+  updateAddOn();
+  softUnmuteDAC();
+}
+
+void next_preset(void) {
+  currentPreset++;
+  if( currentPreset >= MAX_NUM_PRESETS )
+    currentPreset = 0;
+
+  update_preset();
+}
+
+void prev_preset(void) {
+  if( currentPreset == 0 )
+    currentPreset = MAX_NUM_PRESETS - 1;
+  else
+    currentPreset--;
+
+  update_preset();
+}
+
+void increase_volume(void) {
+  masterVolume.val += 0.5f;
+  if( masterVolume.val > 0.f )
+    masterVolume.val = 0.f;
+  setMasterVolume();
+}
+
+void decrease_volume(void) {
+  masterVolume.val -= 0.5f;
+  if( masterVolume.val <= -80.f )
+    masterVolume.val = -80.f;
+  setMasterVolume();
+}
+
+//==============================================================================
 /*! Arduino Main Loop
  *
  */
@@ -610,10 +654,7 @@ void loop()
   {
     if(editMode == 0)
     {
-      masterVolume.val += 0.5f;
-      if( masterVolume.val > 0.f )
-        masterVolume.val = 0.f;
-      setMasterVolume();
+      increase_volume();
       lastREval = rotaryEncoder.getRotationValue();
       needUpdateUI = true;
     }
@@ -621,15 +662,7 @@ void loop()
     {
       myDisplay.drawSwitchingPreset();
 
-      currentPreset++;
-      if( currentPreset >= MAX_NUM_PRESETS )
-        currentPreset = 0;
-
-      softMuteDAC();
-      initUserParams();
-      uploadUserParams();
-      updateAddOn();
-      softUnmuteDAC();
+      next_preset();
 
       lastREval = rotaryEncoder.getRotationValue();
       needUpdateUI = true;
@@ -651,10 +684,7 @@ void loop()
   {
     if( editMode == 0 )
     {
-      masterVolume.val -= 0.5f;
-      if( masterVolume.val <= -80.f )
-        masterVolume.val = -80.f;
-      setMasterVolume();
+      decrease_volume();
       lastREval = rotaryEncoder.getRotationValue();
       needUpdateUI = true;
     }
@@ -662,16 +692,7 @@ void loop()
     {
       myDisplay.drawSwitchingPreset();
 
-      if( currentPreset == 0 )
-        currentPreset = MAX_NUM_PRESETS - 1;
-      else
-        currentPreset--;
-
-      softMuteDAC();
-      initUserParams();
-      uploadUserParams();
-      updateAddOn();
-      softUnmuteDAC();
+      prev_preset();
 
       lastREval = rotaryEncoder.getRotationValue();
       needUpdateUI = true;
@@ -697,34 +718,19 @@ void loop()
   {
     if( irResults.value == APPLE_REMOTE_UP )
     {
-      masterVolume.val += 0.5f;
-      if( masterVolume.val > 0.f )
-        masterVolume.val = 0.f;
-      setMasterVolume();
+      increase_volume();
       needUpdateUI = true;
     }
     else if( irResults.value == APPLE_REMOTE_DOWN )
     {
-      masterVolume.val -= 0.5f;
-      if( masterVolume.val <= -80.f )
-        masterVolume.val = -80.f;
-      setMasterVolume();
+      decrease_volume();
       needUpdateUI = true;
     }
     else if( irResults.value == APPLE_REMOTE_LEFT )
     {
       myDisplay.drawSwitchingPreset();
 
-      if( currentPreset == 0 )
-        currentPreset = MAX_NUM_PRESETS - 1;
-      else
-        currentPreset--;
-
-      softMuteDAC();
-      initUserParams();
-      uploadUserParams();
-      updateAddOn();
-      softUnmuteDAC();
+      prev_preset();
 
       needUpdateUI = true;
     }
@@ -732,15 +738,7 @@ void loop()
     {
       myDisplay.drawSwitchingPreset();
 
-      currentPreset++;
-      if( currentPreset >= MAX_NUM_PRESETS )
-        currentPreset = 0;
-
-      softMuteDAC();
-      initUserParams();
-      uploadUserParams();
-      updateAddOn();
-      softUnmuteDAC();
+      next_preset();
 
       needUpdateUI = true;
     }
