@@ -26,7 +26,6 @@
 #include "display.h"
 #include "plugin.h"
 #include "web.h"
-#include "display.h"
 #include "channelnames.h"
 #include "inputrouting.h"
 
