@@ -1,25 +1,3 @@
-// Store the exported function in a global property referenced by a string:
-window['getConfig'] = getConfig;
-window['sendConfig'] = sendConfig;
-window['sendSpdifOutMux'] = sendSpdifOutMux;
-window['onLoad'] = onLoad;
-window['switchPreset'] = switchPreset;
-window['sendWifi'] = sendWifi;
-window['sendPwdAP'] = sendPwdAP;
-window['configDev'] = configDev;
-window['configWifi'] = configWifi;
-window['getWifiConfig'] = getWifiConfig;
-window['hideAddon'] = hideAddon;
-window['storePreset'] = storePreset;
-window['changeSPDIF'] = changeSPDIF;
-window['closeModal'] = closeModal;
-window['switchMute'] = switchMute;
-window['bypass'] = bypass;
-window['switchBypass'] = switchBypass;
-window['postMVol'] = postMVol;
-window['sendParam'] = sendParam;
-window['mute'] = mute;
-
 function getConfig(){
   fetch("/config").then (function (response) {return response.json();})
   .then (function (data) {  
@@ -136,6 +114,16 @@ function onLoad(){
     for(ii in data.inputs){document.getElementById("input"+ii).innerHTML=data.inputs[ii];}
     for(ii in data.outputs){document.getElementById("output"+ii).innerHTML=data.outputs[ii];}
     for(ii in data.presets){document.getElementById("pre"+ii).innerHTML=data.presets[ii];}
+    if(data.sources.length > 0){
+      document.getElementById("vinput").innerText = null;
+      for(ii in data.sources){
+        var option = document.createElement("option");
+        option.value = ii;
+        option.text = data.sources[ii];
+        document.getElementById("vinput").appendChild(option);  
+      }
+      document.getElementById("vinput").value = data.selvinput;
+    }
   }).catch(function(err){console.log(err);
   });
 }
@@ -873,23 +861,4 @@ function selectVirtualInput(){
   data.sel = document.getElementById('vinput').value;
   fetch("/vinput",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)})
   .catch(function(error){console.log(error);});
-}
-
-function getVirtualInputSelection(){
-  fetch("/inputrouting").then(function(response){return response.json();
-  }).then(function(data){ 
-    var sel = document.getElementById("vinput");
-    var len = sel.options.length;
-    for(var ii = len-1; ii >= 0; ii--) sel.options[ii] = null;
-    for(var mm = 0; mm < data["numSourceNames"]; mm++) {
-      var opt = document.createElement('option');
-      opt.value = mm;
-      opt.text = data["sourceNames"][mm];
-      sel.appendChild(opt);
-    }
-    return fetch("/vinput");
-  }).then(function(response){return response.json();
-  }).then(function(data){document.getElementById('vinput').value=data.sel;
-  }).catch(function(error){console.log(error);
-  });  
 }

@@ -20,11 +20,14 @@
 #include "inputrouting.h"
 #include "hwconfig.h"
 #include "plugin.h"
+#include "inputrouting.h"
 
 #if HAVE_DISPLAY
 extern void updateUI(void);
 extern Display myDisplay;
 #endif
+
+extern String sourceNames[kNumSourceNames];
 
 AsyncWebServer server( 80 );
 uint8_t currentFirUploadIdx = 0;
@@ -506,7 +509,10 @@ void handleGetConfigJson( AsyncWebServerRequest* request )
   #endif
   AsyncJsonResponse* response = new AsyncJsonResponse();
   JsonVariant& jsonResponse = response->getRoot();
-  jsonResponse["aid"] = Settings.addonid;
+  if(currentPlugInName == String(F("stereoforever")) || currentPlugInName == String(F("The Room")))
+    jsonResponse["aid"] = -1;
+  else
+    jsonResponse["aid"] = Settings.addonid;
   jsonResponse["vpot"] = Settings.vpot;
   jsonResponse["fw"] = VERSION_STR;
   jsonResponse["plugin"] = pluginVersion; 
@@ -824,7 +830,7 @@ void handleGetAllInputsJson( AsyncWebServerRequest* request )
   uint8_t val;
   String key[] = {"in0", "in1", "in2", "in3", "in4", "in5", "in6", "in7"};
 
-  if(currentPlugInName == String(F("stereoforever")))
+  if(currentPlugInName == String(F("stereoforever")) || currentPlugInName == String(F("The Room")))
     jsonResponse["num"] = 0;
   else
     jsonResponse["num"] = numInputs;
@@ -2024,6 +2030,7 @@ String handleGetAllNamesJson( void )
     array += String("\"") + channelNames[numInputs-1];
   }
   array += String("\"],");
+
   array += String("\"outputs\":[");
   if(numOutputs > 0)
   {
@@ -2032,11 +2039,23 @@ String handleGetAllNamesJson( void )
     array += String("\"") + channelNames[numInputs + numOutputs - 1];
   }
   array += String("\"],");
+
   array += String("\"presets\":[");
   for(int ii = 0; ii < NUMPRESETS-1; ii++)
     array += String("\"") + presetNames[ii] + String("\",");
   array += String("\"") + presetNames[NUMPRESETS - 1];
-  array += String("\"]");
+  array += String("\"],");
+
+  array += String("\"sources\":[");
+  if(currentPlugInName == String(F("stereoforever")) || currentPlugInName == String(F("The Room")))
+  {
+    for(int ii = 0; ii < kNumSourceNames-1; ii++)
+      array += String("\"") + sourceNames[ii] + String("\",");
+    array += String("\"") + sourceNames[kNumSourceNames - 1];
+  }
+  array += String("\"],");
+  array += String("\"selvinput\":") + String(currentVirtualInput);
+
   array += String("}");
   return array;
 }

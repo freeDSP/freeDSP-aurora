@@ -1,6 +1,10 @@
 #ifndef _INPUTROUTING_H_
 #define _INPUTROUTING_H_
 
+static const int kNumSourceNames = 8;
+
+extern int currentVirtualInput;
+
 //==============================================================================
 /*! Builds the HTML page for the input routing by source names.
  *
