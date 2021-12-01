@@ -66,7 +66,7 @@ You should have a similar folder structure: `<home_dir>/Arduino/tools/ESP32FS/to
 2. Open `Tools > Card Types > Manage Cards` and install `ESP32 dev module`.
 3. Select `Tools > Card Types > ESP32 Arduino > ESP32 Dev Module` as card.
 
-Ensure Python2 is in your PATH (as `python`).
+Ensure Python is in your PATH (as `python`) and it has pyserial module installed.
 
 
 ## Uploading Code and Files
