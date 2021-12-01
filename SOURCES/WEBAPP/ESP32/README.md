@@ -71,7 +71,7 @@ Ensure Python is in your PATH (as `python`) and it has pyserial module installed
 
 ## Uploading Code and Files
 
-Before uploading, read [firmware flashing](/DOCUMENTATION/AN001 Firmware Update EN.pdf).
+Before uploading, read [firmware update documentation](../../../DOCUMENTATION/AN001%20Firmware%20Update%20EN.pdf).
 
 
 1. Open the file `aurora.ino` in your ArduinoIDE and click on Upload.
@@ -83,7 +83,7 @@ Before uploading, read [firmware flashing](/DOCUMENTATION/AN001 Firmware Update 
 
 You can now compile and upload new ESP32 firmware.
 
-
+----
 
 # Alternative method using espmake32 (experimental)
 
