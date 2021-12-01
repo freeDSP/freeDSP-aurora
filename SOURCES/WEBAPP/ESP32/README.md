@@ -82,13 +82,22 @@ Before uploading, read [firmware flashing](/DOCUMENTATION/AN001 Firmware Update 
 ## That's it
 
 You can now compile and upload new ESP32 firmware.
+
+
+
+# Alternative method using espmake32 (experimental)
+
+
+**Following instructions are meant only for espmake32, else skip this!**
+
 ## espmake32
 
-This is work in progres. **Only if** you are using [espmake32](https://github.com/plerup/makeEspArduino), you need to download the last libraries manually. **Else, skip this!**
-You'll find them here:
+Download and install [espmake32](https://github.com/plerup/makeEspArduino).
+
+## Download and install libraries
+
+You have to download the last libraries manually, you'll find them here:
 
 1. [ArduinoJson](https://github.com/bblanchon/ArduinoJson/releases/download/v6.13.0/ArduinoJson-v6.13.0.zip)
 2. [u8g2](https://github.com/olikraus/u8g2/archive/master.zip), which does not offer proper releases. Let's hope master doesn't break anything.
 3. [IRremote](https://github.com/z3t0/Arduino-IRremote/archive/master.zip). However, while [this PR from dspverden](https://github.com/z3t0/Arduino-IRremote/pull/689) isn't merged, you'll probably prefer [dspverden's branch](https://github.com/dspverden/Arduino-IRremote/archive/master.zip).
-
-I did not yet test much of this.
