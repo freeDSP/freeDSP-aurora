@@ -31,7 +31,7 @@ The ESPAsyncWebServer library requires the AsyncTCP library to work. Follow the 
 1. Go to https://github.com/me-no-dev/arduino-esp32fs-plugin/releases/ and click the `ESP32FS-1.0.zip` file to download.
 2. Unzip the .zip folder and you should get `ESP32FS` folder
 3. Move the `ESP32FS` folder to your Ardino IDE installation tools folder.  
-You should have a similar folder structure: `<home_dir>/Arduino-<version>/tools/ESP32FS/tool/esp32fs.jar`.
+You should have a similar folder structure: `<home_dir>/Arduino/tools/ESP32FS/tool/esp32fs.jar`.
 
 
 ## Installing the ArduinJSON library
