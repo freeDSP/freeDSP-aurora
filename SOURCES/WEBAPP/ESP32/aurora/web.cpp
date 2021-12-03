@@ -2006,6 +2006,8 @@ void handlePostNamesJson(AsyncWebServerRequest* request, uint8_t* data)
       presetNames[ii] = root["presets"][ii].as<String>().substring(0,16);
   }
   writeChannelNames();
+  
+  needUpdateUI = true;
 
   request->send(200, "text/plain", "");
 }

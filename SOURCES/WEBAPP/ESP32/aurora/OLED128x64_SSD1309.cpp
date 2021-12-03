@@ -8,6 +8,7 @@
 #include "OLED128x64_SSD1309.h"
 
 extern String getCurrentVirtualInputName(void);
+extern String currentPlugInName;
 
 U8G2_SSD1309_128X64_NONAME0_F_HW_I2C u8g2_ssd1309( U8G2_R0, /* clock=*/ I2C_SCL_PIN, /* data=*/ I2C_SDA_PIN, /* reset=*/ U8X8_PIN_NONE );
 
@@ -56,7 +57,7 @@ void OLED128x64_SSD1309::drawBootScreen(void)
 void OLED128x64_SSD1309::drawUI(const char* plugin, const char* ip, const char* preset, float vol, int editMode)
 {
   u8g2_ssd1309.clearBuffer();
-  if(String(plugin) == String(F("stereoforever")))
+  if(currentPlugInName == String(F("stereoforever")) || currentPlugInName == String(F("The Room")))
   {
     //u8g2_ssd1309.setFont(u8g2_font_5x7_tf);
     u8g2_ssd1309.setFont( u8g2_font_helvR08_tf );

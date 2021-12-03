@@ -15,7 +15,6 @@
 
 StaticJsonDocument<2048> jsonDoc;
 
-//static const int kNumSourceNames = 8;
 String sourceNames[kNumSourceNames] = {"CD-A", "Blueray", "Phono", "Aux", "USB", "Streaming", "SPDIF coax", "SPDIF optical"};
 
 //! TODO Make this dynamic depending on plugin

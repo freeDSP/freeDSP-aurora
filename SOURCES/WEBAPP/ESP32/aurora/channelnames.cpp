@@ -6,14 +6,13 @@
 #include "channelnames.h"
 
 String channelNames[NUMCHANNELNAMES];
-String presetNames[NUMPRESETS];
+String presetNames[NUMPRESETS] = {"Preset A", "Preset B", "Preset C", "Preset D"};
 
 //==============================================================================
 /*! Write the channel names to file.
  */
 void writeChannelNames(void)
 {
-  Serial.println("writeChannelNames");
   File file = SPIFFS.open("/chnames.txt", FILE_WRITE);
  
   if(!file)
@@ -22,7 +21,7 @@ void writeChannelNames(void)
     return;
   }
 
-  for(int ii = 0; numInputs + numOutputs && ii < NUMCHANNELNAMES; ii++)
+  for(int ii = 0; (ii < numInputs + numOutputs) && (ii < NUMCHANNELNAMES); ii++)
     file.print(channelNames[ii] + String("\n"));
   for(int ii = 0; ii < NUMPRESETS; ii++)
     file.print(presetNames[ii] + String("\n"));
@@ -47,7 +46,7 @@ void readChannelNames(void)
   while(file.available())
   {
     String str = file.readStringUntil('\n');
-    if(ii < numInputs + numOutputs && ii < NUMCHANNELNAMES)
+    if((ii < numInputs + numOutputs) && (ii < NUMCHANNELNAMES))
       channelNames[ii] = str;
     else if(ii < numInputs + numOutputs + NUMPRESETS)
       presetNames[ii - numInputs - numOutputs] = str;

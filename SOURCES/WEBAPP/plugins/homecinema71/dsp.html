@@ -492,6 +492,32 @@
       </table>
     </div>
   </div>
+
+  <div id="peqbank" class="modal">
+    <div id="peqbank-dialog-content" class="modal-content d_peq">
+      <table class="ptbl">
+      <tr><td style="height:20px;padding-top:10px;">
+      <table style="width:100%;">
+      <tr><td id="peqbank-title" class="headline">Title</td><td class="close" onclick="closeModal('peqbank')">&times;</td></tr>
+      </table></td></tr>
+      <tr><td>
+      <table class="ptbl" id='peqbank-userinput' data-numbands="0">
+      </table>
+      </td></tr>
+      <tr><td>
+      <table style="width:100%;">
+        <tr>
+          <!--<td style="padding: 10px;"><button class="modal-send" id="peq-import" onclick="document.getElementById('fileImportRew').click();">Import REW</button></td>
+          <td style="padding: 10px;"><button class="modal-send" id="peq-bypass" data-bypass="0">Bypass</button></td>-->
+          <td style="padding: 10px;"><button class="send" id="peqbank-send">Send</button></td>
+        </tr>
+      </table>
+      </td></tr>
+
+      </table>
+      <!-- <input id="fileImportRew" type="file" style="display:none;" onchange="importREW(this.files[0])"/> -->
+    </div>
+  </div>
   
   <div id="highShelv" class="modal" data-idx="0">
     <div class="modal-content d_shlv">

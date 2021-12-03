@@ -194,24 +194,7 @@ void updateUI( void )
 
     if( (editMode == 0) || (editMode == 1) || (editMode == 2) )
     {
-      switch( currentPreset )
-      {
-      case 0:
-        myDisplay.drawUI( currentPlugInName.c_str(), ip.c_str(), "A", masterVolume.val, editMode );
-        break;
-      case 1:
-        myDisplay.drawUI( currentPlugInName.c_str(), ip.c_str(), "B", masterVolume.val, editMode );
-        break;
-      case 2:
-        myDisplay.drawUI( currentPlugInName.c_str(), ip.c_str(), "C", masterVolume.val, editMode );
-        break;
-      case 3:
-        myDisplay.drawUI( currentPlugInName.c_str(), ip.c_str(), "D", masterVolume.val, editMode );
-        break;
-      default:
-        myDisplay.drawUI( currentPlugInName.c_str(), ip.c_str(), "A", masterVolume.val, editMode );
-        break;
-      }
+      myDisplay.drawUI(currentPlugInName.c_str(), ip.c_str(), presetNames[currentPreset].c_str(), masterVolume.val, editMode);
     }
 
   }
