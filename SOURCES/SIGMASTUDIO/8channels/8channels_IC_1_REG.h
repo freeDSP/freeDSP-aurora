@@ -1,7 +1,7 @@
 /*
  * File:           C:\freeDSP-aurora\SOURCES\SIGMASTUDIO\8channels\8channels_IC_1_REG.h
  *
- * Created:        Monday, November 22, 2021 7:59:17 PM
+ * Created:        Friday, December 3, 2021 4:28:25 PM
  * Description:    8channels:IC 1 control register definitions.
  *
  * This software is distributed in the hope that it will be useful,

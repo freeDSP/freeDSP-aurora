@@ -1076,23 +1076,23 @@
             </Algorithm>
             <Algorithm name="HWGainADAU145XAlg5" friendlyname="Gain (HW slew) " cell="Plugin.Gain8 " location="{X=2172, Y=1626.278} " Growth="1 " GrowthB="0">
                 <Link pin="I_C609_A0_P1_in" dir="in" link="Link90" />
-                <Link pin="O_C609_A0_P2_out" dir="out" link="Link227" />
+                <Link pin="O_C609_A0_P2_out" dir="out" link="Link224" />
             </Algorithm>
             <Algorithm name="HWGainADAU145XAlg6" friendlyname="Gain (HW slew) " cell="Plugin.Gain5 " location="{X=2169, Y=750.3049} " Growth="1 " GrowthB="0">
                 <Link pin="I_C633_A0_P1_in" dir="in" link="Link93" />
-                <Link pin="O_C633_A0_P2_out" dir="out" link="Link224" />
+                <Link pin="O_C633_A0_P2_out" dir="out" link="Link225" />
             </Algorithm>
             <Algorithm name="HWGainADAU145XAlg4" friendlyname="Gain (HW slew) " cell="Plugin.Gain7 " location="{X=2167, Y=1334.601} " Growth="1 " GrowthB="0">
                 <Link pin="I_C589_A0_P1_in" dir="in" link="Link100" />
-                <Link pin="O_C589_A0_P2_out" dir="out" link="Link226" />
+                <Link pin="O_C589_A0_P2_out" dir="out" link="Link223" />
             </Algorithm>
             <Algorithm name="HWGainADAU145XAlg3" friendlyname="Gain (HW slew) " cell="Plugin.Gain4 " location="{X=2174, Y=459.7741} " Growth="1 " GrowthB="0">
                 <Link pin="I_C244_A0_P1_in" dir="in" link="Link107" />
-                <Link pin="O_C244_A0_P2_out" dir="out" link="Link223" />
+                <Link pin="O_C244_A0_P2_out" dir="out" link="Link226" />
             </Algorithm>
             <Algorithm name="HWGainADAU145XAlg7" friendlyname="Gain (HW slew) " cell="Plugin.Gain6 " location="{X=2176, Y=1042.305} " Growth="1 " GrowthB="0">
                 <Link pin="I_C655_A0_P1_in" dir="in" link="Link133" />
-                <Link pin="O_C655_A0_P2_out" dir="out" link="Link225" />
+                <Link pin="O_C655_A0_P2_out" dir="out" link="Link227" />
             </Algorithm>
             <Algorithm name="HWGainADAU145XAlg2" friendlyname="Gain (HW slew) " cell="Plugin.Gain3 " location="{X=2169, Y=167.7741} " Growth="1 " GrowthB="0">
                 <Link pin="I_C197_A0_P1_in" dir="in" link="Link142" />
@@ -1106,11 +1106,11 @@
                 <Link pin="I_C0_A0_P1_in" dir="in" link="Link220" />
                 <Link pin="I_C0_A0_P3_in" dir="in" link="Link221" />
                 <Link pin="I_C0_A0_P5_in" dir="in" link="Link222" />
-                <Link pin="I_C0_A0_P7_in" dir="in" link="Link224" />
+                <Link pin="I_C0_A0_P7_in" dir="in" link="Link226" />
                 <Link pin="I_C0_A0_P9_in" dir="in" link="Link225" />
-                <Link pin="I_C0_A0_P11_in" dir="in" link="Link223" />
-                <Link pin="I_C0_A0_P13_in" dir="in" link="Link226" />
-                <Link pin="I_C0_A0_P15_in" dir="in" link="Link227" />
+                <Link pin="I_C0_A0_P11_in" dir="in" link="Link227" />
+                <Link pin="I_C0_A0_P13_in" dir="in" link="Link223" />
+                <Link pin="I_C0_A0_P15_in" dir="in" link="Link224" />
                 <Link pin="O_C0_A0_P2_out" dir="out" link="Link158" />
                 <Link pin="O_C0_A0_P4_out" dir="out" link="Link160" />
                 <Link pin="O_C0_A0_P6_out" dir="out" link="Link161" />

@@ -1,7 +1,7 @@
 #ifndef CONFIG_H_
 #define CONFIG_H_
 
-#define VERSION_STR "v2.2.0"
+#define VERSION_STR "v2.2.1"
 
 #define MAX_NUM_INPUTS 16
 #define MAX_NUM_OUTPUTS 16
