@@ -699,31 +699,51 @@ void loop()
   decode_results irResults;
   if( irReceiver.decode( &irResults ) )
   {
-    if( irResults.value == APPLE_REMOTE_UP )
+    Serial.println(irResults.value, HEX);
+    uint32_t irval = (irResults.value & 0x0000ff00) >> 8;
+    if((irval == APPLE_A_REMOTE_UP) || (irval == APPLE_B_REMOTE_UP))
     {
       increase_volume();
       needUpdateUI = true;
     }
-    else if( irResults.value == APPLE_REMOTE_DOWN )
+    else if((irval == APPLE_A_REMOTE_DOWN) || (irval == APPLE_B_REMOTE_DOWN))
     {
       decrease_volume();
       needUpdateUI = true;
     }
-    else if( irResults.value == APPLE_REMOTE_LEFT )
+    if(currentPlugInName == String(F("stereoforever")) || currentPlugInName == String(F("The Room")))
     {
-      myDisplay.drawSwitchingPreset();
-
-      prev_preset();
-
-      needUpdateUI = true;
+      if((irval == APPLE_A_REMOTE_LEFT) || (irval == APPLE_B_REMOTE_LEFT))
+      {
+        decrementVirtualInput();
+        needUpdateUI = true;
+      }
+      else if((irval == APPLE_A_REMOTE_RIGHT) || (irval == APPLE_B_REMOTE_RIGHT))
+      {
+        incrementVirtualInput();
+        needUpdateUI = true;
+      }
+      else if((irval == APPLE_A_REMOTE_MENU) || (irval == APPLE_B_REMOTE_MENU))
+      {
+        myDisplay.drawSwitchingPreset();
+        next_preset();
+        needUpdateUI = true;
+      }
     }
-    else if( irResults.value == APPLE_REMOTE_RIGHT )
+    else
     {
-      myDisplay.drawSwitchingPreset();
-
-      next_preset();
-
-      needUpdateUI = true;
+      if((irval == APPLE_A_REMOTE_LEFT) || (irval == APPLE_B_REMOTE_LEFT))
+      {
+        myDisplay.drawSwitchingPreset();
+        prev_preset();
+        needUpdateUI = true;
+      }
+      else if((irval == APPLE_A_REMOTE_RIGHT) || (irval == APPLE_B_REMOTE_RIGHT))
+      {
+        myDisplay.drawSwitchingPreset();
+        next_preset();
+        needUpdateUI = true;
+      }
     }
     //else
     //  Serial.println(irResults.value, HEX);
