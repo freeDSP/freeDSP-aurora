@@ -31,7 +31,7 @@ The ESPAsyncWebServer library requires the AsyncTCP library to work. Follow the 
 1. Go to https://github.com/me-no-dev/arduino-esp32fs-plugin/releases/ and click the `ESP32FS-1.0.zip` file to download.
 2. Unzip the .zip folder and you should get `ESP32FS` folder
 3. Move the `ESP32FS` folder to your Ardino IDE installation tools folder.  
-You should have a similar folder structure: `<home_dir>/Arduino-<version>/tools/ESP32FS/tool/esp32fs.jar`.
+You should have a similar folder structure: `<home_dir>/Arduino/tools/ESP32FS/tool/esp32fs.jar`.
 
 
 ## Installing the ArduinJSON library
@@ -66,23 +66,38 @@ You should have a similar folder structure: `<home_dir>/Arduino-<version>/tools/
 2. Open `Tools > Card Types > Manage Cards` and install `ESP32 dev module`.
 3. Select `Tools > Card Types > ESP32 Arduino > ESP32 Dev Module` as card.
 
-Ensure Python2 is in your PATH (as `python`).
+Ensure Python is in your PATH (as `python`) and it has pyserial module installed.
 
 
 ## Uploading Code and Files
+
+Before uploading, read [firmware update documentation](../../../DOCUMENTATION/AN001%20Firmware%20Update%20EN.pdf).
+
 
 1. Open the file `aurora.ino` in your ArduinoIDE and click on Upload.
 2. After uploading the code, you need to upload the data files.
 3. Go to `Tools > ESP32 Data` Sketch Upload and wait for the files to be uploaded.
 
 
+## That's it
+
+You can now compile and upload new ESP32 firmware.
+
+----
+
+# Alternative method using espmake32 (experimental)
+
+
+**Following instructions are meant only for espmake32, else skip this!**
+
 ## espmake32
 
-This is work in progres. **Only if** you are using [espmake32](https://github.com/plerup/makeEspArduino), you need to download the last libraries manually. **Else, skip this!**
-You'll find them here:
+Download and install [espmake32](https://github.com/plerup/makeEspArduino).
+
+## Download and install libraries
+
+You have to download the last libraries manually, you'll find them here:
 
 1. [ArduinoJson](https://github.com/bblanchon/ArduinoJson/releases/download/v6.13.0/ArduinoJson-v6.13.0.zip)
 2. [u8g2](https://github.com/olikraus/u8g2/archive/master.zip), which does not offer proper releases. Let's hope master doesn't break anything.
 3. [IRremote](https://github.com/z3t0/Arduino-IRremote/archive/master.zip). However, while [this PR from dspverden](https://github.com/z3t0/Arduino-IRremote/pull/689) isn't merged, you'll probably prefer [dspverden's branch](https://github.com/dspverden/Arduino-IRremote/archive/master.zip).
-
-I did not yet test much of this.
