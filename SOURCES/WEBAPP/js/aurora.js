@@ -397,82 +397,99 @@ function openPeqBank(idx,len){
     return response.json();
   }).then (function(data) {
     document.getElementById('peqbank-dialog-content').style.width = 200 * data["fc"].length + 'px';
+    document.getElementById('peqbank-dialog-content').style.maxWidth = '95%';
     var userinput = document.getElementById('peqbank-userinput');
     userinput.dataset.numbands = data["fc"].length;
-    var tr = document.createElement('tr');
-    for(var ii = 0; ii < data["fc"].length; ii++) {
-      var td = document.createElement('td');
-      td.innerHTML = ii + 1;
-      td.colSpan = 3;
-      tr.appendChild(td);
+
+    var startidx = 0;
+    for(var mm = 0; mm < 2; mm++) {
+      var tr = document.createElement('tr');
+
+      ii = startidx;
+      for(var nn = 0; nn < 5 && ii < data["fc"].length; nn++) {
+        var td = document.createElement('td');
+        td.innerHTML = ii + 1;
+        ii++;
+        td.colSpan = 3;
+        tr.appendChild(td);
+      }
+      userinput.appendChild(tr);
+      tr = document.createElement('tr');
+      ii = startidx;
+      for(var nn = 0; nn < 5 && ii < data["fc"].length; nn++) {
+        var td = document.createElement('td');
+        td.style.textAlign = 'right';
+        td.style.width = '20px';
+        td.innerHTML = 'fc';
+        tr.appendChild(td);
+        td = document.createElement('td');
+        td.style.maxWidth = '120px';
+        td.innerHTML = '<input type="number" id="peq_fc_' + ii + '" style="width:90%;" value="' + data["fc"][ii] + '" step="any" min="0" max="24000">';
+        tr.appendChild(td);
+        td = document.createElement('td');
+        td.style.textAlign = 'left';
+        td.style.width = '20px';
+        td.innerHTML = 'Hz';
+        tr.appendChild(td);
+        ii++;
+      }
+      userinput.appendChild(tr);
+      tr = document.createElement('tr');
+      ii = startidx;
+      for(var nn = 0; nn < 5 && ii < data["Q"].length; nn++) {
+        var td = document.createElement('td');
+        td.style.textAlign = 'right';
+        td.style.width = '20px';
+        td.id = "label_"+ii;
+        td.innerHTML = 'Q';
+        tr.appendChild(td);
+        td = document.createElement('td');
+        td.style.maxWidth = '120px';
+        td.innerHTML = '<input type="number" id="peq_q_' + ii + '" style="width:90%;" value="' + data["Q"][ii] + '" step="any" min="0.1" max="100">';
+        tr.appendChild(td);
+        td = document.createElement('td');
+        td.style.textAlign = 'left';
+        td.style.width = '20px';
+        td.innerHTML = '';
+        tr.appendChild(td);
+        ii++;
+      }
+      userinput.appendChild(tr);
+      tr = document.createElement('tr');
+      ii = startidx;
+      for(var nn = 0; nn < 5 && ii < data["V0"].length; nn++) {
+        var td = document.createElement('td');
+        td.style.textAlign = 'right';
+        td.style.width = '20px';
+        td.innerHTML = 'V0';
+        tr.appendChild(td);
+        td = document.createElement('td');
+        td.style.maxWidth = '120px';
+        td.innerHTML = '<input type="number" id="peq_v0_' + ii + '" style="width:90%;" value="' + data["V0"][ii] + '" step="any" min="-100" max="100">';
+        tr.appendChild(td);
+        td = document.createElement('td');
+        td.style.textAlign = 'left';
+        td.style.width = '20px';
+        td.innerHTML = 'dB';
+        tr.appendChild(td);
+        ii++;
+      }
+      userinput.appendChild(tr);
+      tr = document.createElement('tr');
+      ii = startidx;
+      for(var nn = 0; nn < 5 && ii < data["bypass"].length; nn++) {
+        var td = document.createElement('td');
+        tr.appendChild(td);
+        td = document.createElement('td');
+        td.innerHTML = "<button class=\"send\" id='peq_bypass_" + ii + "' onclick=\"bypass('peq_bypass_" + ii + "')\" data-bypass=\"0\">Bypass</button>";
+        tr.appendChild(td);
+        td = document.createElement('td');
+        tr.appendChild(td);
+        ii++;
+        startidx = ii;
+      }
+      userinput.appendChild(tr);
     }
-    userinput.appendChild(tr);
-    tr = document.createElement('tr');
-    for(var ii = 0; ii < data["fc"].length; ii++) {
-      var td = document.createElement('td');
-      td.style.textAlign = 'right';
-      td.style.width = '20px';
-      td.innerHTML = 'fc';
-      tr.appendChild(td);
-      td = document.createElement('td');
-      td.style.maxWidth = '120px';
-      td.innerHTML = '<input type="number" id="peq_fc_' + ii + '" style="width:90%;" value="' + data["fc"][ii] + '" step="any" min="0" max="24000">';
-      tr.appendChild(td);
-      td = document.createElement('td');
-      td.style.textAlign = 'left';
-      td.style.width = '20px';
-      td.innerHTML = 'Hz';
-      tr.appendChild(td);
-    }
-    userinput.appendChild(tr);
-    tr = document.createElement('tr');
-    for(var ii = 0; ii < data["Q"].length; ii++) {
-      var td = document.createElement('td');
-      td.style.textAlign = 'right';
-      td.style.width = '20px';
-      td.id = "label_"+ii;
-      td.innerHTML = 'Q';
-      tr.appendChild(td);
-      td = document.createElement('td');
-      td.style.maxWidth = '120px';
-      td.innerHTML = '<input type="number" id="peq_q_' + ii + '" style="width:90%;" value="' + data["Q"][ii] + '" step="any" min="0.1" max="100">';
-      tr.appendChild(td);
-      td = document.createElement('td');
-      td.style.textAlign = 'left';
-      td.style.width = '20px';
-      td.innerHTML = '';
-      tr.appendChild(td);
-    }
-    userinput.appendChild(tr);
-    tr = document.createElement('tr');
-    for(var ii = 0; ii < data["V0"].length; ii++) {
-      var td = document.createElement('td');
-      td.style.textAlign = 'right';
-      td.style.width = '20px';
-      td.innerHTML = 'V0';
-      tr.appendChild(td);
-      td = document.createElement('td');
-      td.style.maxWidth = '120px';
-      td.innerHTML = '<input type="number" id="peq_v0_' + ii + '" style="width:90%;" value="' + data["V0"][ii] + '" step="any" min="-100" max="100">';
-      tr.appendChild(td);
-      td = document.createElement('td');
-      td.style.textAlign = 'left';
-      td.style.width = '20px';
-      td.innerHTML = 'dB';
-      tr.appendChild(td);
-    }
-    userinput.appendChild(tr);
-    tr = document.createElement('tr');
-    for(var ii = 0; ii < data["bypass"].length; ii++) {
-      var td = document.createElement('td');
-      tr.appendChild(td);
-      td = document.createElement('td');
-      td.innerHTML = "<button class=\"send\" id='peq_bypass_" + ii + "' onclick=\"bypass('peq_bypass_" + ii + "')\" data-bypass=\"0\">Bypass</button>";
-      tr.appendChild(td);
-      td = document.createElement('td');
-      tr.appendChild(td);
-    }
-    userinput.appendChild(tr);
     for(var ii = 0; ii < data["bypass"].length; ii++) {
       document.getElementById("peq_bypass_" + ii).dataset.bypass=data["bypass"][ii];
       switchBypass("peq_bypass_" + ii);

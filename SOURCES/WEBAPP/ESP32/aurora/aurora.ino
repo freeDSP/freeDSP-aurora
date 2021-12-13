@@ -716,11 +716,13 @@ void loop()
       if((irval == APPLE_A_REMOTE_LEFT) || (irval == APPLE_B_REMOTE_LEFT))
       {
         decrementVirtualInput();
+        setVirtualInput();
         needUpdateUI = true;
       }
       else if((irval == APPLE_A_REMOTE_RIGHT) || (irval == APPLE_B_REMOTE_RIGHT))
       {
         incrementVirtualInput();
+        setVirtualInput();
         needUpdateUI = true;
       }
       else if((irval == APPLE_A_REMOTE_MENU) || (irval == APPLE_B_REMOTE_MENU))

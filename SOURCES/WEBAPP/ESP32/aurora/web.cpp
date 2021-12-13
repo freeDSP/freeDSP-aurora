@@ -190,8 +190,6 @@ void handleGetPeqBankJson( AsyncWebServerRequest* request )
     AsyncWebParameter* idx = request->getParam(0);
     int offset = idx->value().toInt();
     int numBands = paramPeqBank[offset].numBands;
-    Serial.println(offset);
-    Serial.println(numBands);
 
     // Build the JSON response manually. Via ArduinoJson it did not work somehow.
     String array("{");
@@ -230,7 +228,6 @@ void handleGetPeqBankJson( AsyncWebServerRequest* request )
       array += String(F("]"));
     }
     array += String("}");
-    Serial.println(array);
     request->send(200, F("text/plain"), array);
   }
   else
