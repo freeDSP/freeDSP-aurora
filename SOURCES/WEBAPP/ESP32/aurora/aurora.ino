@@ -45,6 +45,7 @@
 File fileDspProgram;
 
 bool changeWifiState = false;
+int editmode_last;
 
 //------------------------------------------------------------------------------
 //
@@ -192,11 +193,7 @@ void updateUI( void )
     else
       ip = WiFi.localIP().toString();
 
-    if( (editMode == 0) || (editMode == 1) || (editMode == 2) )
-    {
-      myDisplay.drawUI(currentPlugInName.c_str(), ip.c_str(), presetNames[currentPreset].c_str(), masterVolume.val, editMode);
-    }
-
+    myDisplay.drawUI(currentPlugInName.c_str(), ip.c_str(), presetNames[currentPreset].c_str(), masterVolume.val, editMode);
   }
 }
 #endif
@@ -549,6 +546,11 @@ void setup()
   Serial.println(xPortGetFreeHeapSize());
   #endif
 
+  if (currentPlugInName == String(F("stereoforever"))) {
+    editmode_last = EDITMODE_INPUT;
+  } else {
+    editmode_last = EDITMODE_PRESET;
+  }
   Serial.println(F("Ready"));
 }
 
@@ -615,17 +617,8 @@ void loop()
     else
     {
       editMode++;
-      if(currentPlugInName == String(F("stereoforever")))
-      {
-        if(editMode > 2)
-          editMode = 0;
-      }
-      else
-      {
-        // we may have more then two modes in the future.
-        if(editMode > 1)
-          editMode = 0;
-      }
+      if (editMode > editmode_last)
+        editMode = EDITMODE_DEFAULT;
       
       delay(300);
       needUpdateUI = true;
@@ -635,13 +628,13 @@ void loop()
   }
   else if( rotaryEncoder.getRotationValue() > lastREval + 1 )
   {
-    if(editMode == 0)
+    if(editMode == EDITMODE_VOLUME)
     {
       increase_volume();
       lastREval = rotaryEncoder.getRotationValue();
       needUpdateUI = true;
     }
-    else if( editMode == 1 )
+    else if(editMode == EDITMODE_PRESET)
     {
       myDisplay.drawSwitchingPreset();
 
@@ -650,7 +643,7 @@ void loop()
       lastREval = rotaryEncoder.getRotationValue();
       needUpdateUI = true;
     }
-    else if(editMode == 2)
+    else if(editMode == EDITMODE_INPUT)
     {
       if(currentPlugInName == String(F("stereoforever")))
       {
@@ -665,13 +658,13 @@ void loop()
   }
   else if( rotaryEncoder.getRotationValue() < lastREval - 1 )
   {
-    if( editMode == 0 )
+    if(editMode == EDITMODE_VOLUME)
     {
       decrease_volume();
       lastREval = rotaryEncoder.getRotationValue();
       needUpdateUI = true;
     }
-    else if( editMode == 1 )
+    else if(editMode == EDITMODE_PRESET)
     {
       myDisplay.drawSwitchingPreset();
 
@@ -680,7 +673,7 @@ void loop()
       lastREval = rotaryEncoder.getRotationValue();
       needUpdateUI = true;
     }
-    else if(editMode == 2)
+    else if(editMode == EDITMODE_INPUT)
     {
       if(currentPlugInName == String(F("stereoforever")))
       {

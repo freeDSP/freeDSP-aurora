@@ -1,6 +1,7 @@
 #ifndef DISPLAY_H_
 #define DISPLAY_H_
 
+#include "editmode.h"
 #include "OLED128x64_SH1106.h"
 #include "OLED128x64_SSD1309.h"
 
@@ -29,7 +30,7 @@ public:
       pDisplayDriver->drawBootScreen();
   }
 
-  void drawUI(const char* plugin, const char* ip, const char* preset, float vol, int editMode = 0)
+  void drawUI(const char* plugin, const char* ip, const char* preset, float vol, int editMode = EDITMODE_DEFAULT)
   {
     if(pDisplayDriver)
       pDisplayDriver->drawUI(plugin, ip, preset, vol, editMode);

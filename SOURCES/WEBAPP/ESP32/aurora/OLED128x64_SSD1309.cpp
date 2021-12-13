@@ -75,7 +75,7 @@ void OLED128x64_SSD1309::drawUI(const char* plugin, const char* ip, const char* 
     u8g2_ssd1309.drawLine(0, 11, 127, 11);
     u8g2_ssd1309.drawLine(0, 53, 127, 53);
 
-    if( editMode == 1 )
+    if( editMode == EDITMODE_PRESET )
     {
       u8g2_ssd1309.drawLine( 13, 44, 31, 44 );
       u8g2_ssd1309.drawLine( 13, 45, 31, 45 );
@@ -94,7 +94,7 @@ void OLED128x64_SSD1309::drawUI(const char* plugin, const char* ip, const char* 
 
     u8g2_ssd1309.setFont(u8g2_font_helvB18_tf);
     u8g2_ssd1309.drawStr(13, 20, preset);
-    if( editMode == 1 )
+    if( editMode == EDITMODE_PRESET )
     {
       u8g2_ssd1309.drawLine(13, 44, 31, 44);
       u8g2_ssd1309.drawLine(13, 45, 31, 45);
