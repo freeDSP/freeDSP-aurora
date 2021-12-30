@@ -1,4 +1,4 @@
-# Software build instructions
+<!-- Software-Construct-Build-instructions
 
 If you just want to use the Aurora in your project, please use the pre-built releases instead of building your own firmware (this is **not** necessary for creating your own plugins).
 But if you want to assist with development by contributing code, you will find the Aurora actually runs three firmwares:
@@ -8,4 +8,6 @@ But if you want to assist with development by contributing code, you will find t
 3. **XMOS**: The USB interface comes with a 7.1 firmware pre-installed; if you want to change this, you need to build your own firmware.
 
 Please note that a complete Aurora Plugin consists of a DSP firmware image, an associated control website and some meta-data.
-The actual XMOS and ESP32 firmware are not modified by plugins.
+The actual XMOS and ESP32 firmware are not modified by plugins-->
+
+ v
