@@ -47,22 +47,25 @@ function onLoad(){
     document.getElementById("pre2").style.backgroundColor = "#101010";
     document.getElementById("pre3").style.backgroundColor = "#101010";
     document.getElementById("pre"+p).style.backgroundColor = "#73EC6F";
-    if(cfg.aid==0) document.getElementById('addon_none').style.display = "block";
-    else if(cfg.aid==1) document.getElementById('addon_a').style.display = "block";
-    else if(cfg.aid==2)
-    {
-      if(cfg.addcfg==0) document.getElementById("spdif_b").value="0x00";
-      else if(cfg.addcfg==1) document.getElementById("spdif_b").value="0x01";
-      else if(cfg.addcfg==2) document.getElementById("spdif_b").value="0x02";
-      else if(cfg.addcfg==3) document.getElementById("spdif_b").value="0x03";
-      else if(cfg.addcfg==4) document.getElementById("spdif_b").value="0x04";
-      else if(cfg.addcfg==5) document.getElementById("spdif_b").value="0x05";
-      else if(cfg.addcfg==6) document.getElementById("spdif_b").value="0x06";
-      else if(cfg.addcfg==7) document.getElementById("spdif_b").value="0x07";
-      document.getElementById('addon_b').style.display = "block";
+    if(cfg.aid==-1) document.getElementById('addon').innerHTML = "";
+    else{
+      document.getElementById('addon').innerHTML = "AddOn";
+      if(cfg.aid==0) document.getElementById('addon_none').style.display = "block";
+      else if(cfg.aid==1) document.getElementById('addon_a').style.display = "block";
+      else if(cfg.aid==2){
+        if(cfg.addcfg==0) document.getElementById("spdif_b").value="0x00";
+        else if(cfg.addcfg==1) document.getElementById("spdif_b").value="0x01";
+        else if(cfg.addcfg==2) document.getElementById("spdif_b").value="0x02";
+        else if(cfg.addcfg==3) document.getElementById("spdif_b").value="0x03";
+        else if(cfg.addcfg==4) document.getElementById("spdif_b").value="0x04";
+        else if(cfg.addcfg==5) document.getElementById("spdif_b").value="0x05";
+        else if(cfg.addcfg==6) document.getElementById("spdif_b").value="0x06";
+        else if(cfg.addcfg==7) document.getElementById("spdif_b").value="0x07";
+        document.getElementById('addon_b').style.display = "block";
+      }
+      else if(cfg.aid==3) document.getElementById('addon_c').style.display="block";
+      else if(cfg.aid==4) document.getElementById('addon_d').style.display="block";
     }
-    else if(cfg.aid==3) document.getElementById('addon_c').style.display="block";
-    else if(cfg.aid==4) document.getElementById('addon_d').style.display="block";
     return fetch("/spdifout");
   }).then(function(response){
     return response.json();

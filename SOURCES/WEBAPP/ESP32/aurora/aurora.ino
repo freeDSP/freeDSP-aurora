@@ -487,7 +487,7 @@ void setup()
   //----------------------------------------------------------------------------
   //--- Read virtual input channel routing (only if supported by plugin)
   //----------------------------------------------------------------------------
-  if(currentPlugInName == String(F("stereoforever")))
+  if(currentPlugInName == String(F("stereoforever")) || currentPlugInName == String(F("The Room")))
   {
     if(!SPIFFS.exists(F("/vinputs.txt")))
       // if file does not exist, write it with defautl values
@@ -536,6 +536,9 @@ void setup()
   #if HAVE_IRRECEIVER
   irReceiver.enableIRIn();
   #endif
+
+  if(currentPlugInName == String(F("stereoforever")) || currentPlugInName == String(F("The Room")))
+    setVirtualInput();
 
   resetDAC(false);
 
