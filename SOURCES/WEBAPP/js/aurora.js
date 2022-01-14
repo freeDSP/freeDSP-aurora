@@ -15,13 +15,15 @@ function sendConfig(){
   data.adcsum=document.getElementById("adcsum").value;
   fetch("/config",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)})
   .then(function(result) {
-    hideAddon();
-    if(data.aid==0) document.getElementById("addon_none").style.display = "block";
-    else if(data.aid==1) document.getElementById("addon_a").style.display = "block";
-    else if(data.aid==2) document.getElementById("addon_b").style.display = "block";
-    else if(data.aid==3) document.getElementById("addon_c").style.display = "block";
-    else if(data.aid==4) document.getElementById("addon_d").style.display = "block";})
-  .catch (function(err){console.log(err);});
+    if(document.getElementById('addon').innerHTML == "AddOn"){
+      hideAddon();
+      if(data.aid==0) document.getElementById("addon_none").style.display = "block";
+      else if(data.aid==1) document.getElementById("addon_a").style.display = "block";
+      else if(data.aid==2) document.getElementById("addon_b").style.display = "block";
+      else if(data.aid==3) document.getElementById("addon_c").style.display = "block";
+      else if(data.aid==4) document.getElementById("addon_d").style.display = "block";
+    }
+  }).catch (function(err){console.log(err);});
 }
 
 function sendSpdifOutMux(){
@@ -47,8 +49,12 @@ function onLoad(){
     document.getElementById("pre2").style.backgroundColor = "#101010";
     document.getElementById("pre3").style.backgroundColor = "#101010";
     document.getElementById("pre"+p).style.backgroundColor = "#73EC6F";
-    if(cfg.aid==-1) document.getElementById('addon').innerHTML = "";
-    else{
+    if(cfg.vinputs == true){
+      hideAddon();
+      document.getElementById('addon').innerHTML = "";
+    }
+    else
+    {
       document.getElementById('addon').innerHTML = "AddOn";
       if(cfg.aid==0) document.getElementById('addon_none').style.display = "block";
       else if(cfg.aid==1) document.getElementById('addon_a').style.display = "block";
