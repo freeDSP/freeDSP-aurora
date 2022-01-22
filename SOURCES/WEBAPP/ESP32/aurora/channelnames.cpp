@@ -7,6 +7,7 @@
 
 String channelNames[NUMCHANNELNAMES];
 String presetNames[NUMPRESETS] = {"Preset A", "Preset B", "Preset C", "Preset D"};
+String presetShortNames[NUMPRESETS] = {"A", "B", "C", "D"};
 
 //==============================================================================
 /*! Write the channel names to file.

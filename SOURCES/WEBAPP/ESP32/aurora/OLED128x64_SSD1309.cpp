@@ -5,10 +5,13 @@
 #endif
 
 #include "hwconfig.h"
+#include "config.h"
 #include "OLED128x64_SSD1309.h"
 
 extern String getCurrentVirtualInputName(void);
 extern String currentPlugInName;
+extern String presetNames[NUMPRESETS];
+extern String presetShortNames[NUMPRESETS];
 
 U8G2_SSD1309_128X64_NONAME0_F_HW_I2C u8g2_ssd1309( U8G2_R0, /* clock=*/ I2C_SCL_PIN, /* data=*/ I2C_SDA_PIN, /* reset=*/ U8X8_PIN_NONE );
 
@@ -54,11 +57,12 @@ void OLED128x64_SSD1309::drawBootScreen(void)
   u8g2_ssd1309.sendBuffer();
 }
 
-void OLED128x64_SSD1309::drawUI(const char* plugin, const char* ip, const char* preset, float vol, int editMode)
+void OLED128x64_SSD1309::drawUI(const char* plugin, const char* ip, const int currentPreset, float vol, int editMode)
 {
   u8g2_ssd1309.clearBuffer();
   if(currentPlugInName == String(F("stereoforever")) || currentPlugInName == String(F("The Room")))
   {
+    const char* preset = presetNames[currentPreset].c_str();
     //u8g2_ssd1309.setFont(u8g2_font_5x7_tf);
     u8g2_ssd1309.setFont( u8g2_font_helvR08_tf );
     u8g2_ssd1309.setFontRefHeightExtendedText();
@@ -87,6 +91,7 @@ void OLED128x64_SSD1309::drawUI(const char* plugin, const char* ip, const char* 
   }
   else
   {
+    const char* preset = presetShortNames[currentPreset].c_str();
     u8g2_ssd1309.drawLine(42, 12, 42, 52);
 
     u8g2_ssd1309.drawLine(0, 53, 127, 53);

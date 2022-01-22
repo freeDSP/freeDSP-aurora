@@ -194,7 +194,7 @@ void updateUI( void )
 
     if( (editMode == 0) || (editMode == 1) || (editMode == 2) )
     {
-      myDisplay.drawUI(currentPlugInName.c_str(), ip.c_str(), presetNames[currentPreset].c_str(), masterVolume.val, editMode);
+      myDisplay.drawUI(currentPlugInName.c_str(), ip.c_str(), currentPreset, masterVolume.val, editMode);
     }
 
   }
