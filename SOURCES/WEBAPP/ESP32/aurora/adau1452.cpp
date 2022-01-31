@@ -1091,6 +1091,10 @@ void uploadUserParams( void )
     setPEQ( ii );
   Serial.print( "." );
 
+  for(int ii = 0; ii < numPeqBanks; ii++)
+    setPeqBank(ii);
+  Serial.print(".");
+
   for( int ii = 0; ii < numHShelvs; ii++ )
     setHighShelving( ii );
   Serial.print( "." );
