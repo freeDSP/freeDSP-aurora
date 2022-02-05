@@ -4,6 +4,7 @@
 #include <Wire.h>
 #endif
 
+#include "customdefines.h"
 #include "hwconfig.h"
 #include "config.h"
 #include "OLED128x64_SH1106.h"
@@ -47,7 +48,7 @@ void OLED128x64_SH1106::drawBootScreen( void )
 
   u8g2.setFont( u8g2_font_helvR14_tf );
   u8g2.setFontRefHeightExtendedText();
-  u8g2.drawStr( 23, 10, "AURORA");
+  u8g2.drawStr( 23, 10, DSPNAME);
 
   u8g2.setFont(u8g2_font_6x10_tf);
   u8g2.setFontRefHeightExtendedText();

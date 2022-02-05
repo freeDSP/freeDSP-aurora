@@ -4,6 +4,7 @@
 #include <ArduinoJson.h>
 #include <SPIFFS.h>
 
+#include "customdefines.h"
 #include "config.h"
 #include "hwconfig.h"
 #include "plugin.h"
@@ -81,7 +82,9 @@ String createInputRoutingPage(int numinputs)
     <html lang="en">
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
     <head>
-    <title>AURORA DSP</title>
+    <title>)"""";
+  ret += String(DSPNAME);
+  ret += R""""(</title>
     <link rel="stylesheet" href="dark.css">
     <script type="text/javascript" src="aurora.js"></script>
     </head>

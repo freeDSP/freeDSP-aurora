@@ -215,7 +215,7 @@ void myWiFiTask(void *pvParameters)
   IPAddress subnet(255, 255, 255, 0);
 
   WiFi.mode(WIFI_AP_STA);
-  WiFi.setHostname("freeDSP-aurora");
+  WiFi.setHostname(AP_HOSTNAME);
   // Start access point
   if( Settings.pwdap.length() > 0 )
   {

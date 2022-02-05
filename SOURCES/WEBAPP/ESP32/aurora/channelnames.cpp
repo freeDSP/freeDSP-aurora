@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <SPIFFS.h>
 
+#include "customdefines.h"
 #include "config.h"
 #include "plugin.h"
 #include "channelnames.h"
@@ -71,7 +72,9 @@ String createChannelNamesPage(void)
     <html lang="en">
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
     <head>
-    <title>Aurora DSP</title>
+    <title>)"""";
+  ret += String(DSPNAME);
+  ret += R""""(</title>
     <link id='theme' rel="stylesheet" href="dark.css" rel="stylesheet" type="text/css">
     <script type="text/javascript" src="aurora.js"></script>
     </head>
