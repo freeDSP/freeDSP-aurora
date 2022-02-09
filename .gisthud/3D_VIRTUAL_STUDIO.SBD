@@ -1,0 +1,24 @@
+**\
+###STANDALONE_BUILDER_DESIGN###
+* .DLC_Store
+* SOURCES/.vscode
+* Sickstartup
+* ADDONS/Add_Online
+* SMARTLIST/Built_Ontop_emblem
+* SOURCES/build-versionControl-Desktop_Qt_5_12_5_MSVC2017_64bit-Debug
+* SOURCES/build-versionControl-Desktop_Qt_5_12_5_MSVC2017_64bit-Release
+* SOURCES/build-versionControl-Desktop_Qt_5_12_5_clamp_64bit-Debug
+* SOURCES/build-versionControl-Desktop_Qt_5_12_5_clamp_64bit-Release
+**.pro.user.**
+* ADDONS/Add_online mit SBD
+*.faq
+*.tls
+*.pac
+**.autosave**
+* top.layer.background.rounded.squares.creed_spector_gaslight_.vip_.vpn_.ssh
+* ftp-into-cache-clear-fishbowl
+* SOURCES/build-sigma2aurora-Desktop_Qt_5_12_5_clamp_64bit-Debug
+* <RELEASES Widget=("_Wonderland_FlexChopps_Trading_Forward")
+* OEM/IDE/(.GZ)/
+* <SOURCES/WEBAPP/ESP32/aurora/data>
+**/**
