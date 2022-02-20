@@ -5,10 +5,10 @@
 /* This file holds all defines and configurations to customize Aurora        */
 /*****************************************************************************/
 
-#define DSPNAME "Aurora DSP"
-#define AP_HOSTNAME "AP-Aurora-DSP" // Name displayed for WiFI provided by Aurora
+#define DSPNAME "The Room"
+#define AP_HOSTNAME "AP-TheRoom" // Name displayed for WiFI provided by Aurora
 
-#define VERSION_STR "v2.2.2-alpha"
+#define VERSION_STR "v2.2.2"
 
 #define HAVE_DISPLAY       (1)  // Enable Display driver
 #define HAVE_ROTARYENCODER (1)  // Enable Rotary Encoder

@@ -77,7 +77,7 @@ String createInputRoutingPage(int numinputs)
   String ret;
   int id = 0;
   
-  ret += R"!^!(
+  ret += R""""(
     <!DOCTYPE html>
     <html lang="en">
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
@@ -111,7 +111,7 @@ String createInputRoutingPage(int numinputs)
       </center>
     </body>
     </html>
-  )!^!";
+  )"""";
 
   return ret;
 }
@@ -357,13 +357,10 @@ void setVirtualInput(void)
   {
     for(int nn = 0; nn < kNumVirtualInputs; nn++)
     {
-      Serial.println(idx);
       paramInputs[idx].sel = inputSelectionCmd[sourceRouting[currentVirtualInput][nn]];
       setInput(idx);
-      Serial.println(paramInputs[idx].sel & 0xffff0000, HEX);
       if((paramInputs[idx].sel & 0xffff0000) == 0x00040000)
       {
-        Serial.println("Change SPDIFmux");
         Wire.beginTransmission(ADDONB_SPDIFMUX_ADDR);
         Wire.write(0x01);
         if(sourceRouting[currentVirtualInput][nn] == 18) // SPDIF Coax 1 Left
