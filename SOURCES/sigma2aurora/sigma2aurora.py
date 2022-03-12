@@ -85,6 +85,7 @@ parser.add_argument("input", help="SigmaStudio project file")
 parser.add_argument("plugin", help="Name of plugin")
 parser.add_argument("--gui", help="Path to html gui", type=str)
 parser.add_argument("--version", help="Version of plugin", type=str)
+parser.add_argument("--outputdir", help="Output directory", type=str)
 
 # Read arguments from the command line
 args = parser.parse_args()
@@ -100,6 +101,10 @@ if args.version:
     version = args.version
 else:
     version = "0.0.0"
+if args.outputdir:
+    outputdir = args.outputdir
+else:
+    outputdir = ""
 
 projectname = os.path.splitext(os.path.basename(path_sigmastudioproject))[0]
 projectdir = os.path.dirname(path_sigmastudioproject)
@@ -137,14 +142,24 @@ with open(numbytes_path) as fp:
 
 # --- Create output directory
 try:
-    if not os.path.exists(projectname):
+    if not os.path.exists(outputdir):
+        os.mkdir(outputdir)
+except OSError:
+    print("Creation of output directory %s failed" % outputdir)
+
+if outputdir:
+    outputdir = outputdir + "/"
+
+try:
+    if not os.path.exists(outputdir + projectname):
         os.mkdir(projectname)
 except OSError:
     print("Creation of output directory %s failed" % projectname)
 
+
 # --- Write dsp.fw
 print("Writing DSP firmware")
-dspfw_path = os.path.join(projectname, 'dsp.fw')
+dspfw_path = os.path.join(outputdir + projectname, 'dsp.fw')
 with open(dspfw_path, 'wb') as file:
     idx = 0
     for ii in range(0, len(numbytes)):
@@ -695,16 +710,16 @@ data = {
     "version": version,
 }
 
-plugin_ini_path = os.path.join(projectname, "plugin.ini")
+webapp_path = os.path.join('..', 'WEBAPP')
+project_path = os.path.join('.', outputdir + projectname)
+
+# --- Write plugin.ini
+plugin_ini_path = os.path.join(project_path, "plugin.ini")
 with io.open(plugin_ini_path, 'w', encoding='utf8') as outfile:
     str_ = json.dumps(data,
                       indent=0, sort_keys=False,
                       separators=(',', ': '), ensure_ascii=False)
     outfile.write(to_unicode(str_))
-
-
-webapp_path = os.path.join('..', 'WEBAPP')
-project_path = os.path.join('.', projectname)
 
 # --- Copy aurora.jgz
 print("Copying aurora.jgz")
