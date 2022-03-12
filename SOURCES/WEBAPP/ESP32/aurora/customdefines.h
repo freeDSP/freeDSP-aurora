@@ -5,8 +5,8 @@
 /* This file holds all defines and configurations to customize Aurora        */
 /*****************************************************************************/
 
-#define DSPNAME "The Room"
-#define AP_HOSTNAME "AP-TheRoom" // Name displayed for WiFI provided by Aurora
+#define DSPNAME "Aurora"
+#define AP_HOSTNAME "AP-freeDSP-Aurora" // Name displayed for WiFi provided by Aurora
 
 #define VERSION_STR "v2.2.2"
 

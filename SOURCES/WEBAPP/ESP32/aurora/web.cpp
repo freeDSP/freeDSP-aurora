@@ -2054,8 +2054,9 @@ String handleGetAllNamesJson( void )
     for(int ii = 0; ii < kNumSourceNames-1; ii++)
       array += String("\"") + sourceNames[ii] + String("\",");
     array += String("\"") + sourceNames[kNumSourceNames - 1];
+    array += String("\"");
   }
-  array += String("\"],");
+  array += String("],");
   array += String("\"selvinput\":") + String(currentVirtualInput);
 
   array += String("}");
