@@ -51,6 +51,12 @@ Branches:
 ## License
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
 
+## Related Projects
+- [Generate Aurora Plugins from SigmaStudio Exports (Alternative to Aurora's python scripts)](https://github.com/archi/aurora-tool)
+- [PCB with startup delay (I2C) mod with a DM 2.4" OLED](https://github.com/Ca-Wi/freeDSP-aurora-extension-i2c-mod-display)
+- [PCB to expand the freeDSP aurora expansion port with 3V3 regulator](https://github.com/Ca-Wi/freeDSP-aurora-expansion-port-extender)
+
+
 ## Links
 
 - [Buy Aurora board and addons](https://auverdion.de/)
@@ -59,7 +65,6 @@ Branches:
 - [DIYAudio forum (english)](https://www.diyaudio.com/forums/digital-line-level/334055-freedsp-aurora-dsp-8-os-usb-audio-dif-adat-bluetooth-wifi-contro.html)
 - [DIYHifi forum (german, features)](https://www.diy-hifi-forum.eu/forum/showthread.php?18572-freeDSP-aurora-Der-Feature-Thread)
 - [DIYHifi forum (german, specs)](https://www.diy-hifi-forum.eu/forum/showthread.php?15019-Verst%E4rkermodul-mit-DSP-600W-1-4Kan%E4le-low-budget-high-quality&p=249786&viewfull=1#post249786)
-- [Youtube tutorials](https://www.youtube.com/channel/UCGmSGSIjvFPSlGyMbqJgFxw)
 - [ADAU1452 at Analog Devices](https://www.analog.com/en/products/adau1452.html)
 - [ESP32 at Espressif](https://www.espressif.com/en/products/socs/esp32/overview)
 - [XMOS XE216-512-TQ128 datasheet](https://www.xmos.com/file/xe216-512-tq128-datasheet)
