@@ -736,77 +736,77 @@ if args.gui:
         for m in range(0, len(lp)):
             dsphtml = dsphtml.replace(
                 "id=\"" + lp[m].name.split('.', 1)[1] + "\"",
-                "id=lp" + str(m) + " onclick=\"openLP(" + str(m) + ");\""
+                "id=\"lp" + str(m) + "\" onclick=\"openLP(" + str(m) + ");\""
             )
 
         # --- replace HP names
         for m in range(0, len(hp)):
             dsphtml = dsphtml.replace(
                 "id=\"" + hp[m].name.split('.', 1)[1] + "\"",
-                "id=hp" + str(m) + " onclick=\"openHP(" + str(m) + ");\""
+                "id=\"hp" + str(m) + "\" onclick=\"openHP(" + str(m) + ");\""
             )
 
         # --- LowShelv blocks
         for m in range(0, len(lshelv)):
             dsphtml = dsphtml.replace(
                 "id=\"" + lshelv[m].name.split('.', 1)[1] + "\"",
-                "id=ls" + str(m) + " onclick=\"openLShelv(" + str(m) + ");\""
+                "id=\"ls" + str(m) + "\" onclick=\"openLShelv(" + str(m) + ");\""
             )
 
         # --- HighShelv blocks
         for m in range(0, len(hshelv)):
             dsphtml = dsphtml.replace(
                 "id=\"" + hshelv[m].name.split('.', 1)[1] + "\"",
-                "id=hs" + str(m) + " onclick=\"openHShelv(" + str(m) + ");\""
+                "id=\"hs" + str(m) + "\" onclick=\"openHShelv(" + str(m) + ");\""
             )
 
         # --- PEQ banks
         for m in range(0, len(peqbank)):
             dsphtml = dsphtml.replace(
                 "id=\"" + peqbank[m].name.split('.', 1)[1] + "\"",
-                "id=peqbank" + str(m) + " onclick=\"openPeqBank(" + str(m) + ");\""
+                "id=\"peqbank" + str(m) + "\" onclick=\"openPeqBank(" + str(m) + ");\""
             )
 
         # --- PEQ blocks
         for m in range(0, len(peq)):
             dsphtml = dsphtml.replace(
                 "id=\"" + peq[m].name.split('.', 1)[1] + "\"",
-                "id=peq" + str(m) + " onclick=\"openPEQ(" + str(m) + ");\""
+                "id=\"peq" + str(m) + "\" onclick=\"openPEQ(" + str(m) + ");\""
             )
 
         # --- Phase blocks
         for m in range(0, len(phase)):
             dsphtml = dsphtml.replace(
                 "id=\"" + phase[m].name.split('.', 1)[1] + "\"",
-                "id=ph" + str(m) + " onclick=\"openPhase(" + str(m) + ");\""
+                "id=\"ph" + str(m) + "\" onclick=\"openPhase(" + str(m) + ");\""
             )
 
         # --- Delay blocks
         for m in range(0, len(dly)):
             dsphtml = dsphtml.replace(
                 "id=\"" + dly[m].name.split('.', 1)[1] + "\"",
-                "id=dly" + str(m) + " onclick=\"openDelay(" + str(m) + ");\""
+                "id=\"dly" + str(m) + "\" onclick=\"openDelay(" + str(m) + ");\""
             )
 
         # --- Gain blocks
         for m in range(0, len(gain)):
             dsphtml = dsphtml.replace(
                 "id=\"" + gain[m].name.split('.', 1)[1] + "\"",
-                "id=gn" + str(m) + " onclick=\"openGain(" + str(m) + ");\""
+                "id=\"gn" + str(m) + "\" onclick=\"openGain(" + str(m) + ");\""
             )
 
         # --- FIR blocks
         for m in range(0, len(fir)):
             dsphtml = dsphtml.replace(
                 "id=\"" + fir[m].name.split('.', 1)[1] + "\"",
-                "id=fir" + str(m) + " onclick=\"openFIR(" + str(m) + ");\""
+                "id=\"fir" + str(m) + "\" onclick=\"openFIR(" + str(m) + ");\""
             )
 
         # --- XO-HP blocks
         for m in range(0, len(xohp)):
             dsphtml = dsphtml.replace(
                 "id=\"" + xohp[m].name.split('.', 1)[1].replace("HP", "") + "\"",
-                "id=xo" + str(m) + " onclick=\"openXO(" + str(m) + ");\""
+                "id=\"xo" + str(m) + "\" onclick=\"openXO(" + str(m) + ");\""
             )
 
         # --- XO-LP blocks
