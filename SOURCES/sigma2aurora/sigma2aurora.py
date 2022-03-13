@@ -152,7 +152,7 @@ if outputdir:
 
 try:
     if not os.path.exists(outputdir + projectname):
-        os.mkdir(projectname)
+        os.mkdir(outputdir + projectname)
 except OSError:
     print("Creation of output directory %s failed" % projectname)
 
