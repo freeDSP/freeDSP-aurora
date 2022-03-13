@@ -10,7 +10,7 @@
  * are intended for resale to audio product end users. This software
  * may not be distributed whole or in any part to third parties.
  *
- * Copyright © 2021 Analog Devices, Inc. All rights reserved.
+ * Copyright © 2022 Analog Devices, Inc. All rights reserved.
  */
 -->
 <!--NetList XML file-->
@@ -428,66 +428,66 @@
             </Algorithm>
             <Algorithm name="FIRSigma300Alg1" friendlyname="FIR " cell="Plugin.FIR1 " location="{X=1214, Y=224.1922} " Growth="1022 " GrowthB="0">
                 <Link pin="I_C45_A0_P1_in" dir="in" link="Link95" />
-                <Link pin="O_C45_A0_P2_out" dir="out" link="Link44" />
+                <Link pin="O_C45_A0_P2_out" dir="out" link="Link38" />
             </Algorithm>
             <Algorithm name="FIRSigma300Alg2" friendlyname="FIR " cell="Plugin.FIR2 " location="{X=1214, Y=514.6771} " Growth="1022 " GrowthB="0">
                 <Link pin="I_C48_A0_P1_in" dir="in" link="Link94" />
-                <Link pin="O_C48_A0_P2_out" dir="out" link="Link39" />
+                <Link pin="O_C48_A0_P2_out" dir="out" link="Link40" />
             </Algorithm>
             <Algorithm name="FIRSigma300Alg3" friendlyname="FIR " cell="Plugin.FIR3 " location="{X=1214, Y=807.6467} " Growth="1022 " GrowthB="0">
                 <Link pin="I_C52_A0_P1_in" dir="in" link="Link93" />
-                <Link pin="O_C52_A0_P2_out" dir="out" link="Link35" />
+                <Link pin="O_C52_A0_P2_out" dir="out" link="Link41" />
             </Algorithm>
             <Algorithm name="FIRSigma300Alg4" friendlyname="FIR " cell="Plugin.FIR4 " location="{X=1214, Y=1099.647} " Growth="1022 " GrowthB="0">
                 <Link pin="I_C55_A0_P1_in" dir="in" link="Link92" />
-                <Link pin="O_C55_A0_P2_out" dir="out" link="Link36" />
-            </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg3" friendlyname="Multi-Channel - Double Precision " cell="Plugin.PeqBank3 " location="{X=1580, Y=814.6467} " Growth="1 " GrowthB="1">
-                <Link pin="I_C65_A0_P1_in" dir="in" link="Link35" />
-                <Link pin="O_C65_A0_P2_out" dir="out" link="Link34" />
-            </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg4" friendlyname="Multi-Channel - Double Precision " cell="Plugin.PeqBank4 " location="{X=1570, Y=1106.647} " Growth="1 " GrowthB="1">
-                <Link pin="I_C69_A0_P1_in" dir="in" link="Link36" />
-                <Link pin="O_C69_A0_P2_out" dir="out" link="Link40" />
-            </Algorithm>
-            <Algorithm name="General2ndOrderDPSigma300Alg2" friendlyname="Multi-Channel - Double Precision " cell="Plugin.PeqBank2 " location="{X=1570, Y=521.6772} " Growth="1 " GrowthB="1">
-                <Link pin="I_C61_A0_P1_in" dir="in" link="Link39" />
-                <Link pin="O_C61_A0_P2_out" dir="out" link="Link41" />
+                <Link pin="O_C55_A0_P2_out" dir="out" link="Link42" />
             </Algorithm>
             <Algorithm name="General2ndOrderDPSigma300Alg1" friendlyname="Multi-Channel - Double Precision " cell="Plugin.PeqBank1 " location="{X=1570, Y=231.1922} " Growth="1 " GrowthB="1">
-                <Link pin="I_C58_A0_P1_in" dir="in" link="Link44" />
-                <Link pin="O_C58_A0_P2_out" dir="out" link="Link37" />
+                <Link pin="I_C58_A0_P1_in" dir="in" link="Link38" />
+                <Link pin="O_C58_A0_P2_out" dir="out" link="Link34" />
             </Algorithm>
-            <Algorithm name="DelaySigma300Alg3" friendlyname="Growable Delay " cell="Plugin.Delay3 " location="{X=1853, Y=793.6468} " Growth="1 " GrowthB="0">
-                <Link pin="I_C78_A0_P1_in" dir="in" link="Link34" />
-                <Link pin="O_C78_A0_P2_out" dir="out" link="Link43" />
+            <Algorithm name="General2ndOrderDPSigma300Alg2" friendlyname="Multi-Channel - Double Precision " cell="Plugin.PeqBank2 " location="{X=1570, Y=521.677} " Growth="1 " GrowthB="1">
+                <Link pin="I_C23_A0_P1_in" dir="in" link="Link40" />
+                <Link pin="O_C23_A0_P2_out" dir="out" link="Link43" />
+            </Algorithm>
+            <Algorithm name="General2ndOrderDPSigma300Alg3" friendlyname="Multi-Channel - Double Precision " cell="Plugin.PeqBank3 " location="{X=1570, Y=814.6467} " Growth="1 " GrowthB="1">
+                <Link pin="I_C27_A0_P1_in" dir="in" link="Link41" />
+                <Link pin="O_C27_A0_P2_out" dir="out" link="Link44" />
+            </Algorithm>
+            <Algorithm name="General2ndOrderDPSigma300Alg4" friendlyname="Multi-Channel - Double Precision " cell="Plugin.PeqBank4 " location="{X=1570, Y=1106.647} " Growth="1 " GrowthB="1">
+                <Link pin="I_C37_A0_P1_in" dir="in" link="Link42" />
+                <Link pin="O_C37_A0_P2_out" dir="out" link="Link45" />
             </Algorithm>
             <Algorithm name="DelaySigma300Alg1" friendlyname="Growable Delay " cell="Plugin.Delay1 " location="{X=1853, Y=210.1922} " Growth="1 " GrowthB="0">
-                <Link pin="I_C72_A0_P1_in" dir="in" link="Link37" />
-                <Link pin="O_C72_A0_P2_out" dir="out" link="Link45" />
-            </Algorithm>
-            <Algorithm name="DelaySigma300Alg4" friendlyname="Growable Delay " cell="Plugin.Delay4 " location="{X=1853, Y=1085.647} " Growth="1 " GrowthB="0">
-                <Link pin="I_C81_A0_P1_in" dir="in" link="Link40" />
-                <Link pin="O_C81_A0_P2_out" dir="out" link="Link38" />
+                <Link pin="I_C72_A0_P1_in" dir="in" link="Link34" />
+                <Link pin="O_C72_A0_P2_out" dir="out" link="Link39" />
             </Algorithm>
             <Algorithm name="DelaySigma300Alg2" friendlyname="Growable Delay " cell="Plugin.Delay2 " location="{X=1853, Y=500.6771} " Growth="1 " GrowthB="0">
-                <Link pin="I_C75_A0_P1_in" dir="in" link="Link41" />
-                <Link pin="O_C75_A0_P2_out" dir="out" link="Link42" />
+                <Link pin="I_C75_A0_P1_in" dir="in" link="Link43" />
+                <Link pin="O_C75_A0_P2_out" dir="out" link="Link36" />
+            </Algorithm>
+            <Algorithm name="DelaySigma300Alg3" friendlyname="Growable Delay " cell="Plugin.Delay3 " location="{X=1853, Y=793.6468} " Growth="1 " GrowthB="0">
+                <Link pin="I_C78_A0_P1_in" dir="in" link="Link44" />
+                <Link pin="O_C78_A0_P2_out" dir="out" link="Link37" />
+            </Algorithm>
+            <Algorithm name="DelaySigma300Alg4" friendlyname="Growable Delay " cell="Plugin.Delay4 " location="{X=1853, Y=1085.647} " Growth="1 " GrowthB="0">
+                <Link pin="I_C81_A0_P1_in" dir="in" link="Link45" />
+                <Link pin="O_C81_A0_P2_out" dir="out" link="Link35" />
             </Algorithm>
             <Algorithm name="HWGainADAU145XAlg4" friendlyname="Gain (HW slew) " cell="Plugin.Gain4 " location="{X=2354, Y=1040.577} " Growth="1 " GrowthB="0">
-                <Link pin="I_C42_A0_P1_in" dir="in" link="Link38" />
+                <Link pin="I_C42_A0_P1_in" dir="in" link="Link35" />
                 <Link pin="O_C42_A0_P2_out" dir="out" link="Link99" />
             </Algorithm>
             <Algorithm name="HWGainADAU145XAlg2" friendlyname="Gain (HW slew) " cell="Plugin.Gain2 " location="{X=2345, Y=454.9653} " Growth="1 " GrowthB="0">
-                <Link pin="I_C28_A0_P1_in" dir="in" link="Link42" />
+                <Link pin="I_C28_A0_P1_in" dir="in" link="Link36" />
                 <Link pin="O_C28_A0_P2_out" dir="out" link="Link97" />
             </Algorithm>
             <Algorithm name="HWGainADAU145XAlg3" friendlyname="Gain (HW slew) " cell="Plugin.Gain3 " location="{X=2354, Y=748.5775} " Growth="1 " GrowthB="0">
-                <Link pin="I_C36_A0_P1_in" dir="in" link="Link43" />
+                <Link pin="I_C36_A0_P1_in" dir="in" link="Link37" />
                 <Link pin="O_C36_A0_P2_out" dir="out" link="Link98" />
             </Algorithm>
             <Algorithm name="HWGainADAU145XAlg1" friendlyname="Gain (HW slew) " cell="Plugin.Gain1 " location="{X=2355, Y=165.8993} " Growth="1 " GrowthB="0">
-                <Link pin="I_C1_A0_P1_in" dir="in" link="Link45" />
+                <Link pin="I_C1_A0_P1_in" dir="in" link="Link39" />
                 <Link pin="O_C1_A0_P2_out" dir="out" link="Link96" />
             </Algorithm>
             <Algorithm name="HWGainADAU145XAlg9" friendlyname="Gain (HW slew) " cell="MasterVolume " location="{X=689, Y=198.1172} " Growth="4 " GrowthB="0">
