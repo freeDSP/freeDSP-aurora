@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ "$#" -ne 1 ]; then
+  echo "usage: makefullrelease.sh versionnumber"
+  exit 1
+fi
+
 if [ -d $1 ]; then
   rm -rf $1
 fi
