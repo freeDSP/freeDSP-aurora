@@ -1,0 +1,10 @@
+#ifndef EDITMODE_H_
+#define EDITMODE_H_
+
+#define EDITMODE_VOLUME 0
+#define EDITMODE_PRESET 1
+#define EDITMODE_INPUT 2
+
+#define EDITMODE_DEFAULT EDITMODE_VOLUME
+
+#endif

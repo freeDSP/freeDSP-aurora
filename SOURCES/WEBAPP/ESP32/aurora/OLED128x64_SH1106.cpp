@@ -79,7 +79,7 @@ void OLED128x64_SH1106::drawUI(const char* plugin, const char* ip, const int cur
     u8g2.drawLine(0, 11, 127, 11);
     u8g2.drawLine(0, 53, 127, 53);
 
-    if( editMode == 1 )
+    if( editMode == EDITMODE_PRESET )
     {
       u8g2.drawLine( 13, 44, 31, 44 );
       u8g2.drawLine( 13, 45, 31, 45 );
@@ -98,7 +98,7 @@ void OLED128x64_SH1106::drawUI(const char* plugin, const char* ip, const int cur
 
     u8g2.setFont(u8g2_font_helvB18_tf);
     u8g2.drawStr(13, 20, preset);
-    if(editMode == 1)
+    if(editMode == EDITMODE_PRESET)
     {
       u8g2.drawLine(13, 44, 31, 44);
       u8g2.drawLine(13, 45, 31, 45);
