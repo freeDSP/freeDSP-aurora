@@ -1,6 +1,8 @@
 #ifndef HWCONFIG_H_
 #define HWCONFIG_H_
 
+#include "customdefines.h"
+
 // Defines the GPIO for SW-I2C
 #define I2C_SDA_PIN 17
 #define I2C_SCL_PIN 16
@@ -17,31 +19,45 @@
 // S/P-DIF-Mux on AddOnB
 #define ADDONB_SPDIFMUX_ADDR (0x82>>1)
 
-#define HAVE_DISPLAY (1)
+#if HAVE_DISPLAY
 // SH1106 I2C display controller
 #define SH1106_I2C_ADDR (0x3C) // 0x78 >> 1
 // SSD1309 I2C display controller
 #define SSD1309_I2C_ADDR (0x3D) // 0x7A >> 1
+#endif
 
 // KY-040 rotary encoder
-#define HAVE_ROTARYENCODER (1)  // Enable Rotary Encoder
+#if HAVE_ROTARYENCODER
 #define ROTARYENCODER_PINA  21 // DT Pin
 #define ROTARYENCODER_PINB  19 // CLK Pin
 #define ROTARYENCODER_PINSW 18 // SW Pin
+#endif
 
 // KY-022 IR Receiver Module
-#define HAVE_IRRECEIVER (1)
+#if HAVE_IRRECEIVER
 #define IR_RECEIVER_PIN 5
+#endif
 
-#define APPLE_REMOTE_UP          0x77E1D047
-#define APPLE_REMOTE_DOWN        0x77E1B047
-#define APPLE_REMOTE_LEFT        0x77E11047
-#define APPLE_REMOTE_RIGHT       0x77E1E047
-#define APPLE_REMOTE_CENTER_DOWN 0x77E1BA47
-#define APPLE_REMOTE_CENTER_UP   0x77E12047
-#define APPLE_REMOTE_MENU        0x77E14047
-#define APPLE_REMOTE_PLAY_DOWN   0x77E17A47
-#define APPLE_REMOTE_PLAY_UP     0x77E12047
+#define APPLE_A_REMOTE_LEFT        0x10
+#define APPLE_A_REMOTE_RIGHT       0xE0
+#define APPLE_A_REMOTE_UP          0xD0
+#define APPLE_A_REMOTE_DOWN        0xB0
+#define APPLE_A_REMOTE_MENU        0x40
+#define APPLE_A_REMOTE_PLAY_DOWN   0x7A
+#define APPLE_A_REMOTE_PLAY_UP     0x20
+#define APPLE_A_REMOTE_CENTER_DOWN 0xBA
+#define APPLE_A_REMOTE_CENTER_UP   0x20
+
+#define APPLE_B_REMOTE_LEFT        0x90
+#define APPLE_B_REMOTE_RIGHT       0x60
+#define APPLE_B_REMOTE_UP          0x50
+#define APPLE_B_REMOTE_DOWN        0x30
+#define APPLE_B_REMOTE_MENU        0xC0
+#define APPLE_B_REMOTE_PLAY_DOWN   0xFA
+#define APPLE_B_REMOTE_PLAY_UP     0x20
+#define APPLE_B_REMOTE_CENTER_DOWN 0x3A
+#define APPLE_B_REMOTE_CENTER_UP   0x20
+
 
 
 #endif

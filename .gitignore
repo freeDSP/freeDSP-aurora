@@ -18,3 +18,6 @@ SOURCES/build-sigma2aurora-Desktop_Qt_5_12_5_clang_64bit-Debug
 RELEASES
 OEM
 SOURCES/WEBAPP/ESP32/aurora/data
+SOURCES/WEBAPP/ESP32/aurora/aurora.ino.esp32.bin
+SOURCES/sigma2aurora/plugins
+SOURCES/WEBAPP/js/aurora.jgz

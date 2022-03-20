@@ -26,14 +26,14 @@
 	</nav>
 	
 	<div>
-  <table>
+  <table align="center">
   <tr><td colspan="2"><center>
   <table style="border-bottom:1px solid;"><tr><td><h1>Aurora DSP</h1></td></tr></table>  
   </center></td></tr>
   <tr><td colspan="2"><h2>4FIRs</h2></td></tr>
   <tr><td valign=top style="border-right: 1px solid #808080; min-width:200px; max-width:200px;">
   <table align="center" style="padding:10px">
-    <tr><td><h2>AddOn</h2></td></tr>
+    <tr><td><h2 id='addon'>AddOn</h2></td></tr>
     <tr><td>
       <div class="hidden" id="addon_none"><h3>None or custom</h3></div> 
       <div class="hidden" id="addon_a"><h3>The woodworker's friend</h3></div> 
@@ -265,7 +265,8 @@
     <tr><td><div style="height: 50px;"></div></td></tr>
     <tr><td><div style="height: 50px;"></div></td></tr>
   </table>
-  </td></tr>
+  </td>
+  <td style="width:200px;"></td></tr>
   <tr><td colspan="2"><center>
   <table><tr><td><button class="prebtn" id="pre0" onclick="switchPreset(0)">Preset A</button></td>
   <td><button class="prebtn" id="pre1" onclick="switchPreset(1)">Preset B</button></td>

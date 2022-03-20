@@ -190,8 +190,6 @@ void handleGetPeqBankJson( AsyncWebServerRequest* request )
     AsyncWebParameter* idx = request->getParam(0);
     int offset = idx->value().toInt();
     int numBands = paramPeqBank[offset].numBands;
-    Serial.println(offset);
-    Serial.println(numBands);
 
     // Build the JSON response manually. Via ArduinoJson it did not work somehow.
     String array("{");
@@ -230,7 +228,6 @@ void handleGetPeqBankJson( AsyncWebServerRequest* request )
       array += String(F("]"));
     }
     array += String("}");
-    Serial.println(array);
     request->send(200, F("text/plain"), array);
   }
   else
@@ -509,10 +506,8 @@ void handleGetConfigJson( AsyncWebServerRequest* request )
   #endif
   AsyncJsonResponse* response = new AsyncJsonResponse();
   JsonVariant& jsonResponse = response->getRoot();
-  if(currentPlugInName == String(F("stereoforever")) || currentPlugInName == String(F("The Room")))
-    jsonResponse["aid"] = -1;
-  else
-    jsonResponse["aid"] = Settings.addonid;
+
+  jsonResponse["aid"] = Settings.addonid;
   jsonResponse["vpot"] = Settings.vpot;
   jsonResponse["fw"] = VERSION_STR;
   jsonResponse["plugin"] = pluginVersion; 
@@ -527,6 +522,11 @@ void handleGetConfigJson( AsyncWebServerRequest* request )
     jsonResponse["addcfg"] = 0;
 
   jsonResponse["adcsum"] = Settings.adcsum;
+
+  if(currentPlugInName == String(F("stereoforever")) || currentPlugInName == String(F("The Room")))
+    jsonResponse["vinputs"] = true;
+  else
+    jsonResponse["vinputs"] = false;
 
   response->setLength();
   request->send(response);
@@ -2054,8 +2054,9 @@ String handleGetAllNamesJson( void )
     for(int ii = 0; ii < kNumSourceNames-1; ii++)
       array += String("\"") + sourceNames[ii] + String("\",");
     array += String("\"") + sourceNames[kNumSourceNames - 1];
+    array += String("\"");
   }
-  array += String("\"],");
+  array += String("],");
   array += String("\"selvinput\":") + String(currentVirtualInput);
 
   array += String("}");

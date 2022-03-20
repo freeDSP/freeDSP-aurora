@@ -1,6 +1,6 @@
 Cell Name         = SpdifOutMux.Nx_Analog_Left
 Parameter Name    = monomuxSigma300ns50index
-Parameter Address = 20266
+Parameter Address = 20306
 Parameter Value   = 0
 Parameter Data :
 0x00, 0x00, 0x00, 0x00, 
@@ -9,7 +9,7 @@ Parameter Data :
 
 Cell Name         = SpdifOutMux.Nx_UAC2_Left
 Parameter Name    = monomuxSigma300ns51index
-Parameter Address = 20267
+Parameter Address = 20307
 Parameter Value   = 0
 Parameter Data :
 0x00, 0x00, 0x00, 0x00, 
@@ -18,7 +18,7 @@ Parameter Data :
 
 Cell Name         = SpdifOutMux.Nx_ESP32_Left
 Parameter Name    = monomuxSigma300ns52index
-Parameter Address = 20274
+Parameter Address = 20314
 Parameter Value   = 0
 Parameter Data :
 0x00, 0x00, 0x00, 0x00, 
@@ -27,7 +27,7 @@ Parameter Data :
 
 Cell Name         = SpdifOutMux.Nx_Exp_Left
 Parameter Name    = monomuxSigma300ns53index
-Parameter Address = 20265
+Parameter Address = 20305
 Parameter Value   = 0
 Parameter Data :
 0x00, 0x00, 0x00, 0x00, 
@@ -36,7 +36,7 @@ Parameter Data :
 
 Cell Name         = SpdifOutMux.Nx_SPDIF_Left
 Parameter Name    = monomuxSigma300ns54index
-Parameter Address = 20270
+Parameter Address = 20310
 Parameter Value   = 0
 Parameter Data :
 0x00, 0x00, 0x00, 0x00, 
@@ -45,7 +45,7 @@ Parameter Data :
 
 Cell Name         = SpdifOutMux.Nx_Left
 Parameter Name    = monomuxSigma300ns55index
-Parameter Address = 20281
+Parameter Address = 20321
 Parameter Value   = 0
 Parameter Data :
 0x00, 0x00, 0x00, 0x00, 
@@ -54,7 +54,7 @@ Parameter Data :
 
 Cell Name         = SpdifOutMux.Nx_UAC2_Right
 Parameter Name    = monomuxSigma300ns56index
-Parameter Address = 20273
+Parameter Address = 20313
 Parameter Value   = 0
 Parameter Data :
 0x00, 0x00, 0x00, 0x00, 
@@ -63,7 +63,7 @@ Parameter Data :
 
 Cell Name         = SpdifOutMux.Nx_ESP32_Right
 Parameter Name    = monomuxSigma300ns57index
-Parameter Address = 20268
+Parameter Address = 20308
 Parameter Value   = 0
 Parameter Data :
 0x00, 0x00, 0x00, 0x00, 
@@ -72,7 +72,7 @@ Parameter Data :
 
 Cell Name         = SpdifOutMux.Nx_Exp_Right
 Parameter Name    = monomuxSigma300ns58index
-Parameter Address = 20271
+Parameter Address = 20311
 Parameter Value   = 0
 Parameter Data :
 0x00, 0x00, 0x00, 0x00, 
@@ -81,7 +81,7 @@ Parameter Data :
 
 Cell Name         = SpdifOutMux.Nx_SPDIF_Right
 Parameter Name    = monomuxSigma300ns59index
-Parameter Address = 20272
+Parameter Address = 20312
 Parameter Value   = 0
 Parameter Data :
 0x00, 0x00, 0x00, 0x00, 
@@ -90,7 +90,7 @@ Parameter Data :
 
 Cell Name         = SpdifOutMux.Nx_Right
 Parameter Name    = monomuxSigma300ns60index
-Parameter Address = 20282
+Parameter Address = 20322
 Parameter Value   = 0
 Parameter Data :
 0x00, 0x00, 0x00, 0x00, 
@@ -99,7 +99,7 @@ Parameter Data :
 
 Cell Name         = SpdifOutMux.Nx_Analog_Right
 Parameter Name    = monomuxSigma300ns61index
-Parameter Address = 20269
+Parameter Address = 20309
 Parameter Value   = 0
 Parameter Data :
 0x00, 0x00, 0x00, 0x00, 
@@ -108,7 +108,7 @@ Parameter Data :
 
 Cell Name         = SpdifOutMux.Nx_Out_Left
 Parameter Name    = monomuxSigma300ns62index
-Parameter Address = 20279
+Parameter Address = 20319
 Parameter Value   = 0
 Parameter Data :
 0x00, 0x00, 0x00, 0x00, 
@@ -117,7 +117,7 @@ Parameter Data :
 
 Cell Name         = SpdifOutMux.Nx_Out_Right
 Parameter Name    = monomuxSigma300ns63index
-Parameter Address = 20280
+Parameter Address = 20320
 Parameter Value   = 0
 Parameter Data :
 0x00, 0x00, 0x00, 0x00, 
@@ -126,7 +126,7 @@ Parameter Data :
 
 Cell Name         = InputSelect_4.Nx1-1_Analog
 Parameter Name    = monomuxSigma300ns19index
-Parameter Address = 20248
+Parameter Address = 20288
 Parameter Value   = 3
 Parameter Data :
 0x00, 0x00, 0x00, 0x03, 
@@ -135,7 +135,7 @@ Parameter Data :
 
 Cell Name         = InputSelect_4.Nx1-1_UAC
 Parameter Name    = monomuxSigma300ns20index
-Parameter Address = 20245
+Parameter Address = 20285
 Parameter Value   = 3
 Parameter Data :
 0x00, 0x00, 0x00, 0x03, 
@@ -144,7 +144,7 @@ Parameter Data :
 
 Cell Name         = InputSelect_4.Nx1-1_ESP32
 Parameter Name    = monomuxSigma300ns21index
-Parameter Address = 20246
+Parameter Address = 20286
 Parameter Value   = 3
 Parameter Data :
 0x00, 0x00, 0x00, 0x03, 
@@ -153,7 +153,7 @@ Parameter Data :
 
 Cell Name         = InputSelect_4.Nx1-1_Exp
 Parameter Name    = monomuxSigma300ns22index
-Parameter Address = 20247
+Parameter Address = 20287
 Parameter Value   = 3
 Parameter Data :
 0x00, 0x00, 0x00, 0x03, 
@@ -162,7 +162,7 @@ Parameter Data :
 
 Cell Name         = InputSelect_4.Nx1-1_SPDIF
 Parameter Name    = monomuxSigma300ns23index
-Parameter Address = 20249
+Parameter Address = 20289
 Parameter Value   = 0
 Parameter Data :
 0x00, 0x00, 0x00, 0x00, 
@@ -171,7 +171,7 @@ Parameter Data :
 
 Cell Name         = InputSelect_4.Nx1-1_Mux
 Parameter Name    = monomuxSigma300ns24index
-Parameter Address = 20275
+Parameter Address = 20315
 Parameter Value   = 0
 Parameter Data :
 0x00, 0x00, 0x00, 0x00, 
@@ -180,7 +180,7 @@ Parameter Data :
 
 Cell Name         = InputSelect_3.Nx1-1_Analog
 Parameter Name    = monomuxSigma300ns13index
-Parameter Address = 20252
+Parameter Address = 20292
 Parameter Value   = 2
 Parameter Data :
 0x00, 0x00, 0x00, 0x02, 
@@ -189,7 +189,7 @@ Parameter Data :
 
 Cell Name         = InputSelect_3.Nx1-1_UAC
 Parameter Name    = monomuxSigma300ns14index
-Parameter Address = 20253
+Parameter Address = 20293
 Parameter Value   = 2
 Parameter Data :
 0x00, 0x00, 0x00, 0x02, 
@@ -198,7 +198,7 @@ Parameter Data :
 
 Cell Name         = InputSelect_3.Nx1-1_ESP32
 Parameter Name    = monomuxSigma300ns15index
-Parameter Address = 20251
+Parameter Address = 20291
 Parameter Value   = 2
 Parameter Data :
 0x00, 0x00, 0x00, 0x02, 
@@ -207,7 +207,7 @@ Parameter Data :
 
 Cell Name         = InputSelect_3.Nx1-1_Exp
 Parameter Name    = monomuxSigma300ns16index
-Parameter Address = 20250
+Parameter Address = 20290
 Parameter Value   = 2
 Parameter Data :
 0x00, 0x00, 0x00, 0x02, 
@@ -216,7 +216,7 @@ Parameter Data :
 
 Cell Name         = InputSelect_3.Nx1-1_SPDIF
 Parameter Name    = monomuxSigma300ns17index
-Parameter Address = 20254
+Parameter Address = 20294
 Parameter Value   = 0
 Parameter Data :
 0x00, 0x00, 0x00, 0x00, 
@@ -225,7 +225,7 @@ Parameter Data :
 
 Cell Name         = InputSelect_3.Nx1-1_Mux
 Parameter Name    = monomuxSigma300ns18index
-Parameter Address = 20276
+Parameter Address = 20316
 Parameter Value   = 0
 Parameter Data :
 0x00, 0x00, 0x00, 0x00, 
@@ -234,7 +234,7 @@ Parameter Data :
 
 Cell Name         = InputSelect_2.Nx1-1_Analog
 Parameter Name    = monomuxSigma300ns7index
-Parameter Address = 20255
+Parameter Address = 20295
 Parameter Value   = 1
 Parameter Data :
 0x00, 0x00, 0x00, 0x01, 
@@ -243,7 +243,7 @@ Parameter Data :
 
 Cell Name         = InputSelect_2.Nx1-1_UAC
 Parameter Name    = monomuxSigma300ns8index
-Parameter Address = 20258
+Parameter Address = 20298
 Parameter Value   = 1
 Parameter Data :
 0x00, 0x00, 0x00, 0x01, 
@@ -252,7 +252,7 @@ Parameter Data :
 
 Cell Name         = InputSelect_2.Nx1-1_ESP32
 Parameter Name    = monomuxSigma300ns9index
-Parameter Address = 20257
+Parameter Address = 20297
 Parameter Value   = 1
 Parameter Data :
 0x00, 0x00, 0x00, 0x01, 
@@ -261,7 +261,7 @@ Parameter Data :
 
 Cell Name         = InputSelect_2.Nx1-1_Exp
 Parameter Name    = monomuxSigma300ns10index
-Parameter Address = 20256
+Parameter Address = 20296
 Parameter Value   = 1
 Parameter Data :
 0x00, 0x00, 0x00, 0x01, 
@@ -270,7 +270,7 @@ Parameter Data :
 
 Cell Name         = InputSelect_2.Nx1-1_SPDIF
 Parameter Name    = monomuxSigma300ns11index
-Parameter Address = 20259
+Parameter Address = 20299
 Parameter Value   = 0
 Parameter Data :
 0x00, 0x00, 0x00, 0x00, 
@@ -279,7 +279,7 @@ Parameter Data :
 
 Cell Name         = InputSelect_2.Nx1-1_Mux
 Parameter Name    = monomuxSigma300ns12index
-Parameter Address = 20277
+Parameter Address = 20317
 Parameter Value   = 0
 Parameter Data :
 0x00, 0x00, 0x00, 0x00, 
@@ -288,7 +288,7 @@ Parameter Data :
 
 Cell Name         = InputSelect_1.Nx1-1_Analog
 Parameter Name    = monomuxSigma300ns1index
-Parameter Address = 20262
+Parameter Address = 20302
 Parameter Value   = 0
 Parameter Data :
 0x00, 0x00, 0x00, 0x00, 
@@ -297,7 +297,7 @@ Parameter Data :
 
 Cell Name         = InputSelect_1.Nx1-1_UAC
 Parameter Name    = monomuxSigma300ns2index
-Parameter Address = 20263
+Parameter Address = 20303
 Parameter Value   = 0
 Parameter Data :
 0x00, 0x00, 0x00, 0x00, 
@@ -306,7 +306,7 @@ Parameter Data :
 
 Cell Name         = InputSelect_1.Nx1-1_ESP32
 Parameter Name    = monomuxSigma300ns3index
-Parameter Address = 20260
+Parameter Address = 20300
 Parameter Value   = 0
 Parameter Data :
 0x00, 0x00, 0x00, 0x00, 
@@ -315,7 +315,7 @@ Parameter Data :
 
 Cell Name         = InputSelect_1.Nx1-1_Exp
 Parameter Name    = monomuxSigma300ns4index
-Parameter Address = 20261
+Parameter Address = 20301
 Parameter Value   = 0
 Parameter Data :
 0x00, 0x00, 0x00, 0x00, 
@@ -324,7 +324,7 @@ Parameter Data :
 
 Cell Name         = InputSelect_1.Nx1-1_SPDIF
 Parameter Name    = monomuxSigma300ns5index
-Parameter Address = 20264
+Parameter Address = 20304
 Parameter Value   = 0
 Parameter Data :
 0x00, 0x00, 0x00, 0x00, 
@@ -333,7 +333,7 @@ Parameter Data :
 
 Cell Name         = InputSelect_1.Nx1-1_Mux
 Parameter Name    = monomuxSigma300ns6index
-Parameter Address = 20278
+Parameter Address = 20318
 Parameter Value   = 0
 Parameter Data :
 0x00, 0x00, 0x00, 0x00, 
@@ -342,7 +342,7 @@ Parameter Data :
 
 Cell Name         = Plugin.Gain1
 Parameter Name    = HWGainADAU145XAlg1slew_mode
-Parameter Address = 20211
+Parameter Address = 20251
 Parameter Value   = 8330
 Parameter Data :
 0x00, 0x00, 0x20, 0x8A, 
@@ -351,7 +351,7 @@ Parameter Data :
 
 Cell Name         = Plugin.Gain1
 Parameter Name    = HWGainADAU145XAlg1target
-Parameter Address = 20210
+Parameter Address = 20250
 Parameter Value   = 1
 Parameter Data :
 0x01, 0x00, 0x00, 0x00, 
@@ -360,7 +360,7 @@ Parameter Data :
 
 Cell Name         = Plugin.Gain2
 Parameter Name    = HWGainADAU145XAlg2slew_mode
-Parameter Address = 20205
+Parameter Address = 20245
 Parameter Value   = 8330
 Parameter Data :
 0x00, 0x00, 0x20, 0x8A, 
@@ -369,7 +369,7 @@ Parameter Data :
 
 Cell Name         = Plugin.Gain2
 Parameter Name    = HWGainADAU145XAlg2target
-Parameter Address = 20204
+Parameter Address = 20244
 Parameter Value   = 1
 Parameter Data :
 0x01, 0x00, 0x00, 0x00, 
@@ -378,7 +378,7 @@ Parameter Data :
 
 Cell Name         = Plugin.Gain3
 Parameter Name    = HWGainADAU145XAlg3slew_mode
-Parameter Address = 20208
+Parameter Address = 20248
 Parameter Value   = 8330
 Parameter Data :
 0x00, 0x00, 0x20, 0x8A, 
@@ -387,7 +387,7 @@ Parameter Data :
 
 Cell Name         = Plugin.Gain3
 Parameter Name    = HWGainADAU145XAlg3target
-Parameter Address = 20207
+Parameter Address = 20247
 Parameter Value   = 1
 Parameter Data :
 0x01, 0x00, 0x00, 0x00, 
@@ -396,7 +396,7 @@ Parameter Data :
 
 Cell Name         = Plugin.Gain4
 Parameter Name    = HWGainADAU145XAlg4slew_mode
-Parameter Address = 20202
+Parameter Address = 20242
 Parameter Value   = 8330
 Parameter Data :
 0x00, 0x00, 0x20, 0x8A, 
@@ -405,7 +405,7 @@ Parameter Data :
 
 Cell Name         = Plugin.Gain4
 Parameter Name    = HWGainADAU145XAlg4target
-Parameter Address = 20201
+Parameter Address = 20241
 Parameter Value   = 1
 Parameter Data :
 0x01, 0x00, 0x00, 0x00, 
@@ -16826,1447 +16826,457 @@ Parameter Data :
 
 Cell Name         = Plugin.PeqBank1
 Parameter Name    = General2ndOrderDPSigma300Alg1B2_1
-Parameter Address = 20156
-Parameter Value   = 0.990362942218781
+Parameter Address = 20036
+Parameter Value   = 0
 Parameter Data :
-0x00 ,	0xFD ,	0x88 ,	0x6D ,	
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
 Cell Name         = Plugin.PeqBank1
 Parameter Name    = General2ndOrderDPSigma300Alg1B1_1
-Parameter Address = 20157
-Parameter Value   = -1.99289184808731
+Parameter Address = 20037
+Parameter Value   = 0
 Parameter Data :
-0xFE ,	0x01 ,	0xD1 ,	0xD7 ,	
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
 Cell Name         = Plugin.PeqBank1
 Parameter Name    = General2ndOrderDPSigma300Alg1B0_1
-Parameter Address = 20158
-Parameter Value   = 1.00269961357117
+Parameter Address = 20038
+Parameter Value   = 1
 Parameter Data :
-0x01 ,	0x00 ,	0xB0 ,	0xEC ,	
+0x01 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
 Cell Name         = Plugin.PeqBank1
 Parameter Name    = General2ndOrderDPSigma300Alg1A2_1
-Parameter Address = 20159
-Parameter Value   = -0.993062555789948
+Parameter Address = 20039
+Parameter Value   = 0
 Parameter Data :
-0xFF ,	0x01 ,	0xC6 ,	0xA7 ,	
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
 Cell Name         = Plugin.PeqBank1
 Parameter Name    = General2ndOrderDPSigma300Alg1A1_1
-Parameter Address = 20160
-Parameter Value   = 1.99289184808731
+Parameter Address = 20040
+Parameter Value   = 0
 Parameter Data :
-0x01 ,	0xFE ,	0x2E ,	0x29 ,	
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
 Cell Name         = Plugin.PeqBank1
 Parameter Name    = General2ndOrderDPSigma300Alg1B2_2
-Parameter Address = 20161
-Parameter Value   = 0.980896949768066
+Parameter Address = 20041
+Parameter Value   = 0
 Parameter Data :
-0x00 ,	0xFB ,	0x1C ,	0x10 ,	
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
 Cell Name         = Plugin.PeqBank1
 Parameter Name    = General2ndOrderDPSigma300Alg1B1_2
-Parameter Address = 20162
-Parameter Value   = -1.97486865520477
+Parameter Address = 20042
+Parameter Value   = 0
 Parameter Data :
-0xFE ,	0x06 ,	0x6F ,	0x02 ,	
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
 Cell Name         = Plugin.PeqBank1
 Parameter Name    = General2ndOrderDPSigma300Alg1B0_2
-Parameter Address = 20163
-Parameter Value   = 0.994648635387421
+Parameter Address = 20043
+Parameter Value   = 1
 Parameter Data :
-0x00 ,	0xFE ,	0xA1 ,	0x4B ,	
+0x01 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
 Cell Name         = Plugin.PeqBank1
 Parameter Name    = General2ndOrderDPSigma300Alg1A2_2
-Parameter Address = 20164
-Parameter Value   = -0.975545585155487
+Parameter Address = 20044
+Parameter Value   = 0
 Parameter Data :
-0xFF ,	0x06 ,	0x42 ,	0xA5 ,	
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
 Cell Name         = Plugin.PeqBank1
 Parameter Name    = General2ndOrderDPSigma300Alg1A1_2
-Parameter Address = 20165
-Parameter Value   = 1.97486865520477
+Parameter Address = 20045
+Parameter Value   = 0
 Parameter Data :
-0x01 ,	0xF9 ,	0x90 ,	0xFE ,	
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
 Cell Name         = Plugin.PeqBank1
 Parameter Name    = General2ndOrderDPSigma300Alg1B2_3
-Parameter Address = 20166
-Parameter Value   = 0.961864948272705
+Parameter Address = 20046
+Parameter Value   = 0
 Parameter Data :
-0x00 ,	0xF6 ,	0x3C ,	0xC8 ,	
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
 Cell Name         = Plugin.PeqBank1
 Parameter Name    = General2ndOrderDPSigma300Alg1B1_3
-Parameter Address = 20167
-Parameter Value   = -1.96984440088272
+Parameter Address = 20047
+Parameter Value   = 0
 Parameter Data :
-0xFE ,	0x07 ,	0xB8 ,	0x47 ,	
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
 Cell Name         = Plugin.PeqBank1
 Parameter Name    = General2ndOrderDPSigma300Alg1B0_3
-Parameter Address = 20168
-Parameter Value   = 1.01068276166916
+Parameter Address = 20048
+Parameter Value   = 1
 Parameter Data :
-0x01 ,	0x02 ,	0xBC ,	0x1B ,	
+0x01 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
 Cell Name         = Plugin.PeqBank1
 Parameter Name    = General2ndOrderDPSigma300Alg1A2_3
-Parameter Address = 20169
-Parameter Value   = -0.972547709941864
+Parameter Address = 20049
+Parameter Value   = 0
 Parameter Data :
-0xFF ,	0x07 ,	0x07 ,	0x1D ,	
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
 Cell Name         = Plugin.PeqBank1
 Parameter Name    = General2ndOrderDPSigma300Alg1A1_3
-Parameter Address = 20170
-Parameter Value   = 1.96984440088272
+Parameter Address = 20050
+Parameter Value   = 0
 Parameter Data :
-0x01 ,	0xF8 ,	0x47 ,	0xB9 ,	
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
 Cell Name         = Plugin.PeqBank1
 Parameter Name    = General2ndOrderDPSigma300Alg1B2_4
-Parameter Address = 20171
-Parameter Value   = 0.944108128547668
+Parameter Address = 20051
+Parameter Value   = 0
 Parameter Data :
-0x00 ,	0xF1 ,	0xB1 ,	0x12 ,	
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
 Cell Name         = Plugin.PeqBank1
 Parameter Name    = General2ndOrderDPSigma300Alg1B1_4
-Parameter Address = 20172
-Parameter Value   = -1.92250633239746
+Parameter Address = 20052
+Parameter Value   = 0
 Parameter Data :
-0xFE ,	0x13 ,	0xD6 ,	0xA0 ,	
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
 Cell Name         = Plugin.PeqBank1
 Parameter Name    = General2ndOrderDPSigma300Alg1B0_4
-Parameter Address = 20173
-Parameter Value   = 0.984342992305756
+Parameter Address = 20053
+Parameter Value   = 1
 Parameter Data :
-0x00 ,	0xFB ,	0xFD ,	0xE7 ,	
+0x01 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
 Cell Name         = Plugin.PeqBank1
 Parameter Name    = General2ndOrderDPSigma300Alg1A2_4
-Parameter Address = 20174
-Parameter Value   = -0.928451120853424
+Parameter Address = 20054
+Parameter Value   = 0
 Parameter Data :
-0xFF ,	0x12 ,	0x51 ,	0x07 ,	
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
 Cell Name         = Plugin.PeqBank1
 Parameter Name    = General2ndOrderDPSigma300Alg1A1_4
-Parameter Address = 20175
-Parameter Value   = 1.92250633239746
+Parameter Address = 20055
+Parameter Value   = 0
 Parameter Data :
-0x01 ,	0xEC ,	0x29 ,	0x60 ,	
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
 Cell Name         = Plugin.PeqBank1
 Parameter Name    = General2ndOrderDPSigma300Alg1B2_5
-Parameter Address = 20176
-Parameter Value   = 0.924862921237946
+Parameter Address = 20056
+Parameter Value   = 0
 Parameter Data :
-0x00 ,	0xEC ,	0xC3 ,	0xD1 ,	
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
 Cell Name         = Plugin.PeqBank1
 Parameter Name    = General2ndOrderDPSigma300Alg1B1_5
-Parameter Address = 20177
-Parameter Value   = -1.93525117635727
+Parameter Address = 20057
+Parameter Value   = 0
 Parameter Data :
-0xFE ,	0x10 ,	0x93 ,	0x61 ,	
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
 Cell Name         = Plugin.PeqBank1
 Parameter Name    = General2ndOrderDPSigma300Alg1B0_5
-Parameter Address = 20178
-Parameter Value   = 1.02104812860489
+Parameter Address = 20058
+Parameter Value   = 1
 Parameter Data :
-0x01 ,	0x05 ,	0x63 ,	0x69 ,	
+0x01 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
 Cell Name         = Plugin.PeqBank1
 Parameter Name    = General2ndOrderDPSigma300Alg1A2_5
-Parameter Address = 20179
-Parameter Value   = -0.945911049842834
+Parameter Address = 20059
+Parameter Value   = 0
 Parameter Data :
-0xFF ,	0x0D ,	0xD8 ,	0xC6 ,	
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
 Cell Name         = Plugin.PeqBank1
 Parameter Name    = General2ndOrderDPSigma300Alg1A1_5
-Parameter Address = 20180
-Parameter Value   = 1.93525117635727
+Parameter Address = 20060
+Parameter Value   = 0
 Parameter Data :
-0x01 ,	0xEF ,	0x6C ,	0x9F ,	
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
 Cell Name         = Plugin.PeqBank1
 Parameter Name    = General2ndOrderDPSigma300Alg1B2_6
-Parameter Address = 20181
-Parameter Value   = 0.909173369407654
+Parameter Address = 20061
+Parameter Value   = 0
 Parameter Data :
-0x00 ,	0xE8 ,	0xBF ,	0x96 ,	
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
 Cell Name         = Plugin.PeqBank1
 Parameter Name    = General2ndOrderDPSigma300Alg1B1_6
-Parameter Address = 20182
-Parameter Value   = -1.86761456727982
+Parameter Address = 20062
+Parameter Value   = 0
 Parameter Data :
-0xFE ,	0x21 ,	0xE4 ,	0x03 ,	
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
 Cell Name         = Plugin.PeqBank1
 Parameter Name    = General2ndOrderDPSigma300Alg1B0_6
-Parameter Address = 20183
-Parameter Value   = 0.974556744098663
+Parameter Address = 20063
+Parameter Value   = 1
 Parameter Data :
-0x00 ,	0xF9 ,	0x7C ,	0x8D ,	
+0x01 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
 Cell Name         = Plugin.PeqBank1
 Parameter Name    = General2ndOrderDPSigma300Alg1A2_6
-Parameter Address = 20184
-Parameter Value   = -0.883730113506317
+Parameter Address = 20064
+Parameter Value   = 0
 Parameter Data :
-0xFF ,	0x1D ,	0xC3 ,	0xDD ,	
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
 Cell Name         = Plugin.PeqBank1
 Parameter Name    = General2ndOrderDPSigma300Alg1A1_6
-Parameter Address = 20185
-Parameter Value   = 1.86761456727982
+Parameter Address = 20065
+Parameter Value   = 0
 Parameter Data :
-0x01 ,	0xDE ,	0x1B ,	0xFD ,	
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
 Cell Name         = Plugin.PeqBank1
 Parameter Name    = General2ndOrderDPSigma300Alg1B2_7
-Parameter Address = 20186
-Parameter Value   = 0.743387222290039
+Parameter Address = 20066
+Parameter Value   = 0
 Parameter Data :
-0x00 ,	0xBE ,	0x4E ,	0xA0 ,	
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
 Cell Name         = Plugin.PeqBank1
 Parameter Name    = General2ndOrderDPSigma300Alg1B1_7
-Parameter Address = 20187
-Parameter Value   = -1.67709279060364
+Parameter Address = 20067
+Parameter Value   = 0
 Parameter Data :
-0xFE ,	0x52 ,	0xAA ,	0x0C ,	
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
 Cell Name         = Plugin.PeqBank1
 Parameter Name    = General2ndOrderDPSigma300Alg1B0_7
-Parameter Address = 20188
-Parameter Value   = 1.07188493013382
+Parameter Address = 20068
+Parameter Value   = 1
 Parameter Data :
-0x01 ,	0x12 ,	0x67 ,	0x0D ,	
+0x01 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
 Cell Name         = Plugin.PeqBank1
 Parameter Name    = General2ndOrderDPSigma300Alg1A2_7
-Parameter Address = 20189
-Parameter Value   = -0.815272152423859
+Parameter Address = 20069
+Parameter Value   = 0
 Parameter Data :
-0xFF ,	0x2F ,	0x4A ,	0x53 ,	
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
 Cell Name         = Plugin.PeqBank1
 Parameter Name    = General2ndOrderDPSigma300Alg1A1_7
-Parameter Address = 20190
-Parameter Value   = 1.67709279060364
+Parameter Address = 20070
+Parameter Value   = 0
 Parameter Data :
-0x01 ,	0xAD ,	0x55 ,	0xF4 ,	
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
 Cell Name         = Plugin.PeqBank1
 Parameter Name    = General2ndOrderDPSigma300Alg1B2_8
-Parameter Address = 20191
-Parameter Value   = 0.65077805519104
+Parameter Address = 20071
+Parameter Value   = 0
 Parameter Data :
-0x00 ,	0xA6 ,	0x99 ,	0x64 ,	
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
 Cell Name         = Plugin.PeqBank1
 Parameter Name    = General2ndOrderDPSigma300Alg1B1_8
-Parameter Address = 20192
-Parameter Value   = -1.23203843832016
+Parameter Address = 20072
+Parameter Value   = 0
 Parameter Data :
-0xFE ,	0xC4 ,	0x99 ,	0x21 ,	
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
 Cell Name         = Plugin.PeqBank1
 Parameter Name    = General2ndOrderDPSigma300Alg1B0_8
-Parameter Address = 20193
-Parameter Value   = 0.902172446250916
+Parameter Address = 20073
+Parameter Value   = 1
 Parameter Data :
-0x00 ,	0xE6 ,	0xF4 ,	0xC6 ,	
+0x01 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
 Cell Name         = Plugin.PeqBank1
 Parameter Name    = General2ndOrderDPSigma300Alg1A2_8
-Parameter Address = 20194
-Parameter Value   = -0.552950501441956
+Parameter Address = 20074
+Parameter Value   = 0
 Parameter Data :
-0xFF ,	0x72 ,	0x71 ,	0xD6 ,	
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
 Cell Name         = Plugin.PeqBank1
 Parameter Name    = General2ndOrderDPSigma300Alg1A1_8
-Parameter Address = 20195
-Parameter Value   = 1.23203843832016
-Parameter Data :
-0x01 ,	0x3B ,	0x66 ,	0xDF ,	
-
-
-
-Cell Name         = Plugin.PeqBank2
-Parameter Name    = General2ndOrderDPSigma300Alg2B2_1
-Parameter Address = 20116
-Parameter Value   = 0.990362942218781
-Parameter Data :
-0x00 ,	0xFD ,	0x88 ,	0x6D ,	
-
-
-
-Cell Name         = Plugin.PeqBank2
-Parameter Name    = General2ndOrderDPSigma300Alg2B1_1
-Parameter Address = 20117
-Parameter Value   = -1.99289184808731
-Parameter Data :
-0xFE ,	0x01 ,	0xD1 ,	0xD7 ,	
-
-
-
-Cell Name         = Plugin.PeqBank2
-Parameter Name    = General2ndOrderDPSigma300Alg2B0_1
-Parameter Address = 20118
-Parameter Value   = 1.00269961357117
-Parameter Data :
-0x01 ,	0x00 ,	0xB0 ,	0xEC ,	
-
-
-
-Cell Name         = Plugin.PeqBank2
-Parameter Name    = General2ndOrderDPSigma300Alg2A2_1
-Parameter Address = 20119
-Parameter Value   = -0.993062555789948
-Parameter Data :
-0xFF ,	0x01 ,	0xC6 ,	0xA7 ,	
-
-
-
-Cell Name         = Plugin.PeqBank2
-Parameter Name    = General2ndOrderDPSigma300Alg2A1_1
-Parameter Address = 20120
-Parameter Value   = 1.99289184808731
-Parameter Data :
-0x01 ,	0xFE ,	0x2E ,	0x29 ,	
-
-
-
-Cell Name         = Plugin.PeqBank2
-Parameter Name    = General2ndOrderDPSigma300Alg2B2_2
-Parameter Address = 20121
-Parameter Value   = 0.980896949768066
-Parameter Data :
-0x00 ,	0xFB ,	0x1C ,	0x10 ,	
-
-
-
-Cell Name         = Plugin.PeqBank2
-Parameter Name    = General2ndOrderDPSigma300Alg2B1_2
-Parameter Address = 20122
-Parameter Value   = -1.97486865520477
-Parameter Data :
-0xFE ,	0x06 ,	0x6F ,	0x02 ,	
-
-
-
-Cell Name         = Plugin.PeqBank2
-Parameter Name    = General2ndOrderDPSigma300Alg2B0_2
-Parameter Address = 20123
-Parameter Value   = 0.994648635387421
-Parameter Data :
-0x00 ,	0xFE ,	0xA1 ,	0x4B ,	
-
-
-
-Cell Name         = Plugin.PeqBank2
-Parameter Name    = General2ndOrderDPSigma300Alg2A2_2
-Parameter Address = 20124
-Parameter Value   = -0.975545585155487
-Parameter Data :
-0xFF ,	0x06 ,	0x42 ,	0xA5 ,	
-
-
-
-Cell Name         = Plugin.PeqBank2
-Parameter Name    = General2ndOrderDPSigma300Alg2A1_2
-Parameter Address = 20125
-Parameter Value   = 1.97486865520477
-Parameter Data :
-0x01 ,	0xF9 ,	0x90 ,	0xFE ,	
-
-
-
-Cell Name         = Plugin.PeqBank2
-Parameter Name    = General2ndOrderDPSigma300Alg2B2_3
-Parameter Address = 20126
-Parameter Value   = 0.961864948272705
-Parameter Data :
-0x00 ,	0xF6 ,	0x3C ,	0xC8 ,	
-
-
-
-Cell Name         = Plugin.PeqBank2
-Parameter Name    = General2ndOrderDPSigma300Alg2B1_3
-Parameter Address = 20127
-Parameter Value   = -1.96984440088272
-Parameter Data :
-0xFE ,	0x07 ,	0xB8 ,	0x47 ,	
-
-
-
-Cell Name         = Plugin.PeqBank2
-Parameter Name    = General2ndOrderDPSigma300Alg2B0_3
-Parameter Address = 20128
-Parameter Value   = 1.01068276166916
-Parameter Data :
-0x01 ,	0x02 ,	0xBC ,	0x1B ,	
-
-
-
-Cell Name         = Plugin.PeqBank2
-Parameter Name    = General2ndOrderDPSigma300Alg2A2_3
-Parameter Address = 20129
-Parameter Value   = -0.972547709941864
-Parameter Data :
-0xFF ,	0x07 ,	0x07 ,	0x1D ,	
-
-
-
-Cell Name         = Plugin.PeqBank2
-Parameter Name    = General2ndOrderDPSigma300Alg2A1_3
-Parameter Address = 20130
-Parameter Value   = 1.96984440088272
-Parameter Data :
-0x01 ,	0xF8 ,	0x47 ,	0xB9 ,	
-
-
-
-Cell Name         = Plugin.PeqBank2
-Parameter Name    = General2ndOrderDPSigma300Alg2B2_4
-Parameter Address = 20131
-Parameter Value   = 0.944108128547668
-Parameter Data :
-0x00 ,	0xF1 ,	0xB1 ,	0x12 ,	
-
-
-
-Cell Name         = Plugin.PeqBank2
-Parameter Name    = General2ndOrderDPSigma300Alg2B1_4
-Parameter Address = 20132
-Parameter Value   = -1.92250633239746
-Parameter Data :
-0xFE ,	0x13 ,	0xD6 ,	0xA0 ,	
-
-
-
-Cell Name         = Plugin.PeqBank2
-Parameter Name    = General2ndOrderDPSigma300Alg2B0_4
-Parameter Address = 20133
-Parameter Value   = 0.984342992305756
-Parameter Data :
-0x00 ,	0xFB ,	0xFD ,	0xE7 ,	
-
-
-
-Cell Name         = Plugin.PeqBank2
-Parameter Name    = General2ndOrderDPSigma300Alg2A2_4
-Parameter Address = 20134
-Parameter Value   = -0.928451120853424
-Parameter Data :
-0xFF ,	0x12 ,	0x51 ,	0x07 ,	
-
-
-
-Cell Name         = Plugin.PeqBank2
-Parameter Name    = General2ndOrderDPSigma300Alg2A1_4
-Parameter Address = 20135
-Parameter Value   = 1.92250633239746
-Parameter Data :
-0x01 ,	0xEC ,	0x29 ,	0x60 ,	
-
-
-
-Cell Name         = Plugin.PeqBank2
-Parameter Name    = General2ndOrderDPSigma300Alg2B2_5
-Parameter Address = 20136
-Parameter Value   = 0.924862921237946
-Parameter Data :
-0x00 ,	0xEC ,	0xC3 ,	0xD1 ,	
-
-
-
-Cell Name         = Plugin.PeqBank2
-Parameter Name    = General2ndOrderDPSigma300Alg2B1_5
-Parameter Address = 20137
-Parameter Value   = -1.93525117635727
-Parameter Data :
-0xFE ,	0x10 ,	0x93 ,	0x61 ,	
-
-
-
-Cell Name         = Plugin.PeqBank2
-Parameter Name    = General2ndOrderDPSigma300Alg2B0_5
-Parameter Address = 20138
-Parameter Value   = 1.02104812860489
-Parameter Data :
-0x01 ,	0x05 ,	0x63 ,	0x69 ,	
-
-
-
-Cell Name         = Plugin.PeqBank2
-Parameter Name    = General2ndOrderDPSigma300Alg2A2_5
-Parameter Address = 20139
-Parameter Value   = -0.945911049842834
-Parameter Data :
-0xFF ,	0x0D ,	0xD8 ,	0xC6 ,	
-
-
-
-Cell Name         = Plugin.PeqBank2
-Parameter Name    = General2ndOrderDPSigma300Alg2A1_5
-Parameter Address = 20140
-Parameter Value   = 1.93525117635727
-Parameter Data :
-0x01 ,	0xEF ,	0x6C ,	0x9F ,	
-
-
-
-Cell Name         = Plugin.PeqBank2
-Parameter Name    = General2ndOrderDPSigma300Alg2B2_6
-Parameter Address = 20141
-Parameter Value   = 0.909173369407654
-Parameter Data :
-0x00 ,	0xE8 ,	0xBF ,	0x96 ,	
-
-
-
-Cell Name         = Plugin.PeqBank2
-Parameter Name    = General2ndOrderDPSigma300Alg2B1_6
-Parameter Address = 20142
-Parameter Value   = -1.86761456727982
-Parameter Data :
-0xFE ,	0x21 ,	0xE4 ,	0x03 ,	
-
-
-
-Cell Name         = Plugin.PeqBank2
-Parameter Name    = General2ndOrderDPSigma300Alg2B0_6
-Parameter Address = 20143
-Parameter Value   = 0.974556744098663
-Parameter Data :
-0x00 ,	0xF9 ,	0x7C ,	0x8D ,	
-
-
-
-Cell Name         = Plugin.PeqBank2
-Parameter Name    = General2ndOrderDPSigma300Alg2A2_6
-Parameter Address = 20144
-Parameter Value   = -0.883730113506317
-Parameter Data :
-0xFF ,	0x1D ,	0xC3 ,	0xDD ,	
-
-
-
-Cell Name         = Plugin.PeqBank2
-Parameter Name    = General2ndOrderDPSigma300Alg2A1_6
-Parameter Address = 20145
-Parameter Value   = 1.86761456727982
-Parameter Data :
-0x01 ,	0xDE ,	0x1B ,	0xFD ,	
-
-
-
-Cell Name         = Plugin.PeqBank2
-Parameter Name    = General2ndOrderDPSigma300Alg2B2_7
-Parameter Address = 20146
-Parameter Value   = 0.743387222290039
-Parameter Data :
-0x00 ,	0xBE ,	0x4E ,	0xA0 ,	
-
-
-
-Cell Name         = Plugin.PeqBank2
-Parameter Name    = General2ndOrderDPSigma300Alg2B1_7
-Parameter Address = 20147
-Parameter Value   = -1.67709279060364
-Parameter Data :
-0xFE ,	0x52 ,	0xAA ,	0x0C ,	
-
-
-
-Cell Name         = Plugin.PeqBank2
-Parameter Name    = General2ndOrderDPSigma300Alg2B0_7
-Parameter Address = 20148
-Parameter Value   = 1.07188493013382
-Parameter Data :
-0x01 ,	0x12 ,	0x67 ,	0x0D ,	
-
-
-
-Cell Name         = Plugin.PeqBank2
-Parameter Name    = General2ndOrderDPSigma300Alg2A2_7
-Parameter Address = 20149
-Parameter Value   = -0.815272152423859
-Parameter Data :
-0xFF ,	0x2F ,	0x4A ,	0x53 ,	
-
-
-
-Cell Name         = Plugin.PeqBank2
-Parameter Name    = General2ndOrderDPSigma300Alg2A1_7
-Parameter Address = 20150
-Parameter Value   = 1.67709279060364
-Parameter Data :
-0x01 ,	0xAD ,	0x55 ,	0xF4 ,	
-
-
-
-Cell Name         = Plugin.PeqBank2
-Parameter Name    = General2ndOrderDPSigma300Alg2B2_8
-Parameter Address = 20151
-Parameter Value   = 0.65077805519104
-Parameter Data :
-0x00 ,	0xA6 ,	0x99 ,	0x64 ,	
-
-
-
-Cell Name         = Plugin.PeqBank2
-Parameter Name    = General2ndOrderDPSigma300Alg2B1_8
-Parameter Address = 20152
-Parameter Value   = -1.23203843832016
-Parameter Data :
-0xFE ,	0xC4 ,	0x99 ,	0x21 ,	
-
-
-
-Cell Name         = Plugin.PeqBank2
-Parameter Name    = General2ndOrderDPSigma300Alg2B0_8
-Parameter Address = 20153
-Parameter Value   = 0.902172446250916
-Parameter Data :
-0x00 ,	0xE6 ,	0xF4 ,	0xC6 ,	
-
-
-
-Cell Name         = Plugin.PeqBank2
-Parameter Name    = General2ndOrderDPSigma300Alg2A2_8
-Parameter Address = 20154
-Parameter Value   = -0.552950501441956
-Parameter Data :
-0xFF ,	0x72 ,	0x71 ,	0xD6 ,	
-
-
-
-Cell Name         = Plugin.PeqBank2
-Parameter Name    = General2ndOrderDPSigma300Alg2A1_8
-Parameter Address = 20155
-Parameter Value   = 1.23203843832016
-Parameter Data :
-0x01 ,	0x3B ,	0x66 ,	0xDF ,	
-
-
-
-Cell Name         = Plugin.PeqBank3
-Parameter Name    = General2ndOrderDPSigma300Alg3B2_1
-Parameter Address = 20036
-Parameter Value   = 0.990362942218781
-Parameter Data :
-0x00 ,	0xFD ,	0x88 ,	0x6D ,	
-
-
-
-Cell Name         = Plugin.PeqBank3
-Parameter Name    = General2ndOrderDPSigma300Alg3B1_1
-Parameter Address = 20037
-Parameter Value   = -1.99289184808731
-Parameter Data :
-0xFE ,	0x01 ,	0xD1 ,	0xD7 ,	
-
-
-
-Cell Name         = Plugin.PeqBank3
-Parameter Name    = General2ndOrderDPSigma300Alg3B0_1
-Parameter Address = 20038
-Parameter Value   = 1.00269961357117
-Parameter Data :
-0x01 ,	0x00 ,	0xB0 ,	0xEC ,	
-
-
-
-Cell Name         = Plugin.PeqBank3
-Parameter Name    = General2ndOrderDPSigma300Alg3A2_1
-Parameter Address = 20039
-Parameter Value   = -0.993062555789948
-Parameter Data :
-0xFF ,	0x01 ,	0xC6 ,	0xA7 ,	
-
-
-
-Cell Name         = Plugin.PeqBank3
-Parameter Name    = General2ndOrderDPSigma300Alg3A1_1
-Parameter Address = 20040
-Parameter Value   = 1.99289184808731
-Parameter Data :
-0x01 ,	0xFE ,	0x2E ,	0x29 ,	
-
-
-
-Cell Name         = Plugin.PeqBank3
-Parameter Name    = General2ndOrderDPSigma300Alg3B2_2
-Parameter Address = 20041
-Parameter Value   = 0.980896949768066
-Parameter Data :
-0x00 ,	0xFB ,	0x1C ,	0x10 ,	
-
-
-
-Cell Name         = Plugin.PeqBank3
-Parameter Name    = General2ndOrderDPSigma300Alg3B1_2
-Parameter Address = 20042
-Parameter Value   = -1.97486865520477
-Parameter Data :
-0xFE ,	0x06 ,	0x6F ,	0x02 ,	
-
-
-
-Cell Name         = Plugin.PeqBank3
-Parameter Name    = General2ndOrderDPSigma300Alg3B0_2
-Parameter Address = 20043
-Parameter Value   = 0.994648635387421
-Parameter Data :
-0x00 ,	0xFE ,	0xA1 ,	0x4B ,	
-
-
-
-Cell Name         = Plugin.PeqBank3
-Parameter Name    = General2ndOrderDPSigma300Alg3A2_2
-Parameter Address = 20044
-Parameter Value   = -0.975545585155487
-Parameter Data :
-0xFF ,	0x06 ,	0x42 ,	0xA5 ,	
-
-
-
-Cell Name         = Plugin.PeqBank3
-Parameter Name    = General2ndOrderDPSigma300Alg3A1_2
-Parameter Address = 20045
-Parameter Value   = 1.97486865520477
-Parameter Data :
-0x01 ,	0xF9 ,	0x90 ,	0xFE ,	
-
-
-
-Cell Name         = Plugin.PeqBank3
-Parameter Name    = General2ndOrderDPSigma300Alg3B2_3
-Parameter Address = 20046
-Parameter Value   = 0.961864948272705
-Parameter Data :
-0x00 ,	0xF6 ,	0x3C ,	0xC8 ,	
-
-
-
-Cell Name         = Plugin.PeqBank3
-Parameter Name    = General2ndOrderDPSigma300Alg3B1_3
-Parameter Address = 20047
-Parameter Value   = -1.96984440088272
-Parameter Data :
-0xFE ,	0x07 ,	0xB8 ,	0x47 ,	
-
-
-
-Cell Name         = Plugin.PeqBank3
-Parameter Name    = General2ndOrderDPSigma300Alg3B0_3
-Parameter Address = 20048
-Parameter Value   = 1.01068276166916
-Parameter Data :
-0x01 ,	0x02 ,	0xBC ,	0x1B ,	
-
-
-
-Cell Name         = Plugin.PeqBank3
-Parameter Name    = General2ndOrderDPSigma300Alg3A2_3
-Parameter Address = 20049
-Parameter Value   = -0.972547709941864
-Parameter Data :
-0xFF ,	0x07 ,	0x07 ,	0x1D ,	
-
-
-
-Cell Name         = Plugin.PeqBank3
-Parameter Name    = General2ndOrderDPSigma300Alg3A1_3
-Parameter Address = 20050
-Parameter Value   = 1.96984440088272
-Parameter Data :
-0x01 ,	0xF8 ,	0x47 ,	0xB9 ,	
-
-
-
-Cell Name         = Plugin.PeqBank3
-Parameter Name    = General2ndOrderDPSigma300Alg3B2_4
-Parameter Address = 20051
-Parameter Value   = 0.944108128547668
-Parameter Data :
-0x00 ,	0xF1 ,	0xB1 ,	0x12 ,	
-
-
-
-Cell Name         = Plugin.PeqBank3
-Parameter Name    = General2ndOrderDPSigma300Alg3B1_4
-Parameter Address = 20052
-Parameter Value   = -1.92250633239746
-Parameter Data :
-0xFE ,	0x13 ,	0xD6 ,	0xA0 ,	
-
-
-
-Cell Name         = Plugin.PeqBank3
-Parameter Name    = General2ndOrderDPSigma300Alg3B0_4
-Parameter Address = 20053
-Parameter Value   = 0.984342992305756
-Parameter Data :
-0x00 ,	0xFB ,	0xFD ,	0xE7 ,	
-
-
-
-Cell Name         = Plugin.PeqBank3
-Parameter Name    = General2ndOrderDPSigma300Alg3A2_4
-Parameter Address = 20054
-Parameter Value   = -0.928451120853424
-Parameter Data :
-0xFF ,	0x12 ,	0x51 ,	0x07 ,	
-
-
-
-Cell Name         = Plugin.PeqBank3
-Parameter Name    = General2ndOrderDPSigma300Alg3A1_4
-Parameter Address = 20055
-Parameter Value   = 1.92250633239746
-Parameter Data :
-0x01 ,	0xEC ,	0x29 ,	0x60 ,	
-
-
-
-Cell Name         = Plugin.PeqBank3
-Parameter Name    = General2ndOrderDPSigma300Alg3B2_5
-Parameter Address = 20056
-Parameter Value   = 0.924862921237946
-Parameter Data :
-0x00 ,	0xEC ,	0xC3 ,	0xD1 ,	
-
-
-
-Cell Name         = Plugin.PeqBank3
-Parameter Name    = General2ndOrderDPSigma300Alg3B1_5
-Parameter Address = 20057
-Parameter Value   = -1.93525117635727
-Parameter Data :
-0xFE ,	0x10 ,	0x93 ,	0x61 ,	
-
-
-
-Cell Name         = Plugin.PeqBank3
-Parameter Name    = General2ndOrderDPSigma300Alg3B0_5
-Parameter Address = 20058
-Parameter Value   = 1.02104812860489
-Parameter Data :
-0x01 ,	0x05 ,	0x63 ,	0x69 ,	
-
-
-
-Cell Name         = Plugin.PeqBank3
-Parameter Name    = General2ndOrderDPSigma300Alg3A2_5
-Parameter Address = 20059
-Parameter Value   = -0.945911049842834
-Parameter Data :
-0xFF ,	0x0D ,	0xD8 ,	0xC6 ,	
-
-
-
-Cell Name         = Plugin.PeqBank3
-Parameter Name    = General2ndOrderDPSigma300Alg3A1_5
-Parameter Address = 20060
-Parameter Value   = 1.93525117635727
-Parameter Data :
-0x01 ,	0xEF ,	0x6C ,	0x9F ,	
-
-
-
-Cell Name         = Plugin.PeqBank3
-Parameter Name    = General2ndOrderDPSigma300Alg3B2_6
-Parameter Address = 20061
-Parameter Value   = 0.909173369407654
-Parameter Data :
-0x00 ,	0xE8 ,	0xBF ,	0x96 ,	
-
-
-
-Cell Name         = Plugin.PeqBank3
-Parameter Name    = General2ndOrderDPSigma300Alg3B1_6
-Parameter Address = 20062
-Parameter Value   = -1.86761456727982
-Parameter Data :
-0xFE ,	0x21 ,	0xE4 ,	0x03 ,	
-
-
-
-Cell Name         = Plugin.PeqBank3
-Parameter Name    = General2ndOrderDPSigma300Alg3B0_6
-Parameter Address = 20063
-Parameter Value   = 0.974556744098663
-Parameter Data :
-0x00 ,	0xF9 ,	0x7C ,	0x8D ,	
-
-
-
-Cell Name         = Plugin.PeqBank3
-Parameter Name    = General2ndOrderDPSigma300Alg3A2_6
-Parameter Address = 20064
-Parameter Value   = -0.883730113506317
-Parameter Data :
-0xFF ,	0x1D ,	0xC3 ,	0xDD ,	
-
-
-
-Cell Name         = Plugin.PeqBank3
-Parameter Name    = General2ndOrderDPSigma300Alg3A1_6
-Parameter Address = 20065
-Parameter Value   = 1.86761456727982
-Parameter Data :
-0x01 ,	0xDE ,	0x1B ,	0xFD ,	
-
-
-
-Cell Name         = Plugin.PeqBank3
-Parameter Name    = General2ndOrderDPSigma300Alg3B2_7
-Parameter Address = 20066
-Parameter Value   = 0.743387222290039
-Parameter Data :
-0x00 ,	0xBE ,	0x4E ,	0xA0 ,	
-
-
-
-Cell Name         = Plugin.PeqBank3
-Parameter Name    = General2ndOrderDPSigma300Alg3B1_7
-Parameter Address = 20067
-Parameter Value   = -1.67709279060364
-Parameter Data :
-0xFE ,	0x52 ,	0xAA ,	0x0C ,	
-
-
-
-Cell Name         = Plugin.PeqBank3
-Parameter Name    = General2ndOrderDPSigma300Alg3B0_7
-Parameter Address = 20068
-Parameter Value   = 1.07188493013382
-Parameter Data :
-0x01 ,	0x12 ,	0x67 ,	0x0D ,	
-
-
-
-Cell Name         = Plugin.PeqBank3
-Parameter Name    = General2ndOrderDPSigma300Alg3A2_7
-Parameter Address = 20069
-Parameter Value   = -0.815272152423859
-Parameter Data :
-0xFF ,	0x2F ,	0x4A ,	0x53 ,	
-
-
-
-Cell Name         = Plugin.PeqBank3
-Parameter Name    = General2ndOrderDPSigma300Alg3A1_7
-Parameter Address = 20070
-Parameter Value   = 1.67709279060364
-Parameter Data :
-0x01 ,	0xAD ,	0x55 ,	0xF4 ,	
-
-
-
-Cell Name         = Plugin.PeqBank3
-Parameter Name    = General2ndOrderDPSigma300Alg3B2_8
-Parameter Address = 20071
-Parameter Value   = 0.65077805519104
-Parameter Data :
-0x00 ,	0xA6 ,	0x99 ,	0x64 ,	
-
-
-
-Cell Name         = Plugin.PeqBank3
-Parameter Name    = General2ndOrderDPSigma300Alg3B1_8
-Parameter Address = 20072
-Parameter Value   = -1.23203843832016
-Parameter Data :
-0xFE ,	0xC4 ,	0x99 ,	0x21 ,	
-
-
-
-Cell Name         = Plugin.PeqBank3
-Parameter Name    = General2ndOrderDPSigma300Alg3B0_8
-Parameter Address = 20073
-Parameter Value   = 0.902172446250916
-Parameter Data :
-0x00 ,	0xE6 ,	0xF4 ,	0xC6 ,	
-
-
-
-Cell Name         = Plugin.PeqBank3
-Parameter Name    = General2ndOrderDPSigma300Alg3A2_8
-Parameter Address = 20074
-Parameter Value   = -0.552950501441956
-Parameter Data :
-0xFF ,	0x72 ,	0x71 ,	0xD6 ,	
-
-
-
-Cell Name         = Plugin.PeqBank3
-Parameter Name    = General2ndOrderDPSigma300Alg3A1_8
 Parameter Address = 20075
-Parameter Value   = 1.23203843832016
+Parameter Value   = 0
 Parameter Data :
-0x01 ,	0x3B ,	0x66 ,	0xDF ,	
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
-Cell Name         = Plugin.PeqBank4
-Parameter Name    = General2ndOrderDPSigma300Alg4B2_1
+Cell Name         = Plugin.PeqBank1
+Parameter Name    = General2ndOrderDPSigma300Alg1B2_9
 Parameter Address = 20076
-Parameter Value   = 0.990362942218781
+Parameter Value   = 0
 Parameter Data :
-0x00 ,	0xFD ,	0x88 ,	0x6D ,	
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
-Cell Name         = Plugin.PeqBank4
-Parameter Name    = General2ndOrderDPSigma300Alg4B1_1
+Cell Name         = Plugin.PeqBank1
+Parameter Name    = General2ndOrderDPSigma300Alg1B1_9
 Parameter Address = 20077
-Parameter Value   = -1.99289184808731
+Parameter Value   = 0
 Parameter Data :
-0xFE ,	0x01 ,	0xD1 ,	0xD7 ,	
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
-Cell Name         = Plugin.PeqBank4
-Parameter Name    = General2ndOrderDPSigma300Alg4B0_1
+Cell Name         = Plugin.PeqBank1
+Parameter Name    = General2ndOrderDPSigma300Alg1B0_9
 Parameter Address = 20078
-Parameter Value   = 1.00269961357117
+Parameter Value   = 1
 Parameter Data :
-0x01 ,	0x00 ,	0xB0 ,	0xEC ,	
+0x01 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
-Cell Name         = Plugin.PeqBank4
-Parameter Name    = General2ndOrderDPSigma300Alg4A2_1
+Cell Name         = Plugin.PeqBank1
+Parameter Name    = General2ndOrderDPSigma300Alg1A2_9
 Parameter Address = 20079
-Parameter Value   = -0.993062555789948
+Parameter Value   = 0
 Parameter Data :
-0xFF ,	0x01 ,	0xC6 ,	0xA7 ,	
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
-Cell Name         = Plugin.PeqBank4
-Parameter Name    = General2ndOrderDPSigma300Alg4A1_1
+Cell Name         = Plugin.PeqBank1
+Parameter Name    = General2ndOrderDPSigma300Alg1A1_9
 Parameter Address = 20080
-Parameter Value   = 1.99289184808731
+Parameter Value   = 0
 Parameter Data :
-0x01 ,	0xFE ,	0x2E ,	0x29 ,	
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
-Cell Name         = Plugin.PeqBank4
-Parameter Name    = General2ndOrderDPSigma300Alg4B2_2
+Cell Name         = Plugin.PeqBank1
+Parameter Name    = General2ndOrderDPSigma300Alg1B2_10
 Parameter Address = 20081
-Parameter Value   = 0.980896949768066
+Parameter Value   = 0
 Parameter Data :
-0x00 ,	0xFB ,	0x1C ,	0x10 ,	
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
-Cell Name         = Plugin.PeqBank4
-Parameter Name    = General2ndOrderDPSigma300Alg4B1_2
+Cell Name         = Plugin.PeqBank1
+Parameter Name    = General2ndOrderDPSigma300Alg1B1_10
 Parameter Address = 20082
-Parameter Value   = -1.97486865520477
+Parameter Value   = 0
 Parameter Data :
-0xFE ,	0x06 ,	0x6F ,	0x02 ,	
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
-Cell Name         = Plugin.PeqBank4
-Parameter Name    = General2ndOrderDPSigma300Alg4B0_2
+Cell Name         = Plugin.PeqBank1
+Parameter Name    = General2ndOrderDPSigma300Alg1B0_10
 Parameter Address = 20083
-Parameter Value   = 0.994648635387421
+Parameter Value   = 1
 Parameter Data :
-0x00 ,	0xFE ,	0xA1 ,	0x4B ,	
+0x01 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
-Cell Name         = Plugin.PeqBank4
-Parameter Name    = General2ndOrderDPSigma300Alg4A2_2
+Cell Name         = Plugin.PeqBank1
+Parameter Name    = General2ndOrderDPSigma300Alg1A2_10
 Parameter Address = 20084
-Parameter Value   = -0.975545585155487
+Parameter Value   = 0
 Parameter Data :
-0xFF ,	0x06 ,	0x42 ,	0xA5 ,	
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
-Cell Name         = Plugin.PeqBank4
-Parameter Name    = General2ndOrderDPSigma300Alg4A1_2
+Cell Name         = Plugin.PeqBank1
+Parameter Name    = General2ndOrderDPSigma300Alg1A1_10
 Parameter Address = 20085
-Parameter Value   = 1.97486865520477
+Parameter Value   = 0
 Parameter Data :
-0x01 ,	0xF9 ,	0x90 ,	0xFE ,	
-
-
-
-Cell Name         = Plugin.PeqBank4
-Parameter Name    = General2ndOrderDPSigma300Alg4B2_3
-Parameter Address = 20086
-Parameter Value   = 0.961864948272705
-Parameter Data :
-0x00 ,	0xF6 ,	0x3C ,	0xC8 ,	
-
-
-
-Cell Name         = Plugin.PeqBank4
-Parameter Name    = General2ndOrderDPSigma300Alg4B1_3
-Parameter Address = 20087
-Parameter Value   = -1.96984440088272
-Parameter Data :
-0xFE ,	0x07 ,	0xB8 ,	0x47 ,	
-
-
-
-Cell Name         = Plugin.PeqBank4
-Parameter Name    = General2ndOrderDPSigma300Alg4B0_3
-Parameter Address = 20088
-Parameter Value   = 1.01068276166916
-Parameter Data :
-0x01 ,	0x02 ,	0xBC ,	0x1B ,	
-
-
-
-Cell Name         = Plugin.PeqBank4
-Parameter Name    = General2ndOrderDPSigma300Alg4A2_3
-Parameter Address = 20089
-Parameter Value   = -0.972547709941864
-Parameter Data :
-0xFF ,	0x07 ,	0x07 ,	0x1D ,	
-
-
-
-Cell Name         = Plugin.PeqBank4
-Parameter Name    = General2ndOrderDPSigma300Alg4A1_3
-Parameter Address = 20090
-Parameter Value   = 1.96984440088272
-Parameter Data :
-0x01 ,	0xF8 ,	0x47 ,	0xB9 ,	
-
-
-
-Cell Name         = Plugin.PeqBank4
-Parameter Name    = General2ndOrderDPSigma300Alg4B2_4
-Parameter Address = 20091
-Parameter Value   = 0.944108128547668
-Parameter Data :
-0x00 ,	0xF1 ,	0xB1 ,	0x12 ,	
-
-
-
-Cell Name         = Plugin.PeqBank4
-Parameter Name    = General2ndOrderDPSigma300Alg4B1_4
-Parameter Address = 20092
-Parameter Value   = -1.92250633239746
-Parameter Data :
-0xFE ,	0x13 ,	0xD6 ,	0xA0 ,	
-
-
-
-Cell Name         = Plugin.PeqBank4
-Parameter Name    = General2ndOrderDPSigma300Alg4B0_4
-Parameter Address = 20093
-Parameter Value   = 0.984342992305756
-Parameter Data :
-0x00 ,	0xFB ,	0xFD ,	0xE7 ,	
-
-
-
-Cell Name         = Plugin.PeqBank4
-Parameter Name    = General2ndOrderDPSigma300Alg4A2_4
-Parameter Address = 20094
-Parameter Value   = -0.928451120853424
-Parameter Data :
-0xFF ,	0x12 ,	0x51 ,	0x07 ,	
-
-
-
-Cell Name         = Plugin.PeqBank4
-Parameter Name    = General2ndOrderDPSigma300Alg4A1_4
-Parameter Address = 20095
-Parameter Value   = 1.92250633239746
-Parameter Data :
-0x01 ,	0xEC ,	0x29 ,	0x60 ,	
-
-
-
-Cell Name         = Plugin.PeqBank4
-Parameter Name    = General2ndOrderDPSigma300Alg4B2_5
-Parameter Address = 20096
-Parameter Value   = 0.924862921237946
-Parameter Data :
-0x00 ,	0xEC ,	0xC3 ,	0xD1 ,	
-
-
-
-Cell Name         = Plugin.PeqBank4
-Parameter Name    = General2ndOrderDPSigma300Alg4B1_5
-Parameter Address = 20097
-Parameter Value   = -1.93525117635727
-Parameter Data :
-0xFE ,	0x10 ,	0x93 ,	0x61 ,	
-
-
-
-Cell Name         = Plugin.PeqBank4
-Parameter Name    = General2ndOrderDPSigma300Alg4B0_5
-Parameter Address = 20098
-Parameter Value   = 1.02104812860489
-Parameter Data :
-0x01 ,	0x05 ,	0x63 ,	0x69 ,	
-
-
-
-Cell Name         = Plugin.PeqBank4
-Parameter Name    = General2ndOrderDPSigma300Alg4A2_5
-Parameter Address = 20099
-Parameter Value   = -0.945911049842834
-Parameter Data :
-0xFF ,	0x0D ,	0xD8 ,	0xC6 ,	
-
-
-
-Cell Name         = Plugin.PeqBank4
-Parameter Name    = General2ndOrderDPSigma300Alg4A1_5
-Parameter Address = 20100
-Parameter Value   = 1.93525117635727
-Parameter Data :
-0x01 ,	0xEF ,	0x6C ,	0x9F ,	
-
-
-
-Cell Name         = Plugin.PeqBank4
-Parameter Name    = General2ndOrderDPSigma300Alg4B2_6
-Parameter Address = 20101
-Parameter Value   = 0.909173369407654
-Parameter Data :
-0x00 ,	0xE8 ,	0xBF ,	0x96 ,	
-
-
-
-Cell Name         = Plugin.PeqBank4
-Parameter Name    = General2ndOrderDPSigma300Alg4B1_6
-Parameter Address = 20102
-Parameter Value   = -1.86761456727982
-Parameter Data :
-0xFE ,	0x21 ,	0xE4 ,	0x03 ,	
-
-
-
-Cell Name         = Plugin.PeqBank4
-Parameter Name    = General2ndOrderDPSigma300Alg4B0_6
-Parameter Address = 20103
-Parameter Value   = 0.974556744098663
-Parameter Data :
-0x00 ,	0xF9 ,	0x7C ,	0x8D ,	
-
-
-
-Cell Name         = Plugin.PeqBank4
-Parameter Name    = General2ndOrderDPSigma300Alg4A2_6
-Parameter Address = 20104
-Parameter Value   = -0.883730113506317
-Parameter Data :
-0xFF ,	0x1D ,	0xC3 ,	0xDD ,	
-
-
-
-Cell Name         = Plugin.PeqBank4
-Parameter Name    = General2ndOrderDPSigma300Alg4A1_6
-Parameter Address = 20105
-Parameter Value   = 1.86761456727982
-Parameter Data :
-0x01 ,	0xDE ,	0x1B ,	0xFD ,	
-
-
-
-Cell Name         = Plugin.PeqBank4
-Parameter Name    = General2ndOrderDPSigma300Alg4B2_7
-Parameter Address = 20106
-Parameter Value   = 0.743387222290039
-Parameter Data :
-0x00 ,	0xBE ,	0x4E ,	0xA0 ,	
-
-
-
-Cell Name         = Plugin.PeqBank4
-Parameter Name    = General2ndOrderDPSigma300Alg4B1_7
-Parameter Address = 20107
-Parameter Value   = -1.67709279060364
-Parameter Data :
-0xFE ,	0x52 ,	0xAA ,	0x0C ,	
-
-
-
-Cell Name         = Plugin.PeqBank4
-Parameter Name    = General2ndOrderDPSigma300Alg4B0_7
-Parameter Address = 20108
-Parameter Value   = 1.07188493013382
-Parameter Data :
-0x01 ,	0x12 ,	0x67 ,	0x0D ,	
-
-
-
-Cell Name         = Plugin.PeqBank4
-Parameter Name    = General2ndOrderDPSigma300Alg4A2_7
-Parameter Address = 20109
-Parameter Value   = -0.815272152423859
-Parameter Data :
-0xFF ,	0x2F ,	0x4A ,	0x53 ,	
-
-
-
-Cell Name         = Plugin.PeqBank4
-Parameter Name    = General2ndOrderDPSigma300Alg4A1_7
-Parameter Address = 20110
-Parameter Value   = 1.67709279060364
-Parameter Data :
-0x01 ,	0xAD ,	0x55 ,	0xF4 ,	
-
-
-
-Cell Name         = Plugin.PeqBank4
-Parameter Name    = General2ndOrderDPSigma300Alg4B2_8
-Parameter Address = 20111
-Parameter Value   = 0.65077805519104
-Parameter Data :
-0x00 ,	0xA6 ,	0x99 ,	0x64 ,	
-
-
-
-Cell Name         = Plugin.PeqBank4
-Parameter Name    = General2ndOrderDPSigma300Alg4B1_8
-Parameter Address = 20112
-Parameter Value   = -1.23203843832016
-Parameter Data :
-0xFE ,	0xC4 ,	0x99 ,	0x21 ,	
-
-
-
-Cell Name         = Plugin.PeqBank4
-Parameter Name    = General2ndOrderDPSigma300Alg4B0_8
-Parameter Address = 20113
-Parameter Value   = 0.902172446250916
-Parameter Data :
-0x00 ,	0xE6 ,	0xF4 ,	0xC6 ,	
-
-
-
-Cell Name         = Plugin.PeqBank4
-Parameter Name    = General2ndOrderDPSigma300Alg4A2_8
-Parameter Address = 20114
-Parameter Value   = -0.552950501441956
-Parameter Data :
-0xFF ,	0x72 ,	0x71 ,	0xD6 ,	
-
-
-
-Cell Name         = Plugin.PeqBank4
-Parameter Name    = General2ndOrderDPSigma300Alg4A1_8
-Parameter Address = 20115
-Parameter Value   = 1.23203843832016
-Parameter Data :
-0x01 ,	0x3B ,	0x66 ,	0xDF ,	
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
 
 
 
 Cell Name         = Plugin.Delay1
 Parameter Name    = DelaySigma300Alg1delay
-Parameter Address = 20197
+Parameter Address = 20236
 Parameter Value   = 0
 Parameter Data :
 0x00, 0x00, 0x00, 0x00, 
@@ -18275,7 +17285,7 @@ Parameter Data :
 
 Cell Name         = Plugin.Delay2
 Parameter Name    = DelaySigma300Alg2delay
-Parameter Address = 20199
+Parameter Address = 20237
 Parameter Value   = 0
 Parameter Data :
 0x00, 0x00, 0x00, 0x00, 
@@ -18284,7 +17294,7 @@ Parameter Data :
 
 Cell Name         = Plugin.Delay3
 Parameter Name    = DelaySigma300Alg3delay
-Parameter Address = 20196
+Parameter Address = 20238
 Parameter Value   = 0
 Parameter Data :
 0x00, 0x00, 0x00, 0x00, 
@@ -18293,16 +17303,1366 @@ Parameter Data :
 
 Cell Name         = Plugin.Delay4
 Parameter Name    = DelaySigma300Alg4delay
-Parameter Address = 20198
+Parameter Address = 20239
 Parameter Value   = 0
 Parameter Data :
 0x00, 0x00, 0x00, 0x00, 
 
 
 
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2B2_1
+Parameter Address = 20086
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2B1_1
+Parameter Address = 20087
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2B0_1
+Parameter Address = 20088
+Parameter Value   = 1
+Parameter Data :
+0x01 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2A2_1
+Parameter Address = 20089
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2A1_1
+Parameter Address = 20090
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2B2_2
+Parameter Address = 20091
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2B1_2
+Parameter Address = 20092
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2B0_2
+Parameter Address = 20093
+Parameter Value   = 1
+Parameter Data :
+0x01 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2A2_2
+Parameter Address = 20094
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2A1_2
+Parameter Address = 20095
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2B2_3
+Parameter Address = 20096
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2B1_3
+Parameter Address = 20097
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2B0_3
+Parameter Address = 20098
+Parameter Value   = 1
+Parameter Data :
+0x01 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2A2_3
+Parameter Address = 20099
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2A1_3
+Parameter Address = 20100
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2B2_4
+Parameter Address = 20101
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2B1_4
+Parameter Address = 20102
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2B0_4
+Parameter Address = 20103
+Parameter Value   = 1
+Parameter Data :
+0x01 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2A2_4
+Parameter Address = 20104
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2A1_4
+Parameter Address = 20105
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2B2_5
+Parameter Address = 20106
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2B1_5
+Parameter Address = 20107
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2B0_5
+Parameter Address = 20108
+Parameter Value   = 1
+Parameter Data :
+0x01 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2A2_5
+Parameter Address = 20109
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2A1_5
+Parameter Address = 20110
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2B2_6
+Parameter Address = 20111
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2B1_6
+Parameter Address = 20112
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2B0_6
+Parameter Address = 20113
+Parameter Value   = 1
+Parameter Data :
+0x01 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2A2_6
+Parameter Address = 20114
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2A1_6
+Parameter Address = 20115
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2B2_7
+Parameter Address = 20116
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2B1_7
+Parameter Address = 20117
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2B0_7
+Parameter Address = 20118
+Parameter Value   = 1
+Parameter Data :
+0x01 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2A2_7
+Parameter Address = 20119
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2A1_7
+Parameter Address = 20120
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2B2_8
+Parameter Address = 20121
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2B1_8
+Parameter Address = 20122
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2B0_8
+Parameter Address = 20123
+Parameter Value   = 1
+Parameter Data :
+0x01 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2A2_8
+Parameter Address = 20124
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2A1_8
+Parameter Address = 20125
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2B2_9
+Parameter Address = 20126
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2B1_9
+Parameter Address = 20127
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2B0_9
+Parameter Address = 20128
+Parameter Value   = 1
+Parameter Data :
+0x01 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2A2_9
+Parameter Address = 20129
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2A1_9
+Parameter Address = 20130
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2B2_10
+Parameter Address = 20131
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2B1_10
+Parameter Address = 20132
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2B0_10
+Parameter Address = 20133
+Parameter Value   = 1
+Parameter Data :
+0x01 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2A2_10
+Parameter Address = 20134
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank2
+Parameter Name    = General2ndOrderDPSigma300Alg2A1_10
+Parameter Address = 20135
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3B2_1
+Parameter Address = 20136
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3B1_1
+Parameter Address = 20137
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3B0_1
+Parameter Address = 20138
+Parameter Value   = 1
+Parameter Data :
+0x01 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3A2_1
+Parameter Address = 20139
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3A1_1
+Parameter Address = 20140
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3B2_2
+Parameter Address = 20141
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3B1_2
+Parameter Address = 20142
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3B0_2
+Parameter Address = 20143
+Parameter Value   = 1
+Parameter Data :
+0x01 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3A2_2
+Parameter Address = 20144
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3A1_2
+Parameter Address = 20145
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3B2_3
+Parameter Address = 20146
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3B1_3
+Parameter Address = 20147
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3B0_3
+Parameter Address = 20148
+Parameter Value   = 1
+Parameter Data :
+0x01 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3A2_3
+Parameter Address = 20149
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3A1_3
+Parameter Address = 20150
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3B2_4
+Parameter Address = 20151
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3B1_4
+Parameter Address = 20152
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3B0_4
+Parameter Address = 20153
+Parameter Value   = 1
+Parameter Data :
+0x01 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3A2_4
+Parameter Address = 20154
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3A1_4
+Parameter Address = 20155
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3B2_5
+Parameter Address = 20156
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3B1_5
+Parameter Address = 20157
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3B0_5
+Parameter Address = 20158
+Parameter Value   = 1
+Parameter Data :
+0x01 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3A2_5
+Parameter Address = 20159
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3A1_5
+Parameter Address = 20160
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3B2_6
+Parameter Address = 20161
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3B1_6
+Parameter Address = 20162
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3B0_6
+Parameter Address = 20163
+Parameter Value   = 1
+Parameter Data :
+0x01 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3A2_6
+Parameter Address = 20164
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3A1_6
+Parameter Address = 20165
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3B2_7
+Parameter Address = 20166
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3B1_7
+Parameter Address = 20167
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3B0_7
+Parameter Address = 20168
+Parameter Value   = 1
+Parameter Data :
+0x01 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3A2_7
+Parameter Address = 20169
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3A1_7
+Parameter Address = 20170
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3B2_8
+Parameter Address = 20171
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3B1_8
+Parameter Address = 20172
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3B0_8
+Parameter Address = 20173
+Parameter Value   = 1
+Parameter Data :
+0x01 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3A2_8
+Parameter Address = 20174
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3A1_8
+Parameter Address = 20175
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3B2_9
+Parameter Address = 20176
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3B1_9
+Parameter Address = 20177
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3B0_9
+Parameter Address = 20178
+Parameter Value   = 1
+Parameter Data :
+0x01 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3A2_9
+Parameter Address = 20179
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3A1_9
+Parameter Address = 20180
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3B2_10
+Parameter Address = 20181
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3B1_10
+Parameter Address = 20182
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3B0_10
+Parameter Address = 20183
+Parameter Value   = 1
+Parameter Data :
+0x01 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3A2_10
+Parameter Address = 20184
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank3
+Parameter Name    = General2ndOrderDPSigma300Alg3A1_10
+Parameter Address = 20185
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4B2_1
+Parameter Address = 20186
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4B1_1
+Parameter Address = 20187
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4B0_1
+Parameter Address = 20188
+Parameter Value   = 1
+Parameter Data :
+0x01 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4A2_1
+Parameter Address = 20189
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4A1_1
+Parameter Address = 20190
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4B2_2
+Parameter Address = 20191
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4B1_2
+Parameter Address = 20192
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4B0_2
+Parameter Address = 20193
+Parameter Value   = 1
+Parameter Data :
+0x01 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4A2_2
+Parameter Address = 20194
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4A1_2
+Parameter Address = 20195
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4B2_3
+Parameter Address = 20196
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4B1_3
+Parameter Address = 20197
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4B0_3
+Parameter Address = 20198
+Parameter Value   = 1
+Parameter Data :
+0x01 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4A2_3
+Parameter Address = 20199
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4A1_3
+Parameter Address = 20200
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4B2_4
+Parameter Address = 20201
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4B1_4
+Parameter Address = 20202
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4B0_4
+Parameter Address = 20203
+Parameter Value   = 1
+Parameter Data :
+0x01 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4A2_4
+Parameter Address = 20204
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4A1_4
+Parameter Address = 20205
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4B2_5
+Parameter Address = 20206
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4B1_5
+Parameter Address = 20207
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4B0_5
+Parameter Address = 20208
+Parameter Value   = 1
+Parameter Data :
+0x01 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4A2_5
+Parameter Address = 20209
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4A1_5
+Parameter Address = 20210
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4B2_6
+Parameter Address = 20211
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4B1_6
+Parameter Address = 20212
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4B0_6
+Parameter Address = 20213
+Parameter Value   = 1
+Parameter Data :
+0x01 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4A2_6
+Parameter Address = 20214
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4A1_6
+Parameter Address = 20215
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4B2_7
+Parameter Address = 20216
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4B1_7
+Parameter Address = 20217
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4B0_7
+Parameter Address = 20218
+Parameter Value   = 1
+Parameter Data :
+0x01 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4A2_7
+Parameter Address = 20219
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4A1_7
+Parameter Address = 20220
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4B2_8
+Parameter Address = 20221
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4B1_8
+Parameter Address = 20222
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4B0_8
+Parameter Address = 20223
+Parameter Value   = 1
+Parameter Data :
+0x01 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4A2_8
+Parameter Address = 20224
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4A1_8
+Parameter Address = 20225
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4B2_9
+Parameter Address = 20226
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4B1_9
+Parameter Address = 20227
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4B0_9
+Parameter Address = 20228
+Parameter Value   = 1
+Parameter Data :
+0x01 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4A2_9
+Parameter Address = 20229
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4A1_9
+Parameter Address = 20230
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4B2_10
+Parameter Address = 20231
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4B1_10
+Parameter Address = 20232
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4B0_10
+Parameter Address = 20233
+Parameter Value   = 1
+Parameter Data :
+0x01 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4A2_10
+Parameter Address = 20234
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
+Cell Name         = Plugin.PeqBank4
+Parameter Name    = General2ndOrderDPSigma300Alg4A1_10
+Parameter Address = 20235
+Parameter Value   = 0
+Parameter Data :
+0x00 ,	0x00 ,	0x00 ,	0x00 ,	
+
+
+
 Cell Name         = MasterVolume
 Parameter Name    = HWGainADAU145XAlg9slew_mode
-Parameter Address = 20214
+Parameter Address = 20254
 Parameter Value   = 8330
 Parameter Data :
 0x00, 0x00, 0x20, 0x8A, 
@@ -18311,7 +18671,7 @@ Parameter Data :
 
 Cell Name         = MasterVolume
 Parameter Name    = HWGainADAU145XAlg9target
-Parameter Address = 20213
+Parameter Address = 20253
 Parameter Value   = 1
 Parameter Data :
 0x01, 0x00, 0x00, 0x00, 
@@ -18320,7 +18680,7 @@ Parameter Data :
 
 Cell Name         = MasterVolume
 Parameter Name    = HWGainADAU145XAlg9slew_mode
-Parameter Address = 20214
+Parameter Address = 20254
 Parameter Value   = 8330
 Parameter Data :
 0x00, 0x00, 0x20, 0x8A, 
@@ -18329,7 +18689,7 @@ Parameter Data :
 
 Cell Name         = MasterVolume
 Parameter Name    = HWGainADAU145XAlg9target
-Parameter Address = 20213
+Parameter Address = 20253
 Parameter Value   = 1
 Parameter Data :
 0x01, 0x00, 0x00, 0x00, 
@@ -18338,7 +18698,7 @@ Parameter Data :
 
 Cell Name         = MasterVolume
 Parameter Name    = HWGainADAU145XAlg9slew_mode
-Parameter Address = 20214
+Parameter Address = 20254
 Parameter Value   = 8330
 Parameter Data :
 0x00, 0x00, 0x20, 0x8A, 
@@ -18347,7 +18707,7 @@ Parameter Data :
 
 Cell Name         = MasterVolume
 Parameter Name    = HWGainADAU145XAlg9target
-Parameter Address = 20213
+Parameter Address = 20253
 Parameter Value   = 1
 Parameter Data :
 0x01, 0x00, 0x00, 0x00, 
@@ -18356,7 +18716,7 @@ Parameter Data :
 
 Cell Name         = MasterVolume
 Parameter Name    = HWGainADAU145XAlg9slew_mode
-Parameter Address = 20214
+Parameter Address = 20254
 Parameter Value   = 8330
 Parameter Data :
 0x00, 0x00, 0x20, 0x8A, 
@@ -18365,7 +18725,7 @@ Parameter Data :
 
 Cell Name         = MasterVolume
 Parameter Name    = HWGainADAU145XAlg9target
-Parameter Address = 20213
+Parameter Address = 20253
 Parameter Value   = 1
 Parameter Data :
 0x01, 0x00, 0x00, 0x00, 
@@ -18374,7 +18734,7 @@ Parameter Data :
 
 Cell Name         = VolumePot
 Parameter Name    = ExternalGainAlgSlew145X1slew_mode
-Parameter Address = 44605
+Parameter Address = 44637
 Parameter Value   = 8320
 Parameter Data :
 0x00, 0x00, 0x20, 0x80, 
@@ -18392,7 +18752,7 @@ Parameter Data :
 
 Cell Name         = DC1
 Parameter Name    = DCInpAlg145X1value
-Parameter Address = 20243
+Parameter Address = 20283
 Parameter Value   = 1
 Parameter Data :
 0x01, 0x00, 0x00, 0x00, 
@@ -18401,7 +18761,7 @@ Parameter Data :
 
 Cell Name         = BypassVolPoti
 Parameter Name    = monomuxSigma300ns49index
-Parameter Address = 20244
+Parameter Address = 20284
 Parameter Value   = 1
 Parameter Data :
 0x00, 0x00, 0x00, 0x01, 
