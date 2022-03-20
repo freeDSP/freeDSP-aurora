@@ -1,12 +1,14 @@
 #include <Arduino.h>
 #include <SPIFFS.h>
 
+#include "customdefines.h"
 #include "config.h"
 #include "plugin.h"
 #include "channelnames.h"
 
 String channelNames[NUMCHANNELNAMES];
 String presetNames[NUMPRESETS] = {"Preset A", "Preset B", "Preset C", "Preset D"};
+String presetShortNames[NUMPRESETS] = {"A", "B", "C", "D"};
 
 //==============================================================================
 /*! Write the channel names to file.
@@ -70,15 +72,17 @@ String createChannelNamesPage(void)
     <html lang="en">
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
     <head>
-    <title>i:3 Audio DSP</title>
+    <title>)"""";
+  ret += String(DSPNAME);
+  ret += R""""(</title>
     <link id='theme' rel="stylesheet" href="dark.css" rel="stylesheet" type="text/css">
     <script type="text/javascript" src="aurora.js"></script>
     </head>
     <body>
-    <center><div style="border-bottom: 1px solid; width: 25%"><h1>Aurora</h1></div></center>
+    <center><div style="border-bottom: 1px solid; width: 25%"><h1>Aurora DSP</h1></div></center>
     <div><h2>Names</h2></div>)"""";
 
-  ret += String("<table><tr><td id='audioinputs' data-numchannels='") + String(numInputs) + String("'>Audio Inputs</td>");
+  ret += String("<center><table><tr><td id='audioinputs' data-numchannels='") + String(numInputs) + String("'>Audio Inputs</td>");
   ret += String("<td id='audiooutputs' data-numchannels='") + String(numOutputs) + String("'>Audio Outputs</td>");
   ret += String("<td id='presets' data-numpresets='") + String(NUMPRESETS) + String("'>Presets</td>");
   ret += String("</tr>");
@@ -111,13 +115,13 @@ String createChannelNamesPage(void)
   ret += String("</table>");
 
   ret += String("</td>");
-  ret += String("</tr></table>");
+  ret += String("</tr></table></center>");
 
   ret += R""""(
   <center>
     <table><tr>
-      <td><button class="cfgbtn" style="height:30px;" id="cfgcancel" onclick="window.location.href='/'">Cancel</button></td>
-      <td><button class="cfgbtn" style="height:30px;" id="cfgstore" onclick="onStoreNames()">Store</button></td>
+      <td><button class="prebtn" style="height:30px;" id="cfgcancel" onclick="window.location.href='/'">Cancel</button></td>
+      <td><button class="prebtn" style="height:30px;" id="cfgstore" onclick="onStoreNames()">Store</button></td>
     </tr></table>
     </center>
   )"""";

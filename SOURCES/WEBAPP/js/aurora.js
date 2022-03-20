@@ -15,13 +15,15 @@ function sendConfig(){
   data.adcsum=document.getElementById("adcsum").value;
   fetch("/config",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(data)})
   .then(function(result) {
-    hideAddon();
-    if(data.aid==0) document.getElementById("addon_none").style.display = "block";
-    else if(data.aid==1) document.getElementById("addon_a").style.display = "block";
-    else if(data.aid==2) document.getElementById("addon_b").style.display = "block";
-    else if(data.aid==3) document.getElementById("addon_c").style.display = "block";
-    else if(data.aid==4) document.getElementById("addon_d").style.display = "block";})
-  .catch (function(err){console.log(err);});
+    if(document.getElementById('addon').innerHTML == "AddOn"){
+      hideAddon();
+      if(data.aid==0) document.getElementById("addon_none").style.display = "block";
+      else if(data.aid==1) document.getElementById("addon_a").style.display = "block";
+      else if(data.aid==2) document.getElementById("addon_b").style.display = "block";
+      else if(data.aid==3) document.getElementById("addon_c").style.display = "block";
+      else if(data.aid==4) document.getElementById("addon_d").style.display = "block";
+    }
+  }).catch (function(err){console.log(err);});
 }
 
 function sendSpdifOutMux(){
@@ -47,22 +49,29 @@ function onLoad(){
     document.getElementById("pre2").style.backgroundColor = "#101010";
     document.getElementById("pre3").style.backgroundColor = "#101010";
     document.getElementById("pre"+p).style.backgroundColor = "#73EC6F";
-    if(cfg.aid==0) document.getElementById('addon_none').style.display = "block";
-    else if(cfg.aid==1) document.getElementById('addon_a').style.display = "block";
-    else if(cfg.aid==2)
-    {
-      if(cfg.addcfg==0) document.getElementById("spdif_b").value="0x00";
-      else if(cfg.addcfg==1) document.getElementById("spdif_b").value="0x01";
-      else if(cfg.addcfg==2) document.getElementById("spdif_b").value="0x02";
-      else if(cfg.addcfg==3) document.getElementById("spdif_b").value="0x03";
-      else if(cfg.addcfg==4) document.getElementById("spdif_b").value="0x04";
-      else if(cfg.addcfg==5) document.getElementById("spdif_b").value="0x05";
-      else if(cfg.addcfg==6) document.getElementById("spdif_b").value="0x06";
-      else if(cfg.addcfg==7) document.getElementById("spdif_b").value="0x07";
-      document.getElementById('addon_b').style.display = "block";
+    if(cfg.vinputs == true){
+      hideAddon();
+      document.getElementById('addon').innerHTML = "";
     }
-    else if(cfg.aid==3) document.getElementById('addon_c').style.display="block";
-    else if(cfg.aid==4) document.getElementById('addon_d').style.display="block";
+    else
+    {
+      document.getElementById('addon').innerHTML = "AddOn";
+      if(cfg.aid==0) document.getElementById('addon_none').style.display = "block";
+      else if(cfg.aid==1) document.getElementById('addon_a').style.display = "block";
+      else if(cfg.aid==2){
+        if(cfg.addcfg==0) document.getElementById("spdif_b").value="0x00";
+        else if(cfg.addcfg==1) document.getElementById("spdif_b").value="0x01";
+        else if(cfg.addcfg==2) document.getElementById("spdif_b").value="0x02";
+        else if(cfg.addcfg==3) document.getElementById("spdif_b").value="0x03";
+        else if(cfg.addcfg==4) document.getElementById("spdif_b").value="0x04";
+        else if(cfg.addcfg==5) document.getElementById("spdif_b").value="0x05";
+        else if(cfg.addcfg==6) document.getElementById("spdif_b").value="0x06";
+        else if(cfg.addcfg==7) document.getElementById("spdif_b").value="0x07";
+        document.getElementById('addon_b').style.display = "block";
+      }
+      else if(cfg.aid==3) document.getElementById('addon_c').style.display="block";
+      else if(cfg.aid==4) document.getElementById('addon_d').style.display="block";
+    }
     return fetch("/spdifout");
   }).then(function(response){
     return response.json();
@@ -397,82 +406,99 @@ function openPeqBank(idx,len){
     return response.json();
   }).then (function(data) {
     document.getElementById('peqbank-dialog-content').style.width = 200 * data["fc"].length + 'px';
+    document.getElementById('peqbank-dialog-content').style.maxWidth = '95%';
     var userinput = document.getElementById('peqbank-userinput');
     userinput.dataset.numbands = data["fc"].length;
-    var tr = document.createElement('tr');
-    for(var ii = 0; ii < data["fc"].length; ii++) {
-      var td = document.createElement('td');
-      td.innerHTML = ii + 1;
-      td.colSpan = 3;
-      tr.appendChild(td);
+
+    var startidx = 0;
+    for(var mm = 0; mm < 2; mm++) {
+      var tr = document.createElement('tr');
+
+      ii = startidx;
+      for(var nn = 0; nn < 5 && ii < data["fc"].length; nn++) {
+        var td = document.createElement('td');
+        td.innerHTML = ii + 1;
+        ii++;
+        td.colSpan = 3;
+        tr.appendChild(td);
+      }
+      userinput.appendChild(tr);
+      tr = document.createElement('tr');
+      ii = startidx;
+      for(var nn = 0; nn < 5 && ii < data["fc"].length; nn++) {
+        var td = document.createElement('td');
+        td.style.textAlign = 'right';
+        td.style.width = '20px';
+        td.innerHTML = 'fc';
+        tr.appendChild(td);
+        td = document.createElement('td');
+        td.style.maxWidth = '120px';
+        td.innerHTML = '<input type="number" id="peq_fc_' + ii + '" style="width:90%;" value="' + data["fc"][ii] + '" step="any" min="0" max="24000">';
+        tr.appendChild(td);
+        td = document.createElement('td');
+        td.style.textAlign = 'left';
+        td.style.width = '20px';
+        td.innerHTML = 'Hz';
+        tr.appendChild(td);
+        ii++;
+      }
+      userinput.appendChild(tr);
+      tr = document.createElement('tr');
+      ii = startidx;
+      for(var nn = 0; nn < 5 && ii < data["Q"].length; nn++) {
+        var td = document.createElement('td');
+        td.style.textAlign = 'right';
+        td.style.width = '20px';
+        td.id = "label_"+ii;
+        td.innerHTML = 'Q';
+        tr.appendChild(td);
+        td = document.createElement('td');
+        td.style.maxWidth = '120px';
+        td.innerHTML = '<input type="number" id="peq_q_' + ii + '" style="width:90%;" value="' + data["Q"][ii] + '" step="any" min="0.1" max="100">';
+        tr.appendChild(td);
+        td = document.createElement('td');
+        td.style.textAlign = 'left';
+        td.style.width = '20px';
+        td.innerHTML = '';
+        tr.appendChild(td);
+        ii++;
+      }
+      userinput.appendChild(tr);
+      tr = document.createElement('tr');
+      ii = startidx;
+      for(var nn = 0; nn < 5 && ii < data["V0"].length; nn++) {
+        var td = document.createElement('td');
+        td.style.textAlign = 'right';
+        td.style.width = '20px';
+        td.innerHTML = 'V0';
+        tr.appendChild(td);
+        td = document.createElement('td');
+        td.style.maxWidth = '120px';
+        td.innerHTML = '<input type="number" id="peq_v0_' + ii + '" style="width:90%;" value="' + data["V0"][ii] + '" step="any" min="-100" max="100">';
+        tr.appendChild(td);
+        td = document.createElement('td');
+        td.style.textAlign = 'left';
+        td.style.width = '20px';
+        td.innerHTML = 'dB';
+        tr.appendChild(td);
+        ii++;
+      }
+      userinput.appendChild(tr);
+      tr = document.createElement('tr');
+      ii = startidx;
+      for(var nn = 0; nn < 5 && ii < data["bypass"].length; nn++) {
+        var td = document.createElement('td');
+        tr.appendChild(td);
+        td = document.createElement('td');
+        td.innerHTML = "<button class=\"send\" id='peq_bypass_" + ii + "' onclick=\"bypass('peq_bypass_" + ii + "')\" data-bypass=\"0\">Bypass</button>";
+        tr.appendChild(td);
+        td = document.createElement('td');
+        tr.appendChild(td);
+        ii++;
+        startidx = ii;
+      }
+      userinput.appendChild(tr);
     }
-    userinput.appendChild(tr);
-    tr = document.createElement('tr');
-    for(var ii = 0; ii < data["fc"].length; ii++) {
-      var td = document.createElement('td');
-      td.style.textAlign = 'right';
-      td.style.width = '20px';
-      td.innerHTML = 'fc';
-      tr.appendChild(td);
-      td = document.createElement('td');
-      td.style.maxWidth = '120px';
-      td.innerHTML = '<input type="number" id="peq_fc_' + ii + '" style="width:90%;" value="' + data["fc"][ii] + '" step="any" min="0" max="24000">';
-      tr.appendChild(td);
-      td = document.createElement('td');
-      td.style.textAlign = 'left';
-      td.style.width = '20px';
-      td.innerHTML = 'Hz';
-      tr.appendChild(td);
-    }
-    userinput.appendChild(tr);
-    tr = document.createElement('tr');
-    for(var ii = 0; ii < data["Q"].length; ii++) {
-      var td = document.createElement('td');
-      td.style.textAlign = 'right';
-      td.style.width = '20px';
-      td.id = "label_"+ii;
-      td.innerHTML = 'Q';
-      tr.appendChild(td);
-      td = document.createElement('td');
-      td.style.maxWidth = '120px';
-      td.innerHTML = '<input type="number" id="peq_q_' + ii + '" style="width:90%;" value="' + data["Q"][ii] + '" step="any" min="0.1" max="100">';
-      tr.appendChild(td);
-      td = document.createElement('td');
-      td.style.textAlign = 'left';
-      td.style.width = '20px';
-      td.innerHTML = '';
-      tr.appendChild(td);
-    }
-    userinput.appendChild(tr);
-    tr = document.createElement('tr');
-    for(var ii = 0; ii < data["V0"].length; ii++) {
-      var td = document.createElement('td');
-      td.style.textAlign = 'right';
-      td.style.width = '20px';
-      td.innerHTML = 'V0';
-      tr.appendChild(td);
-      td = document.createElement('td');
-      td.style.maxWidth = '120px';
-      td.innerHTML = '<input type="number" id="peq_v0_' + ii + '" style="width:90%;" value="' + data["V0"][ii] + '" step="any" min="-100" max="100">';
-      tr.appendChild(td);
-      td = document.createElement('td');
-      td.style.textAlign = 'left';
-      td.style.width = '20px';
-      td.innerHTML = 'dB';
-      tr.appendChild(td);
-    }
-    userinput.appendChild(tr);
-    tr = document.createElement('tr');
-    for(var ii = 0; ii < data["bypass"].length; ii++) {
-      var td = document.createElement('td');
-      tr.appendChild(td);
-      td = document.createElement('td');
-      td.innerHTML = "<button class=\"send\" id='peq_bypass_" + ii + "' onclick=\"bypass('peq_bypass_" + ii + "')\" data-bypass=\"0\">Bypass</button>";
-      tr.appendChild(td);
-      td = document.createElement('td');
-      tr.appendChild(td);
-    }
-    userinput.appendChild(tr);
     for(var ii = 0; ii < data["bypass"].length; ii++) {
       document.getElementById("peq_bypass_" + ii).dataset.bypass=data["bypass"][ii];
       switchBypass("peq_bypass_" + ii);

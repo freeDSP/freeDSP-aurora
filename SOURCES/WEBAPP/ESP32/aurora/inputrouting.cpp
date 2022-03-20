@@ -4,6 +4,7 @@
 #include <ArduinoJson.h>
 #include <SPIFFS.h>
 
+#include "customdefines.h"
 #include "config.h"
 #include "hwconfig.h"
 #include "plugin.h"
@@ -76,12 +77,14 @@ String createInputRoutingPage(int numinputs)
   String ret;
   int id = 0;
   
-  ret += R"!^!(
+  ret += R""""(
     <!DOCTYPE html>
     <html lang="en">
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
     <head>
-    <title>AURORA DSP</title>
+    <title>)"""";
+  ret += String(DSPNAME);
+  ret += R""""(</title>
     <link rel="stylesheet" href="dark.css">
     <script type="text/javascript" src="aurora.js"></script>
     </head>
@@ -108,7 +111,7 @@ String createInputRoutingPage(int numinputs)
       </center>
     </body>
     </html>
-  )!^!";
+  )"""";
 
   return ret;
 }
@@ -349,51 +352,52 @@ void setVirtualInput(void)
 {
   softMuteDAC();
 
-  for(int nn = 0; nn < kNumVirtualInputs; nn++)
+  int idx = 0;
+  for(int ii = 0; ii < numInputs; ii = ii + kNumVirtualInputs)
   {
-    paramInputs[nn].sel = inputSelectionCmd[sourceRouting[currentVirtualInput][nn]];
-    setInput(nn);
-
-    // if spdif was select, change multiplexer on addon B, too
-    //! TODO Support other addons
-    if(paramInputs[nn].sel & 0xffff0000 == 0x00040000)
+    for(int nn = 0; nn < kNumVirtualInputs; nn++)
     {
-      Serial.println("Change SPDIFmux");
-      Wire.beginTransmission(ADDONB_SPDIFMUX_ADDR);
-      Wire.write(0x01);
-      if(sourceRouting[currentVirtualInput][nn] == 18) // SPDIF Coax 1 Left
-        Wire.write(0x04);
-      else if(sourceRouting[currentVirtualInput][nn] == 19) // SPDIF Coax 1 Right
-        Wire.write(0x04);
-      else if(sourceRouting[currentVirtualInput][nn] == 20) // SPDIF Coax 2 Left
-        Wire.write(0x05);
-      else if(sourceRouting[currentVirtualInput][nn] == 21) // SPDIF Coax 2 Right
-        Wire.write(0x05);
-      else if(sourceRouting[currentVirtualInput][nn] == 22) // SPDIF Coax 3 Left
-        Wire.write(0x06);
-      else if(sourceRouting[currentVirtualInput][nn] == 23) // SPDIF Coax 3 Right
-        Wire.write(0x06);
-      else if(sourceRouting[currentVirtualInput][nn] == 24) // SPDIF Coax 4 Left
-        Wire.write(0x07);
-      else if(sourceRouting[currentVirtualInput][nn] == 25) // SPDIF Coax 4 Right
-        Wire.write(0x07);
-      else if(sourceRouting[currentVirtualInput][nn] == 26) // SPDIF Optical 1 Left
-        Wire.write(0x00);
-      else if(sourceRouting[currentVirtualInput][nn] == 27) // SPDIF Optical 1 Right
-        Wire.write(0x00);
-      else if(sourceRouting[currentVirtualInput][nn] == 28) // SPDIF Optical 2 Left
+      paramInputs[idx].sel = inputSelectionCmd[sourceRouting[currentVirtualInput][nn]];
+      setInput(idx);
+      if((paramInputs[idx].sel & 0xffff0000) == 0x00040000)
+      {
+        Wire.beginTransmission(ADDONB_SPDIFMUX_ADDR);
         Wire.write(0x01);
-      else if(sourceRouting[currentVirtualInput][nn] == 29) // SPDIF Optical 2 Right
-        Wire.write(0x01);
-      else if(sourceRouting[currentVirtualInput][nn] == 30) // SPDIF Optical 3 Left
-        Wire.write(0x02);
-      else if(sourceRouting[currentVirtualInput][nn] == 31) // SPDIF Optical 3 Right
-        Wire.write(0x02);
-      else if(sourceRouting[currentVirtualInput][nn] == 32) // SPDIF Optical 4 Left
-        Wire.write(0x03);
-      else if(sourceRouting[currentVirtualInput][nn] == 33) // SPDIF Optical 4 Right
-        Wire.write(0x03);
-      Wire.endTransmission(true);
+        if(sourceRouting[currentVirtualInput][nn] == 18) // SPDIF Coax 1 Left
+          Wire.write(0x04);
+        else if(sourceRouting[currentVirtualInput][nn] == 19) // SPDIF Coax 1 Right
+          Wire.write(0x04);
+        else if(sourceRouting[currentVirtualInput][nn] == 20) // SPDIF Coax 2 Left
+          Wire.write(0x05);
+        else if(sourceRouting[currentVirtualInput][nn] == 21) // SPDIF Coax 2 Right
+          Wire.write(0x05);
+        else if(sourceRouting[currentVirtualInput][nn] == 22) // SPDIF Coax 3 Left
+          Wire.write(0x06);
+        else if(sourceRouting[currentVirtualInput][nn] == 23) // SPDIF Coax 3 Right
+          Wire.write(0x06);
+        else if(sourceRouting[currentVirtualInput][nn] == 24) // SPDIF Coax 4 Left
+          Wire.write(0x07);
+        else if(sourceRouting[currentVirtualInput][nn] == 25) // SPDIF Coax 4 Right
+          Wire.write(0x07);
+        else if(sourceRouting[currentVirtualInput][nn] == 26) // SPDIF Optical 1 Left
+          Wire.write(0x00);
+        else if(sourceRouting[currentVirtualInput][nn] == 27) // SPDIF Optical 1 Right
+          Wire.write(0x00);
+        else if(sourceRouting[currentVirtualInput][nn] == 28) // SPDIF Optical 2 Left
+          Wire.write(0x01);
+        else if(sourceRouting[currentVirtualInput][nn] == 29) // SPDIF Optical 2 Right
+          Wire.write(0x01);
+        else if(sourceRouting[currentVirtualInput][nn] == 30) // SPDIF Optical 3 Left
+          Wire.write(0x02);
+        else if(sourceRouting[currentVirtualInput][nn] == 31) // SPDIF Optical 3 Right
+          Wire.write(0x02);
+        else if(sourceRouting[currentVirtualInput][nn] == 32) // SPDIF Optical 4 Left
+          Wire.write(0x03);
+        else if(sourceRouting[currentVirtualInput][nn] == 33) // SPDIF Optical 4 Right
+          Wire.write(0x03);
+        Wire.endTransmission(true);
+      }
+      idx++;
     }
   } 
 

@@ -233,24 +233,24 @@ void setFir( int idx )
   byte val[4];
   uint32_t floatval;
 
-  for( uint16_t kk = 0; kk <paramFir[idx].numCoeffs; kk++ )
+  for(uint16_t kk = 0; kk < paramFir[idx].numCoeffs; kk++)
   {
     uint16_t addr = paramFir[idx].addr + kk;
-    if( paramFir[idx].bypass )
+    if(paramFir[idx].bypass)
     {
-      if( kk == 0 )
-        floatval = convertTo824( 1.0 );
+      if(kk == paramFir[idx].numCoeffs - 1)
+        floatval = convertTo824(1.0);
       else
-        floatval = convertTo824( 0.0 );
+        floatval = convertTo824(0.0);
     }
     else
-      floatval = convertTo824( paramFir[idx].ir[kk] );
+      floatval = convertTo824(paramFir[idx].ir[paramFir[idx].numCoeffs - kk - 1]);
 
     val[0] = (floatval >> 24 ) & 0xFF;
     val[1] = (floatval >> 16 ) & 0xFF;
     val[2] = (floatval >> 8 ) & 0xFF;
     val[3] =  floatval & 0xFF;
-    ADAU1452_WRITE_BLOCK( addr, val, 4 );
+    ADAU1452_WRITE_BLOCK(addr, val, 4);
   }
   
 }
@@ -1090,6 +1090,10 @@ void uploadUserParams( void )
   for( int ii = 0; ii < numPEQs; ii++ )
     setPEQ( ii );
   Serial.print( "." );
+
+  for(int ii = 0; ii < numPeqBanks; ii++)
+    setPeqBank(ii);
+  Serial.print(".");
 
   for( int ii = 0; ii < numHShelvs; ii++ )
     setHighShelving( ii );

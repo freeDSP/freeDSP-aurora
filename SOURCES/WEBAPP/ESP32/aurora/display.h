@@ -30,10 +30,10 @@ public:
       pDisplayDriver->drawBootScreen();
   }
 
-  void drawUI(const char* plugin, const char* ip, const char* preset, float vol, int editMode = EDITMODE_DEFAULT)
+  void drawUI(const char* plugin, const char* ip, const int currentPreset, float vol, int editMode = EDITMODE_DEFAULT)
   {
     if(pDisplayDriver)
-      pDisplayDriver->drawUI(plugin, ip, preset, vol, editMode);
+      pDisplayDriver->drawUI(plugin, ip, currentPreset, vol, editMode);
   }
 
   void drawSwitchingPreset(void)

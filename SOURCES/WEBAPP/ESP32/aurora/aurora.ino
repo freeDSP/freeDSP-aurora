@@ -193,7 +193,10 @@ void updateUI( void )
     else
       ip = WiFi.localIP().toString();
 
-    myDisplay.drawUI(currentPlugInName.c_str(), ip.c_str(), presetNames[currentPreset].c_str(), masterVolume.val, editMode);
+    if( (editMode == 0) || (editMode == 1) || (editMode == 2) )
+    {
+      myDisplay.drawUI(currentPlugInName.c_str(), ip.c_str(), currentPreset, masterVolume.val, editMode);
+    }
   }
 }
 #endif
@@ -212,7 +215,7 @@ void myWiFiTask(void *pvParameters)
   IPAddress subnet(255, 255, 255, 0);
 
   WiFi.mode(WIFI_AP_STA);
-  WiFi.setHostname("freeDSP-aurora");
+  WiFi.setHostname(AP_HOSTNAME);
   // Start access point
   if( Settings.pwdap.length() > 0 )
   {
@@ -484,7 +487,7 @@ void setup()
   //----------------------------------------------------------------------------
   //--- Read virtual input channel routing (only if supported by plugin)
   //----------------------------------------------------------------------------
-  if(currentPlugInName == String(F("stereoforever")))
+  if(currentPlugInName == String(F("stereoforever")) || currentPlugInName == String(F("The Room")))
   {
     if(!SPIFFS.exists(F("/vinputs.txt")))
       // if file does not exist, write it with defautl values
@@ -533,6 +536,9 @@ void setup()
   #if HAVE_IRRECEIVER
   irReceiver.enableIRIn();
   #endif
+
+  if(currentPlugInName == String(F("stereoforever")) || currentPlugInName == String(F("The Room")))
+    setVirtualInput();
 
   resetDAC(false);
 
@@ -692,31 +698,53 @@ void loop()
   decode_results irResults;
   if( irReceiver.decode( &irResults ) )
   {
-    if( irResults.value == APPLE_REMOTE_UP )
+    Serial.println(irResults.value, HEX);
+    uint32_t irval = (irResults.value & 0x0000ff00) >> 8;
+    if((irval == APPLE_A_REMOTE_UP) || (irval == APPLE_B_REMOTE_UP))
     {
       increase_volume();
       needUpdateUI = true;
     }
-    else if( irResults.value == APPLE_REMOTE_DOWN )
+    else if((irval == APPLE_A_REMOTE_DOWN) || (irval == APPLE_B_REMOTE_DOWN))
     {
       decrease_volume();
       needUpdateUI = true;
     }
-    else if( irResults.value == APPLE_REMOTE_LEFT )
+    if(currentPlugInName == String(F("stereoforever")) || currentPlugInName == String(F("The Room")))
     {
-      myDisplay.drawSwitchingPreset();
-
-      prev_preset();
-
-      needUpdateUI = true;
+      if((irval == APPLE_A_REMOTE_LEFT) || (irval == APPLE_B_REMOTE_LEFT))
+      {
+        decrementVirtualInput();
+        setVirtualInput();
+        needUpdateUI = true;
+      }
+      else if((irval == APPLE_A_REMOTE_RIGHT) || (irval == APPLE_B_REMOTE_RIGHT))
+      {
+        incrementVirtualInput();
+        setVirtualInput();
+        needUpdateUI = true;
+      }
+      else if((irval == APPLE_A_REMOTE_MENU) || (irval == APPLE_B_REMOTE_MENU))
+      {
+        myDisplay.drawSwitchingPreset();
+        next_preset();
+        needUpdateUI = true;
+      }
     }
-    else if( irResults.value == APPLE_REMOTE_RIGHT )
+    else
     {
-      myDisplay.drawSwitchingPreset();
-
-      next_preset();
-
-      needUpdateUI = true;
+      if((irval == APPLE_A_REMOTE_LEFT) || (irval == APPLE_B_REMOTE_LEFT))
+      {
+        myDisplay.drawSwitchingPreset();
+        prev_preset();
+        needUpdateUI = true;
+      }
+      else if((irval == APPLE_A_REMOTE_RIGHT) || (irval == APPLE_B_REMOTE_RIGHT))
+      {
+        myDisplay.drawSwitchingPreset();
+        next_preset();
+        needUpdateUI = true;
+      }
     }
     //else
     //  Serial.println(irResults.value, HEX);

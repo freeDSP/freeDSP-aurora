@@ -2,6 +2,7 @@
 #include <ArduinoJson.h>
 #include <SPIFFS.h>
 
+#include "customdefines.h"
 #include "addons.h"
 #include "plugin.h"
 #include "settings.h"
@@ -45,7 +46,7 @@ void readSettings( void )
   Settings.addonid = ADDON_CUSTOM;
   Settings.vpot = false;
   Settings.pwdap = "";
-  Settings.apname = "AP-freeDSP-aurora";
+  Settings.apname = AP_HOSTNAME;
   Settings.adcsum = 0;
   Settings.wifiOn = true;
 
