@@ -59,5 +59,4 @@
 #define APPLE_B_REMOTE_CENTER_UP   0x20
 
 
-
 #endif

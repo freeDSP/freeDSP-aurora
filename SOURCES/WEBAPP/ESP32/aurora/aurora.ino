@@ -590,19 +590,81 @@ void prev_preset(void) {
   update_preset();
 }
 
-void increase_volume(void) {
-  masterVolume.val += 0.5f;
+#define VOLUME_STEP 0.5f
+
+void increase_volume_step(float factor) {
+  masterVolume.val += VOLUME_STEP * factor;
   if( masterVolume.val > 0.f )
     masterVolume.val = 0.f;
   setMasterVolume();
 }
 
-void decrease_volume(void) {
-  masterVolume.val -= 0.5f;
+void decrease_volume_step(float factor) {
+  masterVolume.val -= VOLUME_STEP * factor;
   if( masterVolume.val <= -80.f )
     masterVolume.val = -80.f;
   setMasterVolume();
 }
+
+void increase_volume(void) {
+  increase_volume_step(1.0f);
+}
+
+void decrease_volume(void) {
+  decrease_volume_step(1.0f);
+}
+
+#if HAVE_IRRECEIVER
+
+#define DELAY_REMOTE_MS	150  // minimal time between IR remote actions
+
+#define REMOTE_BUTTON_NONE 0
+#define REMOTE_BUTTON_PLUS 1
+#define REMOTE_BUTTON_PREVIOUS 2
+#define REMOTE_BUTTON_PLAY 3
+#define REMOTE_BUTTON_NEXT 4
+#define REMOTE_BUTTON_MINUS 5
+#define REMOTE_BUTTON_MENU  6
+#define REMOTE_BUTTON_CENTER 7
+#define REMOTE_BUTTON_RELEASED 8
+#define REMOTE_BUTTON_REPEAT 9
+
+
+uint8_t ir_action(uint32_t value) {
+    uint8_t action = REMOTE_BUTTON_NONE;
+    if (value == 0xFFFFFFFF) {
+      action = REMOTE_BUTTON_REPEAT;
+    }
+    else if ((value & 0xFFFF0000) == 0x77E10000) {
+      // Apple remotes
+      // Following code is working for multiple Apple remote models
+      // Inspired by https://github.com/brackendawson/Appleceiver/blob/357a0a16013d9e35f1119530399aba55b7030bab/Appleceiver.ino#L43-L55
+      switch ((value & 0x00007F00) >> 8) {
+        case 0x50: action = REMOTE_BUTTON_PLUS; break;
+        case 0x10: action = REMOTE_BUTTON_PREVIOUS; break;
+        case 0x7a: action = REMOTE_BUTTON_PLAY; break;
+        case 0x60: action = REMOTE_BUTTON_NEXT; break;
+        case 0x30: action = REMOTE_BUTTON_MINUS; break;
+        case 0x40: action = REMOTE_BUTTON_MENU; break;
+        case 0x3a: action = REMOTE_BUTTON_CENTER; break;
+        case 0x20: action = REMOTE_BUTTON_RELEASED; /* emitted when PLAY or CENTER buttons are released */; break;
+      }
+    }
+    return action;
+}
+
+uint8_t repeatable_action = REMOTE_BUTTON_NONE;
+unsigned long last_action_time = millis();
+unsigned long last_repeat_time = millis();
+unsigned long repeat_duration_ms = 0;
+
+float speed_factor(unsigned long repeat_duration_ms) {
+  /* Return volume speed factor depending on long press duration */
+  if (repeat_duration_ms < 1000) return 1.0f;
+  if (repeat_duration_ms < 3000) return 2.0f;
+  return 4.0f;
+}
+#endif
 
 //==============================================================================
 /*! Arduino Main Loop
@@ -698,61 +760,78 @@ void loop()
   decode_results irResults;
   if( irReceiver.decode( &irResults ) )
   {
-    Serial.println(irResults.value, HEX);
-    uint32_t irval = (irResults.value & 0x0000ff00) >> 8;
-    if((irval == APPLE_A_REMOTE_UP) || (irval == APPLE_B_REMOTE_UP))
+    //Serial.println(irResults.value, HEX);
+    unsigned long now = millis();
+    if (now - last_action_time > DELAY_REMOTE_MS)
     {
-      increase_volume();
-      needUpdateUI = true;
+      uint8_t action = ir_action(irResults.value);
+
+      if (action == REMOTE_BUTTON_REPEAT && repeatable_action != REMOTE_BUTTON_NONE) {
+        /* repeat last action */
+        action = repeatable_action;
+        last_repeat_time = now;
+        repeat_duration_ms = now - last_action_time;
+      } else {
+        /* no repeat */
+        last_action_time = now;
+        repeat_duration_ms = 0;
+      }
+
+      repeatable_action = REMOTE_BUTTON_NONE;
+      switch (action) {
+        case REMOTE_BUTTON_PLUS:
+          increase_volume_step(speed_factor(repeat_duration_ms));
+          needUpdateUI = true;
+          repeatable_action = action;  // this action can be repeated
+          break;
+        case REMOTE_BUTTON_MINUS:
+          decrease_volume_step(speed_factor(repeat_duration_ms));
+          needUpdateUI = true;
+          repeatable_action = action;  // this action can be repeated
+          break;
+        case REMOTE_BUTTON_PREVIOUS:
+          if(currentPlugInName == String(F("stereoforever")) || currentPlugInName == String(F("The Room")))
+          {
+            decrementVirtualInput();
+            setVirtualInput();
+            needUpdateUI = true;
+          }
+          else
+          {
+            myDisplay.drawSwitchingPreset();
+            prev_preset();
+            needUpdateUI = true;
+          }
+          break;
+        case REMOTE_BUTTON_NEXT:
+          if(currentPlugInName == String(F("stereoforever")) || currentPlugInName == String(F("The Room")))
+          {
+            incrementVirtualInput();
+            setVirtualInput();
+            needUpdateUI = true;
+          }
+          else
+          {
+            myDisplay.drawSwitchingPreset();
+            next_preset();
+            needUpdateUI = true;
+          }
+          break;
+        case REMOTE_BUTTON_MENU:
+          if(currentPlugInName == String(F("stereoforever")) || currentPlugInName == String(F("The Room")))
+          {
+            myDisplay.drawSwitchingPreset();
+            next_preset();
+            needUpdateUI = true;
+          }
+          break;
+      }
     }
-    else if((irval == APPLE_A_REMOTE_DOWN) || (irval == APPLE_B_REMOTE_DOWN))
-    {
-      decrease_volume();
-      needUpdateUI = true;
-    }
-    if(currentPlugInName == String(F("stereoforever")) || currentPlugInName == String(F("The Room")))
-    {
-      if((irval == APPLE_A_REMOTE_LEFT) || (irval == APPLE_B_REMOTE_LEFT))
-      {
-        decrementVirtualInput();
-        setVirtualInput();
-        needUpdateUI = true;
-      }
-      else if((irval == APPLE_A_REMOTE_RIGHT) || (irval == APPLE_B_REMOTE_RIGHT))
-      {
-        incrementVirtualInput();
-        setVirtualInput();
-        needUpdateUI = true;
-      }
-      else if((irval == APPLE_A_REMOTE_MENU) || (irval == APPLE_B_REMOTE_MENU))
-      {
-        myDisplay.drawSwitchingPreset();
-        next_preset();
-        needUpdateUI = true;
-      }
-    }
-    else
-    {
-      if((irval == APPLE_A_REMOTE_LEFT) || (irval == APPLE_B_REMOTE_LEFT))
-      {
-        myDisplay.drawSwitchingPreset();
-        prev_preset();
-        needUpdateUI = true;
-      }
-      else if((irval == APPLE_A_REMOTE_RIGHT) || (irval == APPLE_B_REMOTE_RIGHT))
-      {
-        myDisplay.drawSwitchingPreset();
-        next_preset();
-        needUpdateUI = true;
-      }
-    }
-    //else
-    //  Serial.println(irResults.value, HEX);
     irReceiver.resume();
   }
   #endif
 
-  if( needUpdateUI )
+  if(needUpdateUI)
   {
     updateUI();
     needUpdateUI = false;
