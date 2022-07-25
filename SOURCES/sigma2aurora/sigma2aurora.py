@@ -5,6 +5,7 @@ import argparse
 import os
 import struct
 import shutil
+import gzip
 
 try:
     to_unicode = unicode
@@ -85,6 +86,8 @@ parser.add_argument("input", help="SigmaStudio project file")
 parser.add_argument("plugin", help="Name of plugin")
 parser.add_argument("--gui", help="Path to html gui", type=str)
 parser.add_argument("--version", help="Version of plugin", type=str)
+parser.add_argument("--outputdir", help="Output directory", type=str)
+parser.add_argument("--html", action="store_true", default=False, dest="html", help="Export html files instead of gz files")
 
 # Read arguments from the command line
 args = parser.parse_args()
@@ -100,6 +103,14 @@ if args.version:
     version = args.version
 else:
     version = "0.0.0"
+if args.outputdir:
+    outputdir = args.outputdir
+else:
+    outputdir = "."
+if args.html:
+    export_html = True
+else:
+    export_html = False
 
 projectname = os.path.splitext(os.path.basename(path_sigmastudioproject))[0]
 projectdir = os.path.dirname(path_sigmastudioproject)
@@ -136,15 +147,16 @@ with open(numbytes_path) as fp:
         line = fp.readline()
 
 # --- Create output directory
+project_path = os.path.join(outputdir, projectname)
 try:
-    if not os.path.exists(projectname):
-        os.mkdir(projectname)
+    if not os.path.isdir(project_path):
+        os.makedirs(project_path)
 except OSError:
     print("Creation of output directory %s failed" % projectname)
 
 # --- Write dsp.fw
 print("Writing DSP firmware")
-dspfw_path = os.path.join(projectname, 'dsp.fw')
+dspfw_path = os.path.join(project_path, 'dsp.fw')
 with open(dspfw_path, 'wb') as file:
     idx = 0
     for ii in range(0, len(numbytes)):
@@ -695,16 +707,14 @@ data = {
     "version": version,
 }
 
-plugin_ini_path = os.path.join(projectname, "plugin.ini")
+webapp_path = os.path.join('..', 'WEBAPP')
+
+plugin_ini_path = os.path.join(project_path, "plugin.ini")
 with io.open(plugin_ini_path, 'w', encoding='utf8') as outfile:
     str_ = json.dumps(data,
                       indent=0, sort_keys=False,
                       separators=(',', ': '), ensure_ascii=False)
     outfile.write(to_unicode(str_))
-
-
-webapp_path = os.path.join('..', 'WEBAPP')
-project_path = os.path.join('.', projectname)
 
 # --- Copy aurora.jgz
 print("Copying aurora.jgz")
@@ -713,9 +723,13 @@ aurora_jgz_dst_path = os.path.join(project_path, 'aurora.jgz')
 shutil.copy2(aurora_jgz_src_path, aurora_jgz_dst_path)
 
 # --- Copy stylesheet
-print("Copying dark.css")
+print("Copying dark.gz")
 darkcss_src_path = os.path.join(webapp_path, 'css', 'dark.css')
-darkcss_dst_path = os.path.join(project_path, 'dark.css')
+darkcss_dst_path = os.path.join(webapp_path, 'css', 'dark.gz')
+with open(darkcss_src_path, 'rb') as f_in, gzip.open(darkcss_dst_path, 'wb') as f_out:
+    f_out.writelines(f_in)
+darkcss_src_path = os.path.join(webapp_path, 'css', 'dark.gz')
+darkcss_dst_path = os.path.join(project_path, 'dark.gz')
 shutil.copy2(darkcss_src_path, darkcss_dst_path)
 
 # ------------------------------------------------------------------------------
@@ -812,9 +826,14 @@ if args.gui:
         # --- XO-LP blocks
         # Handled by xohp
 
-    dsp_html_path = os.path.join(project_path, 'dsp.html')
-    with open(dsp_html_path, "w") as f1:
-        f1.write(dsphtml)
+    if export_html:
+        dsp_html_path = os.path.join(project_path, 'dsp.html')
+        with open(dsp_html_path, "w") as f1:
+            f1.write(dsphtml)
+    else:
+        dsp_html_path = os.path.join(project_path, 'dsp.gz')
+        with gzip.open(dsp_html_path, "wb") as f1:
+            f1.write(bytes(dsphtml, 'utf-8'))
 
     custom_chnames_path = args.gui.replace("dsp.html", "chnames.txt")
     if os.path.isfile(custom_chnames_path):

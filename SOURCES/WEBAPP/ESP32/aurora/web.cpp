@@ -2064,12 +2064,40 @@ String handleGetAllNamesJson( void )
 
 void setupWebserver (void)
 {
-  if( SPIFFS.exists( "/dsp.html" ) )
-    server.on( "/",          HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( SPIFFS, "/dsp.html", "text/html" ); });
-  else
-    server.on( "/",          HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( 200, "text/html", fallback_html ); });
+  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request)
+  {
+    if(SPIFFS.exists("/dsp.html"))
+      // if an uncompressed html file exist, return it
+     // this is usefull for quicker debugging
+      request->send(SPIFFS, "/dsp.html", "text/html"); 
+    else if(SPIFFS.exists("/dsp.gz"))
+    {
+      // return the compressed file which should be the default for release
+      AsyncWebServerResponse* response = request->beginResponse(SPIFFS, "/dsp.gz", "text/html");
+      response->addHeader("Content-Encoding", "gzip");
+      request->send(response);
+    }
+    else
+    {
+      // return the fallback site
+      request->send(200, "text/html", fallback_html);
+    }
+  });
   server.on( "/fallback",  HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( 200, "text/html", fallback_html ); });
-  server.on( "/dark.css",  HTTP_GET, [](AsyncWebServerRequest *request ) { request->send( SPIFFS, "/dark.css", "text/css" ); });
+  server.on( "/dark.css",  HTTP_GET, [](AsyncWebServerRequest *request )
+  { 
+    if(SPIFFS.exists("/dark.css"))
+      // if an uncompressed css file exist, return it
+      // this is usefull for quicker debugging
+      request->send( SPIFFS, "/dark.css", "text/css" );
+    else
+    {
+      // return the compressed file which should be the default for release
+      AsyncWebServerResponse* response = request->beginResponse(SPIFFS, "/dark.gz", "text/css");
+      response->addHeader("Content-Encoding", "gzip");
+      request->send(response);
+    }
+  });
   server.on( "/aurora.js", HTTP_GET, [](AsyncWebServerRequest *request )
   { 
     if(SPIFFS.exists("/aurora.js"))
