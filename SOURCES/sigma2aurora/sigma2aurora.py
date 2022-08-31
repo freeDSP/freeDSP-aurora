@@ -99,6 +99,10 @@ if args.input:
 if args.plugin:
     print("Name of plugin: %s" % args.plugin)
     nameplugin = args.plugin
+
+projectname = os.path.splitext(os.path.basename(path_sigmastudioproject))[0]
+projectdir = os.path.dirname(path_sigmastudioproject)
+
 if args.version:
     version = args.version
 else:
@@ -107,13 +111,11 @@ if args.outputdir:
     outputdir = args.outputdir
 else:
     outputdir = "."
+    outputdir = os.path.join(outputdir, projectname)
 if args.html:
     export_html = True
 else:
     export_html = False
-
-projectname = os.path.splitext(os.path.basename(path_sigmastudioproject))[0]
-projectdir = os.path.dirname(path_sigmastudioproject)
 
 # --- Read TxBuffer file
 txbuffer_path = os.path.join(projectdir, "TxBuffer_IC_1.dat")
@@ -147,7 +149,7 @@ with open(numbytes_path) as fp:
         line = fp.readline()
 
 # --- Create output directory
-project_path = os.path.join(outputdir, projectname)
+project_path = outputdir; # os.path.join(outputdir, projectname)
 try:
     if not os.path.isdir(project_path):
         os.makedirs(project_path)

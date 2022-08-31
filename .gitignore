@@ -20,3 +20,4 @@ OEM
 SOURCES/WEBAPP/ESP32/aurora/data
 SOURCES/WEBAPP/ESP32/aurora/aurora.ino.esp32.bin
 SOURCES/WEBAPP/css/dark.gz
+SOURCES/WEBAPP/ESP32/aurora/aurora.ino.SNAPSHOT.esp32.bin
