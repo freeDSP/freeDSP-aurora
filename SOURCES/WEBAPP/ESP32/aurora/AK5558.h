@@ -20,10 +20,10 @@
 
 /*! Configure AK5558 ADC
  */
-void configADC( void );
+void configADC(void);
 
 /*! Change the channel summation of AK5558 ADC
  */
-void changeChannelSummationADC( void );
+void changeChannelSummationADC(void);
 
 #endif /* AK5558_H_ */

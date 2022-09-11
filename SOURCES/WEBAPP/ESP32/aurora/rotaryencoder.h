@@ -1,30 +1,30 @@
 #ifndef ROTARYENCODER_H_
 #define ROTARYENCODER_H_
 
-class RotaryEncoder
-{
+class RotaryEncoder {
 public:
-  RotaryEncoder( void );
-  ~RotaryEncoder( void ) {}
+    RotaryEncoder(void);
 
-  long int getRotationValue( void ) { return value; }
+    ~RotaryEncoder(void) {}
 
-  void setRotationValue( long int val ) { value = val; }
+    long int getRotationValue(void) { return value; }
 
-  long int getSwitchValue( void ) { return sw; }
+    void setRotationValue(long int val) { value = val; }
 
-  void setSwitchValue( long int val ) { sw = val; }
+    long int getSwitchValue(void) { return sw; }
 
-  uint8_t getCurrentState( void ) { return state; }
+    void setSwitchValue(long int val) { sw = val; }
 
-  void setCurrentState( uint8_t s ) { state = s; }
+    uint8_t getCurrentState(void) { return state; }
 
-  void init( void );
+    void setCurrentState(uint8_t s) { state = s; }
+
+    void init(void);
 
 private:
-  long int value;
-  long int sw;
-  uint8_t state;
+    long int value;
+    long int sw;
+    uint8_t state;
 };
 
 extern RotaryEncoder rotaryEncoder;
