@@ -56,6 +56,8 @@ Branches:
 - [PCB with startup delay (I2C) mod with a DM 2.4" OLED](https://github.com/Ca-Wi/freeDSP-aurora-extension-i2c-mod-display)
 - [PCB to expand the freeDSP aurora expansion port with 3V3 regulator](https://github.com/Ca-Wi/freeDSP-aurora-expansion-port-extender)
 
+## Custom Plugins
+- [7.1 Homecinema Plugin with Highpassfilter by pillepalle1234](https://github.com/pillepalle1234/FreeDSP-Aurora-7.1-Homecinema-Plugin-Highpass)
 
 ## Links
 
