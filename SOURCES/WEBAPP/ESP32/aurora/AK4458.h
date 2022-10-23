@@ -33,22 +33,22 @@
 
 /*!
  */
-void AK4458_REGWRITE( byte reg, byte val );
+void AK4458_REGWRITE(byte reg, byte val);
 
 /*! Configure AK4458 DAC
  */
-void configDAC( void );
+void configDAC(void);
 
 /*! Set DAC into reset.
  */
-void resetDAC( bool rst );
+void resetDAC(bool rst);
 
 /*! Mute DAC
  */
-void softMuteDAC( void );
+void softMuteDAC(void);
 
 /*! Unmute DAC
  */
-void softUnmuteDAC( void );
+void softUnmuteDAC(void);
 
 #endif /* AK4458_H_ */

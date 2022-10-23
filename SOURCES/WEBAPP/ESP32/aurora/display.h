@@ -12,38 +12,34 @@ extern int editMode;
 extern OLED128x64_SH1106 SH1106;
 extern OLED128x64_SSD1309 SSD1309;
 
-class Display
-{
+class Display {
 public:
-  Display(void) {}
+    Display(void) {}
 
-  void begin(DisplayDriver* drv)
-  {
-    pDisplayDriver = drv;
-    if(pDisplayDriver)
-      pDisplayDriver->begin();
-  }
+    void begin(DisplayDriver *drv) {
+        pDisplayDriver = drv;
+        if (pDisplayDriver)
+            pDisplayDriver->begin();
+    }
 
-  void drawBootScreen(void)
-  { 
-    if(pDisplayDriver)
-      pDisplayDriver->drawBootScreen();
-  }
+    void drawBootScreen(void) {
+        if (pDisplayDriver)
+            pDisplayDriver->drawBootScreen();
+    }
 
-  void drawUI(const char* plugin, const char* ip, const int currentPreset, float vol, int editMode = EDITMODE_DEFAULT)
-  {
-    if(pDisplayDriver)
-      pDisplayDriver->drawUI(plugin, ip, currentPreset, vol, editMode);
-  }
+    void
+    drawUI(const char *plugin, const char *ip, const int currentPreset, float vol, int editMode = EDITMODE_DEFAULT) {
+        if (pDisplayDriver)
+            pDisplayDriver->drawUI(plugin, ip, currentPreset, vol, editMode);
+    }
 
-  void drawSwitchingPreset(void)
-  {
-    if(pDisplayDriver)
-      pDisplayDriver->drawSwitchingPreset();
-  }
+    void drawSwitchingPreset(void) {
+        if (pDisplayDriver)
+            pDisplayDriver->drawSwitchingPreset();
+    }
 
 private:
-  DisplayDriver* pDisplayDriver = nullptr;
+    DisplayDriver *pDisplayDriver = nullptr;
 };
 
 #endif
